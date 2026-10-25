@@ -1,0 +1,45 @@
+name: ANKIN DRIFT performance
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: perf-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  performance:
+    name: Benchmark (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Profile normal, dual and triple raid
+        run: npx playwright test tests/performance.spec.mjs --project=${{ matrix.project }}
+      - name: Upload per-scenario JSON and browser report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14

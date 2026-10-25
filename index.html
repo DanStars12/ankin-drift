@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v11.8 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v11.9 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v11.8 | RAID PERFORMANCE & CLEAR HUD</title>
+<title>ANKIN DRIFT v11.9 | PERFORMANCE PROFILER</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -727,7 +727,7 @@ function playMusic(){if(!musicOn||mode!=='playing'||!setupAudio()||audio.state!=
  if([0,3,5,7,8,11,13,15].includes(unit)){const idx=(unit*3+bar*5)%MUSIC_SCALE.length;const semitone=MUSIC_SCALE[idx];synth(root*4*Math.pow(2,semitone/12),.13+(unit===15?.12:0),'triangle',.044,nextMusicBeat,'music')}
  if(unit===0||unit===8)synth(root*2*Math.pow(2,(bar%4===3?5:bar%4===2?7:0)/12),.75,'sine',.025,nextMusicBeat,'music');
  nextMusicBeat+=halfBeat}}
-function musicControls(){return `<div class="settings-area"><button id="bgm" class="secondary sound-toggle" aria-pressed="${musicOn}">♫ BGM ${musicOn?'ON':'OFF'}</button><button id="sound" class="secondary sound-toggle" aria-pressed="${soundOn}">♪ SE ${soundOn?'ON':'OFF'}</button><label>BGM音量 <input id="bgmVolume" type="range" min="0" max="100" step="5" value="${settings.bgm}"><span class="setting-value" id="bgmVolumeNum">${settings.bgm}%</span></label><label>SE音量 <input id="sfxVolume" type="range" min="0" max="100" step="5" value="${settings.sfx}"><span class="setting-value" id="sfxVolumeNum">${settings.sfx}%</span></label><label>演出量 <select id="fxQuality"><option value="high" ${settings.fx==='high'?'selected':''}>多い</option><option value="medium" ${settings.fx==='medium'?'selected':''}>標準</option><option value="low" ${settings.fx==='low'?'selected':''}>軽量</option></select></label><label>画質 <select id="graphicsQuality" aria-label="画質クオリティ"><option value="high" ${settings.quality==='high'?'selected':''}>高画質（端末解像度）</option><option value="balanced" ${settings.quality==='balanced'?'selected':''}>標準（解像度82%）</option><option value="low" ${settings.quality==='low'?'selected':''}>軽量（解像度60%）</option></select></label><label>描画FPS <select id="fpsTarget" aria-label="フレームレート設定">${[30,45,60,90,120,0].map(n=>`<option value="${n}" ${settings.fps===n?'selected':''}>${n===0?'端末上限（無制限）':n+' FPS'}</option>`).join('')}</select></label><label class="fps-setting">FPS表示 <input id="showFps" type="checkbox" ${settings.showFps?'checked':''}></label><span class="graphics-note">初期設定：PCは高画質、スマホは標準画質・60FPS。複合レイド中は必要に応じ描画解像度を自動調整します。FPSは描画上限で、実際の動作速度は端末性能と画面のリフレッシュレートによります。演出量は解像度とは別設定です。</span></div>`}
+function musicControls(){return `<div class="settings-area"><button id="bgm" class="secondary sound-toggle" aria-pressed="${musicOn}">♫ BGM ${musicOn?'ON':'OFF'}</button><button id="sound" class="secondary sound-toggle" aria-pressed="${soundOn}">♪ SE ${soundOn?'ON':'OFF'}</button><label>BGM音量 <input id="bgmVolume" type="range" min="0" max="100" step="5" value="${settings.bgm}"><span class="setting-value" id="bgmVolumeNum">${settings.bgm}%</span></label><label>SE音量 <input id="sfxVolume" type="range" min="0" max="100" step="5" value="${settings.sfx}"><span class="setting-value" id="sfxVolumeNum">${settings.sfx}%</span></label><label>演出量 <select id="fxQuality"><option value="high" ${settings.fx==='high'?'selected':''}>多い</option><option value="medium" ${settings.fx==='medium'?'selected':''}>標準</option><option value="low" ${settings.fx==='low'?'selected':''}>軽量</option></select></label><label>画質 <select id="graphicsQuality" aria-label="画質クオリティ"><option value="high" ${settings.quality==='high'?'selected':''}>高画質（端末解像度）</option><option value="balanced" ${settings.quality==='balanced'?'selected':''}>標準（解像度82%）</option><option value="low" ${settings.quality==='low'?'selected':''}>軽量（解像度60%）</option></select></label><label>描画FPS <select id="fpsTarget" aria-label="フレームレート設定">${[30,45,60,90,120,0].map(n=>`<option value="${n}" ${settings.fps===n?'selected':''}>${n===0?'端末上限（無制限）':n+' FPS'}</option>`).join('')}</select></label><label class="fps-setting">FPS表示 <input id="showFps" type="checkbox" ${settings.showFps?'checked':''}></label><button type="button" class="secondary" id="perfExport">負荷ログ保存（JSON）</button><span class="graphics-note">初期設定：PCは高画質、スマホは標準画質・60FPS。複合レイド中は必要に応じ描画解像度を自動調整します。FPSは描画上限で、実際の動作速度は端末性能と画面のリフレッシュレートによります。演出量は解像度とは別設定です。</span></div>`}
 // New record schema: legacy SCORE cannot be interpreted as DAMAGE. Keep survival and level records only.
 const DAMAGE_RECORD_KEY='ankin_drift_v96_damage_records';
 const record={read(){try{
@@ -1256,7 +1256,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementMain)));panel.querySelectorAll('[data-element-pair]').forEach(el=>el.addEventListener('click',()=>chooseElementPair(Number(el.dataset.elementPair))));click('pairBack',backElementPairs);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',()=>{state('playing');processTransitions()});click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
  U('graphicsQuality')?.addEventListener('change',e=>{settings.quality=e.target.value;saveSettings();resize();fitFestival();renderBudget=0});
  U('fpsTarget')?.addEventListener('change',e=>{settings.fps=Number(e.target.value);saveSettings();renderBudget=0});
- U('showFps')?.addEventListener('change',e=>{settings.showFps=e.target.checked;saveSettings();refreshFpsDisplay()});click('reroll',reroll);click('defer',deferNormal);click('fusionNext',dismissFusion);click('uniqueContinue',continueAfterReward);panel.querySelectorAll('[data-choice]').forEach(bindSafeChoice);panel.querySelectorAll('[data-target]').forEach(el=>el.addEventListener('click',()=>toggleTarget(el.dataset.target)));panel.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{buildTab=el.dataset.tab;drawOverlay()}));if(mode==='build'&&(buildTab==='synergy'||buildTab==='evolution')){panel.querySelectorAll('[data-recipe-filter]').forEach(el=>el.addEventListener('click',()=>{const kind=el.dataset.recipeKind;labRecipeFilters[kind]=el.dataset.recipeFilter;panel.querySelectorAll(`[data-recipe-kind="${kind}"]`).forEach(b=>{const active=b.dataset.recipeFilter===labRecipeFilters[kind];b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});const result=U('recipeResults');if(result)result.innerHTML=kind==='synergy'?synergyBuild():recipeBuild()}))}if(mode==='build'&&buildTab==='enemies'){panel.querySelectorAll('[data-enemy-filter]').forEach(el=>el.addEventListener('click',()=>{enemyCodexFilter=el.dataset.enemyFilter;panel.querySelectorAll('[data-enemy-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.enemyFilter===enemyCodexFilter);b.setAttribute('aria-pressed',String(b.dataset.enemyFilter===enemyCodexFilter))});const r=U('enemyCodexResults');if(r)r.innerHTML=enemyCodexList();}))}if(mode==='build'&&buildTab==='atlas'){const updateAtlas=()=>{const r=U('atlasResults');if(r)r.innerHTML=atlasList()};U('atlasSearch')?.addEventListener('input',e=>{atlasQuery=e.target.value;updateAtlas()});U('atlasRarity')?.addEventListener('change',e=>{atlasRarity=e.target.value;updateAtlas()});U('atlasAttr')?.addEventListener('change',e=>{atlasAttr=e.target.value;updateAtlas()});}
+ U('showFps')?.addEventListener('change',e=>{settings.showFps=e.target.checked;saveSettings();refreshFpsDisplay()});U('perfExport')?.addEventListener('click',exportAnkinPerfReport);click('reroll',reroll);click('defer',deferNormal);click('fusionNext',dismissFusion);click('uniqueContinue',continueAfterReward);panel.querySelectorAll('[data-choice]').forEach(bindSafeChoice);panel.querySelectorAll('[data-target]').forEach(el=>el.addEventListener('click',()=>toggleTarget(el.dataset.target)));panel.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{buildTab=el.dataset.tab;drawOverlay()}));if(mode==='build'&&(buildTab==='synergy'||buildTab==='evolution')){panel.querySelectorAll('[data-recipe-filter]').forEach(el=>el.addEventListener('click',()=>{const kind=el.dataset.recipeKind;labRecipeFilters[kind]=el.dataset.recipeFilter;panel.querySelectorAll(`[data-recipe-kind="${kind}"]`).forEach(b=>{const active=b.dataset.recipeFilter===labRecipeFilters[kind];b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});const result=U('recipeResults');if(result)result.innerHTML=kind==='synergy'?synergyBuild():recipeBuild()}))}if(mode==='build'&&buildTab==='enemies'){panel.querySelectorAll('[data-enemy-filter]').forEach(el=>el.addEventListener('click',()=>{enemyCodexFilter=el.dataset.enemyFilter;panel.querySelectorAll('[data-enemy-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.enemyFilter===enemyCodexFilter);b.setAttribute('aria-pressed',String(b.dataset.enemyFilter===enemyCodexFilter))});const r=U('enemyCodexResults');if(r)r.innerHTML=enemyCodexList();}))}if(mode==='build'&&buildTab==='atlas'){const updateAtlas=()=>{const r=U('atlasResults');if(r)r.innerHTML=atlasList()};U('atlasSearch')?.addEventListener('input',e=>{atlasQuery=e.target.value;updateAtlas()});U('atlasRarity')?.addEventListener('change',e=>{atlasRarity=e.target.value;updateAtlas()});U('atlasAttr')?.addEventListener('change',e=>{atlasAttr=e.target.value;updateAtlas()});}
 }
 
 
@@ -2055,7 +2055,7 @@ function ring(x,y,to,color){particles.push({x,y,r:6,to,life:.43,total:.43,color,
 function pop(x,y,s,color='#ffffff'){floats.push({x,y,s,color,life:1.2});if(floats.length>42)floats.shift()}
 // Reusable spatial index: refreshed during combat, shared by lasers, drones, blades and projectiles.
 const SPATIAL_CELL=112;let enemyIndex=new Map(),enemyMaxRadius=24,enemyIndexReady=false;
-let spatialMaintenanceClock=0;
+let spatialMaintenanceClock=0,enemyIndexDirtyDuringForces=false;
 function refreshEnemyIndex(){for(const bucket of enemyIndex.values())bucket.length=0;enemyMaxRadius=0;for(const e of enemies){if(e.dead)continue;enemyMaxRadius=Math.max(enemyMaxRadius,e.r);const x=Math.floor(e.x/SPATIAL_CELL),y=Math.floor(e.y/SPATIAL_CELL),k=x+','+y;let b=enemyIndex.get(k);if(!b){b=[];enemyIndex.set(k,b)}b.push(e)}enemyIndexReady=true}
 function circleCandidates(x,y,r){if(!enemyIndexReady)return enemies;const result=[],rad=r+enemyMaxRadius;
  const x0=Math.floor((x-rad)/SPATIAL_CELL),x1=Math.floor((x+rad)/SPATIAL_CELL),y0=Math.floor((y-rad)/SPATIAL_CELL),y1=Math.floor((y+rad)/SPATIAL_CELL);
@@ -2282,11 +2282,11 @@ function magmaPatch(x,y,scale=1){if(engageBlockedPoint(x,y,Math.min(30,player.ma
 function rockPos(i){return ringPosition(i,player.rockWalls,t,56,31,8,player.elementMods?.orbitFort?-2.15:-1.08)}
 function tickRocks(dt){const p=player;for(let i=0;i<p.rockWalls;i++){p.rockCooldowns[i]=Math.max(0,(p.rockCooldowns[i]||0)-dt);if(p.rockCooldowns[i]>0)continue;const wall=rockPos(i);if(engageBlockedPoint(wall.x,wall.y,p.rockSize)){p.rockCooldowns[i]=2.4;continue;}let triggered=false;
  for(const b of hostile){if(b.ttl<=0||b.unblockable)continue;if(d2(b,wall)<(p.rockSize+b.r+5)**2){b.ttl=0;triggered=true;burst(wall.x,wall.y,'#d9ba88',6,70);if(p.elementMods?.diamondWall){const target=visibleTarget(wall.x,wall.y);if(target)fireFrom(wall.x,wall.y,target,3,Math.max(30,p.rockDamage*.85),550,'rockReflect')}break}}
- if(!triggered)for(const e of circleCandidates(wall.x,wall.y,p.rockSize+5)){if(e.dead||e.type==='unique'||e.rockHit>0)continue;if(d2(e,wall)<(p.rockSize+e.r+4)**2){const dx=e.x-p.x,dy=e.y-p.y,dist=Math.max(1,Math.hypot(dx,dy));e.x+=dx/dist*13;e.y+=dy/dist*13;e.rockHit=.42;damageEnemy(e,p.rockDamage+p.dmg*.17,{special:true,source:'rock'});if(p.elementMods?.meteorWall||p.elementMods?.gaiaShock)detonate(wall.x,wall.y,p.elementMods?.meteorWall?130:95,p.rockDamage*(p.elementMods?.meteorWall?1.6:.75),e,5);triggered=true;burst(wall.x,wall.y,'#cab99e',4,55);break}}
+ if(!triggered)for(const e of circleCandidates(wall.x,wall.y,p.rockSize+5)){if(e.dead||e.type==='unique'||e.rockHit>0)continue;if(d2(e,wall)<(p.rockSize+e.r+4)**2){const dx=e.x-p.x,dy=e.y-p.y,dist=Math.max(1,Math.hypot(dx,dy));e.x+=dx/dist*13;e.y+=dy/dist*13;enemyIndexDirtyDuringForces=true;e.rockHit=.42;damageEnemy(e,p.rockDamage+p.dmg*.17,{special:true,source:'rock'});if(p.elementMods?.meteorWall||p.elementMods?.gaiaShock)detonate(wall.x,wall.y,p.elementMods?.meteorWall?130:95,p.rockDamage*(p.elementMods?.meteorWall?1.6:.75),e,5);triggered=true;burst(wall.x,wall.y,'#cab99e',4,55);break}}
  if(triggered)p.rockCooldowns[i]=.46;
  }}
 function tickGusts(dt){if(player.windCount<1&&gusts.length===0)return;player.windTimer-=dt;if(player.windCount>0&&player.windTimer<=0){player.windTimer+=Math.max(1.25,player.windPeriod);const target=visibleTarget(player.x,player.y);const angle=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);for(let i=0;i<Math.min(7,player.windCount);i++){let a=angle+(i-(Math.min(7,player.windCount)-1)/2)*.22;gusts.push({x:player.x,y:player.y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?245:150),vy:Math.sin(a)*(player.elementMods?.galeOrbit?245:150),r:player.windRadius,life:player.elementMods?.galeOrbit?4.3:3.2,tick:0});}if(gusts.length>28)gusts.splice(0,gusts.length-28);tone(490,.09,'sine',.025)}
- for(const g of gusts){const ox=g.x,oy=g.y;g.x+=g.vx*dt;g.y+=g.vy*dt;if(engageBarrierBlocks(ox,oy,g.x,g.y,Math.min(30,g.r||3))){g.life=0;continue}g.life-=dt;g.tick-=dt;if(g.kind==='fireTornado')g.r=Math.min(175,g.r+dt*30);if(g.tick>0)continue;g.tick=.13;for(const e of circleCandidates(g.x,g.y,g.r)){if(e.dead)continue;if(g.kind!=='fireTornado'&&['minor','major','unique'].includes(e.type))continue;const dist=dst(e,g);if(dist>g.r+e.r||dist<1)continue;if(g.kind==='fireTornado'){damageEnemy(e,Math.max(30,player.magmaDps*.26),{special:true,source:'element'});setBurn(e,Math.max(30,player.magmaDps),2)}else{const pull=Math.min(dist,player.windStrength*.13);e.x+=(g.x-e.x)/dist*pull;e.y+=(g.y-e.y)/dist*pull;damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(1+(player.elementMods?.galeCrush||0)*1.15),{special:true,source:'element'});}}}gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
+ for(const g of gusts){const ox=g.x,oy=g.y;g.x+=g.vx*dt;g.y+=g.vy*dt;if(engageBarrierBlocks(ox,oy,g.x,g.y,Math.min(30,g.r||3))){g.life=0;continue}g.life-=dt;g.tick-=dt;if(g.kind==='fireTornado')g.r=Math.min(175,g.r+dt*30);if(g.tick>0)continue;g.tick=.13;for(const e of circleCandidates(g.x,g.y,g.r)){if(e.dead)continue;if(g.kind!=='fireTornado'&&['minor','major','unique'].includes(e.type))continue;const dist=dst(e,g);if(dist>g.r+e.r||dist<1)continue;if(g.kind==='fireTornado'){damageEnemy(e,Math.max(30,player.magmaDps*.26),{special:true,source:'element'});setBurn(e,Math.max(30,player.magmaDps),2)}else{const pull=Math.min(dist,player.windStrength*.13);e.x+=(g.x-e.x)/dist*pull;e.y+=(g.y-e.y)/dist*pull;enemyIndexDirtyDuringForces=true;damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(1+(player.elementMods?.galeCrush||0)*1.15),{special:true,source:'element'});}}}gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
 function tickCrossFusion(dt){const mods=player.elementMods;if(!mods)return;
@@ -2341,9 +2341,9 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(p.staticField>0){p.staticTick=(p.staticTick||0)-dt;if(p.staticTick<=0){p.staticTick=.3;for(const e of circleCandidates(p.x,p.y,115+Math.min(4,p.staticField)*25)){if(!e.dead&&dst(e,p)<115+Math.min(4,p.staticField)*25){damageEnemy(e,12*p.staticField+p.dmg*.035,{special:true,source:'element'});if(Math.random()<.18)particles.push({x:p.x,y:p.y,x2:e.x,y2:e.y,life:.16,total:.16,lightning:true,color:'#91fff5'})}}}}
  if(p.magmaLevel>0){p.magmaTimer-=dt;if(p.magmaTimer<=0){p.magmaTimer=Math.max(1.5,4.6-p.magmaLevel*.38);magmaPatch(p.x+rand(-90,90),p.y+rand(-90,90))}}
  const zoneWalls=activeEngageWalls();for(const z of zones){if(zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma')setBurn(e,Math.max(12,z.dps*.55),1.6)}}}zones=zones.filter(z=>z.life>0);
- tickGusts(dt);gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(22,g.r)));tickRocks(dt);tickCrossFusion(dt);
- // Re-index after wind and rock displacement; shared by all bullet sweeps.
- refreshEnemyIndex();
+ enemyIndexDirtyDuringForces=false;tickGusts(dt);gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(22,g.r)));tickRocks(dt);tickCrossFusion(dt);
+ // Index is already current when neither wind nor rock attacks displaced a target.
+ if(enemyIndexDirtyDuringForces)refreshEnemyIndex();
  // Projectiles persist across wave boundaries, including those already airborne.
  for(const b of shots){b.ttl-=dt;if(b.ttl<=0)continue;const bx=b.x,by=b.y;if(b.kind==='rocket'||b.relicHoming){b.seekTimer=(b.seekTimer||0)-dt;if(b.seekTimer<=0){b.seekTimer=.19+Math.random()*.06;const target=(b.cachedTarget&&!b.cachedTarget.dead&&isVisibleAutoTarget(b.cachedTarget)&&d2(b,b.cachedTarget)<330*330)?b.cachedTarget:nearTarget(b.x,b.y,null,Math.min(500,Math.max(W,H)*.75),true);b.cachedTarget=target;if(target){const v=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);const steer=b.kind==='rocket'?.48:.42;b.vx=b.vx*(1-steer)+Math.cos(a)*v*steer;b.vy=b.vy*(1-steer)+Math.sin(a)*v*steer}}}b.x+=b.vx*dt;b.y+=b.vy*dt;if(engageBarrierBlocks(bx,by,b.x,b.y,b.r||3)){b.ttl=0;continue}if(b.relicGrowth)b.r=Math.min(b.growthLimit||8.1,(b.r||4.5)+dt*(b.source==='burst'?1.55:1.85));if(p.shipType==='charge'&&b.chargeFull){if(p.relicChargeGravity){for(const e of circleCandidates(b.x,b.y,135)){if(e.dead||['minor','major','unique'].includes(e.type))continue;const dd=Math.hypot(e.x-b.x,e.y-b.y);if(dd>1&&dd<135){e.x+=(b.x-e.x)/dd*100*dt;e.y+=(b.y-e.y)/dd*100*dt}}}if(p.relicChargeFlame){b.trailTimer=(b.trailTimer||0)-dt;if(b.trailTimer<=0){b.trailTimer=.23;zones.push({x:b.x,y:b.y,r:34,life:1.1,ttl:0,dps:Math.max(18,p.dmg*.42),type:'magma'})}}}if(b.bounces>0&&(b.x<12||b.x>W-12||b.y<12||b.y>H-12)){if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<12||b.y>H-12)b.vy*=-1;b.x=clamp(b.x,13,W-13);b.y=clamp(b.y,13,H-13);const target=visibleTarget(b.x,b.y);if(target){const sp=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);b.vx=Math.cos(a)*sp;b.vy=Math.sin(a)*sp}b.bounces--;b.ttl=Math.max(b.ttl,.8);if(settings.fx!=='low')ring(b.x,b.y,26,'#b8ffed')}if(b.x<-90||b.y<-90||b.x>W+90||b.y>H+90){b.ttl=0;continue}
  const travelX=b.x-bx,travelY=b.y-by,travelSq=travelX*travelX+travelY*travelY,travelLen=Math.sqrt(travelSq);
@@ -2393,9 +2393,14 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(h.type==='beam'){const dist=Math.abs(Math.sin(h.a)*(p.x-h.x)-Math.cos(h.a)*(p.y-h.y));if(dist<h.width+p.r)loseHP(h.damage)}
  else if(h.type==='voidring'){if(d2(h,p)>(h.r-p.r)**2)loseHP(h.damage)}else if(d2(h,p)<(h.r+p.r)**2)loseHP(h.damage)}hazards=hazards.filter(h=>h.warn>0||h.active>0);
  // Purple shards give both experience AND Nova charge, with no expiry timer.
- for(const e of pickups){e.phase+=dt*3;let distance=dst(e,p);if(distance<p.magnet&&distance>2){const speed=Math.min(780,340+Math.max(0,p.magnet-distance)*2);e.x+=(p.x-e.x)/distance*speed*dt;e.y+=(p.y-e.y)/distance*speed*dt}
- if(distance<p.r+14){e.collected=true;if(e.type==='heal'){p.hp=Math.min(p.maxHp,p.hp+e.value);pop(e.x,e.y,'+'+e.value+' HP','#70ffb0');tone(480,.1,'sine',.03)}else{addExp(e.value);gainNovaEnergy(e.charge);if(p.expShield>0)p.shield=Math.min(p.shieldMax,p.shield+p.expShield)}}}
- pickups=pickups.filter(e=>!e.collected);
+ // Avoid a square root for distant XP shards. Collision checks still use the
+ // pre-movement distance, matching the original pickup and magnet behavior.
+ const pickupMagnetSq=p.magnet*p.magnet, pickupReach=p.r+14, pickupReachSq=pickupReach*pickupReach;
+ for(const e of pickups){e.phase+=dt*3;const dx=p.x-e.x,dy=p.y-e.y,dd=dx*dx+dy*dy;
+ if(dd<pickupMagnetSq&&dd>4){const distance=Math.sqrt(dd),speed=Math.min(780,340+Math.max(0,p.magnet-distance)*2);e.x+=dx/distance*speed*dt;e.y+=dy/distance*speed*dt}
+ if(dd<pickupReachSq){e.collected=true;if(e.type==='heal'){p.hp=Math.min(p.maxHp,p.hp+e.value);pop(e.x,e.y,'+'+e.value+' HP','#70ffb0');tone(480,.1,'sine',.03)}else{addExp(e.value);gainNovaEnergy(e.charge);if(p.expShield>0)p.shield=Math.min(p.shieldMax,p.shield+p.expShield)}}}
+ // Compact in place: hundreds of XP shards no longer allocate a new array 60 times/sec.
+ let livePickups=0;for(let i=0;i<pickups.length;i++){const e=pickups[i];if(!e.collected)pickups[livePickups++]=e;}pickups.length=livePickups;
  if(ui.announcement.classList.contains('show')&&runClock>announceUntil)ui.announcement.classList.remove('show');
  if(mode!=='playing')return;
  // The clock schedules bosses independently of drops/enemies; no wave cleanup occurs.
@@ -2525,10 +2530,27 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  for(const e of pickups){if(e.x<-22||e.y<-22||e.x>W+22||e.y>H+22)continue;const yy=e.y+Math.sin(e.phase)*3;ctx.save();ctx.translate(e.x,yy);ctx.rotate(e.phase*.35);ctx.shadowColor=e.type==='heal'?'#66ffa5':'#af8dff';ctx.shadowBlur=renderHeavyLoad?0:13;ctx.fillStyle=e.type==='heal'?'#73ffb9':'#bd93ff';ctx.beginPath();ctx.moveTo(0,-e.r*1.5);ctx.lineTo(e.r,0);ctx.lineTo(0,e.r*1.5);ctx.lineTo(-e.r,0);ctx.closePath();ctx.fill();ctx.restore()}
  ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(b.kind==='comet'||b.kind==='novaCharge'){const c=b.kind==='novaCharge'?'#fff1bd':'#ffb16c';ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=b.kind==='novaCharge'?'#ffd6a1':'#e77f45';ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(game?.fusions?.inferno&&b.kind==='plasma')?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':BULLET_COLOR[b.kind]||'#ffc27d';ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;
  for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=l.nova?'#ebd3ff':'#7a5df2';ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor='#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=l.nova?'#ffedff':'#ada1ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
- for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
- if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
- glow(b.x,b.y,b.r,b.color,12);
-}for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&e.blastWarn>0){ctx.save();ctx.globalAlpha=.55+.2*Math.sin(t*18);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,79,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
+ // Batch hostile bullets by color under heavy load: one Canvas fill per color
+ // rather than a shadow/filter/path submission for every bullet.
+ if(renderHeavyLoad||settings.fx==='low'){
+  const groups=new Map();
+  for(const b of hostile){
+   if(b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
+   let path=groups.get(b.color);if(!path){path=new Path2D();groups.set(b.color,path)}
+   path.moveTo(b.x+b.r,b.y);path.arc(b.x,b.y,b.r,0,TAU);
+  }
+  // Large batched paths must not cast a whole-screen shadow texture.
+  // Pressure warnings below still retain their dedicated outline.
+  ctx.shadowBlur=0;
+  for(const [color,path] of groups){ctx.fillStyle=color;ctx.fill(path)}
+  // Keep special warning rings on top of the colored projectiles.
+  for(const b of hostile){if(!b.pressure||b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
+   ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();
+  }
+ }else for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
+  if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
+  glow(b.x,b.y,b.r,b.color,12);
+ }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&e.blastWarn>0){ctx.save();ctx.globalAlpha=.55+.2*Math.sin(t*18);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,79,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
  if(player.orbit){for(let i=0;i<player.orbit;i++){const pos=ringPosition(i,player.orbit,t,73,30,6,2.2);glow(pos.x,pos.y,7,'#75ffdf',15);ctx.strokeStyle='#a6fff1';ctx.lineWidth=2;ctx.beginPath();ctx.arc(pos.x,pos.y,11,0,TAU);ctx.stroke()}}
  for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor='#e3bd88';ctx.shadowBlur=13;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':'#bca388';ctx.strokeStyle='#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
  if(player.relicLaserOrbit){for(let k=0;k<2;k++){const a=t*1.65+k*Math.PI;const xx=player.x+Math.cos(a)*28,yy=player.y+Math.sin(a)*28;glow(xx,yy,5,'#d9b6ff',11);ctx.strokeStyle='#9e8cff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(xx,yy,9,0,TAU);ctx.stroke()}}
@@ -2576,6 +2598,38 @@ function updateFestival(dt){if(!celebrationParticles.length&&!celebrationRockets
  fctx.shadowBlur=0;if(celebrationLabel){fctx.save();fctx.textAlign='center';fctx.font=`900 ${Math.min(24,Math.max(13,innerWidth/40))}px system-ui,sans-serif`;fctx.shadowBlur=19;fctx.shadowColor='#c8a2ff';fctx.fillStyle='#ffffff';fctx.fillText(celebrationLabel,innerWidth/2,Math.min(innerHeight*.12,88));fctx.restore()}
 }
 let perfFrames=0,perfSecond=0,perfFPS=60;
+// v11.9: bounded read-only runtime diagnostics; no gameplay or benchmark cheats ship in production.
+const PERF_RING_SIZE=480;
+const perfRing={frame:new Float32Array(PERF_RING_SIZE),sim:new Float32Array(PERF_RING_SIZE),draw:new Float32Array(PERF_RING_SIZE),head:0,count:0};
+function recordPerfSample(frameMs,simMs,drawMs){
+ if(mode!=='playing'||document.hidden||frameMs<1||frameMs>500)return;
+ const i=perfRing.head;perfRing.frame[i]=frameMs;perfRing.sim[i]=simMs;perfRing.draw[i]=drawMs;
+ perfRing.head=(i+1)%PERF_RING_SIZE;perfRing.count=Math.min(PERF_RING_SIZE,perfRing.count+1);
+}
+function perfSummary(samples,drawOnly=false){
+ const values=[];for(let i=0;i<perfRing.count;i++){const v=samples[i];if(Number.isFinite(v)&&(!drawOnly||v>=0))values.push(v)}
+ if(!values.length)return null;
+ values.sort((a,b)=>a-b);
+ const percentile=q=>Number(values[Math.min(values.length-1,Math.ceil(values.length*q)-1)].toFixed(2));
+ const avg=values.reduce((a,b)=>a+b,0)/values.length;
+ return {samples:values.length,avgMs:Number(avg.toFixed(2)),p50Ms:percentile(.50),p95Ms:percentile(.95),p99Ms:percentile(.99),maxMs:percentile(1)};
+}
+function ankinPerformanceReport(){
+ const frame=perfSummary(perfRing.frame),simulation=perfSummary(perfRing.sim),drawing=perfSummary(perfRing.draw,true);
+ const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
+ return {version:'11.9',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+  rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
+  counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
+  raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
+  frame,simulation,drawing,framesOver33ms:over33,stalledFrames:stalledFrameCount,
+  jsHeapMB:performance.memory?.usedJSHeapSize?Number((performance.memory.usedJSHeapSize/1048576).toFixed(1)):null};
+}
+window.ankinPerformanceReport=ankinPerformanceReport;
+function exportAnkinPerfReport(){
+ const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v11.9.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
 const SIM_STEP=1/60,MAX_SIM_STEPS=8,MAX_BACKLOG=.32;
 let simAccumulator=0,stalledFrameCount=0;
@@ -2602,6 +2656,7 @@ function tuneRenderResolution(elapsed,renderMs){
 
 function frame(ts){
  const elapsed=last?Math.max(0,(ts-last)/1000):0;last=ts;
+ const perfSimStart=performance.now();
  if(mode==='playing'){
   // Wall-clock gaps are never added to survival time without simulating the same combat time.
   // Extreme stalls slow game time instead of granting unearned survival or instant boss spawns.
@@ -2613,6 +2668,7 @@ function frame(ts){
   }
   if(mode!=='playing')simAccumulator=0;
  }else simAccumulator=0;
+ const perfSimMs=performance.now()-perfSimStart;
  const dt=Math.min(.10,elapsed),effectsDt=Math.min(.25,elapsed);
  shake=Math.max(0,shake-effectsDt*28);flash=Math.max(0,flash-effectsDt);
  const particleDrag=Math.pow(.97,effectsDt*60);for(const p of particles){p.life-=effectsDt;if(p.ring)p.r+=(p.to-p.r)*Math.min(1,effectsDt*12);else if(!p.lightning){p.x+=p.vx*effectsDt;p.y+=p.vy*effectsDt;p.vx*=particleDrag;p.vy*=particleDrag}}particles=particles.filter(x=>x.life>0);
@@ -2625,13 +2681,15 @@ function frame(ts){
  const targetInterval=settings.fps===0?0:1000/settings.fps;
  renderBudget=Math.min(250,renderBudget+frameMs);
  const drawNow=mode!=='playing'||!frame.lastDraw||settings.fps===0||renderBudget>=targetInterval-.55;
+ let perfDrawMs=-1;
  if(drawNow){
   if(targetInterval>0)renderBudget=mode==='playing'?Math.max(0,renderBudget-targetInterval):0;
   else renderBudget=0;
   const festivalStep=frame.lastDraw?Math.min(.12,(ts-frame.lastDraw)/1000):effectsDt;
   const drawStart=performance.now();
   render();updateFestival(festivalStep);frame.lastDraw=ts;
-  if(mode==='playing')tuneRenderResolution(elapsed,performance.now()-drawStart);
+  perfDrawMs=performance.now()-drawStart;
+  if(mode==='playing')tuneRenderResolution(elapsed,perfDrawMs);
   if(mode==='playing'){
    actualDraws++;
    if(!lastFpsSample)lastFpsSample=ts;
@@ -2640,6 +2698,7 @@ function frame(ts){
    }
   }else{actualDraws=0;lastFpsSample=ts}
  }
+ recordPerfSample(elapsed*1000,perfSimMs,perfDrawMs);
  requestAnimationFrame(frame)
 }
 addEventListener('visibilitychange',()=>{last=0;simAccumulator=0;keys.clear();clearTouch();if(document.hidden&&mode==='playing')state('paused')});
