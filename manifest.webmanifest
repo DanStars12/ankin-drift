@@ -1,0 +1,36 @@
+{
+  "name": "ANKIN DRIFT v11.7 — WARP & DEFENSE UPDATE",
+  "short_name": "ANKIN DRIFT",
+  "description": "v11.7: visible warp warnings and endgame defense balance.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060916",
+  "theme_color": "#09152d",
+  "lang": "ja",
+  "categories": [
+    "games"
+  ],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ]
+}
