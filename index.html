@@ -822,17 +822,24 @@ function chooseElementPair(index){
 }
 function backElementPairs(){if(mode!=='elementChoice')return;elementChoice=null;drawOverlay()}
 function fusionPreview(main,sub){
- const lostCards=[...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS]
-  .filter(c=>elementFromCard(c)===sub&&owned(c.id));
- const lostSynergies=activeSynergies().filter(a=>game.synergies[a.id]&&a.need.some(id=>lostCards.some(c=>c.id===id)));
- const lostEvolutions=activeFusions().filter(a=>game.fusions[a.id]&&[a.power,a.legend].some(id=>lostCards.some(c=>c.id===id)));
- const lostSummary=lostCards.map(c=>c.name+(game.skills[c.id]>1?' ×'+game.skills[c.id]:''));
- return {lostCards,lostSynergies,lostEvolutions,lostSummary};
+ const material=elementInvestments(sub);
+ const restingSynergies=activeSynergies().filter(a=>game.synergies[a.id]&&a.need.some(id=>material.cards.some(c=>c.id===id)));
+ const restingEvolutions=activeFusions().filter(a=>game.fusions[a.id]&&[a.power,a.legend].some(id=>material.cards.some(c=>c.id===id)));
+ return {material,restingSynergies,restingEvolutions,summary:material.cards.map(c=>c.name+(game.skills[c.id]>1?' ×'+game.skills[c.id]:''))};
 }
 function elementChoiceMarkup(){
- if(!elementChoice){return `<p class="eyebrow">ELEMENTAL CROSS FUSION · STEP 1 / 2</p><h2 class="logo small">FUSION SELECT</h2><p class="desc">融合可能な属性ペアが <b>${pendingElementPairs.length} 組</b>あります。<b>消費する属性を決める前に、組み合わせを選んでください。</b></p><div class="fusion-pair-grid">${pendingElementPairs.map((f,i)=>`<button type="button" class="fusion-pair" data-element-pair="${i}"><span style="color:${ELEMENTS[f.a].color}">${ELEMENTS[f.a].icon} ${ELEMENTS[f.a].name}</span><span class="fusion-pair-times">×</span><span style="color:${ELEMENTS[f.b].color}">${ELEMENTS[f.b].icon} ${ELEMENTS[f.b].name}</span><small>どちらを主属性にするか次に選択　→</small></button>`).join('')}</div><p class="fine">選択するまでは能力は消費されません。素材を失う前に効果を比較できます。</p>`}
+ const nextStage=ELEMENT_FUSION_LEVELS[game.elementCombos.length]||12;
+ if(!elementChoice){
+  return `<p class="eyebrow">ELEMENTAL REBIRTH · STAGE ${game.elementCombos.length+1}</p><h2 class="logo small">FUSION SELECT</h2>
+  <p class="desc">LV${nextStage}到達！ <b>属性スキルを1種類ずつ</b>持つだけで融合可能です。進化合成のPOWER＋LEGENDARYは不要です。<br>融合先は20通り。主属性を強化し、副属性の攻撃・効果は休眠しますが、<b>カードは消えず共鳴強化へ変換</b>されます。</p>
+  <div class="fusion-pair-grid">${pendingElementPairs.map((f,i)=>`<button type="button" class="fusion-pair" data-element-pair="${i}"><span style="color:${ELEMENTS[f.a].color}">${ELEMENTS[f.a].icon} ${ELEMENTS[f.a].name}</span><span class="fusion-pair-times">×</span><span style="color:${ELEMENTS[f.b].color}">${ELEMENTS[f.b].icon} ${ELEMENTS[f.b].name}</span><small>どちらを主属性にするか選択 →</small></button>`).join('')}</div>
+  <p class="fine">1回目はLV12、2回目はLV28で解放。主属性の見た目と性能が進化します。</p>`;
+ }
  const f=elementChoice;
- return `<p class="eyebrow">ELEMENTAL CROSS FUSION · STEP 2 / 2</p><h2 class="logo small">MAIN ELEMENT</h2><p class="desc"><b>主属性を選びます。</b>副属性の所持カードと関連シナジー・進化は失われ、今後の抽選からも除外されます。</p><div class="fusion-route-grid">${[f.a,f.b].map(main=>{const sub=main===f.a?f.b:f.a,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub),impact=fusionPreview(main,sub);return `<button type="button" class="fusion-route choice" data-element-main="${main}" style="--rarity:${ELEMENTS[main].color}"><span class="rarity">MAIN ${ELEMENTS[main].name} · ${ELEMENTS[sub].name}を消費</span><span class="choice-icon">${r.icon}</span><strong class="choice-name">${r.name}</strong><span class="choice-desc">${r.desc}</span><span class="fusion-impact gain">＋ 主属性の進化攻撃を獲得</span><span class="fusion-impact loss">− 失うカード ${impact.lostCards.length}種類 / シナジー ${impact.lostSynergies.length}件 / 進化 ${impact.lostEvolutions.length}件</span><span class="fusion-lost-names">${impact.lostSummary.length?impact.lostSummary.map(x=>escHtml(x)).join('・'):'該当する所持カードなし'}</span><span class="fusion-impact caution">⚠ ${ELEMENTS[sub].name}のカードはこのランで再取得不可</span></button>`}).join('')}</div><div class="actions"><button type="button" id="pairBack" class="secondary">← 属性ペアを選び直す</button></div><p class="fine">カードを押すと確定します。取消したい場合は「選び直す」を使用してください。</p>`;
+ return `<p class="eyebrow">ELEMENTAL REBIRTH · SELECT MAIN</p><h2 class="logo small">主属性を選択</h2>
+ <p class="desc">同じ2属性でも主属性で融合結果が変わります。<b>獲得済みカードは消えません。</b>副属性の効果は停止し、強化の蓄積に応じて主属性の「共鳴出力」が高まります。</p>
+ <div class="fusion-route-grid">${[f.a,f.b].map(main=>{const sub=main===f.a?f.b:f.a,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub),impact=fusionPreview(main,sub),color=FUSION_PALETTES[main][sub];return `<button type="button" class="fusion-route choice fused-route" data-element-main="${main}" style="--rarity:${color};--fusion-color:${color}"><span class="rarity">MAIN ${ELEMENTS[main].name} ＋ ${ELEMENTS[sub].name}の共鳴</span><span class="choice-icon">${r.icon}</span><strong class="choice-name">${r.name}</strong><span class="choice-desc">${r.desc}</span><span class="fusion-impact gain">✦ 主属性の威力・範囲を進化（専用カラー ${color}）</span><span class="fusion-impact gain">✦ 副属性 ${impact.material.count}枚分／共鳴出力 ${impact.material.points.toFixed(1)} を継承</span><span class="fusion-lost-names">${impact.summary.length?impact.summary.map(x=>escHtml(x)).join('・'):'まだ取得した属性カードなし'}</span><span class="fusion-impact caution">副属性の効果・対応シナジーは休眠／カード・取得履歴は保持</span></button>`}).join('')}</div>
+ <div class="actions"><button type="button" id="pairBack" class="secondary">← 組み合わせを選び直す</button></div>`;
 }
 function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
@@ -853,17 +860,41 @@ function applyElementFusionStats(p,combo){const {main,sub}=combo,r=ELEMENT_FUSIO
  if(sub==='ice'&&main==='rock')p.rockDamage+=55;if(main==='rock'&&sub==='wind')p.rockSize+=8;if(main==='rock'&&sub==='thunder')p.rockDamage+=90;
  if(sub==='rock'&&main==='fire')p.magmaDps+=120;
 }
-function selectElementFusion(main){if(mode!=='elementChoice'||!elementChoice||![elementChoice.a,elementChoice.b].includes(main))return;const sub=main===elementChoice.a?elementChoice.b:elementChoice.a,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);if(!r)return;
- game.sealedElements.push(sub);game.elementCombos.push({main,sub});
- for(const id of Object.keys(game.skills))if(elementFromCard(skillById(id))===sub)delete game.skills[id];
- for(const name of ['powers','legends','uniques','relics'])for(const id of Object.keys(game[name]))if(elementFromCard(skillById(id))===sub)delete game[name][id];
- game.acquisitionLog=game.acquisitionLog.filter(id=>owned(id)||['power','legendary'].includes(skillById(id)?.rarity));
- for(const a of SYNERGIES)if(game.synergies[a.id]&&a.need.some(id=>!owned(id)))delete game.synergies[a.id];
- for(const a of FUSIONS)if(game.fusions[a.id]&&(!owned(a.power)||!owned(a.legend)))delete game.fusions[a.id];
- pendingFusions=pendingFusions.filter(a=>game.fusions[a.id]);pendingSynergy=pendingSynergy.filter(a=>game.synergies[a.id]);
- restorePlayerBuild();reconcileTargets();elementChoice=null;pendingElementPairs=[];confetti();queueFireworks();sfx('fusion');announce(`✦ ${r.name}！ ${ELEMENTS[sub].name}属性を消費`,5);ring(player.x,player.y,260,ELEMENTS[main].color);burst(player.x,player.y,ELEMENTS[main].color,65,210);state('elementResult');
+function selectElementFusion(main){
+ if(mode!=='elementChoice'||!elementChoice||![elementChoice.a,elementChoice.b].includes(main))return;
+ const sub=main===elementChoice.a?elementChoice.b:elementChoice.a;
+ if(game.sealedElements.includes(sub)||game.sealedElements.includes(main))return;
+ const r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);if(!r)return;
+ const resonance=elementInvestments(sub);
+ // All cards and acquisition history survive fusion. Secondary attack modules
+ // sleep, rather than being erased, and their investment strengthens the main.
+ game.sealedElements.push(sub);
+ game.elementCombos.push({main,sub,resonance:resonance.points,cards:resonance.count});
+ pendingFusions=pendingFusions.filter(a=>!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)));
+ pendingSynergy=pendingSynergy.filter(a=>a.need.every(id=>!isSealedCard(skillById(id))));
+ restorePlayerBuild();reconcileTargets();elementChoice=null;pendingElementPairs=[];
+ const color=FUSION_PALETTES[main][sub];
+ confetti();queueFireworks();sfx('fusion');flash=Math.max(flash,.7);
+ announce(`✦ REBIRTH: ${r.name}！ ${ELEMENTS[sub].name}を共鳴変換！`,5);
+ ring(player.x,player.y,190,color);ring(player.x,player.y,125,'#ffffff');
+ burst(player.x,player.y,color,Math.min(45,26+resonance.count*3),195);
+ state('elementResult');
 }
-function elementLabMarkup(){const obtained=game.elementCombos||[];const cards=ELEMENT_FUSION_RECIPES.map(r=>{const one=!!game.fusions[ELEMENTS[r.main].evo],two=!!game.fusions[ELEMENTS[r.sub].evo],done=obtained.some(x=>x.main===r.main&&x.sub===r.sub),sealed=game.sealedElements.includes(r.main)||game.sealedElements.includes(r.sub);return `<article class="lab-recipe ${done?'done':sealed?'':'partial'}"><div class="lab-recipe-head"><strong style="color:${ELEMENTS[r.main].color}">${r.icon} ${r.name}</strong><span>${done?'✓ 融合済':sealed?'属性ロック':one&&two?'✦ 融合可能':one||two?'あと1属性':'未完成'}</span></div><div class="recipe-parts"><span class="requirement ${one?'owned':'missing'}" style="color:${ELEMENTS[r.main].color}">${one?'✓':'＋'} メイン：${ELEMENTS[r.main].name}（${evolutionPeekLink(ELEMENTS[r.main].evo)}）</span><span class="fusion-plus">×</span><span class="requirement ${two?'owned':'missing'}" style="color:${ELEMENTS[r.sub].color}">${two?'✓':'＋'} 素材：${ELEMENTS[r.sub].name}（${evolutionPeekLink(ELEMENTS[r.sub].evo)}）</span></div><div class="recipe-effect">${r.desc}</div><div class="recipe-effect" style="font-size:11px;color:#a8bfd3">準備：${skillPeekLink(FUSIONS.find(x=>x.id===ELEMENTS[r.main].evo).power)} ＋ ${skillPeekLink(FUSIONS.find(x=>x.id===ELEMENTS[r.main].evo).legend)} / ${skillPeekLink(FUSIONS.find(x=>x.id===ELEMENTS[r.sub].evo).power)} ＋ ${skillPeekLink(FUSIONS.find(x=>x.id===ELEMENTS[r.sub].evo).legend)}</div><small class="fusion-cost">融合すると${ELEMENTS[r.sub].name}属性の通常能力が全消失・同ラン再取得不可</small></article>`}).join('');return `<p class="lab-help">5属性 × 4方向 = <b>全20通り</b>。<b>進化名・必要素材名のⓘを押すと詳細を確認できます。</b>各属性で同属性進化（POWER＋LEGENDARY）を完成させると、戦闘停止中にまず属性の組み合わせを選び、次に主属性と消費する属性を選択できます。<b>主属性で結果が変化し、副属性は完全消費・再取得禁止</b>です。</p><div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${v.color}">${v.icon}${v.name}：${game.sealedElements.includes(k)?'封印':game.fusions[v.evo]?'進化完了':'進化前'}</span>`).join('')}</div><div class="lab-recipe-grid">${cards}</div>`}
+function elementLabMarkup(){
+ const ownedKeys=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[game.elementCombos.length];
+ const cards=ELEMENT_FUSION_RECIPES.map(r=>{
+  const mainReady=elementInvestments(r.main).count>0,subReady=elementInvestments(r.sub).count>0;
+  const done=game.elementCombos.some(x=>x.main===r.main&&x.sub===r.sub);
+  const sealed=game.sealedElements.includes(r.main)||game.sealedElements.includes(r.sub);
+  const color=FUSION_PALETTES[r.main][r.sub];
+  return `<article class="lab-recipe ${done?'done':sealed?'':'partial'}" style="--fusion-color:${color};${done?'border-color:'+color:''}"><div class="lab-recipe-head"><strong style="color:${color}">${r.icon} ${r.name}</strong><span>${done?'✓ REBIRTH':sealed?'属性休眠':mainReady&&subReady?'✦ 素材揃い':mainReady||subReady?'あと1属性':'未取得'}</span></div>
+   <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性スキル</span><span class="fusion-plus">×</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性スキル</span></div>
+   <div class="recipe-effect">${r.desc}</div><small class="fusion-cost">副属性スキルは削除せず、主属性への共鳴出力に変換。</small></article>`;
+ }).join('');
+ return `<p class="lab-help">✦ <b>ELEMENTAL REBIRTH v12</b> — LV12で初回、LV28で2回目の融合が解放。必要なのは異なる2属性のスキルを各1種類（レアリティ不問）。<b>POWER＋LEGENDARYの進化合成は別システムとして継続。</b><br>融合では副属性の攻撃・連携効果だけを休眠し、取得済みカードや実績は消えません。過去のスキル投入量に応じて主属性の攻撃力を上乗せします。</p>
+ <div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${fusedColor(k)||v.color}">${v.icon}${v.name}：${game.sealedElements.includes(k)?'共鳴素材（休眠）':ownedKeys.includes(k)?'属性カード取得済み':'未取得'}</span>`).join('')}</div>
+ <p class="fine">現在 LV${game.level} ／ ${next?'次の融合 LV'+next:'融合回数の上限に到達'} ／ 融合 ${game.elementCombos.length}/2</p><div class="lab-recipe-grid">${cards}</div>`;
+}
 function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;const info=bossInfo(variant);box.className='boss-alert show '+type;box.innerHTML=`<div class="alert-stripe">${type==='unique'?'⚠ CRITICAL ANOMALY':'⚠ HOSTILE SIGNATURE DETECTED'}</div><div class="alert-name">${variant==='theEnd'?ULTIMATE_NAME:(info?.en||'BOSS')}</div><div class="alert-sub">${variant==='theEnd'?'ULTIMATE BOSS · 3 MODULES':type==='unique'?'UNIQUE ENCOUNTER':type==='major'?'MAJOR BOSS INBOUND':'ELITE BOSS INBOUND'} · ${variant==='theEnd'?'PILOT LEVEL ADAPTIVE':(info?.jp||'')}</div>`;bossAlertUntil=performance.now()+3400;}
 
 let selectedGameMode="normal";
