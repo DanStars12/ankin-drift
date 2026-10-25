@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v11.10 — HUD LAYOUT FIX",
+  "name": "ANKIN DRIFT v12.0 — ELEMENTAL REBIRTH",
   "short_name": "ANKIN DRIFT",
-  "description": "v11.10: desktop FPS indicator moved below survival HUD; mobile placement preserved.",
+  "description": "V12 elemental rebirth, knockback gusts, preserved skill investments and special fusion colors.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",

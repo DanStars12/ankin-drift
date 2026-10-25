@@ -46,3 +46,9 @@ GitHub Actions uploads the Playwright report including JSON attachments. Perform
 - The `late-game-stress` test scenario initially adds 500 energy orbs, up to 220 enemies and 300 hostile projectiles, plus magma patches and tornado effects at the 60-minute difficulty setting. The game's normal five-second shard consolidation reduces the number of orb objects without reducing stored XP; the test verifies this. It collects frame time P95/P99 as well as simulation and draw time. This is an **equivalent synthetic workload**, not a real 60-minute session.
 
 Before-and-after numbers from GitHub-hosted runners are indicative only. Always retest on the same device at the same graphics and FPS settings, especially during long combined raids.
+
+## v12.0 Elemental Rebirth
+- Wind gusts push ordinary enemies away from the pilot and the gust perimeter, never pull inward. Both knockback and rendered arcs are bounded; bosses remain immune to gust push.
+- Elemental fusion at levels 12 and 28 requires one acquired skill of each chosen element. Standard POWER + LEGENDARY evolution is still available separately.
+- Secondary-element cards and acquisition history remain in the inventory and are converted into resonance damage; their effects are suspended. Special palettes identify each ordered fusion, including blue fire+ice magma and red wind+fire gusts.
+- Fusion-specific rendering uses a reduced animation budget for high-load raids.
