@@ -1,5 +1,5 @@
-/* ANKIN DRIFT v11.9 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v11-9-raid-clear-hud-1';
+/* ANKIN DRIFT v11.10 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v11-10-hud-layout-1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
