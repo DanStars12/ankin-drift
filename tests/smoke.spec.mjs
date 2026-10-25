@@ -83,7 +83,7 @@ function rectanglesOverlap(a,b) {
 test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }, testInfo) => {
   const errors = watchFailures(page);
   await page.goto('./');
-  await expect(page).toHaveTitle(/ANKIN DRIFT v12\.0/);
+  await expect(page).toHaveTitle(/ANKIN DRIFT v12\.1/);
   await page.locator('[data-control="' + (isMobile ? 'mobile' : 'desktop') + '"]').click();
   await page.locator('#openOptions').click();
   await page.locator('#showFps').check();
@@ -161,7 +161,7 @@ test('v12 elemental fusion keeps cards and gusts never pull enemies toward the p
     const original=await route.fetch(),html=await original.text();
     const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
     if(!html.includes(anchor))throw Error('v12 test injection anchor missing');
-    await route.fulfill({response:original,body:html.replace(anchor,"window.__v12Checks=()=>{\n // Test-only scenarios operate inside the game IIFE. No public debug interface ships.\n newRun();game.level=12;\n game.skills.emberSeed=1;game.skills.coldCoil=1;\n game.acquisitionLog=['emberSeed','coldCoil'];restorePlayerBuild();\n const pairs=availableElementPairs();\n const initial={pairs:pairs.length,fire:elementInvestments('fire').count,ice:elementInvestments('ice').count};\n elementChoice={a:'fire',b:'ice'};state('elementChoice');selectElementFusion('fire');\n const echo={skills:[game.skills.emberSeed,game.skills.coldCoil],stored:game.acquisitionLog.length,sealed:[...game.sealedElements],combos:game.elementCombos.length,color:fusedColor('fire'),magmaLevel:player.magmaLevel};\n magmaPatch(player.x+80,player.y,1);echo.magmaColor=zones.at(-1)?.tint;\n newRun();game.level=12;\n game.skills.windOrigin=1;game.skills.emberSeed=1;game.acquisitionLog=['windOrigin','emberSeed'];restorePlayerBuild();\n elementChoice={a:'fire',b:'wind'};state('elementChoice');selectElementFusion('wind');\n const colorWind=fusedColor('wind');const restored=game.skills.emberSeed;\n player.windCount=7;player.windRadius=900;player.windStrength=10000;player.windTimer=0;player.windDps=5;\n const e={type:'drone',x:player.x+140,y:player.y,r:12,dead:false,hp:1e8,maxHp:1e8,slow:0,burn:0,frozen:0,dmg:0,xp:0,rockHit:0,phase:0};\n enemies=[e];refreshEnemyIndex();gusts=[];\n const before={x:e.x,y:e.y,playerX:player.x};\n tickGusts(.13);\n const after={x:e.x,y:e.y};\n const wind={color:colorWind,stored:restored,before,after,gusts:gusts.length,maximumRadius:Math.max(...gusts.map(g=>g.r)),tint:gusts[0]?.color};\n return {initial,echo,wind};\n};"+anchor)});
+    await route.fulfill({response:original,body:html.replace(anchor,"window.__v12Checks=()=>{\n // Test-only scenarios operate inside the game IIFE. No public debug interface ships.\n newRun();game.level=12;\n game.skills.emberSeed=1;game.skills.coldCoil=1;\n game.acquisitionLog=['emberSeed','coldCoil'];restorePlayerBuild();\n const pairs=availableElementPairs();\n const initial={pairs:pairs.length,fire:elementInvestments('fire').count,ice:elementInvestments('ice').count};\n elementChoice={main:'fire'};state('elementChoice');selectElementFusion('ice');\n const echo={skills:[game.skills.emberSeed,game.skills.coldCoil],stored:game.acquisitionLog.length,sealed:[...game.sealedElements],combos:game.elementCombos.length,color:fusedColor('fire'),magmaLevel:player.magmaLevel};\n magmaPatch(player.x+80,player.y,1);echo.magmaColor=zones.at(-1)?.tint;\n newRun();game.level=12;\n game.skills.windOrigin=1;game.skills.emberSeed=1;game.acquisitionLog=['windOrigin','emberSeed'];restorePlayerBuild();\n elementChoice={main:'wind'};state('elementChoice');selectElementFusion('fire');\n const colorWind=fusedColor('wind');const restored=game.skills.emberSeed;\n player.windCount=7;player.windRadius=900;player.windStrength=10000;player.windTimer=0;player.windDps=5;\n const e={type:'drone',x:player.x+140,y:player.y,r:12,dead:false,hp:1e8,maxHp:1e8,slow:0,burn:0,frozen:0,dmg:0,xp:0,rockHit:0,phase:0};\n enemies=[e];refreshEnemyIndex();gusts=[];\n const before={x:e.x,y:e.y,playerX:player.x};\n tickGusts(.13);\n const after={x:e.x,y:e.y};\n const wind={color:colorWind,stored:restored,before,after,gusts:gusts.length,maximumRadius:Math.max(...gusts.map(g=>g.r)),tint:gusts[0]?.color};\n return {initial,echo,wind};\n};\nwindow.__v121StageChecks=()=>{\n newRun();game.level=12;\n for(const id of ['emberSeed','coldCoil','windOrigin','stoneSeed'])game.skills[id]=1;\n game.acquisitionLog=['emberSeed','coldCoil','windOrigin','stoneSeed'];\n restorePlayerBuild();\n const started=enterElementChoice();\n const startUI=elementChoiceMarkup();\n const firstMains=fusionMainChoices();\n chooseFusionMain('fire');\n const subUI=elementChoiceMarkup();\n const main=elementChoice.main;\n selectElementFusion('ice');\n const afterFirst={used:[...fusedElementKeys()],count:game.elementCombos.length,hasCard:game.skills.coldCoil===1};\n game.level=28;state('playing');\n const secondStarted=enterElementChoice();\n const secondMains=fusionMainChoices();\n const secondUI=elementChoiceMarkup();\n chooseFusionMain('wind');\n const secondSubUI=elementChoiceMarkup();\n selectElementFusion('fire'); // Already consumed; must not commit.\n const ignored=game.elementCombos.length===1&&mode==='elementChoice';\n selectElementFusion('rock');\n const final={count:game.elementCombos.length,used:[...fusedElementKeys()],cards:['emberSeed','coldCoil','windOrigin','stoneSeed'].every(x=>game.skills[x]===1),finished:availableElementPairs().length===0};\n return {started,startUI,firstMains,subUI,main,afterFirst,secondStarted,secondMains,secondUI,secondSubUI,ignored,final};\n};\n"+anchor)});
   });
   await page.goto('./');
   await page.locator('[data-control="'+(isMobile?'mobile':'desktop')+'"]').click();
@@ -186,4 +186,42 @@ test('v12 elemental fusion keeps cards and gusts never pull enemies toward the p
   expect(r.wind.after.x).toBeGreaterThanOrEqual(r.wind.before.x);
   expect(Math.hypot(r.wind.after.x-r.wind.before.x,r.wind.after.y-r.wind.before.y)).toBeLessThanOrEqual(10.01);
   expect(errors).toEqual([]);
+});
+
+test('v12.1 sequential fusion selection, disabled used attributes and milestone copy', async ({page,isMobile})=>{
+ const failures=watchFailures(page);
+ await page.route('**/ankin-drift/',async route=>{
+  const fetched=await route.fetch(),html=await fetched.text();
+  const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
+  if(!html.includes(anchor))throw Error('v12.1 test anchor changed');
+  const script="window.__v12Checks=()=>{\n // Test-only scenarios operate inside the game IIFE. No public debug interface ships.\n newRun();game.level=12;\n game.skills.emberSeed=1;game.skills.coldCoil=1;\n game.acquisitionLog=['emberSeed','coldCoil'];restorePlayerBuild();\n const pairs=availableElementPairs();\n const initial={pairs:pairs.length,fire:elementInvestments('fire').count,ice:elementInvestments('ice').count};\n elementChoice={main:'fire'};state('elementChoice');selectElementFusion('ice');\n const echo={skills:[game.skills.emberSeed,game.skills.coldCoil],stored:game.acquisitionLog.length,sealed:[...game.sealedElements],combos:game.elementCombos.length,color:fusedColor('fire'),magmaLevel:player.magmaLevel};\n magmaPatch(player.x+80,player.y,1);echo.magmaColor=zones.at(-1)?.tint;\n newRun();game.level=12;\n game.skills.windOrigin=1;game.skills.emberSeed=1;game.acquisitionLog=['windOrigin','emberSeed'];restorePlayerBuild();\n elementChoice={main:'wind'};state('elementChoice');selectElementFusion('fire');\n const colorWind=fusedColor('wind');const restored=game.skills.emberSeed;\n player.windCount=7;player.windRadius=900;player.windStrength=10000;player.windTimer=0;player.windDps=5;\n const e={type:'drone',x:player.x+140,y:player.y,r:12,dead:false,hp:1e8,maxHp:1e8,slow:0,burn:0,frozen:0,dmg:0,xp:0,rockHit:0,phase:0};\n enemies=[e];refreshEnemyIndex();gusts=[];\n const before={x:e.x,y:e.y,playerX:player.x};\n tickGusts(.13);\n const after={x:e.x,y:e.y};\n const wind={color:colorWind,stored:restored,before,after,gusts:gusts.length,maximumRadius:Math.max(...gusts.map(g=>g.r)),tint:gusts[0]?.color};\n return {initial,echo,wind};\n};\nwindow.__v121StageChecks=()=>{\n newRun();game.level=12;\n for(const id of ['emberSeed','coldCoil','windOrigin','stoneSeed'])game.skills[id]=1;\n game.acquisitionLog=['emberSeed','coldCoil','windOrigin','stoneSeed'];\n restorePlayerBuild();\n const started=enterElementChoice();\n const startUI=elementChoiceMarkup();\n const firstMains=fusionMainChoices();\n chooseFusionMain('fire');\n const subUI=elementChoiceMarkup();\n const main=elementChoice.main;\n selectElementFusion('ice');\n const afterFirst={used:[...fusedElementKeys()],count:game.elementCombos.length,hasCard:game.skills.coldCoil===1};\n game.level=28;state('playing');\n const secondStarted=enterElementChoice();\n const secondMains=fusionMainChoices();\n const secondUI=elementChoiceMarkup();\n chooseFusionMain('wind');\n const secondSubUI=elementChoiceMarkup();\n selectElementFusion('fire'); // Already consumed; must not commit.\n const ignored=game.elementCombos.length===1&&mode==='elementChoice';\n selectElementFusion('rock');\n const final={count:game.elementCombos.length,used:[...fusedElementKeys()],cards:['emberSeed','coldCoil','windOrigin','stoneSeed'].every(x=>game.skills[x]===1),finished:availableElementPairs().length===0};\n return {started,startUI,firstMains,subUI,main,afterFirst,secondStarted,secondMains,secondUI,secondSubUI,ignored,final};\n};\n";
+  await route.fulfill({response:fetched,body:html.replace(anchor,script+anchor)});
+ });
+ await page.goto('./');
+ await page.locator('[data-control="'+(isMobile?'mobile':'desktop')+'"]').click();
+ await page.locator('#start').click();
+ await page.locator('#guideContinue').click();
+ const result=await page.evaluate(()=>window.__v121StageChecks());
+ expect(result.started).toBe(true);
+ expect(result.startUI).toContain('属性融合解放');
+ expect(result.startUI).toContain('特化する属性を選んでください');
+ expect(result.startUI).toContain('Lv12');
+ expect(result.firstMains).toContain('fire');
+ expect(result.subUI).toContain('素材にする属性を1つ選んでください');
+ expect(result.subUI).toContain('※選択した属性は融合され、失います！');
+ expect(result.subUI).toContain('特化属性として選択済み');
+ expect(result.main).toBe('fire');
+ expect(result.afterFirst.hasCard).toBe(true);
+ expect(result.afterFirst.used).toEqual(['fire','ice']);
+ expect(result.secondStarted).toBe(true);
+ expect(result.secondMains).toEqual(['wind','rock']);
+ expect(result.secondUI).toContain('Lv28');
+ expect(result.secondUI).toContain('前回の融合で使用済み');
+ expect(result.secondSubUI).toContain('特化属性として選択済み');
+ expect(result.ignored).toBe(true);
+ expect(result.final.count).toBe(2);
+ expect(result.final.used).toEqual(['fire','ice','wind','rock']);
+ expect(result.final.cards).toBe(true);
+ expect(result.final.finished).toBe(true);
+ expect(failures).toEqual([]);
 });
