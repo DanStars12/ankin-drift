@@ -472,7 +472,9 @@ body.pilot-mobile .fusion-route.choice{display:flex;flex-direction:column;grid-t
 #fpsCounter[hidden]{display:none!important}
 /* PC: keep FPS directly below the left survival HUD, never over the lower-right build summary. */
 body:not(.pilot-mobile) #fpsCounter{right:auto;bottom:auto;left:14px;top:112px}
-body.pilot-mobile #fpsCounter{left:auto;top:auto;right:12px;bottom:103px;font-size:10px}
+/* Same safe-area reference as DASH: FPS stays above the control with a gap. */
+body.pilot-mobile #fpsCounter{left:auto;top:auto;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 228px);font-size:10px}
+@media(max-width:370px){body.pilot-mobile #fpsCounter{bottom:calc(env(safe-area-inset-bottom,0px) + 200px)}}
 @media(max-width:550px){.settings-area{max-width:100%}.settings-area label{width:100%;justify-content:space-between;padding:7px 10px;min-height:39px}.settings-area select{max-width:63%;font-size:11px}.settings-area .graphics-note{text-align:left}}
 
 /* v9.3: make OPTIONS its own accessible panel, not a wall of buttons on the title. */
@@ -701,11 +703,8 @@ resize();
 function positionFpsDisplay(){
  const el=U('fpsCounter');if(!el)return;
  if(controlMode==='mobile'){
-  // Keep the counter immediately above DASH, away from both touch controls.
-  // Anchor to the actual button bounds so safe areas and narrow devices work.
-  el.style.left='';el.style.top='';
-  const dash=U('dashTouch'),bounds=dash?.getBoundingClientRect();
-  if(bounds?.height)el.style.bottom=Math.ceil(innerHeight-bounds.top+8)+'px';
+  // CSS uses the same safe-area offset as DASH; no stale inline positioning.
+  el.style.left='';el.style.top='';el.style.bottom='';
   return;
  }
  el.style.bottom='';
