@@ -2393,9 +2393,14 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(h.type==='beam'){const dist=Math.abs(Math.sin(h.a)*(p.x-h.x)-Math.cos(h.a)*(p.y-h.y));if(dist<h.width+p.r)loseHP(h.damage)}
  else if(h.type==='voidring'){if(d2(h,p)>(h.r-p.r)**2)loseHP(h.damage)}else if(d2(h,p)<(h.r+p.r)**2)loseHP(h.damage)}hazards=hazards.filter(h=>h.warn>0||h.active>0);
  // Purple shards give both experience AND Nova charge, with no expiry timer.
- for(const e of pickups){e.phase+=dt*3;let distance=dst(e,p);if(distance<p.magnet&&distance>2){const speed=Math.min(780,340+Math.max(0,p.magnet-distance)*2);e.x+=(p.x-e.x)/distance*speed*dt;e.y+=(p.y-e.y)/distance*speed*dt}
- if(distance<p.r+14){e.collected=true;if(e.type==='heal'){p.hp=Math.min(p.maxHp,p.hp+e.value);pop(e.x,e.y,'+'+e.value+' HP','#70ffb0');tone(480,.1,'sine',.03)}else{addExp(e.value);gainNovaEnergy(e.charge);if(p.expShield>0)p.shield=Math.min(p.shieldMax,p.shield+p.expShield)}}}
- pickups=pickups.filter(e=>!e.collected);
+ // Avoid a square root for distant XP shards. Collision checks still use the
+ // pre-movement distance, matching the original pickup and magnet behavior.
+ const pickupMagnetSq=p.magnet*p.magnet, pickupReach=p.r+14, pickupReachSq=pickupReach*pickupReach;
+ for(const e of pickups){e.phase+=dt*3;const dx=p.x-e.x,dy=p.y-e.y,dd=dx*dx+dy*dy;
+ if(dd<pickupMagnetSq&&dd>4){const distance=Math.sqrt(dd),speed=Math.min(780,340+Math.max(0,p.magnet-distance)*2);e.x+=dx/distance*speed*dt;e.y+=dy/distance*speed*dt}
+ if(dd<pickupReachSq){e.collected=true;if(e.type==='heal'){p.hp=Math.min(p.maxHp,p.hp+e.value);pop(e.x,e.y,'+'+e.value+' HP','#70ffb0');tone(480,.1,'sine',.03)}else{addExp(e.value);gainNovaEnergy(e.charge);if(p.expShield>0)p.shield=Math.min(p.shieldMax,p.shield+p.expShield)}}}
+ // Compact in place: hundreds of XP shards no longer allocate a new array 60 times/sec.
+ let livePickups=0;for(let i=0;i<pickups.length;i++){const e=pickups[i];if(!e.collected)pickups[livePickups++]=e;}pickups.length=livePickups;
  if(ui.announcement.classList.contains('show')&&runClock>announceUntil)ui.announcement.classList.remove('show');
  if(mode!=='playing')return;
  // The clock schedules bosses independently of drops/enemies; no wave cleanup occurs.
@@ -2525,10 +2530,25 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  for(const e of pickups){if(e.x<-22||e.y<-22||e.x>W+22||e.y>H+22)continue;const yy=e.y+Math.sin(e.phase)*3;ctx.save();ctx.translate(e.x,yy);ctx.rotate(e.phase*.35);ctx.shadowColor=e.type==='heal'?'#66ffa5':'#af8dff';ctx.shadowBlur=renderHeavyLoad?0:13;ctx.fillStyle=e.type==='heal'?'#73ffb9':'#bd93ff';ctx.beginPath();ctx.moveTo(0,-e.r*1.5);ctx.lineTo(e.r,0);ctx.lineTo(0,e.r*1.5);ctx.lineTo(-e.r,0);ctx.closePath();ctx.fill();ctx.restore()}
  ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(b.kind==='comet'||b.kind==='novaCharge'){const c=b.kind==='novaCharge'?'#fff1bd':'#ffb16c';ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=b.kind==='novaCharge'?'#ffd6a1':'#e77f45';ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(game?.fusions?.inferno&&b.kind==='plasma')?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':BULLET_COLOR[b.kind]||'#ffc27d';ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;
  for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=l.nova?'#ebd3ff':'#7a5df2';ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor='#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=l.nova?'#ffedff':'#ada1ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
- for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
- if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
- glow(b.x,b.y,b.r,b.color,12);
-}for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&e.blastWarn>0){ctx.save();ctx.globalAlpha=.55+.2*Math.sin(t*18);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,79,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
+ // Batch hostile bullets by color under heavy load: one Canvas fill per color
+ // rather than a shadow/filter/path submission for every bullet.
+ if(renderHeavyLoad||settings.fx==='low'){
+  const groups=new Map();
+  for(const b of hostile){
+   if(b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
+   let path=groups.get(b.color);if(!path){path=new Path2D();groups.set(b.color,path)}
+   path.moveTo(b.x+b.r,b.y);path.arc(b.x,b.y,b.r,0,TAU);
+  }
+  for(const [color,path] of groups){ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=settings.fx==='low'?0:2;ctx.fill(path)}
+  ctx.shadowBlur=0;
+  // Keep special warning rings on top of the colored projectiles.
+  for(const b of hostile){if(!b.pressure||b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
+   ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();
+  }
+ }else for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
+  if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
+  glow(b.x,b.y,b.r,b.color,12);
+ }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&e.blastWarn>0){ctx.save();ctx.globalAlpha=.55+.2*Math.sin(t*18);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,79,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
  if(player.orbit){for(let i=0;i<player.orbit;i++){const pos=ringPosition(i,player.orbit,t,73,30,6,2.2);glow(pos.x,pos.y,7,'#75ffdf',15);ctx.strokeStyle='#a6fff1';ctx.lineWidth=2;ctx.beginPath();ctx.arc(pos.x,pos.y,11,0,TAU);ctx.stroke()}}
  for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor='#e3bd88';ctx.shadowBlur=13;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':'#bca388';ctx.strokeStyle='#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
  if(player.relicLaserOrbit){for(let k=0;k<2;k++){const a=t*1.65+k*Math.PI;const xx=player.x+Math.cos(a)*28,yy=player.y+Math.sin(a)*28;glow(xx,yy,5,'#d9b6ff',11);ctx.strokeStyle='#9e8cff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(xx,yy,9,0,TAU);ctx.stroke()}}
