@@ -589,6 +589,15 @@ body.pilot-mobile.playing-mobile #hud .hud-bottom .stat-detail{font-size:7px}
 body.pilot-mobile.playing-mobile.mobile-top-threat #hud .hud-row>.hud-box,
 body.pilot-mobile.playing-mobile.mobile-top-threat #hud .hud-level{opacity:.48}
 body.pilot-mobile.playing-mobile.mobile-bottom-threat #hud .hud-bottom .hud-box{opacity:.42}
+/* Players can see threats behind DASH / NOVA just like other mobile HUD panels. */
+body.pilot-mobile.playing-mobile.mobile-dash-threat #dashTouch,
+body.pilot-mobile.playing-mobile.mobile-nova-threat #novaTouch{opacity:.42;background:#0b1b2a63;border-color:#bcd5e377;box-shadow:none;backdrop-filter:none}
+body.pilot-mobile.playing-mobile.mobile-dash-threat #dashTouch:active,
+body.pilot-mobile.playing-mobile.mobile-nova-threat #novaTouch:active,
+body.pilot-mobile.playing-mobile.mobile-dash-threat #dashTouch:focus-visible,
+body.pilot-mobile.playing-mobile.mobile-nova-threat #novaTouch:focus-visible{opacity:.92}
+body.pilot-mobile.playing-mobile #touchControls button{transition:opacity .16s ease}
+body.pilot-mobile.playing-mobile #touchControls button small{text-shadow:0 1px 2px #000}
 body.pilot-mobile.playing-mobile #raidStatus{top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;width:max-content;min-width:0;max-width:87%;padding:3px 9px;font-size:9px;line-height:1.3;opacity:.82;border-radius:8px;background:#2a233b8a;box-shadow:none;backdrop-filter:none}
 body.pilot-mobile.playing-mobile #raidStatus b{font-size:9px}
 body.pilot-mobile.playing-mobile #raidStatus .raid-detail{display:none}
@@ -2672,6 +2681,18 @@ function hudUpdate(){if(!game||!player)return;
   const topY=110/.69,bottomY=H-82/.69;
   document.body.classList.toggle('mobile-top-threat',enemies.some(e=>!e.dead&&e.y-e.r<topY&&e.y+e.r>0));
   document.body.classList.toggle('mobile-bottom-threat',enemies.some(e=>!e.dead&&e.y+e.r>bottomY&&e.y-e.r<H));
+  // Narrow phase-safe world coordinates: threat underneath the actual touch button
+  // (not just anywhere at the same height) dims the button without disabling it.
+  const bounds=canvas.getBoundingClientRect(),sx=bounds.width/Math.max(1,W),sy=bounds.height/Math.max(1,H);
+  const threats=[...enemies,...hostile].filter(e=>!e.dead);
+  for(const [name,node] of [['dash',dashTouch],['nova',novaTouch]]){
+   const r=node.getBoundingClientRect();
+   const hit=threats.some(e=>{
+    const x=bounds.left+e.x*sx,y=bounds.top+e.y*sy,rad=(e.r||6)*Math.min(sx,sy);
+    return x+rad>=r.left-7&&x-rad<=r.right+7&&y+rad>=r.top-7&&y-rad<=r.bottom+7;
+   });
+   document.body.classList.toggle('mobile-'+name+'-threat',hit);
+  }
  }if(controlMode==='mobile'){novaTouch.classList.toggle('ready',player.energy>=100&&player.novaCooldown<=0);hudText(U('novaTouchPct'),player.novaCooldown>0?Math.ceil(player.novaCooldown)+'s':Math.floor(player.energy)+'%');dashTouch.classList.toggle('ready',player.dashLeft<=0);hudText(U('dashTouchCd'),player.dashLeft>0?player.dashLeft.toFixed(1)+'s':'READY')}const up=U('upgradeButton');if(up){if(up.hidden===!!game.storedLevels)up.hidden=!game.storedLevels;hudText(up,'✦ 強化 ×'+(game.storedLevels||0)+(controlMode==='mobile'?'':' [L]'))}const vt=U('vacuumTimer');if(vt){hudText(vt,game.vacuum?'✦ EXP SWEEP 出現中！':controlMode==='mobile'?'✦ EXPイベント：ランダム抽選':'✦ EXP SWEEP：ランダムイベント');vt.classList.toggle('ready',!!game.vacuum)}const g=game,p=player;const next=(g.ultimatePending||boss?.type==='ultimate')?(g.endless?g.nextUltimateAt:ultimateThreshold()):(g.bossQueue[0]?.at||g.nextBossAt),upcoming=g.bossQueue[0]?.type||scheduledBossType(g.nextBossAt,g.gameMode);const label=(g.ultimatePending||boss?.type==='ultimate')?ULTIMATE_NAME:({minor:'中ボス / ANKIN POWER',major:'大ボス / LEGENDARY',unique:'ユニーク / UNIQUE ANKIN'}[upcoming]||ULTIMATE_NAME);const prev=g.gameMode==='challenge'?(next===60?0:next===135?60:next-90):(next===60?0:next===150?60:next-150);
  hudText(ui.wave,fmtTime(g.total));hudText(ui.waveType,controlMode==='mobile'?(g.gameMode==='challenge'?'CHALLENGE':'SURVIVAL'):(g.gameMode==='challenge'?'CHALLENGE · 15分でクリア':'NORMAL · 30分でクリア'));hudWidth(ui.waveFill,`${100*clamp((g.total-prev)/Math.max(1,next-prev),0,1)}%`);hudText(ui.waveText,controlMode==='mobile'?(boss?`ボス戦 / 次 ${fmtTime(next)}`:`次ボスまで ${fmtTime(Math.max(0,next-g.total))}`):(boss?`戦闘中：${({minor:'中ボス',major:'大ボス',unique:'ユニークボス',ultimate:ULTIMATE_NAME}[boss.type]||'BOSS')} / 次回 ${fmtTime(next)}`:`次 ${fmtTime(next)} · ${label}　残り ${fmtTime(Math.max(0,next-g.total))}`));
  hudText(ui.level,`LV ${String(g.level).padStart(2,'0')}`);hudWidth(ui.xpFill,`${Math.round(100*clamp(g.xp/g.need,0,1))}%`);hudText(ui.xpText,`EXP ${format(Math.floor(g.xp))} / ${format(g.need)} ${g.pendingLevels?'(選択待ち '+g.pendingLevels+')':''}${g.storedLevels?' · 強化ストック '+g.storedLevels:''}`);
