@@ -1,0 +1,17 @@
+{
+  "name": "ankin-drift-checks",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "check:pwa": "node scripts/check-pwa.mjs",
+    "test:smoke": "playwright test",
+    "test": "npm run check:syntax && npm run check:pwa && npm run test:smoke"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "acorn": "8.19.0",
+    "parse5": "8.0.1"
+  }
+}
