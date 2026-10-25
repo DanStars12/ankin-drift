@@ -1957,7 +1957,7 @@ function evolutionVisualProfile(id){
  return {id,color:'hsl('+hue%360+' 96% 70%)',motif,index,name:recipe.name};
 }
 function syncEvolutionVisuals(p){
- const active=FUSIONS.filter(f=>game?.fusions?.[f.id]).map(f=>evolutionVisualProfile(f.id)).filter(Boolean);
+ const active=FUSIONS.filter(f=>game?.fusions?.[f.id]&&!isSealedCard(skillById(f.power))&&!isSealedCard(skillById(f.legend))).map(f=>evolutionVisualProfile(f.id)).filter(Boolean);
  p.evolutionStyles=active;
  // The most recent evolution owns the chassis / projectile palette; older
  // evolutions keep their orbital seals, so no achievement loses its identity.
