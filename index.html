@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v12.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v12.2 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v12.1 | FUSION SELECTION</title>
+<title>ANKIN DRIFT v12.2 | EVOLUTION OVERDRIVE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -703,7 +703,7 @@ const BOSS_POOLS={minor:['guardian','raptor','hive'],major:['titan','rail','vort
 function pickBossVariant(type){const pool=BOSS_POOLS[type],last=game.bossHistory?.[type];const options=pool.filter(v=>v!==last);const id=options[Math.floor(Math.random()*options.length)];game.bossHistory[type]=id;return id;}
 const bossInfo=e=>ENEMY_CODEX.find(b=>b.id===(typeof e==='string'?e:e?.variant))||null;
 
-const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:.09,freezeDuration:1.1,iceAttackSlow:.25,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99});
+const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:.09,freezeDuration:1.1,iceAttackSlow:.25,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99});
 let adaptiveRenderScale=1;
 let overloadClock=0,recoveryClock=0,lastAdaptiveTime=0;
 function applyCanvasResolution(){
@@ -911,14 +911,15 @@ function applyElementFusionStats(p,combo){const {main,sub}=combo,r=ELEMENT_FUSIO
  if(main==='rock'){p.rockWalls=Math.min(18,p.rockWalls+4);p.rockSize+=4;p.rockDamage+=115;if(sub==='fire')p.rockDamage+=120;}
  if(sub==='ice'&&main==='rock')p.rockDamage+=55;if(main==='rock'&&sub==='wind')p.rockSize+=8;if(main==='rock'&&sub==='thunder')p.rockDamage+=90;
  if(sub==='rock'&&main==='fire')p.magmaDps+=120;
- // Preserve the value of normal / epic / power / legendary secondary cards
- // by converting investment into a bounded primary-element resonance.
- const echo=Math.min(15,Math.max(1,combo.resonance||1));
- if(main==='fire'){p.magmaDps+=echo*17;p.magmaRadius+=Math.min(26,echo*2)}
- if(main==='ice'){p.iceBurst+=echo*.8;p.freezeChance=Math.min(.85,p.freezeChance+echo*.012)}
- if(main==='thunder'){p.chainDamage+=echo*38;p.arcNova+=Math.min(3,Math.floor(echo/4))}
- if(main==='wind'){p.windDps+=echo*17;p.windStrength+=echo*18}
- if(main==='rock'){p.rockDamage+=echo*27;p.rockSize+=Math.min(7,echo*.6)}
+ // Each fusion offsets the damage lost from its consumed secondary element.
+ // Single damage hook below covers shots, drill, drone, magic, laser and DOT.
+ p.fusionOutputBonus=(p.fusionOutputBonus||0)+.28;
+ const echo=Math.min(22,Math.max(1,combo.resonance||1));
+ if(main==='fire'){p.magmaDps+=echo*25;p.magmaRadius+=Math.min(30,echo*2)}
+ if(main==='ice'){p.iceBurst+=echo*1.8;p.freezeChance=Math.min(.85,p.freezeChance+echo*.012);p.chainDamage+=echo*9}
+ if(main==='thunder'){p.chainDamage+=echo*53;p.arcNova+=Math.min(4,Math.floor(echo/4))}
+ if(main==='wind'){p.windDps+=echo*26;p.windStrength+=echo*18}
+ if(main==='rock'){p.rockDamage+=echo*41;p.rockSize+=Math.min(7,echo*.6)}
 }
 function selectElementFusion(sub){
  if(mode!=='elementChoice'||!elementChoice?.main)return;
@@ -1362,7 +1363,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V12.1 · FUSION SELECTION</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div><div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V12.2 · EVOLUTION OVERDRIVE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div><div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='guide'){
  html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え13.5秒の再使用待機が必要です。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。BキーまたはLABからビルドを確認できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLV12で1回目、LV28で2回目が解放されます。異なる属性スキルを各1種類持てばレアリティ不問で融合可能。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて敵がワープします。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">いつでもタイトルの「遊び方」から再表示できます。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
@@ -2193,7 +2194,9 @@ function spawnBoss(type='minor',variant=null){
  if(!variant)variant=game.lastBossAt===60?'guardian':pickBossVariant(type);
  const info=bossInfo(variant),unique=type==='unique',major=type==='major';
  const mins=minutes(),tier=Math.max(1,Math.floor(mins/2.5)),scale=1+mins*.44+mins*mins*.080+mins*mins*mins*.0011;
- const early=.62+.38*(1-Math.exp(-mins/8)),radius=unique?71:major?55:38,hp=Math.round(info.hp*scale*early*(1+Math.min(.055,Math.max(0,mins-5)*.004)));
+ // Reduce runaway boss scaling around Lv28; the ultimate boss has a separate formula.
+ const midBossRelief=1-Math.min(.30,Math.max(0,(game.level-22)*.025));
+ const early=.62+.38*(1-Math.exp(-mins/8)),radius=unique?71:major?55:38,hp=Math.round(info.hp*scale*early*(1+Math.min(.055,Math.max(0,mins-5)*.004))*midBossRelief);
  const e={x:W*.5,y:-radius-40,r:radius,type,variant,hp,maxHp:hp,spd:info.speed,dmg:(unique?58:major?36:27)+Math.round(mins*4+mins*mins*.5),xp:Math.round((unique?500:major?290:145)*(1+Math.min(1.5,mins*.055))),color:info.color,dead:false,hurt:0,phase:0,shoot:unique?1.7:1.8,burn:0,burnDps:0,slow:0,frozen:0,rockHit:0,bladeHit:0,attacks:0,teleport:0,charge:0};
  enemies.push(e);boss=e;game.raid=null;U('raidStatus').style.display='none';game.bossSpawned=true;showBossAlert(type,variant);sfx('bossAlert');
 }
@@ -2263,6 +2266,8 @@ function tickVacuum(dt){game.compactTimer-=dt;if(game.compactTimer<=0){game.comp
  while(game.total>=game.nextVacuumAt){const stamp=game.nextVacuumAt;game.nextVacuumAt=stamp+rand(70,120);if(!game.vacuum&&(Math.random()<.38||stamp-game.lastVacuumAt>=300)){spawnVacuum();game.lastVacuumAt=stamp}}
  const core=game.vacuum;if(!core)return;core.pulse+=dt;const distance=dst(core,player);if(distance<Math.max(95,player.magnet*.8)&&distance>1){const speed=clamp(180+(105-distance)*2,140,620);core.x+=(player.x-core.x)/distance*speed*dt;core.y+=(player.y-core.y)/distance*speed*dt}if(distance<player.r+23)collectVacuum();}
 function damageEnemy(e,damage,meta={}){if(e.dead||!Number.isFinite(damage))return;
+ // Central bonus applies exactly once to every damage source, regardless of ship.
+ damage*=1+Math.min(.56,Math.max(0,player?.fusionOutputBonus||0));
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
@@ -2862,7 +2867,7 @@ function perfSummary(samples,drawOnly=false){
 function ankinPerformanceReport(){
  const frame=perfSummary(perfRing.frame),simulation=perfSummary(perfRing.sim),drawing=perfSummary(perfRing.draw,true);
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
- return {version:'12.1',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'12.2',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -2872,7 +2877,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v12.1.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v12.2.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
