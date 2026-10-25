@@ -2376,12 +2376,75 @@ function tickRocks(dt){const p=player;for(let i=0;i<p.rockWalls;i++){p.rockCoold
  if(!triggered)for(const e of circleCandidates(wall.x,wall.y,p.rockSize+5)){if(e.dead||e.type==='unique'||e.rockHit>0)continue;if(d2(e,wall)<(p.rockSize+e.r+4)**2){const dx=e.x-p.x,dy=e.y-p.y,dist=Math.max(1,Math.hypot(dx,dy));e.x+=dx/dist*13;e.y+=dy/dist*13;enemyIndexDirtyDuringForces=true;e.rockHit=.42;damageEnemy(e,p.rockDamage+p.dmg*.17,{special:true,source:'rock'});if(p.elementMods?.meteorWall||p.elementMods?.gaiaShock)detonate(wall.x,wall.y,p.elementMods?.meteorWall?130:95,p.rockDamage*(p.elementMods?.meteorWall?1.6:.75),e,5);triggered=true;burst(wall.x,wall.y,'#cab99e',4,55);break}}
  if(triggered)p.rockCooldowns[i]=.46;
  }}
-function tickGusts(dt){if(player.windCount<1&&gusts.length===0)return;player.windTimer-=dt;if(player.windCount>0&&player.windTimer<=0){player.windTimer+=Math.max(1.25,player.windPeriod);const target=visibleTarget(player.x,player.y);const angle=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);for(let i=0;i<Math.min(7,player.windCount);i++){let a=angle+(i-(Math.min(7,player.windCount)-1)/2)*.22;gusts.push({x:player.x,y:player.y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?245:150),vy:Math.sin(a)*(player.elementMods?.galeOrbit?245:150),r:player.windRadius,life:player.elementMods?.galeOrbit?4.3:3.2,tick:0});}if(gusts.length>28)gusts.splice(0,gusts.length-28);tone(490,.09,'sine',.025)}
- for(const g of gusts){const ox=g.x,oy=g.y;g.x+=g.vx*dt;g.y+=g.vy*dt;if(engageBarrierBlocks(ox,oy,g.x,g.y,Math.min(30,g.r||3))){g.life=0;continue}g.life-=dt;g.tick-=dt;if(g.kind==='fireTornado')g.r=Math.min(175,g.r+dt*30);if(g.tick>0)continue;g.tick=.13;for(const e of circleCandidates(g.x,g.y,g.r)){if(e.dead)continue;if(g.kind!=='fireTornado'&&['minor','major','unique'].includes(e.type))continue;const dist=dst(e,g);if(dist>g.r+e.r||dist<1)continue;if(g.kind==='fireTornado'){damageEnemy(e,Math.max(30,player.magmaDps*.26),{special:true,source:'element'});setBurn(e,Math.max(30,player.magmaDps),2)}else{const pull=Math.min(dist,player.windStrength*.13);e.x+=(g.x-e.x)/dist*pull;e.y+=(g.y-e.y)/dist*pull;enemyIndexDirtyDuringForces=true;damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(1+(player.elementMods?.galeCrush||0)*1.15),{special:true,source:'element'});}}}gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
+// v12: Gusts are protective OUTWARD shockwaves. Never pull enemies into the pilot.
+// Bigger builds trade surplus radius / projectiles for damage instead of screen coverage.
+const WIND_VISUAL_CAP=165,WIND_BULLET_CAP=4,WIND_ACTIVE_CAP=16;
+function tickGusts(dt){
+ if(player.windCount<1&&gusts.length===0)return;
+ player.windTimer-=dt;
+ if(player.windCount>0&&player.windTimer<=0){
+  player.windTimer+=Math.max(1.25,player.windPeriod);
+  const target=visibleTarget(player.x,player.y);
+  const angle=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);
+  const n=Math.min(WIND_BULLET_CAP,player.windCount);
+  const extra=Math.max(0,player.windCount-n);
+  for(let i=0;i<n;i++){
+   const a=angle+(i-(n-1)/2)*.36;
+   gusts.push({
+    x:player.x,y:player.y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?230:150),
+    vy:Math.sin(a)*(player.elementMods?.galeOrbit?230:150),
+    r:Math.min(WIND_VISUAL_CAP,Math.max(46,player.windRadius)),
+    bonus:1+extra*.18+Math.max(0,player.windRadius-WIND_VISUAL_CAP)*.004,
+    color:fusedColor('wind')||'#78ead1',
+    life:player.elementMods?.galeOrbit?3.8:2.8,tick:0
+   });
+  }
+  if(gusts.length>WIND_ACTIVE_CAP)gusts.splice(0,gusts.length-WIND_ACTIVE_CAP);
+  tone(490,.09,'sine',.025);
+ }
+ for(const g of gusts){
+  const ox=g.x,oy=g.y;
+  g.x+=g.vx*dt;g.y+=g.vy*dt;
+  if(engageBarrierBlocks(ox,oy,g.x,g.y,Math.min(30,g.r||3))){g.life=0;continue}
+  g.life-=dt;g.tick-=dt;
+  if(g.kind==='fireTornado')g.r=Math.min(150,g.r+dt*30);
+  if(g.tick>0)continue;
+  g.tick=.13;
+  const candidates=circleCandidates(g.x,g.y,g.r);
+  for(const e of candidates){
+   if(e.dead)continue;
+   // Bosses remain immune to gust displacement, including the final boss.
+   if(g.kind!=='fireTornado'&&['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type))continue;
+   const dx=e.x-g.x,dy=e.y-g.y,distSq=dx*dx+dy*dy;
+   const reach=g.r+e.r;
+   if(distSq>reach*reach||distSq<.01)continue;
+   if(g.kind==='fireTornado'){
+    damageEnemy(e,Math.max(30,player.magmaDps*.26),{special:true,source:'element'});
+    setBurn(e,Math.max(30,player.magmaDps),2);
+    continue;
+   }
+   const dist=Math.sqrt(distSq);
+   // Outer edge knocks enemies AWAY from the shockwave; the inner visual
+   // ring damages only, so overlapping gusts cannot repeatedly teleport foes.
+   if(dist>=g.r*.5){
+    let nx=dx/dist,ny=dy/dist;
+    const px=e.x-player.x,py=e.y-player.y;
+    const pd=Math.hypot(px,py);
+    // If the ring has travelled past a foe, redirect its push away from the
+    // pilot rather than accidentally launching the enemy into the pilot.
+    if(pd>.01&&(px*nx+py*ny)<0){nx=px/pd;ny=py/pd;}
+    const step=Math.min(10,Math.max(3,player.windStrength*.014));
+    e.x+=nx*step;e.y+=ny*step;
+    enemyIndexDirtyDuringForces=true;
+   }
+   damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(g.bonus||1)*(1+(player.elementMods?.galeCrush||0)*1.15),{special:true,source:'element'});
+  }
+ }
+ gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
 function tickCrossFusion(dt){const mods=player.elementMods;if(!mods)return;
- if(mods.fireTornado){player.fireTornadoTimer=(player.fireTornadoTimer||0)-dt;if(player.fireTornadoTimer<=0){player.fireTornadoTimer=4.1;const target=visibleTarget(player.x,player.y),a=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);gusts.push({kind:'fireTornado',x:player.x,y:player.y,vx:Math.cos(a)*115,vy:Math.sin(a)*115,r:54,life:4.8,tick:0});if(gusts.length>28)gusts.shift();ring(player.x,player.y,100,'#ff9c4a')}}
+ if(mods.fireTornado){player.fireTornadoTimer=(player.fireTornadoTimer||0)-dt;if(player.fireTornadoTimer<=0){player.fireTornadoTimer=4.1;const target=visibleTarget(player.x,player.y),a=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);gusts.push({kind:'fireTornado',x:player.x,y:player.y,vx:Math.cos(a)*115,vy:Math.sin(a)*115,r:54,color:fusedColor('fire')||'#ff9c4a',life:4.1,tick:0});if(gusts.length>WIND_ACTIVE_CAP)gusts.splice(0,gusts.length-WIND_ACTIVE_CAP);ring(player.x,player.y,100,fusedColor('fire')||'#ff9c4a')}}
  if(mods.iceStorm||mods.zeroSurge||mods.emberPulse||mods.thunderFort){player.elementPulseTimer=(player.elementPulseTimer||0)-dt;if(player.elementPulseTimer<=0){player.elementPulseTimer=3.1;const main=game.elementCombos.at(-1)?.main||'ice',color=ELEMENTS[main]?.color||'#ffffff';ring(player.x,player.y,195,color);for(const e of circleCandidates(player.x,player.y,190))if(!e.dead&&dst(e,player)<190){damageEnemy(e,45+player.dmg*.7+player.magmaDps*.12,{special:true});if(mods.iceStorm||mods.zeroSurge)chillEnemy(e,2.5,Math.min(.8,player.freezeChance));}}}
 }
 
