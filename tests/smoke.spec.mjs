@@ -80,7 +80,7 @@ function rectanglesOverlap(a,b) {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
-test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }) => {
+test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }, testInfo) => {
   const errors = watchFailures(page);
   await page.goto('./');
   await expect(page).toHaveTitle(/ANKIN DRIFT v11\.10/);
@@ -146,6 +146,10 @@ test('FPS indicator stays clear of desktop HUD and mobile touch controls', async
           expect(rectanglesOverlap(indicator,geometry[key]),'FPS overlaps '+key+' at '+viewport.width).toBe(false);
         }
       }
+    }
+    // Store successful visual evidence for the main PC and mobile layouts.
+    if (viewport.width === 1280 || (isMobile && viewport.width === 390)) {
+      await page.screenshot({ path: testInfo.outputPath('fps-hud-'+viewport.width+'.png') });
     }
   }
   expect(errors).toEqual([]);
