@@ -61,3 +61,11 @@ Before-and-after numbers from GitHub-hosted runners are indicative only. Always 
 - Consumed secondary attribute effects are removed. Collected cards stay in build history and investment is converted into primary-element resonance.
 - Elemental skills carry the 属性融合素材 tag. Do not show the former repeated 属性融合可能！ banner on every level up.
 - Text no longer promises an exclusive palette or calls consumed attribute effects dormant. Celebrations use the main element's color and show the resulting fusion skill name.
+
+## v12.2 — EVOLUTION OVERDRIVE
+- The first and second elemental fusions each add +28% direct output across all weapons / elemental damage sources through a single shared damage hook (up to +56% total). Echo investment contributes more to primary elemental skills.
+- At pilot Lv22–34 regular boss HP growth is reduced smoothly up to 30%; the 30-minute final boss has separate HP logic and remains unchanged.
+- Every FUSIONS recipe has a stable, identifiable colored chassis and themed crest (crystal, bolt, satellite, shield, flame, prism, spiral or orbit) and recolors primary projectiles, beams, escorts, comets, rocks and the drill aura.
+- Visuals cap at 3 active seals (1 when heavy-load), with a rotating reveal of previously earned evolution seals and up to 8 attack glyphs (disabled at high pressure). Gameplay hitboxes stay untouched.
+- The mobile DASH and NOVA controls use the existing threat-opacity convention when enemies/projectiles pass beneath the controls. The buttons remain interactable; detection uses actual on-screen rects, not world-only bottom bands.
+- Validate at 320px and 390px, especially controls while projectiles approach from the right. Compare gameplay balance before and after on identical seeded encounters.
