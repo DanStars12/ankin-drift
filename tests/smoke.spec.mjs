@@ -154,3 +154,36 @@ test('FPS indicator stays clear of desktop HUD and mobile touch controls', async
   }
   expect(errors).toEqual([]);
 });
+
+test('v12 elemental fusion keeps cards and gusts never pull enemies toward the pilot', async ({ page, isMobile }) => {
+  const errors=watchFailures(page);
+  await page.route('**/ankin-drift/',async route=>{
+    const original=await route.fetch(),html=await original.text();
+    const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
+    if(!html.includes(anchor))throw Error('v12 test injection anchor missing');
+    await route.fulfill({response:original,body:html.replace(anchor,"window.__v12Checks=()=>{\n // Test-only scenarios operate inside the game IIFE. No public debug interface ships.\n newRun();game.level=12;\n game.skills.emberSeed=1;game.skills.coldCoil=1;\n game.acquisitionLog=['emberSeed','coldCoil'];restorePlayerBuild();\n const pairs=availableElementPairs();\n const initial={pairs:pairs.length,fire:elementInvestments('fire').count,ice:elementInvestments('ice').count};\n elementChoice={a:'fire',b:'ice'};state('elementChoice');selectElementFusion('fire');\n const echo={skills:[game.skills.emberSeed,game.skills.coldCoil],stored:game.acquisitionLog.length,sealed:[...game.sealedElements],combos:game.elementCombos.length,color:fusedColor('fire'),magmaLevel:player.magmaLevel};\n magmaPatch(player.x+80,player.y,1);echo.magmaColor=zones.at(-1)?.tint;\n newRun();game.level=12;\n game.skills.windOrigin=1;game.skills.emberSeed=1;game.acquisitionLog=['windOrigin','emberSeed'];restorePlayerBuild();\n elementChoice={a:'fire',b:'wind'};state('elementChoice');selectElementFusion('wind');\n const colorWind=fusedColor('wind');const restored=game.skills.emberSeed;\n player.windCount=7;player.windRadius=900;player.windStrength=10000;player.windTimer=0;player.windDps=5;\n const e={type:'drone',x:player.x+140,y:player.y,r:12,dead:false,hp:1e8,maxHp:1e8,slow:0,burn:0,frozen:0,dmg:0,xp:0,rockHit:0,phase:0};\n enemies=[e];refreshEnemyIndex();gusts=[];\n const before={x:e.x,y:e.y,playerX:player.x};\n tickGusts(.13);\n const after={x:e.x,y:e.y};\n const wind={color:colorWind,stored:restored,before,after,gusts:gusts.length,maximumRadius:Math.max(...gusts.map(g=>g.r)),tint:gusts[0]?.color};\n return {initial,echo,wind};\n};"+anchor)});
+  });
+  await page.goto('./');
+  await page.locator('[data-control="'+(isMobile?'mobile':'desktop')+'"]').click();
+  await page.locator('#start').click();
+  await page.locator('#guideContinue').click();
+  await expect(page.locator('#hud')).toBeVisible();
+  const r=await page.evaluate(()=>window.__v12Checks());
+  expect(r.initial.fire).toBe(1);
+  expect(r.initial.ice).toBe(1);
+  expect(r.initial.pairs).toBeGreaterThan(0);
+  expect(r.echo.skills).toEqual([1,1]);
+  expect(r.echo.stored).toBe(2);
+  expect(r.echo.sealed).toContain('ice');
+  expect(r.echo.combos).toBe(1);
+  expect(r.echo.color).toBe('#50bfff');
+  expect(r.echo.magmaColor).toBe('#50bfff');
+  expect(r.wind.color).toBe('#ff5968');
+  expect(r.wind.tint).toBe('#ff5968');
+  expect(r.wind.stored).toBe(1);
+  expect(r.wind.gusts).toBeLessThanOrEqual(4);
+  expect(r.wind.maximumRadius).toBeLessThanOrEqual(165);
+  expect(r.wind.after.x).toBeGreaterThanOrEqual(r.wind.before.x);
+  expect(Math.hypot(r.wind.after.x-r.wind.before.x,r.wind.after.y-r.wind.before.y)).toBeLessThanOrEqual(10.01);
+  expect(errors).toEqual([]);
+});
