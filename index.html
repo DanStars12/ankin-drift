@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v12.0 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v12.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v12.0 | ELEMENTAL REBIRTH</title>
+<title>ANKIN DRIFT v12.1 | FUSION SELECTION</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -803,15 +803,20 @@ function elementInvestments(element){
  const points=cards.reduce((sum,c)=>sum+(game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0)*({common:1,uncommon:1.5,rare:2,epic:3,power:4,legendary:5,unique:5,relic:3}[c.rarity]||1),0);
  return {cards,count,points};
 }
-function ownedElementKeys(){return Object.keys(ELEMENTS).filter(e=>!game.sealedElements.includes(e)&&elementInvestments(e).count>0)}
+// Each element is consumed at most once per run, including the main element.
+// Ownership is retained in the codex; consumed attributes cannot be fused again.
+function fusedElementKeys(){return new Set((game?.elementCombos||[]).flatMap(({main,sub})=>[main,sub]));}
+function ownedElementKeys(){const used=fusedElementKeys();return Object.keys(ELEMENTS).filter(e=>!used.has(e)&&!game.sealedElements.includes(e)&&elementInvestments(e).count>0);}
 function availableElementPairs(){
  if(!game||!player||game.elementCombos.length>=ELEMENT_FUSION_LEVELS.length||game.level<ELEMENT_FUSION_LEVELS[game.elementCombos.length])return[];
  const keys=ownedElementKeys(),pairs=[];
- for(let i=0;i<keys.length;i++)for(let j=i+1;j<keys.length;j++){
-  const a=keys[i],b=keys[j];
-  if(!game.elementCombos.some(x=>(x.main===a&&x.sub===b)||(x.main===b&&x.sub===a)))pairs.push({a,b});
- }
+ for(let i=0;i<keys.length;i++)for(let j=i+1;j<keys.length;j++)pairs.push({a:keys[i],b:keys[j]});
  return pairs;
+}
+function fusionMainChoices(){return [...new Set(availableElementPairs().flatMap(pair=>[pair.a,pair.b]))];}
+function fusionSubChoices(main){
+ if(!ELEMENTS[main]||!fusionMainChoices().includes(main))return[];
+ return ownedElementKeys().filter(k=>k!==main);
 }
 const FUSION_PALETTES={
  fire:{ice:'#50bfff',thunder:'#b66aff',wind:'#ff519a',rock:'#ffdd72'},
@@ -824,32 +829,44 @@ function fusedColor(main){const combo=game?.elementCombos?.findLast(c=>c.main===
 function enterElementChoice(){
  if(mode!=='playing'||pendingFusions.length||pendingFusion)return false;
  const options=availableElementPairs();if(!options.length)return false;
- pendingElementPairs=options;elementChoice=null;state('elementChoice');return true;
+ pendingElementPairs=options;elementChoice=null;
+ flash=Math.max(flash,.55);shake=Math.max(shake,6);
+ ring(player.x,player.y,155,'#ffffff');
+ sfx('fusion');
+ state('elementChoice');
+ return true;
 }
-function chooseElementPair(index){
- if(mode!=='elementChoice'||!Number.isInteger(index)||!pendingElementPairs[index])return;
- elementChoice=pendingElementPairs[index];drawOverlay();
+function chooseFusionMain(main){
+ if(mode!=='elementChoice'||!ELEMENTS[main]||!fusionMainChoices().includes(main))return;
+ elementChoice={main};tone(660,.14,'triangle',.05);drawOverlay();
 }
-function backElementPairs(){if(mode!=='elementChoice')return;elementChoice=null;drawOverlay()}
+function backElementMain(){if(mode!=='elementChoice')return;elementChoice=null;drawOverlay();}
 function fusionPreview(main,sub){
  const material=elementInvestments(sub);
- const restingSynergies=activeSynergies().filter(a=>game.synergies[a.id]&&a.need.some(id=>material.cards.some(c=>c.id===id)));
- const restingEvolutions=activeFusions().filter(a=>game.fusions[a.id]&&[a.power,a.legend].some(id=>material.cards.some(c=>c.id===id)));
- return {material,restingSynergies,restingEvolutions,summary:material.cards.map(c=>c.name+(game.skills[c.id]>1?' ×'+game.skills[c.id]:''))};
+ return {material,summary:material.cards.map(c=>c.name+(game.skills[c.id]>1?' ×'+game.skills[c.id]:''))};
+}
+function fusionAttributeButton(key,stage,main){
+ const def=ELEMENTS[key],used=fusedElementKeys(),isUsed=used.has(key),has=elementInvestments(key).count>0,
+  allowed=stage==='main'?fusionMainChoices().includes(key):key!==main&&fusionSubChoices(main).includes(key);
+ const why=isUsed?'前回の融合で使用済み':stage==='sub'&&key===main?'特化属性として選択済み':!has?'属性スキル未取得':'この融合では選択できません';
+ const sub=stage==='sub';
+ return `<button type="button" class="fusion-attribute ${allowed?'':'unavailable'}" style="--element-color:${def.color}" data-element-${sub?'sub':'main'}="${key}" ${allowed?'':'disabled'} aria-disabled="${!allowed}" aria-label="${def.name}属性${allowed?'を選択':'：'+why}">
+  <span class="fusion-attr-icon">${def.icon}</span><strong>${def.name}</strong><small>${allowed?(sub?'融合に使用':'特化する属性'):(why)}</small></button>`;
 }
 function elementChoiceMarkup(){
- const nextStage=ELEMENT_FUSION_LEVELS[game.elementCombos.length]||12;
- if(!elementChoice){
-  return `<p class="eyebrow">ELEMENTAL REBIRTH · STAGE ${game.elementCombos.length+1}</p><h2 class="logo small">FUSION SELECT</h2>
-  <p class="desc">LV${nextStage}到達！ <b>属性スキルを1種類ずつ</b>持つだけで融合可能です。進化合成のPOWER＋LEGENDARYは不要です。<br>融合先は20通り。主属性を強化し、副属性の攻撃・効果は休眠しますが、<b>カードは消えず共鳴強化へ変換</b>されます。</p>
-  <div class="fusion-pair-grid">${pendingElementPairs.map((f,i)=>`<button type="button" class="fusion-pair" data-element-pair="${i}"><span style="color:${ELEMENTS[f.a].color}">${ELEMENTS[f.a].icon} ${ELEMENTS[f.a].name}</span><span class="fusion-pair-times">×</span><span style="color:${ELEMENTS[f.b].color}">${ELEMENTS[f.b].icon} ${ELEMENTS[f.b].name}</span><small>どちらを主属性にするか選択 →</small></button>`).join('')}</div>
-  <p class="fine">1回目はLV12、2回目はLV28で解放。主属性の見た目と性能が進化します。</p>`;
- }
- const f=elementChoice;
- return `<p class="eyebrow">ELEMENTAL REBIRTH · SELECT MAIN</p><h2 class="logo small">主属性を選択</h2>
- <p class="desc">同じ2属性でも主属性で融合結果が変わります。<b>獲得済みカードは消えません。</b>副属性の効果は停止し、強化の蓄積に応じて主属性の「共鳴出力」が高まります。</p>
- <div class="fusion-route-grid">${[f.a,f.b].map(main=>{const sub=main===f.a?f.b:f.a,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub),impact=fusionPreview(main,sub),color=FUSION_PALETTES[main][sub];return `<button type="button" class="fusion-route choice fused-route" data-element-main="${main}" style="--rarity:${color};--fusion-color:${color}"><span class="rarity">MAIN ${ELEMENTS[main].name} ＋ ${ELEMENTS[sub].name}の共鳴</span><span class="choice-icon">${r.icon}</span><strong class="choice-name">${r.name}</strong><span class="choice-desc">${r.desc}</span><span class="fusion-impact gain">✦ 主属性の威力・範囲を進化（専用カラー ${color}）</span><span class="fusion-impact gain">✦ 副属性 ${impact.material.count}枚分／共鳴出力 ${impact.material.points.toFixed(1)} を継承</span><span class="fusion-lost-names">${impact.summary.length?impact.summary.map(x=>escHtml(x)).join('・'):'まだ取得した属性カードなし'}</span><span class="fusion-impact caution">副属性の効果・対応シナジーは休眠／カード・取得履歴は保持</span></button>`}).join('')}</div>
- <div class="actions"><button type="button" id="pairBack" class="secondary">← 組み合わせを選び直す</button></div>`;
+ const stage=game.elementCombos.length+1,level=ELEMENT_FUSION_LEVELS[game.elementCombos.length],
+  main=elementChoice?.main;
+ const banner=`<div class="fusion-unlock" role="status" aria-live="polite"><span class="fusion-unlock-stars">✦ ✧ ✦</span><p class="eyebrow">ELEMENTAL REBIRTH · ${stage}/2</p><h2>属性融合解放</h2><p class="fusion-unlock-level">Lv${level} · ${stage===1?'1回目':'2回目'}の属性融合</p></div>`;
+ if(!main)return `${banner}<h3 class="fusion-choice-heading">特化する属性を選んでください</h3>
+  <div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'main')).join('')}</div>
+  <p class="fine">取得済みの属性から選択できます。2回目は、前回融合した2属性を選べません。</p>`;
+ const def=ELEMENTS[main];
+ return `${banner}<h3 class="fusion-choice-heading">素材にする属性を1つ選んでください</h3>
+  <p class="fusion-selected-main" style="--element-color:${def.color}">特化する属性：${def.icon} ${def.name}</p>
+  <p class="fusion-farewell">※選択した属性は融合され、失います！</p>
+  <div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'sub',main)).join('')}</div>
+  <p class="fine">失う属性の攻撃・効果は無効になります。取得済みカードの記録は残り、特化属性の共鳴強化に変換されます。</p>
+  <div class="actions"><button type="button" id="fusionBackMain" class="secondary">← 特化する属性を選び直す</button></div>`;
 }
 function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
@@ -1319,7 +1336,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V12.0 · ELEMENTAL REBIRTH</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div><div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V12.1 · FUSION SELECTION</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div><div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='guide'){
  html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え13.5秒の再使用待機が必要です。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。BキーまたはLABからビルドを確認できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLV12で1回目、LV28で2回目が解放されます。異なる属性スキルを各1種類持てばレアリティ不問で融合可能。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて敵がワープします。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">いつでもタイトルの「遊び方」から再表示できます。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
@@ -2806,7 +2823,7 @@ function perfSummary(samples,drawOnly=false){
 function ankinPerformanceReport(){
  const frame=perfSummary(perfRing.frame),simulation=perfSummary(perfRing.sim),drawing=perfSummary(perfRing.draw,true);
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
- return {version:'12.0',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'12.1',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -2816,7 +2833,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v12.0.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v12.1.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
