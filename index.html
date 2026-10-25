@@ -859,6 +859,14 @@ function applyElementFusionStats(p,combo){const {main,sub}=combo,r=ELEMENT_FUSIO
  if(main==='rock'){p.rockWalls=Math.min(18,p.rockWalls+4);p.rockSize+=4;p.rockDamage+=115;if(sub==='fire')p.rockDamage+=120;}
  if(sub==='ice'&&main==='rock')p.rockDamage+=55;if(main==='rock'&&sub==='wind')p.rockSize+=8;if(main==='rock'&&sub==='thunder')p.rockDamage+=90;
  if(sub==='rock'&&main==='fire')p.magmaDps+=120;
+ // Preserve the value of normal / epic / power / legendary secondary cards
+ // by converting investment into a bounded primary-element resonance.
+ const echo=Math.min(15,Math.max(1,combo.resonance||1));
+ if(main==='fire'){p.magmaDps+=echo*17;p.magmaRadius+=Math.min(26,echo*2)}
+ if(main==='ice'){p.iceBurst+=echo*.8;p.freezeChance=Math.min(.85,p.freezeChance+echo*.012)}
+ if(main==='thunder'){p.chainDamage+=echo*38;p.arcNova+=Math.min(3,Math.floor(echo/4))}
+ if(main==='wind'){p.windDps+=echo*17;p.windStrength+=echo*18}
+ if(main==='rock'){p.rockDamage+=echo*27;p.rockSize+=Math.min(7,echo*.6)}
 }
 function selectElementFusion(main){
  if(mode!=='elementChoice'||!elementChoice||![elementChoice.a,elementChoice.b].includes(main))return;
@@ -1243,14 +1251,9 @@ function skillPeekLink(id){const c=skillById(id);if(!c)return coloredName(id);re
 function choiceSynergyReady(c){return synergiesFor(c.id).some(a=>!game.synergies[a.id]&&a.need.some(id=>id!==c.id&&owned(id)))}
 function choiceEvolutionReady(c){return fusionFor(c.id).some(r=>!game.fusions[r.id]&&owned(c.id===r.power?r.legend:r.power))}
 function choiceElementCombinationReady(c){
- if(!game||!c||isSealedCard(c))return false;
- for(const [element,def] of Object.entries(ELEMENTS)){
-  const evo=FUSIONS.find(f=>f.id===def.evo);
-  if(!evo||game.fusions[evo.id]||![evo.power,evo.legend].includes(c.id))continue;
-  if(!owned(c.id===evo.power?evo.legend:evo.power))continue;
-  if(Object.keys(ELEMENTS).some(other=>other!==element&&!game.sealedElements.includes(other)&&game.fusions[ELEMENTS[other].evo]))return true;
- }
- return false;
+ if(!game||!c||isSealedCard(c)||game.elementCombos.length>=2)return false;
+ const element=elementFromCard(c),keys=ownedElementKeys();if(!element)return false;
+ return keys.some(k=>k!==element)||(!keys.includes(element)&&keys.length>0);
 }
 function recipePartnerMarkup(id){const c=skillById(id);return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':'＋ 未所持'} ${skillPeekLink(id)} <small>${c?.rarity==='unique'?'UNIQUE ANKIN':c?.rarity==='legendary'?'LEGENDARY':'ANKIN POWER'}</small></span>`}
 function evolutionMarkup(c){const recipes=fusionFor(c.id);if(!recipes.length)return '';
@@ -1891,12 +1894,20 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
  const targetDefs=targetDefinitions().filter(t=>game.targets.includes(t.key)&&!targetStatus(t).done&&!targetStatus(t).sealed);
  for(let i=0;i<desired;i++){
   const possible=pool.filter(c=>!used.has(c.id));if(!possible.length)break;let c;
-  const targetMatches=possible.filter(c=>targetDefs.some(t=>t.materials.includes(c.id)&&!owned(c.id)));
+  const targetMatches=possible.filter(c=>targetDefs.some(t=>!owned(c.id)&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id))));
   const elementMatches=possible.filter(c=>offeredElements(c).some(tag=>focus.has(tag)));
   // Rerolls improve control of an existing elemental build, but never force a specific card.
   if(isReroll&&targetMatches.length&&Math.random()<.22){c=targetMatches[Math.floor(Math.random()*targetMatches.length)];}
   else if(isReroll&&elementMatches.length&&Math.random()<.27){c=elementMatches[Math.floor(Math.random()*elementMatches.length)];}
   else if(kind==='normal'){
+   // Offer one missing element more often as the first fusion milestone approaches.
+   // Players still choose from three cards; no forced auto-pick or free upgrades.
+   const existing=ownedElementKeys();
+   const fusionCandidates=possible.filter(c=>{const e=elementFromCard(c);return !!e&&!existing.includes(e)&&existing.length===1});
+   if(fusionCandidates.length&&game.elementCombos.length===0&&game.level>=7&&Math.random()<.44){
+    c=fusionCandidates[Math.floor(Math.random()*fusionCandidates.length)];
+    options.push(c);used.add(c.id);continue;
+   }
    const completed=possible.filter(c=>synergiesFor(c.id).some(a=>!game.synergies[a.id]&&a.need.some(id=>id!==c.id&&owned(id))));
    const preferred=weightedRarity(),rarityDuplicates=options.filter(x=>x.rarity===preferred).length;
    const same=possible.filter(c=>c.rarity===preferred);
