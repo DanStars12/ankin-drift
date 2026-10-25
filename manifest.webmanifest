@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v11.9 — RAID OPTIMIZATION",
+  "name": "ANKIN DRIFT v11.10 — HUD LAYOUT FIX",
   "short_name": "ANKIN DRIFT",
-  "description": "v11.9: performance telemetry and lower-cost multi-raid simulation.",
+  "description": "v11.10: desktop FPS indicator moved below survival HUD; mobile placement preserved.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
