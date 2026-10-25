@@ -2758,6 +2758,59 @@ function enemyDraw(e){ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.phase*.2);c
 if(e.burn>0){ctx.save();ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:11;ctx.shadowColor='#ff7a32';ctx.strokeStyle='#ff9a45';ctx.lineWidth=e.type==='major'||e.type==='unique'?4:2.5;ctx.globalAlpha=.75+.18*Math.sin(t*13+e.phase*2);ctx.beginPath();ctx.arc(0,0,e.r*1.14,0,TAU);ctx.stroke();ctx.globalAlpha=1;const count=renderHeavyLoad||settings.fx==='low'?2:4;for(let i=0;i<count;i++){const angle=(i/count)*TAU+t*.4+e.phase*.13,r=e.r*.8;ctx.fillStyle=i%2?'#ffcc70':'#ff7539';ctx.beginPath();const x=Math.cos(angle)*r,y=Math.sin(angle)*r;ctx.ellipse(x,y-4-3*Math.sin(t*8+i),Math.max(2,e.r*.11),Math.max(5,e.r*.24),.1,0,TAU);ctx.fill()}ctx.restore()}
 if(e.slow>0&&!['minor','major','unique'].includes(e.type)){ctx.shadowBlur=6;ctx.strokeStyle=e.frozen>0?'#d5faff':'#7ccfff';ctx.lineWidth=e.frozen>0?2.6:1.5;ctx.globalAlpha=e.frozen>0?.94:.68;ctx.beginPath();ctx.arc(0,0,e.r*1.16,0,TAU);ctx.stroke();ctx.globalAlpha=1}ctx.restore();if((e.type==='brute'||e.type==='relic'||e.type==='ultimatePart')&&e.hp<e.maxHp){ctx.fillStyle='#25304b';ctx.fillRect(e.x-17,e.y-28,34,3);ctx.fillStyle='#b3a8fc';ctx.fillRect(e.x-17,e.y-28,34*clamp(e.hp/e.maxHp,0,1),3)}}
 let renderHeavyLoad=false, cachedBgGradient=null, cachedBgW=0, cachedBgH=0;
+// Persistent evolution crests. At most three lightweight Canvas paths per frame,
+// cyclically revealing every completed evolution in long runs.
+function drawEvolutionCrests(){
+ const entries=player?.evolutionStyles||[];
+ if(!entries.length)return;
+ const count=Math.min(renderHeavyLoad?1:3,entries.length),base=Math.floor(t/3)%entries.length;
+ ctx.save();ctx.translate(player.x,player.y);
+ ctx.lineWidth=renderHeavyLoad?1.6:2.3;
+ ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:7;
+ for(let i=0;i<count;i++){
+  const fx=entries[(base+i)%entries.length],r=34+i*10,phase=t*(i%2?-.53:.62)+fx.index;
+  ctx.save();ctx.rotate(phase);ctx.strokeStyle=fx.color;ctx.shadowColor=fx.color;
+  ctx.globalAlpha=renderHeavyLoad?.57:.78;
+  ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*1.22);ctx.stroke();
+  ctx.rotate(-phase*1.7);
+  const a=phase*.32,dist=r+4,x=Math.cos(a)*dist,y=Math.sin(a)*dist;
+  ctx.translate(x,y);ctx.lineWidth=2.1;ctx.beginPath();
+  switch(fx.motif){
+   case 'crystal':
+    for(let k=0;k<6;k++){const q=k*Math.PI/3;ctx.moveTo(0,0);ctx.lineTo(Math.cos(q)*9,Math.sin(q)*9)}
+    break;
+   case 'bolt':ctx.moveTo(-4,-9);ctx.lineTo(2,-2);ctx.lineTo(-2,1);ctx.lineTo(5,9);break;
+   case 'satellite':ctx.arc(0,0,5,0,TAU);ctx.moveTo(-11,0);ctx.lineTo(-7,0);ctx.moveTo(7,0);ctx.lineTo(11,0);break;
+   case 'shield':ctx.moveTo(0,-10);ctx.lineTo(8,-6);ctx.lineTo(6,5);ctx.lineTo(0,10);ctx.lineTo(-6,5);ctx.lineTo(-8,-6);ctx.closePath();break;
+   case 'flame':ctx.moveTo(0,-10);ctx.quadraticCurveTo(10,-1,4,8);ctx.quadraticCurveTo(-6,11,-5,3);ctx.quadraticCurveTo(-4,-4,0,-10);break;
+   case 'prism':ctx.moveTo(0,-9);ctx.lineTo(9,7);ctx.lineTo(-9,7);ctx.closePath();break;
+   case 'spiral':for(let k=0;k<8;k++){const q=k*.84,rad=1+k*1.3;const px=Math.cos(q)*rad,py=Math.sin(q)*rad;k?ctx.lineTo(px,py):ctx.moveTo(px,py)}break;
+   case 'orbit':ctx.ellipse(0,0,10,5,.7,0,TAU);break;
+   default:for(let k=0;k<10;k++){const q=-Math.PI/2+k*Math.PI/5,rad=k%2?4:10;k?ctx.lineTo(Math.cos(q)*rad,Math.sin(q)*rad):ctx.moveTo(Math.cos(q)*rad,Math.sin(q)*rad)}ctx.closePath();
+  }
+  ctx.stroke();ctx.restore();
+ }
+ ctx.restore();
+}
+// A few crystalline / rune-like impacts, not particle systems per bullet.
+function drawEvolutionShotMotifs(){
+ const motif=player?.evolutionMotif,color=player?.evolutionTint;
+ if(!motif||!color||renderHeavyLoad||shots.length>80||settings.fx==='low')return;
+ let drawn=0;
+ ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.4;ctx.globalAlpha=.66;ctx.shadowBlur=0;
+ for(let i=0;i<shots.length&&drawn<8;i+=Math.max(2,Math.ceil(shots.length/8))){
+  const b=shots[i];if(!b||b.x<0||b.y<0||b.x>W||b.y>H)continue;
+  const radius=8+Math.min(10,(b.r||2)*.6);drawn++;
+  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(t*.8+(i*.7));ctx.beginPath();
+  if(motif==='crystal'){for(let j=0;j<6;j++){const a=j*Math.PI/3;ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*radius,Math.sin(a)*radius)}}
+  else if(motif==='bolt'){ctx.moveTo(-radius*.5,-radius);ctx.lineTo(1,0);ctx.lineTo(-1,radius*.15);ctx.lineTo(radius*.5,radius)}
+  else if(motif==='prism'){for(let j=0;j<3;j++){const a=j*TAU/3;ctx.lineTo(Math.cos(a)*radius,Math.sin(a)*radius)}ctx.closePath()}
+  else {ctx.arc(0,0,radius*.7,t,Math.PI+t*1.15)}
+  ctx.stroke();ctx.restore();
+ }
+ ctx.restore();
+}
+
 function render(){const renderPressure=shots.length+hostile.length+enemies.length*2+particles.length+zones.length*4+gusts.length*5;
  renderHeavyLoad=mode==='playing'&&(renderPressure>(controlMode==='mobile'?310:490)||(game?.raid?.effects?.length>=2&&renderPressure>(controlMode==='mobile'?190:360)));ctx.save();if(!cachedBgGradient||cachedBgW!==W||cachedBgH!==H){cachedBgW=W;cachedBgH=H;cachedBgGradient=ctx.createRadialGradient(W*.46,H*.40,24,W*.5,H*.52,Math.max(W,H)*.8);cachedBgGradient.addColorStop(0,'#152440');cachedBgGradient.addColorStop(.6,'#0a1428');cachedBgGradient.addColorStop(1,'#050a15')}ctx.fillStyle=cachedBgGradient;ctx.fillRect(0,0,W,H);ctx.strokeStyle='#5b9cb418';ctx.lineWidth=1;const off=(t*11)%61;for(let x=off-61;x<W;x+=61){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=off-61;y<H;y+=61){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}for(let si=0;si<stars.length;si++){if(renderHeavyLoad&&si%2)continue;const s=stars[si];ctx.fillStyle=`rgba(199,230,255,${.24+.33*Math.sin(t*s.z+s.v)**2})`;ctx.fillRect(s.x,s.y,s.r,s.r)}ctx.translate(rand(-shake,shake),rand(-shake,shake));if(mode!=='menu'&&player){
  // Warning telegraphs are drawn on the topmost gameplay layer (after magma, gusts, projectiles and particles).
@@ -2817,7 +2870,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   }ctx.restore()}
  if(game?.vacuum){const v=game.vacuum,tw=t*4;ctx.save();ctx.translate(v.x,v.y+Math.sin(tw)*5);ctx.rotate(t*.85);const rad=21+Math.sin(t*6)*3;ctx.shadowColor='#fff8ab';ctx.shadowBlur=28+Math.sin(t*8)*8;const gr=ctx.createRadialGradient(0,0,0,0,0,rad*2);gr.addColorStop(0,'#ffffff');gr.addColorStop(.22,'#fff3a3');gr.addColorStop(.55,'#fee27b77');gr.addColorStop(1,'#fffab400');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,rad*2,0,TAU);ctx.fill();ctx.fillStyle='#ffffff';ctx.strokeStyle='#fff9c2';ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<8;i++){const a=i*TAU/8,r=i%2?rad*.56:rad*1.35;i?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.rotate(-t*1.9);ctx.strokeStyle='#ffe9a3';ctx.lineWidth=2;ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(0,0,rad+12,0,TAU);ctx.stroke();ctx.restore();ctx.save();ctx.fillStyle='#fff9d4';ctx.shadowColor='#ffda68';ctx.shadowBlur=11;ctx.textAlign='center';ctx.font='900 11px system-ui';ctx.fillText('✦ ALL EXP',v.x,v.y-39);ctx.restore();}
  for(const e of pickups){if(e.x<-22||e.y<-22||e.x>W+22||e.y>H+22)continue;const yy=e.y+Math.sin(e.phase)*3;ctx.save();ctx.translate(e.x,yy);ctx.rotate(e.phase*.35);ctx.shadowColor=e.type==='heal'?'#66ffa5':'#af8dff';ctx.shadowBlur=renderHeavyLoad?0:13;ctx.fillStyle=e.type==='heal'?'#73ffb9':'#bd93ff';ctx.beginPath();ctx.moveTo(0,-e.r*1.5);ctx.lineTo(e.r,0);ctx.lineTo(0,e.r*1.5);ctx.lineTo(-e.r,0);ctx.closePath();ctx.fill();ctx.restore()}
- ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;
+ ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
  for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
@@ -2853,7 +2906,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   ctx.restore();}
  if(game?.elementCombos?.length){ctx.save();ctx.translate(player.x,player.y);ctx.rotate(t*.48);ctx.globalAlpha=renderHeavyLoad?.58:.86;ctx.lineWidth=2.8;ctx.shadowBlur=renderHeavyLoad?0:7;
  for(let i=0;i<game.elementCombos.length;i++){const combo=game.elementCombos[i],color=FUSION_PALETTES[combo.main][combo.sub];ctx.strokeStyle=color;ctx.shadowColor=color;ctx.beginPath();ctx.arc(0,0,28+i*9,t*.4+i,t*.4+i+Math.PI*1.28);ctx.stroke()}ctx.restore()}
- if(player.fusionList.length){ctx.save();ctx.translate(player.x,player.y);ctx.rotate(t*.65);ctx.strokeStyle='#ffe0a4';ctx.lineWidth=2;ctx.shadowColor='#ffcf79';ctx.shadowBlur=20;for(let i=0;i<player.fusionList.length;i++){ctx.setLineDash([11+i*2,13]);ctx.beginPath();ctx.arc(0,0,32+i*7,0,TAU);ctx.stroke()}ctx.setLineDash([]);ctx.restore()}
+ if(player.fusionList.length)drawEvolutionCrests();
  if(player.shipType==='charge'){const r=27;ctx.save();ctx.strokeStyle='#673a3670';ctx.lineWidth=5;ctx.beginPath();ctx.arc(player.x,player.y,r,0,TAU);ctx.stroke();ctx.strokeStyle=player.charge>=.999?'#fff4a4':'#ffac71';ctx.shadowBlur=player.charge>=.999?17:9;ctx.shadowColor='#ffbd77';ctx.lineWidth=4;ctx.beginPath();ctx.arc(player.x,player.y,r,-Math.PI/2,-Math.PI/2+TAU*clamp(player.charge,0,1));ctx.stroke();ctx.restore();if(player.charge>=.99)glow(player.x,player.y,4,'#fff4b0',13)}if(player.shield>0){ctx.strokeStyle='#72ffccaa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x,player.y,22+Math.sin(t*3)*1.5,0,TAU);ctx.stroke()}if(player.energy>=100){ctx.setLineDash([5,7]);ctx.strokeStyle='#be98ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x,player.y,29,0,TAU);ctx.stroke();ctx.setLineDash([])}
  }
  for(const p of particles){if(p.x<-50||p.x>W+50||p.y<-50||p.y>H+50)continue;ctx.globalAlpha=clamp(p.life/p.total,0,1);if(p.lightning){ctx.strokeStyle=p.color;ctx.lineWidth=3;ctx.shadowColor=p.color;ctx.shadowBlur=18;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x2,p.y2);ctx.stroke();ctx.shadowBlur=0}else if(p.ring){ctx.lineWidth=3;ctx.strokeStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.stroke()}else glow(p.x,p.y,p.r,p.color,5)}ctx.globalAlpha=1;
