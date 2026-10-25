@@ -52,3 +52,12 @@ Before-and-after numbers from GitHub-hosted runners are indicative only. Always 
 - Elemental fusion at levels 12 and 28 requires one acquired skill of each chosen element. Standard POWER + LEGENDARY evolution is still available separately.
 - Secondary-element cards and acquisition history remain in the inventory and are converted into resonance damage; their effects are suspended. Special palettes identify each ordered fusion, including blue fire+ice magma and red wind+fire gusts.
 - Fusion-specific rendering uses a reduced animation budget for high-load raids.
+
+## v12.1 Fusion Selection & Copy Review
+
+- Fusion milestone UI explicitly shows Lv12 (first) and Lv28 (second) and unlocks the choice once two eligible elemental skills are owned.
+- Selection proceeds primary/main element first and sacrificed/sub element second; five attribute buttons stay visible and unavailable choices are disabled.
+- Both elements used in the first fusion become unavailable for the second fusion, including the original main element.
+- Consumed secondary attribute effects are removed. Collected cards stay in build history and investment is converted into primary-element resonance.
+- Elemental skills carry the 属性融合素材 tag. Do not show the former repeated 属性融合可能！ banner on every level up.
+- Text no longer promises an exclusive palette or calls consumed attribute effects dormant. Celebrations use the main element's color and show the resulting fusion skill name.
