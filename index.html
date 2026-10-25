@@ -899,7 +899,7 @@ function restorePlayerBuild(){const current=retainCombatState(player),next=initi
  // Recalculate passive bonuses without triggering presentations or double-applying the original selection.
  for(const a of activeSynergies())if(game.synergies[a.id])applyBalancedUpgrade(next,a.apply,'synergy');
  for(const a of activeFusions())if(game.fusions[a.id]){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
- for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');
+ for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
  Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0});player=next;
 }
 function applyElementFusionStats(p,combo){const {main,sub}=combo,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);if(!r)return;
@@ -1922,7 +1922,36 @@ function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly==
 function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&fitsShip(skillById(a.power))&&fitsShip(skillById(a.legend))&&!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)))}
 function synergiesFor(id){return activeSynergies().filter(a=>a.need.includes(id))}
 function fusionFor(id){return activeFusions().filter(a=>a.power===id||a.legend===id)}
-function activateUpgrades(){pendingSynergy=[];for(const a of activeSynergies()){if(!game.synergies[a.id]&&a.need.every(owned)){game.synergies[a.id]=1;applyBalancedUpgrade(player,a.apply,'synergy');pendingSynergy.push(a)}}for(const a of activeFusions()){if(!game.fusions[a.id]&&owned(a.power)&&owned(a.legend)){game.fusions[a.id]=1;applyBalancedUpgrade(player,a.apply,'fusion');pendingFusions.push(a);player.fusionList.push(a.id)}}}
+
+/* Every POWER × LEGENDARY (or UNIQUE × LEGENDARY) synthesis receives its own
+   stable visual identity. Colors vary even for recipes in the same family. */
+function evolutionVisualProfile(id){
+ const index=FUSIONS.findIndex(f=>f.id===id);if(index<0)return null;
+ const recipe=FUSIONS[index];
+ const token=(id+' '+recipe.name).toLowerCase();
+ let motif='star',hue=Math.round((index*137.508+31)%360);
+ if(/frost|ice|crystal|freeze|snow|氷|フリーズ/.test(token)){motif='crystal';hue=188+index%4*8;}
+ else if(/thunder|storm|volt|ion|lightning|tempest|雷/.test(token)){motif='bolt';hue=239+index%3*13;}
+ else if(/queen|swarm|mother|drone|hive|僚機/.test(token)){motif='satellite';hue=154+index%4*16;}
+ else if(/fort|rock|stone|seraph|shield|wall|guardian/.test(token)){motif='shield';hue=32+index%4*9;}
+ else if(/burn|magma|inferno|wildfire|flame|cataclysm|炎/.test(token)){motif='flame';hue=6+index%4*11;}
+ else if(/laser|prism|light|radiant|光/.test(token)){motif='prism';hue=278+index%5*9;}
+ else if(/drill|plasma|rotor|auger/.test(token)){motif='spiral';hue=316+index%4*9;}
+ else if(/nova|galaxy|cosmic|void|stellar/.test(token)){motif='orbit';hue=273+index%5*13;}
+ else if(/wind|cyclone|gale|vortex/.test(token)){motif='spiral';hue=158+index%4*13;}
+ return {id,color:'hsl('+hue%360+' 96% 70%)',motif,index,name:recipe.name};
+}
+function syncEvolutionVisuals(p){
+ const active=FUSIONS.filter(f=>game?.fusions?.[f.id]).map(f=>evolutionVisualProfile(f.id)).filter(Boolean);
+ p.evolutionStyles=active;
+ // The most recent evolution owns the chassis / projectile palette; older
+ // evolutions keep their orbital seals, so no achievement loses its identity.
+ const latest=active.at(-1);
+ p.evolutionTint=latest?.color||null;
+ p.evolutionMotif=latest?.motif||'';
+}
+
+function activateUpgrades(){pendingSynergy=[];for(const a of activeSynergies()){if(!game.synergies[a.id]&&a.need.every(owned)){game.synergies[a.id]=1;applyBalancedUpgrade(player,a.apply,'synergy');pendingSynergy.push(a)}}for(const a of activeFusions()){if(!game.fusions[a.id]&&owned(a.power)&&owned(a.legend)){game.fusions[a.id]=1;applyBalancedUpgrade(player,a.apply,'fusion');pendingFusions.push(a);player.fusionList.push(a.id)}}syncEvolutionVisuals(player)}
 function kindLabel(k){return({pulse:'パルス',plasma:'プラズマ',cryo:'フロスト',arc:'サンダー'})[k]||'パルス'}
 function rarityWeights(){const k=clamp((game.level-1)/60,0,1);return{common:.50-.26*k,uncommon:.32-.02*k,rare:.15+.17*k,epic:.03+.11*k}}
 function weightedRarity(){const w=rarityWeights();let r=Math.random();for(const k of ['common','uncommon','rare','epic']){r-=w[k];if(r<=0)return k}return'epic'}
@@ -2837,7 +2866,7 @@ function celebrateElementFusion(main,name){
  sfx('fusion');
  celebrationEvents.push({at:celebrationClock+4,type:'labelOff'});
 }
-function celebrateFusion(unique=false){confetti();celebrationTint='#c8a2ff';if(unique){queueFireworks();celebrationLabel='✦ TRANSCENDENCE · UNIQUE EVOLUTION ✦';sfx('unique')}else{celebrationLabel='✦ EVOLUTION COMPLETE ✦';sfx('fusion')}celebrationEvents.push({at:celebrationClock+3.4,type:'labelOff'});}
+function celebrateFusion(unique=false){confetti(player?.evolutionTint);celebrationTint=player?.evolutionTint||'#c8a2ff';if(unique){queueFireworks(player?.evolutionTint);celebrationLabel='✦ TRANSCENDENCE · UNIQUE EVOLUTION ✦';sfx('unique')}else{queueFireworks(player?.evolutionTint);celebrationLabel='✦ EVOLUTION COMPLETE ✦';sfx('fusion')}celebrationEvents.push({at:celebrationClock+3.4,type:'labelOff'});}
 function celebrateUnique(){queueFireworks();celebrationLabel='✦ UNIQUE ANKIN ACQUIRED ✦';sfx('unique');celebrationEvents.push({at:celebrationClock+3.7,type:'labelOff'})}
 function updateFestival(dt){if(!celebrationParticles.length&&!celebrationRockets.length&&!celebrationEvents.length&&!celebrationLabel){
  if(updateFestival.needsClear){fctx.clearRect(0,0,innerWidth,innerHeight);updateFestival.needsClear=false;}return;
