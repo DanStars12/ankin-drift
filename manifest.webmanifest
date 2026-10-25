@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v12.0 — ELEMENTAL REBIRTH",
+  "name": "ANKIN DRIFT v12.1 — FUSION SELECTION",
   "short_name": "ANKIN DRIFT",
-  "description": "V12 elemental rebirth, knockback gusts, preserved skill investments and special fusion colors.",
+  "description": "属性融合はLv12・Lv28で解放。特化属性と失う素材属性を順に選択できます。",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
