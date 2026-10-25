@@ -775,10 +775,10 @@ const format=n=>Math.floor(n).toLocaleString('ja-JP');
 const ELEMENTS={fire:{name:'炎',color:'#ff9558',icon:'🔥',evo:'magmaEvo'},ice:{name:'氷',color:'#8cdeff',icon:'❄️',evo:'iceEvo'},thunder:{name:'雷',color:'#d3a6ff',icon:'⚡',evo:'thunderGod'},wind:{name:'風',color:'#7bffe1',icon:'🌪️',evo:'windEvo'},rock:{name:'岩',color:'#e7c69c',icon:'🪨',evo:'rockEvo'}};
 // 5 x 4 = 20 directed outcomes. The primary attacks are transformed; the secondary element is dismantled.
 const CROSS_VARIANTS={
- fire:[['ice','クリムゾン・シャッター','火炎が大爆発へ変化。凍結能力は失う。','🔥', {emberBlast:1}],['thunder','プラズマ・インフェルノ','火炎の周期パルスが弾け、広範囲を炎で焼く。雷撃は失う。','🌋',{emberPulse:1}],['wind','ブレイズ・トルネード','吸引しない燃える竜巻が広がりながら敵を焼き尽くす。風弾は失う。','🌪️',{fireTornado:1}],['rock','ヴォルカニック・コア','マグマが激しく噴き上がり、広い範囲で追加爆発。岩壁は失う。','☄️',{volcanicCore:1}]],
+ fire:[['ice','クリムゾン・シャッター','火炎が大爆発へ変化。凍結能力は失う。','🔥', {emberBlast:1}],['thunder','プラズマ・インフェルノ','火炎の周期パルスが弾け、広範囲を炎で焼く。雷撃は失う。','🌋',{emberPulse:1}],['wind','ブレイズ・トルネード','燃える竜巻が広がりながら敵を焼く。風弾は休眠。','🌪️',{fireTornado:1}],['rock','ヴォルカニック・コア','マグマが激しく噴き上がり、広い範囲で追加爆発。岩壁は失う。','☄️',{volcanicCore:1}]],
  ice:[['fire','グレイシャル・バースト','凍結した敵が破裂し、氷の破片で周囲を攻撃。炎は失う。','💠',{shatterIce:1}],['thunder','ゼロ・サージ','冷気の周期パルスで広範囲の敵を停止させる。雷撃は失う。','❄️',{zeroSurge:1}],['wind','ブリザード・スフィア','広がる氷の波動が周囲の敵を減速・凍結。風の吸引は失う。','🌨️',{iceStorm:1}],['rock','クリスタル・バスティオン','攻撃を受けると氷晶の反撃が発生。岩壁は失う。','🧊',{iceArmor:1}]],
  thunder:[['fire','ボルト・デトネーター','連鎖雷撃が一定確率で爆発する。燃焼は失う。','⚡',{voltBlast:1}],['ice','フラッシュ・チェイン','雷撃が連鎖するたびに強烈な追加ダメージ。凍結は失う。','💜',{flashChain:1}],['wind','テンペスト・レール','雷撃が長射程で多数へ飛び移る。風の吸引は失う。','🌩️',{arcTempest:1}],['rock','サンダー・フォート','雷の反撃フィールドを展開。岩壁は失う。','⚡',{thunderFort:1}]],
- wind:[['fire','ストーム・エクスパンション','強烈な吸引旋風が分裂し、より多くの敵を集める。燃焼は失う。','🌀',{galeSplit:1}],['ice','スノウ・ハリケーン','吸引する風弾に鋭い風刃を重ねる。氷の凍結は失う。','🌬️',{galeBlade:1}],['thunder','ヴォルテックス・クラッシュ','吸引した敵への風ダメージが大幅増加。雷撃は失う。','🌪️',{galeCrush:1}],['rock','サイクロン・ランページ','巨大な吸引弾が高速旋回して敵をまとめる。岩壁は失う。','💨',{galeOrbit:1}]],
+ wind:[['fire','ストーム・エクスパンション','赤く変異した突風が外縁で敵を押し返す。燃焼は休眠。','🌀',{galeSplit:1}],['ice','スノウ・ハリケーン','押し返す風弾に鋭い風刃を重ねる。氷の凍結は休眠。','🌬️',{galeBlade:1}],['thunder','ヴォルテックス・クラッシュ','風の衝撃で押し返した敵へのダメージが増加。雷撃は休眠。','🌪️',{galeCrush:1}],['rock','サイクロン・ランページ','巨大な風の防壁が高速旋回して敵を遠ざける。岩壁は休眠。','💨',{galeOrbit:1}]],
  rock:[['fire','メテオ・シールド','岩壁が高火力の衝撃波を放つ。マグマと炎上は失う。','🪨',{meteorWall:1}],['ice','ダイヤモンド・ウォール','迎撃した敵弾を散弾として打ち返す。凍結は失う。','💎',{diamondWall:1}],['thunder','ガイア・インパクト','岩壁が敵をはじくたびに周囲へ衝撃波。雷撃は失う。','⛰️',{gaiaShock:1}],['wind','オービット・フォートレス','岩壁が高速に旋回し接触攻撃も強化。風の吸引は失う。','🛡️',{orbitFort:1}]]
 };
 const ELEMENT_FUSION_RECIPES=Object.entries(CROSS_VARIANTS).flatMap(([main,list])=>list.map(([sub,name,desc,icon,mod])=>({id:`${main}_${sub}`,main,sub,name,desc,icon,mod})));
@@ -1188,7 +1188,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  '属性：炎':{name:'🔥 炎属性',desc:'攻撃の燃焼効果で継続ダメージ。マグマ床は接触中の敵へ追加ダメージを与えます。',details:[`燃焼：約${Math.round(burn)} ダメージ/秒（通常攻撃基準）`,`通常攻撃の燃焼確率：${pct(p.burnChance)}（炎弾・火炎ミサイルは別条件）`,p.magmaLevel>0?`マグマ床：約${magma} ダメージ/秒`:`マグマ床：未取得（取得時の基準威力 約${magma}/秒）`,`マグマ設置数の強化：${p.magmaLevel} ／ 効果半径：${Math.round(p.magmaRadius)}`]},
  '属性：氷':{name:'❄️ 氷属性',desc:'敵の移動速度・攻撃頻度を低下させ、一般敵は確率で完全凍結。ボスは凍結せず、スロウだけ有効です。',details:[`スロウ中の移動速度：通常の42%`,`スロウ中の敵攻撃頻度：通常の${pct(Math.max(.25,1-p.iceAttackSlow))}`,`氷系追加凍結確率：${pct(p.freezeChance)}（冷却弾は基本16%を加算）`,`凍結時間：${p.freezeDuration.toFixed(1)}秒（ボスには無効）`]},
  '属性：雷':{name:'⚡ 雷属性',desc:'雷撃が敵から敵へ連鎖し、複数体を攻撃します。強化で威力・範囲が向上します。',details:[`通常連鎖の追加確率：${pct(p.chain)}`,`連鎖ダメージ補正：+${Math.round(p.chainDamage)}`,`ノヴァ関連の追加連鎖：+${p.arcNova}`]},
- '属性：風':{name:'🌪️ 風属性',desc:'周期的な風弾が雑魚敵を吸い寄せ、敵をまとめて攻撃しやすくします。ボスは吸引されません。',details:[`風弾数：${p.windCount}`,`吸引半径：${Math.round(p.windRadius)}`,`吸引力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
+ '属性：風':{name:'🌪️ 風属性',desc:'周期的な風弾が外縁から雑魚敵を押し返します。プレイヤー側へ引き込まず、ボスは移動しません。',details:[`突風弾数（同時発射最大4）：${p.windCount}`,`衝撃半径：${Math.round(p.windRadius)}`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
  '属性：岩':{name:'🪨 岩属性',desc:'自機を周回する岩壁が通常の敵・敵弾を防ぎます。UNIQUE ANKINの特殊攻撃は防げません。',details:[`周回岩壁：${p.rockWalls}枚`,`岩壁サイズ：${Math.round(p.rockSize)}`,`反撃ダメージ補正：+${Math.round(p.rockDamage)}`]}
  };
  const extra={
@@ -1231,7 +1231,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  'マグマ床':['持続するマグマ','設置した床に触れ続ける敵へ継続ダメージを与えます。',[`設置床ダメージ：約${magma}/秒`,`設置強化：${p.magmaLevel}`,`効果半径：${Math.round(p.magmaRadius)}`]],
  '鈍化':['スロウ効果','敵の移動速度と攻撃の頻度を下げます。ボスにも鈍化だけは有効です。',[`鈍化の追加発生確率：${pct(p.slowChance)}`,`氷の攻撃頻度低下：${pct(p.iceAttackSlow)}`]],
  '凍結':['フリーズ効果','通常敵の行動を短時間停止させます。ボスは完全凍結を無効化します。',[`凍結の追加発生確率：${pct(p.freezeChance)}`,`凍結持続：${p.freezeDuration.toFixed(1)}秒（ボス無効）`]],
- '吸引':['敵を引き寄せる','風の突風や一部の重力攻撃で通常敵をまとめます。ボスは吸引されません。',[`風の吸引力：${Math.round(p.windStrength)}`,`風の吸引半径：${Math.round(p.windRadius)}`]],
+ '吸引':['敵を引き寄せる','風の突風や一部の重力攻撃で通常敵をまとめます。ボスは吸引されません。',[`風のノックバック力：${Math.round(p.windStrength)}`,`風の衝撃半径：${Math.round(p.windRadius)}`]],
  '防御壁':['旋回する岩壁','自機周囲の壁が通常弾を防ぎ、接触した敵を押し返します。後半のPHASE弾・特殊攻撃は防げないため、回避が必要です。',[`防御壁：${p.rockWalls}枚`,`壁のサイズ：${Math.round(p.rockSize)}`,`壁の反撃ダメージ補正：+${Math.round(p.rockDamage)}`]],
  '防御':['シールド防御','シールドで通常の被ダメージを先に吸収します。後半に現れるPHASE弾は一部がHPへ直接届きます。',[`シールド：${Math.round(p.shield)} / ${Math.round(p.shieldMax)}`,`シールド回復：${Math.round(p.shieldRecharge)}/秒（後半の実効：${Math.round(p.shieldRecharge>16?Math.min(34,16+Math.sqrt(p.shieldRecharge-16)*2.2):p.shieldRecharge)}/秒）`]],
  '装甲':['機体の耐久力','最大HPや被ダメージ対策を増やし、長時間生存を支えます。',[`現在のHP：${Math.round(p.hp)} / ${Math.round(p.maxHp)}`]],
@@ -1719,8 +1719,8 @@ SKILLS.push(
  skill('coldCoil','uncommon','❄️','低温駆動コイル','命中時の鈍化確率+12%、敵攻撃間隔の遅延効果+12%。',p=>{p.slowChance=Math.min(1,p.slowChance+.12);p.iceAttackSlow=Math.min(.8,p.iceAttackSlow+.12)}),
  skill('iceLock','epic','🧊','フリーズ・プロトコル','低温攻撃で敵を凍結させる確率+22%、凍結時間+0.8秒。',p=>{p.freezeChance+=.22;p.freezeDuration+=.8}),
  skill('magmaPulse','epic','🌋','マグマスプラッシュ','定期的に広いマグマ床を生成。床は燃焼を与える。',p=>{p.magmaLevel+=2;p.magmaRadius+=20;p.magmaDps+=30}),
- skill('windOrigin','uncommon','🌀','突風弾','定期的に円形の突風弾を1個発射。雑魚敵を中心へ引き寄せる（ボス無効）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1}),
- skill('windEngine','rare','🌪️','気流集束機','突風の吸引範囲+35、引き寄せ力+65、風ダメージ+12。',p=>{p.windRadius+=35;p.windStrength+=65;p.windDps+=12;p.windCount=Math.max(1,p.windCount)}),
+ skill('windOrigin','uncommon','🌀','突風弾','定期的に突風弾を発射。外縁の衝撃波で雑魚敵を外側へ押し返す（ボス無効）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1}),
+ skill('windEngine','rare','🌪️','気流集束機','突風の範囲+35、押し返す力+65、風ダメージ+12。',p=>{p.windRadius+=35;p.windStrength+=65;p.windDps+=12;p.windCount=Math.max(1,p.windCount)}),
  skill('windTwin','epic','💨','ツイン・サイクロン','発射する突風弾+2個、発射間隔-18%。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windPeriod=Math.max(1.4,p.windPeriod*.82);p.windTimer=.1}),
  skill('stoneSeed','uncommon','🪨','浮遊岩壁','岩壁+1。機体の周囲を周回し、通常の敵・敵弾を迎撃する。',p=>p.rockWalls=Math.min(18,p.rockWalls+1)),
  skill('stoneCarapace','rare','🧱','岩壁増設','回転する岩壁+2、壁の当たり判定が少し拡大。',p=>{p.rockWalls=Math.min(18,p.rockWalls+2);p.rockSize+=2}),
@@ -1730,13 +1730,13 @@ POWERS.push(
  skill('magmaCore','power','🌋','ANKIN メルトダウン','マグマ床を追加し範囲を拡張、敵に燃焼を付与する。',p=>{p.magmaLevel+=2;p.magmaRadius+=25;p.magmaDps+=35}),
  skill('missileFlare','power','🚀','ANKIN フレイムミサイル','炎ミサイル+2。命中時にマグマ床を生成する。',p=>{p.rocketCd+=2;p.flameMissiles+=2;p.rocketTimer=0}),
  skill('crystalStasis','power','🧊','ANKIN アイスチェーン','凍結確率+30%、凍結時間+1.3秒、鈍化した敵の攻撃速度をさらに低下。',p=>{p.freezeChance+=.3;p.freezeDuration+=1.3;p.iceAttackSlow=Math.min(.85,p.iceAttackSlow+.18)}),
- skill('windPower','power','🌪️','ANKIN サイクロン・チャージャー','突風を2個追加。吸引力+90、範囲+35。ボスは吸い込まない。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windRadius+=35;p.windStrength+=90;p.windTimer=.1}),
+ skill('windPower','power','🌪️','ANKIN サイクロン・チャージャー','突風を2個強化。押し返す力+90、範囲+35。ボスはノックバック無効。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windRadius+=35;p.windStrength+=90;p.windTimer=.1}),
  skill('rockPower','power','🪨','ANKIN パワーウォール','迎撃岩壁+3、壁を大型化。ユニークボスの攻撃は防げない。',p=>{p.rockWalls=Math.min(18,p.rockWalls+3);p.rockSize+=3})
 );
 LEGENDS.push(
  skill('volcanoLegend','legendary','🌋','紅蓮惑星の心臓','巨大マグマ床と炎ミサイルを強化。燃焼ダメージが跳ね上がる。',p=>{p.magmaLevel+=4;p.magmaRadius+=50;p.magmaDps+=75;p.flameMissiles+=1;p.burnChance=Math.min(.9,p.burnChance+.25)}),
  skill('iceLegend','legendary','❄️','永久零凍の王','氷属性の凍結確率と時間を上げ、敵の攻撃速度も下げる。',p=>{p.freezeChance+=.42;p.freezeDuration+=1.4;p.slowChance=Math.min(1,p.slowChance+.24);p.iceAttackSlow=Math.min(.88,p.iceAttackSlow+.25)}),
- skill('windLegend','legendary','🌪️','真空の風神','突風弾+3、吸引範囲+75、発射間隔を短縮。',p=>{p.windCount=Math.min(7,p.windCount+3);p.windRadius+=75;p.windStrength+=110;p.windPeriod=Math.max(1.35,p.windPeriod*.7);p.windTimer=.1}),
+ skill('windLegend','legendary','🌪️','真空の風神','突風弾+3、衝撃範囲+75、発射間隔を短縮。上限超過分は威力へ変換。',p=>{p.windCount=Math.min(7,p.windCount+3);p.windRadius+=75;p.windStrength+=110;p.windPeriod=Math.max(1.35,p.windPeriod*.7);p.windTimer=.1}),
  skill('rockLegend','legendary','🏔️','巨岩天蓋','回転岩壁+6、岩壁のサイズと反撃威力を強化。',p=>{p.rockWalls=Math.min(18,p.rockWalls+6);p.rockSize+=5;p.rockDamage+=80})
 );
 SYNERGIES.push(
@@ -1749,7 +1749,7 @@ SYNERGIES.push(
 FUSIONS.push(
  {id:'magmaEvo',power:'magmaCore',legend:'volcanoLegend',name:'パーフェクト・マグマコア',icon:'🌋',desc:'マグマ床が巨大化し、燃焼とミサイル火力が増す。',apply:p=>{p.magmaLevel+=3;p.magmaRadius+=65;p.magmaDps+=90;p.burnChance=Math.min(.98,p.burnChance+.20)}},
  {id:'iceEvo',power:'crystalStasis',legend:'iceLegend',name:'アブソリュート・フリーズ',icon:'❄️',desc:'凍結時間+2秒、凍結確率+40%、敵攻撃の遅延を強化。',apply:p=>{p.freezeDuration+=2;p.freezeChance+=.4;p.iceAttackSlow=.92}},
- {id:'windEvo',power:'windPower',legend:'windLegend',name:'テンペスト・ヴォルテックス',icon:'🌪️',desc:'突風を最大7個に増幅、広域へ吸引する。',apply:p=>{p.windCount=7;p.windRadius+=105;p.windStrength+=160;p.windPeriod=Math.max(1.15,p.windPeriod*.75)}},
+ {id:'windEvo',power:'windPower',legend:'windLegend',name:'テンペスト・ヴォルテックス',icon:'🌪️',desc:'突風の総出力を大幅増幅。広域へ押し返し、余剰弾は威力に変換。',apply:p=>{p.windCount=7;p.windRadius+=105;p.windStrength+=160;p.windPeriod=Math.max(1.15,p.windPeriod*.75)}},
  {id:'rockEvo',power:'rockPower',legend:'rockLegend',name:'ガイア・ガーディアン',icon:'🏔️',desc:'岩壁数を18まで増やし、反撃火力と岩壁サイズを強化。',apply:p=>{p.rockWalls=18;p.rockDamage+=125;p.rockSize+=7}}
 );
 
@@ -1758,7 +1758,7 @@ FUSIONS.push(
 FUSIONS.push(
  {id:'wildfireMissiles',power:'missileFlare',legend:'rain',name:'フレア・アルマゲドン',icon:'🚀',desc:'火炎ミサイル+4、マグマ威力+80、着弾で大規模燃焼。',apply:p=>{p.rocketCd+=4;p.flameMissiles+=3;p.magmaDps+=80;p.thermal+=2}},
  {id:'absoluteCrystal',power:'cryo',legend:'iceLegend',name:'ダイヤモンド・フリーズ',icon:'💠',desc:'冷却弾の凍結+35%、氷破砕+5、凍結時間+2秒。',apply:p=>{p.freezeChance+=.35;p.iceBurst+=5;p.freezeDuration+=2}},
- {id:'cycloneBlades',power:'satellite',legend:'windLegend',name:'サイクロン・エッジ',icon:'🌀',desc:'風刃+4、突風数+1、範囲+70。',apply:p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+4);p.windCount=Math.min(7,p.windCount+1);p.windRadius+=70}},
+ {id:'cycloneBlades',power:'satellite',legend:'windLegend',name:'サイクロン・エッジ',icon:'🌀',desc:'風刃+4、突風威力+1段階、範囲+70。',apply:p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+4);p.windCount=Math.min(7,p.windCount+1);p.windRadius+=70}},
  {id:'stoneSeraph',power:'rockPower',legend:'seraph',name:'モノリス・セラフ',icon:'🛡️',desc:'岩壁+4・耐久シールド+120、反撃ダメージ+65。',apply:p=>{p.rockWalls=Math.min(18,p.rockWalls+4);p.shieldMax+=120;p.shield+=120;p.rockDamage+=65}},
  {id:'ionSwarm',power:'capacitor',legend:'celestial',name:'スーパーボルト・スウォーム',icon:'⚡',desc:'雷撃僚機+3、雷の連鎖+80、射程拡大。',apply:p=>{p.droneCount=Math.min(p.limitDrones,p.droneCount+3);p.droneThunder+=3;p.chainDamage+=80}},
  {id:'novaArmor',power:'field',legend:'void',name:'ノヴァ・リフレクター',icon:'🔮',desc:'ノヴァ威力+400、シールド+160、エネルギー回復量+45%。',apply:p=>{p.novaDamage+=400;p.shieldMax+=160;p.shield+=160;p.novaGain+=.45}}
@@ -1771,7 +1771,7 @@ SYNERGIES.push(
  {id:'rockBulwark',need:['stoneCarapace','stoneFury'],name:'モノリス・ウォール',desc:'岩壁+3、防御壁サイズ+5',apply:p=>{p.rockWalls=Math.min(18,p.rockWalls+3);p.rockSize+=5}},
  {id:'thunderCore',need:['chain','capacitor'],name:'チェイン・リアクター',desc:'連鎖ダメージ+65、発動確率+15%',apply:p=>{p.chainDamage+=65;p.chain=Math.min(1,p.chain+.15)}},
  {id:'frostThunder',need:['coldCoil','chain'],name:'プラズマ・フロスト',desc:'雷撃威力+25、氷減速確率+15%',apply:p=>{p.chainDamage+=25;p.slowChance+=.15}},
- {id:'windRock',need:['windOrigin','stoneSeed'],name:'ゲイル・ディフェンス',desc:'風の吸引力+60、岩壁の迎撃ダメージ+35',apply:p=>{p.windStrength+=60;p.rockDamage+=35}},
+ {id:'windRock',need:['windOrigin','stoneSeed'],name:'ゲイル・ディフェンス',desc:'風の押し返す力+60、岩壁の迎撃ダメージ+35',apply:p=>{p.windStrength+=60;p.rockDamage+=35}},
  {id:'magmaRock',need:['magmaPulse','stoneSeed'],name:'コア・エラプション',desc:'マグマ威力+45、岩壁の数+1',apply:p=>{p.magmaDps+=45;p.rockWalls=Math.min(18,p.rockWalls+1)}},
  {id:'windIce',need:['windOrigin','coldCoil'],name:'スノウ・ストリーム',desc:'風ダメージ+28、氷鈍化確率+18%',apply:p=>{p.windDps+=28;p.slowChance+=.18}}
 );
@@ -1928,7 +1928,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
    c=drillEligible.length&&Math.random()<.39?drillEligible[Math.floor(Math.random()*drillEligible.length)]:weighted[Math.floor(Math.random()*weighted.length)];
   }else{
    const ready=possible.filter(c=>fusionFor(c.id).some(a=>!game.fusions[a.id]&&owned(c.id===a.power?a.legend:a.power)));
-   const weighted=Math.random()<.46&&ready.length?ready:possible;
+   const weighted=(i===0&&ready.length)||Math.random()<.75&&ready.length?ready:possible;
    c=weighted[Math.floor(Math.random()*weighted.length)];
   }
   options.push(c);used.add(c.id);
