@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v11.8 — RAID OPTIMIZATION",
+  "name": "ANKIN DRIFT v11.9 — RAID OPTIMIZATION",
   "short_name": "ANKIN DRIFT",
-  "description": "v11.8: multiple raid performance improvements, adaptive rendering and clear mobile HUD.",
+  "description": "v11.9: performance telemetry and lower-cost multi-raid simulation.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
