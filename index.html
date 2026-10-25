@@ -645,6 +645,12 @@ body.pilot-mobile.playing-mobile #synergyFeed .synergy-recipe{font-size:9px;line
 @media(max-width:355px){.fusion-attribute-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.fusion-attribute{min-height:78px}.fusion-attr-icon{font-size:22px}}
 @keyframes fusionUnlockPop{from{opacity:.3;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.fusion-unlock,.fusion-celebration{animation:none}.fusion-attribute{transition:none}}
+
+/* v12.2: premium evolution reveal. */
+.evolution-complete{text-align:center;border:2px solid var(--evo-accent);background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--evo-accent) 18%,#10172b),#10172b 76%);box-shadow:0 0 25px color-mix(in srgb,var(--evo-accent) 28%,transparent),inset 0 0 18px #ffffff0b;border-radius:16px;padding:16px 10px;margin-bottom:14px}
+.evolution-complete .fusion-symbol{filter:drop-shadow(0 0 13px var(--evo-accent));font-size:51px}
+.evolution-complete .subtitle{color:var(--evo-accent);font-size:clamp(19px,3vw,27px);font-weight:950;text-shadow:0 0 14px var(--evo-accent)}
+.evolution-fx-label{display:block;font:850 11px ui-monospace,monospace;letter-spacing:.12em;margin:10px 0}
 </style>
 <style>
 .choice-pick{display:none}
@@ -1384,7 +1390,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  }else if(mode==='uniqueReward'){
  const c=lastUniqueCard;html=`<p class="eyebrow rainbow-text">★ 10-MINUTE ACHIEVEMENT · UNIQUE REWARD ★</p><div class="unique-reward-mark">✹</div><h2 class="rainbow-text unique-reward-title">UNIQUE ANKIN</h2><p class="subtitle">${c?.icon||'🌈'} ${c?.name||'限界突破'} 獲得！</p><div class="unique-reward-detail">${c?.desc||'究極の機体強化を獲得。'}</div><p class="desc">限界突破の力を手に入れた。次なる進化を目指せ！</p><button class="primary" id="uniqueContinue">▶ 新たな力で続行</button>`;
  }else if(mode==='fusion'){
- const a=pendingFusion;html=`<p class="eyebrow">POWER × LEGENDARY — EVOLUTION FUSION</p>${pendingFusions.length?`<p class="fusion-progress">さらに ${pendingFusions.length} 件の進化が待機中</p>`:''}<div class="fusion-symbol">${a.icon}</div><h2 class="fusion-title">EVOLUTION COMPLETE</h2><div class="subtitle">${a.name}</div><p class="desc">${coloredName(a.power)}　＋　${coloredName(a.legend)}<br>${a.desc}</p><div class="milestone">専用の機体エフェクトと強化効果を獲得！</div><button class="primary" id="fusionNext">▶ 進化した機体で続行</button>`;
+ const a=pendingFusion,fx=evolutionVisualProfile(a.id);html=`<div class="evolution-complete" style="--evo-accent:${fx.color}"><p class="eyebrow">POWER × LEGENDARY — EVOLUTION FUSION</p>${pendingFusions.length?`<p class="fusion-progress">さらに ${pendingFusions.length} 件の進化が待機中</p>`:''}<div class="fusion-symbol">${a.icon}</div><h2 class="fusion-title">EVOLUTION COMPLETE</h2><div class="subtitle">${a.name}</div><p class="desc">${coloredName(a.power)}　＋　${coloredName(a.legend)}<br>${a.desc}</p><div class="milestone" style="color:${fx.color}">✦ 機体カラーと攻撃紋様が進化しました！</div><small class="evolution-fx-label" style="color:${fx.color}">EVOLUTION MARK · ${fx.motif.toUpperCase()}</small></div><button class="primary" id="fusionNext">▶ 進化した機体で続行</button>`;
  }else if(mode==='options'){
  html=`<p class="eyebrow">ANKIN DRIFT · CONFIGURATION</p><h2 class="logo small">OPTIONS</h2><p class="desc">画質・FPS・音量と演出を個別に調整できます。プレイの進行は一時停止中です。</p>${musicControls()}<div class="actions"><button class="primary" id="optionsBack">← ${optionsBack==='menu'?'タイトルへ戻る':'PAUSEDへ戻る'}</button></div>`;
  }else if(mode==='paused'){
@@ -2027,7 +2033,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
 }
 function enterChoice(kind){if(mode!=='playing')return;game.lastChoice=kind;if(kind==='minor'||kind==='major')game.rerolls=Math.min(7,game.rerolls+1);choices=offerCards(kind);state('choice');if(kind==='normal')sfx('level');else sfx(kind==='unique'?'unique':'level')}
 function reroll(){if(mode!=='choice'||game.rerolls<1||choices.every(c=>c.isSupply))return;game.rerolls--;const previous=new Set(choices.map(c=>c.id));choices=offerCards(game.lastChoice,previous,true);choiceOpenedAt=performance.now();choiceTouchArms.clear();drawOverlay();tone(530,.1,'triangle',.04)}
-function beginNextFusion(){if(!pendingFusions.length)return false;pendingFusion=pendingFusions.shift();flash=.9;shake=24;burst(player.x,player.y,'#ffd88e',70,310);ring(player.x,player.y,450,'#fff0b0');pop(player.x,player.y-65,'EVOLUTION: '+pendingFusion.name,'#ffe4a6');state('fusion');celebrateFusion([pendingFusion.power,pendingFusion.legend].some(id=>skillById(id)?.rarity==='unique'));return true}
+function beginNextFusion(){if(!pendingFusions.length)return false;pendingFusion=pendingFusions.shift();const fx=evolutionVisualProfile(pendingFusion.id),color=fx?.color||'#ffd88e';flash=.9;shake=24;burst(player.x,player.y,color,70,310);ring(player.x,player.y,450,color);ring(player.x,player.y,270,'#ffffff');pop(player.x,player.y-65,'EVOLUTION: '+pendingFusion.name,color);state('fusion');celebrateFusion([pendingFusion.power,pendingFusion.legend].some(id=>skillById(id)?.rarity==='unique'));return true}
 function continueAfterReward(){state('playing');if(beginNextFusion())return;if(pendingSynergy.length)notifySynergies();if(game.lastChoice==='normal'&&!game.autoBank&&game.pendingLevels>0){game.pendingLevels--;choices=offerCards('normal');state('choice');return}game.choiceBatchTotal=0;game.choiceBatchDone=0;processTransitions()}
 function choose(i){if(mode!=='choice'||!choices[i])return;const c=choices[i];if(rewardAlreadyTaken(c)){choices=offerCards(game.lastChoice);drawOverlay();return;}if(c.isSupply){c.apply(player);state('playing');announce('✦ SUPPLY RECEIVED · '+c.name,2.8);sfx('pickupSpawn');continueAfterReward();return;}const wasNormal=game.lastChoice==='normal';c.apply(player);const bucket=c.rarity==='relic'?game.relics:c.rarity==='legendary'?game.legends:c.rarity==='power'?game.powers:c.rarity==='unique'?game.uniques:game.skills;bucket[c.id]=(bucket[c.id]||0)+1;game.acquisitionLog.push(c.id);activateUpgrades();reconcileTargets();if(wasNormal)game.choiceBatchDone++;state('playing');
  if(c.rarity==='relic'){sfx('relicEarned');confetti();announce('✦ RELIC ACQUIRED · '+c.name,4.5);}if(c.rarity==='unique'){lastUniqueCard=c;state('uniqueReward');celebrateUnique();return}if(beginNextFusion())return;tone(c.rarity==='legendary'?920:730,.2,'triangle',.065);continueAfterReward()}
@@ -2684,10 +2690,10 @@ function hudUpdate(){if(!game||!player)return;
   // Narrow phase-safe world coordinates: threat underneath the actual touch button
   // (not just anywhere at the same height) dims the button without disabling it.
   const bounds=canvas.getBoundingClientRect(),sx=bounds.width/Math.max(1,W),sy=bounds.height/Math.max(1,H);
-  const threats=[...enemies,...hostile].filter(e=>!e.dead);
+  const threatsUnder=predicate=>enemies.some(predicate)||hostile.some(predicate);
   for(const [name,node] of [['dash',dashTouch],['nova',novaTouch]]){
    const r=node.getBoundingClientRect();
-   const hit=threats.some(e=>{
+   const hit=threatsUnder(e=>{if(e.dead)return false;
     const x=bounds.left+e.x*sx,y=bounds.top+e.y*sy,rad=(e.r||6)*Math.min(sx,sy);
     return x+rad>=r.left-7&&x-rad<=r.right+7&&y+rad>=r.top-7&&y-rad<=r.bottom+7;
    });
@@ -2940,7 +2946,7 @@ function celebrateElementFusion(main,name){
  sfx('fusion');
  celebrationEvents.push({at:celebrationClock+4,type:'labelOff'});
 }
-function celebrateFusion(unique=false){confetti(player?.evolutionTint);celebrationTint=player?.evolutionTint||'#c8a2ff';if(unique){queueFireworks(player?.evolutionTint);celebrationLabel='✦ TRANSCENDENCE · UNIQUE EVOLUTION ✦';sfx('unique')}else{queueFireworks(player?.evolutionTint);celebrationLabel='✦ EVOLUTION COMPLETE ✦';sfx('fusion')}celebrationEvents.push({at:celebrationClock+3.4,type:'labelOff'});}
+function celebrateFusion(unique=false){confetti(player?.evolutionTint);celebrationTint=player?.evolutionTint||'#c8a2ff';if(unique){queueFireworks(player?.evolutionTint);celebrationLabel='✦ '+(pendingFusion?.name||'TRANSCENDENCE')+' · EVOLUTION ✦';sfx('unique')}else{queueFireworks(player?.evolutionTint);celebrationLabel='✦ '+(pendingFusion?.name||'EVOLUTION COMPLETE')+' ✦';sfx('fusion')}celebrationEvents.push({at:celebrationClock+3.4,type:'labelOff'});}
 function celebrateUnique(){queueFireworks();celebrationLabel='✦ UNIQUE ANKIN ACQUIRED ✦';sfx('unique');celebrationEvents.push({at:celebrationClock+3.7,type:'labelOff'})}
 function updateFestival(dt){if(!celebrationParticles.length&&!celebrationRockets.length&&!celebrationEvents.length&&!celebrationLabel){
  if(updateFestival.needsClear){fctx.clearRect(0,0,innerWidth,innerHeight);updateFestival.needsClear=false;}return;
