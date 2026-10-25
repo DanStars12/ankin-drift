@@ -611,6 +611,31 @@ body.pilot-mobile.playing-mobile #synergyFeed .synergy-recipe{font-size:9px;line
 .rebirth-card{box-shadow:inset 0 0 12px color-mix(in srgb,var(--fusion-color) 19%,transparent)}
 .rebirth-dormant{opacity:.66;border-style:dashed!important}
 .rebirth-rest{font-size:10px;color:#9af5e0}
+
+/* v12.1 two-step elemental fusion: five accessible attribute buttons and short reveal. */
+.fusion-unlock{position:relative;overflow:hidden;text-align:center;padding:14px 12px 16px;margin:0 auto 14px;border:1px solid #eaf7ff9a;border-radius:16px;background:linear-gradient(125deg,#16354e,#291e49,#19323c);box-shadow:0 0 25px #9bd8ff2b;animation:fusionUnlockPop .48s cubic-bezier(.2,.9,.2,1)}
+.fusion-unlock:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 52% 30%,#ffffff29,transparent 65%)}
+.fusion-unlock-stars{display:block;color:#f9f1a8;font-size:21px;letter-spacing:12px;text-shadow:0 0 13px #fff}
+.fusion-unlock .eyebrow{margin:6px 0;font-size:11px;letter-spacing:.12em}
+.fusion-unlock h2{font-size:clamp(24px,5vw,38px);color:#fff;margin:2px 0;text-shadow:0 0 16px #99deff,0 0 30px #ceaaff}
+.fusion-unlock-level{color:#dce9fb;font-size:12px;font-weight:800;margin:5px 0}
+.fusion-choice-heading{text-align:center;font-size:clamp(17px,3vw,22px);margin:10px 0 15px;color:#f7fbff}
+.fusion-attribute-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:8px 0 16px}
+.fusion-attribute{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:111px;min-width:0;padding:11px 5px;border-radius:14px;background:linear-gradient(150deg,#0e1d30,#192b3c);border:2px solid var(--element-color);color:var(--element-color);cursor:pointer;box-shadow:inset 0 0 18px #ffffff08,0 0 12px color-mix(in srgb,var(--element-color) 24%,transparent);transition:transform .16s,border-color .16s}
+.fusion-attribute:not(:disabled):hover,.fusion-attribute:not(:disabled):focus-visible{transform:translateY(-3px);background:#203b50;outline:2px solid #fff;outline-offset:2px}
+.fusion-attr-icon{font-size:clamp(22px,3vw,32px);line-height:1.3}
+.fusion-attribute strong{font-weight:950;font-size:clamp(16px,2.6vw,21px)}
+.fusion-attribute small{font-size:9px;line-height:1.2;color:#d7e7f3;text-align:center}
+.fusion-attribute.unavailable{border-color:#55606d!important;color:#929eae!important;filter:grayscale(1);opacity:.47;background:#101720;cursor:not-allowed;box-shadow:none}
+.fusion-selected-main{color:var(--element-color);text-align:center;font-weight:900;font-size:15px;margin:8px 0}
+.fusion-farewell{color:#ffd2d9;background:#4c2230;border:1px solid #fd7895;border-radius:8px;text-align:center;font-weight:850;padding:8px 9px;margin:9px 0}
+.fusion-celebration{text-align:center;animation:fusionUnlockPop .54s ease-out}
+.fusion-celebration .fusion-symbol{font-size:58px;filter:drop-shadow(0 0 16px var(--fusion-color))}
+.fusion-awakened-name{font-size:clamp(18px,3.5vw,29px);font-weight:950;color:var(--fusion-color);text-shadow:0 0 16px var(--fusion-color);margin:9px 0}
+@media(max-width:680px){.fusion-attribute-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.fusion-attribute{min-height:91px;padding:8px 4px}.fusion-attribute small{font-size:9px}.fusion-unlock{padding:10px 7px}.fusion-unlock-stars{font-size:16px;letter-spacing:8px}}
+@media(max-width:355px){.fusion-attribute-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.fusion-attribute{min-height:78px}.fusion-attr-icon{font-size:22px}}
+@keyframes fusionUnlockPop{from{opacity:.3;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.fusion-unlock,.fusion-celebration{animation:none}.fusion-attribute{transition:none}}
 </style>
 <style>
 .choice-pick{display:none}
@@ -2791,10 +2816,19 @@ const festival=document.getElementById('celebration'),fctx=festival.getContext('
 let fdpr=1,celebrationParticles=[],celebrationRockets=[],celebrationEvents=[],celebrationClock=0,celebrationLabel='';
 const PARTY_COLORS=['#ff719d','#ffcd5e','#72ffe5','#a599ff','#8bd3ff','#e8f9a4','#ffa975'];
 function fitFestival(){fdpr=Math.max(.6,Math.min(devicePixelRatio||1,3)*({high:1,balanced:.82,low:.60}[settings.quality]||1));festival.width=Math.round(innerWidth*fdpr);festival.height=Math.round(innerHeight*fdpr);fctx.setTransform(fdpr,0,0,fdpr,0,0)}addEventListener('resize',fitFestival);fitFestival();
-function confetti(){for(let j=0;j<(settings.fx==='high'?240:settings.fx==='medium'?140:60);j++){const side=j%2,xx=side?innerWidth+rand(-16,35):rand(-35,16),yy=innerHeight*.30+rand(0,innerHeight*.36),ang=side?rand(Math.PI*.8,Math.PI*1.36):rand(-.36,.36),speed=rand(200,630);celebrationParticles.push({type:'paper',x:xx,y:yy,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed-rand(180,320),w:rand(4,11),h:rand(6,17),r:rand(0,TAU),spin:rand(-15,15),life:rand(2.5,5.8),color:PARTY_COLORS[j%PARTY_COLORS.length]})}}
-function queueFireworks(){for(let i=0;i<(settings.fx==='high'?7:settings.fx==='medium'?5:3);i++)celebrationEvents.push({at:celebrationClock+i*.29,type:'launch',x:innerWidth*(.12+(i*3%8)*.105),y:innerHeight*(.17+(i%3)*.12),color:PARTY_COLORS[i%PARTY_COLORS.length]})}
+function confetti(elementColor=null){for(let j=0;j<(settings.fx==='high'?240:settings.fx==='medium'?140:60);j++){const side=j%2,xx=side?innerWidth+rand(-16,35):rand(-35,16),yy=innerHeight*.30+rand(0,innerHeight*.36),ang=side?rand(Math.PI*.8,Math.PI*1.36):rand(-.36,.36),speed=rand(200,630);celebrationParticles.push({type:'paper',x:xx,y:yy,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed-rand(180,320),w:rand(4,11),h:rand(6,17),r:rand(0,TAU),spin:rand(-15,15),life:rand(2.5,5.8),color:elementColor?(j%5===0?'#ffffff':elementColor):PARTY_COLORS[j%PARTY_COLORS.length]})}}
+function queueFireworks(elementColor=null){for(let i=0;i<(settings.fx==='high'?7:settings.fx==='medium'?5:3);i++)celebrationEvents.push({at:celebrationClock+i*.29,type:'launch',x:innerWidth*(.12+(i*3%8)*.105),y:innerHeight*(.17+(i%3)*.12),color:elementColor||PARTY_COLORS[i%PARTY_COLORS.length]})}
 function explodeFirework(x,y,color){const count=settings.fx==='high'?76:settings.fx==='medium'?45:24;for(let k=0;k<count;k++){const a=k/count*TAU+rand(-.05,.05),sp=rand(110,320);celebrationParticles.push({type:'spark',x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:rand(.65,1.35),total:1.35,r:rand(1.7,3.3),color:k%5===0?'#ffffff':color})}sfx('firework')}
-function celebrateFusion(unique=false){confetti();if(unique){queueFireworks();celebrationLabel='✦ TRANSCENDENCE · UNIQUE EVOLUTION ✦';sfx('unique')}else{celebrationLabel='✦ EVOLUTION COMPLETE ✦';sfx('fusion')}celebrationEvents.push({at:celebrationClock+3.4,type:'labelOff'});}
+let celebrationTint='#c8a2ff';
+function celebrateElementFusion(main,name){
+ const color=ELEMENTS[main].color;
+ confetti(color);queueFireworks(color);
+ celebrationTint=color;
+ celebrationLabel=`✦ ${ELEMENTS[main].icon} ${name} ✦`;
+ sfx('fusion');
+ celebrationEvents.push({at:celebrationClock+4,type:'labelOff'});
+}
+function celebrateFusion(unique=false){confetti();celebrationTint='#c8a2ff';if(unique){queueFireworks();celebrationLabel='✦ TRANSCENDENCE · UNIQUE EVOLUTION ✦';sfx('unique')}else{celebrationLabel='✦ EVOLUTION COMPLETE ✦';sfx('fusion')}celebrationEvents.push({at:celebrationClock+3.4,type:'labelOff'});}
 function celebrateUnique(){queueFireworks();celebrationLabel='✦ UNIQUE ANKIN ACQUIRED ✦';sfx('unique');celebrationEvents.push({at:celebrationClock+3.7,type:'labelOff'})}
 function updateFestival(dt){if(!celebrationParticles.length&&!celebrationRockets.length&&!celebrationEvents.length&&!celebrationLabel){
  if(updateFestival.needsClear){fctx.clearRect(0,0,innerWidth,innerHeight);updateFestival.needsClear=false;}return;
@@ -2802,7 +2836,7 @@ function updateFestival(dt){if(!celebrationParticles.length&&!celebrationRockets
  fctx.clearRect(0,0,innerWidth,innerHeight);
  for(let i=celebrationRockets.length-1;i>=0;i--){const r=celebrationRockets[i];r.life-=dt;r.x+=(r.tx-r.x)*Math.min(1,dt*11);r.y+=(r.ty-r.y)*Math.min(1,dt*11);fctx.strokeStyle=r.color;fctx.lineWidth=3;fctx.shadowBlur=19;fctx.shadowColor=r.color;fctx.beginPath();fctx.moveTo(r.x,r.y+40);fctx.lineTo(r.x,r.y);fctx.stroke();if(r.life<=0){explodeFirework(r.x,r.y,r.color);celebrationRockets.splice(i,1)}}
  const celebrationDrag=Math.pow(.985,dt*60);for(let i=celebrationParticles.length-1;i>=0;i--){const p=celebrationParticles[i];p.life-=dt;if(p.life<=0){celebrationParticles.splice(i,1);continue}p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=celebrationDrag;p.vy+=(p.type==='paper'?330:45)*dt;p.r+=(p.spin||0)*dt;fctx.save();fctx.globalAlpha=Math.min(1,p.life*.95);fctx.translate(p.x,p.y);if(p.type==='paper'){fctx.rotate(p.r);fctx.fillStyle=p.color;fctx.fillRect(-p.w/2,-p.h/2,p.w,p.h)}else{fctx.fillStyle=p.color;fctx.shadowColor=p.color;fctx.shadowBlur=13;fctx.beginPath();fctx.arc(0,0,p.r,0,TAU);fctx.fill()}fctx.restore()}
- fctx.shadowBlur=0;if(celebrationLabel){fctx.save();fctx.textAlign='center';fctx.font=`900 ${Math.min(24,Math.max(13,innerWidth/40))}px system-ui,sans-serif`;fctx.shadowBlur=19;fctx.shadowColor='#c8a2ff';fctx.fillStyle='#ffffff';fctx.fillText(celebrationLabel,innerWidth/2,Math.min(innerHeight*.12,88));fctx.restore()}
+ fctx.shadowBlur=0;if(celebrationLabel){fctx.save();fctx.textAlign='center';fctx.font=`900 ${Math.min(24,Math.max(13,innerWidth/40))}px system-ui,sans-serif`;fctx.shadowBlur=19;fctx.shadowColor=celebrationTint;fctx.fillStyle='#ffffff';fctx.fillText(celebrationLabel,innerWidth/2,Math.min(innerHeight*.12,88));fctx.restore()}
 }
 let perfFrames=0,perfSecond=0,perfFPS=60;
 // v11.9: bounded read-only runtime diagnostics; no gameplay or benchmark cheats ship in production.
