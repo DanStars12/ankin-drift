@@ -38,3 +38,11 @@ GitHub Actions uploads the Playwright report including JSON attachments. Perform
 - Look for P95/P99 frame-time regression or spikes, not only average FPS.
 - Confirm hostile bullet visibility, warp warnings and touch controls still work.
 - A test passing in headless Chromium does not replace a 20–40-minute real-device run.
+
+## Second optimization pass (v11.9)
+
+- Hostile projectiles are grouped into per-color Canvas paths during heavy rendering load and low-effects mode. This reduces draw submissions while retaining hostile bullet geometry and damage checks. Special pressure-bullet warning rings remain drawn on top.
+- XP pickup proximity uses squared distances until a shard enters magnet range; a square root is no longer computed for every faraway shard. Pickup compaction reuses the existing array instead of allocating another array every simulation tick.
+- The `late-game-stress` test scenario adds 500 persistent energy orbs, up to 220 initial enemies, 300 hostile projectiles, magma patches and tornado effects at the 60-minute difficulty setting. It collects frame time P95/P99 as well as simulation and draw time. This is an **equivalent synthetic workload**, not a real 60-minute session.
+
+Before-and-after numbers from GitHub-hosted runners are indicative only. Always retest on the same device at the same graphics and FPS settings, especially during long combined raids.
