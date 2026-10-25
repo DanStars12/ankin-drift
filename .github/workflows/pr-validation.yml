@@ -1,0 +1,121 @@
+name: ANKIN DRIFT validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  syntax:
+    name: JavaScript syntax
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Check JavaScript syntax
+        id: check
+        run: npm run check:syntax
+      - name: Write result summary
+        if: always()
+        env:
+          RESULT: ${{ steps.check.outcome }}
+        run: echo "JavaScript syntax — ${RESULT:-not executed}. See step logs for details." >> "$GITHUB_STEP_SUMMARY"
+
+  pwa:
+    name: HTML and PWA
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Check HTML and PWA consistency
+        id: check
+        run: npm run check:pwa
+      - name: Write result summary
+        if: always()
+        env:
+          RESULT: ${{ steps.check.outcome }}
+        run: echo "HTML and PWA — ${RESULT:-not executed}. See step logs for details." >> "$GITHUB_STEP_SUMMARY"
+
+  smoke:
+    name: Smoke (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390, mobile-320]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Test game and offline startup
+        id: check
+        run: npm run test:smoke -- --project=${{ matrix.project }}
+      - name: Write result summary
+        if: always()
+        env:
+          PROJECT: ${{ matrix.project }}
+          RESULT: ${{ steps.check.outcome }}
+        run: node scripts/summarize-smoke.mjs
+      - name: Upload browser report and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+  required:
+    name: PR validation
+    if: always()
+    needs: [syntax, pwa, smoke]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Require every check to pass
+        env:
+          SYNTAX: ${{ needs.syntax.result }}
+          PWA: ${{ needs.pwa.result }}
+          SMOKE: ${{ needs.smoke.result }}
+        run: |
+          {
+            echo '## ANKIN DRIFT validation'
+            echo "- JavaScript syntax: $SYNTAX"
+            echo "- HTML and PWA: $PWA"
+            echo "- PC and mobile startup: $SMOKE"
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$SYNTAX" = success
+          test "$PWA" = success
+          test "$SMOKE" = success
