@@ -2659,7 +2659,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    const pool=(radius,wiggle=0)=>{ctx.beginPath();for(let j=0;j<=segments;j++){const a=j*TAU/segments;const n=1+.075*Math.sin(a*5+phase)+.06*Math.sin(a*9-phase*1.7);const r=radius*n+wiggle*Math.sin(phase+a*4);const x=Math.cos(a)*r,y=Math.sin(a)*r;j?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath()};
    pool(z.r);ctx.fillStyle=z.tint?'#10233e':'#4b1a14';ctx.fill();ctx.strokeStyle=z.tint||'#9a4d29';ctx.lineWidth=z.tint?3:4;ctx.stroke();
    pool(z.r*.83,2);ctx.fillStyle=z.tint?'#25598b':'#f05c25';ctx.fill();
-   pool(z.r*.61,3);ctx.fillStyle=z.tint:'#ff9f39';ctx.globalAlpha=fade*.73;ctx.fill();
+   pool(z.r*.61,3);ctx.fillStyle=z.tint||'#ff9f39';ctx.globalAlpha=fade*.73;ctx.fill();
    ctx.globalAlpha=fade*.9;ctx.strokeStyle=z.tint?'#d9f6ff':'#ffe28b';ctx.lineWidth=2.8;ctx.lineCap='round';
    for(let k=0;k<3;k++){const a=t*.31+k*TAU/3+z.x*.03,r=z.r*(.24+k*.13);ctx.beginPath();ctx.arc(Math.cos(a)*z.r*.14,Math.sin(a)*z.r*.13,r,a,a+1.1);ctx.stroke()}
    ctx.fillStyle=z.tint?'#e4faff':'#fff0ae';for(let k=0;k<4;k++){const a=phase*(.9+k*.15)+k*1.57;const r=z.r*(.22+.1*(k%2));ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,2.2,0,TAU);ctx.fill()}
