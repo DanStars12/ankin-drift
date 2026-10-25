@@ -74,3 +74,79 @@ test('PWA activates, caches its shell and starts offline', async ({ page, contex
   await expect(page.locator('#hudWave')).not.toHaveText('00:00');
   expect(errors).toEqual([]);
 });
+
+
+function rectanglesOverlap(a,b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }) => {
+  const errors = watchFailures(page);
+  await page.goto('./');
+  await expect(page).toHaveTitle(/ANKIN DRIFT v11\.10/);
+  await page.locator('[data-control="' + (isMobile ? 'mobile' : 'desktop') + '"]').click();
+  await page.locator('#openOptions').click();
+  await page.locator('#showFps').check();
+  await page.locator('#optionsBack').click();
+  await page.locator('#start').click();
+  await page.locator('#guideContinue').click();
+  const fps = page.locator('#fpsCounter');
+  await expect(fps).toBeVisible();
+  await expect(fps).toContainText('FPS');
+
+  const sizes = isMobile
+    ? [{ width: 390, height: 844 }, { width: 320, height: 740 }]
+    : [
+      { width: 1280, height: 800 },
+      { width: 1024, height: 768 },
+      { width: 800, height: 600 },
+      { width: 760, height: 540 },
+    ];
+
+  for (const viewport of sizes) {
+    await page.setViewportSize(viewport);
+    await expect(fps).toBeVisible();
+    const geometry = await page.evaluate(() => {
+      const box = selector => {
+        const el = document.querySelector(selector);
+        if (!el) return null;
+        const rect = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden') return null;
+        return {
+          top:rect.top, bottom:rect.bottom,
+          left:rect.left, right:rect.right,
+          width:rect.width, height:rect.height,
+        };
+      };
+      return {
+        fps:box('#fpsCounter'),
+        wave:box('#hud .hud-row > .hud-box'),
+        build:box('#hudBuild'),
+        bottom:box('#hud .hud-bottom'),
+        dash:box('#dashTouch'),
+        nova:box('#novaTouch'),
+      };
+    });
+    expect(geometry.fps, 'Missing FPS badge').not.toBeNull();
+    const { fps: indicator } = geometry;
+    expect(indicator.left).toBeGreaterThanOrEqual(-1);
+    expect(indicator.right).toBeLessThanOrEqual(viewport.width+1);
+    expect(indicator.top).toBeGreaterThanOrEqual(-1);
+    expect(indicator.bottom).toBeLessThanOrEqual(viewport.height+1);
+    if (isMobile) {
+      for(const key of ['dash','nova']) {
+        if(geometry[key])expect(rectanglesOverlap(indicator,geometry[key]),'FPS overlaps '+key).toBe(false);
+      }
+    } else {
+      expect(indicator.top).toBeGreaterThanOrEqual(geometry.wave.bottom+7);
+      expect(Math.abs(indicator.left-geometry.wave.left)).toBeLessThanOrEqual(2);
+      for (const key of ['wave','build','bottom']) {
+        if(geometry[key] && geometry[key].width && geometry[key].height) {
+          expect(rectanglesOverlap(indicator,geometry[key]),'FPS overlaps '+key+' at '+viewport.width).toBe(false);
+        }
+      }
+    }
+  }
+  expect(errors).toEqual([]);
+});
