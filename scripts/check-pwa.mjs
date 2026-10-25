@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'acorn';
-import { nodes, attr, root, parseErrors } from './html.mjs';
+import { html, nodes, attr, root, parseErrors } from './html.mjs';
 
 assert.equal(parseErrors.length, 0, `HTML parse errors: ${JSON.stringify(parseErrors)}`);
 const base = new URL('https://ci.invalid/ankin-drift/');
@@ -26,6 +26,14 @@ const ids = nodes.map(n => attr(n, 'id')).filter(Boolean);
 assert.equal(new Set(ids).size, ids.length, 'Duplicate HTML IDs');
 for (const required of ['html', 'head', 'body', 'title', 'canvas']) assert(nodes.some(n => n.tagName === required), `Missing <${required}>`);
 assert(nodes.some(n => n.tagName === 'meta' && attr(n, 'name') === 'viewport'), 'Missing mobile viewport');
+
+const pageTitle = nodes.find(n => n.tagName === 'title')?.childNodes?.map(n => n.value ?? '').join('') ?? '';
+const titleVersion = pageTitle.match(/\bV(\d+\.\d+)\b/i)?.[1];
+const menuVersion = html.match(/<p class="eyebrow">V(\d+\.\d+)\s*·/)?.[1];
+assert(titleVersion, 'Browser title must include game version');
+assert(menuVersion, 'Title screen must include a game version');
+assert.equal(menuVersion, titleVersion, 'Title screen and browser title version mismatch');
+
 for (const node of nodes) {
   for (const name of ['src', 'href']) {
     const ref = attr(node, name);
