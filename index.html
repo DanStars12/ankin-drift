@@ -2398,8 +2398,10 @@ function tickRocks(dt){const p=player;for(let i=0;i<p.rockWalls;i++){p.rockCoold
 // v12: Gusts are protective OUTWARD shockwaves. Never pull enemies into the pilot.
 // Bigger builds trade surplus radius / projectiles for damage instead of screen coverage.
 const WIND_VISUAL_CAP=165,WIND_BULLET_CAP=4,WIND_ACTIVE_CAP=16;
+let gustFrameSerial=0;
 function tickGusts(dt){
  if(player.windCount<1&&gusts.length===0)return;
+ gustFrameSerial++;
  player.windTimer-=dt;
  if(player.windCount>0&&player.windTimer<=0){
   player.windTimer+=Math.max(1.25,player.windPeriod);
@@ -2445,7 +2447,8 @@ function tickGusts(dt){
    const dist=Math.sqrt(distSq);
    // Outer edge knocks enemies AWAY from the shockwave; the inner visual
    // ring damages only, so overlapping gusts cannot repeatedly teleport foes.
-   if(dist>=g.r*.5){
+   if(dist>=g.r*.5&&e.gustPushFrame!==gustFrameSerial){
+    e.gustPushFrame=gustFrameSerial;
     let nx=dx/dist,ny=dy/dist;
     const px=e.x-player.x,py=e.y-player.y;
     const pd=Math.hypot(px,py);
