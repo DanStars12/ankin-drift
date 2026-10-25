@@ -700,7 +700,15 @@ function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(set
 resize();
 function positionFpsDisplay(){
  const el=U('fpsCounter');if(!el)return;
- if(controlMode==='mobile'){el.style.left='';el.style.top='';return;}
+ if(controlMode==='mobile'){
+  // Keep the counter immediately above DASH, away from both touch controls.
+  // Anchor to the actual button bounds so safe areas and narrow devices work.
+  el.style.left='';el.style.top='';
+  const dash=U('dashTouch'),bounds=dash?.getBoundingClientRect();
+  if(bounds?.height)el.style.bottom=Math.ceil(innerHeight-bounds.top+8)+'px';
+  return;
+ }
+ el.style.bottom='';
  const waveBox=U('hud')?.querySelector('.hud-row > .hud-box');
  if(!waveBox)return;
  const bounds=waveBox.getBoundingClientRect();
