@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v11.7 — WARP & DEFENSE UPDATE",
+  "name": "ANKIN DRIFT v11.8 — RAID OPTIMIZATION",
   "short_name": "ANKIN DRIFT",
-  "description": "v11.7: visible warp warnings and endgame defense balance.",
+  "description": "v11.8: multiple raid performance improvements, adaptive rendering and clear mobile HUD.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",

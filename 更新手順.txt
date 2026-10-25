@@ -1,0 +1,7 @@
+GitHub Pages アップデート手順
+1. zipを展開する。
+2. index.html / manifest.webmanifest / sw.js / iconsフォルダと画像 / .nojekyll を既存リポジトリのルートに反映する。
+3. 同名ファイルを置き換えたことを確認し Commit changes。
+4. Actionsで pages build and deployment が success になるまで確認。
+5. https://danstars12.github.io/ankin-drift/ にアクセス。以前の画面なら再読み込み。
+既存の進行記録は通常ブラウザのローカル保存に残りますが、念のためブラウザデータを消さずに更新してください。
