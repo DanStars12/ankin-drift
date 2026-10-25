@@ -2539,8 +2539,10 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    let path=groups.get(b.color);if(!path){path=new Path2D();groups.set(b.color,path)}
    path.moveTo(b.x+b.r,b.y);path.arc(b.x,b.y,b.r,0,TAU);
   }
-  for(const [color,path] of groups){ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=settings.fx==='low'?0:2;ctx.fill(path)}
+  // Large batched paths must not cast a whole-screen shadow texture.
+  // Pressure warnings below still retain their dedicated outline.
   ctx.shadowBlur=0;
+  for(const [color,path] of groups){ctx.fillStyle=color;ctx.fill(path)}
   // Keep special warning rings on top of the colored projectiles.
   for(const b of hostile){if(!b.pressure||b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
    ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();
