@@ -6,7 +6,7 @@ test('v13 migrates old clear, exports JSON and restores without duplication',asy
   damage:54000,time:1900,level:46,clears:[{mode:'normal',time:1801,level:43,damage:54000,
   date:'2026-10-25T18:30:00.000Z',endless:false}],runs:[] })));
  await page.goto('./');
- await expect(page).toHaveTitle(/ANKIN DRIFT v13\.2\.1/);
+ await expect(page).toHaveTitle(/ANKIN DRIFT v13\.3/);
  await page.locator('#openArchive').click();
  await expect(page.getByText('初めての勝利')).toBeVisible();
  const download=page.waitForEvent('download');
