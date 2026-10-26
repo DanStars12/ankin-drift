@@ -201,6 +201,8 @@ function start(){
 function current(){return snapshot||start()}
 function read(){return structuredClone(current().record)}
 function awardsUpdated(candidate){
+ // Never mutate the previous snapshot's awards: unlock toasts are diffed across commits.
+ candidate.awards={...candidate.awards};
  const now=new Date().toISOString();
  for(const [id,,, ,goal] of DEFINITIONS)if(progressValue(id,candidate.profile)>=goal&&!candidate.awards[id])candidate.awards[id]=now;
  return candidate;
