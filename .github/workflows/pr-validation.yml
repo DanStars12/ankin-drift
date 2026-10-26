@@ -81,7 +81,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Test game and offline startup
         id: check
-        run: npm run test:smoke -- tests/smoke.spec.mjs --project=${{ matrix.project }}
+        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs --project=${{ matrix.project }}
       - name: Write result summary
         if: always()
         env:
