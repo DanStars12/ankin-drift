@@ -1548,6 +1548,10 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  '光子':['レーザー光学','自動照準・即着弾のレーザーを複数本照射して持続ダメージを与えます。',[`本数：${p.laserCount}、線幅：${p.laserWidth.toFixed(1)}`,`照射威力倍率：×${p.laserScale.toFixed(2)}`]],
  '燃焼':['燃焼ダメージ','炎属性攻撃により一定時間ダメージを与える状態異常です。',[`基準燃焼ダメージ：約${Math.round(burn)}/秒`,`追加燃焼確率：${pct(p.burnChance)}`]],
  'マグマ床':['持続するマグマ','設置した床に触れ続ける敵へ継続ダメージを与えます。',[`設置床ダメージ：約${magma}/秒`,`設置強化：${p.magmaLevel}`,`効果半径：${Math.round(p.magmaRadius)}`]],
+ 'アイスボール':['氷の独立射撃','水色の氷弾が自動発射され、命中時に凍結を判定。スロウは発生しません。',[`発射数：${p.iceBallCount}`,`威力：${Math.round(p.iceBallDamage)}`,`凍結確率：${pct(p.iceBallChance)}`]],
+ 'パルス':['電磁パルス領域','自機周辺の円内と外周に継続雷ダメージ。連鎖弾やNOVAには自動伝播しません。',[`半径：${Math.round(p.empRadius)}`,`毎秒威力：${Math.round(p.empDps)}`]],
+ '隕石':['ローリング・メテオ','敵を貫通し、進むほど大きくなる隕石。ダメージは成長せず、画面外に出ると消滅。',[`威力：${Math.round(p.meteorDamage)}`,`最大半径：${Math.round(Math.min(75,p.meteorRadius+29))}`]],
+ 'サイクロン':['サイクロン弾','竜巻が直進し、外周で敵を押し返す。ブレードは付随しません。',[`発射数：${p.windCount}`,`衝撃半径：${Math.round(p.windRadius)}`]],
  'スロウ':['スロウ効果','敵の移動速度と攻撃の頻度を下げます。ボスにもスロウだけは有効です。',[`スロウの追加発生確率：${pct(p.slowChance)}`,`氷の攻撃頻度低下：${pct(p.iceAttackSlow)}`]],
  '凍結':['フリーズ効果','通常敵を最大2秒間停止。解凍後2.8秒は再凍結を無効化します。ボスは完全凍結しません。',[`凍結の追加発生確率：${pct(p.freezeChance)}`,`凍結持続：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は凍結耐性（ボス無効）`]],
  'ノックバック':['敵を外側へ押し返す','風の突風は敵を中心へ吸い寄せず、外側へ押し返します。ボスは突風で移動しません。',[`風のノックバック力：${Math.round(p.windStrength)}`,`風の衝撃半径：${Math.round(p.windRadius)}`]],
@@ -3335,13 +3339,19 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    ctx.globalAlpha=Math.min(.53,g.life*.24);ctx.lineWidth=2;
    ctx.beginPath();ctx.arc(0,0,g.r,0,TAU);ctx.stroke();
   }else{
-   ctx.rotate(t*1.65);ctx.shadowColor=color;
-   ctx.shadowBlur=settings.fx==='high'?12:settings.fx==='medium'?8:0;
-   ctx.globalAlpha=Math.min(.72,g.life*.28);
-   ctx.lineWidth=g.kind==='fireTornado'?4:3;
-   for(let i=0;i<(settings.fx==='low'?2:3);i++){
-    ctx.beginPath();ctx.arc(0,0,g.r*(.57+i*.2),i*1.13,i*1.13+Math.PI*1.12);ctx.stroke();
+   // Stable tapered tornado spiral (never switches shape except in SIMPLE mode).
+   ctx.rotate(t*1.85);ctx.shadowColor=color;ctx.shadowBlur=settings.fx==='high'?12:settings.fx==='medium'?7:0;
+   ctx.globalAlpha=Math.min(.84,g.life*.31);ctx.lineWidth=g.kind==='fireTornado'?4:3.3;
+   const ribbons=settings.fx==='low'?2:3;
+   for(let k=0;k<ribbons;k++){
+    ctx.beginPath();
+    for(let j=0;j<=28;j++){
+     const q=j/28,a=q*TAU*1.55+k*TAU/ribbons,rad=g.r*(.16+q*.79);
+     const x=Math.cos(a)*rad,y=Math.sin(a)*rad*.48+(q-.5)*g.r*.36;
+     if(j)ctx.lineTo(x,y);else ctx.moveTo(x,y);
+    }ctx.stroke();
    }
+   ctx.globalAlpha*=.55;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,g.r*.17,g.r*.89,g.r*.23,0,0,TAU);ctx.stroke();
   }
   ctx.restore();
  }
