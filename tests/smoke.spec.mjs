@@ -83,7 +83,7 @@ function rectanglesOverlap(a,b) {
 test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }, testInfo) => {
   const errors = watchFailures(page);
   await page.goto('./');
-  await expect(page).toHaveTitle(/ANKIN DRIFT v12\.2/);
+  await expect(page).toHaveTitle(/ANKIN DRIFT v12\.3/);
   await page.locator('[data-control="' + (isMobile ? 'mobile' : 'desktop') + '"]').click();
   await page.locator('#openOptions').click();
   await page.locator('#showFps').check();
@@ -226,12 +226,12 @@ test('v12.1 sequential fusion selection, disabled used attributes and milestone 
  expect(failures).toEqual([]);
 });
 
-test('v12.2 boss HP, fusion damage and evolution identity on every synthesis', async ({page,isMobile})=>{
+test('v12.3 boss HP, fusion damage and evolution identity on every synthesis', async ({page,isMobile})=>{
  const errors=watchFailures(page);
  await page.route('**/ankin-drift/',async route=>{
   const original=await route.fetch(),html=await original.text();
   const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
-  if(!html.includes(anchor))throw Error('v12.2 probe injection anchor changed');
+  if(!html.includes(anchor))throw Error('v12.3 probe injection anchor changed');
   await route.fulfill({response:original,body:html.replace(anchor,"\nwindow.__v122Probe = () => {\n newRun();game.total=600;game.level=22;\n spawnBoss('major','titan');const beforeHP=boss.maxHp;\n boss=null;enemies=[];game.level=28;\n spawnBoss('major','titan');const afterHP=boss.maxHp;\n // At fixed elapsed time Lv28 has a modest HP discount.\n newRun();\n const p=initialP();applyElementFusionStats(p,{main:'fire',sub:'ice',resonance:6});\n const first=p.fusionOutputBonus;\n applyElementFusionStats(p,{main:'wind',sub:'rock',resonance:9});\n const second=p.fusionOutputBonus;\n player.fusionOutputBonus=p.fusionOutputBonus;\n const dummy={type:'drone',hp:10000,maxHp:10000,dead:false,burn:0,slow:0,rockHit:0,bladeHit:0,x:W*.4,y:H*.4,r:14};\n damageEnemy(dummy,100,{source:'element',special:true});\n const effective=10000-dummy.hp;\n game.fusions=Object.fromEntries(FUSIONS.map(f=>[f.id,1]));\n syncEvolutionVisuals(player);\n player.fusionList=FUSIONS.map(f=>f.id);\n const all=player.evolutionStyles.map(x=>({id:x.id,motif:x.motif,color:x.color}));\n const styleOK=all.every(x=>x.motif&&x.color.startsWith('hsl('));\n const diverse=[...new Set(all.map(x=>x.color))].length;\n state('playing');render();\n return {beforeHP,afterHP,first,second,effective,total:FUSIONS.length,visuals:all.length,styleOK,diverse,tint:player.evolutionTint,rendered:true};\n};\nwindow.__v122Threat = async kind => {\n newRun();state('playing');\n const button=kind==='dash'?dashTouch:novaTouch;\n const rect=button.getBoundingClientRect(),bounds=canvas.getBoundingClientRect();\n const x=((rect.left+rect.right)/2-bounds.left)*W/bounds.width;\n const y=((rect.top+rect.bottom)/2-bounds.top)*H/bounds.height;\n enemies=[{type:'drone',x,y,r:12,hp:200,maxHp:200,dead:false}];\n hostile=[];hudUpdate();\n const className='mobile-'+kind+'-threat';\n const dim=document.body.classList.contains(className);\n const opacity=Number(getComputedStyle(button).opacity);\n enemies=[];hudUpdate();\n const cleared=!document.body.classList.contains(className);\n return {dim,opacity,cleared,pointerEvents:getComputedStyle(button).pointerEvents};\n};\n"+anchor)});
  });
  await page.goto('./');
@@ -242,9 +242,9 @@ test('v12.2 boss HP, fusion damage and evolution identity on every synthesis', a
  expect(r.beforeHP).toBeGreaterThan(r.afterHP);
  expect(r.afterHP/r.beforeHP).toBeGreaterThan(.83);
  expect(r.afterHP/r.beforeHP).toBeLessThan(.87);
- expect(r.first).toBeCloseTo(.28,4);
- expect(r.second).toBeCloseTo(.56,4);
- expect(r.effective).toBeCloseTo(156,2);
+ expect(r.first).toBeCloseTo(.42,4);
+ expect(r.second).toBeCloseTo(.84,4);
+ expect(r.effective).toBeCloseTo(184,2);
  expect(r.total).toBeGreaterThan(15);
  expect(r.visuals).toBe(r.total);
  expect(r.styleOK).toBe(true);
@@ -253,13 +253,13 @@ test('v12.2 boss HP, fusion damage and evolution identity on every synthesis', a
  expect(r.rendered).toBe(true);
  expect(errors).toEqual([]);
 });
-test('v12.2 mobile touch controls dim under threats while staying tappable', async ({page,isMobile})=>{
+test('v12.3 mobile touch controls dim under threats while staying tappable', async ({page,isMobile})=>{
  test.skip(!isMobile,'Touch-control opacity is mobile-only');
  const errors=watchFailures(page);
  await page.route('**/ankin-drift/',async route=>{
   const original=await route.fetch(),html=await original.text();
   const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
-  if(!html.includes(anchor))throw Error('v12.2 threat injection anchor changed');
+  if(!html.includes(anchor))throw Error('v12.3 threat injection anchor changed');
   await route.fulfill({response:original,body:html.replace(anchor,"\nwindow.__v122Probe = () => {\n newRun();game.total=600;game.level=22;\n spawnBoss('major','titan');const beforeHP=boss.maxHp;\n boss=null;enemies=[];game.level=28;\n spawnBoss('major','titan');const afterHP=boss.maxHp;\n // At fixed elapsed time Lv28 has a modest HP discount.\n newRun();\n const p=initialP();applyElementFusionStats(p,{main:'fire',sub:'ice',resonance:6});\n const first=p.fusionOutputBonus;\n applyElementFusionStats(p,{main:'wind',sub:'rock',resonance:9});\n const second=p.fusionOutputBonus;\n player.fusionOutputBonus=p.fusionOutputBonus;\n const dummy={type:'drone',hp:10000,maxHp:10000,dead:false,burn:0,slow:0,rockHit:0,bladeHit:0,x:W*.4,y:H*.4,r:14};\n damageEnemy(dummy,100,{source:'element',special:true});\n const effective=10000-dummy.hp;\n game.fusions=Object.fromEntries(FUSIONS.map(f=>[f.id,1]));\n syncEvolutionVisuals(player);\n player.fusionList=FUSIONS.map(f=>f.id);\n const all=player.evolutionStyles.map(x=>({id:x.id,motif:x.motif,color:x.color}));\n const styleOK=all.every(x=>x.motif&&x.color.startsWith('hsl('));\n const diverse=[...new Set(all.map(x=>x.color))].length;\n state('playing');render();\n return {beforeHP,afterHP,first,second,effective,total:FUSIONS.length,visuals:all.length,styleOK,diverse,tint:player.evolutionTint,rendered:true};\n};\nwindow.__v122Threat = async kind => {\n newRun();state('playing');\n const button=kind==='dash'?dashTouch:novaTouch;\n const rect=button.getBoundingClientRect(),bounds=canvas.getBoundingClientRect();\n const x=((rect.left+rect.right)/2-bounds.left)*W/bounds.width;\n const y=((rect.top+rect.bottom)/2-bounds.top)*H/bounds.height;\n enemies=[{type:'drone',x,y,r:12,hp:200,maxHp:200,dead:false}];\n hostile=[];hudUpdate();\n const className='mobile-'+kind+'-threat';\n const dim=document.body.classList.contains(className);\n const opacity=Number(getComputedStyle(button).opacity);\n enemies=[];hudUpdate();\n const cleared=!document.body.classList.contains(className);\n return {dim,opacity,cleared,pointerEvents:getComputedStyle(button).pointerEvents};\n};\n"+anchor)});
  });
  await page.goto('./');
