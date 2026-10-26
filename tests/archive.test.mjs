@@ -23,7 +23,7 @@ test('v12.4 save migration is non-destructive and persists after reload',()=>{
  const legacy={damage:930000,time:1850,level:77,clears:[clear('legacy-original',{title:'旧クリア'})],runs:[{id:'r0',time:40,level:2,damage:9}]};
  const h=harness({[old]:asText(legacy)});
  const first=h.api.start();
- assert.equal(first.schemaVersion,1);assert.equal(first.record.damage,930000);
+ assert.equal(first.schemaVersion,2);assert.equal(first.record.damage,930000);
  assert.equal(first.record.clears.length,1);
  assert.equal(first.record.clears[0].title,'旧クリア');
  assert.equal(first.awards.first_clear!==undefined,true);
@@ -77,5 +77,5 @@ test('storage quota failure is visible and record stays available for backup',()
  assert.match(h.api.status(),/保存不可/);
  assert.equal(h.api.write({...h.api.read(),time:88}),false);
  assert.match(h.api.status(),/保存失敗/);
- assert.ok(h.api.exported().includes('"schemaVersion": 1'));
+ assert.ok(h.api.exported().includes('"schemaVersion": 2'));
 });
