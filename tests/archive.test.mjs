@@ -79,3 +79,59 @@ test('storage quota failure is visible and record stays available for backup',()
  assert.match(h.api.status(),/保存失敗/);
  assert.ok(h.api.exported().includes('"schemaVersion": 2'));
 });
+
+test('v13.0 schema v1 backups migrate to schema v2 without losing previous awards',()=>{
+ const oldSave={format:'ankin-drift-archive',schemaVersion:1,updatedAt:'2026-10-24T00:00:00.000Z',
+  record:{damage:750000,time:1800,level:44,runs:[{id:'run-first',damage:300000,time:400,kills:150}],
+   clears:[clear('run-first-clear-1',{damage:750000})]},awards:{first_clear:'2026-10-24T00:00:00.000Z'}};
+ const h=harness({[key]:asText(oldSave)});h.api.start();
+ assert.equal(h.api.current().schemaVersion,2);
+ assert.equal(h.api.read().clears.length,1);
+ assert.equal(h.api.current().awards.first_clear,'2026-10-24T00:00:00.000Z');
+ assert.equal(h.api.lifetimeDamage(),750000); // clear and run must not be counted twice
+ assert.equal(JSON.parse(h.memory.get(key)).schemaVersion,2);
+ const copy=h.api.exported();const later=harness();later.api.start();later.api.restore(copy,'replace');
+ assert.equal(later.api.lifetimeDamage(),750000);
+});
+test('bronze newcomer is awarded once on first actual play, not when opening title',()=>{
+ const h=harness();h.api.start();assert.equal(h.api.current().awards.new_pilot,undefined);
+ assert.deepEqual([...h.api.takeUnlocks()],[]);
+ h.api.markStarted();const gained=h.api.takeUnlocks();
+ assert.equal(gained.length,1);assert.equal(gained[0].id,'new_pilot');assert.equal(gained[0].tier,'bronze');
+ h.api.markStarted();assert.equal(h.api.takeUnlocks().length,0);
+ const again=harness(Object.fromEntries(h.memory));again.api.start();again.api.markStarted();
+ assert.equal(again.api.takeUnlocks().length,0);
+});
+test('cumulative damage tracks run maxima, not repeated snapshots, and unlocks パイロットセンス',()=>{
+ const h=harness();h.api.start();h.api.markStarted();h.api.takeUnlocks();
+ h.api.observeRun('run-one',40_000_000,10,20,60);
+ h.api.observeRun('run-one',70_000_000,15,100,300);
+ assert.equal(h.api.lifetimeDamage(),70_000_000);
+ h.api.observeRun('run-two',30_000_000,1,0,0);
+ assert.equal(h.api.lifetimeDamage(),100_000_000);
+ assert.ok(h.api.takeUnlocks().some(x=>x.id==='pilot_sense'));
+ const persisted=harness(Object.fromEntries(h.memory));persisted.api.start();
+ assert.equal(persisted.api.lifetimeDamage(),100_000_000);
+ const progress=persisted.api.progress().find(x=>x.id==='pilot_sense');
+ assert.equal(progress.current,100_000_000);assert.equal(progress.target,100_000_000);
+ assert.equal(progress.tier,'rainbow');
+});
+test('achievement tiers and ten-clear progress are correct, including old save records',()=>{
+ const h=harness({[old]:asText({damage:123,time:1800,level:23,clears:[clear('one')]})});h.api.start();
+ const a=h.api.progress().find(x=>x.id==='ten_clears');
+ assert.equal(a.current,1);assert.equal(a.target,10);assert.equal(a.tier,'gold');
+ assert.equal(h.api.progress().find(x=>x.id==='first_clear').tier,'rainbow');
+ assert.equal(h.api.progress().find(x=>x.id==='new_pilot').tier,'bronze');
+ const r=h.api.read();r.clears.unshift(...Array.from({length:9},(_,i)=>clear('extra-'+i)));
+ h.api.write(r);
+ assert.equal(h.api.progress().find(x=>x.id==='ten_clears').current,10);
+ assert.ok(h.api.current().awards.ten_clears);
+});
+test('merging old and new archives preserves already-earned achievements and distinct run damage',()=>{
+ const a=harness();a.api.start();a.api.markStarted();a.api.observeRun('run-one',60_000_000);
+ const backup=a.api.exported();const b=harness();b.api.start();b.api.markStarted();
+ b.api.observeRun('run-two',40_000_000);b.api.restore(backup,'merge');
+ assert.equal(b.api.lifetimeDamage(),100_000_000);
+ assert.equal(b.api.progress().find(x=>x.id==='pilot_sense').unlocked,true);
+ b.api.restore(backup,'merge');assert.equal(b.api.lifetimeDamage(),100_000_000);
+});
