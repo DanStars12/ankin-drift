@@ -2944,6 +2944,16 @@ function magmaVisualPaths(radius,phase){
  }
  return paths;
 }
+function unifyMagma(){
+ if(!player?.lavaConstrain)return null;
+ const all=zones.filter(z=>z.type==='magma');if(!all.length)return null;
+ const core=all[0];let stacks=0,x=0,y=0,r=0,life=0;
+ for(const z of all){const n=z.stacks||1;stacks+=n;x+=z.x*n;y+=z.y*n;r=Math.max(r,z.r);life=Math.max(life,z.life);}
+ if(all.length>1){core.x=x/stacks;core.y=y/stacks;zones=zones.filter(z=>z.type!=='magma'||z===core);core.visualPaths=null;}
+ core.stacks=Math.min(36,stacks);core.r=Math.min(185,r);core.life=Math.max(core.life,life);
+ core.dps=(player.magmaDps+player.magmaLevel*18+player.dmg*.25)*(1+.18*Math.min(30,core.stacks-1));
+ return core;
+}
 function magmaPatch(x,y,scale=1){
  const actualRadius=Math.max(24,player.magmaRadius*scale),r=Math.min(185,actualRadius);
  if(engageBlockedPoint(x,y,Math.min(30,r)))return;
