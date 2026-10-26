@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.4 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.4.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.4 | ELEMENTAL ARSENAL</title>
+<title>ANKIN DRIFT v13.4.1 | ELEMENTAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -987,7 +987,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.4 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.4.1 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1508,8 +1508,8 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  const known={
  '属性：炎':{name:'🔥 炎属性',desc:'攻撃の燃焼効果で継続ダメージ。マグマ床は接触中の敵へ追加ダメージを与えます。',details:[`燃焼：約${Math.round(burn)} ダメージ/秒（通常攻撃基準）`,`通常攻撃の燃焼確率：${pct(p.burnChance)}（炎弾・火炎ミサイルは別条件）`,p.magmaLevel>0?`マグマ床：約${magma} ダメージ/秒`:`マグマ床：未取得（取得時の基準威力 約${magma}/秒）`,`マグマ設置数の強化：${p.magmaLevel} ／ 効果半径：${Math.round(p.magmaRadius)}`]},
  '属性：氷':{name:'❄️ 氷属性',desc:'スロウと凍結は別系統。主武装への付与とアイスボールで戦います。スロウは凍結させず、アイスボールはスロウを与えません。ボスは凍結無効・スロウ効果半減。',details:[`スロウ中の移動速度：通常敵42% / ボス71%`,`スロウ中の敵攻撃頻度：通常の${pct(Math.max(.25,1-p.iceAttackSlow))}`,`主武装の凍結確率：${pct(p.freezeChance)}（スロウ系とは独立）`,`凍結時間：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は再凍結不可（ボス無効）`]},
- '属性：雷':{name:'⚡ 雷属性',desc:'雷撃が敵から敵へ連鎖し、複数体を攻撃します。強化で威力・範囲が向上します。',details:[`通常連鎖の追加確率：${pct(p.chain)}`,`連鎖ダメージ補正：+${Math.round(p.chainDamage)}`,`ノヴァ関連の追加連鎖：+${p.arcNova}`]},
- '属性：風':{name:'🌪️ 風属性',desc:'サイクロンは敵を外側へ押し返し、ウィンドブレードは機体周囲を棒状の刃が旋回します。2種類は独立した攻撃です。',details:[`サイクロン数（同時発射最大4）：${p.windCount}`,`衝撃半径：${Math.round(p.windRadius)}`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
+ '属性：雷':{name:'⚡ 雷属性',desc:'連鎖雷撃と電磁パルスは別系統。パルスは自機周辺に継続雷ダメージを与え、連鎖やNOVAへ自動伝播しません。',details:[`通常連鎖の追加確率：${pct(p.chain)}`,`連鎖ダメージ補正：+${Math.round(p.chainDamage)}`,`電磁パルスの実効半径：${Math.round(Math.min(290,p.empRadius))}`,`電磁パルス基準威力：${Math.round(p.empDps)}/秒`]},
+ '属性：風':{name:'🌪️ 風属性',desc:'円形のサイクロンは通常敵を外側へ押し返し、ウィンドブレードは自機周囲を旋回する独立武器。ボスはノックバック無効です。',details:[`基本発射数：${p.windCount}（同時最大4・超過分は火力補正）`,`衝撃半径：${Math.round(p.windRadius)}`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
  '属性：岩':{name:'🪨 岩属性',desc:'周回岩壁は防御と接触攻撃、隕石は独立した貫通攻撃。隕石は成長しても威力が増えません。',details:[`周回岩壁：${p.rockWalls}枚`,`岩壁サイズ：${Math.round(p.rockSize)}`,`反撃ダメージ補正：+${Math.round(p.rockDamage)}`,`隕石威力：${Math.round(p.meteorDamage)} / 最大サイズ：${Math.round(Math.min(75,p.meteorRadius+29))}`]}
  };
  const extra={
@@ -1545,18 +1545,18 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  'ノヴァ':['NOVA必殺技','NOVAは補助・緊急回避用。再使用にはゲージ100%と13.5秒のクールダウンが必要です。プラズマドリル型は一定時間プラズマMAX・速度UPになります。',[`現在のNOVAチャージ：${Math.round(p.energy)}%`,`ゲージ増加倍率：×${effectiveNovaGain(p).toFixed(2)}（最大1.55）`,`撃破時ボーナス：最大2.25 / 撃破`,`実効NOVA威力：${Math.round(effectiveNovaDamage(p))}（最大720）`,`再使用待機：${(p.novaCooldown||0).toFixed(1)}秒`]],
  'オプション':['随伴機・支援ユニット','自機の周囲で独立して攻撃する小型機を追加・強化します。',[`随伴機：${p.droneCount}機（上限${p.limitDrones}）`,`雷撃僚機レベル：${p.droneThunder}`,`僚機火力倍率：×${(p.droneBoost||1).toFixed(2)}`]],
  'ブレード':['周回ブレード','自機周辺を旋回する風属性の刃です。接触した敵にダメージを与えます。',[`ブレード：${p.orbit}枚（上限${p.limitOrbit}）`]],
- 'ミサイル':['追尾ミサイル','敵を狙う誘導弾を追加します。炎属性のミサイルは着弾時に燃焼やマグマを起こします。',[`火炎ミサイル強化：${p.flameMissiles}`,`ミサイル射出強化：${p.rocketCd}`]],
+ 'ミサイル':['追尾ミサイル','敵を狙う誘導弾を追加します。炎属性ミサイルは着弾時に燃焼を与えますが、マグマ床は生成しません。',[`火炎ミサイル強化：${p.flameMissiles}`,`ミサイル射出強化：${p.rocketCd}`]],
  'チャージ':['チャージ武器','停止している間に蓄積した力を移動開始で放ちます。満充填時は貫通が発動します。',[`チャージ速度倍率：×${p.chargeRate.toFixed(2)}`,`取得威力倍率：×${p.chargeScale.toFixed(2)}`,`高威力・巨大化・貫通には逓減補正。最大火力は移動で解放`,`チャージ弾サイズ補正：+${p.chargeSize}`]],
  '光子':['レーザー光学','自動照準・即着弾のレーザーを複数本照射して持続ダメージを与えます。',[`本数：${p.laserCount}、線幅：${p.laserWidth.toFixed(1)}`,`照射威力倍率：×${p.laserScale.toFixed(2)}`]],
  '燃焼':['燃焼ダメージ','炎属性攻撃により一定時間ダメージを与える状態異常です。',[`基準燃焼ダメージ：約${Math.round(burn)}/秒`,`追加燃焼確率：${pct(p.burnChance)}`]],
  'マグマ床':['持続するマグマ','設置した床に触れ続ける敵へ継続ダメージを与えます。',[`設置床ダメージ：約${magma}/秒`,`設置強化：${p.magmaLevel}`,`効果半径：${Math.round(p.magmaRadius)}`]],
  'アイスボール':['氷の独立射撃','水色の氷弾が自動発射され、命中時に凍結を判定。スロウは発生しません。',[`発射数：${p.iceBallCount}`,`威力：${Math.round(p.iceBallDamage)}`,`凍結確率：${pct(p.iceBallChance)}`]],
- 'パルス':['電磁パルス領域','自機周辺の円内と外周に継続雷ダメージ。連鎖弾やNOVAには自動伝播しません。',[`半径：${Math.round(p.empRadius)}`,`毎秒威力：${Math.round(p.empDps)}`]],
+ 'パルス':['電磁パルス領域','自機周囲のテスラ放電領域に継続雷ダメージ。実効半径は最大290。連鎖弾やNOVAへ自動伝播しません。',[`実効半径：${Math.round(Math.min(290,p.empRadius))}（上限290）`,`基準威力：${Math.round(p.empDps)}/秒`]],
  '隕石':['ローリング・メテオ','敵を貫通し、進むほど大きくなる隕石。ダメージは成長せず、画面外に出ると消滅。',[`威力：${Math.round(p.meteorDamage)}`,`最大半径：${Math.round(Math.min(75,p.meteorRadius+29))}`]],
- 'サイクロン':['サイクロン弾','竜巻が直進し、外周で敵を押し返す。ブレードは付随しません。',[`発射数：${p.windCount}`,`衝撃半径：${Math.round(p.windRadius)}`]],
- 'スロウ':['スロウ効果','敵の移動速度と攻撃の頻度を下げます。ボスにもスロウだけは有効です。',[`スロウの追加発生確率：${pct(p.slowChance)}`,`氷の攻撃頻度低下：${pct(p.iceAttackSlow)}`]],
+ 'サイクロン':['サイクロン弾','円形の風弾が直進し、外縁で通常敵を押し返す。ブレードは付随せず、ボスは押し返しません。',[`基本発射数：${p.windCount}（同時最大4）`,`実効半径：${Math.round(Math.min(165,Math.max(46,p.windRadius)))}`]],
+ 'スロウ':['スロウ効果','敵の移動速度と攻撃の頻度を下げます。ボスにもスロウは有効ですが、移動速度低下量は通常敵の半分です。',[`スロウの追加発生確率：${pct(p.slowChance)}`,`氷の攻撃頻度低下：${pct(p.iceAttackSlow)}`]],
  '凍結':['フリーズ効果','通常敵を最大2秒間停止。解凍後2.8秒は再凍結を無効化します。ボスは完全凍結しません。',[`凍結の追加発生確率：${pct(p.freezeChance)}`,`凍結持続：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は凍結耐性（ボス無効）`]],
- 'ノックバック':['敵を外側へ押し返す','風の突風は敵を中心へ吸い寄せず、外側へ押し返します。ボスは突風で移動しません。',[`風のノックバック力：${Math.round(p.windStrength)}`,`風の衝撃半径：${Math.round(p.windRadius)}`]],
+ 'ノックバック':['敵を外側へ押し返す','サイクロンは敵を吸い寄せず、外側へ押し返します。ボスはサイクロンで移動しません。',[`風のノックバック力：${Math.round(p.windStrength)}`,`風の衝撃半径：${Math.round(p.windRadius)}`]],
  '吸引':['重力による引き寄せ','一部のチャージ系レリックや重力攻撃で敵を引き寄せます。風の突風とは別の効果です。',['風の突風は吸引ではなくノックバックになりました。']],
  '防御壁':['旋回する岩壁','自機周囲の壁が通常弾を防ぎ、接触した敵を押し返します。後半のPHASE弾・特殊攻撃は防げないため、回避が必要です。',[`防御壁：${p.rockWalls}枚`,`壁のサイズ：${Math.round(p.rockSize)}`,`壁の反撃ダメージ補正：+${Math.round(p.rockDamage)}`]],
  '防御':['シールド防御','シールドで通常の被ダメージを先に吸収します。後半に現れるPHASE弾は一部がHPへ直接届きます。',[`シールド：${Math.round(p.shield)} / ${Math.round(p.shieldMax)}`,`シールド回復：${Math.round(p.shieldRecharge)}/秒（後半の実効：${Math.round(p.shieldRecharge>16?Math.min(34,16+Math.sqrt(p.shieldRecharge-16)*2.2):p.shieldRecharge)}/秒）`]],
@@ -1642,7 +1642,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.4 · ELEMENTAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.4.1 · ELEMENTAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2052,11 +2052,11 @@ for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS])if(!c.tags)c.ta
 SKILLS.push(
  skill('emberSeed','common','🔥','花火弾','自機の主武装に燃焼確率+10%。独立攻撃には付与しない。',p=>p.burnChance=Math.min(.85,p.burnChance+.10)),
  skill('coldCoil','uncommon','❄️','低温駆動コイル','主武装のスロウ確率+12%。凍結は発生せず、ボスへのスロウは半減。',p=>{p.slowChance=Math.min(1,p.slowChance+.12);p.iceAttackSlow=Math.min(.8,p.iceAttackSlow+.12)}),
- skill('iceLock','epic','🧊','フリーズ・プロトコル','低温攻撃の凍結確率+22%、凍結時間+0.8秒（最大2秒・解凍後2.8秒耐性）。',p=>{p.freezeChance+=.22;p.freezeDuration+=.8}),
+ skill('iceLock','epic','🧊','フリーズ・プロトコル','主武装の凍結確率+22%、凍結時間+0.8秒（最大2秒・解凍後2.8秒耐性）。',p=>{p.freezeChance=Math.min(.85,p.freezeChance+.22);p.freezeDuration+=.8}),
  skill('magmaPulse','epic','🌋','マグマスプラッシュ','定期的に広いマグマ床を生成。床は燃焼を与える。',p=>{p.magmaLevel+=2;p.magmaRadius+=20;p.magmaDps+=30}),
  skill('windOrigin','uncommon','🌀','サイクロン','定期的にサイクロンを発射。外縁の衝撃波で雑魚敵を外側へ押し返す（ボス無効）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1}),
- skill('windEngine','rare','🌪️','気流集束機','突風の範囲+35、押し返す力+65、風ダメージ+12。',p=>{p.windRadius+=35;p.windStrength+=65;p.windDps+=12;p.windCount=Math.max(1,p.windCount)}),
- skill('windTwin','epic','💨','ツイン・サイクロン','発射するサイクロン+2個、発射間隔-18%。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windPeriod=Math.max(1.4,p.windPeriod*.82);p.windTimer=.1}),
+ skill('windEngine','rare','🌪️','気流集束機','サイクロンの半径+35、ノックバック力+65、風ダメージ+12。未取得なら1発追加。',p=>{p.windRadius+=35;p.windStrength+=65;p.windDps+=12;p.windCount=Math.max(1,p.windCount)}),
+ skill('windTwin','epic','💨','ツイン・サイクロン','サイクロンの基本発射数+2、発射間隔-18%。同時発射は最大4個。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windPeriod=Math.max(1.4,p.windPeriod*.82);p.windTimer=.1}),
  skill('stoneSeed','uncommon','🪨','浮遊岩壁','岩壁+1。機体の周囲を周回し、通常の敵・敵弾を迎撃する。',p=>p.rockWalls=Math.min(18,p.rockWalls+1)),
  skill('stoneCarapace','rare','🧱','岩壁増設','回転する岩壁+2、壁の当たり判定が少し拡大。',p=>{p.rockWalls=Math.min(18,p.rockWalls+2);p.rockSize+=2}),
  skill('stoneFury','epic','⛰️','タイタンリング','岩壁+3、敵を弾く際の反撃ダメージ+50。',p=>{p.rockWalls=Math.min(18,p.rockWalls+3);p.rockDamage+=50})
@@ -2065,13 +2065,13 @@ POWERS.push(
  skill('magmaCore','power','🌋','ANKIN メルトダウン','マグマ床を追加し範囲を拡張、敵に燃焼を付与する。',p=>{p.magmaLevel+=2;p.magmaRadius+=25;p.magmaDps+=35}),
  skill('missileFlare','power','🚀','ANKIN フレイムミサイル','燃焼ミサイル+2。マグマ床は生成しない。',p=>{p.rocketCd+=2;p.flameMissiles+=2;p.rocketTimer=0}),
  skill('crystalStasis','power','🧊','ANKIN アイスチェーン','主武装の凍結確率+30%、持続+1.3秒（最大2秒）。スロウと同時発動しない。',p=>{p.freezeChance=Math.min(.85,p.freezeChance+.3);p.freezeDuration+=1.3}),
- skill('windPower','power','🌪️','ANKIN サイクロン・チャージャー','サイクロンを2個強化。押し返す力+90、範囲+35。ボスはノックバック無効。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windRadius+=35;p.windStrength+=90;p.windTimer=.1}),
+ skill('windPower','power','🌪️','ANKIN サイクロン・チャージャー','サイクロンの基本発射数+2、ノックバック力+90、半径+35。ボスは押し返さない。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windRadius+=35;p.windStrength+=90;p.windTimer=.1}),
  skill('rockPower','power','🪨','ANKIN パワーウォール','迎撃岩壁+3、壁を大型化。ユニークボスの攻撃は防げない。',p=>{p.rockWalls=Math.min(18,p.rockWalls+3);p.rockSize+=3})
 );
 LEGENDS.push(
  skill('volcanoLegend','legendary','🌋','紅蓮惑星の心臓','マグマ床の範囲・威力・発生数を強化。ミサイルは増えない。',p=>{p.magmaLevel+=4;p.magmaRadius+=50;p.magmaDps+=100}),
  skill('iceLegend','legendary','❄️','永久零凍の王','主武装の凍結確率と持続を強化（最大2秒、解凍後耐性あり）。スロウは付与しない。',p=>{p.freezeChance=Math.min(.85,p.freezeChance+.42);p.freezeDuration+=1.4}),
- skill('windLegend','legendary','🌪️','真空の風神','サイクロン+3、衝撃範囲+75、発射間隔を短縮。上限超過分は威力へ変換。',p=>{p.windCount=Math.min(7,p.windCount+3);p.windRadius+=75;p.windStrength+=110;p.windPeriod=Math.max(1.35,p.windPeriod*.7);p.windTimer=.1}),
+ skill('windLegend','legendary','🌪️','真空の風神','サイクロンの基本発射数+3、半径+75、発射間隔を短縮。同時4個を超える分は火力補正へ。',p=>{p.windCount=Math.min(7,p.windCount+3);p.windRadius+=75;p.windStrength+=110;p.windPeriod=Math.max(1.35,p.windPeriod*.7);p.windTimer=.1}),
  skill('rockLegend','legendary','🏔️','巨岩天蓋','回転岩壁+6、岩壁のサイズと反撃威力を強化。',p=>{p.rockWalls=Math.min(18,p.rockWalls+6);p.rockSize+=5;p.rockDamage+=80})
 );
 SYNERGIES.push(
@@ -2147,17 +2147,17 @@ const RELICS=[
  skill('rDrillImpact','relic','💥','インパクト・スピンドリル','突進命中時に小さな衝撃波が発生（連続ヒット制限付き）。',p=>p.drillShock+=1,{shipOnly:'drill',stackable:false}),
  skill('rDrillHeat','relic','🔥','メルト・スピンドリル','ドリル攻撃が燃焼を付与する。',p=>p.drillHeat+=1,{shipOnly:'drill',stackable:false}),
  skill('rDrillRefund','relic','♻️','リサイクル・タービン','突進で敵を倒すとプラズマを少量回復（最大量を超えない）。',p=>p.drillRefund=.08,{shipOnly:'drill',stackable:false}),
- skill('rDrillIce','relic','❄️','バラクライオ・スパイラル','プラズマ突進の命中相手を減速させる。ボスは完全凍結しない。',p=>p.drillSlow+=1,{shipOnly:'drill',stackable:false}),
+ skill('rDrillIce','relic','❄️','バラクライオ・スパイラル','プラズマ突進の命中相手を減速させる。凍結は発生せず、ボスへの減速は半減。',p=>p.drillSlow+=1,{shipOnly:'drill',stackable:false}),
  skill('rDrillLance','relic','📏','ロング・スピンドリル','ドリル先端の射程+35、攻撃幅+6。',p=>{p.drillReach+=35;p.drillWidth+=6},{shipOnly:'drill',stackable:false}),
  skill('rDrillTempo','relic','⚡','ハイギア・アクセル','ダッシュ再使用-0.23秒。オーバードライブ中は最短0.5秒。',p=>p.dashCd=Math.max(.52,p.dashCd-.23),{shipOnly:'drill',stackable:false})
 ];
 
-// v13.4: strictly independent attack families (a card upgrades exactly its advertised family).
+// v13.4.1: strictly independent attack families (a card upgrades exactly its advertised family).
 SKILLS.push(
  skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾を自動発射。命中ダメージと凍結確率23%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallTimer=.1}),
  skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
  skill('iceBallVolley','epic','❄️','グレイシャル・サルヴォ','アイスボール+2発、発射間隔-20%。',p=>{p.iceBallCount=Math.min(5,Math.max(1,p.iceBallCount)+2);p.iceBallPeriod=Math.max(1.2,p.iceBallPeriod*.8)}),
- skill('empPulse','uncommon','⚡','電磁パルス','機体周辺に雷の円形フィールドを展開。円内と外縁の敵に継続ダメージ。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=28}),
+ skill('empPulse','uncommon','⚡','電磁パルス','機体周辺に青白いテスラ放電領域を展開。範囲内の敵に継続雷ダメージ（最大半径290）。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=28}),
  skill('empAmplifier','rare','🔋','パルス増幅器','電磁パルスのダメージ+34、範囲+22。連鎖雷撃は増えない。',p=>{p.empRadius=Math.max(96,p.empRadius)+22;p.empDps+=34}),
  skill('empOverdrive','epic','🌩️','電磁共振領域','電磁パルスのダメージ+82、範囲+32。',p=>{p.empRadius=Math.max(96,p.empRadius)+32;p.empDps+=82}),
  skill('meteorSeed','uncommon','☄️','ローリング・メテオ','前方へ貫通する隕石を1つ放つ。進むほど大きくなるが威力は一定。完全に画面外へ出ると消える。',p=>{p.meteorCount=1;p.meteorTimer=.1},{available:p=>p.meteorCount===0}),
@@ -2209,7 +2209,7 @@ const EXTRA_SKILL_TAGS={
  rChargeShatter:['分裂','チャージ'],rChargeNova:['爆発','チャージ'],rChargeEcho:['追加弾','チャージ'],rChargeGravity:['吸引','チャージ'],rChargeFlame:['属性：炎','マグマ床','チャージ'],rChargeMomentum:['機動','チャージ'],rDrillRotor:['プラズマ','蓄積','機動'],rDrillWide:['近接','ドリル'],rDrillImpact:['突進','爆発'],rDrillHeat:['近接','属性：炎','燃焼'],rDrillRefund:['突進','蓄積'],rDrillIce:['近接','属性：氷','スロウ']
 };
 for(const c of ALL_SKILL_DEFS())if(EXTRA_SKILL_TAGS[c.id])c.tags=[...new Set([...(c.tags||[]),...EXTRA_SKILL_TAGS[c.id]])];
-// v13.4: tags must reflect the ability actually granted, never a second weapon family.
+// v13.4.1: tags must reflect the ability actually granted, never a second weapon family.
 const ELEMENT_ATTACK_TAGS={
  missileFlare:['属性：炎','ミサイル','燃焼'],rain:['属性：炎','ミサイル','燃焼'],rocket:['属性：炎','ミサイル','燃焼'],volcanoLegend:['属性：炎','マグマ床'],magmaCore:['属性：炎','マグマ床'],magmaPulse:['属性：炎','マグマ床'],static:['属性：炎','マグマ床'],thermal:['属性：炎','燃焼'],emberSeed:['属性：炎','燃焼'],
  freeze:['属性：氷','凍結'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],crystalStasis:['属性：氷','凍結'],iceLegend:['属性：氷','凍結'],
@@ -2972,7 +2972,7 @@ function tickGusts(dt){
  gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
-// v13.4 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
+// v13.4.1 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
 function tickIndependentElements(dt){
  const p=player;if(!p)return;
  if(p.iceBallCount>0){
@@ -3303,7 +3303,7 @@ function drawEvolutionShotMotifs(){
 }
 
 
-/* v13.4.1 — Circular cyclone: consistent radius under all effect presets. */
+/* v13.4.1.1 — Circular cyclone: consistent radius under all effect presets. */
 function drawCyclone(g){
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
@@ -3318,7 +3318,7 @@ function drawCyclone(g){
  if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count;ctx.beginPath();ctx.arc(0,0,r*.87,a,a+.44);ctx.stroke();}}
  ctx.restore();
 }
-/* v13.4.1 — Tesla EMP: blue-white discharge with purple field accents. */
+/* v13.4.1.1 — Tesla EMP: blue-white discharge with purple field accents. */
 function drawTeslaField(p){
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
@@ -3512,7 +3512,7 @@ function perfSummary(samples,drawOnly=false){
 function ankinPerformanceReport(){
  const frame=perfSummary(perfRing.frame),simulation=perfSummary(perfRing.sim),drawing=perfSummary(perfRing.draw,true);
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
- return {version:'13.4',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'13.4.1',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -3522,7 +3522,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.4.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.4.1.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
