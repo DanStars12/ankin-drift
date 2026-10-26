@@ -1933,7 +1933,7 @@ const UNIQUE_SKILLS=[
  skill('hiveMind','unique','🛸','ドローン・オーバーロード','僚機上限を28に拡張。僚機+8、射撃間隔を短縮。',p=>{p.limitDrones=28;p.droneCount=Math.min(28,p.droneCount+8);p.droneBoost=(p.droneBoost||1)*1.7}),
  skill('unboundNova','unique','🪐','シンギュラリティ・ノヴァ','NOVAが広範囲化、基礎威力+450、継続領域を追加（実効威力は上限適用）。',p=>{p.novaRadius=10000;p.novaDamage+=450;p.voidHalo+=3;if(p.shipType==='drill')p.drillNovaBonusTime=Math.min(2,(p.drillNovaBonusTime||0)+.8)}),
  skill('eternalBody','unique','🧬','フェニックス・リアクター','最大HP+450、シールド+350、常時再生+12/秒、蘇生+1。',p=>{p.maxHp+=450;p.hp=p.maxHp;p.shieldMax+=350;p.shield+=350;p.regen+=12;p.phoenix++}),
- skill('divineNetwork','unique','⚡','サンダー・ドミネーター','雷撃が追加で連続跳躍し、連鎖ダメージ+230、雷の範囲を超強化。',p=>{p.chain=1;p.chainDamage+=230;p.arcNova+=3;p.staticField+=4}),
+ skill('divineNetwork','unique','⚡','サンダー・ドミネーター','雷撃が追加で連続跳躍し、連鎖ダメージ+230、連鎖射程を強化。電磁パルスは追加しない。',p=>{p.chain=1;p.chainDamage+=230;p.arcNova+=3}),
  skill('overlord','unique','👁️','オーバーロード・システム','全攻撃力+250、経験値取得+80%、ボスへのダメージ+100%。',p=>{p.dmg+=250;p.xpBonus+=.8;p.bossBane*=2})
 ];
 
@@ -1980,13 +1980,13 @@ const FUSIONS=[
  {id:'singularNova',power:'novaAmp',legend:'void',name:'ギャラクシー・ノヴァ',icon:'🪐',desc:'ノヴァ発動後に大きなダメージフィールドを形成。',apply:p=>{p.novaDamage+=800;p.voidHalo+=5}},
  {id:'eternalBarrage',power:'scatter',legend:'hyper',name:'インフィニット・バラージ',icon:'🌠',desc:'弾幕を極限まで密集させる。全弾に追加追撃。',apply:p=>{p.echoShots+=.45;p.multishot=Math.min(p.limitShot,p.multishot+4)}},
  {id:'heavenBreaker',power:'perforate',legend:'railgod',name:'ヘブンズレール',icon:'🪡',desc:'貫通ごとに貫通光輪を発射。弾速と攻撃力激増。',apply:p=>{p.pierce+=7;p.dmg+=160;p.bulletOrbit+=1}},
- {id:'fortress',power:'field',legend:'seraph',name:'セラフ・フォートレス',icon:'🪽',desc:'強固なシールドが周囲に雷と回復を放つ。',apply:p=>{p.shieldMax+=200;p.shield+=200;p.shieldRecharge+=16;p.staticField+=2}}
+ {id:'fortress',power:'field',legend:'seraph',name:'セラフ・フォートレス',icon:'🪽',desc:'最大シールド+200、再充填+16/秒。雷攻撃を生成しない。',apply:p=>{p.shieldMax+=200;p.shield+=200;p.shieldRecharge+=16}}
 ];
 // Transcendent fusions: UNIQUE ANKIN also qualifies as a POWER-tier ingredient.
 FUSIONS.push(
  {id:'starMother',power:'hiveMind',legend:'celestial',name:'超越・ギャラクシーマザー',icon:'🌌',desc:'限界突破僚機が雷撃編隊を形成。僚機数+6、速度と電撃火力が上昇。',apply:p=>{p.droneCount=Math.min(p.limitDrones,p.droneCount+6);p.droneThunder+=4;p.droneBoost=(p.droneBoost||1)*1.6}},
  {id:'cosmicEnd',power:'unboundNova',legend:'void',name:'超越・コスモエンド',icon:'🌠',desc:'ノヴァ発動後のフィールドが極大強化。撃破充填と威力がさらに上昇。',apply:p=>{p.novaDamage+=1500;p.voidHalo+=7;p.killCharge+=9}},
- {id:'absoluteStorm',power:'divineNetwork',legend:'tempest',name:'超越・テンペスター',icon:'⚡',desc:'長距離連鎖雷撃をさらに強化し、周囲に永久雷場を形成。',apply:p=>{p.arcNova+=4;p.chainDamage+=300;p.staticField+=3}},
+ {id:'absoluteStorm',power:'divineNetwork',legend:'tempest',name:'超越・テンペスター',icon:'⚡',desc:'長距離連鎖雷撃をさらに強化。電磁パルスは生成しない。',apply:p=>{p.arcNova+=4;p.chainDamage+=300}},
  {id:'quantumMagazine',power:'limitBreak',legend:'hyper',name:'超越・インフィニットマガジン',icon:'♾️',desc:'限界突破の銃身が追撃弾を連射。弾数+8、エコー確率+50%。',apply:p=>{p.echoShots=Math.min(.95,p.echoShots+.5);p.multishot=Math.min(p.limitShot,p.multishot+8);p.rate=Math.max(p.limitRate,p.rate*.84)}}
 );
 
@@ -2294,6 +2294,8 @@ function rewardAlreadyTaken(c){return !!(c&&(c.rarity==='power'||c.rarity==='leg
 // A capped skill should never consume a 3-choice slot when its effect can no longer improve.
 const SKILL_CAP_CHECKS={
  fire:p=>p.rate>p.limitRate+.00001,
+ windOrigin:p=>p.windCount<7,
+ stoneSeed:p=>p.rockWalls<18,
  dash:p=>p.dashCd>.85001,
  battery:p=>p.novaGain<1.55-.00001,
  blast:p=>p.explosion<.85-.00001,
@@ -2308,7 +2310,7 @@ const SKILL_CAP_CHECKS={
  scatter:p=>p.multishot<p.limitShot,
  queen:p=>p.droneCount<p.limitDrones,
  critical:p=>p.crit<.95-.00001,
- freeze:p=>p.slowChance<.999||p.freezeChance<.849||p.iceAttackSlow<.799,
+ freeze:p=>p.freezeChance<.849,
  iceLock:p=>p.freezeChance<.849||p.freezeDuration<1.999
 };
 function skillHasRoom(c,p=player){
