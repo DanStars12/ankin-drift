@@ -2957,11 +2957,20 @@ function unifyMagma(){
 function magmaPatch(x,y,scale=1){
  const actualRadius=Math.max(24,player.magmaRadius*scale),r=Math.min(185,actualRadius);
  if(engageBlockedPoint(x,y,Math.min(30,r)))return;
- if(zones.length>=48)zones.shift(); // Prevent decades-long runs from covering the field with magma.
+ if(zones.length>=48&&!player.lavaConstrain)zones.shift(); // Limit independent magma instances.
  const tint=fusedColor('fire');
  const overflow=1+Math.max(0,actualRadius-185)*.008;
- zones.push({x,y,r,life:3.5+Math.min(3,player.thermal),ttl:0,dps:(player.magmaDps+player.magmaLevel*18+player.dmg*.25)*overflow,type:'magma',tint,visualPaths:magmaVisualPaths(r,rand(0,TAU))});
- burst(x,y,tint||'#ff6c36',tint?9:6,45);
+ if(player.lavaConstrain){
+  const core=unifyMagma();
+  if(core){
+   core.stacks=Math.min(36,(core.stacks||1)+1);
+   core.life=Math.max(core.life,4+Math.min(3,player.thermal));
+   core.r=Math.min(185,Math.max(core.r,r)+Math.min(12,2+core.stacks*.6));
+   core.dps=(player.magmaDps+player.magmaLevel*18+player.dmg*.25)*overflow*(1+.18*Math.min(30,core.stacks-1));
+   core.ttl=0;if(!core.visualRadius||core.r-core.visualRadius>8)core.visualPaths=null;
+  }else zones.push({x,y,r,life:4,ttl:0,dps:(player.magmaDps+player.magmaLevel*18+player.dmg*.25)*overflow,type:'magma',tint,stacks:1,visualRadius:r,visualPaths:magmaVisualPaths(r,rand(0,TAU))});
+ }else zones.push({x,y,r,life:3.5+Math.min(3,player.thermal),ttl:0,dps:(player.magmaDps+player.magmaLevel*18+player.dmg*.25)*overflow,type:'magma',tint,visualPaths:magmaVisualPaths(r,rand(0,TAU))});
+ burst(x,y,tint||'#ff6c36',player.lavaConstrain?2:(tint?9:6),45);
  if(player.elementMods?.volcanicCore)detonate(x,y,Math.min(170,r+30),Math.max(45,player.magmaDps*.9),null,5)
 }
 function rockPos(i){return ringPosition(i,player.rockWalls,t,56,31,8,player.elementMods?.orbitFort?-2.15:-1.08)}
