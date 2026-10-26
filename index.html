@@ -2211,7 +2211,29 @@ function kindLabel(k){return({pulse:'パルス',plasma:'プラズマ',cryo:'フ�
 function rarityWeights(){const k=clamp((game.level-1)/60,0,1);return{common:.50-.26*k,uncommon:.32-.02*k,rare:.15+.17*k,epic:.03+.11*k}}
 function weightedRarity(){const w=rarityWeights();let r=Math.random();for(const k of ['common','uncommon','rare','epic']){r-=w[k];if(r<=0)return k}return'epic'}
 function rewardAlreadyTaken(c){return !!(c&&(c.rarity==='power'||c.rarity==='legendary')&&((game.acquisitionLog||[]).includes(c.id)||game.powers[c.id]>0||game.legends[c.id]>0))}
-function selectable(cards){return cards.filter(c=>!isSealedCard(c)&&fitsShip(c)&&!rewardAlreadyTaken(c)&&(!c.available||c.available(player))&&(c.stackable!==false||!(game.skills[c.id]||game.powers[c.id]||game.legends[c.id])))}
+// A capped skill should never consume a 3-choice slot when its effect can no longer improve.
+const SKILL_CAP_CHECKS={
+ fire:p=>p.rate>p.limitRate+.00001,
+ dash:p=>p.dashCd>.85001,
+ battery:p=>p.novaGain<1.55-.00001,
+ blast:p=>p.explosion<.85-.00001,
+ echo:p=>p.echoShots<.75-.00001,
+ dCooling:p=>p.drillDecay>.10001,
+ fan:p=>p.multishot<p.limitShot,
+ minorDrone:p=>p.droneCount<p.limitDrones,
+ squad:p=>p.droneCount<p.limitDrones,
+ orbit:p=>p.orbit<p.limitOrbit,
+ satellite:p=>p.orbit<p.limitOrbit,
+ escort:p=>p.droneCount<p.limitDrones,
+ scatter:p=>p.multishot<p.limitShot,
+ queen:p=>p.droneCount<p.limitDrones,
+ critical:p=>p.crit<.95-.00001
+};
+function skillHasRoom(c,p=player){
+ const check=SKILL_CAP_CHECKS[c.id];
+ return !check||check(p);
+}
+function selectable(cards){return cards.filter(c=>!isSealedCard(c)&&fitsShip(c)&&!rewardAlreadyTaken(c)&&skillHasRoom(c)&&(!c.available||c.available(player))&&(c.stackable!==false||!(game.skills[c.id]||game.powers[c.id]||game.legends[c.id])))}
 // Bounded, repeatable support rewards appear ONLY when one-time skill stock is depleted.
 // No passive stats, stackable damage or new acquisition entries: endless-safe.
 const REWARD_SUPPLIES=[
@@ -2275,7 +2297,7 @@ function enterChoice(kind){if(mode!=='playing')return;game.lastChoice=kind;if(ki
 function reroll(){if(mode!=='choice'||game.rerolls<1||choices.every(c=>c.isSupply))return;game.rerolls--;const previous=new Set(choices.map(c=>c.id));choices=offerCards(game.lastChoice,previous,true);choiceOpenedAt=performance.now();choiceTouchArms.clear();drawOverlay();tone(530,.1,'triangle',.04)}
 function beginNextFusion(){if(!pendingFusions.length)return false;pendingFusion=pendingFusions.shift();const fx=evolutionVisualProfile(pendingFusion.id),color=fx?.color||'#ffd88e';flash=.9;shake=24;burst(player.x,player.y,color,70,310);ring(player.x,player.y,450,color);ring(player.x,player.y,270,'#ffffff');pop(player.x,player.y-65,'EVOLUTION: '+pendingFusion.name,color);state('fusion');celebrateFusion([pendingFusion.power,pendingFusion.legend].some(id=>skillById(id)?.rarity==='unique'));return true}
 function continueAfterReward(){state('playing');if(beginNextFusion())return;if(pendingSynergy.length)notifySynergies();if(game.lastChoice==='normal'&&!game.autoBank&&game.pendingLevels>0){game.pendingLevels--;choices=offerCards('normal');state('choice');return}game.choiceBatchTotal=0;game.choiceBatchDone=0;processTransitions()}
-function choose(i){if(mode!=='choice'||!choices[i])return;const c=choices[i];if(rewardAlreadyTaken(c)){choices=offerCards(game.lastChoice);drawOverlay();return;}if(c.isSupply){c.apply(player);state('playing');announce('✦ SUPPLY RECEIVED · '+c.name,2.8);sfx('pickupSpawn');continueAfterReward();return;}const wasNormal=game.lastChoice==='normal';c.apply(player);const bucket=c.rarity==='relic'?game.relics:c.rarity==='legendary'?game.legends:c.rarity==='power'?game.powers:c.rarity==='unique'?game.uniques:game.skills;bucket[c.id]=(bucket[c.id]||0)+1;game.acquisitionLog.push(c.id);activateUpgrades();reconcileTargets();if(wasNormal)game.choiceBatchDone++;state('playing');
+function choose(i){if(mode!=='choice'||!choices[i])return;const c=choices[i];if(rewardAlreadyTaken(c)||!skillHasRoom(c)||(!c.available||!c.available(player))===false){choices=offerCards(game.lastChoice);drawOverlay();return;}if(c.isSupply){c.apply(player);state('playing');announce('✦ SUPPLY RECEIVED · '+c.name,2.8);sfx('pickupSpawn');continueAfterReward();return;}const wasNormal=game.lastChoice==='normal';c.apply(player);const bucket=c.rarity==='relic'?game.relics:c.rarity==='legendary'?game.legends:c.rarity==='power'?game.powers:c.rarity==='unique'?game.uniques:game.skills;bucket[c.id]=(bucket[c.id]||0)+1;game.acquisitionLog.push(c.id);activateUpgrades();reconcileTargets();if(wasNormal)game.choiceBatchDone++;state('playing');
  if(c.rarity==='relic'){sfx('relicEarned');confetti();announce('✦ RELIC ACQUIRED · '+c.name,4.5);}if(c.rarity==='unique'){lastUniqueCard=c;state('uniqueReward');celebrateUnique();return}if(beginNextFusion())return;tone(c.rarity==='legendary'?920:730,.2,'triangle',.065);continueAfterReward()}
 function dismissFusion(){if(mode!=='fusion')return;pendingFusion=null;continueAfterReward()}
 function deferNormal(){if(mode!=='choice'||game.lastChoice!=='normal')return;game.storedLevels+=game.pendingLevels+1;game.pendingLevels=0;game.autoBank=true;game.choiceBatchTotal=0;game.choiceBatchDone=0;state('playing');announce('✦ '+game.storedLevels+'回分の強化をストック！ Lキーでまとめて選択',4);processTransitions()}
@@ -2943,7 +2965,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
    if(e.bomberAlert&&!e.bomberArmed)spd=Math.min(ENEMY_SPEED.bomber.cap*1.7,spd*1.6);
    if(!e.bomberArmed&&distance<=95&&e.frozen<=0){e.bomberArmed=true;e.blastWarn=.62;}
    if(e.bomberArmed){
-    spd=0;e.blastWarn=Math.max(0,e.blastWarn-dt);
+    spd=0;if(e.frozen<=0)e.blastWarn=Math.max(0,e.blastWarn-dt);
     if(e.blastWarn<=0){
      e.dead=true;
      // Only the player is damaged; rocks do not block the explosion, shield does.
@@ -2966,7 +2988,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  e.x+=Math.cos(angle)*spd*dt;e.y+=Math.sin(angle)*spd*dt;
  // Hostile units ignore ENGAGE barriers, unlike the pilot and friendly fire.
  tickBurn(e,dt);
- if(distance<e.r+p.r&&(e.isoSafe||0)<=0)loseHP(e.dmg);
+ if(e.type!=='bomber'&&distance<e.r+p.r&&(e.isoSafe||0)<=0)loseHP(e.dmg);
  }enemies=enemies.filter(e=>!e.dead);
  for(const b of hostile){b.ttl-=dt;if(b.warn>0){b.warn=Math.max(0,b.warn-dt);continue}b.x+=b.vx*(1-p.slowField)*dt;b.y+=b.vy*(1-p.slowField)*dt;if(d2(b,p)<(b.r+p.r)**2){loseHP(b.damage,!!b.pressure);b.ttl=0}}hostile=hostile.filter(b=>b.ttl>0&&b.x>-110&&b.x<W+110&&b.y>-110&&b.y<H+110);
  // Unique ANKIN attacks: pre-warned crossing beams and area mines.
