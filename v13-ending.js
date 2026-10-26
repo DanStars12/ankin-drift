@@ -47,11 +47,12 @@ function normalize(source){
  const o=keys(source),ship=Object.hasOwn(SHIPS,o.ship)?o.ship:'shot',damageStats={};
  for(const [k,v] of Object.entries(keys(o.damageStats)))if(Object.hasOwn(SOURCE,k))damageStats[k]=sane(v);
  const fusions=arr(o.fusionIds).filter(x=>typeof x==='string'&&/^(fire|ice|thunder|wind|rock)_(fire|ice|thunder|wind|rock)$/.test(x)).slice(0,2);
+ const elements={};for(const id of Object.keys(ELEMENTS))elements[id]=sane(keys(o.elementAffinities)[id],1e4);
  return {ship,mode:o.mode==='challenge'?'challenge':'normal',endless:!!o.endless,
   clearCount:Math.max(1,Math.floor(sane(o.clearCount,1e5))),
   level:Math.floor(sane(o.level,1e7)),seconds:Math.floor(sane(o.seconds,1e8)),
   damage:sane(o.damage),kills:Math.floor(sane(o.kills,1e8)),damageStats,
-  fusionIds:fusions,evolutionIds:arr(o.evolutionIds).map(x=>str(x,70)).slice(0,20),
+  fusionIds:fusions,elementAffinities:elements,evolutionIds:arr(o.evolutionIds).map(x=>str(x,70)).slice(0,20),
   evolutionNames:arr(o.evolutionNames).map(x=>str(x,90)).slice(0,8),
   relicNames:arr(o.relicNames).map(x=>str(x,90)).slice(0,8),
   featuredSkills:arr(o.featuredSkills).map(x=>str(x,90)).slice(0,6),
@@ -79,7 +80,11 @@ function chooseStyle(s,primary,share){
  return 'adaptive';
 }
 function elementSignature(s){
- if(!s.fusionIds.length)return {title:'',scene:'',label:'属性融合なし',pairs:[]};
+ if(!s.fusionIds.length){
+  const strongest=Object.entries(s.elementAffinities).sort((a,b)=>b[1]-a[1])[0];
+  if(strongest?.[1]>0){const el=ELEMENTS[strongest[0]];return {title:el.title+'の操者',scene:el.scene,label:'属性スキル：'+el.name,pairs:[]};}
+  return {title:'',scene:'',label:'属性スキルなし',pairs:[]};
+ }
  const pairs=s.fusionIds.map(id=>{
   const [main,sub]=id.split('_'),a=ELEMENTS[main],b=ELEMENTS[sub];
   return {id,main,sub,label:a.name+' × '+b.name,
@@ -103,7 +108,7 @@ function create(source){
   style=STYLES[styleId],elem=elementSignature(s),
   sourceLabel=SOURCE[primary],finisherLabel=SOURCE[s.finisherSource]||sourceLabel,
   motif=elem.title||ship.epithet,
-  title=elem.title?motif+'・'+style.name:style.name+'・'+ship.epithet,
+  title=elem.title?motif+'・'+style.name+'・'+ship.epithet:style.name+'・'+ship.epithet,
   intense=s.clearCount>1?'終焉は再び現れた。それでも、':'長い戦いの果て、',
   route=s.mode==='challenge'?'高速の試練を越えた。':'最後の戦場を越えた。',
   details=s.evolutionNames.length?'進化合成「'+s.evolutionNames.slice(0,2).join('」「')+'」の力を携え、':
@@ -115,7 +120,7 @@ function create(source){
    '機体：'+ship.name,
    '戦闘：'+style.name,
    '主力：'+sourceLabel+' '+percent+'%',
-   ...(elem.pairs.length?['属性融合：'+elem.label]:[]),
+   ...(elem.pairs.length?['属性融合：'+elem.label]:elem.title?['属性特化：'+elem.label]:[]),
    ...(s.evolutionNames.length?['進化：'+s.evolutionNames.slice(0,2).join(' / ')]:[]),
    ...(s.hits===0?['被弾なし']:s.revives?['復活 '+s.revives+'回']:s.hpPercent<=15?['残HP '+Math.round(s.hpPercent)+'%']:[]),
    ...(s.challenges.length?['追加試練：'+s.challenges.length+'件']:[])
