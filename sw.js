@@ -1,5 +1,5 @@
-/* ANKIN DRIFT v13.0 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-0-clear-legacy-1';
+/* ANKIN DRIFT v13.1 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v13-1-achievements-1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js',

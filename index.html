@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.0 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.0 | CLEAR LEGACY</title>
+<title>ANKIN DRIFT v13.1 | ACHIEVEMENTS</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -664,6 +664,36 @@ body.pilot-mobile #novaTouch,body.pilot-mobile #dashTouch{
 body.pilot-mobile #novaTouch{background-image:linear-gradient(145deg,#5540b6f2,#211145f7)}
 body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#12243cf9)}
 
+
+/* v13.1 achievement ranks and progress */
+:root{--ach-bronze:#cb956b;--ach-silver:#b8c9da;--ach-gold:#e8bb5a;--ach-rainbow:#bda7ff}
+.v13-achievement,.v13-achievement-toast{--ach-border:#647d96}
+.v13-achievement[data-tier="bronze"],.v13-achievement-toast[data-tier="bronze"]{--ach-border:var(--ach-bronze)}
+.v13-achievement[data-tier="silver"],.v13-achievement-toast[data-tier="silver"]{--ach-border:var(--ach-silver)}
+.v13-achievement[data-tier="gold"],.v13-achievement-toast[data-tier="gold"]{--ach-border:var(--ach-gold)}
+.v13-achievement[data-tier="rainbow"],.v13-achievement-toast[data-tier="rainbow"]{--ach-border:var(--ach-rainbow);border-color:transparent;background:linear-gradient(125deg,#352447,#15424c,#293559) padding-box,linear-gradient(100deg,#ff82a5,#ffdb83,#92ffd1,#83beff,#dc9bff,#ff82a5) border-box;box-shadow:inset 0 0 18px #d3aaff30}
+.v13-achievement{border:2px solid var(--ach-border);background:#14243b;border-radius:12px;padding:11px;min-width:0}
+.v13-achievement:not(.is-unlocked){opacity:.83}
+.v13-achievement .v13-ach-title{font-size:14px;font-weight:950;color:var(--ach-border)}
+.v13-achievement .v13-ach-desc{display:block;font-size:11px;color:#d5e0ef;line-height:1.5;margin:7px 0}
+.v13-progress-label{font-size:11px;font-weight:850;color:#eaf5ff;text-align:right;font-variant-numeric:tabular-nums}
+.v13-progress-track{height:9px;overflow:hidden;border-radius:99px;background:#061425;border:1px solid #4d6682;margin-top:4px}
+.v13-progress-track>span{height:100%;display:block;border-radius:99px;background:var(--ach-border);transition:width .35s}
+.v13-achievement[data-tier="rainbow"] .v13-progress-track>span{background:linear-gradient(90deg,#ed99ba,#ffe28a,#8ef5d6,#a5afff,#e7a7ff)}
+.v13-ach-tier{border-bottom:1px solid #52647d;margin:15px 0 8px;padding-bottom:5px;font-size:13px;font-weight:950}
+.v13-ach-tier[data-tier="bronze"]{color:var(--ach-bronze)}.v13-ach-tier[data-tier="silver"]{color:var(--ach-silver)}
+.v13-ach-tier[data-tier="gold"]{color:var(--ach-gold)}.v13-ach-tier[data-tier="rainbow"]{color:var(--ach-rainbow)}
+#achievementFeed{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:20px;width:min(360px,calc(100vw - 28px));z-index:22;pointer-events:none}
+.v13-achievement-toast{border:3px solid var(--ach-border);border-radius:14px;background:linear-gradient(130deg,#132b47f5,#1a1833f5);box-shadow:0 10px 45px #000c,0 0 25px #f3dca533;padding:13px 16px;text-align:center;animation:appearToast .25s ease-out;line-height:1.45}
+.v13-achievement-toast[data-tier="rainbow"]{background:linear-gradient(130deg,#3b2148,#15434e,#282e5b) padding-box,linear-gradient(100deg,#ff82a5,#ffdb83,#92ffd1,#83beff,#dc9bff,#ff82a5) border-box;box-shadow:0 0 24px #e2bdff99,0 9px 36px #000c}
+.v13-toast-head{font-size:14px;font-weight:1000;color:var(--ach-border)}
+.v13-achievement-toast strong{display:block;font-size:clamp(18px,4vw,23px);font-weight:1000;color:#fff4d5;margin:5px 0}
+.v13-toast-desc{display:block;font-size:12px;color:#e9f3ff}.v13-toast-done{font-size:15px;font-weight:1000;color:#9affda}
+.v13-toast-tier{font-size:10px;color:#d8e7f5;letter-spacing:.1em}
+.v13-first-clear-award{margin:10px 0;animation:v13-reveal .9s ease-out both}
+@media(max-width:680px){#achievementFeed{top:calc(env(safe-area-inset-top,0px) + 52px);right:8px;width:min(275px,calc(100vw - 16px))}.v13-achievement-toast{padding:9px 10px}.v13-achievement-toast strong{font-size:17px}.v13-toast-head{font-size:12px}.v13-toast-desc{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.v13-achievement-toast,.v13-first-clear-award{animation:none}.v13-progress-track>span{transition:none}}
+
 /* v13: permanent Pilot Archive and Final Moment */
 .v13-panel{display:grid;gap:10px;margin:9px 0;padding:12px;border:1px solid #56748f;border-radius:14px;background:linear-gradient(140deg,rgba(16,38,61,.96),rgba(19,26,48,.91))}
 .v13-panel h3{margin:3px 0;font-size:14px;color:#f5d59b;letter-spacing:.05em}
@@ -713,7 +743,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
   <button id="novaTouch" type="button" aria-label="ノヴァ発動">NOVA<small id="novaTouchPct">0%</small></button>
  <div id="mobileHint">左指：移動 / 右指：DASH・NOVA</div>
 </div><div id="mobileRotate">↻<br>スマホ版は縦画面でプレイしてください</div>
-<div id="announcement" aria-live="polite"></div><div id="synergyFeed" aria-live="polite"></div><div id="overlay"><div class="panel" id="panel"></div></div><canvas id="celebration" aria-hidden="true"></canvas>
+<div id="announcement" aria-live="polite"></div><div id="synergyFeed" aria-live="polite"></div><div id="achievementFeed" role="status" aria-live="polite" aria-atomic="true"></div><div id="overlay"><div class="panel" id="panel"></div></div><canvas id="celebration" aria-hidden="true"></canvas>
 <div id="bossAlert" class="boss-alert" role="status" aria-live="polite"></div>
 <script src="./v13-archive.js"></script>
 <script>
@@ -865,15 +895,64 @@ function v13History(){
  (list.map(c=>'<div class="v13-history-item"><b>'+escHtml(c.title||'歴戦のパイロット')+'</b> · '+escHtml(c.rank||'CLEAR')+'<small>'+escHtml(c.mode.toUpperCase())+' · '+(SHIPS[c.ship]?.jp||'過去の記録')+' · '+fmtTime(c.time)+' · LV '+format(c.level)+' · '+escHtml(c.date.slice(0,10))+'</small></div>').join('')||'<div class="v13-note">まだクリア記録がありません。</div>')+
  '</div><small class="v13-mini">直近30件を表示。保存領域には最大1000件を保持します。</small></section>';
 }
+
+const achievementQueue=[];let achievementCurrent=null,achievementExpires=0,achievementSyncClock=0;
+const ACHIEVEMENT_TIER_LABELS={bronze:'銅枠',silver:'銀枠',gold:'金枠',rainbow:'虹枠'};
+function v13AwardMarkup(a){
+ return '<div class="v13-achievement-toast" data-tier="'+a.tier+'" data-achievement-id="'+a.id+'">'+
+ '<div class="v13-toast-head">🏆実績解除🏆</div><div class="v13-toast-tier">'+ACHIEVEMENT_TIER_LABELS[a.tier]+'</div>'+
+ '<strong>'+escHtml(a.name)+'</strong><span class="v13-toast-desc">'+escHtml(a.description)+'</span>'+
+ '<div class="v13-toast-done">達成！</div></div>';
+}
+function v13RenderAward(){const root=U('achievementFeed');if(root)root.innerHTML=achievementCurrent?v13AwardMarkup(achievementCurrent):''}
+function v13CollectAwards(){
+ const gained=AnkinArchive.takeUnlocks();
+ const firstClear=gained.find(a=>a.id==='first_clear');
+ if(firstClear){
+  // First victory's rainbow trophy must interrupt lesser popups on the boss-clear frame.
+  if(achievementCurrent)achievementQueue.unshift(achievementCurrent);
+  achievementCurrent=firstClear;achievementExpires=performance.now()+6200;
+ }
+ achievementQueue.push(...gained.filter(a=>a!==firstClear));
+ achievementQueue.sort((a,b)=>Number(b.tier==='rainbow')-Number(a.tier==='rainbow'));
+ if(!achievementCurrent&&achievementQueue.length){
+  achievementCurrent=achievementQueue.shift();achievementExpires=performance.now()+5200;
+ }
+ if(firstClear||achievementCurrent)v13RenderAward();
+ return gained;
+}
+function v13AdvanceAward(){
+ if(!achievementCurrent||performance.now()<achievementExpires)return;
+ achievementCurrent=achievementQueue.shift()||null;
+ achievementExpires=achievementCurrent?performance.now()+5200:0;v13RenderAward();
+}
+function v13ObserveRun(){
+ if(!game?.runId)return;
+ AnkinArchive.observeRun(game.runId,game.damage,game.level,game.kills,game.total);
+ saveWarning=AnkinArchive.status()||'';
+ v13CollectAwards();
+}
+function v13AchievementList(){
+ const items=AnkinArchive.progress(),tiers=[['bronze','🥉 銅枠 · BEGINNER'],['silver','🥈 銀枠 · ADVANCED'],['gold','🥇 金枠 · EXPERT'],['rainbow','🌈 虹枠 · LEGEND']];
+ return tiers.map(([tier,label])=>'<h4 class="v13-ach-tier" data-tier="'+tier+'">'+label+'</h4><div class="v13-grid">'+
+ items.filter(a=>a.tier===tier).map(a=>{
+ const pct=Math.round(100*a.current/Math.max(1,a.target));
+ return '<div class="v13-achievement '+(a.unlocked?'is-unlocked':'locked')+'" data-achievement-id="'+a.id+'" data-tier="'+tier+'">'+
+ '<div class="v13-ach-title">'+(a.unlocked?'🏆 ':'◇ ')+escHtml(a.name)+'</div>'+
+ '<small class="v13-ach-desc">'+escHtml(a.description)+'</small>'+
+ '<div class="v13-progress-label">'+format(Math.floor(a.current))+' / '+format(a.target)+'</div>'+
+ '<div class="v13-progress-track" role="progressbar" aria-label="'+escHtml(a.name)+'の進捗" aria-valuemin="0" aria-valuemax="'+a.target+'" aria-valuenow="'+Math.floor(a.current)+'"><span style="width:'+pct+'%"></span></div>'+
+ (a.unlocked?'<small>✦ 解除済み</small>':'')+'</div>';
+ }).join('')+'</div>').join('');
+}
+
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
  return '<p class="eyebrow">ANKIN DRIFT v13 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
- '<section class="v13-panel"><h3>✦ ACHIEVEMENTS · 実績</h3><div class="v13-grid">'+
- all.map(a=>'<div class="v13-card '+(awards[a[0]]?'':'locked')+'"><b>'+(awards[a[0]]?'🏆 ':'◇ ')+escHtml(a[1])+'</b><small>'+escHtml(a[2])+'</small></div>').join('')+
- '</div><small class="v13-mini">達成報酬は記録・称号。恒久ステータス強化はありません。</small></section>'+v13History()+
+ '<section class="v13-panel"><h3>✦ ACHIEVEMENTS · 実績（枠色は難易度）</h3>'+v13AchievementList()+'<small class="v13-mini">銅 → 銀 → 金 → 虹。初クリアは特別な虹枠実績です。</small></section>'+v13History()+
  '<section class="v13-panel"><h3>✦ BACKUP / RESTORE</h3><div class="v13-note">サイトデータ削除に備えてJSONを保管してください。手動でバックアップ・復元できます。</div>'+
  '<button type="button" class="secondary" id="v13Export">↓ 全セーブデータをJSONで保存</button>'+
  '<label class="v13-note">復元ファイル（JSON / 最大1MB）<input id="v13ImportFile" type="file" accept=".json,application/json"></label>'+
@@ -1078,7 +1157,7 @@ function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;con
 let selectedGameMode="normal";
 const ULTIMATE_NAME="THE・END・OF・ANKIN";
 function ultimateThreshold(runMode=game?.gameMode||selectedGameMode){return runMode==="challenge"?900:1800} function ultimateSecond(runMode=game?.gameMode||selectedGameMode){return runMode==="challenge"?1800:2700}
-function newRun(){player=initialP();applyShipPreset(player);game={gameMode:selectedGameMode,completed:false,endless:false,clearCount:0,ultimatePending:false,ultimateEncounterAt:0,ultimateParts:[],lastClearAt:0,nextUltimateAt:ultimateThreshold(selectedGameMode),lastUltimateQueuedAt:0,runOutcome:null,targetHistory:[],targetNameCache:{},ship:selectedShip,spawn:.78,nextBossAt:60,nextRaidAt:105,raid:null,raidsCleared:0,lastRaidEvent:null,nextVacuumAt:rand(85,135),lastVacuumAt:0,nextRelicAt:rand(125,205),vacuum:null,compactTimer:5,bossQueue:[],bossHistory:{minor:null,major:null,unique:null},lastBossAt:0,damage:0,kills:0,total:0,rerolls:3,skills:{},powers:{},legends:{},uniques:{},relics:{},fusions:{},synergies:{},elementCombos:[],sealedElements:[],acquisitionLog:[],lastChoice:'',bestBroke:false,targets:[],damageStats:{},bossDamage:0,level:1,xp:0,need:expNeed(1),pendingLevels:0,storedLevels:0,autoBank:false,choiceBatchTotal:0,choiceBatchDone:0,rewards:[]};game.activeChallenges=record.read().clears.length?[...selectedChallenges]:[];game.runId='run-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);game.lastClear=null;if(game.activeChallenges.includes('fragile')){player.maxHp=Math.max(1,Math.round(player.maxHp*.75));player.hp=Math.min(player.hp,player.maxHp)}enemies=[];enemyIndex.clear();enemyIndexReady=false;shots=[];hostile=[];pickups=[];hazards=[];zones=[];particles=[];floats=[];boss=null;pendingFusion=null;pendingFusions=[];elementChoice=null;pendingElementPairs=[];pendingElementChoice=false;bossAlertUntil=0;lastUniqueCard=null;pendingSynergy=[];synergyNotices=[];laserLinks=[];gusts=[];buildTab='inventory';atlasRarity='all';atlasAttr='all';atlasQuery='';enemyCodexFilter='all';runClock=0;hudClock=.2;lastHudBuildMarkup='';announceUntil=0;ui.announcement.classList.remove('show');renderSynergyNotices();shake=0;flash=0;keys.clear();clearTouch();nextMusicBeat=0;musicStep=0;celebrationParticles=[];celebrationRockets=[];celebrationEvents=[];celebrationLabel='';celebrationClock=0;spawnOpeningScouts();}
+function newRun(){player=initialP();applyShipPreset(player);game={gameMode:selectedGameMode,completed:false,endless:false,clearCount:0,ultimatePending:false,ultimateEncounterAt:0,ultimateParts:[],lastClearAt:0,nextUltimateAt:ultimateThreshold(selectedGameMode),lastUltimateQueuedAt:0,runOutcome:null,targetHistory:[],targetNameCache:{},ship:selectedShip,spawn:.78,nextBossAt:60,nextRaidAt:105,raid:null,raidsCleared:0,lastRaidEvent:null,nextVacuumAt:rand(85,135),lastVacuumAt:0,nextRelicAt:rand(125,205),vacuum:null,compactTimer:5,bossQueue:[],bossHistory:{minor:null,major:null,unique:null},lastBossAt:0,damage:0,kills:0,total:0,rerolls:3,skills:{},powers:{},legends:{},uniques:{},relics:{},fusions:{},synergies:{},elementCombos:[],sealedElements:[],acquisitionLog:[],lastChoice:'',bestBroke:false,targets:[],damageStats:{},bossDamage:0,level:1,xp:0,need:expNeed(1),pendingLevels:0,storedLevels:0,autoBank:false,choiceBatchTotal:0,choiceBatchDone:0,rewards:[]};game.activeChallenges=record.read().clears.length?[...selectedChallenges]:[];game.runId='run-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);game.lastClear=null;game.lastUnlocked=[];game.startedMarked=false;achievementSyncClock=0;if(game.activeChallenges.includes('fragile')){player.maxHp=Math.max(1,Math.round(player.maxHp*.75));player.hp=Math.min(player.hp,player.maxHp)}enemies=[];enemyIndex.clear();enemyIndexReady=false;shots=[];hostile=[];pickups=[];hazards=[];zones=[];particles=[];floats=[];boss=null;pendingFusion=null;pendingFusions=[];elementChoice=null;pendingElementPairs=[];pendingElementChoice=false;bossAlertUntil=0;lastUniqueCard=null;pendingSynergy=[];synergyNotices=[];laserLinks=[];gusts=[];buildTab='inventory';atlasRarity='all';atlasAttr='all';atlasQuery='';enemyCodexFilter='all';runClock=0;hudClock=.2;lastHudBuildMarkup='';announceUntil=0;ui.announcement.classList.remove('show');renderSynergyNotices();shake=0;flash=0;keys.clear();clearTouch();nextMusicBeat=0;musicStep=0;celebrationParticles=[];celebrationRockets=[];celebrationEvents=[];celebrationLabel='';celebrationClock=0;spawnOpeningScouts();}
 // Growth is deliberately super-quadratic while shard income grows only slowly over time.
 function expNeed(level){if(level<=35)return Math.round(34+18*level+2.7*Math.pow(level,2.08));const excess=level-35;return Math.round(34+18*35+2.7*Math.pow(35,2.08)+165*excess+2*Math.pow(excess,1.72))}
 function settleExpLevels(limit=192){if(!game||!player)return 0;let loops=0,healed=0;while(game.xp>=game.need&&loops<limit){game.xp-=game.need;game.level++;game.need=expNeed(game.level);if(game.autoBank)game.storedLevels++;else game.pendingLevels++;const heal=Math.min(player.maxHp-player.hp,Math.max(4,Math.min(18,Math.round(player.maxHp*.045))));if(heal>0){player.hp+=heal;healed+=heal}loops++}if(healed>0){pop(player.x,player.y-38,`LEVEL HEAL +${Math.ceil(healed)} HP`,'#8cffc8');sfx('level')}return loops}
@@ -1337,7 +1416,7 @@ function bindSafeChoice(el){
     if(mode==='choice')choose(index); // PC mouse and keyboard / accessibility
   });
 }
-function state(s){if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive')?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay()}
+function state(s){if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive')?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay()}
 function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.dmg=35;p.hp=94;p.maxHp=94;p.spd=235;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}}
 function boot(){setupAudio();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');if(!first)sfx('level')}
 const GUIDE_KEY='ankin_drift_release_guide_seen';let guideReturn='playing';function guideSeen(){try{return localStorage.getItem(GUIDE_KEY)==='1'}catch{return false}}function markGuide(){try{localStorage.setItem(GUIDE_KEY,'1')}catch{}}
@@ -1477,7 +1556,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.0 · CLEAR LEGACY</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.1 · ACHIEVEMENTS</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -1501,7 +1580,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  }else if(mode==='build'){
  html=`<p class="eyebrow">${SHIPS[player.shipType].name} · YOUR LOADOUT · ${fmtTime(game.total)} · LV ${game.level}</p><h2 class="logo small">BUILD LAB</h2><div class="text-stats"><span>攻撃 <strong>${format(player.dmg)}</strong></span><span>${player.shipType==='laser'?'レーザーDPS係数':player.shipType==='charge'?'チャージ速度':'射撃間隔'} <strong>${player.shipType==='laser'?'×'+player.laserScale.toFixed(2):player.shipType==='charge'?player.chargeRate.toFixed(2)+'/s':player.rate.toFixed(3)+'秒'}</strong></span><span>${player.shipType==='laser'?'ビーム':player.shipType==='charge'?'チャージ威力':'弾数'} <strong>${player.shipType==='laser'?player.laserCount+' 本 / 幅'+player.laserWidth.toFixed(1):player.shipType==='charge'?'×'+player.chargeScale.toFixed(2):player.multishot+' / '+player.limitShot}</strong></span><span>僚機 <strong>${player.droneCount} / ${player.limitDrones}</strong></span><span>EXP倍率 <strong>×${player.xpBonus.toFixed(2)}</strong></span><span>攻撃タイプ <strong>${player.shipType==='laser'?'即着弾・持続照射':player.shipType==='charge'?'チャージ解放':player.bulletModes.map(kindLabel).join(' / ')}</strong></span></div><details class="lab-ship-tip" ${controlMode==='mobile'?'':'open'} style="border-color:${SHIPS[player.shipType].color};color:${SHIPS[player.shipType].color}"><summary>機体情報 · ${SHIPS[player.shipType].jp}（タップで開閉）</summary><div class="lab-ship-description">${SHIPS[player.shipType].desc}　／　${SHIPS[player.shipType].nova}</div></details>${labMarkup()}<button class="primary lab-back" id="back">← 戻る</button>`;
  }else if(mode==='victory'){
- html=`<p class="eyebrow">MISSION COMPLETE · ${game.gameMode==='challenge'?'CHALLENGE 15 MIN':'NORMAL 30 MIN'}</p><h2 class="logo small">CLEAR!</h2><div class="v13-badge v13-victory-badge"><small>✦ CLEAR LEGACY · ${escHtml(game.lastClear?.rank||"BRONZE")}</small><strong>${escHtml(game.lastClear?.title||"星を超えし者")}</strong><small>${escHtml(game.lastClear?.subtitle||"あなただけの勝利")}</small></div><div class="subtitle">✦ ${ULTIMATE_NAME} 撃破！${game.clearCount>1?' · ENDLESS STAGE '+game.clearCount:''}</div><div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">PILOT LV</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div></div><div class="actions"><button class="primary" id="continueEndless">∞ エンドレスモードで続行（次 ${game.gameMode==='challenge'?'30:00':'45:00'}）</button><button class="secondary" id="openArchive">🏆 クリア履歴・実績を見る</button><button class="secondary" id="title">タイトルへ戻る</button></div><div class="fine">${saveWarning?"⚠ 保存できませんでした。PILOT ARCHIVEから直ちにJSONバックアップを取得してください。":"クリア記録を保存しました。"} エンドレスは現在のスキル・HP・LEVELを引き継げます。</div>`;
+ html=`<p class="eyebrow">MISSION COMPLETE · ${game.gameMode==='challenge'?'CHALLENGE 15 MIN':'NORMAL 30 MIN'}</p><h2 class="logo small">CLEAR!</h2>${game.lastUnlocked?.some(a=>a.id==="first_clear")?'<div class="v13-first-clear-award" data-first-clear-award="true">🌈 初クリア虹枠実績「初めての勝利」解除！</div>':''}<div class="v13-badge v13-victory-badge"><small>✦ CLEAR LEGACY · ${escHtml(game.lastClear?.rank||"BRONZE")}</small><strong>${escHtml(game.lastClear?.title||"星を超えし者")}</strong><small>${escHtml(game.lastClear?.subtitle||"あなただけの勝利")}</small></div><div class="subtitle">✦ ${ULTIMATE_NAME} 撃破！${game.clearCount>1?' · ENDLESS STAGE '+game.clearCount:''}</div><div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">PILOT LV</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div></div><div class="actions"><button class="primary" id="continueEndless">∞ エンドレスモードで続行（次 ${game.gameMode==='challenge'?'30:00':'45:00'}）</button><button class="secondary" id="openArchive">🏆 クリア履歴・実績を見る</button><button class="secondary" id="title">タイトルへ戻る</button></div><div class="fine">${saveWarning?"⚠ 保存できませんでした。PILOT ARCHIVEから直ちにJSONバックアップを取得してください。":"クリア記録を保存しました。"} エンドレスは現在のスキル・HP・LEVELを引き継げます。</div>`;
  }else if(mode==='dead'||mode==='retired'){
  const retired=mode==='retired';const r=record.read(),duration=Math.floor(game.total);html=`<p class="eyebrow">${retired?'RUN TERMINATED · FINAL RECORD':'TRANSMISSION LOST · FINAL RECORD'} · ${game.gameMode==='challenge'?'CHALLENGE':'NORMAL'}</p><h2 class="logo small">${retired?'RUN ENDED':'GAME OVER'}</h2><div class="subtitle">${retired?'途中終了したプレイの記録':'最後まで戦った記録'} · ${SHIPS[player.shipType].jp}</div>${game.bestBroke?'<div class="newbest">✦ NEW PERSONAL BEST ✦</div>':''}<div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">FINAL LEVEL</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><div class="report-metrics"><div class="report-metric"><strong>${format(game.bossDamage)}</strong><small>ボスへのダメージ</small></div><div class="report-metric"><strong>${format(game.damage/Math.max(game.total,1)*60)}</strong><small>1分あたりのダメージ</small></div><div class="report-metric"><strong>${format(game.kills)}</strong><small>撃破数</small></div></div><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div><details><summary>通常スキル一覧（${buildSummary().cards.length}種類）</summary><div class="report-chips">${buildSummary().cards.map(n=>`<span>${escHtml(n)}</span>`).join('')}</div></details><div class="history"><b>戦績</b>：${format(game.kills)} KILLS<br>レリック ${Object.keys(game.relics).length} · シナジー ${Object.keys(game.synergies).length} · 進化 ${Object.keys(game.fusions).length} · UNIQUE ANKIN ${Object.keys(game.uniques).length}<br>自己ベスト：${fmtTime(r.time||0)} 生存 / LV ${format(r.level)} / DAMAGE ${format(r.damage)}</div></div><div class="actions"><button class="primary" id="restart">↻ リトライ</button><button class="secondary" id="inspect">◈ 今回のビルド</button><button class="secondary" id="title">タイトルへ</button></div><div class="fine">${saveWarning?"⚠ 保存失敗。バックアップを取得してください。":"今回の記録はこのブラウザに保存しました。"} · リトライで再挑戦できます</div>`;
  }
@@ -2161,7 +2240,7 @@ function processTransitions(){if(mode!=='playing'||!game)return;
  if(game.bossQueue.length&&!boss){const scheduled=game.bossQueue.shift();game.lastBossAt=scheduled.at;spawnBoss(scheduled.type,scheduled.variant);return;}
  if(game.pendingLevels>0&&!game.autoBank){game.pendingLevels--;game.choiceBatchTotal=game.pendingLevels+1;game.choiceBatchDone=0;enterChoice('normal');return;}
 }
-function endRun(reason='dead'){if(!game||game.runOutcome||!['playing','quitConfirm'].includes(mode))return;game.runOutcome=reason;const r=record.read();game.bestBroke=game.damage>r.damage||game.total>(r.time||0)||game.level>(r.level||0);r.damage=Math.max(r.damage,Math.floor(game.damage));r.time=Math.max(r.time||0,Math.floor(game.total));r.level=Math.max(r.level||0,game.level);r.runs=Array.isArray(r.runs)?r.runs:[];r.runs.unshift({id:game.runId,outcome:reason,gameMode:game.gameMode,damage:Math.floor(game.damage),bossDamage:Math.floor(game.bossDamage),stats:{...game.damageStats},ship:player.shipType,time:Math.floor(game.total),level:game.level,kills:game.kills,build:buildSummary(),date:new Date().toISOString()});r.runs=r.runs.slice(0,200);record.write(r);state(reason==='retired'?'retired':'dead');if(reason==='dead')tone(140,.5,'triangle',.05)}
+function endRun(reason='dead'){if(!game||game.runOutcome||!['playing','quitConfirm'].includes(mode))return;game.runOutcome=reason;v13ObserveRun();const r=record.read();game.bestBroke=game.damage>r.damage||game.total>(r.time||0)||game.level>(r.level||0);r.damage=Math.max(r.damage,Math.floor(game.damage));r.time=Math.max(r.time||0,Math.floor(game.total));r.level=Math.max(r.level||0,game.level);r.runs=Array.isArray(r.runs)?r.runs:[];r.runs.unshift({id:game.runId,outcome:reason,gameMode:game.gameMode,damage:Math.floor(game.damage),bossDamage:Math.floor(game.bossDamage),stats:{...game.damageStats},ship:player.shipType,time:Math.floor(game.total),level:game.level,kills:game.kills,build:buildSummary(),date:new Date().toISOString()});r.runs=r.runs.slice(0,200);record.write(r);v13CollectAwards();state(reason==='retired'?'retired':'dead');if(reason==='dead')tone(140,.5,'triangle',.05)}
 function edgeSpawn(){const i=Math.floor(rand(0,4)),m=60;return {x:i===0?-m:i===1?W+m:rand(-m,W+m),y:i===2?-m:i===3?H+m:rand(-m,H+m)}}
 
 function spawnRelicEnemy(){if(!game||game.relicAlive||RELICS.filter(c=>c.shipOnly===player.shipType&&!game.relics[c.id]).length<3)return false;
@@ -2332,14 +2411,14 @@ function ultimateVolley(b){
 function recordVictory(){
  if(!game||game.lastClearAt===game.ultimateEncounterAt)return;
  game.lastClearAt=game.ultimateEncounterAt;game.clearCount++;game.completed=true;
- const r=record.read();r.damage=Math.max(r.damage,Math.floor(game.damage));r.time=Math.max(r.time||0,Math.floor(game.total));r.level=Math.max(r.level||0,game.level);
+ v13ObserveRun();const r=record.read();r.damage=Math.max(r.damage,Math.floor(game.damage));r.time=Math.max(r.time||0,Math.floor(game.total));r.level=Math.max(r.level||0,game.level);
  r.clears=r.clears||[];
  const fusionIds=game.elementCombos.map(x=>x.main+'_'+x.sub);
  const evolutionIds=Object.keys(game.fusions).filter(k=>game.fusions[k]);
  const source=Object.entries(game.damageStats).sort((a,b)=>b[1]-a[1])[0]?.[0]||'other';
  const entry={id:game.runId+'-clear-'+game.clearCount,mode:game.gameMode,time:Math.floor(game.total),level:game.level,damage:Math.floor(game.damage),endless:game.endless,date:new Date().toISOString(),ship:player.shipType,title:v13ClearTitle(),subtitle:(fusionIds.length?fusionIds.length+'属性融合・':'')+evolutionIds.length+'進化合成を達成',rank:v13Rank(game.activeChallenges?.length||0),challenges:[...(game.activeChallenges||[])],fusionIds,evolutionIds,finalSource:source};
  game.lastClear=entry;
- r.clears.unshift(entry);r.clears=r.clears.slice(0,1000);record.write(r);
+ r.clears.unshift(entry);r.clears=r.clears.slice(0,1000);record.write(r);game.lastUnlocked=v13CollectAwards();
  game.raid=null;game.bossQueue=[];enemies=[];hostile=[];hazards=[];boss=null;bossAlertUntil=0;U('bossAlert').classList.remove('show');
  sfx('victory');confetti();queueFireworks();state('victory');
 }
@@ -3179,7 +3258,7 @@ function frame(ts){
  shake=Math.max(0,shake-effectsDt*28);flash=Math.max(0,flash-effectsDt);
  const particleDrag=Math.pow(.97,effectsDt*60);for(const p of particles){p.life-=effectsDt;if(p.ring)p.r+=(p.to-p.r)*Math.min(1,effectsDt*12);else if(!p.lightning){p.x+=p.vx*effectsDt;p.y+=p.vy*effectsDt;p.vx*=particleDrag;p.vy*=particleDrag}}particles=particles.filter(x=>x.life>0);
  for(const f of floats){f.life-=effectsDt;f.y-=effectsDt*28}floats=floats.filter(f=>f.life>0);
- if(mode==='playing'){hudClock+=Math.min(elapsed,.25);if(hudClock>=.11){hudClock%=.11;hudUpdate()}playMusic()}
+ if(mode==='playing'){achievementSyncClock+=Math.min(elapsed,.25);if(achievementSyncClock>=12){achievementSyncClock=0;v13ObserveRun()}hudClock+=Math.min(elapsed,.25);if(hudClock>=.11){hudClock%=.11;hudUpdate()}playMusic()}
  if(bossAlertUntil&&performance.now()>bossAlertUntil){U('bossAlert').classList.remove('show');bossAlertUntil=0}
  // FPS cap is now user selectable in BOTH modes. Physics always runs on RAF.
  // Accumulated intervals avoid halving the visible frame rate on 60/90/120 Hz screens.
@@ -3204,7 +3283,7 @@ function frame(ts){
    }
   }else{actualDraws=0;lastFpsSample=ts}
  }
- recordPerfSample(elapsed*1000,perfSimMs,perfDrawMs);
+ v13AdvanceAward();recordPerfSample(elapsed*1000,perfSimMs,perfDrawMs);
  requestAnimationFrame(frame)
 }
 document.addEventListener('visibilitychange',()=>{last=0;simAccumulator=0;keys.clear();clearTouch();if(document.hidden&&mode==='playing')state('paused')});

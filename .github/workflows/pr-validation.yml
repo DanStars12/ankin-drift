@@ -78,10 +78,10 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install chromium
       - name: Test game and offline startup
         id: check
-        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs --project=${{ matrix.project }}
+        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs --project=${{ matrix.project }}
       - name: Write result summary
         if: always()
         env:
