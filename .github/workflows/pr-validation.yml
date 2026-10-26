@@ -83,7 +83,7 @@ jobs:
       - run: npx playwright install chromium
       - name: Test game and offline startup
         id: check
-        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs tests/ending.spec.mjs tests/fusion-skip.spec.mjs tests/v13-3.spec.mjs --project=${{ matrix.project }}
+        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs tests/ending.spec.mjs tests/fusion-skip.spec.mjs tests/v13-3.spec.mjs tests/v13-4.spec.mjs --project=${{ matrix.project }}
       - name: Write result summary
         if: always()
         env:

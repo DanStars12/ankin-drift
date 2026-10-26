@@ -48,7 +48,7 @@ test('repeatable combat load profiles', async ({ page, isMobile }, testInfo) => 
     expect(errors).toEqual([]);
     results.push({ scenario:scenario.name, config, report });
   }
-  await testInfo.attach('performance-v13.3.json', {
+  await testInfo.attach('performance-v13.4.json', {
     body: JSON.stringify({ project:testInfo.project.name, results }, null, 2),
     contentType: 'application/json'
   });
