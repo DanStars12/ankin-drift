@@ -99,12 +99,14 @@ function current(){return snapshot||start()}
 function read(){return structuredClone(current().record)}
 function write(record){
  if(problem.startsWith('セーブ保護モード'))return false;
+ let candidate=null;
  try{
   const now=new Date().toISOString(),r=recordOf(record),checks=earned(r),awards={...current().awards};
   for(const [id] of DEFINITIONS)if(checks[id]&&!awards[id])awards[id]=now;
-  store({format:'ankin-drift-archive',schemaVersion:1,updatedAt:now,record:r,awards});
+  candidate={format:'ankin-drift-archive',schemaVersion:1,updatedAt:now,record:r,awards};
+  store(candidate);
   return true;
- }catch(e){problem='保存失敗：'+e.message;return false}
+ }catch(e){if(candidate&&JSON.stringify(candidate).length<=MAX_BYTES)snapshot=candidate;problem='保存失敗：'+e.message;return false}
 }
 function exported(){return JSON.stringify(current(),null,2)}
 function preview(raw){const x=parse(raw);return {clears:x.record.clears.length,runs:x.record.runs.length,awards:Object.keys(x.awards).length,updatedAt:x.updatedAt,data:x}}
