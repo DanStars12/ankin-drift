@@ -67,7 +67,8 @@ function chooseStyle(s,primary,share){
  if(s.hits>0&&s.hpPercent<=15)return 'near_death';
  if(s.hits===0)return 'untouched';
  if(primary==='nova'&&share>=.22&&s.novaCount>=3)return 'nova';
- if(s.dashCount>=22&&s.dashCount>=s.hits*2)return 'dash';
+ // A dash-focused victory needs sustained movement, not a few routine dodges over 30 minutes.
+ if(s.dashCount>=Math.max(24,Math.floor(s.seconds/60*1.5))&&s.dashCount>=s.hits*2)return 'dash';
  if(primary==='drone'&&share>=.28)return 'drone';
  if(['dot','magma'].includes(primary)&&share>=.30)return 'burn';
  if(['rock','element','blade'].includes(primary)&&share>=.4)return 'area';
@@ -106,7 +107,7 @@ function create(source){
   percent=total>0?Math.round(all[0][1]/total*100):0,
   styleId=chooseStyle(s,primary,total>0?all[0][1]/total:0),
   style=STYLES[styleId],elem=elementSignature(s),
-  sourceLabel=SOURCE[primary],finisherLabel=SOURCE[s.finisherSource]||sourceLabel,
+  sourceLabel=SOURCE[primary],finisherLabel=s.finisherSource?SOURCE[s.finisherSource]:null,
   motif=elem.title||ship.epithet,
   title=elem.title?motif+'・'+style.name+'・'+ship.epithet:style.name+'・'+ship.epithet,
   intense=s.clearCount>1?'終焉は再び現れた。それでも、':'長い戦いの果て、',
@@ -126,7 +127,7 @@ function create(source){
    ...(s.challenges.length?['追加試練：'+s.challenges.length+'件']:[])
   ],
   summary='主力 '+sourceLabel+' '+percent+'% ／ '+(elem.title?elem.label+' ／ ':'')+
-   '決め手 '+finisherLabel;
+   (finisherLabel?'決め手 '+finisherLabel:'撃破時の攻撃種別は未記録');
  return {version:1,styleId,styleName:style.name,title:title.slice(0,88),
   story:prose.slice(0,520),summary:summary.slice(0,190),why:why.slice(0,8),
   primarySource:primary,primaryPercent:percent,finisherSource:s.finisherSource,

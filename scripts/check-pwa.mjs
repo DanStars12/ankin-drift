@@ -28,14 +28,14 @@ for (const required of ['html', 'head', 'body', 'title', 'canvas']) assert(nodes
 assert(nodes.some(n => n.tagName === 'meta' && attr(n, 'name') === 'viewport'), 'Missing mobile viewport');
 
 const pageTitle = nodes.find(n => n.tagName === 'title')?.childNodes?.map(n => n.value ?? '').join('') ?? '';
-const titleVersion = pageTitle.match(/\bV(\d+\.\d+)\b/i)?.[1];
-const menuVersion = html.match(/<p class="eyebrow">V(\d+\.\d+)\s*·/)?.[1];
+const titleVersion = pageTitle.match(/\bV(\d+\.\d+(?:\.\d+)?)\b/i)?.[1];
+const menuVersion = html.match(/<p class="eyebrow">V(\d+\.\d+(?:\.\d+)?)\s*·/)?.[1];
 assert(titleVersion, 'Browser title must include game version');
 assert(menuVersion, 'Title screen must include a game version');
 assert.equal(menuVersion, titleVersion, 'Title screen and browser title version mismatch');
 assert.equal(manifestVersionFromTitle(pageTitle), titleVersion, 'Browser title version parse error');
 
-function manifestVersionFromTitle(title) { return title.match(/\bV(\d+\.\d+)\b/i)?.[1]; }
+function manifestVersionFromTitle(title) { return title.match(/\bV(\d+\.\d+(?:\.\d+)?)\b/i)?.[1]; }
 
 for (const node of nodes) {
   for (const name of ['src', 'href']) {
@@ -49,7 +49,7 @@ assert.equal(manifestLinks.length, 1, 'Expected one manifest link');
 const manifestURL = await asset(attr(manifestLinks[0], 'href'));
 const manifest = JSON.parse(await readFile(diskURL(manifestURL), 'utf8'));
 assert(manifest.name && manifest.short_name, 'Missing PWA name');
-const manifestVersion = manifest.name.match(/\bV(\d+\.\d+)\b/i)?.[1];
+const manifestVersion = manifest.name.match(/\bV(\d+\.\d+(?:\.\d+)?)\b/i)?.[1];
 assert.equal(manifestVersion, titleVersion, 'Manifest and game version mismatch');
 assert(['standalone', 'fullscreen', 'minimal-ui'].includes(manifest.display), 'Invalid installable display mode');
 assert(manifest.scope && manifest.start_url, 'Missing scope/start_url');
@@ -76,7 +76,7 @@ const declarations = sw.body.filter(n => n.type === 'VariableDeclaration').flatM
 const cache = declarations.find(n => n.id.name === 'CACHE_NAME')?.init;
 assert.equal(typeof cache?.value, 'string', 'Missing literal CACHE_NAME');
 assert(cache.value.length > 0, 'Empty cache name');
-assert(cache.value.includes('v' + titleVersion.replace('.', '-')), 'Service Worker cache name version mismatch');
+assert(cache.value.includes('v' + titleVersion.replaceAll('.', '-')), 'Service Worker cache name version mismatch');
 const shell = declarations.find(n => n.id.name === 'SHELL')?.init;
 assert.equal(shell?.type, 'ArrayExpression', 'Missing static SHELL array');
 const cached = new Set();

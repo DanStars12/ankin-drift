@@ -94,3 +94,18 @@ test('unfused elemental cards change the title; ship always changes the title',(
  assert.notEqual(a.title,c.title);
  assert.ok(a.summary.includes('属性スキル：炎'));
 });
+
+test('dash-master title requires meaningful dodges relative to run duration',()=>{
+ const baseline={ship:'shot',fusionIds:[],damageStats:{other:200000},hits:10,revives:0,hpPercent:60};
+ const easy=generate({...baseline,seconds:1800,dashCount:23});
+ assert.notEqual(easy.styleId,'dash');
+ const expert=generate({...baseline,seconds:1800,dashCount:47});
+ assert.equal(expert.styleId,'dash');
+ const shorter=generate({...baseline,seconds:900,dashCount:25});
+ assert.equal(shorter.styleId,'dash');
+});
+test('ending does not invent a killing blow when finisher is not observed',()=>{
+ const x=generate({...base,finisherSource:''});
+ assert.ok(x.summary.includes('未記録'));
+ assert.ok(!x.summary.includes('決め手 レーザー'));
+});
