@@ -125,7 +125,7 @@ function create(source){
    ...(s.hits===0?['被弾なし']:s.revives?['復活 '+s.revives+'回']:s.hpPercent<=15?['残HP '+Math.round(s.hpPercent)+'%']:[]),
    ...(s.challenges.length?['追加試練：'+s.challenges.length+'件']:[])
   ],
-  summary='主力 '+sourceLabel+' '+percent+'% ／ '+(elem.pairs.length?elem.label+' ／ ':'')+
+  summary='主力 '+sourceLabel+' '+percent+'% ／ '+(elem.title?elem.label+' ／ ':'')+
    '決め手 '+finisherLabel;
  return {version:1,styleId,styleName:style.name,title:title.slice(0,88),
   story:prose.slice(0,520),summary:summary.slice(0,190),why:why.slice(0,8),
