@@ -1509,7 +1509,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  '属性：炎':{name:'🔥 炎属性',desc:'攻撃の燃焼効果で継続ダメージ。マグマ床は接触中の敵へ追加ダメージを与えます。',details:[`燃焼：約${Math.round(burn)} ダメージ/秒（通常攻撃基準）`,`通常攻撃の燃焼確率：${pct(p.burnChance)}（炎弾・火炎ミサイルは別条件）`,p.magmaLevel>0?`マグマ床：約${magma} ダメージ/秒`:`マグマ床：未取得（取得時の基準威力 約${magma}/秒）`,`マグマ設置数の強化：${p.magmaLevel} ／ 効果半径：${Math.round(p.magmaRadius)}`]},
  '属性：氷':{name:'❄️ 氷属性',desc:'スロウと凍結は別系統。主武装への付与とアイスボールで戦います。スロウは凍結させず、アイスボールはスロウを与えません。ボスは凍結無効・スロウ効果半減。',details:[`スロウ中の移動速度：通常敵42% / ボス71%`,`スロウ中の敵攻撃頻度：通常の${pct(Math.max(.25,1-p.iceAttackSlow))}`,`主武装の凍結確率：${pct(p.freezeChance)}（スロウ系とは独立）`,`凍結時間：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は再凍結不可（ボス無効）`]},
  '属性：雷':{name:'⚡ 雷属性',desc:'連鎖雷撃と電磁パルスは別系統。パルスは自機周辺に継続雷ダメージを与え、連鎖やNOVAへ自動伝播しません。',details:[`通常連鎖の追加確率：${pct(p.chain)}`,`連鎖ダメージ補正：+${Math.round(p.chainDamage)}`,`電磁パルスの実効半径：${Math.round(Math.min(290,p.empRadius))}`,`電磁パルス基準威力：${Math.round(p.empDps)}/秒`]},
- '属性：風':{name:'🌪️ 風属性',desc:'円形のサイクロンは通常敵を外側へ押し返し、ウィンドブレードは自機周囲を旋回する独立武器。ボスはノックバック無効です。',details:[`基本発射数：${p.windCount}（同時最大4・超過分は火力補正）`,`衝撃半径：${Math.round(p.windRadius)}`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
+ '属性：風':{name:'🌪️ 風属性',desc:'円形のサイクロンは通常敵を外側へ押し返し、ウィンドブレードは自機周囲を旋回する独立武器。ボスはノックバック無効です。',details:[`基本発射数：${p.windCount}（同時最大4・超過分は火力補正）`,`実効半径：${Math.round(Math.min(165,Math.max(46,p.windRadius)))}（最大165）`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
  '属性：岩':{name:'🪨 岩属性',desc:'周回岩壁は防御と接触攻撃、隕石は独立した貫通攻撃。隕石は成長しても威力が増えません。',details:[`周回岩壁：${p.rockWalls}枚`,`岩壁サイズ：${Math.round(p.rockSize)}`,`反撃ダメージ補正：+${Math.round(p.rockDamage)}`,`隕石威力：${Math.round(p.meteorDamage)} / 最大サイズ：${Math.round(Math.min(75,p.meteorRadius+29))}`]}
  };
  const extra={
@@ -3303,7 +3303,7 @@ function drawEvolutionShotMotifs(){
 }
 
 
-/* v13.4.1.1 — Circular cyclone: consistent radius under all effect presets. */
+/* v13.4.1 — Circular cyclone: consistent radius under all effect presets. */
 function drawCyclone(g){
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
@@ -3318,7 +3318,7 @@ function drawCyclone(g){
  if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count;ctx.beginPath();ctx.arc(0,0,r*.87,a,a+.44);ctx.stroke();}}
  ctx.restore();
 }
-/* v13.4.1.1 — Tesla EMP: blue-white discharge with purple field accents. */
+/* v13.4.1 — Tesla EMP: blue-white discharge with purple field accents. */
 function drawTeslaField(p){
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
