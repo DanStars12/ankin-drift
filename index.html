@@ -2173,6 +2173,19 @@ const EXTRA_SKILL_TAGS={
  rChargeShatter:['分裂','チャージ'],rChargeNova:['爆発','チャージ'],rChargeEcho:['追加弾','チャージ'],rChargeGravity:['吸引','チャージ'],rChargeFlame:['属性：炎','マグマ床','チャージ'],rChargeMomentum:['機動','チャージ'],rDrillRotor:['プラズマ','蓄積','機動'],rDrillWide:['近接','ドリル'],rDrillImpact:['突進','爆発'],rDrillHeat:['近接','属性：炎','燃焼'],rDrillRefund:['突進','蓄積'],rDrillIce:['近接','属性：氷','スロウ']
 };
 for(const c of ALL_SKILL_DEFS())if(EXTRA_SKILL_TAGS[c.id])c.tags=[...new Set([...(c.tags||[]),...EXTRA_SKILL_TAGS[c.id]])];
+// v13.4: tags must reflect the ability actually granted, never a second weapon family.
+const ELEMENT_ATTACK_TAGS={
+ missileFlare:['属性：炎','ミサイル','燃焼'],rain:['属性：炎','ミサイル','燃焼'],rocket:['属性：炎','ミサイル','燃焼'],volcanoLegend:['属性：炎','マグマ床'],magmaCore:['属性：炎','マグマ床'],magmaPulse:['属性：炎','マグマ床'],static:['属性：炎','マグマ床'],thermal:['属性：炎','燃焼'],emberSeed:['属性：炎','燃焼'],
+ freeze:['属性：氷','凍結'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],crystalStasis:['属性：氷','凍結'],iceLegend:['属性：氷','凍結'],
+ iceBall:['属性：氷','アイスボール'],iceBallFocus:['属性：氷','アイスボール'],iceBallVolley:['属性：氷','アイスボール'],iceBallPower:['属性：氷','アイスボール'],iceBallLegend:['属性：氷','アイスボール'],
+ empPulse:['属性：雷','パルス'],empAmplifier:['属性：雷','パルス'],empOverdrive:['属性：雷','パルス'],empPower:['属性：雷','パルス'],empLegend:['属性：雷','パルス'],
+ meteorSeed:['属性：岩','隕石'],meteorCore:['属性：岩','隕石'],meteorHeavy:['属性：岩','隕石'],meteorPower:['属性：岩','隕石'],meteorLegend:['属性：岩','隕石'],
+ windOrigin:['属性：風','サイクロン'],windEngine:['属性：風','サイクロン'],windTwin:['属性：風','サイクロン'],windPower:['属性：風','サイクロン'],windLegend:['属性：風','サイクロン'],
+ orbit:['属性：風','ブレード'],satellite:['属性：風','ブレード'],gravityCore:['属性：風','ブレード'],
+ rLaserFrost:['レリック','属性：氷','凍結','レーザー'],rDrillIce:['レリック','属性：氷','スロウ','ドリル']
+};
+for(const c of ALL_SKILL_DEFS())if(ELEMENT_ATTACK_TAGS[c.id])c.tags=ELEMENT_ATTACK_TAGS[c.id];
+
 // v9.8: canonical element ownership. These cards grant an elemental attack, not just a named effect.
 const ELEMENT_CARD_IDS={
  fire:['plasma','flameField','emberSeed','rocket','thermal','static','magmaPulse','magmaCore','missileFlare','volcanoLegend','rain','rChargeFlame','rDrillHeat'],
