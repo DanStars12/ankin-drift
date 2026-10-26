@@ -3302,6 +3302,47 @@ function drawEvolutionShotMotifs(){
  ctx.restore();
 }
 
+
+/* v13.4.1 — Circular cyclone: consistent radius under all effect presets. */
+function drawCyclone(g){
+ const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
+ const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
+ ctx.save();ctx.translate(g.x,g.y);ctx.lineCap='round';
+ ctx.fillStyle=c;ctx.globalAlpha=opacity*.12;ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.fill();
+ ctx.strokeStyle=c;ctx.globalAlpha=opacity;ctx.lineWidth=g.kind==='fireTornado'?3.4:2.7;
+ ctx.shadowColor=c;ctx.shadowBlur=simple||low?0:settings.fx==='high'?9:5;
+ ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.stroke();ctx.shadowBlur=0;
+ const arcs=simple?2:low?3:settings.fx==='high'?6:4;
+ ctx.globalAlpha=opacity*(simple?.43:.56);ctx.lineWidth=simple?1.4:1.7;
+ for(let i=0;i<arcs;i++){const a=phase+i*TAU/arcs,rad=r*(i%2?.68:.44);ctx.beginPath();ctx.arc(0,0,rad,a,a+(simple?.66:1.10));ctx.stroke();}
+ if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count;ctx.beginPath();ctx.arc(0,0,r*.87,a,a+.44);ctx.stroke();}}
+ ctx.restore();
+}
+/* v13.4.1 — Tesla EMP: blue-white discharge with purple field accents. */
+function drawTeslaField(p){
+ if(p.empRadius<=0)return;
+ const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
+ const n=simple?2:low?4:high?9:6;
+ ctx.save();ctx.translate(p.x,p.y);ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.globalAlpha=.1;ctx.fillStyle='#465bff';ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.fill();
+ ctx.globalAlpha=.52+.08*Math.sin(t*4);ctx.strokeStyle='#83c8ff';ctx.lineWidth=2.4;ctx.shadowColor='#849aff';ctx.shadowBlur=simple||low?0:9;
+ ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.stroke();ctx.shadowBlur=0;
+ ctx.globalAlpha=.31;ctx.strokeStyle='#9880ff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(0,0,r*.67,0,TAU);ctx.stroke();
+ for(let i=0;i<n;i++){
+  const base=i*TAU/n+t*.19,steps=simple?3:5,inner=r*(simple?.70:.46),span=r*.98-inner;
+  ctx.globalAlpha=simple?.49:.56+.1*Math.sin(t*6+i*2.6);ctx.strokeStyle=i%3===0?'#e8fcff':i%2?'#b99aff':'#80d5ff';ctx.lineWidth=i%3===0?2.1:1.55;
+  ctx.beginPath();
+  for(let j=0;j<=steps;j++){const rr=inner+span*j/steps,jag=(j===0||j===steps)?0:(j%2?1:-1)*.037*Math.sin(t*1.7+i*2.3+j),a=base+jag;
+   if(j===0)ctx.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);else ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);}
+  ctx.stroke();
+ }
+ if(!simple&&!low){ctx.globalAlpha=.72;ctx.strokeStyle='#d8faff';ctx.lineWidth=2;const count=high?6:4;for(let i=0;i<count;i++){const a=i*TAU/count-t*.28;ctx.beginPath();ctx.arc(0,0,r*.965,a,a+.2);ctx.stroke();}}
+ const core=Math.min(18,r*.15);ctx.globalAlpha=.76;ctx.strokeStyle='#c7edff';ctx.lineWidth=2;
+ ctx.beginPath();ctx.arc(0,0,core,0,TAU);ctx.stroke();ctx.fillStyle='#eaffff';ctx.globalAlpha=.78;
+ for(let i=0;i<4;i++){const a=t*.53+i*TAU/4;ctx.beginPath();ctx.arc(Math.cos(a)*core,Math.sin(a)*core,simple?1.4:2,0,TAU);ctx.fill();}
+ ctx.restore();
+}
+
 function render(){const renderPressure=shots.length+hostile.length+enemies.length*2+particles.length+zones.length*4+gusts.length*5;
  renderHeavyLoad=mode==='playing'&&(settings.fx==='simple'||renderPressure>(controlMode==='mobile'?310:490)||(game?.raid?.effects?.length>=2&&renderPressure>(controlMode==='mobile'?190:360)));ctx.save();if(!cachedBgGradient||cachedBgW!==W||cachedBgH!==H){cachedBgW=W;cachedBgH=H;cachedBgGradient=ctx.createRadialGradient(W*.46,H*.40,24,W*.5,H*.52,Math.max(W,H)*.8);cachedBgGradient.addColorStop(0,'#152440');cachedBgGradient.addColorStop(.6,'#0a1428');cachedBgGradient.addColorStop(1,'#050a15')}ctx.fillStyle=cachedBgGradient;ctx.fillRect(0,0,W,H);ctx.strokeStyle='#5b9cb418';ctx.lineWidth=1;const off=(t*11)%61;for(let x=off-61;x<W;x+=61){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=off-61;y<H;y+=61){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}for(let si=0;si<stars.length;si++){if(renderHeavyLoad&&si%2)continue;const s=stars[si];ctx.fillStyle=`rgba(199,230,255,${.24+.33*Math.sin(t*s.z+s.v)**2})`;ctx.fillRect(s.x,s.y,s.r,s.r)}ctx.translate(rand(-shake,shake),rand(-shake,shake));if(mode!=='menu'&&player){
  // Warning telegraphs are drawn on the topmost gameplay layer (after magma, gusts, projectiles and particles).
@@ -3333,32 +3374,8 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    }
   }else{ctx.fillStyle='#9b81ff';ctx.strokeStyle='#e1aaff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,z.r,0,TAU);ctx.fill();ctx.stroke()}
   ctx.restore()}
- // Gusts keep their ribbon style under all load levels except explicit SIMPLE.
- for(const g of gusts){
-  if(g.x+g.r<-25||g.x-g.r>W+25||g.y+g.r<-25||g.y-g.r>H+25)continue;
-  ctx.save();ctx.translate(g.x,g.y);
-  const color=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1');
-  ctx.strokeStyle=color;
-  if(settings.fx==='simple'){
-   ctx.globalAlpha=Math.min(.53,g.life*.24);ctx.lineWidth=2;
-   ctx.beginPath();ctx.arc(0,0,g.r,0,TAU);ctx.stroke();
-  }else{
-   // Stable tapered tornado spiral (never switches shape except in SIMPLE mode).
-   ctx.rotate(t*1.85);ctx.shadowColor=color;ctx.shadowBlur=settings.fx==='high'?12:settings.fx==='medium'?7:0;
-   ctx.globalAlpha=Math.min(.84,g.life*.31);ctx.lineWidth=g.kind==='fireTornado'?4:3.3;
-   const ribbons=settings.fx==='low'?2:3;
-   for(let k=0;k<ribbons;k++){
-    ctx.beginPath();
-    for(let j=0;j<=28;j++){
-     const q=j/28,a=q*TAU*1.55+k*TAU/ribbons,rad=g.r*(.16+q*.79);
-     const x=Math.cos(a)*rad,y=Math.sin(a)*rad*.48+(q-.5)*g.r*.36;
-     if(j)ctx.lineTo(x,y);else ctx.moveTo(x,y);
-    }ctx.stroke();
-   }
-   ctx.globalAlpha*=.55;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,g.r*.17,g.r*.89,g.r*.23,0,0,TAU);ctx.stroke();
-  }
-  ctx.restore();
- }
+ // Circular cyclone with subtle rotating arcs; true radius matches enemy hit detection.
+ for(const g of gusts){if(g.x+g.r<-25||g.x-g.r>W+25||g.y+g.r<-25||g.y-g.r>H+25)continue;drawCyclone(g);}
  // ENGAGE barriers: collision geometry matches the filled rectangles. Enemy projectiles ignore them.
  for(const wall of activeEngageWalls()){ctx.save();const fade=clamp(wall.ttl/.5,0,1);ctx.globalAlpha=.88*fade;
   ctx.fillStyle='#37172c';ctx.strokeStyle='#ff9bbb';ctx.lineWidth=3;ctx.shadowColor='#ff8dc1';ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:13;
@@ -3386,8 +3403,8 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
- if(player.empRadius>0){const rad=Math.min(290,player.empRadius);ctx.save();ctx.strokeStyle='#9ef8ff';ctx.fillStyle='#3c8ed019';ctx.lineWidth=2.6;ctx.globalAlpha=.63+.13*Math.sin(t*4);ctx.beginPath();ctx.arc(player.x,player.y,rad,0,TAU);ctx.fill();ctx.stroke();if(settings.fx!=='simple'&&!renderHeavyLoad){ctx.strokeStyle='#be9fff';ctx.lineWidth=1.5;ctx.setLineDash([11,13]);ctx.beginPath();ctx.arc(player.x,player.y,rad*.72,0,TAU);ctx.stroke();ctx.setLineDash([])}ctx.restore();}
- for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
+ if(player.empRadius>0)drawTeslaField(player);
+  for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
  if(renderHeavyLoad||settings.fx==='low'){
