@@ -2155,7 +2155,7 @@ const RELICS=[
 
 // v13.5: strictly independent attack families (a card upgrades exactly its advertised family).
 SKILLS.push(
- skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾を自動発射。命中ダメージと凍結確率23%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallTimer=.1}),
+ skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾+1発（最大5発）。基本凍結確率23%。スロウなし。繰り返し取得で同時発射数が増える。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallTimer=.1},{available:p=>p.iceBallCount<5}),
  skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
  skill('iceBallVolley','epic','❄️','グレイシャル・サルヴォ','アイスボール+2発、発射間隔-20%。',p=>{p.iceBallCount=Math.min(5,Math.max(1,p.iceBallCount)+2);p.iceBallPeriod=Math.max(1.2,p.iceBallPeriod*.8)}),
  skill('empPulse','uncommon','⚡','電磁パルス','機体周辺に青白いテスラ放電領域を展開。範囲内の敵に継続雷ダメージ（最大半径290）。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=28}),
@@ -2193,7 +2193,7 @@ SKILLS.push(
  skill('tridentPulse','epic','⚡','トライデントパルス','EMPを小型の3領域に分割して旋回させる。中心の防御範囲は薄くなるが、威力が高いほど旋回が速い。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=35;p.empTrident=1},{stackable:false}),
  skill('lavaConstrain','epic','🌋','ラヴァ・コンストレイション','全マグマ床を1つに統合し、新規マグマも吸収。合体数で威力が増え、持続中徐々に拡大。広域設置を失う。',p=>{p.magmaLevel=Math.max(1,p.magmaLevel);p.lavaConstrain=1},{stackable:false}),
  skill('thrusterEngine','rare','🚀','スラスターエンジン','ダッシュ再使用+1.1秒。代わりに移動速度1.75倍・持続1.65倍で長距離移動（ドリル対応）。',p=>{p.dashCd+=1.1;p.thrusterEngine=1},{stackable:false}),
- skill('gigaNapalm','epic','🔥','ギガ・ナパーム','全ミサイルを1発の大型低速追尾弾に統合。合計弾数で爆発・燃焼が強化されるが手数を失う。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.flameMissiles=Math.max(1,p.flameMissiles);p.gigaNapalm=1;p.rocketTimer=0},{stackable:false}),
+ skill('gigaNapalm','epic','🔥','ギガ・ナパーム','全ミサイルを大型の低速追尾弾1発に統合。弾数に応じ爆発・燃焼強化。連射力が低下する。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.flameMissiles=Math.max(1,p.flameMissiles);p.gigaNapalm=1;p.rocketTimer=0},{stackable:false}),
  skill('meteorAnvil','rare','☄️','メテオ・アンビル','隕石威力+210・サイズ上限+12。発射間隔+45%。',p=>{p.meteorCount=1;p.meteorDamage+=210;p.meteorRadius+=12;p.meteorInterval*=1.45},{stackable:false}),
  skill('iceShardScatter','rare','❄️','氷晶散華','アイスボール+2発・凍結確率+7%。1発の威力-35%。',p=>{p.iceBallCount=Math.min(5,Math.max(1,p.iceBallCount)+2);p.iceBallChance=Math.min(.78,p.iceBallChance+.07);p.iceBallDamage*=.65},{stackable:false}),
  skill('ionCompression','rare','🔌','イオン圧縮','EMP威力+120。攻撃半径-30%。',p=>{p.empRadius=Math.max(96,p.empRadius)*.7;p.empDps+=120},{stackable:false}),
@@ -2376,11 +2376,16 @@ const SKILL_CAP_CHECKS={
  escort:p=>p.droneCount<p.limitDrones,
  scatter:p=>p.multishot<p.limitShot,
  queen:p=>p.droneCount<p.limitDrones,
- critical:p=>p.crit<.95-.00001,
+ critical:p=>p.crit<.969,
+ iceBall:p=>p.iceBallCount<5,
+ wider:p=>p.multishot<p.limitShot||p.crit<.969,
  freeze:p=>p.freezeChance<.849,
 
 };
 function skillHasRoom(c,p=player){
+ if(!c||!p)return false;
+ // One-off cards are never offered after acquisition, even when a new pool includes them.
+ if(c.stackable===false&&game&&(game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]))return false;
  const check=SKILL_CAP_CHECKS[c.id];
  return !check||check(p);
 }
