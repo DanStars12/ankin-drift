@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.4.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.4.2 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.4.1 | ELEMENTAL ARSENAL</title>
+<title>ANKIN DRIFT v13.4.2 | ELEMENTAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -987,7 +987,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.4.1 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.4.2 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -2152,7 +2152,7 @@ const RELICS=[
  skill('rDrillTempo','relic','⚡','ハイギア・アクセル','ダッシュ再使用-0.23秒。オーバードライブ中は最短0.5秒。',p=>p.dashCd=Math.max(.52,p.dashCd-.23),{shipOnly:'drill',stackable:false})
 ];
 
-// v13.4.1: strictly independent attack families (a card upgrades exactly its advertised family).
+// v13.4.2: strictly independent attack families (a card upgrades exactly its advertised family).
 SKILLS.push(
  skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾を自動発射。命中ダメージと凍結確率23%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallTimer=.1}),
  skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
@@ -2209,7 +2209,7 @@ const EXTRA_SKILL_TAGS={
  rChargeShatter:['分裂','チャージ'],rChargeNova:['爆発','チャージ'],rChargeEcho:['追加弾','チャージ'],rChargeGravity:['吸引','チャージ'],rChargeFlame:['属性：炎','マグマ床','チャージ'],rChargeMomentum:['機動','チャージ'],rDrillRotor:['プラズマ','蓄積','機動'],rDrillWide:['近接','ドリル'],rDrillImpact:['突進','爆発'],rDrillHeat:['近接','属性：炎','燃焼'],rDrillRefund:['突進','蓄積'],rDrillIce:['近接','属性：氷','スロウ']
 };
 for(const c of ALL_SKILL_DEFS())if(EXTRA_SKILL_TAGS[c.id])c.tags=[...new Set([...(c.tags||[]),...EXTRA_SKILL_TAGS[c.id]])];
-// v13.4.1: tags must reflect the ability actually granted, never a second weapon family.
+// v13.4.2: tags must reflect the ability actually granted, never a second weapon family.
 const ELEMENT_ATTACK_TAGS={
  missileFlare:['属性：炎','ミサイル','燃焼'],rain:['属性：炎','ミサイル','燃焼'],rocket:['属性：炎','ミサイル','燃焼'],volcanoLegend:['属性：炎','マグマ床'],magmaCore:['属性：炎','マグマ床'],magmaPulse:['属性：炎','マグマ床'],static:['属性：炎','マグマ床'],thermal:['属性：炎','燃焼'],emberSeed:['属性：炎','燃焼'],
  freeze:['属性：氷','凍結'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],crystalStasis:['属性：氷','凍結'],iceLegend:['属性：氷','凍結'],
@@ -2636,7 +2636,7 @@ function circleCandidates(x,y,r){if(!enemyIndexReady)return enemies;const result
 function segmentCandidates(x1,y1,x2,y2,r){if(!enemyIndexReady)return enemies;const result=[],pad=r+enemyMaxRadius;
  const ax=Math.floor((Math.min(x1,x2)-pad)/SPATIAL_CELL),bx=Math.floor((Math.max(x1,x2)+pad)/SPATIAL_CELL),ay=Math.floor((Math.min(y1,y2)-pad)/SPATIAL_CELL),by=Math.floor((Math.max(y1,y2)+pad)/SPATIAL_CELL);
  for(let cx=ax;cx<=bx;cx++)for(let cy=ay;cy<=by;cy++){const group=enemyIndex.get(cx+','+cy);if(group)result.push(...group)}return result}
-function isVisibleAutoTarget(e){return e&&!e.dead&&e.x>=10&&e.x<=W-10&&e.y>=10&&e.y<=H-10&&!e.isoWarp;}
+function isVisibleAutoTarget(e){return e&&!e.dead&&e.x>=10&&e.x<=W-10&&e.y>=10&&e.y<=H-10&&!e.isoWarp&&(e.isoSafe||0)<=0;}
 function visibleTarget(x,y,except=null,radius=Infinity){return nearTarget(x,y,except,radius,true)}
 function nearTarget(x,y,except=null,radius=Infinity,visibleOnly=false){
  if(boss?.type==='ultimate'&&ultimatePartsAlive()>0){let best=null,dd=radius*radius;for(const part of game.ultimateParts){if(part.dead||part===except||(visibleOnly&&!isVisibleAutoTarget(part)))continue;const d=(part.x-x)**2+(part.y-y)**2;if(d<dd){best=part;dd=d;}}if(best)return best;}if(!enemyIndexReady){let best=null,dist2=radius*radius;for(const e of enemies){if(e.dead||e===except||(visibleOnly&&!isVisibleAutoTarget(e)))continue;const d=(e.x-x)**2+(e.y-y)**2;if(d<dist2){dist2=d;best=e}}return best}
@@ -2939,8 +2939,10 @@ function tickGusts(dt){
   const candidates=circleCandidates(g.x,g.y,g.r);
   for(const e of candidates){
    if(e.dead)continue;
-   // Bosses remain immune to gust displacement, including the final boss.
-   if(g.kind!=='fireTornado'&&['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type))continue;
+   // Pending WARP targets cannot be moved or damaged.
+   if(e.isoWarp||(e.isoSafe||0)>0)continue;
+   // Bosses and relics resist displacement, not ordinary cyclone damage.
+   const immovable=['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type);
    const dx=e.x-g.x,dy=e.y-g.y,distSq=dx*dx+dy*dy;
    const reach=g.r+e.r;
    if(distSq>reach*reach||distSq<.01)continue;
@@ -2952,7 +2954,7 @@ function tickGusts(dt){
    const dist=Math.sqrt(distSq);
    // Outer edge knocks enemies AWAY from the shockwave; the inner visual
    // ring damages only, so overlapping gusts cannot repeatedly teleport foes.
-   if(dist>=g.r*.5&&e.gustPushFrame!==gustFrameSerial){
+   if(!immovable&&dist>=g.r*.5&&e.gustPushFrame!==gustFrameSerial){
     e.gustPushFrame=gustFrameSerial;
     let nx=dx/dist,ny=dy/dist;
     const px=e.x-player.x,py=e.y-player.y;
@@ -2972,27 +2974,33 @@ function tickGusts(dt){
  gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
-// v13.4.1 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
+// v13.4.2 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
 function tickIndependentElements(dt){
  const p=player;if(!p)return;
  if(p.iceBallCount>0){
   p.iceBallTimer-=dt;
   if(p.iceBallTimer<=0){
-   p.iceBallTimer=Math.max(1.1,p.iceBallPeriod);
-   const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
-   for(let k=0;k<Math.min(5,p.iceBallCount)&&shots.length<currentShotBudget();k++){
-    const ang=a+(k-(Math.min(5,p.iceBallCount)-1)/2)*.19;
-    shots.push(addPlayerShot({x:p.x,y:p.y,vx:Math.cos(ang)*325,vy:Math.sin(ang)*325,r:8.5,
-     damage:p.iceBallDamage,pierce:0,kind:'iceball',ttl:3,hit:new Set(),source:'iceball'}));
+   // A saturated shot pool must not consume a complete iceball cooldown.
+   if(shots.length>=currentShotBudget())p.iceBallTimer=.13;
+   else{
+    p.iceBallTimer=Math.max(1.1,p.iceBallPeriod);
+    const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
+    const count=Math.min(5,p.iceBallCount);
+    for(let k=0;k<count&&shots.length<currentShotBudget();k++){
+     const ang=a+(k-(count-1)/2)*.19;
+     shots.push(addPlayerShot({x:p.x,y:p.y,vx:Math.cos(ang)*325,vy:Math.sin(ang)*325,r:8.5,
+      damage:p.iceBallDamage,pierce:0,kind:'iceball',ttl:3,hit:new Set(),source:'iceball'}));
+    }
    }
   }
  }
  if(p.meteorCount>0){
   p.meteorTimer-=dt;
   if(p.meteorTimer<=0&&!shots.some(b=>b.kind==='meteor'&&b.ttl>0)){
-   p.meteorTimer=Math.max(2.2,p.meteorInterval);
-   const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
-   if(shots.length<currentShotBudget()){
+   if(shots.length>=currentShotBudget())p.meteorTimer=.13;
+   else{
+    p.meteorTimer=Math.max(2.2,p.meteorInterval);
+    const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
     shots.push({x:p.x,y:p.y,vx:Math.cos(a)*155,vy:Math.sin(a)*155,r:12,
      damage:p.meteorDamage,pierce:9999,kind:'meteor',ttl:30,hit:new Set(),source:'meteor',
      meteorDistance:0,meteorMaxRadius:Math.min(75,Math.max(22,p.meteorRadius+29))});
@@ -3043,6 +3051,24 @@ function projectileHit(b,e){let dmg=b.damage;if(Math.random()<Math.min(.97,playe
  burst(b.x,b.y,game.fusions.inferno&&b.kind==='plasma'?'#ffe7a1':BULLET_COLOR[b.kind]||'#ffc080',2,55)
 }
 
+// Charge echo waits briefly for a projectile slot instead of disappearing.
+function tickEchoShots(p,dt){
+ if(!p.relicEchoQueue?.length)return;
+ for(const echo of p.relicEchoQueue){
+  echo.time-=dt;if(echo.time>0)continue;
+  if(shots.length>=currentShotBudget()){
+   echo.wait=(echo.wait||0)+dt;
+   if(echo.wait>=1.25)echo.fired=true;
+   continue;
+  }
+  shots.push({x:p.x+Math.cos(echo.dir)*16,y:p.y+Math.sin(echo.dir)*16,
+   vx:Math.cos(echo.dir)*p.shotSpeed*1.45,vy:Math.sin(echo.dir)*p.shotSpeed*1.45,
+   r:15+p.chargeSize*.25,damage:echo.power,pierce:4+p.chargePenetration,
+   kind:'comet',ttl:2.1,hit:new Set(),source:'echoComet',chargeFull:true});
+  echo.fired=true;
+ }
+ p.relicEchoQueue=p.relicEchoQueue.filter(echo=>!echo.fired);
+}
 function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  spatialMaintenanceClock+=dt;if(spatialMaintenanceClock>=10){spatialMaintenanceClock=0;for(const [k,bucket] of enemyIndex){if(!bucket.length)enemyIndex.delete(k)}}scheduleBosses();updateRaid(dt);scheduleRelic();tickVacuum(dt);
  p.iframes=Math.max(0,p.iframes-dt);p.novaCooldown=Math.max(0,(p.novaCooldown||0)-dt);p.drillOverdriveTime=Math.max(0,(p.drillOverdriveTime||0)-dt);p.dashLeft=Math.max(0,p.dashLeft-dt);p.dashGaugeFade=p.dashLeft>0||p.dashTime>0?1:Math.max(0,(p.dashGaugeFade||0)-dt*2.4);p.hitTime+=dt;
@@ -3056,7 +3082,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  const rawM=Math.hypot(x,y),m=Math.min(1,rawM);if(rawM>1){x/=rawM;y/=rawM}if(m>.02){p.dx=x/Math.max(m,.001);p.dy=y/Math.max(m,.001)}const oldDrillX=p.x,oldDrillY=p.y,dashWasActive=p.dashTime>0;const mobileMotion=controlMode==='mobile'?1/.69:1;const drillNovaSpeed=p.shipType==='drill'&&p.drillOverdriveTime>0?1.8:1;/* keep the same on-screen touch response despite the wider camera */if(p.dashTime>0){p.dashTime-=dt;p.x+=p.dx*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*mobileMotion*dt;p.y+=p.dy*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*mobileMotion*dt;if(Math.random()<.5)burst(p.x,p.y,'#80fff6',1,40)}else{p.x+=x*p.spd*drillNovaSpeed*mobileMotion*dt;p.y+=y*p.spd*drillNovaSpeed*mobileMotion*dt}{const blocked=engageClampMotion(oldDrillX,oldDrillY,p.x,p.y,p.r+2);
  if(blocked.blocked){const targetX=p.x,targetY=p.y;const tryX=engageClampMotion(oldDrillX,oldDrillY,targetX,oldDrillY,p.r+2);const tryY=engageClampMotion(tryX.x,oldDrillY,tryX.x,targetY,p.r+2);p.x=tryY.x;p.y=tryY.y;if(dashWasActive){p.dashTime=0;p.drillRushActive=0;}}
  }p.x=clamp(p.x,p.r+13,W-p.r-13);p.y=clamp(p.y,p.r+13,H-p.r-13);
- if(p.relicEchoQueue.length){for(const r of p.relicEchoQueue){r.time-=dt;if(r.time<=0&&shots.length<currentShotBudget()){shots.push({x:p.x+Math.cos(r.dir)*16,y:p.y+Math.sin(r.dir)*16,vx:Math.cos(r.dir)*p.shotSpeed*1.45,vy:Math.sin(r.dir)*p.shotSpeed*1.45,r:15+p.chargeSize*.25,damage:r.power,pierce:4+p.chargePenetration,kind:'comet',ttl:2.1,hit:new Set(),source:'echoComet',chargeFull:true})}}p.relicEchoQueue=p.relicEchoQueue.filter(r=>r.time>0)}
+ tickEchoShots(p,dt);
   if(p.shipType==='laser'){p.laserIdleTime=m>.19?Math.max(0,(p.laserIdleTime||0)-dt*2.3):Math.min(4,(p.laserIdleTime||0)+dt);updateLaser(dt)}else if(p.shipType==='charge'){updateCharge(dt,m)}else if(p.shipType==='drill'){updateDrill(dt,m,oldDrillX,oldDrillY,dashWasActive)}else{p.shotTimer-=dt;if(p.shotTimer<=0){shoot();p.shotTimer=efficientShotRate(p)}}
  const count=p.droneCount;for(let i=0;i<count;i++){const pos=ringPosition(i,count,t),xx=pos.x,yy=pos.y;p.droneTimers[i]=(p.droneTimers[i]||0)-dt;if(p.droneTimers[i]<=0){const target=visibleTarget(xx,yy);if(target)fireFrom(xx,yy,target,1,p.dmg*(.58+p.droneThunder*.10),p.shotSpeed*.9,'drone');p.droneTimers[i]=Math.max(.16,.72/(p.droneBoost||1))}}
  if(p.orbit){
@@ -3303,7 +3329,7 @@ function drawEvolutionShotMotifs(){
 }
 
 
-/* v13.4.1 — Circular cyclone: consistent radius under all effect presets. */
+/* v13.4.2 — Circular cyclone: consistent radius under all effect presets. */
 function drawCyclone(g){
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
@@ -3314,11 +3340,12 @@ function drawCyclone(g){
  ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.stroke();ctx.shadowBlur=0;
  const arcs=simple?2:low?3:settings.fx==='high'?6:4;
  ctx.globalAlpha=opacity*(simple?.43:.56);ctx.lineWidth=simple?1.4:1.7;
- for(let i=0;i<arcs;i++){const a=phase+i*TAU/arcs,rad=r*(i%2?.68:.44);ctx.beginPath();ctx.arc(0,0,rad,a,a+(simple?.66:1.10));ctx.stroke();}
- if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count;ctx.beginPath();ctx.arc(0,0,r*.87,a,a+.44);ctx.stroke();}}
+ // The same arc paths require only one stroke call per ring group.
+ ctx.beginPath();for(let i=0;i<arcs;i++){const a=phase+i*TAU/arcs,rad=r*(i%2?.68:.44);ctx.arc(0,0,rad,a,a+(simple?.66:1.10));}ctx.stroke();
+ if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count;ctx.arc(0,0,r*.87,a,a+.44);}ctx.stroke();}
  ctx.restore();
 }
-/* v13.4.1 — Tesla EMP: blue-white discharge with purple field accents. */
+/* v13.4.2 — Tesla EMP: blue-white discharge with purple field accents. */
 function drawTeslaField(p){
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
@@ -3522,7 +3549,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.4.1.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.4.2.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
