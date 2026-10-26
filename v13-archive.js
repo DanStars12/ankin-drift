@@ -38,6 +38,31 @@ const DEFINITIONS=[
  ['pilot_sense','パイロットセンス','全プレイ累計で1億ダメージを与える','rainbow',100000000]
 ];
 const definitionById=new Map(DEFINITIONS.map(d=>[d[0],d]));
+// Personal ending is optional: v12/v13 records remain valid without it.
+// Whitelist fields to prevent untrusted JSON import from injecting markup or huge objects.
+function stripEnding(v){
+ const o=object(v);if(!Object.keys(o).length)return null;
+ const metrics=object(o.metrics),stats={};
+ for(const [k,value] of Object.entries(object(metrics.damageStats)).slice(0,20))
+  if(/^[a-z]{2,18}$/.test(k))stats[k]=finite(value);
+ const output={
+  version:finite(o.version,10),styleId:text(o.styleId,40),styleName:text(o.styleName,90),
+  title:text(o.title,90),story:text(o.story,550),summary:text(o.summary,200),
+  why:array(o.why).map(x=>text(x,95)).slice(0,8),
+  primarySource:text(o.primarySource,24),primaryPercent:finite(o.primaryPercent,100),
+  finisherSource:text(o.finisherSource,24),elementLabel:text(o.elementLabel,100),
+  frameName:text(o.frameName,48),
+  metrics:{kills:finite(metrics.kills,1e9),remainingHpPct:finite(metrics.remainingHpPct,100),
+   dashCount:finite(metrics.dashCount,1e8),novaCount:finite(metrics.novaCount,1e8),
+   hits:finite(metrics.hits,1e8),revives:finite(metrics.revives,1e8),
+   damageTaken:finite(metrics.damageTaken),damageStats:stats},
+  evolutionNames:array(o.evolutionNames).map(x=>text(x,90)).slice(0,8),
+  relicNames:array(o.relicNames).map(x=>text(x,90)).slice(0,8),
+  featuredSkills:array(o.featuredSkills).map(x=>text(x,90)).slice(0,6),
+  fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,2)
+ };
+ return output;
+}
 function stripClear(v,i){
  const o=object(v),meta=object(o.meta);
  return {id:text(o.id||('legacy-clear-'+i+'-'+text(o.date,32)),90),
@@ -48,7 +73,7 @@ function stripClear(v,i){
   challenges:unique(o.challenges,['fragile','onslaught','armored']).slice(0,3),
   fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,2),
   evolutionIds:array(o.evolutionIds).map(x=>text(x,70)).slice(0,30),
-  finalSource:text(o.finalSource,40),
+  finalSource:text(o.finalSource,40),ending:stripEnding(o.ending),
   meta:{...('victories' in meta?{victories:finite(meta.victories,1e7)}:{})}};
 }
 function stripRun(v,i){

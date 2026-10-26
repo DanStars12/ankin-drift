@@ -135,3 +135,34 @@ test('merging old and new archives preserves already-earned achievements and dis
  assert.equal(b.api.progress().find(x=>x.id==='pilot_sense').unlocked,true);
  b.api.restore(backup,'merge');assert.equal(b.api.lifetimeDamage(),100_000_000);
 });
+
+test('personal ending snapshot survives write, schema v2 reload, JSON backup and safe merge',()=>{
+ const ending={version:1,styleId:'near_death',styleName:'死線の生還者',
+  title:'紅蓮の風使い・死線の生還者',story:'残りHP8%で終焉に勝利した。',
+  summary:'主力 近接ドリル 80% ／ 決め手 近接ドリル',
+  why:['機体：PLASMA DRILL','主力：近接ドリル 80%','残HP 8%'],
+  primarySource:'drill',primaryPercent:80,finisherSource:'drill',
+  elementLabel:'炎 × 風',frameName:'PLASMA DRILL',
+  metrics:{kills:1200,remainingHpPct:8,dashCount:38,novaCount:4,hits:11,revives:0,
+   damageTaken:250,damageStats:{drill:800000,magma:200000}},
+  evolutionNames:['進化ドリル'],featuredSkills:['加速強化'],relicNames:['反射弾'],
+  fusionIds:['fire_wind']};
+ const a=harness();a.api.start();let record=a.api.read();
+ record.clears.unshift(clear('personal-1',{ending,title:ending.title,damage:1000000,fusionIds:['fire_wind']}));
+ assert.equal(a.api.write(record),true);
+ const saved=a.api.read().clears[0];
+ assert.equal(saved.title,ending.title);
+ assert.equal(saved.ending.story,ending.story);
+ assert.equal(saved.ending.metrics.dashCount,38);
+ const migrated=harness(Object.fromEntries(a.memory));migrated.api.start();
+ assert.equal(migrated.api.read().clears[0].ending.metrics.damageStats.drill,800000);
+ const b=harness();b.api.start();b.api.restore(migrated.api.exported(),'merge');
+ assert.equal(b.api.read().clears[0].ending.styleId,'near_death');
+ b.api.restore(migrated.api.exported(),'merge');
+ assert.equal(b.api.read().clears.length,1);
+});
+test('old clear logs keep their original title and never fabricate a missing ending',()=>{
+ const h=harness({[old]:asText({damage:55,time:1800,level:15,clears:[clear('old',{title:'昔の英雄'})]})});
+ h.api.start();assert.equal(h.api.read().clears[0].title,'昔の英雄');
+ assert.equal(h.api.read().clears[0].ending,null);
+});
