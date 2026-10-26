@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v12.3 — EVOLUTION OVERDRIVE",
+  "name": "ANKIN DRIFT v12.4 — STABLE EFFECTS",
   "short_name": "ANKIN DRIFT",
-  "description": "属性融合の火力補正を強化し、全進化合成の機体・弾・エフェクトの視覚変化を備えたローグライクSTG。",
+  "description": "マグマ・突風の見た目を安定化。演出量に「シンプル」を追加し、入力の誤作動対策を強化したブラウザSTG。",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
