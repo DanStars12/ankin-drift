@@ -37,6 +37,9 @@ const STYLES={
  drill:{name:'近接の猛者',lead:'危険な距離から離れずに突破し',close:'鋼の一閃が、絶望を切り裂いた。'},
  storm:{name:'殲滅の覇者',lead:'次々と押し寄せる敵を退け',close:'尽きぬ敵の波の先で、勝利を掴み取った。'},
  endurance:{name:'不屈の守護者',lead:'幾度も衝撃を受け止めながら',close:'傷跡の一つひとつが生還の証になった。'},
+ iceball:{name:'氷晶の名手',lead:'無数の氷晶を撃ち放ち',close:'冷たい光が戦いの結末を告げた。'},
+ pulse:{name:'雷円の守り手',lead:'自機の周囲に雷の陣を敷き',close:'円環の雷が勝利を刻んだ。'},
+ meteor:{name:'隕石の先導者',lead:'成長する隕石で道を切り開き',close:'長く続いた戦場に新しい軌跡が残った。'},
  adaptive:{name:'戦場の開拓者',lead:'多彩な武装を組み合わせて道を開き',close:'選び抜いた戦術が、その結末を導いた。'}
 };
 const sane=(v,max=1e12)=>Number.isFinite(Number(v))?Math.max(0,Math.min(max,Number(v))):0;
@@ -70,6 +73,9 @@ function chooseStyle(s,primary,share){
  // A dash-focused victory needs sustained movement, not a few routine dodges over 30 minutes.
  if(s.dashCount>=Math.max(24,Math.floor(s.seconds/60*1.5))&&s.dashCount>=s.hits*2)return 'dash';
  if(primary==='drone'&&share>=.28)return 'drone';
+ if(primary==='iceball'&&share>=.28)return 'iceball';
+ if(primary==='pulseField'&&share>=.28)return 'pulse';
+ if(primary==='meteor'&&share>=.28)return 'meteor';
  if(['dot','magma'].includes(primary)&&share>=.30)return 'burn';
  if(['rock','element','blade'].includes(primary)&&share>=.4)return 'area';
  if(primary==='charge'&&share>=.4)return 'bombard';
