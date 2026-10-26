@@ -1035,7 +1035,7 @@ const CROSS_VARIANTS={
  fire:[['ice','クリムゾン・シャッター','火炎が大爆発へ変化。氷属性を失う。','🔥', {emberBlast:1}],['thunder','プラズマ・インフェルノ','火炎の周期パルスが弾け、広範囲を炎で焼く。雷属性を失う。','🌋',{emberPulse:1}],['wind','ブレイズ・トルネード','燃える竜巻が広がりながら敵を焼く。風属性を失う。','🌪️',{fireTornado:1}],['rock','ヴォルカニック・コア','マグマが激しく噴き上がり、広い範囲で追加爆発。岩属性を失う。','☄️',{volcanicCore:1}]],
  ice:[['fire','グレイシャル・バースト','凍結した敵が破裂し、氷の破片で周囲を攻撃。炎属性を失う。','💠',{shatterIce:1}],['thunder','ゼロ・サージ','冷気の周期パルスで広範囲の敵を停止させる。雷属性を失う。','❄️',{zeroSurge:1}],['wind','ブリザード・スフィア','広がる氷の波動が周囲の敵を減速・凍結。風属性を失う。','🌨️',{iceStorm:1}],['rock','クリスタル・バスティオン','攻撃を受けると氷晶の反撃が発生。岩属性を失う。','🧊',{iceArmor:1}]],
  thunder:[['fire','ボルト・デトネーター','連鎖雷撃が一定確率で爆発する。炎属性を失う。','⚡',{voltBlast:1}],['ice','フラッシュ・チェイン','雷撃が連鎖するたびに強烈な追加ダメージ。氷属性を失う。','💜',{flashChain:1}],['wind','テンペスト・レール','雷撃が長射程で多数へ飛び移る。風属性を失う。','🌩️',{arcTempest:1}],['rock','サンダー・フォート','雷の反撃フィールドを展開。岩属性を失う。','⚡',{thunderFort:1}]],
- wind:[['fire','ストーム・エクスパンション','突風が外縁で敵を押し返す。炎属性を失う。','🌀',{galeSplit:1}],['ice','スノウ・ハリケーン','押し返す風弾に鋭い風刃を重ねる。氷属性を失う。','🌬️',{galeBlade:1}],['thunder','ヴォルテックス・クラッシュ','風の衝撃で押し返した敵へのダメージが増加。雷属性を失う。','🌪️',{galeCrush:1}],['rock','サイクロン・ランページ','巨大な風の防壁が高速旋回して敵を遠ざける。岩属性を失う。','💨',{galeOrbit:1}]],
+ wind:[['fire','ストーム・エクスパンション','主力の風攻撃に燃焼を継承する。炎属性を失う。','🌀',{galeSplit:1}],['ice','スノウ・ハリケーン','主力のサイクロンまたは旋回刃にスロウを付与。氷属性を失う。','🌬️',{galeBlade:1}],['thunder','ヴォルテックス・クラッシュ','風の衝撃で押し返した敵へのダメージが増加。雷属性を失う。','🌪️',{galeCrush:1}],['rock','サイクロン・ランページ','サイクロンまたは旋回刃を高火力化。岩属性を失う。','💨',{galeOrbit:1}]],
  rock:[['fire','メテオ・シールド','岩壁が高火力の燃焼衝撃波を放つ。隕石は通常どおり残る。炎属性を失う。','🪨',{meteorWall:1}],['ice','ダイヤモンド・ロック','転がる隕石が接触時にスロウ・凍結を与え、通常敵弾を消す。氷属性を失う。','💎',{diamondWall:1}],['thunder','ガイア・インパクト','岩壁が敵をはじくたびに周囲へ衝撃波。雷属性を失う。','⛰️',{gaiaShock:1}],['wind','オービット・フォートレス','岩壁が高速に旋回し接触攻撃も強化。風属性を失う。','🛡️',{orbitFort:1}]]
 };
 const ELEMENT_FUSION_RECIPES=Object.entries(CROSS_VARIANTS).flatMap(([main,list])=>list.map(([sub,name,desc,icon,mod])=>({id:`${main}_${sub}`,main,sub,name,desc,icon,mod})));
@@ -1161,7 +1161,9 @@ function applyElementFusionStats(p,combo){
  if(main==='thunder'){
   if(p.empRadius>0){p.empRadius+=35+Math.min(35,echo);p.empDps+=125+echo*42;}
   else{p.chain=Math.min(1,p.chain+.25);p.chainDamage+=110+echo*52;}
-  if(sub==='rock'){p.empRadius=Math.max(105,p.empRadius);p.empDps+=80;}
+  if(sub==='rock'){if(p.empRadius>0)p.empDps+=80;else p.chainDamage+=180;}
+  if(sub==='wind'&&p.empRadius===0)p.arcNova+=2;
+  if(sub==='ice'&&p.empRadius===0)p.chainDamage+=90;
  }
  if(main==='wind'){
   if(p.orbit>0&&p.windCount===0){
@@ -1169,8 +1171,8 @@ function applyElementFusionStats(p,combo){
   }else{
    p.windCount=Math.min(7,Math.max(1,p.windCount)+2);p.windRadius+=45;p.windStrength+=120+echo*12;p.windDps+=40+echo*18;p.windTimer=.2;
   }
-  if(sub==='fire')p.cycloneBurn=1;
-  if(sub==='ice')p.cycloneSlow=1;
+  if(sub==='fire'){if(p.orbit>0&&p.windCount===0)p.bladeFireBurn=1;else p.cycloneBurn=1;}
+  if(sub==='ice'){if(p.orbit>0&&p.windCount===0)p.bladeIceSlow=1;else p.cycloneSlow=1;}
   if(sub==='rock')p.windStrength+=120;
  }
  if(main==='rock'){
@@ -2690,14 +2692,14 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
  damage*=1+Math.min(.84,Math.max(0,player?.fusionOutputBonus||0));
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
- if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
- if(player.elementMods?.voltBlast&&e.hp>0&&Math.random()<.025)detonate(e.x,e.y,65,Math.max(50,player.chainDamage*.3),e,5);
+ if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
+ if(player.elementMods?.voltBlast&&['element','pulseField'].includes(meta.source)&&e.hp>0&&Math.random()<.025)detonate(e.x,e.y,65,Math.max(50,player.chainDamage*.3),e,5);
  if(player.lifeSteal>0&&dealt>0)player.hp=Math.min(player.maxHp,player.hp+dealt*player.lifeSteal);if(e.hp>0)return;
  e.dead=true;game.kills++;if(e.type==='ultimate')game.finisherSource=source;
  burst(e.x,e.y,e.color,e.type==='unique'?70:e.type==='major'?45:e.type==='minor'?30:(shots.length>110?4:7),e.type==='unique'?300:130);
  if(player.killBurst>0&&(meta.depth||0)<3&&e.type!=='unique')detonate(e.x,e.y,78+Math.min(65,player.killBurst*.18),player.killBurst/(meta.depth?2:1),e,(meta.depth||0)+1);
  if(wasBurn&&player.elementMods?.emberBlast)detonate(e.x,e.y,115,player.magmaDps*2,e,5);
- if(wasSlow&&player.elementMods?.shatterIce)detonate(e.x,e.y,100,player.iceBurst*38,e,5);
+ if((wasSlow||wasFrozen)&&player.elementMods?.shatterIce)detonate(e.x,e.y,100,Math.max(40,player.iceBurst*38),e,5);
  if(wasBurn&&player.plasmaWave>0)detonate(e.x,e.y,75+player.plasmaWave*16,player.dmg*(.6+player.plasmaWave*.3),e,5);
  if(wasSlow&&player.iceBurst>0){ring(e.x,e.y,76,'#8feaff');detonate(e.x,e.y,65,player.iceBurst*12,e,5)}
  if(e.type==='ultimatePart'){collectVacuum('boss');if(ultimatePartsAlive()===0){announce('✦ ALL MODULES DESTROYED — 本体のHP制限解除！',4);ring(boss?.x||e.x,boss?.y||e.y,210,'#bfffff');}else announce('✦ '+e.partName+' 破壊！ 残り'+ultimatePartsAlive()+'か所',2.4);return;}
@@ -3067,7 +3069,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
     if(e.dead||e.bladeHit>0)continue;
     const q=clamp(((e.x-x0)*vx+(e.y-y0)*vy)/den,0,1);
     if((e.x-x0-vx*q)**2+(e.y-y0-vy*q)**2>(e.r+width)**2)continue;
-    damageEnemy(e,(p.dmg*.55+14)*(p.bladePower||1),{special:true,source:'blade'});e.bladeHit=.22;
+    damageEnemy(e,(p.dmg*.55+14)*(p.bladePower||1),{special:true,source:'blade'});if(p.bladeFireBurn)setBurn(e,Math.max(16,p.dmg*.16),1.8);if(p.bladeIceSlow)applySlow(e,1.3);e.bladeHit=.22;
    }
   }
  }
