@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.2.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.3 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.2.1 | FUSION POLISH</title>
+<title>ANKIN DRIFT v13.3 | ENEMY OVERHAUL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -741,6 +741,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @keyframes v13-reveal{0%{opacity:0;transform:translateY(17px) scale(.88);filter:brightness(2.5)}70%{filter:brightness(1.4)}100%{opacity:1;transform:none;filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.v13-victory-badge{animation:none}}
 
+.bar.shield{background:#102e30;border:1px solid #408d84}.bar.shield>span{background:linear-gradient(90deg,#35bfae,#aaffdf);box-shadow:0 0 8px #53ddbe55;display:block;height:100%;border-radius:inherit;transition:width .13s}
 </style>
 <style>
 .choice-pick{display:none}
@@ -755,7 +756,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
   <div class="hud-right"><div class="hud-box hud-level"><div class="level-row"><span class="micro">PILOT LEVEL</span><span class="hud-value" id="hudLevel">LV 01</span></div><div class="bar xp"><span id="xpFill" style="width:0%"></span></div><div class="stat-detail level-text" id="xpText">0 / 35 EXP</div></div><div class="hud-box hud-score"><div class="micro">TOTAL DAMAGE / 合計ダメージ</div><div class="hud-value" id="damageTotal">0</div><div class="stat-detail"><span id="kills">0 KILLS</span></div></div><button class="tinybutton" id="upgradeButton" hidden title="保留した強化を選択 (L)">✦ 強化ストック</button><button class="tinybutton" id="buildButton" title="ビルドを見る (B)">◈ BUILD [B]</button><button class="tinybutton" id="optionsButton" title="オプション・設定">⚙</button><button class="tinybutton" id="pauseButton" title="一時停止 (P)">Ⅱ</button></div>
  </div>
  <div id="raidStatus" role="status" aria-live="off"></div><div class="boss-wrap" id="bossWrap"><div class="bossname" id="bossName">BOSS</div><div class="bar boss"><span id="bossFill"></span></div><div id="ultimateModules" class="ultimate-modules" hidden></div></div>
- <div class="hud-bottom"><div class="hud-box"><div class="micro">Hull integrity <span id="hpText" style="float:right;letter-spacing:0">100 / 100</span></div><div class="bar hp"><span id="hpFill"></span></div><div class="micro" style="margin-top:9px">Nova charge <span id="energyText" style="float:right;letter-spacing:0">0%</span></div><div class="bar nova"><span id="energyFill" style="width:0"></span></div><div class="stat-detail" id="dashText">DASH READY / SHIELD 0</div></div><div class="keys-help"><span class="kbd">WASD</span>移動　<span class="kbd">SPACE</span>ダッシュ<br><span class="kbd">E</span>ノヴァ　<span class="kbd">B</span>ビルド　<span class="kbd">P</span>停止</div></div>
+ <div class="hud-bottom"><div class="hud-box"><div class="micro">Hull integrity <span id="hpText" style="float:right;letter-spacing:0">100 / 100</span></div><div class="bar hp"><span id="hpFill"></span></div><div class="micro" style="margin-top:8px">Shield capacity <span id="shieldText" style="float:right;letter-spacing:0">0 / 0</span></div><div class="bar shield"><span id="shieldFill" style="width:0%"></span></div><div class="micro" style="margin-top:9px">Nova charge <span id="energyText" style="float:right;letter-spacing:0">0%</span></div><div class="bar nova"><span id="energyFill" style="width:0"></span></div><div class="stat-detail" id="dashText">DASH READY / SHIELD 0</div></div><div class="keys-help"><span class="kbd">WASD</span>移動　<span class="kbd">SPACE</span>ダッシュ<br><span class="kbd">E</span>ノヴァ　<span class="kbd">B</span>ビルド　<span class="kbd">P</span>停止</div></div>
  <div class="hud-build" id="hudBuild"></div>
 </div>
 <div id="touchControls" aria-label="スマートフォン操作">
@@ -772,7 +773,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
 (()=>{'use strict';
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false}),overlay=document.getElementById('overlay'),panel=document.getElementById('panel'),hud=document.getElementById('hud');
 const U=id=>document.getElementById(id);
-const ui={wave:U('hudWave'),waveType:U('waveType'),waveFill:U('waveFill'),waveText:U('waveText'),damage:U('damageTotal'),kills:U('kills'),hpText:U('hpText'),hpFill:U('hpFill'),energyText:U('energyText'),energyFill:U('energyFill'),dashText:U('dashText'),bossWrap:U('bossWrap'),bossName:U('bossName'),bossFill:U('bossFill'),build:U('hudBuild'),level:U('hudLevel'),xpFill:U('xpFill'),xpText:U('xpText'),announcement:U('announcement')};
+const ui={wave:U('hudWave'),waveType:U('waveType'),waveFill:U('waveFill'),waveText:U('waveText'),damage:U('damageTotal'),kills:U('kills'),hpText:U('hpText'),hpFill:U('hpFill'),shieldText:U('shieldText'),shieldFill:U('shieldFill'),energyText:U('energyText'),energyFill:U('energyFill'),dashText:U('dashText'),bossWrap:U('bossWrap'),bossName:U('bossName'),bossFill:U('bossFill'),build:U('hudBuild'),level:U('hudLevel'),xpFill:U('xpFill'),xpText:U('xpText'),announcement:U('announcement')};
 const TAU=Math.PI*2,RARITY_NAMES={common:'COMMON',uncommon:'UNCOMMON',rare:'RARE',epic:'EPIC',legendary:'LEGENDARY',power:'ANKIN POWER',unique:'UNIQUE ANKIN',relic:'RELIC',supply:'SUPPLY'};
 const RARITY_NAMES_JP={common:'コモン',uncommon:'アンコモン',rare:'レア',epic:'エピック',legendary:'レジェンダリー',power:'ANKIN POWER',unique:'ユニーク',relic:'レリック',supply:'補給'};
 const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.max(a,Math.min(n,b)),d2=(a,b)=>((a.x-b.x)**2+(a.y-b.y)**2),dst=(a,b)=>Math.sqrt(d2(a,b));
@@ -985,7 +986,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.2.1 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.3 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1177,7 +1178,7 @@ function selectElementFusion(sub){
  state('elementResult');
 }
 function elementLabMarkup(){
- const used=fusedElementKeys(),ready=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[game.elementCombos.length];
+ const used=fusedElementKeys(),ready=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[game.elementCombos.length],fused=game.elementCombos,outputPct=Math.round(Math.min(.84,fused.length*.42)*100);
  const stage=game.elementCombos.length;
  const cards=ELEMENT_FUSION_RECIPES.map(r=>{
   const mainReady=ready.includes(r.main),subReady=ready.includes(r.sub);
@@ -1189,7 +1190,7 @@ function elementLabMarkup(){
    <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性</span><span class="fusion-plus">＋</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性</span></div>
    <div class="recipe-effect">${r.desc}</div><small class="fusion-cost">${ELEMENTS[r.sub].name}属性の効果を失う代わりに、取得済みカードの蓄積を主属性の共鳴出力に変換します。</small></article>`;
  }).join('');
- return `<p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12で1回目、Lv28で2回目が解放されます。素材が0〜1属性なら選択画面をスキップし、後から2属性揃えば融合できます。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
+ return `<section class="lab-help"><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+84%）</b><div class="v13-note">融合1件につき全攻撃+42%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12で1回目、Lv28で2回目が解放されます。素材が0〜1属性なら選択画面をスキップし、後から2属性揃えば融合できます。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
  <div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${v.color}">${v.icon} ${v.name}：${used.has(k)?'融合に使用済み':ready.includes(k)?'取得済み・選択可能':'属性素材未取得'}</span>`).join('')}</div>
  <p class="fine">現在 Lv${game.level} ／ ${next?'次の融合解放：Lv'+next:'融合2回完了'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：選択画面をスキップ中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
 }
@@ -1597,7 +1598,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.2.1 · FUSION POLISH</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.3 · ENEMY OVERHAUL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2971,8 +2972,8 @@ function hudUpdate(){if(!game||!player)return;
  hudText(ui.wave,fmtTime(g.total));hudText(ui.waveType,controlMode==='mobile'?(g.gameMode==='challenge'?'CHALLENGE':'SURVIVAL'):(g.gameMode==='challenge'?'CHALLENGE · 15分でクリア':'NORMAL · 30分でクリア'));hudWidth(ui.waveFill,`${100*clamp((g.total-prev)/Math.max(1,next-prev),0,1)}%`);hudText(ui.waveText,controlMode==='mobile'?(boss?`ボス戦 / 次 ${fmtTime(next)}`:`次ボスまで ${fmtTime(Math.max(0,next-g.total))}`):(boss?`戦闘中：${({minor:'中ボス',major:'大ボス',unique:'ユニークボス',ultimate:ULTIMATE_NAME}[boss.type]||'BOSS')} / 次回 ${fmtTime(next)}`:`次 ${fmtTime(next)} · ${label}　残り ${fmtTime(Math.max(0,next-g.total))}`));
  hudText(ui.level,`LV ${String(g.level).padStart(2,'0')}`);hudWidth(ui.xpFill,`${Math.round(100*clamp(g.xp/g.need,0,1))}%`);hudText(ui.xpText,`EXP ${format(Math.floor(g.xp))} / ${format(g.need)} ${g.pendingLevels?'(選択待ち '+g.pendingLevels+')':''}${g.storedLevels?' · 強化ストック '+g.storedLevels:''}`);
  hudText(ui.damage,format(g.damage));hudText(ui.kills,`${g.kills} KILLS`);
- hudText(ui.hpText,`${Math.ceil(p.hp)} / ${Math.ceil(p.maxHp)}`);hudWidth(ui.hpFill,`${100*clamp(p.hp/p.maxHp,0,1)}%`);
- hudText(ui.energyText,`${Math.floor(p.energy)}% ${p.novaCooldown>0?'CD '+p.novaCooldown.toFixed(1)+'s':p.energy>=100?'READY!':''}`);hudWidth(ui.energyFill,`${p.energy}%`);hudText(ui.dashText,controlMode==='mobile'?`SHIELD ${Math.ceil(p.shield)}`:`DASH ${p.dashLeft>0?p.dashLeft.toFixed(1)+'s':'READY'} / SHIELD ${Math.ceil(p.shield)}`);
+ hudText(ui.hpText,`${Math.ceil(p.hp)} / ${Math.ceil(p.maxHp)}`);hudWidth(ui.hpFill,`${100*clamp(p.hp/p.maxHp,0,1)}%`);hudText(ui.shieldText,`${Math.ceil(p.shield)} / ${Math.ceil(p.shieldMax)}`);hudWidth(ui.shieldFill,`${100*clamp(p.shield/Math.max(1,p.shieldMax),0,1)}%`);
+ hudText(ui.energyText,`${Math.floor(p.energy)}% ${p.novaCooldown>0?'CD '+p.novaCooldown.toFixed(1)+'s':p.energy>=100?'READY!':''}`);hudWidth(ui.energyFill,`${p.energy}%`);hudText(ui.dashText,`DASH ${p.dashLeft>0?p.dashLeft.toFixed(1)+'s':'READY'}`);
  const bossDisplay=boss&&!boss.dead?'block':'none';if(ui.bossWrap.style.display!==bossDisplay)ui.bossWrap.style.display=bossDisplay;if(boss&&!boss.dead){const info=bossInfo(boss);ui.bossName.classList.toggle('rainbow-text',boss.type==='unique');hudText(ui.bossName,boss.type==='ultimate'?ULTIMATE_NAME+' · PHASE '+ultimatePhase(boss)+' · 部位残り '+ultimatePartsAlive():(boss.type==='unique'?'🌈 ':boss.type==='major'?'⚠ ':'✦ ')+(boss.variant==='theEnd'?ULTIMATE_NAME:(info?.en||'BOSS'))+' — '+(info?.jp||''));hudWidth(ui.bossFill,`${100*clamp(boss.hp/boss.maxHp,0,1)}%`)}
  const moduleBar=U('ultimateModules');if(moduleBar){const display=boss&&!boss.dead&&boss.type==='ultimate';if(moduleBar.hidden!==!display)moduleBar.hidden=!display;if(display){const moduleHTML=(game.ultimateParts||[]).map((part,i)=>`<div class="ultimate-module ${part.dead?'broken':''}" title="${part.partName}：${part.dead?'破壊済み':Math.ceil(part.hp)+' / '+Math.ceil(part.maxHp)}"><span style="width:${Math.floor(100*clamp(part.hp/Math.max(1,part.maxHp),0,1))}%"></span></div>`).join('');if(moduleBar._previousMarkup!==moduleHTML){moduleBar.innerHTML=moduleHTML;moduleBar._previousMarkup=moduleHTML}}else if(moduleBar._previousMarkup){moduleBar._previousMarkup='';moduleBar.innerHTML=''}}
 
@@ -3260,7 +3261,7 @@ function perfSummary(samples,drawOnly=false){
 function ankinPerformanceReport(){
  const frame=perfSummary(perfRing.frame),simulation=perfSummary(perfRing.sim),drawing=perfSummary(perfRing.draw,true);
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
- return {version:'13.2.1',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'13.3',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -3270,7 +3271,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.2.1.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.3.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
