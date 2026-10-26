@@ -57,14 +57,15 @@ window.__combatPolish={
   return{during,after,pending:isVisibleAutoTarget(e)};
  },
  draw(){
-  this.reset();const original=ctx.stroke;let strokes=0,arcs=0;
-  const arc=ctx.arc,oldFx=settings.fx;settings.fx='high';
+  this.reset();const original=ctx.stroke;let strokes=0,arcs=0,arcStarts=0;
+  const arc=ctx.arc,moveTo=ctx.moveTo,oldFx=settings.fx;settings.fx='high';
   ctx.stroke=function(...args){strokes++;return original.apply(this,args)};
   ctx.arc=function(...args){arcs++;return arc.apply(this,args)};
+  ctx.moveTo=function(...args){arcStarts++;return moveTo.apply(this,args)};
   try{
    for(let i=0;i<16;i++)drawCyclone({x:player.x,y:player.y,r:90,life:2,color:'#7de8da'});
-  }finally{ctx.stroke=original;ctx.arc=arc;settings.fx=oldFx;}
-  return{strokes,arcs};
+  }finally{ctx.stroke=original;ctx.arc=arc;ctx.moveTo=moveTo;settings.fx=oldFx;}
+  return{strokes,arcs,arcStarts};
  }
 };`;
 async function setup(page){
@@ -101,5 +102,6 @@ test('laser/auto-target skips WARP invulnerability until arrival',async({page})=
 test('16 simultaneous cyclone fields batch strokes without losing arc geometry',async({page})=>{
  const errors=await setup(page),x=await page.evaluate(()=>window.__combatPolish.draw());
  expect(x.strokes).toBeLessThanOrEqual(48);expect(x.arcs).toBeGreaterThanOrEqual(16*7);
+ expect(x.arcStarts).toBeGreaterThanOrEqual(16*9); // disconnected arcs do not draw unsightly chords
  expect(errors).toEqual([]);
 });
