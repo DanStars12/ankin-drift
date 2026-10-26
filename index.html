@@ -1505,10 +1505,10 @@ function attrMarkup(c,interactive=true){return (c.tags||['汎用']).map(a=>{cons
 function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.max(0,n)*100)}%`,burn=Math.max(15,p.dmg*(.28+p.thermal*.8)),magma=Math.round(p.magmaDps+p.magmaLevel*18+p.dmg*.25);
  const known={
  '属性：炎':{name:'🔥 炎属性',desc:'攻撃の燃焼効果で継続ダメージ。マグマ床は接触中の敵へ追加ダメージを与えます。',details:[`燃焼：約${Math.round(burn)} ダメージ/秒（通常攻撃基準）`,`通常攻撃の燃焼確率：${pct(p.burnChance)}（炎弾・火炎ミサイルは別条件）`,p.magmaLevel>0?`マグマ床：約${magma} ダメージ/秒`:`マグマ床：未取得（取得時の基準威力 約${magma}/秒）`,`マグマ設置数の強化：${p.magmaLevel} ／ 効果半径：${Math.round(p.magmaRadius)}`]},
- '属性：氷':{name:'❄️ 氷属性',desc:'敵の移動速度・攻撃頻度を低下させ、一般敵は確率で最大2秒間凍結します。解凍後は2.8秒間再凍結できません。ボスは完全凍結せずスロウのみ有効です。',details:[`スロウ中の移動速度：通常の42%`,`スロウ中の敵攻撃頻度：通常の${pct(Math.max(.25,1-p.iceAttackSlow))}`,`氷系追加凍結確率：${pct(p.freezeChance)}（冷却弾は基本16%を加算）`,`凍結時間：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は再凍結不可（ボス無効）`]},
+ '属性：氷':{name:'❄️ 氷属性',desc:'スロウと凍結は別系統。主武装への付与とアイスボールで戦います。スロウは凍結させず、アイスボールはスロウを与えません。ボスは凍結無効・スロウ効果半減。',details:[`スロウ中の移動速度：通常敵42% / ボス71%`,`スロウ中の敵攻撃頻度：通常の${pct(Math.max(.25,1-p.iceAttackSlow))}`,`主武装の凍結確率：${pct(p.freezeChance)}（スロウ系とは独立）`,`凍結時間：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は再凍結不可（ボス無効）`]},
  '属性：雷':{name:'⚡ 雷属性',desc:'雷撃が敵から敵へ連鎖し、複数体を攻撃します。強化で威力・範囲が向上します。',details:[`通常連鎖の追加確率：${pct(p.chain)}`,`連鎖ダメージ補正：+${Math.round(p.chainDamage)}`,`ノヴァ関連の追加連鎖：+${p.arcNova}`]},
- '属性：風':{name:'🌪️ 風属性',desc:'周期的な風弾が外縁から雑魚敵を押し返します。プレイヤー側へ引き込まず、ボスは移動しません。',details:[`突風弾数（同時発射最大4）：${p.windCount}`,`衝撃半径：${Math.round(p.windRadius)}`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
- '属性：岩':{name:'🪨 岩属性',desc:'自機を周回する岩壁が通常の敵・敵弾を防ぎます。UNIQUE ANKINの特殊攻撃は防げません。',details:[`周回岩壁：${p.rockWalls}枚`,`岩壁サイズ：${Math.round(p.rockSize)}`,`反撃ダメージ補正：+${Math.round(p.rockDamage)}`]}
+ '属性：風':{name:'🌪️ 風属性',desc:'サイクロンは敵を外側へ押し返し、ウィンドブレードは機体周囲を棒状の刃が旋回します。2種類は独立した攻撃です。',details:[`サイクロン数（同時発射最大4）：${p.windCount}`,`衝撃半径：${Math.round(p.windRadius)}`,`ノックバック力：${Math.round(p.windStrength)}`,`風のダメージ補正：+${Math.round(p.windDps)}`]},
+ '属性：岩':{name:'🪨 岩属性',desc:'周回岩壁は防御と接触攻撃、隕石は独立した貫通攻撃。隕石は成長しても威力が増えません。',details:[`周回岩壁：${p.rockWalls}枚`,`岩壁サイズ：${Math.round(p.rockSize)}`,`反撃ダメージ補正：+${Math.round(p.rockDamage)}`,`隕石威力：${Math.round(p.meteorDamage)} / 最大サイズ：${Math.round(Math.min(75,p.meteorRadius+29))}`]}
  };
  const extra={
   '補給':['戦闘補給','一度きりのPOWER・LEGENDARYなどを取り尽くしても長時間プレイが停止しないための代替報酬です。',['最大HPや攻撃力の永続上昇はありません。','修理・シールド補給・再抽選補充・ダッシュ再起動から選択できます。']],
@@ -1839,7 +1839,7 @@ const SKILLS=[
  skill('life','rare','🩸','生命吸収システム','与ダメージの1.8%をHPとして回復。',p=>p.lifeSteal+=.018),
  skill('freeze','rare','🧊','冷却コア','主武装の命中で凍結確率+18%。スロウは発生しない。凍結最大2秒。',p=>{p.freezeChance=Math.min(.85,p.freezeChance+.18)}),
  skill('spark','rare','🌠','スロットルチャージ','敵撃破でノヴァエネルギー +2.5。',p=>p.killCharge+=2.5),
- skill('orbit','rare','🌀','ウィンドブレード','風属性。周囲を旋回する接触刃 +1。',p=>p.orbit++,{available:p=>p.orbit<p.limitOrbit}),
+ skill('orbit','rare','🌀','ウィンドブレード','風属性。自機の周囲を回る棒状のブレード+1。長い刃全体で命中判定。',p=>p.orbit++,{available:p=>p.orbit<p.limitOrbit}),
  skill('repair','rare','🍀','解体修復','敵を30体倒すごとにHPを18回復。',p=>p.killHeal+=18),
  skill('rocket','epic','🚀','ホーミングミサイル','炎属性。2.8秒ごとに燃焼を付与する追尾ミサイルを発射。',p=>{p.rocketCd+=1;p.flameMissiles+=1;p.rocketTimer=0}),
  skill('storm','epic','⚡','雷速演算','連鎖雷撃確率 +35%、雷撃ダメージ +32。',p=>{p.chain=Math.min(1,p.chain+.35);p.chainDamage+=32}),
@@ -1896,7 +1896,7 @@ const POWERS=[
  skill('perforate','power','🪡','フェイズ貫通','すべての弾の貫通数 +2。',p=>p.pierce+=2,{excludeShips:["laser"]}),
  skill('rapid','power','⌛','超伝導装填','射撃間隔 -18%、弾速 +75。',p=>{p.rate=Math.max(p.limitRate,p.rate*.82);p.shotSpeed+=75},{excludeShips:["laser"]}),
  skill('field','power','🫧','ANKIN 防御幕','最大シールド +50。被弾後に自動回復。',p=>{p.shieldMax+=50;p.shield+=50;p.shieldRecharge+=3.0}),
- skill('satellite','power','🌀','旋風刃・防衛衛星','風属性。接近した敵に継続ダメージを与える旋回刃 +2。',p=>p.orbit=Math.min(p.limitOrbit,p.orbit+2),{available:p=>p.orbit<p.limitOrbit}),
+ skill('satellite','power','🌀','旋風刃・防衛衛星','風属性。自機の周囲を回る棒状の旋回ブレード+2。サイクロンは発射しない。',p=>p.orbit=Math.min(p.limitOrbit,p.orbit+2),{available:p=>p.orbit<p.limitOrbit}),
  skill('magnet','power','🧲','重力収束装置','回収範囲 +160、撃破時エネルギー +3。',p=>{p.magnet+=160;p.killCharge+=3}),
  skill('novaAmp','power','💫','ノヴァ連結','NOVA基礎威力 +75、範囲 +55（上限あり）。',p=>{p.novaDamage+=75;p.novaRadius+=55;if(p.shipType==='drill')p.drillNovaBonusTime=Math.min(2,(p.drillNovaBonusTime||0)+.36)}),
  skill('critPower','power','🎯','アンキン・ロック','クリティカル確率 +20%、ダメージ +25。',p=>{p.crit+=.2;p.dmg+=25})
@@ -1905,7 +1905,7 @@ POWERS.push(
  skill('boomerang','power','🪃','偏向粒子砲','全弾の射程を伸ばし、反射する弾幕を強化。',p=>{p.ricochet++;p.pierce++},{excludeShips:["laser"]}),
  skill('capacitor','power','⚡','ライトニング・コンデンサー','連鎖雷撃+35%、雷撃範囲増加。',p=>{p.chain=Math.min(1,p.chain+.35);p.chainDamage+=36}),
  skill('flameField','power','☄️','灼熱圧縮炉','全弾に追加の炎上効果と爆発威力。',p=>{p.burnChance=Math.min(.9,p.burnChance+.35);p.thermal+=.55}),
- skill('gravityCore','power','🪐','ハイプレッシャー','風属性。旋回ブレード+2、ブレード威力+30%。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladePower=(p.bladePower||1)*1.3}),
+ skill('gravityCore','power','🪐','ハイプレッシャー','風属性。旋回ブレード+2、ブレード威力+30%。サイクロンは発生しない。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladePower=(p.bladePower||1)*1.3}),
  skill('linkDrive','power','💜','融合増幅ミサイル','ミサイル+1、僚機ダメージ+20%。',p=>{p.rocketCd+=1;p.droneBoost=(p.droneBoost||1)*1.2})
 );
 const LEGENDS=[
@@ -2131,7 +2131,7 @@ const RELICS=[
  skill('rLaserFork','relic','🔱','プリズム・ブランチ','レーザー照射中、照射対象から別の敵へ分岐する追加のレーザーが発生する。',p=>p.relicLaserFork=1,{shipOnly:'laser',stackable:false}),
  skill('rLaserPierce','relic','💠','ワイド・スペクトル','照射線幅を常時+5。線上の敵を巻き込みやすくする。',p=>{p.relicLaserPierce=1;p.laserWidth+=5},{shipOnly:'laser',stackable:false}),
  skill('rLaserPulse','relic','🌟','フォトン・パルサー','レーザー照射先で定期的に光子爆発が起き、周囲の敵も傷つける。',p=>p.relicLaserPulse=1,{shipOnly:'laser',stackable:false}),
- skill('rLaserFrost','relic','🧊','フリーズ・レイ','レーザーが敵の動きを弱め、低確率で短時間凍結させる。',p=>p.relicLaserFrost=1,{shipOnly:'laser',stackable:false}),
+ skill('rLaserFrost','relic','🧊','フリーズ・レイ','レーザーに低確率の凍結を追加。スロウは付与しない。',p=>p.relicLaserFrost=1,{shipOnly:'laser',stackable:false}),
  skill('rLaserHunter','relic','🎯','フィニッシュ・レイ','HPが半分以下の敵に対するレーザーの継続ダメージが1.6倍になる。',p=>p.relicLaserHunter=1,{shipOnly:'laser',stackable:false}),
  skill('rLaserOrbit','relic','🔮','サテライト・エミッター','独立照準レーザーを2本追加。機体周囲に光る小型発振器が出現。',p=>{p.relicLaserOrbit=1;p.laserCount=Math.min(p.laserLimit,p.laserCount+2)},{shipOnly:'laser',stackable:false}),
  skill('rChargeShatter','relic','💥','コメット・スプリッター','最大チャージ弾が命中すると、5発の小型彗星弾に分裂して周囲へ飛び散る。',p=>p.relicChargeShatter=1,{shipOnly:'charge',stackable:false}),
