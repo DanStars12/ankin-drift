@@ -2116,6 +2116,39 @@ const RELICS=[
  skill('rDrillTempo','relic','⚡','ハイギア・アクセル','ダッシュ再使用-0.23秒。オーバードライブ中は最短0.5秒。',p=>p.dashCd=Math.max(.52,p.dashCd-.23),{shipOnly:'drill',stackable:false})
 ];
 
+// v13.4: strictly independent attack families (a card upgrades exactly its advertised family).
+SKILLS.push(
+ skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾を自動発射。命中ダメージと凍結確率23%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallTimer=.1}),
+ skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
+ skill('iceBallVolley','epic','❄️','グレイシャル・サルヴォ','アイスボール+2発、発射間隔-20%。',p=>{p.iceBallCount=Math.min(5,Math.max(1,p.iceBallCount)+2);p.iceBallPeriod=Math.max(1.2,p.iceBallPeriod*.8)}),
+ skill('empPulse','uncommon','⚡','電磁パルス','機体周辺に雷の円形フィールドを展開。円内と外縁の敵に継続ダメージ。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=28}),
+ skill('empAmplifier','rare','🔋','パルス増幅器','電磁パルスのダメージ+34、範囲+22。連鎖雷撃は増えない。',p=>{p.empRadius=Math.max(96,p.empRadius)+22;p.empDps+=34}),
+ skill('empOverdrive','epic','🌩️','電磁共振領域','電磁パルスのダメージ+82、範囲+32。',p=>{p.empRadius=Math.max(96,p.empRadius)+32;p.empDps+=82}),
+ skill('meteorSeed','uncommon','☄️','ローリング・メテオ','前方へ貫通する隕石を1つ放つ。進むほど大きくなるが威力は一定。完全に画面外へ出ると消える。',p=>{p.meteorCount=1;p.meteorTimer=.1},{available:p=>p.meteorCount===0}),
+ skill('meteorCore','rare','🪨','メテオ・コンデンサー','隕石の一定ダメージ+85、最終サイズ+8。成長しても威力は増えない。',p=>{p.meteorCount=1;p.meteorDamage+=85;p.meteorRadius+=8}),
+ skill('meteorHeavy','epic','🌠','コロッサル・ローラー','隕石の威力+130、発射間隔-20%。貫通能力は維持。',p=>{p.meteorCount=1;p.meteorDamage+=130;p.meteorInterval=Math.max(2.2,p.meteorInterval*.8)})
+);
+POWERS.push(
+ skill('iceBallPower','power','🧊','ANKIN アイスボール・アレイ','アイスボール+2発、威力+60。スロウは付与しない。',p=>{p.iceBallCount=Math.min(5,Math.max(1,p.iceBallCount)+2);p.iceBallDamage+=60}),
+ skill('empPower','power','⚡','ANKIN 電磁パルス','電磁パルスを強化。範囲+45、継続ダメージ+95。',p=>{p.empRadius=Math.max(96,p.empRadius)+45;p.empDps+=95}),
+ skill('meteorPower','power','☄️','ANKIN メテオドライブ','隕石の威力+140、最大サイズ+12。岩壁は増やさない。',p=>{p.meteorCount=1;p.meteorDamage+=140;p.meteorRadius+=12})
+);
+LEGENDS.push(
+ skill('iceBallLegend','legendary','💎','氷晶の流星群','アイスボール5発、凍結確率+22%、威力+120。',p=>{p.iceBallCount=5;p.iceBallChance=Math.min(.78,p.iceBallChance+.22);p.iceBallDamage+=120}),
+ skill('empLegend','legendary','⚡','磁界の支配者','電磁パルスの範囲+80、威力+185。連鎖弾は増えない。',p=>{p.empRadius=Math.max(96,p.empRadius)+80;p.empDps+=185}),
+ skill('meteorLegend','legendary','🌠','星砕く巨塊','巨大な貫通隕石を強化。威力+260、成長上限+20。',p=>{p.meteorCount=1;p.meteorDamage+=260;p.meteorRadius+=20})
+);
+SYNERGIES.push(
+ {id:'iceBallChain',need:['iceBall','iceBallFocus'],name:'フローズン・オービット',desc:'アイスボール+1発、凍結確率+8%。',apply:p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallChance=Math.min(.78,p.iceBallChance+.08)}},
+ {id:'empCore',need:['empPulse','empAmplifier'],name:'磁力の中枢',desc:'電磁パルス威力+75、範囲+28。連鎖系統は増やさない。',apply:p=>{p.empDps+=75;p.empRadius+=28}},
+ {id:'meteorRoll',need:['meteorSeed','meteorCore'],name:'大地の転輪',desc:'隕石威力+100、成長上限+12。岩壁は増やさない。',apply:p=>{p.meteorDamage+=100;p.meteorRadius+=12}}
+);
+FUSIONS.push(
+ {id:'iceBallEvo',power:'iceBallPower',legend:'iceBallLegend',name:'アブソリュート・アイスボール',icon:'❄️',desc:'アイスボール5発、威力+240。スロウ系統には影響しない。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=240}},
+ {id:'empEvo',power:'empPower',legend:'empLegend',name:'レゾナント・パルス',icon:'⚡',desc:'電磁パルス威力+320、範囲+110。連鎖雷撃は強化しない。',apply:p=>{p.empRadius+=110;p.empDps+=320}},
+ {id:'meteorEvo',power:'meteorPower',legend:'meteorLegend',name:'プラネット・ローラー',icon:'☄️',desc:'貫通隕石の威力+500、成長上限+22。岩壁は強化しない。',apply:p=>{p.meteorDamage+=500;p.meteorRadius+=22}}
+);
+
 const ELEMENT_TAGS={emberSeed:['属性：炎','燃焼'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],magmaPulse:['属性：炎','マグマ床'],windOrigin:['属性：風','ノックバック'],windEngine:['属性：風','ノックバック'],windTwin:['属性：風','ノックバック'],stoneSeed:['属性：岩','防御壁'],stoneCarapace:['属性：岩','防御壁'],stoneFury:['属性：岩','防御壁'],magmaCore:['属性：炎','マグマ床'],missileFlare:['属性：炎','ミサイル','マグマ床'],crystalStasis:['属性：氷','凍結'],windPower:['属性：風','ノックバック'],rockPower:['属性：岩','防御壁'],volcanoLegend:['属性：炎','マグマ床'],iceLegend:['属性：氷','凍結'],windLegend:['属性：風','ノックバック'],rockLegend:['属性：岩','防御壁']};
 for(const c of RELICS)c.tags=['レリック',`専用：${SHIPS[c.shipOnly].jp}`];
 for(const c of ALL_SKILL_DEFS())if(ELEMENT_TAGS[c.id])c.tags=ELEMENT_TAGS[c.id];
