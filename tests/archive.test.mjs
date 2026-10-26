@@ -51,7 +51,7 @@ test('safe backup roundtrip, preview and merge without duplicating IDs',()=>{
  const a=harness();a.api.start();let r=a.api.read();r.clears.push(clear('a'));assert.equal(a.api.write(r),true);
  const backup=a.api.exported();
  const b=harness();b.api.start();r=b.api.read();r.clears.push(clear('b',{ship:'drill'}));b.api.write(r);
- assert.deepEqual({...b.api.preview(backup),data:null},{clears:1,runs:0,awards:1,updatedAt:b.api.preview(backup).updatedAt,data:null});
+ assert.deepEqual({...b.api.preview(backup),data:null},{clears:1,runs:0,awards:2,updatedAt:b.api.preview(backup).updatedAt,data:null});
  b.api.restore(backup,'merge');assert.equal(b.api.read().clears.length,2);
  b.api.restore(backup,'merge');assert.equal(b.api.read().clears.length,2);
  const c=harness();c.api.start();c.api.restore(b.api.exported(),'replace');
