@@ -1,5 +1,5 @@
-/* ANKIN DRIFT v12.3 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v12-3-evolution-overdrive-1';
+/* ANKIN DRIFT v12.4 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v12-4-stable-effects-1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
