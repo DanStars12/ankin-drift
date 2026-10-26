@@ -62,7 +62,7 @@ test('v13 optional trials produce GOLD legacy and achievements that survive relo
  await expect(page.locator('.v13-victory-badge')).toContainText('GOLD');
  await page.locator('#openArchive').click();
  await expect(page.getByText('試練の征服者')).toBeVisible();
- await expect(page.getByText('究極の進化')).toBeVisible();
+ await expect(page.locator('.v13-achievement[data-achievement-id="evolution_master"]')).toContainText('究極の進化');
  await page.reload();await page.locator('#openArchive').click();
  expect((await page.evaluate(()=>AnkinArchive.read())).clears).toHaveLength(2);
  expect(errors).toEqual([]);
