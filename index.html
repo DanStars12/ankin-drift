@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.4.2 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.5 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.4.2 | ELEMENTAL ARSENAL</title>
+<title>ANKIN DRIFT v13.5 | ELEMENTAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -987,7 +987,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.4.2 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.5 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1642,7 +1642,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.4.2 · ELEMENTAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.5 · ELEMENTAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2152,7 +2152,7 @@ const RELICS=[
  skill('rDrillTempo','relic','⚡','ハイギア・アクセル','ダッシュ再使用-0.23秒。オーバードライブ中は最短0.5秒。',p=>p.dashCd=Math.max(.52,p.dashCd-.23),{shipOnly:'drill',stackable:false})
 ];
 
-// v13.4.2: strictly independent attack families (a card upgrades exactly its advertised family).
+// v13.5: strictly independent attack families (a card upgrades exactly its advertised family).
 SKILLS.push(
  skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾を自動発射。命中ダメージと凍結確率23%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallTimer=.1}),
  skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
@@ -2185,6 +2185,54 @@ FUSIONS.push(
  {id:'meteorEvo',power:'meteorPower',legend:'meteorLegend',name:'プラネット・ローラー',icon:'☄️',desc:'貫通隕石の威力+500、成長上限+22。岩壁は強化しない。',apply:p=>{p.meteorDamage+=500;p.meteorRadius+=22}}
 );
 
+
+// v13.5: one-time trade-offs. Visual transformations are governed by these persistent build flags.
+SKILLS.push(
+ skill('crossBlade','epic','✖️','クロスブレード','旋回刃の長さ-50%・1命中の威力-15%。代わりに1枚が2方向の十字刃になり、刃の本数が倍になる。',p=>{p.orbit=Math.max(1,p.orbit);p.bladeCross=1},{stackable:false}),
+ skill('tridentPulse','epic','⚡','トライデントパルス','EMPを小型の3領域に分割して旋回させる。中心の防御範囲は薄くなるが、威力が高いほど旋回が速い。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=35;p.empTrident=1},{stackable:false}),
+ skill('lavaConstrain','epic','🌋','ラヴァ・コンストレイション','全マグマ床を1つに統合し、新規マグマも吸収。合体数で威力が増え、持続中徐々に拡大。広域設置を失う。',p=>{p.magmaLevel=Math.max(1,p.magmaLevel);p.lavaConstrain=1},{stackable:false}),
+ skill('thrusterEngine','rare','🚀','スラスターエンジン','ダッシュ再使用+1.1秒。代わりに移動速度1.75倍・持続1.65倍で長距離移動（ドリル対応）。',p=>{p.dashCd+=1.1;p.thrusterEngine=1},{stackable:false}),
+ skill('gigaNapalm','epic','🔥','ギガ・ナパーム','全ミサイルを1発の大型低速追尾弾に統合。合計弾数で爆発・燃焼が強化されるが手数を失う。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.flameMissiles=Math.max(1,p.flameMissiles);p.gigaNapalm=1;p.rocketTimer=0},{stackable:false}),
+ skill('meteorAnvil','rare','☄️','メテオ・アンビル','隕石威力+210・サイズ上限+12。発射間隔+45%。',p=>{p.meteorCount=1;p.meteorDamage+=210;p.meteorRadius+=12;p.meteorInterval*=1.45},{stackable:false}),
+ skill('iceShardScatter','rare','❄️','氷晶散華','アイスボール+2発・凍結確率+7%。1発の威力-35%。',p=>{p.iceBallCount=Math.min(5,Math.max(1,p.iceBallCount)+2);p.iceBallChance=Math.min(.78,p.iceBallChance+.07);p.iceBallDamage*=.65},{stackable:false}),
+ skill('ionCompression','rare','🔌','イオン圧縮','EMP威力+120。攻撃半径-30%。',p=>{p.empRadius=Math.max(96,p.empRadius)*.7;p.empDps+=120},{stackable:false}),
+ skill('pulseDiffusion','rare','🌩️','パルス拡散','EMP攻撃半径+90。威力-30%。',p=>{p.empRadius=Math.max(96,p.empRadius)+90;p.empDps=Math.max(10,p.empDps*.7)},{stackable:false}),
+ skill('cycloneOverpressure','epic','🌀','オーバープレッシャー','サイクロン威力+85・押し返す力+140。発射間隔+40%。',p=>{p.windCount=Math.max(1,p.windCount);p.windStrength+=140;p.windDps+=85;p.windPeriod*=1.4},{stackable:false}),
+ skill('magmaFlash','rare','🌋','瞬間溶炉','マグマ設置レベル+3・威力+45。基本半径-25%。',p=>{p.magmaLevel+=3;p.magmaDps+=45;p.magmaRadius=Math.max(24,p.magmaRadius*.75)},{stackable:false}),
+ skill('stoneAnchor','rare','🪨','アンカー・フォート','岩壁+3・反撃威力+30。機体移動速度-13%。',p=>{p.rockWalls=Math.min(18,p.rockWalls+3);p.rockDamage+=30;p.spd*=.87},{stackable:false}),
+ skill('glassReactor','epic','💎','グラス・リアクター','基本攻撃力+95・会心倍率+0.5。最大HP-23%。',p=>{p.dmg+=95;p.critMult+=.5;p.maxHp=Math.max(1,p.maxHp*.77);p.hp=Math.min(p.hp,p.maxHp)},{stackable:false}),
+ skill('droneSwarmTrade','epic','🛸','スウォーム・ペイロード','随伴機+4・僚機連射強化。最大HP-18%。',p=>{p.droneCount=Math.min(p.limitDrones,p.droneCount+4);p.droneBoost=(p.droneBoost||1)*1.25;p.maxHp=Math.max(1,p.maxHp*.82);p.hp=Math.min(p.hp,p.maxHp)},{stackable:false}),
+ skill('novaFracture','rare','🌠','ノヴァ・フラクチャー','NOVA基礎威力+175・範囲+80。ゲージ獲得倍率-18%。',p=>{p.novaDamage+=175;p.novaRadius+=80;p.novaGain=Math.max(.45,p.novaGain*.82)},{stackable:false})
+);
+POWERS.push(
+ skill('crossForge','power','✖️','ANKIN クロス鍛造','旋回ブレード+2、威力+25%。十字刃にも適用。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladePower=(p.bladePower||1)*1.25}),
+ skill('pulseGrid','power','⚡','ANKIN テスラ・グリッド','EMP威力+125・半径+35。分裂パルスも強化。',p=>{p.empRadius=Math.max(96,p.empRadius)+35;p.empDps+=125}),
+ skill('lavaCatalyst','power','🌋','ANKIN マグマ触媒','マグマ床レベル+2・威力+95。統合中は巨大床を強化。',p=>{p.magmaLevel+=2;p.magmaDps+=95}),
+ skill('napalmRig','power','🚀','ANKIN ナパーム架台','ミサイル+3・燃焼威力+30%。大型化時は一発へ集約。',p=>{p.rocketCd+=3;p.flameMissiles+=3;p.missileBurnBonus=(p.missileBurnBonus||0)+.3})
+);
+LEGENDS.push(
+ skill('bladeLegendV','legendary','✖️','双極断裁の王','旋回刃+4・威力+80%。十字刃なら両方向を強化。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+4);p.bladePower=(p.bladePower||1)*1.8}),
+ skill('pulseLegendV','legendary','⚡','三雷界の王座','EMP威力+240・半径+55。分裂時は旋回速度も増加。',p=>{p.empRadius=Math.max(96,p.empRadius)+55;p.empDps+=240}),
+ skill('lavaLegendV','legendary','🌋','一極灼熱星','マグマ床レベル+4・威力+180。',p=>{p.magmaLevel+=4;p.magmaDps+=180}),
+ skill('napalmLegendV','legendary','🔥','終末ナパーム','ミサイル+5・燃焼威力+70%。大型化時は一発に集約。',p=>{p.rocketCd+=5;p.flameMissiles+=5;p.missileBurnBonus=(p.missileBurnBonus||0)+.7})
+);
+SYNERGIES.push(
+ {id:'crossDanceV',need:['crossBlade','orbit'],name:'十字舞踏',desc:'十字刃の威力+35%、移動速度+22。',apply:p=>{p.bladePower=(p.bladePower||1)*1.35;p.spd+=22}},
+ {id:'ionTrinityV',need:['tridentPulse','empPulse'],name:'三位放電',desc:'旋回EMP威力+75・半径+20。',apply:p=>{p.empDps+=75;p.empRadius+=20}},
+ {id:'lavaMetabolismV',need:['lavaConstrain','magmaPulse'],name:'溶岩呼吸',desc:'統合マグマ威力+85・拡大速度+3。',apply:p=>{p.magmaDps+=85;p.lavaGrowth+=3}},
+ {id:'thrusterCrashV',need:['thrusterEngine','superDash'],name:'超音速離脱',desc:'最大HP+65・ダッシュ再使用-0.3秒。',apply:p=>{p.maxHp+=65;p.hp+=65;p.dashCd=Math.max(.52,p.dashCd-.3)}},
+ {id:'napalmDetonationV',need:['gigaNapalm','rocket'],name:'一撃殲滅',desc:'大型ミサイル爆発威力+40%・発射間隔-12%。',apply:p=>{p.napalmBlast=(p.napalmBlast||1)*1.4;p.napalmCooldown=(p.napalmCooldown||1)*.88}},
+ {id:'meteorCrushV',need:['meteorAnvil','meteorSeed'],name:'巨岩圧殺',desc:'隕石威力+160・飛行速度+20%。',apply:p=>{p.meteorDamage+=160;p.meteorSpeed=(p.meteorSpeed||1)*1.2}},
+ {id:'glacierSplitV',need:['iceShardScatter','iceBall'],name:'六花乱舞',desc:'氷球威力+45・凍結確率+10%。',apply:p=>{p.iceBallDamage+=45;p.iceBallChance=Math.min(.78,p.iceBallChance+.10)}},
+ {id:'fortressTradeV',need:['stoneAnchor','barrier'],name:'鉄壁要塞',desc:'岩壁の反撃威力+65・最大シールド+65。',apply:p=>{p.rockDamage+=65;p.shieldMax+=65;p.shield+=65}}
+);
+FUSIONS.push(
+ {id:'crossForgeEvo',power:'crossForge',legend:'bladeLegendV',name:'ヘキサ・クロスブレイカー',icon:'✖️',desc:'刃の威力×1.75・刃の長さ+24。十字化は別スキルで解放。',apply:p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladePower=(p.bladePower||1)*1.75;p.bladeReach=(p.bladeReach||19)+24}},
+ {id:'pulseGridEvo',power:'pulseGrid',legend:'pulseLegendV',name:'テスラ・トリニティ',icon:'⚡',desc:'EMP威力+360・半径+70。三分裂中は旋回も高速化。',apply:p=>{p.empDps+=360;p.empRadius+=70}},
+ {id:'lavaCatalystEvo',power:'lavaCatalyst',legend:'lavaLegendV',name:'プロトスター・ラヴァ',icon:'🌋',desc:'マグマ威力+340・半径+60。統合型の拡大速度+4。',apply:p=>{p.magmaDps+=340;p.magmaRadius+=60;p.lavaGrowth+=4}},
+ {id:'napalmRigEvo',power:'napalmRig',legend:'napalmLegendV',name:'アルマゲドン・ナパーム',icon:'🔥',desc:'ミサイル+4・燃焼威力+100%。大型化時は全火力を一発へ凝縮。',apply:p=>{p.rocketCd+=4;p.flameMissiles+=4;p.missileBurnBonus=(p.missileBurnBonus||0)+1}}
+);
+
 const ELEMENT_TAGS={emberSeed:['属性：炎','燃焼'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],magmaPulse:['属性：炎','マグマ床'],windOrigin:['属性：風','ノックバック'],windEngine:['属性：風','ノックバック'],windTwin:['属性：風','ノックバック'],stoneSeed:['属性：岩','防御壁'],stoneCarapace:['属性：岩','防御壁'],stoneFury:['属性：岩','防御壁'],magmaCore:['属性：炎','マグマ床'],missileFlare:['属性：炎','ミサイル','マグマ床'],crystalStasis:['属性：氷','凍結'],windPower:['属性：風','ノックバック'],rockPower:['属性：岩','防御壁'],volcanoLegend:['属性：炎','マグマ床'],iceLegend:['属性：氷','凍結'],windLegend:['属性：風','ノックバック'],rockLegend:['属性：岩','防御壁']};
 for(const c of RELICS)c.tags=['レリック',`専用：${SHIPS[c.shipOnly].jp}`];
 for(const c of ALL_SKILL_DEFS())if(ELEMENT_TAGS[c.id])c.tags=ELEMENT_TAGS[c.id];
@@ -2209,7 +2257,7 @@ const EXTRA_SKILL_TAGS={
  rChargeShatter:['分裂','チャージ'],rChargeNova:['爆発','チャージ'],rChargeEcho:['追加弾','チャージ'],rChargeGravity:['吸引','チャージ'],rChargeFlame:['属性：炎','マグマ床','チャージ'],rChargeMomentum:['機動','チャージ'],rDrillRotor:['プラズマ','蓄積','機動'],rDrillWide:['近接','ドリル'],rDrillImpact:['突進','爆発'],rDrillHeat:['近接','属性：炎','燃焼'],rDrillRefund:['突進','蓄積'],rDrillIce:['近接','属性：氷','スロウ']
 };
 for(const c of ALL_SKILL_DEFS())if(EXTRA_SKILL_TAGS[c.id])c.tags=[...new Set([...(c.tags||[]),...EXTRA_SKILL_TAGS[c.id]])];
-// v13.4.2: tags must reflect the ability actually granted, never a second weapon family.
+// v13.5: tags must reflect the ability actually granted, never a second weapon family.
 const ELEMENT_ATTACK_TAGS={
  missileFlare:['属性：炎','ミサイル','燃焼'],rain:['属性：炎','ミサイル','燃焼'],rocket:['属性：炎','ミサイル','燃焼'],volcanoLegend:['属性：炎','マグマ床'],magmaCore:['属性：炎','マグマ床'],magmaPulse:['属性：炎','マグマ床'],static:['属性：炎','マグマ床'],thermal:['属性：炎','燃焼'],emberSeed:['属性：炎','燃焼'],
  freeze:['属性：氷','凍結'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],crystalStasis:['属性：氷','凍結'],iceLegend:['属性：氷','凍結'],
@@ -2974,7 +3022,7 @@ function tickGusts(dt){
  gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
-// v13.4.2 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
+// v13.5 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
 function tickIndependentElements(dt){
  const p=player;if(!p)return;
  if(p.iceBallCount>0){
@@ -3329,7 +3377,7 @@ function drawEvolutionShotMotifs(){
 }
 
 
-/* v13.4.2 — Circular cyclone: consistent radius under all effect presets. */
+/* v13.5 — Circular cyclone: consistent radius under all effect presets. */
 function drawCyclone(g){
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
@@ -3345,7 +3393,7 @@ function drawCyclone(g){
  if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count,rad=r*.87;ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);ctx.arc(0,0,rad,a,a+.44);}ctx.stroke();}
  ctx.restore();
 }
-/* v13.4.2 — Tesla EMP: blue-white discharge with purple field accents. */
+/* v13.5 — Tesla EMP: blue-white discharge with purple field accents. */
 function drawTeslaField(p){
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
@@ -3539,7 +3587,7 @@ function perfSummary(samples,drawOnly=false){
 function ankinPerformanceReport(){
  const frame=perfSummary(perfRing.frame),simulation=perfSummary(perfRing.sim),drawing=perfSummary(perfRing.draw,true);
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
- return {version:'13.4.2',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'13.5',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -3549,7 +3597,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.4.2.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.5.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
