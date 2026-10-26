@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v12.4 — STABLE EFFECTS",
+  "name": "ANKIN DRIFT v13.0 — CLEAR LEGACY",
   "short_name": "ANKIN DRIFT",
-  "description": "マグマ・突風の見た目を安定化。演出量に「シンプル」を追加し、入力の誤作動対策を強化したブラウザSTG。",
+  "description": "恒久セーブ、クリア称号、実績、追加チャレンジ、バックアップ／復元に対応したローグライクSTG。",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
