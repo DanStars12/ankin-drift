@@ -2099,7 +2099,7 @@ FUSIONS.push(
 SYNERGIES.push(
  {id:'fireMissileCycle',need:['rocket','missileFlare'],name:'フレア・オーバードライブ',desc:'炎ミサイル+2、燃焼威力+25%。マグマは生成しない。',apply:p=>{p.rocketCd+=2;p.flameMissiles+=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.25}},
  {id:'emberMagma',need:['magmaPulse','thermal'],name:'マグマ・ブースター',desc:'マグマ床威力+35、発生範囲+30',apply:p=>{p.magmaDps+=35;p.magmaRadius+=30}},
- {id:'glacier',need:['iceBall','iceLock'],name:'クリスタル・サルヴォ',desc:'アイスボール発射数+2、凍結確率+12%。スロウは付与しない。',apply:p=>{p.iceBallCount=Math.min(5,p.iceBallCount+2);p.iceBallChance=Math.min(.78,p.iceBallChance+.12}},
+ {id:'glacier',need:['iceBall','iceLock'],name:'クリスタル・サルヴォ',desc:'アイスボール発射数+2、凍結確率+12%。スロウは付与しない。',apply:p=>{p.iceBallCount=Math.min(5,p.iceBallCount+2);p.iceBallChance=Math.min(.78,p.iceBallChance+.12)}},
  {id:'cycloneCore',need:['windEngine','windTwin'],name:'ヴォルテックス・エンジン',desc:'風の押し返す力+110、風弾の周期-18%',apply:p=>{p.windStrength+=110;p.windPeriod=Math.max(1.15,p.windPeriod*.82)}},
  {id:'rockBulwark',need:['stoneCarapace','stoneFury'],name:'モノリス・ウォール',desc:'岩壁+3、防御壁サイズ+5',apply:p=>{p.rockWalls=Math.min(18,p.rockWalls+3);p.rockSize+=5}},
  {id:'thunderCore',need:['chain','capacitor'],name:'チェイン・リアクター',desc:'連鎖ダメージ+65、発動確率+15%',apply:p=>{p.chainDamage+=65;p.chain=Math.min(1,p.chain+.15)}},
