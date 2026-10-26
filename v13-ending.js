@@ -20,7 +20,7 @@ const ELEMENTS={
 const SOURCE={
  shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',drill:'近接ドリル',nova:'NOVA',
  dot:'燃焼DoT',magma:'マグマ',element:'属性攻撃',drone:'僚機',
- missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発',other:'複合攻撃'
+ missile:'ミサイル',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'貫通隕石',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発',other:'複合攻撃'
 };
 const STYLES={
  near_death:{name:'死線の生還者',lead:'消えかけた機体の灯を守り抜き',close:'残りわずかな力が、最後の勝利を引き寄せた。'},
