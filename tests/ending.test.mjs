@@ -83,3 +83,14 @@ test('untrusted oversized values are bounded and finite',()=>{
  assert.ok(e.title.length<=88);
  assert.ok(!e.story.includes('NaN'));
 });
+
+test('unfused elemental cards change the title; ship always changes the title',()=>{
+ const a=generate({...base,ship:'shot',fusionIds:[],elementAffinities:{fire:5,ice:1}});
+ const b=generate({...base,ship:'laser',fusionIds:[],elementAffinities:{fire:5,ice:1}});
+ const c=generate({...base,ship:'shot',fusionIds:[],elementAffinities:{ice:5,fire:1}});
+ assert.ok(a.title.includes('紅蓮'));
+ assert.ok(c.title.includes('氷晶'));
+ assert.notEqual(a.title,b.title);
+ assert.notEqual(a.title,c.title);
+ assert.ok(a.summary.includes('属性スキル：炎'));
+});
