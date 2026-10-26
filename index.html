@@ -2323,7 +2323,7 @@ function tickVacuum(dt){game.compactTimer-=dt;if(game.compactTimer<=0){game.comp
  const core=game.vacuum;if(!core)return;core.pulse+=dt;const distance=dst(core,player);if(distance<Math.max(95,player.magnet*.8)&&distance>1){const speed=clamp(180+(105-distance)*2,140,620);core.x+=(player.x-core.x)/distance*speed*dt;core.y+=(player.y-core.y)/distance*speed*dt}if(distance<player.r+23)collectVacuum();}
 function damageEnemy(e,damage,meta={}){if(e.dead||!Number.isFinite(damage))return;
  // Central bonus applies exactly once to every damage source, regardless of ship.
- damage*=1+Math.min(.56,Math.max(0,player?.fusionOutputBonus||0));
+ damage*=1+Math.min(.84,Math.max(0,player?.fusionOutputBonus||0));
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
