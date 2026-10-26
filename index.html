@@ -2227,7 +2227,9 @@ const SKILL_CAP_CHECKS={
  escort:p=>p.droneCount<p.limitDrones,
  scatter:p=>p.multishot<p.limitShot,
  queen:p=>p.droneCount<p.limitDrones,
- critical:p=>p.crit<.95-.00001
+ critical:p=>p.crit<.95-.00001,
+ freeze:p=>p.slowChance<.999||p.freezeChance<.849||p.iceAttackSlow<.799,
+ iceLock:p=>p.freezeChance<.849||p.freezeDuration<1.999
 };
 function skillHasRoom(c,p=player){
  const check=SKILL_CAP_CHECKS[c.id];
