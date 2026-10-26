@@ -1844,7 +1844,7 @@ const SKILLS=[
  skill('spark','rare','🌠','スロットルチャージ','敵撃破でノヴァエネルギー +2.5。',p=>p.killCharge+=2.5),
  skill('orbit','rare','🌀','ウィンドブレード','風属性。自機の周囲を回る棒状のブレード+1。長い刃全体で命中判定。',p=>p.orbit++,{available:p=>p.orbit<p.limitOrbit}),
  skill('repair','rare','🍀','解体修復','敵を30体倒すごとにHPを18回復。',p=>p.killHeal+=18),
- skill('rocket','epic','🚀','ホーミングミサイル','炎属性。2.8秒ごとに燃焼を付与する追尾ミサイルを発射。',p=>{p.rocketCd+=1;p.flameMissiles+=1;p.rocketTimer=0}),
+ skill('rocket','epic','🚀','ホーミングミサイル','炎属性の追尾ミサイル+1。同時最大4発で超過分は火力へ変換（強化最大36）。',p=>{p.rocketCd=Math.min(36,p.rocketCd+1);p.flameMissiles+=1;p.rocketTimer=0},{available:p=>p.rocketCd<36}),
  skill('storm','epic','⚡','雷速演算','連鎖雷撃確率 +35%、雷撃ダメージ +32。',p=>{p.chain=Math.min(1,p.chain+.35);p.chainDamage+=32}),
  skill('squad','epic','🛸','追加ドローン編隊','小型僚機+2（通常上限16機・限界突破後28機）。',p=>p.droneCount=Math.min(p.limitDrones,p.droneCount+2),{available:p=>p.droneCount<p.limitDrones}),
  skill('shieldEpic','epic','🔮','反応装甲','最大シールド +60、再充填速度 +5/秒。',p=>{p.shieldMax+=60;p.shield+=60;p.shieldRecharge+=5}),
@@ -2161,7 +2161,7 @@ SKILLS.push(
  skill('empPulse','uncommon','⚡','電磁パルス','機体周辺に青白いテスラ放電領域を展開。範囲内の敵に継続雷ダメージ（最大半径290）。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=28}),
  skill('empAmplifier','rare','🔋','パルス増幅器','電磁パルスのダメージ+34、範囲+22。連鎖雷撃は増えない。',p=>{p.empRadius=Math.max(96,p.empRadius)+22;p.empDps+=34}),
  skill('empOverdrive','epic','🌩️','電磁共振領域','電磁パルスのダメージ+82、範囲+32。',p=>{p.empRadius=Math.max(96,p.empRadius)+32;p.empDps+=82}),
- skill('meteorSeed','uncommon','☄️','ローリング・メテオ','前方へ貫通する隕石を1つ放つ。進むほど大きくなるが威力は一定。完全に画面外へ出ると消える。',p=>{p.meteorCount=1;p.meteorTimer=.1},{available:p=>p.meteorCount===0}),
+ skill('meteorSeed','uncommon','☄️','ローリング・メテオ','貫通する隕石を解放して威力+25。すでに隕石があれば威力だけ強化。飛ぶほど拡大、威力一定。',p=>{p.meteorCount=1;p.meteorDamage+=25;p.meteorTimer=.1},{stackable:false}),
  skill('meteorCore','rare','🪨','メテオ・コンデンサー','隕石の一定ダメージ+85、最終サイズ+8。成長しても威力は増えない。',p=>{p.meteorCount=1;p.meteorDamage+=85;p.meteorRadius+=8}),
  skill('meteorHeavy','epic','🌠','コロッサル・ローラー','隕石の威力+130、発射間隔-20%。貫通能力は維持。',p=>{p.meteorCount=1;p.meteorDamage+=130;p.meteorInterval=Math.max(2.2,p.meteorInterval*.8)})
 );
@@ -3236,7 +3236,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  const target=visibleTarget(p.x,p.y);
  if(target){
   // Extra missile stacks above the four-shot projectile cap convert into damage.
-  const surplus=Math.max(0,p.rocketCd-4),dmg=p.dmg*2.6*(1+Math.min(24,surplus)*.065);
+  const surplus=Math.max(0,p.rocketCd-4),dmg=p.dmg*2.6*(1+Math.min(36,surplus)*.065);
   fireFrom(p.x,p.y,target,p.gigaNapalm?1:Math.min(4,p.rocketCd),dmg,p.shotSpeed*.7,'rocket');
  }
  p.rocketTimer=p.gigaNapalm?Math.max(1.7,3.4*(p.napalmCooldown||1)):Math.max(.7,2.8-p.rocketCd*.22);
