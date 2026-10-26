@@ -31,6 +31,8 @@ jobs:
       - name: Check JavaScript syntax
         id: check
         run: npm run check:syntax
+      - name: Verify v13 archive migration, backup and corruption safety
+        run: npm run test:archive
       - name: Write result summary
         if: always()
         env:
