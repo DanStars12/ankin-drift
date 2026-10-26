@@ -1138,24 +1138,54 @@ function restorePlayerBuild(){const current=retainCombatState(player),next=initi
  for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
  Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0});player=next;
 }
-function applyElementFusionStats(p,combo){const {main,sub}=combo,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);if(!r)return;
- p.elementMods=p.elementMods||{};for(const [key,value] of Object.entries(r.mod))p.elementMods[key]=(p.elementMods[key]||0)+value;
- if(main==='fire'){p.magmaLevel+=3;p.magmaDps+=110;p.magmaRadius+=28;p.burnChance=Math.min(.98,p.burnChance+.18);if(sub==='wind')p.fireTornadoTimer=.2;}
- if(main==='ice'){p.freezeChance+=.3;p.freezeDuration+=1;p.iceBurst+=4;if(sub==='rock'){p.shieldMax+=125;p.shield+=125;p.shieldRecharge+=3;}if(sub==='fire')p.iceBurst+=4;}
- if(main==='thunder'){p.chain=Math.min(1,p.chain+.24);p.chainDamage+=135;p.arcNova+=2;if(sub==='wind')p.arcNova+=3;if(sub==='ice')p.chainDamage+=170;if(sub==='fire')p.explosion=Math.min(1,p.explosion+.24);}
- if(main==='wind'){p.windCount=Math.min(7,p.windCount+2);p.windRadius+=60;p.windStrength+=130;p.windDps+=50;p.windTimer=.2;if(sub==='fire'){p.windCount=Math.min(7,p.windCount+2);p.windRadius+=55}if(sub==='ice'){p.windDps+=80;p.orbit=Math.min(p.limitOrbit,p.orbit+3)}if(sub==='rock'){p.windStrength+=200;p.windPeriod=Math.max(1.3,p.windPeriod*.55)}}
- if(main==='rock'){p.rockWalls=Math.min(18,p.rockWalls+4);p.rockSize+=4;p.rockDamage+=115;if(sub==='fire')p.rockDamage+=120;}
- if(sub==='ice'&&main==='rock')p.rockDamage+=55;if(main==='rock'&&sub==='wind')p.rockSize+=8;if(main==='rock'&&sub==='thunder')p.rockDamage+=90;
- if(sub==='rock'&&main==='fire')p.magmaDps+=120;
- // Each fusion offsets the damage lost from its consumed secondary element.
- // Single damage hook below covers shots, drill, drone, magic, laser and DOT.
- p.fusionOutputBonus=(p.fusionOutputBonus||0)+.42;
+function applyElementFusionStats(p,combo){
+ const {main,sub}=combo,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);
+ if(!r)return;
+ p.elementMods=p.elementMods||{};
+ for(const [key,value] of Object.entries(r.mod))p.elementMods[key]=(p.elementMods[key]||0)+value;
  const echo=Math.min(24,Math.max(1,combo.resonance||1));
- if(main==='fire'){p.magmaDps+=echo*32;p.magmaRadius+=Math.min(30,echo*2)}
- if(main==='ice'){p.iceBurst+=echo*2.4;p.freezeChance=Math.min(.85,p.freezeChance+echo*.012);p.chainDamage+=echo*9}
- if(main==='thunder'){p.chainDamage+=echo*65;p.arcNova+=Math.min(4,Math.floor(echo/4))}
- if(main==='wind'){p.windDps+=echo*34;p.windStrength+=echo*18}
- if(main==='rock'){p.rockDamage+=echo*53;p.rockSize+=Math.min(7,echo*.6)}
+ // Transfer consumed-attribute investment into ONE dominant attack family only.
+ if(main==='fire'){
+  if(p.magmaLevel>0&&p.rocketCd<=0){p.magmaLevel+=2;p.magmaDps+=90+echo*32;p.magmaRadius+=20;}
+  else if(p.rocketCd>0){p.rocketCd+=2;p.missileBurnBonus=(p.missileBurnBonus||0)+.45+echo*.02;}
+  else p.burnChance=Math.min(.85,p.burnChance+.22+echo*.01);
+  if(sub==='wind')p.fireTornadoTimer=.2; // explicit fusion grants the hybrid tornado
+  if(sub==='rock'&&p.magmaLevel>0)p.magmaDps+=130;
+ }
+ if(main==='ice'){
+  if(p.iceBallCount>0){p.iceBallDamage+=70+echo*16;p.iceBallChance=Math.min(.78,p.iceBallChance+.12);}
+  else if(p.slowChance>p.freezeChance){p.slowChance=Math.min(.9,p.slowChance+.25);p.iceAttackSlow=Math.min(.85,p.iceAttackSlow+.12);}
+  else{p.freezeChance=Math.min(.85,p.freezeChance+.28);p.freezeDuration+=.5;}
+  if(sub==='rock'){p.shieldMax+=125;p.shield+=125;p.shieldRecharge+=3;}
+ }
+ if(main==='thunder'){
+  if(p.empRadius>0){p.empRadius+=35+Math.min(35,echo);p.empDps+=125+echo*42;}
+  else{p.chain=Math.min(1,p.chain+.25);p.chainDamage+=110+echo*52;}
+  if(sub==='rock'){p.empRadius=Math.max(105,p.empRadius);p.empDps+=80;}
+ }
+ if(main==='wind'){
+  if(p.orbit>0&&p.windCount===0){
+   p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladeReach=(p.bladeReach||19)+16;p.bladePower=(p.bladePower||1)*(1.8+echo*.035);
+  }else{
+   p.windCount=Math.min(7,Math.max(1,p.windCount)+2);p.windRadius+=45;p.windStrength+=120+echo*12;p.windDps+=40+echo*18;p.windTimer=.2;
+  }
+  if(sub==='fire')p.cycloneBurn=1;
+  if(sub==='ice')p.cycloneSlow=1;
+  if(sub==='rock')p.windStrength+=120;
+ }
+ if(main==='rock'){
+  if(sub==='ice'){ // DIAMOND ROCK: meteor, not wall-reflection bullets.
+   p.meteorCount=1;p.meteorDamage+=105+echo*25;p.meteorRadius+=14;
+  }else{
+   p.rockWalls=Math.min(18,Math.max(1,p.rockWalls)+3);
+   p.rockDamage+=105+echo*35;p.rockSize+=5;
+   if(sub==='fire')p.rockDamage+=85;
+   if(sub==='wind')p.rockSize+=8;
+  }
+ }
+ // Rebalance compensates for the removed secondary family, without creating
+ // an unwanted missile, magma, iceball, cyclone, wall or meteor implicitly.
+ p.fusionOutputBonus=(p.fusionOutputBonus||0)+.42;
 }
 function selectElementFusion(sub){
  if(mode!=='elementChoice'||!elementChoice?.main)return;
