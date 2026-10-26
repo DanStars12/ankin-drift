@@ -812,7 +812,7 @@ const BOSS_POOLS={minor:['guardian','raptor','hive'],major:['titan','rail','vort
 function pickBossVariant(type){const pool=BOSS_POOLS[type],last=game.bossHistory?.[type];const options=pool.filter(v=>v!==last);const id=options[Math.floor(Math.random()*options.length)];game.bossHistory[type]=id;return id;}
 const bossInfo=e=>ENEMY_CODEX.find(b=>b.id===(typeof e==='string'?e:e?.variant))||null;
 
-const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99});
+const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99});
 let adaptiveRenderScale=1;
 let overloadClock=0,recoveryClock=0,lastAdaptiveTime=0;
 function applyCanvasResolution(){
@@ -1513,6 +1513,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  '属性：岩':{name:'🪨 岩属性',desc:'周回岩壁は防御と接触攻撃、隕石は独立した貫通攻撃。隕石は成長しても威力が増えません。',details:[`周回岩壁：${p.rockWalls}枚`,`岩壁サイズ：${Math.round(p.rockSize)}`,`反撃ダメージ補正：+${Math.round(p.rockDamage)}`,`隕石威力：${Math.round(p.meteorDamage)} / 最大サイズ：${Math.round(Math.min(75,p.meteorRadius+29))}`]}
  };
  const extra={
+  '変異':['TRADE-OFF · 変異強化','強い効果と代償が同時に発生する一度きりのスキルです。',['攻撃の形態そのものが変化します。','一部の組み合わせでシナジーが自動発動します。']],
   '補給':['戦闘補給','一度きりのPOWER・LEGENDARYなどを取り尽くしても長時間プレイが停止しないための代替報酬です。',['最大HPや攻撃力の永続上昇はありません。','修理・シールド補給・再抽選補充・ダッシュ再起動から選択できます。']],
   '属性融合素材':['属性融合素材 · Lv12／Lv28','炎・氷・雷・風・岩の属性スキルは、属性融合の素材になります。レアリティは問いません。',['Lv12：1回目の属性融合を解放','Lv28：2回目の属性融合を解放','0〜1属性ならスキップし、後から異なる2属性が揃えば選択できます。','一度の融合で使用した特化属性・素材属性は再使用できません。']],
   '進化合成素材':['進化合成の素材','同じ進化レシピのPOWERとLEGENDARYを揃えると、従来の進化合成が発動します。属性融合とは独立したシステムです。',['進化合成には対応するPOWER＋LEGENDARYが必要です。','属性融合では取得済みカードの記録は保持されます。']],
@@ -2054,7 +2055,7 @@ SKILLS.push(
  skill('coldCoil','uncommon','❄️','低温駆動コイル','主武装のスロウ確率+12%。凍結は発生せず、ボスへのスロウは半減。',p=>{p.slowChance=Math.min(1,p.slowChance+.12);p.iceAttackSlow=Math.min(.8,p.iceAttackSlow+.12)}),
  skill('iceLock','epic','🧊','フリーズ・プロトコル','主武装の凍結確率+22%、凍結時間+0.8秒（最大2秒・解凍後2.8秒耐性）。',p=>{p.freezeChance=Math.min(.85,p.freezeChance+.22);p.freezeDuration+=.8}),
  skill('magmaPulse','epic','🌋','マグマスプラッシュ','定期的に広いマグマ床を生成。床は燃焼を与える。',p=>{p.magmaLevel+=2;p.magmaRadius+=20;p.magmaDps+=30}),
- skill('windOrigin','uncommon','🌀','サイクロン','定期的にサイクロンを発射。外縁の衝撃波で雑魚敵を外側へ押し返す（ボス無効）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1}),
+ skill('windOrigin','uncommon','🌀','サイクロン','サイクロン+1発（基本上限7・同時発射最大4）。通常敵を押し返し、ボスはダメージのみ。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1}),
  skill('windEngine','rare','🌪️','気流集束機','サイクロンの半径+35、ノックバック力+65、風ダメージ+12。未取得なら1発追加。',p=>{p.windRadius+=35;p.windStrength+=65;p.windDps+=12;p.windCount=Math.max(1,p.windCount)}),
  skill('windTwin','epic','💨','ツイン・サイクロン','サイクロンの基本発射数+2、発射間隔-18%。同時発射は最大4個。',p=>{p.windCount=Math.min(7,p.windCount+2);p.windPeriod=Math.max(1.4,p.windPeriod*.82);p.windTimer=.1}),
  skill('stoneSeed','uncommon','🪨','浮遊岩壁','岩壁+1。機体の周囲を周回し、通常の敵・敵弾を迎撃する。',p=>p.rockWalls=Math.min(18,p.rockWalls+1)),
@@ -2271,6 +2272,17 @@ const ELEMENT_ATTACK_TAGS={
 for(const c of ALL_SKILL_DEFS())if(ELEMENT_ATTACK_TAGS[c.id])c.tags=ELEMENT_ATTACK_TAGS[c.id];
 
 // v9.8: canonical element ownership. These cards grant an elemental attack, not just a named effect.
+// v13.5 mutator classification for codex and elemental fusion.
+const V135_TAGS={
+ crossBlade:['属性：風','ブレード','変異'],tridentPulse:['属性：雷','パルス','変異'],lavaConstrain:['属性：炎','マグマ床','変異'],
+ thrusterEngine:['機動','変異'],gigaNapalm:['属性：炎','ミサイル','燃焼','変異'],meteorAnvil:['属性：岩','隕石','変異'],
+ iceShardScatter:['属性：氷','アイスボール','変異'],ionCompression:['属性：雷','パルス','変異'],pulseDiffusion:['属性：雷','パルス','変異'],
+ cycloneOverpressure:['属性：風','サイクロン','変異'],magmaFlash:['属性：炎','マグマ床','変異'],
+ stoneAnchor:['属性：岩','防御壁','変異'],glassReactor:['火力','会心','装甲','変異'],droneSwarmTrade:['オプション','装甲','変異'],novaFracture:['ノヴァ','変異'],
+ crossForge:['属性：風','ブレード'],bladeLegendV:['属性：風','ブレード'],pulseGrid:['属性：雷','パルス'],pulseLegendV:['属性：雷','パルス'],
+ lavaCatalyst:['属性：炎','マグマ床'],lavaLegendV:['属性：炎','マグマ床'],napalmRig:['属性：炎','ミサイル','燃焼'],napalmLegendV:['属性：炎','ミサイル','燃焼']
+};
+for(const c of ALL_SKILL_DEFS())if(V135_TAGS[c.id])c.tags=V135_TAGS[c.id];
 const ELEMENT_CARD_IDS={
  fire:['plasma','flameField','emberSeed','rocket','thermal','static','magmaPulse','magmaCore','missileFlare','volcanoLegend','rain','rChargeFlame','rDrillHeat'],
  ice:['cryo','coldCoil','freeze','iceBarrier','iceLock','crystalStasis','iceLegend','aurora','blizzard','rLaserFrost','rDrillIce'],
@@ -2346,6 +2358,11 @@ const SKILL_CAP_CHECKS={
  fire:p=>p.rate>p.limitRate+.00001,
  windOrigin:p=>p.windCount<7,
  stoneSeed:p=>p.rockWalls<18,
+ emberSeed:p=>p.burnChance<.849,
+ coldCoil:p=>p.slowChance<.999||p.iceAttackSlow<.799,
+ iceBallVolley:p=>p.iceBallCount<5||p.iceBallPeriod>1.2001,
+ windTwin:p=>p.windCount<7||p.windPeriod>1.4001,
+ iceLock:p=>p.freezeChance<.849,
  dash:p=>p.dashCd>.85001,
  battery:p=>p.novaGain<1.55-.00001,
  blast:p=>p.explosion<.85-.00001,
@@ -2361,7 +2378,7 @@ const SKILL_CAP_CHECKS={
  queen:p=>p.droneCount<p.limitDrones,
  critical:p=>p.crit<.95-.00001,
  freeze:p=>p.freezeChance<.849,
- iceLock:p=>p.freezeChance<.849||p.freezeDuration<1.999
+
 };
 function skillHasRoom(c,p=player){
  const check=SKILL_CAP_CHECKS[c.id];
