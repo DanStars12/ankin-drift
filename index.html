@@ -2849,33 +2849,49 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  // Magma is an organic, irregular burning puddle, not a targeting circle.
  for(const z of zones){if(z.x+z.r<0||z.x-z.r>W||z.y+z.r<0||z.y-z.r>H)continue;ctx.save();ctx.translate(z.x,z.y);const fade=Math.min(.78,z.life*.25);ctx.globalAlpha=fade;
   if(z.type==='magma'){
-   if(renderHeavyLoad){
-    // One-pass heat shape under load; preserve strong fusion tint.
+   // Only explicit SIMPLE mode uses circular rendering. Pressure cannot change shape.
+   if(settings.fx==='simple'){
     ctx.fillStyle=z.tint?'#142f49':'#7d321a';ctx.beginPath();ctx.arc(0,0,z.r,0,TAU);ctx.fill();
     ctx.strokeStyle=z.tint||'#e9843d';ctx.lineWidth=2;ctx.stroke();
     ctx.fillStyle=z.tint||'#ff8c39';ctx.beginPath();ctx.arc(0,0,z.r*.56,0,TAU);ctx.fill();
    }else{
-   const segments=24,phase=t*.65+z.x*.017+z.y*.013;
-   const pool=(radius,wiggle=0)=>{ctx.beginPath();for(let j=0;j<=segments;j++){const a=j*TAU/segments;const n=1+.075*Math.sin(a*5+phase)+.06*Math.sin(a*9-phase*1.7);const r=radius*n+wiggle*Math.sin(phase+a*4);const x=Math.cos(a)*r,y=Math.sin(a)*r;j?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath()};
-   pool(z.r);ctx.fillStyle=z.tint?'#10233e':'#4b1a14';ctx.fill();ctx.strokeStyle=z.tint||'#9a4d29';ctx.lineWidth=z.tint?3:4;ctx.stroke();
-   pool(z.r*.83,2);ctx.fillStyle=z.tint?'#25598b':'#f05c25';ctx.fill();
-   pool(z.r*.61,3);ctx.fillStyle=z.tint||'#ff9f39';ctx.globalAlpha=fade*.73;ctx.fill();
-   ctx.globalAlpha=fade*.9;ctx.strokeStyle=z.tint?'#d9f6ff':'#ffe28b';ctx.lineWidth=2.8;ctx.lineCap='round';
-   for(let k=0;k<3;k++){const a=t*.31+k*TAU/3+z.x*.03,r=z.r*(.24+k*.13);ctx.beginPath();ctx.arc(Math.cos(a)*z.r*.14,Math.sin(a)*z.r*.13,r,a,a+1.1);ctx.stroke()}
-   ctx.fillStyle=z.tint?'#e4faff':'#fff0ae';for(let k=0;k<4;k++){const a=phase*(.9+k*.15)+k*1.57;const r=z.r*(.22+.1*(k%2));ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,2.2,0,TAU);ctx.fill()}
+    if(!z.visualPaths)z.visualPaths=magmaVisualPaths(z.r,z.x*.017+z.y*.013);
+    const paths=z.visualPaths,phase=t*.65+z.x*.017+z.y*.013;
+    ctx.fillStyle=z.tint?'#10233e':'#4b1a14';ctx.fill(paths[0]);
+    ctx.strokeStyle=z.tint||'#9a4d29';ctx.lineWidth=z.tint?3:4;ctx.stroke(paths[0]);
+    ctx.fillStyle=z.tint?'#25598b':'#f05c25';ctx.fill(paths[1]);
+    ctx.fillStyle=z.tint||'#ff9f39';ctx.globalAlpha=fade*.73;ctx.fill(paths[2]);
+    ctx.globalAlpha=fade*.9;ctx.strokeStyle=z.tint?'#d9f6ff':'#ffe28b';ctx.lineWidth=2.8;ctx.lineCap='round';
+    for(let k=0;k<(settings.fx==='low'?2:3);k++){
+     const a=t*.31+k*TAU/3+z.x*.03,r=z.r*(.24+k*.13);
+     ctx.beginPath();ctx.arc(Math.cos(a)*z.r*.14,Math.sin(a)*z.r*.13,r,a,a+1.1);ctx.stroke();
+    }
+    ctx.fillStyle=z.tint?'#e4faff':'#fff0ae';
+    for(let k=0;k<(settings.fx==='low'?2:4);k++){
+     const a=phase*(.9+k*.15)+k*1.57,r=z.r*(.22+.1*(k%2));
+     ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,2.2,0,TAU);ctx.fill();
+    }
    }
   }else{ctx.fillStyle='#9b81ff';ctx.strokeStyle='#e1aaff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,z.r,0,TAU);ctx.fill();ctx.stroke()}
   ctx.restore()}
- // v12: simple perimeter arcs, no opaque discs and at most two bands.
+ // Gusts keep their ribbon style under all load levels except explicit SIMPLE.
  for(const g of gusts){
   if(g.x+g.r<-25||g.x-g.r>W+25||g.y+g.r<-25||g.y-g.r>H+25)continue;
-  ctx.save();ctx.translate(g.x,g.y);ctx.rotate(t*1.65);
+  ctx.save();ctx.translate(g.x,g.y);
   const color=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1');
-  ctx.shadowColor=color;ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:9;
-  ctx.globalAlpha=Math.min(renderHeavyLoad?.38:.68,g.life*.24);
-  ctx.strokeStyle=color;ctx.lineWidth=g.kind==='fireTornado'?4:3;
-  const bands=renderHeavyLoad?1:2;
-  for(let i=0;i<bands;i++){ctx.beginPath();ctx.arc(0,0,g.r*(.78+i*.2),i*1.5,i*1.5+Math.PI*.88);ctx.stroke()}
+  ctx.strokeStyle=color;
+  if(settings.fx==='simple'){
+   ctx.globalAlpha=Math.min(.53,g.life*.24);ctx.lineWidth=2;
+   ctx.beginPath();ctx.arc(0,0,g.r,0,TAU);ctx.stroke();
+  }else{
+   ctx.rotate(t*1.65);ctx.shadowColor=color;
+   ctx.shadowBlur=settings.fx==='high'?12:settings.fx==='medium'?8:0;
+   ctx.globalAlpha=Math.min(.72,g.life*.28);
+   ctx.lineWidth=g.kind==='fireTornado'?4:3;
+   for(let i=0;i<(settings.fx==='low'?2:3);i++){
+    ctx.beginPath();ctx.arc(0,0,g.r*(.57+i*.2),i*1.13,i*1.13+Math.PI*1.12);ctx.stroke();
+   }
+  }
   ctx.restore();
  }
  // ENGAGE barriers: collision geometry matches the filled rectangles. Enemy projectiles ignore them.
