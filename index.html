@@ -907,11 +907,18 @@ function v13AwardMarkup(a){
 function v13RenderAward(){const root=U('achievementFeed');if(root)root.innerHTML=achievementCurrent?v13AwardMarkup(achievementCurrent):''}
 function v13CollectAwards(){
  const gained=AnkinArchive.takeUnlocks();
- achievementQueue.push(...gained);
+ const firstClear=gained.find(a=>a.id==='first_clear');
+ if(firstClear){
+  // First victory's rainbow trophy must interrupt lesser popups on the boss-clear frame.
+  if(achievementCurrent)achievementQueue.unshift(achievementCurrent);
+  achievementCurrent=firstClear;achievementExpires=performance.now()+6200;
+ }
+ achievementQueue.push(...gained.filter(a=>a!==firstClear));
  achievementQueue.sort((a,b)=>Number(b.tier==='rainbow')-Number(a.tier==='rainbow'));
  if(!achievementCurrent&&achievementQueue.length){
-  achievementCurrent=achievementQueue.shift();achievementExpires=performance.now()+5200;v13RenderAward();
+  achievementCurrent=achievementQueue.shift();achievementExpires=performance.now()+5200;
  }
+ if(firstClear||achievementCurrent)v13RenderAward();
  return gained;
 }
 function v13AdvanceAward(){
