@@ -2460,6 +2460,9 @@ function recordVictory(){
   shieldPercent:player.shieldMax>0?player.shield/player.shieldMax*100:0,
   damageStats:game.damageStats,finisherSource:game.finisherSource||source,
   fusionIds,evolutionIds,
+  elementAffinities:Object.fromEntries(Object.keys(ELEMENTS).map(element=>[element,
+   Object.entries(game.skills).reduce((sum,[id,count])=>
+    sum+(elementFromCard(skillById(id))===element?Math.max(0,count):0),0)])),
   evolutionNames:evolutionIds.map(id=>FUSIONS.find(f=>f.id===id)?.name||id),
   relicNames:Object.keys(game.relics).map(id=>skillById(id)?.name||id),
   featuredSkills:Object.entries(game.skills).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([id])=>skillById(id)?.name||id),
