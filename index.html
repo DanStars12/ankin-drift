@@ -671,7 +671,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 .v13-achievement[data-tier="bronze"],.v13-achievement-toast[data-tier="bronze"]{--ach-border:var(--ach-bronze)}
 .v13-achievement[data-tier="silver"],.v13-achievement-toast[data-tier="silver"]{--ach-border:var(--ach-silver)}
 .v13-achievement[data-tier="gold"],.v13-achievement-toast[data-tier="gold"]{--ach-border:var(--ach-gold)}
-.v13-achievement[data-tier="rainbow"],.v13-achievement-toast[data-tier="rainbow"]{--ach-border:var(--ach-rainbow);background:linear-gradient(125deg,#352447,#15424c,#293559);box-shadow:inset 0 0 18px #d3aaff30}
+.v13-achievement[data-tier="rainbow"],.v13-achievement-toast[data-tier="rainbow"]{--ach-border:var(--ach-rainbow);border-color:transparent;background:linear-gradient(125deg,#352447,#15424c,#293559) padding-box,linear-gradient(100deg,#ff82a5,#ffdb83,#92ffd1,#83beff,#dc9bff,#ff82a5) border-box;box-shadow:inset 0 0 18px #d3aaff30}
 .v13-achievement{border:2px solid var(--ach-border);background:#14243b;border-radius:12px;padding:11px;min-width:0}
 .v13-achievement:not(.is-unlocked){opacity:.83}
 .v13-achievement .v13-ach-title{font-size:14px;font-weight:950;color:var(--ach-border)}
@@ -685,7 +685,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 .v13-ach-tier[data-tier="gold"]{color:var(--ach-gold)}.v13-ach-tier[data-tier="rainbow"]{color:var(--ach-rainbow)}
 #achievementFeed{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:20px;width:min(360px,calc(100vw - 28px));z-index:22;pointer-events:none}
 .v13-achievement-toast{border:3px solid var(--ach-border);border-radius:14px;background:linear-gradient(130deg,#132b47f5,#1a1833f5);box-shadow:0 10px 45px #000c,0 0 25px #f3dca533;padding:13px 16px;text-align:center;animation:appearToast .25s ease-out;line-height:1.45}
-.v13-achievement-toast[data-tier="rainbow"]{background:linear-gradient(130deg,#3b2148,#15434e,#282e5b);box-shadow:0 0 24px #e2bdff99,0 9px 36px #000c}
+.v13-achievement-toast[data-tier="rainbow"]{background:linear-gradient(130deg,#3b2148,#15434e,#282e5b) padding-box,linear-gradient(100deg,#ff82a5,#ffdb83,#92ffd1,#83beff,#dc9bff,#ff82a5) border-box;box-shadow:0 0 24px #e2bdff99,0 9px 36px #000c}
 .v13-toast-head{font-size:14px;font-weight:1000;color:var(--ach-border)}
 .v13-achievement-toast strong{display:block;font-size:clamp(18px,4vw,23px);font-weight:1000;color:#fff4d5;margin:5px 0}
 .v13-toast-desc{display:block;font-size:12px;color:#e9f3ff}.v13-toast-done{font-size:15px;font-weight:1000;color:#9affda}
