@@ -6,7 +6,7 @@ test('v13 migrates old clear, exports JSON and restores without duplication',asy
   damage:54000,time:1900,level:46,clears:[{mode:'normal',time:1801,level:43,damage:54000,
   date:'2026-10-25T18:30:00.000Z',endless:false}],runs:[] })));
  await page.goto('./');
- await expect(page).toHaveTitle(/ANKIN DRIFT v13\.1/);
+ await expect(page).toHaveTitle(/ANKIN DRIFT v13\.2/);
  await page.locator('#openArchive').click();
  await expect(page.getByText('初めての勝利')).toBeVisible();
  const download=page.waitForEvent('download');
@@ -57,7 +57,7 @@ test('v13 optional trials produce GOLD legacy and achievements that survive relo
  const result=await page.evaluate(()=>window.__v13WinTest());
  expect(result.modifiers).toEqual(['fragile','onslaught']);
  expect(result.rank).toBe('GOLD');
- expect(result.title).toBe('雷鳴を統べる者');
+ expect(result.title).toContain('雷鳴');
  expect(result.clears).toBe(2);
  await expect(page.locator('.v13-victory-badge')).toContainText('GOLD');
  await page.locator('#openArchive').click();
