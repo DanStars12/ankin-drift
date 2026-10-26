@@ -664,6 +664,36 @@ body.pilot-mobile #novaTouch,body.pilot-mobile #dashTouch{
 body.pilot-mobile #novaTouch{background-image:linear-gradient(145deg,#5540b6f2,#211145f7)}
 body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#12243cf9)}
 
+
+/* v13.1 achievement ranks and progress */
+:root{--ach-bronze:#cb956b;--ach-silver:#b8c9da;--ach-gold:#e8bb5a;--ach-rainbow:#bda7ff}
+.v13-achievement,.v13-achievement-toast{--ach-border:#647d96}
+.v13-achievement[data-tier="bronze"],.v13-achievement-toast[data-tier="bronze"]{--ach-border:var(--ach-bronze)}
+.v13-achievement[data-tier="silver"],.v13-achievement-toast[data-tier="silver"]{--ach-border:var(--ach-silver)}
+.v13-achievement[data-tier="gold"],.v13-achievement-toast[data-tier="gold"]{--ach-border:var(--ach-gold)}
+.v13-achievement[data-tier="rainbow"],.v13-achievement-toast[data-tier="rainbow"]{--ach-border:var(--ach-rainbow);background:linear-gradient(125deg,#352447,#15424c,#293559);box-shadow:inset 0 0 18px #d3aaff30}
+.v13-achievement{border:2px solid var(--ach-border);background:#14243b;border-radius:12px;padding:11px;min-width:0}
+.v13-achievement:not(.is-unlocked){opacity:.83}
+.v13-achievement .v13-ach-title{font-size:14px;font-weight:950;color:var(--ach-border)}
+.v13-achievement .v13-ach-desc{display:block;font-size:11px;color:#d5e0ef;line-height:1.5;margin:7px 0}
+.v13-progress-label{font-size:11px;font-weight:850;color:#eaf5ff;text-align:right;font-variant-numeric:tabular-nums}
+.v13-progress-track{height:9px;overflow:hidden;border-radius:99px;background:#061425;border:1px solid #4d6682;margin-top:4px}
+.v13-progress-track>span{height:100%;display:block;border-radius:99px;background:var(--ach-border);transition:width .35s}
+.v13-achievement[data-tier="rainbow"] .v13-progress-track>span{background:linear-gradient(90deg,#ed99ba,#ffe28a,#8ef5d6,#a5afff,#e7a7ff)}
+.v13-ach-tier{border-bottom:1px solid #52647d;margin:15px 0 8px;padding-bottom:5px;font-size:13px;font-weight:950}
+.v13-ach-tier[data-tier="bronze"]{color:var(--ach-bronze)}.v13-ach-tier[data-tier="silver"]{color:var(--ach-silver)}
+.v13-ach-tier[data-tier="gold"]{color:var(--ach-gold)}.v13-ach-tier[data-tier="rainbow"]{color:var(--ach-rainbow)}
+#achievementFeed{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:20px;width:min(360px,calc(100vw - 28px));z-index:22;pointer-events:none}
+.v13-achievement-toast{border:3px solid var(--ach-border);border-radius:14px;background:linear-gradient(130deg,#132b47f5,#1a1833f5);box-shadow:0 10px 45px #000c,0 0 25px #f3dca533;padding:13px 16px;text-align:center;animation:appearToast .25s ease-out;line-height:1.45}
+.v13-achievement-toast[data-tier="rainbow"]{background:linear-gradient(130deg,#3b2148,#15434e,#282e5b);box-shadow:0 0 24px #e2bdff99,0 9px 36px #000c}
+.v13-toast-head{font-size:14px;font-weight:1000;color:var(--ach-border)}
+.v13-achievement-toast strong{display:block;font-size:clamp(18px,4vw,23px);font-weight:1000;color:#fff4d5;margin:5px 0}
+.v13-toast-desc{display:block;font-size:12px;color:#e9f3ff}.v13-toast-done{font-size:15px;font-weight:1000;color:#9affda}
+.v13-toast-tier{font-size:10px;color:#d8e7f5;letter-spacing:.1em}
+.v13-first-clear-award{margin:10px 0;animation:v13-reveal .9s ease-out both}
+@media(max-width:680px){#achievementFeed{top:calc(env(safe-area-inset-top,0px) + 52px);right:8px;width:min(275px,calc(100vw - 16px))}.v13-achievement-toast{padding:9px 10px}.v13-achievement-toast strong{font-size:17px}.v13-toast-head{font-size:12px}.v13-toast-desc{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.v13-achievement-toast,.v13-first-clear-award{animation:none}.v13-progress-track>span{transition:none}}
+
 /* v13: permanent Pilot Archive and Final Moment */
 .v13-panel{display:grid;gap:10px;margin:9px 0;padding:12px;border:1px solid #56748f;border-radius:14px;background:linear-gradient(140deg,rgba(16,38,61,.96),rgba(19,26,48,.91))}
 .v13-panel h3{margin:3px 0;font-size:14px;color:#f5d59b;letter-spacing:.05em}
@@ -713,7 +743,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
   <button id="novaTouch" type="button" aria-label="ノヴァ発動">NOVA<small id="novaTouchPct">0%</small></button>
  <div id="mobileHint">左指：移動 / 右指：DASH・NOVA</div>
 </div><div id="mobileRotate">↻<br>スマホ版は縦画面でプレイしてください</div>
-<div id="announcement" aria-live="polite"></div><div id="synergyFeed" aria-live="polite"></div><div id="overlay"><div class="panel" id="panel"></div></div><canvas id="celebration" aria-hidden="true"></canvas>
+<div id="announcement" aria-live="polite"></div><div id="synergyFeed" aria-live="polite"></div><div id="achievementFeed" role="status" aria-live="polite" aria-atomic="true"></div><div id="overlay"><div class="panel" id="panel"></div></div><canvas id="celebration" aria-hidden="true"></canvas>
 <div id="bossAlert" class="boss-alert" role="status" aria-live="polite"></div>
 <script src="./v13-archive.js"></script>
 <script>
@@ -865,15 +895,57 @@ function v13History(){
  (list.map(c=>'<div class="v13-history-item"><b>'+escHtml(c.title||'歴戦のパイロット')+'</b> · '+escHtml(c.rank||'CLEAR')+'<small>'+escHtml(c.mode.toUpperCase())+' · '+(SHIPS[c.ship]?.jp||'過去の記録')+' · '+fmtTime(c.time)+' · LV '+format(c.level)+' · '+escHtml(c.date.slice(0,10))+'</small></div>').join('')||'<div class="v13-note">まだクリア記録がありません。</div>')+
  '</div><small class="v13-mini">直近30件を表示。保存領域には最大1000件を保持します。</small></section>';
 }
+
+const achievementQueue=[];let achievementCurrent=null,achievementExpires=0,achievementSyncClock=0;
+const ACHIEVEMENT_TIER_LABELS={bronze:'銅枠',silver:'銀枠',gold:'金枠',rainbow:'虹枠'};
+function v13AwardMarkup(a){
+ return '<div class="v13-achievement-toast" data-tier="'+a.tier+'" data-achievement-id="'+a.id+'">'+
+ '<div class="v13-toast-head">🏆実績解除🏆</div><div class="v13-toast-tier">'+ACHIEVEMENT_TIER_LABELS[a.tier]+'</div>'+
+ '<strong>'+escHtml(a.name)+'</strong><span class="v13-toast-desc">'+escHtml(a.description)+'</span>'+
+ '<div class="v13-toast-done">達成！</div></div>';
+}
+function v13RenderAward(){const root=U('achievementFeed');if(root)root.innerHTML=achievementCurrent?v13AwardMarkup(achievementCurrent):''}
+function v13CollectAwards(){
+ const gained=AnkinArchive.takeUnlocks();
+ achievementQueue.push(...gained);
+ achievementQueue.sort((a,b)=>Number(b.tier==='rainbow')-Number(a.tier==='rainbow'));
+ if(!achievementCurrent&&achievementQueue.length){
+  achievementCurrent=achievementQueue.shift();achievementExpires=performance.now()+5200;v13RenderAward();
+ }
+ return gained;
+}
+function v13AdvanceAward(){
+ if(!achievementCurrent||performance.now()<achievementExpires)return;
+ achievementCurrent=achievementQueue.shift()||null;
+ achievementExpires=achievementCurrent?performance.now()+5200:0;v13RenderAward();
+}
+function v13ObserveRun(){
+ if(!game?.runId)return;
+ AnkinArchive.observeRun(game.runId,game.damage,game.level,game.kills,game.total);
+ saveWarning=AnkinArchive.status()||'';
+ v13CollectAwards();
+}
+function v13AchievementList(){
+ const items=AnkinArchive.progress(),tiers=[['bronze','🥉 銅枠 · BEGINNER'],['silver','🥈 銀枠 · ADVANCED'],['gold','🥇 金枠 · EXPERT'],['rainbow','🌈 虹枠 · LEGEND']];
+ return tiers.map(([tier,label])=>'<h4 class="v13-ach-tier" data-tier="'+tier+'">'+label+'</h4><div class="v13-grid">'+
+ items.filter(a=>a.tier===tier).map(a=>{
+ const pct=Math.round(100*a.current/Math.max(1,a.target));
+ return '<div class="v13-achievement '+(a.unlocked?'is-unlocked':'locked')+'" data-achievement-id="'+a.id+'" data-tier="'+tier+'">'+
+ '<div class="v13-ach-title">'+(a.unlocked?'🏆 ':'◇ ')+escHtml(a.name)+'</div>'+
+ '<small class="v13-ach-desc">'+escHtml(a.description)+'</small>'+
+ '<div class="v13-progress-label">'+format(Math.floor(a.current))+' / '+format(a.target)+'</div>'+
+ '<div class="v13-progress-track" role="progressbar" aria-label="'+escHtml(a.name)+'の進捗" aria-valuemin="0" aria-valuemax="'+a.target+'" aria-valuenow="'+Math.floor(a.current)+'"><span style="width:'+pct+'%"></span></div>'+
+ (a.unlocked?'<small>✦ 解除済み</small>':'')+'</div>';
+ }).join('')+'</div>').join('');
+}
+
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
  return '<p class="eyebrow">ANKIN DRIFT v13 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
- '<section class="v13-panel"><h3>✦ ACHIEVEMENTS · 実績</h3><div class="v13-grid">'+
- all.map(a=>'<div class="v13-card '+(awards[a[0]]?'':'locked')+'"><b>'+(awards[a[0]]?'🏆 ':'◇ ')+escHtml(a[1])+'</b><small>'+escHtml(a[2])+'</small></div>').join('')+
- '</div><small class="v13-mini">達成報酬は記録・称号。恒久ステータス強化はありません。</small></section>'+v13History()+
+ '<section class="v13-panel"><h3>✦ ACHIEVEMENTS · 実績（枠色は難易度）</h3>'+v13AchievementList()+'<small class="v13-mini">銅 → 銀 → 金 → 虹。初クリアは特別な虹枠実績です。</small></section>'+v13History()+
  '<section class="v13-panel"><h3>✦ BACKUP / RESTORE</h3><div class="v13-note">サイトデータ削除に備えてJSONを保管してください。手動でバックアップ・復元できます。</div>'+
  '<button type="button" class="secondary" id="v13Export">↓ 全セーブデータをJSONで保存</button>'+
  '<label class="v13-note">復元ファイル（JSON / 最大1MB）<input id="v13ImportFile" type="file" accept=".json,application/json"></label>'+
