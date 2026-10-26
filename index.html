@@ -3040,6 +3040,16 @@ function tickGusts(dt){
 }
 
 // v13.5 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
+// Trident pulse: three separate orbiting Tesla fields, combined hits never stack in one tick.
+function empEmitters(p){
+ if(p.empRadius<=0)return[];
+ const total=Math.min(290,p.empRadius);
+ if(!p.empTrident)return[{x:p.x,y:p.y,empRadius:total,split:false}];
+ const orbit=total*.54,r=Math.max(23,total*.37),speed=1.05+Math.min(3,Math.max(0,p.empDps)/230);
+ const fields=[];
+ for(let i=0;i<3;i++){const a=t*speed+i*TAU/3;fields.push({x:p.x+Math.cos(a)*orbit,y:p.y+Math.sin(a)*orbit,empRadius:r,split:true});}
+ return fields;
+}
 function tickIndependentElements(dt){
  const p=player;if(!p)return;
  if(p.iceBallCount>0){
@@ -3076,10 +3086,15 @@ function tickIndependentElements(dt){
   p.empTick=(p.empTick||0)-dt;
   if(p.empTick<=0){
    p.empTick=.24;
-   const r=Math.min(290,p.empRadius),damage=Math.max(2,p.empDps*.24);
-   for(const e of circleCandidates(p.x,p.y,r+26)){
-    if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;
-    if(d2(e,p)<(r+e.r)*(r+e.r))damageEnemy(e,damage,{special:true,source:'pulseField'});
+   const dealt=new Set();
+   for(const field of empEmitters(p)){
+    const r=field.empRadius;
+    for(const e of circleCandidates(field.x,field.y,r+26)){
+     if(e.dead||e.isoWarp||(e.isoSafe||0)>0||dealt.has(e))continue;
+     if((e.x-field.x)**2+(e.y-field.y)**2<(r+e.r)**2){
+      dealt.add(e);damageEnemy(e,Math.max(2,p.empDps*.24)*(p.empTrident?1.18:1),{special:true,source:'pulseField'});
+     }
+    }
    }
   }
  }
@@ -3416,10 +3431,11 @@ function drawCyclone(g){
  ctx.restore();
 }
 /* v13.5 — Tesla EMP: blue-white discharge with purple field accents. */
-function drawTeslaField(p){
+function drawTeslaField(p){for(const field of empEmitters(p))drawTeslaEmitter(field);}
+function drawTeslaEmitter(p){
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
- const n=simple?2:low?4:high?9:6;
+ const n=p.split?(simple?1:low?2:high?4:3):(simple?2:low?4:high?9:6);
  ctx.save();ctx.translate(p.x,p.y);ctx.lineCap='round';ctx.lineJoin='round';
  ctx.globalAlpha=.1;ctx.fillStyle='#465bff';ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.fill();
  ctx.globalAlpha=.52+.08*Math.sin(t*4);ctx.strokeStyle='#83c8ff';ctx.lineWidth=2.4;ctx.shadowColor='#849aff';ctx.shadowBlur=simple||low?0:9;
