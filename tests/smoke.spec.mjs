@@ -83,7 +83,7 @@ function rectanglesOverlap(a,b) {
 test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }, testInfo) => {
   const errors = watchFailures(page);
   await page.goto('./');
-  await expect(page).toHaveTitle(/ANKIN DRIFT v13\.1/);
+  await expect(page).toHaveTitle(/ANKIN DRIFT v13\.2/);
   await page.locator('[data-control="' + (isMobile ? 'mobile' : 'desktop') + '"]').click();
   await page.locator('#openOptions').click();
   await page.locator('#showFps').check();
