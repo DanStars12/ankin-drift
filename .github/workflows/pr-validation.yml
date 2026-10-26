@@ -33,6 +33,8 @@ jobs:
         run: npm run check:syntax
       - name: Verify v13 archive migration, backup and corruption safety
         run: npm run test:archive
+      - name: Test Personal Ending combinations and determinism
+        run: npm run test:ending
       - name: Write result summary
         if: always()
         env:
@@ -81,7 +83,7 @@ jobs:
       - run: npx playwright install chromium
       - name: Test game and offline startup
         id: check
-        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs --project=${{ matrix.project }}
+        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs tests/ending.spec.mjs --project=${{ matrix.project }}
       - name: Write result summary
         if: always()
         env:
