@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v13.1 — ACHIEVEMENTS",
+  "name": "ANKIN DRIFT v13.2 — PERSONAL ENDING",
   "short_name": "ANKIN DRIFT",
-  "description": "銅・銀・金・虹の実績通知、進捗ゲージ、パイロットアーカイブとセーブ引き継ぎに対応したローグライクSTG。",
+  "description": "機体・属性融合・戦闘スタイルごとに変わるパーソナルエンディングを記録できるローグライクSTG。",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
