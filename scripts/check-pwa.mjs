@@ -76,7 +76,7 @@ const declarations = sw.body.filter(n => n.type === 'VariableDeclaration').flatM
 const cache = declarations.find(n => n.id.name === 'CACHE_NAME')?.init;
 assert.equal(typeof cache?.value, 'string', 'Missing literal CACHE_NAME');
 assert(cache.value.length > 0, 'Empty cache name');
-assert(cache.value.includes('v' + titleVersion.replace('.', '-')), 'Service Worker cache name version mismatch');
+assert(cache.value.includes('v' + titleVersion.replaceAll('.', '-')), 'Service Worker cache name version mismatch');
 const shell = declarations.find(n => n.id.name === 'SHELL')?.init;
 assert.equal(shell?.type, 'ArrayExpression', 'Missing static SHELL array');
 const cached = new Set();
