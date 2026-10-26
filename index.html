@@ -3341,8 +3341,8 @@ function drawCyclone(g){
  const arcs=simple?2:low?3:settings.fx==='high'?6:4;
  ctx.globalAlpha=opacity*(simple?.43:.56);ctx.lineWidth=simple?1.4:1.7;
  // The same arc paths require only one stroke call per ring group.
- ctx.beginPath();for(let i=0;i<arcs;i++){const a=phase+i*TAU/arcs,rad=r*(i%2?.68:.44);ctx.arc(0,0,rad,a,a+(simple?.66:1.10));}ctx.stroke();
- if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count;ctx.arc(0,0,r*.87,a,a+.44);}ctx.stroke();}
+ ctx.beginPath();for(let i=0;i<arcs;i++){const a=phase+i*TAU/arcs,rad=r*(i%2?.68:.44);ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);ctx.arc(0,0,rad,a,a+(simple?.66:1.10));}ctx.stroke();
+ if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count,rad=r*.87;ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);ctx.arc(0,0,rad,a,a+.44);}ctx.stroke();}
  ctx.restore();
 }
 /* v13.4.2 — Tesla EMP: blue-white discharge with purple field accents. */
