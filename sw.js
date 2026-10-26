@@ -1,8 +1,8 @@
-/* ANKIN DRIFT v12.4 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v12-4-stable-effects-1';
+/* ANKIN DRIFT v13.0 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v13-0-clear-legacy-1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
-  './', './index.html', './manifest.webmanifest',
+  './', './index.html', './manifest.webmanifest', './v13-archive.js',
   './icons/icon-192.png', './icons/icon-512.png',
   './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
 ];
