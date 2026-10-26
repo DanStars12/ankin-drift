@@ -2288,7 +2288,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
   options.push(c);used.add(c.id);
  }
  // Do not soft-lock when all once-per-run boss rewards have been claimed.
- if(['minor','major','unique'].includes(kind)&&options.length<desired){
+ if(['normal','minor','major','unique'].includes(kind)&&options.length<desired){
   for(const supply of REWARD_SUPPLIES){if(options.length>=desired)break;options.push(supply)}
  }
  return options;
@@ -2942,7 +2942,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  const cay=Math.floor((Math.min(by,b.y)-pad)/SPATIAL_CELL),cby=Math.floor((Math.max(by,b.y)+pad)/SPATIAL_CELL);
  bulletCells:for(let cx=cax;cx<=cbx;cx++)for(let cy=cay;cy<=cby;cy++){
  const cell=enemyIndex.get(cx+','+cy);if(!cell)continue;
- for(const e of cell){if(b.ttl<=0)break bulletCells;if(e.dead||b.hit.has(e))continue;
+ for(const e of cell){if(b.ttl<=0)break bulletCells;if(e.dead||e.isoWarp||(e.isoSafe||0)>0||b.hit.has(e))continue;
  const hitFrac=travelSq>0?clamp(((e.x-bx)*travelX+(e.y-by)*travelY)/travelSq,0,1):0;
  const hitX=bx+travelX*hitFrac,hitY=by+travelY*hitFrac;
  if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.pierce>0)b.pierce--;else b.ttl=0;}}
