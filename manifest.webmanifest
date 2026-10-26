@@ -1,7 +1,7 @@
 {
-  "name": "ANKIN DRIFT v12.2 — EVOLUTION OVERDRIVE",
+  "name": "ANKIN DRIFT v12.3 — EVOLUTION OVERDRIVE",
   "short_name": "ANKIN DRIFT",
-  "description": "属性融合火力の強化、Lv28前後のボス耐久調整、すべての進化合成専用エフェクト、スマホ操作UI改善。",
+  "description": "属性融合の火力補正を強化し、全進化合成の機体・弾・エフェクトの視覚変化を備えたローグライクSTG。",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
