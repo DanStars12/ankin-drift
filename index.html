@@ -3206,7 +3206,9 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
   if(p.rocketCd>0){p.rocketTimer-=dt;if(p.rocketTimer<=0){const target=visibleTarget(p.x,p.y);if(target)fireFrom(p.x,p.y,target,Math.min(4,p.rocketCd),p.dmg*2.6,p.shotSpeed*.7,'rocket');p.rocketTimer=Math.max(.7,2.8-p.rocketCd*.22)}}
  if(p.staticField>0){p.staticTick=(p.staticTick||0)-dt;if(p.staticTick<=0){p.staticTick=.3;for(const e of circleCandidates(p.x,p.y,115+Math.min(4,p.staticField)*25)){if(!e.dead&&dst(e,p)<115+Math.min(4,p.staticField)*25){damageEnemy(e,12*p.staticField+p.dmg*.035,{special:true,source:'element'});if(Math.random()<.18)particles.push({x:p.x,y:p.y,x2:e.x,y2:e.y,life:.16,total:.16,lightning:true,color:'#91fff5'})}}}}
  if(p.magmaLevel>0){p.magmaTimer-=dt;if(p.magmaTimer<=0){p.magmaTimer=Math.max(1.5,4.6-p.magmaLevel*.38);magmaPatch(p.x+rand(-90,90),p.y+rand(-90,90))}}
- const zoneWalls=activeEngageWalls();for(const z of zones){if(zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma')setBurn(e,Math.max(12,z.dps*.55),1.6)}}}zones=zones.filter(z=>z.life>0);
+ if(p.lavaConstrain)unifyMagma();
+ const zoneWalls=activeEngageWalls();for(const z of zones){
+  if(z.type==='magma'&&p.lavaConstrain){z.r=Math.min(185,z.r+dt*(4+(p.lavaGrowth||0)));if(!z.visualRadius||z.r-z.visualRadius>8)z.visualPaths=null;}if(zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma')setBurn(e,Math.max(12,z.dps*.55),1.6)}}}zones=zones.filter(z=>z.life>0);
  tickIndependentElements(dt);enemyIndexDirtyDuringForces=false;tickGusts(dt);gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(22,g.r)));tickRocks(dt);tickCrossFusion(dt);
  // Index is already current when neither wind nor rock attacks displaced a target.
  if(enemyIndexDirtyDuringForces)refreshEnemyIndex();
@@ -3487,7 +3489,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
     ctx.strokeStyle=z.tint||'#e9843d';ctx.lineWidth=2;ctx.stroke();
     ctx.fillStyle=z.tint||'#ff8c39';ctx.beginPath();ctx.arc(0,0,z.r*.56,0,TAU);ctx.fill();
    }else{
-    if(!z.visualPaths)z.visualPaths=magmaVisualPaths(z.r,z.x*.017+z.y*.013);
+    if(!z.visualPaths){z.visualPaths=magmaVisualPaths(z.r,z.x*.017+z.y*.013);z.visualRadius=z.r;}
     const paths=z.visualPaths,phase=t*.65+z.x*.017+z.y*.013;
     ctx.fillStyle=z.tint?'#10233e':'#4b1a14';ctx.fill(paths[0]);
     ctx.strokeStyle=z.tint||'#9a4d29';ctx.lineWidth=z.tint?3:4;ctx.stroke(paths[0]);
