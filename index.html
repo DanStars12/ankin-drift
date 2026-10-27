@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.6 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.7 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.6 | ELEMENTAL ARSENAL</title>
+<title>ANKIN DRIFT v13.7 | ELEMENTAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -738,7 +738,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 .v13-challenge button.active{border-color:#f8ca73;box-shadow:0 0 14px #f8ca7344;background:#393454}
 .v13-challenge button small{display:block;margin-top:6px;color:#c9dce9}
 
-/* v13.6 — compact, accessible ANKIN TRIAL section on the title. */
+/* v13.7 — compact, accessible ANKIN TRIAL section on the title. */
 .v13-trial{width:100%;border:1px solid #395574;border-radius:11px;background:linear-gradient(130deg,#111c35,#162238);margin:8px 0 11px;overflow:hidden}
 .v13-trial>summary{display:flex;gap:9px;align-items:center;padding:11px 14px;cursor:pointer;list-style:none;min-height:44px;font-weight:900;letter-spacing:.04em;color:#f2dcae;touch-action:manipulation}
 .v13-trial>summary::-webkit-details-marker{display:none}
@@ -806,7 +806,7 @@ let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, boss
  let controlMode=/(Android|iPhone|iPod|iPad)/i.test(navigator.userAgent)||(matchMedia('(pointer:coarse)').matches&&innerWidth<900)?'mobile':'desktop'; // On phones select touch controls by default; title choice remains available.
  const touchMove={id:null,x:0,y:0,startX:0,startY:0,lastTap:0,lastX:0,lastY:0,moved:false,captureOk:false};
  const stick=U('floatingStick'),stickDot=U('stickDot'),novaTouch=U('novaTouch'),dashTouch=U('dashTouch');
-const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射しない。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'}};
+const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射しない。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'},dog:{name:'PAW PATROL · BETA',jp:'ドッグ型',color:'#ffd2a0',sub:'🐶 β版 / 骨ブーメラン・アニマル',desc:'骨ブーメランが往復攻撃。犬と仲間たちだけのアニマルスキルで育てるβ版機体。',nova:'BOW SHOCK：小さな骨を8方向へ投げ、帰還でもう一度攻撃'}};
 let W=innerWidth,H=innerHeight,dpr=1,mode='menu',backMode='playing',last=0,t=0,shake=0,flash=0,stars=[],particles=[],floats=[],enemies=[],shots=[],hostile=[],pickups=[],hazards=[],zones=[],player=null,game=null,boss=null,choices=[],keys=new Set(),soundOn=true,audio=null;
 const MAX_ENEMIES=235,MAX_SHOTS=290,MAX_HOSTILE=440,MAX_PICKUPS=620;
 // Normal enemy movement is tuned independently from boss movement. Never exceed each cap.
@@ -837,7 +837,7 @@ const BOSS_POOLS={minor:['guardian','raptor','hive'],major:['titan','rail','vort
 function pickBossVariant(type){const pool=BOSS_POOLS[type],last=game.bossHistory?.[type];const options=pool.filter(v=>v!==last);const id=options[Math.floor(Math.random()*options.length)];game.bossHistory[type]=id;return id;}
 const bossInfo=e=>ENEMY_CODEX.find(b=>b.id===(typeof e==='string'?e:e?.variant))||null;
 
-const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99});
+const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99,dogBones:1,dogBoneSize:1,dogBoneRange:270,dogBoneSpeed:380,dogBonePower:1,dogBoneReturn:1,dogChicks:0,dogChickTimer:0,dogChickenEvolved:false,dogEggDamage:35,dogEggRate:2.4,dogEggSpeed:125,dogFox:0,dogDolphinDuet:0,dogHamster:0,dogAnimalBoost:1});
 let adaptiveRenderScale=1;
 let overloadClock=0,recoveryClock=0,lastAdaptiveTime=0;
 function applyCanvasResolution(){
@@ -1024,7 +1024,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.6 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.7 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1538,7 +1538,7 @@ function bindSafeChoice(el){
   });
 }
 function state(s){if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay()}
-function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.dmg=35;p.hp=94;p.maxHp=94;p.spd=235;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}}
+function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.dmg=35;p.hp=94;p.maxHp=94;p.spd=235;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}if(p.shipType==='dog'){p.hp=118;p.maxHp=118;p.spd=238;p.dmg=39;p.rate=1.12;p.novaRadius=175;p.novaDamage=160;p.shotSpeed=375;p.r=15;p.limitShot=12;p.limitOrbit=10;p.dogBones=1;p.dogBoneSize=1;p.dogBoneRange=245;}}
 function boot(){setupAudio();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');if(!first)sfx('level')}
 const GUIDE_KEY='ankin_drift_release_guide_seen';let guideReturn='playing';function guideSeen(){try{return localStorage.getItem(GUIDE_KEY)==='1'}catch{return false}}function markGuide(){try{localStorage.setItem(GUIDE_KEY,'1')}catch{}}
 function click(id,fn){U(id)?.addEventListener('click',fn)}
@@ -1682,7 +1682,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.6 · ELEMENTAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.7 · DOG TYPE β</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}${id==='dog'?' <span class="dog-beta">β版</span>':''}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -1825,7 +1825,7 @@ click('pauseButton',togglePause);click('optionsButton',openOptions);click('build
  bindMobileAction(novaTouch,()=>nova());
  bindMobileAction(dashTouch,()=>dash());
 
-addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(mode==='playing'&&!e.repeat&&!e.isComposing&&!e.target?.closest?.('input,textarea,select,[contenteditable]')&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))keys.add(e.code);if(e.repeat)return;if(mode==='menu'&&e.code==='Enter'){boot();return}if(mode==='dead'&&e.code==='Enter'){boot();return}if(mode==='choice'&&['Digit1','Digit2','Digit3','Digit4','Numpad1','Numpad2','Numpad3','Numpad4'].includes(e.code)){choose(Number(e.code.at(-1))-1);return}if(mode==='choice'&&e.code==='KeyR'){reroll();return}if(mode==='fusion'&&(e.code==='Enter'||e.code==='Space')){dismissFusion();return}if(mode==='uniqueReward'&&(e.code==='Enter'||e.code==='Space')){continueAfterReward();return}if(e.code==='KeyL'&&mode==='playing'){openStored();return}if(e.code==='KeyB'){if(mode==='build')state(backMode);else showBuild();return}if(e.code==='KeyP'||e.code==='Escape'){if(mode==='options')state(optionsBack);else if(mode==='quitConfirm')state('paused');else if(mode==='build')state(backMode);else togglePause();return}if(mode==='playing'&&e.code==='Space')dash();if(mode==='playing'&&e.code==='KeyE')nova()});addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>{keys.clear();clearTouch();if(mode==='playing')state('paused')});
+addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(mode==='playing'&&!e.repeat&&!e.isComposing&&!e.target?.closest?.('input,textarea,select,[contenteditable]')&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))keys.add(e.code);if(e.repeat)return;if(mode==='menu'&&e.code==='Enter'&&!(e.target?.closest?.('button,summary,input,select,textarea'))){boot();return}if(mode==='dead'&&e.code==='Enter'){boot();return}if(mode==='choice'&&['Digit1','Digit2','Digit3','Digit4','Numpad1','Numpad2','Numpad3','Numpad4'].includes(e.code)){choose(Number(e.code.at(-1))-1);return}if(mode==='choice'&&e.code==='KeyR'){reroll();return}if(mode==='fusion'&&(e.code==='Enter'||e.code==='Space')){dismissFusion();return}if(mode==='uniqueReward'&&(e.code==='Enter'||e.code==='Space')){continueAfterReward();return}if(e.code==='KeyL'&&mode==='playing'){openStored();return}if(e.code==='KeyB'){if(mode==='build')state(menuLabBackup?'menu':backMode);else showBuild();return}if(e.code==='KeyP'||e.code==='Escape'){if(mode==='options')state(optionsBack);else if(mode==='quitConfirm')state('paused');else if(mode==='build')state(menuLabBackup?'menu':backMode);else togglePause();return}if(mode==='playing'&&e.code==='Space')dash();if(mode==='playing'&&e.code==='KeyE')nova()});addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>{keys.clear();clearTouch();if(mode==='playing')state('paused')});
 
 // v10.1 combat balance: slightly lower numeric skill gains, preserving discrete unlocks,
 // projectile counts, one-off healing, attribute seals and upgrade requirements.
@@ -2200,7 +2200,7 @@ const RELICS=[
  skill('rDrillTempo','relic','⚡','ハイギア・アクセル','ダッシュ再使用-0.23秒。オーバードライブ中は最短0.5秒。',p=>p.dashCd=Math.max(.52,p.dashCd-.23),{shipOnly:'drill',stackable:false})
 ];
 
-// v13.6: strictly independent attack families (a card upgrades exactly its advertised family).
+// v13.7: strictly independent attack families (a card upgrades exactly its advertised family).
 SKILLS.push(
  skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾+1発（最大5発）。基本凍結確率23%。スロウなし。繰り返し取得で同時発射数が増える。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallTimer=.1},{available:p=>p.iceBallCount<5}),
  skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
@@ -2234,7 +2234,7 @@ FUSIONS.push(
 );
 
 
-// v13.6: one-time trade-offs. Visual transformations are governed by these persistent build flags.
+// v13.7: one-time trade-offs. Visual transformations are governed by these persistent build flags.
 SKILLS.push(
  skill('crossBlade','epic','✖️','クロスブレード','旋回刃の長さ-50%・1命中の威力-15%。代わりに1枚が2方向の十字刃になり、刃の本数が倍になる。',p=>{p.orbit=Math.max(1,p.orbit);p.bladeCross=1},{stackable:false}),
  skill('tridentPulse','epic','⚡','トライデントパルス','EMPを小型の3領域に分割して旋回させる。中心の防御範囲は薄くなるが、威力が高いほど旋回が速い。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=35;p.empTrident=1},{stackable:false}),
@@ -2305,7 +2305,7 @@ const EXTRA_SKILL_TAGS={
  rChargeShatter:['分裂','チャージ'],rChargeNova:['爆発','チャージ'],rChargeEcho:['追加弾','チャージ'],rChargeGravity:['吸引','チャージ'],rChargeFlame:['属性：炎','マグマ床','チャージ'],rChargeMomentum:['機動','チャージ'],rDrillRotor:['プラズマ','蓄積','機動'],rDrillWide:['近接','ドリル'],rDrillImpact:['突進','爆発'],rDrillHeat:['近接','属性：炎','燃焼'],rDrillRefund:['突進','蓄積'],rDrillIce:['近接','属性：氷','スロウ']
 };
 for(const c of ALL_SKILL_DEFS())if(EXTRA_SKILL_TAGS[c.id])c.tags=[...new Set([...(c.tags||[]),...EXTRA_SKILL_TAGS[c.id]])];
-// v13.6: tags must reflect the ability actually granted, never a second weapon family.
+// v13.7: tags must reflect the ability actually granted, never a second weapon family.
 const ELEMENT_ATTACK_TAGS={
  missileFlare:['属性：炎','ミサイル','燃焼'],rain:['属性：炎','ミサイル','燃焼'],rocket:['属性：炎','ミサイル','燃焼'],volcanoLegend:['属性：炎','マグマ床'],magmaCore:['属性：炎','マグマ床'],magmaPulse:['属性：炎','マグマ床'],static:['属性：炎','マグマ床'],thermal:['属性：炎','燃焼'],emberSeed:['属性：炎','燃焼'],
  freeze:['属性：氷','凍結'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],crystalStasis:['属性：氷','凍結'],iceLegend:['属性：氷','凍結'],
@@ -2319,7 +2319,7 @@ const ELEMENT_ATTACK_TAGS={
 for(const c of ALL_SKILL_DEFS())if(ELEMENT_ATTACK_TAGS[c.id])c.tags=ELEMENT_ATTACK_TAGS[c.id];
 
 // v9.8: canonical element ownership. These cards grant an elemental attack, not just a named effect.
-// v13.6 mutator classification for codex and elemental fusion.
+// v13.7 mutator classification for codex and elemental fusion.
 const V135_TAGS={
  crossBlade:['属性：風','ブレード','変異'],tridentPulse:['属性：雷','パルス','変異'],lavaConstrain:['属性：炎','マグマ床','変異'],
  thrusterEngine:['機動','変異'],gigaNapalm:['属性：炎','ミサイル','燃焼','変異'],meteorAnvil:['属性：岩','隕石','変異'],
@@ -3120,7 +3120,7 @@ function tickGusts(dt){
  gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
-// v13.6 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
+// v13.7 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
 // Trident pulse: three separate orbiting Tesla fields, combined hits never stack in one tick.
 function empEmitters(p){
  if(p.empRadius<=0)return[];
@@ -3521,7 +3521,7 @@ function drawEvolutionShotMotifs(){
 }
 
 
-/* v13.6 — Circular cyclone: consistent radius under all effect presets. */
+/* v13.7 — Circular cyclone: consistent radius under all effect presets. */
 function drawCyclone(g){
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
@@ -3537,7 +3537,7 @@ function drawCyclone(g){
  if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count,rad=r*.87;ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);ctx.arc(0,0,rad,a,a+.44);}ctx.stroke();}
  ctx.restore();
 }
-/* v13.6 — Tesla EMP: blue-white discharge with purple field accents. */
+/* v13.7 — Tesla EMP: blue-white discharge with purple field accents. */
 function drawTeslaField(p){for(const field of empEmitters(p))drawTeslaEmitter(field);}
 function drawTeslaEmitter(p){
  if(p.empRadius<=0)return;
@@ -3753,7 +3753,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.6.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.7.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
