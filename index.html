@@ -2360,8 +2360,80 @@ for(const c of ALL_SKILL_DEFS())if(elementFromCard(c)){
 }
 function owned(id){return !!((game.skills[id]||game.powers[id]||game.legends[id]||game.uniques[id]||game.relics[id])>0)}
 function cName(id){return [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS].find(c=>c.id===id)?.name||id}
+
+// DOG TYPE β — isolated animal arsenal. Shared defensive/economy picks remain universal.
+const DOG_SHARED=new Set(['damage','hp','speed','pickup','refit','battery','dash','regen','critical','radius','repair','barrier','life','spark','shieldEpic','critEpic','novaEpic','superDash','xp','armor','iceBarrier','bounty','expShield','field','magnet','novaAmp','critPower','phoenix','seraph','reaper','void','eternalBody','unboundNova','overlord','halo','novaFracture','glassReactor','stoneAnchor','thrusterEngine']);
+SKILLS.push(
+ skill('dogBonePack','uncommon','🦴','ツイン・フェッチ','骨ブーメラン+1本（最大8本）。一発ごとの威力-8%。',p=>{p.dogBones=Math.min(8,p.dogBones+1);p.dogBonePower*=.92},{shipOnly:'dog',available:p=>p.dogBones<8}),
+ skill('dogBigBone','uncommon','🦴','ビッグ・ボーン','骨ブーメランの大きさ+30%、飛行速度-5%。',p=>{p.dogBoneSize=Math.min(2.8,p.dogBoneSize*1.3);p.dogBoneSpeed=Math.max(235,p.dogBoneSpeed*.95)},{shipOnly:'dog',available:p=>p.dogBoneSize<2.7}),
+ skill('dogGoodBoy','rare','🐶','グッド・ボーイ！','骨の帰還ダメージ+24%、基本攻撃力+10。',p=>{p.dogBoneReturn+=.24;p.dmg+=10},{shipOnly:'dog'}),
+ skill('dogFetchRun','common','🎾','ロング・フェッチ','骨の往路射程+42、飛行速度+20。',p=>{p.dogBoneRange=Math.min(480,p.dogBoneRange+42);p.dogBoneSpeed+=20},{shipOnly:'dog',available:p=>p.dogBoneRange<480}),
+ skill('dogPuppyCheer','rare','🐾','わんわん応援団','骨ブーメラン威力+18%、ダッシュ間隔-0.12秒。',p=>{p.dogBonePower+=.18;p.dashCd=Math.max(.75,p.dashCd-.12)},{shipOnly:'dog'}),
+ skill('dogChick','uncommon','🐤','チック・タック','ヒヨコミニオン+1匹（最大10匹）。ゆっくりした卵を放つ。NORMAL 15分／CHALLENGE 8分で全員ニワトリへ進化。',p=>p.dogChicks=Math.min(10,p.dogChicks+1),{shipOnly:'dog',available:p=>p.dogChicks<10}),
+ skill('dogEggPower','rare','🥚','たまごころころ','ヒヨコ／ニワトリが撃つ卵のダメージ+22、卵サイズ+10%。',p=>{p.dogEggDamage+=22;p.dogEggSize=(p.dogEggSize||1)*1.1},{shipOnly:'dog',available:p=>p.dogChicks>0}),
+ skill('dogEggTempo','epic','🐔','コケコッコ・リズム','卵の発射間隔-18%、卵の速度+24。',p=>{p.dogEggRate=Math.max(.58,p.dogEggRate*.82);p.dogEggSpeed+=24},{shipOnly:'dog',available:p=>p.dogChicks>0}),
+ skill('dogDolphin','rare','🐬','ドルフィン・リング','風属性。イルカが1匹、機体の周囲を泳いで敵を迎撃。',p=>p.orbit=Math.min(p.limitOrbit,p.orbit+1),{shipOnly:'dog',available:p=>p.orbit<p.limitOrbit}),
+ skill('dogDuet','epic','🐬','ドルフィン・デュエット','風属性。イルカがペアで泳ぎ、攻撃方向が増える。個々の攻撃リーチ-35%、一撃威力-15%。',p=>{p.orbit=Math.max(1,p.orbit);p.dogDolphinDuet=1},{shipOnly:'dog',stackable:false}),
+ skill('dogHurricane','uncommon','🐬','ドルフィン・ハリケーン','風属性。イルカ型の旋風が飛んで敵を押し返す。サイクロン+1発（最大7）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1},{shipOnly:'dog',available:p=>p.windCount<7}),
+ skill('dogHurricanePlus','rare','🌪️','ドルフィン・スプラッシュ','風属性。ドルフィン・ハリケーンの範囲+35・威力+25。',p=>{p.windCount=Math.max(1,p.windCount);p.windRadius+=35;p.windDps+=25},{shipOnly:'dog'}),
+ skill('dogFox','epic','🦊','フォックスミサイル','炎属性。狐火の追尾ミサイル+1発（最大8）。命中時は爆炎と燃焼。',p=>{p.rocketCd=Math.min(8,p.rocketCd+1);p.flameMissiles++;p.rocketTimer=0},{shipOnly:'dog',available:p=>p.rocketCd<8}),
+ skill('dogNineTail','epic','🦊','九尾・フレア','炎属性。狐火を低速の巨大な1発に統合。爆風・燃焼威力が上がるが発射間隔が増える。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.gigaNapalm=1;p.rocketTimer=0},{shipOnly:'dog',stackable:false}),
+ skill('dogPawLava','rare','🐾','パウ・ラヴァ','炎属性。肉球型のマグマ領域を形成。持続燃焼ダメージを与える。',p=>{p.magmaLevel++;p.magmaDps+=18},{shipOnly:'dog'}),
+ skill('dogPawBloom','epic','🔥','もえもえ・肉球','炎属性。肉球マグマの半径+32、持続ダメージ+34。',p=>{p.magmaLevel=Math.max(1,p.magmaLevel);p.magmaRadius+=32;p.magmaDps+=34},{shipOnly:'dog'}),
+ skill('dogRabbit','uncommon','🐰','スノー・ラビット','氷属性。ウサギ型アイスボール+1発（最大5）。凍結とスロウの既存ルールに従う。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallDamage+=5},{shipOnly:'dog',available:p=>p.iceBallCount<5}),
+ skill('dogRabbitFrost','rare','❄️','ぴょんぴょん・フロスト','氷属性。ウサギ型氷球のダメージ+28、凍結確率+9%。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=28;p.iceBallChance=Math.min(.78,p.iceBallChance+.09)},{shipOnly:'dog'}),
+ skill('dogCat','uncommon','🐱','キャット・ディフェンダー','岩属性。自機の周囲を回る猫ブロッカー+1匹（最大18）。敵・敵弾を迎撃。',p=>p.rockWalls=Math.min(18,p.rockWalls+1),{shipOnly:'dog',available:p=>p.rockWalls<18}),
+ skill('dogCatFort','rare','🐈','にゃんこ・ガード','岩属性。猫ブロッカー+2匹、迎撃威力+24。',p=>{p.rockWalls=Math.min(18,p.rockWalls+2);p.rockDamage+=24},{shipOnly:'dog',available:p=>p.rockWalls<18}),
+ skill('dogHamMeteor','rare','🐹','ハム・スターメテオ','岩属性。ころころ転がるハムスター型の巨大貫通弾を発射。',p=>{p.meteorCount=1;p.meteorDamage+=40},{shipOnly:'dog',stackable:false}),
+ skill('dogHamPlus','epic','🐹','ハム・クラッシュ','岩属性。ハム・スターメテオの威力+160・成長上限+16。発射間隔+25%。',p=>{p.meteorCount=1;p.meteorDamage+=160;p.meteorRadius+=16;p.meteorInterval*=1.25},{shipOnly:'dog',stackable:false}),
+ skill('dogHedgehog','rare','🦔','エレキ・ハリネズミ','雷属性。自機を取り巻く電磁パルスを発生。敵に継続ダメージ。',p=>{p.empRadius=Math.max(p.empRadius,108);p.empDps+=58},{shipOnly:'dog'}),
+ skill('dogHedgeSpark','epic','⚡','ハリネズミ・ビリビリ','雷属性。電磁パルスの範囲+38、威力+68。',p=>{p.empRadius=Math.max(108,p.empRadius)+38;p.empDps+=68},{shipOnly:'dog'}),
+ skill('dogAnimalPack','epic','🐾','ワンワン・パック','アニマルの攻撃力+18%。骨ブーメラン1発威力-10%。',p=>{p.dogAnimalBoost*=1.18;p.dogBonePower*=.90},{shipOnly:'dog',stackable:false})
+);
+POWERS.push(
+ skill('dogPwrChicks','power','🐔','ANKIN ぴよぴよ隊','チック・タック+2匹、卵の威力+28。',p=>{p.dogChicks=Math.min(10,p.dogChicks+2);p.dogEggDamage+=28},{shipOnly:'dog',available:p=>p.dogChicks<10}),
+ skill('dogPwrFox','power','🦊','ANKIN 狐火パレード','フォックスミサイル+2発、追尾威力を強化。',p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.thermal+=.25},{shipOnly:'dog',available:p=>p.rocketCd<8}),
+ skill('dogPwrDolphin','power','🐬','ANKIN ドルフィン隊','イルカ+2匹、ハリケーン+1発。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.windCount=Math.min(7,p.windCount+1)},{shipOnly:'dog'}),
+ skill('dogPwrRabbit','power','🐰','ANKIN 雪うさぎ隊','ウサギ型氷球+2発、凍結確率+10%。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+2);p.iceBallChance=Math.min(.78,p.iceBallChance+.1)},{shipOnly:'dog'}),
+ skill('dogPwrCat','power','🐱','ANKIN にゃんこ城塞','猫ブロッカー+4匹、反撃威力+40。',p=>{p.rockWalls=Math.min(18,p.rockWalls+4);p.rockDamage+=40},{shipOnly:'dog'}),
+ skill('dogPwrLava','power','🐾','ANKIN 肉球フレア','肉球マグマ+2レベル、半径+25。',p=>{p.magmaLevel+=2;p.magmaRadius+=25;p.magmaDps+=28},{shipOnly:'dog'})
+);
+LEGENDS.push(
+ skill('dogLegendChicken','legendary','🐔','伝説のコケコッコ軍団','チック・タック+3匹、卵の威力+100。時間進化後は全員ニワトリ。',p=>{p.dogChicks=Math.min(10,p.dogChicks+3);p.dogEggDamage+=100},{shipOnly:'dog'}),
+ skill('dogLegendFox','legendary','🦊','九尾の狐火','フォックスミサイル+3発、炎上強化。',p=>{p.rocketCd=Math.min(8,p.rocketCd+3);p.thermal+=.85},{shipOnly:'dog'}),
+ skill('dogLegendSea','legendary','🐬','イルカの大行進','イルカ+4匹、ハリケーン+2発、風ダメージ強化。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+4);p.windCount=Math.min(7,p.windCount+2);p.windDps+=50},{shipOnly:'dog'}),
+ skill('dogLegendHam','legendary','🐹','銀河のまんまるハム','ハム・スターメテオ威力+290、成長上限+24。',p=>{p.meteorCount=1;p.meteorDamage+=290;p.meteorRadius+=24},{shipOnly:'dog'}),
+ skill('dogLegendRabbit','legendary','🐰','雪うさぎの大行進','スノー・ラビットを5発にし、氷球威力+135。',p=>{p.iceBallCount=5;p.iceBallDamage+=135},{shipOnly:'dog'})
+);
+UNIQUE_SKILLS.push(
+ skill('dogUniquePack','unique','🐾','アニマル・パラダイス','全アニマル攻撃力+45%、骨ブーメラン+3本、ヒヨコ+3匹、イルカ+2匹。',p=>{p.dogAnimalBoost*=1.45;p.dogBones=Math.min(8,p.dogBones+3);p.dogChicks=Math.min(10,p.dogChicks+3);p.orbit=Math.min(10,p.orbit+2)},{shipOnly:'dog'})
+);
+SYNERGIES.push(
+ {id:'dogChickenEgg',shipOnly:'dog',need:['dogChick','dogEggPower'],name:'おやつの時間',desc:'たまご威力+35、発射間隔-10%。',apply:p=>{p.dogEggDamage+=35;p.dogEggRate=Math.max(.58,p.dogEggRate*.9)}},
+ {id:'dogDolphinDuetSynergy',shipOnly:'dog',need:['dogDolphin','dogDuet'],name:'イルカのハーモニー',desc:'イルカの周回攻撃力+20%、ドルフィン・ハリケーン+1発。',apply:p=>{p.bladePower=(p.bladePower||1)*1.2;p.windCount=Math.min(7,p.windCount+1)}},
+ {id:'dogFoxPaw',shipOnly:'dog',need:['dogFox','dogPawLava'],name:'こんこん・足あと',desc:'肉球マグマ威力+65、狐火ミサイル+1発。',apply:p=>{p.magmaDps+=65;p.rocketCd=Math.min(8,p.rocketCd+1)}},
+ {id:'dogHamCat',shipOnly:'dog',need:['dogHamMeteor','dogCat'],name:'まんまる守備隊',desc:'ハムスター威力+100、猫ブロッカー反撃+35。',apply:p=>{p.meteorDamage+=100;p.rockDamage+=35}},
+ {id:'dogRabbitHedge',shipOnly:'dog',need:['dogRabbit','dogHedgehog'],name:'びりびり・ぴょん',desc:'氷球凍結+10%、電磁パルス威力+65。',apply:p=>{p.iceBallChance=Math.min(.78,p.iceBallChance+.10);p.empDps+=65}}
+);
+FUSIONS.push(
+ {id:'dogChickenEvo',shipOnly:'dog',power:'dogPwrChicks',legend:'dogLegendChicken',name:'コケコッコ・フェスティバル',icon:'🐔',desc:'卵が大幅強化。ヒヨコ+2匹、発射間隔-30%。',apply:p=>{p.dogEggDamage+=190;p.dogChicks=Math.min(10,p.dogChicks+2);p.dogEggRate=Math.max(.58,p.dogEggRate*.7)}},
+ {id:'dogFoxEvo',shipOnly:'dog',power:'dogPwrFox',legend:'dogLegendFox',name:'九尾のフォックスストーム',icon:'🦊',desc:'フォックスミサイルを強化。狐火がさらに大きな爆風を残す。',apply:p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.dmg+=110;p.thermal+=1.1}},
+ {id:'dogDolphinEvo',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogLegendSea',name:'ドルフィン・オーケストラ',icon:'🐬',desc:'イルカ数と旋回威力・ハリケーンの発生数を強化。',apply:p=>{p.orbit=Math.min(10,p.orbit+2);p.bladePower=(p.bladePower||1)*1.5;p.windCount=7}},
+ {id:'dogRabbitEvo',shipOnly:'dog',power:'dogPwrRabbit',legend:'dogLegendRabbit',name:'スノー・ラビット大行進',icon:'🐰',desc:'雪うさぎ氷球の火力・凍結確率を大幅強化。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=235;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)}}
+);
+for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS])if(c.shipOnly==='dog'){
+ const animal=['骨ブーメラン','アニマル'];
+ if(/Fox|NineTail|PawLava|PawBloom|PwrLava|LegendFox/i.test(c.id))animal.push('属性：炎','ミサイル');
+ if(/Dolphin|Hurricane|Duet/i.test(c.id))animal.push('属性：風','イルカ');
+ if(/Rabbit/i.test(c.id))animal.push('属性：氷','ウサギ');
+ if(/Cat|Ham/i.test(c.id))animal.push('属性：岩');
+ if(/Hedge/i.test(c.id))animal.push('属性：雷');
+ if(/Chick|Egg|Chicken/i.test(c.id))animal.push('ヒヨコ');
+ c.tags=animal;
+}
+
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
-function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))}
+function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&fitsShip(skillById(a.power))&&fitsShip(skillById(a.legend))&&!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)))}
 function synergiesFor(id){return activeSynergies().filter(a=>a.need.includes(id))}
