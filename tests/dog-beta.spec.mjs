@@ -24,7 +24,7 @@ window.__dogTest={
  },
  bone(){
   this.reset();shoot();
-  const first=shots[0],origin={count:shots.length,kind:first?.kind,pierce:first?.pierce,range:first?.range};
+  const first=shots[0],origin={count:shots.length,kind:first?.kind,pierce:first?.pierce,range:first?.range};player.shotTimer=99999;
   for(let i=0;i<160;i++)drive(.016);
   return {...origin,remainingBones:shots.filter(b=>b.kind==='bone').length};
  },
@@ -46,11 +46,11 @@ window.__dogTest={
    const c=skillById(id);c.apply(player);game.skills[id]=1;
   });
   game.total=20;game.spawn=99999;
+  const e=spawnEnemy('drone',{x:player.x+130,y:player.y});e.hp=e.maxHp=100000;refreshEnemyIndex();
   tickIndependentElements(.2);tickDogChicks(2.5);tickGusts(.2);
   const initial={orbit:player.orbit,duet:player.dogDolphinDuet,wind:player.windCount,fox:player.rocketCd,
    lava:player.magmaLevel,ice:player.iceBallCount,cat:player.rockWalls,ham:player.meteorCount,
    emp:player.empRadius,chicks:player.dogChicks,eggShots:shots.filter(b=>b.kind==='dogEgg').length};
-  const e=spawnEnemy('drone',{x:player.x+130,y:player.y});e.hp=e.maxHp=100000;refreshEnemyIndex();
   for(let i=0;i<150;i++)drive(.016);
   return {...initial,foxShots:shots.filter(b=>b.kind==='rocket').length,meteorDamage:player.meteorDamage};
  },
