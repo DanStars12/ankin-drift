@@ -49,6 +49,8 @@ test('v13 optional trials produce GOLD legacy and achievements that survive relo
   damage:500,time:1800,level:45,clears:[{mode:'normal',time:1800,level:45,damage:500,date:'2026-10-24T00:00:00.000Z'}]})));
  await page.goto('./');
  await page.locator('[data-control="'+(isMobile?'mobile':'desktop')+'"]').click();
+ await page.locator('#ankinTrial summary').click();
+ await expect(page.locator('#ankinTrial')).toHaveAttribute('open','');
  await page.locator('[data-v13-challenge="fragile"]').click();
  await page.locator('[data-v13-challenge="onslaught"]').click();
  await expect(page.locator('[data-v13-challenge="fragile"]')).toHaveAttribute('aria-pressed','true');
