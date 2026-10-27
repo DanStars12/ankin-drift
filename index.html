@@ -3540,6 +3540,74 @@ function hudUpdate(){if(!game||!player)return;
 }
 
 function glow(x,y,r,c,blur=14){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=settings.fx==='low'||settings.fx==='simple'?0:renderHeavyLoad?Math.min(blur,2):settings.fx==='high'?blur:settings.fx==='medium'?blur*.45:0;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.shadowBlur=0}
+
+function drawAnimal(kind,x,y,r=14,angle=0){
+ ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.lineCap='round';ctx.lineJoin='round';
+ const fur={dog:'#f3c481',fox:'#ff944d',cat:'#d8a8f2',ham:'#efbd85',rabbit:'#f0ecff',
+  dolphin:'#6acbdf',chick:'#ffdf61',chicken:'#f6e6bb',hedgehog:'#a47a65'}[kind]||'#f1dba7';
+ ctx.strokeStyle='#5a3542';ctx.lineWidth=Math.max(1.1,r*.105);ctx.fillStyle=fur;
+ if(kind==='dolphin'){
+  // Sideways dolphin: a curved dorsal fin, narrow beak, two tail tips.
+  ctx.rotate(Math.PI/2);
+  ctx.beginPath();ctx.moveTo(0,-r*.83);ctx.bezierCurveTo(r*.60,-r*.54,r*.68,r*.10,r*.28,r*.68);
+  ctx.lineTo(r*.69,r*1.02);ctx.lineTo(r*.10,r*.82);ctx.lineTo(-r*.10,r*.82);
+  ctx.lineTo(-r*.69,r*1.02);ctx.lineTo(-r*.28,r*.68);
+  ctx.bezierCurveTo(-r*.69,r*.06,-r*.58,-r*.55,0,-r*.83);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#9cf3ff';ctx.beginPath();ctx.ellipse(0,-r*.26,r*.40,r*.28,0,0,TAU);ctx.fill();
+  ctx.fillStyle='#263c55';ctx.beginPath();ctx.arc(-r*.19,-r*.48,Math.max(1.3,r*.09),0,TAU);ctx.fill();
+  ctx.restore();return;
+ }
+ if(kind==='hedgehog'){
+  ctx.fillStyle='#8d6555';ctx.beginPath();for(let i=0;i<16;i++){const a=i*TAU/16,rad=r*(i%2?1:1.20);i?ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad):ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();
+ }
+ if(kind==='rabbit'){
+  ctx.beginPath();ctx.ellipse(-r*.42,-r*.92,r*.25,r*.75,-.16,0,TAU);ctx.ellipse(r*.42,-r*.92,r*.25,r*.75,.16,0,TAU);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#f8afc8';ctx.beginPath();ctx.ellipse(-r*.42,-r*.95,r*.11,r*.55,-.16,0,TAU);ctx.ellipse(r*.42,-r*.95,r*.11,r*.55,.16,0,TAU);ctx.fill();ctx.fillStyle=fur;
+ }
+ if(kind==='fox'||kind==='cat'){
+  ctx.beginPath();ctx.moveTo(-r*.83,-r*.43);ctx.lineTo(-r*.88,-r*1.22);ctx.lineTo(-r*.25,-r*.85);
+  ctx.lineTo(r*.25,-r*.85);ctx.lineTo(r*.88,-r*1.22);ctx.lineTo(r*.83,-r*.43);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#ffb6c1';ctx.beginPath();ctx.moveTo(-r*.69,-r*.80);ctx.lineTo(-r*.72,-r*1.08);ctx.lineTo(-r*.43,-r*.80);ctx.moveTo(r*.69,-r*.80);ctx.lineTo(r*.72,-r*1.08);ctx.lineTo(r*.43,-r*.80);ctx.fill();ctx.fillStyle=fur;
+ }
+ if(kind==='dog'){
+  ctx.fillStyle='#b87a50';ctx.beginPath();ctx.ellipse(-r*.91,-r*.22,r*.35,r*.74,-.36,0,TAU);ctx.ellipse(r*.91,-r*.22,r*.35,r*.74,.36,0,TAU);ctx.fill();ctx.fillStyle=fur;
+ }
+ if(kind==='ham'){
+  ctx.beginPath();ctx.arc(-r*.74,-r*.72,r*.40,0,TAU);ctx.arc(r*.74,-r*.72,r*.40,0,TAU);ctx.fill();ctx.stroke();
+ }
+ if(kind==='chicken'){
+  ctx.fillStyle='#f55f72';for(let k=-1;k<=1;k++){ctx.beginPath();ctx.arc(k*r*.32,-r*.96,r*.29,0,TAU);ctx.fill()}ctx.fillStyle=fur;
+ }
+ ctx.beginPath();ctx.ellipse(0,0,r,r*.89,0,0,TAU);ctx.fill();ctx.stroke();
+ if(kind==='dog'||kind==='fox'||kind==='ham'||kind==='cat'||kind==='rabbit'){
+  ctx.fillStyle='#fff3df';ctx.beginPath();ctx.ellipse(0,r*.32,r*.52,r*.33,0,0,TAU);ctx.fill();
+ }
+ if(kind==='ham'){ctx.fillStyle='#f09a97';for(const i of [-1,1]){ctx.beginPath();ctx.arc(i*r*.64,r*.19,r*.25,0,TAU);ctx.fill();}}
+ ctx.fillStyle='#31283d';for(const i of [-1,1]){ctx.beginPath();ctx.arc(i*r*.38,-r*.16,Math.max(1.45,r*.115),0,TAU);ctx.fill();}
+ ctx.fillStyle=kind==='chick'||kind==='chicken'?'#f89c47':'#86536c';
+ if(kind==='chick'||kind==='chicken'){ctx.beginPath();ctx.moveTo(-r*.18,r*.21);ctx.lineTo(r*.18,r*.21);ctx.lineTo(0,r*.50);ctx.closePath();ctx.fill();}
+ else {ctx.beginPath();ctx.ellipse(0,r*.27,r*.17,r*.12,0,0,TAU);ctx.fill();}
+ ctx.restore();
+}
+function drawDogBone(b){
+ ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
+ const r=b.r;ctx.shadowColor=b.novaBone?'#ffb2e7':'#ffe4a4';ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
+ ctx.strokeStyle=b.novaBone?'#fff6fc':'#fff0c2';ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
+ ctx.fillStyle=b.novaBone?'#ffe3fa':'#fff1ce';
+ for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
+ ctx.restore();
+}
+function drawDogPaw(z){
+ const r=z.r,hot=Math.sin(t*3+z.x*.12)*.07,fade=clamp(z.life*.30,0,.80);
+ ctx.globalAlpha=fade*.8;ctx.fillStyle='#b4311c';
+ ctx.beginPath();ctx.ellipse(0,r*.20,r*.70,r*.51,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#ff7637';ctx.beginPath();ctx.ellipse(0,r*.16,r*.55,r*.38,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#ef6b2c';const toes=[[-.65,-.35],[-.24,-.64],[.25,-.64],[.65,-.35]];
+ for(const [xx,yy] of toes){ctx.beginPath();ctx.ellipse(xx*r,yy*r,r*.22,r*.25,xx*.20,0,TAU);ctx.fill();}
+ ctx.globalAlpha=fade*.7;ctx.strokeStyle='#ffdc7a';ctx.lineWidth=2.3;
+ ctx.beginPath();ctx.ellipse(0,r*.16,r*(.44+hot),r*.29,0,0,TAU);ctx.stroke();
+}
+
 function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor=player?.evolutionTint|| (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle=player?.evolutionTint|| (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='drill'){
   const hot=(player.drillRushActive||0)>0,charge=clamp((player.drillPlasma||0)/Math.max(.001,player.drillCap||1),0,1);
   // Magenta plated chassis + a distinct, mechanical auger at the nose.
