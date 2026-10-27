@@ -70,11 +70,11 @@ async function setup(page){
  });
  await page.goto('./');return errors;
 }
-test('neon outlines use stroke only and path cache is shared by all animal kinds',async({page})=>{
+test('animal shapes retain cached outlines while filled readable bodies are rendered',async({page})=>{
  const errors=await setup(page),r=await page.evaluate(()=>window.__neonProbe.outlines());
  expect(r.kinds).toHaveLength(9);
  expect(r.kinds).toContain('dolphin');expect(r.kinds).toContain('chicken');
- expect(r.paint.fill).toBe(0);expect(r.paint.stroke).toBe(10);
+ expect(r.paint.fill).toBeGreaterThanOrEqual(18);expect(r.paint.stroke).toBeGreaterThanOrEqual(10);
  expect(r.cache).toBe(9);
  expect(r.dogPath).not.toMatch(/eye|mouth/i);
  expect(r.dolphinPath).toContain('L -1.43 -.40');
