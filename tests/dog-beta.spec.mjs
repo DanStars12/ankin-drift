@@ -75,7 +75,7 @@ async function setup(page){
 test('dog neon ship is playable from title and displays build LAB',async({page,isMobile})=>{
  const errors=await setup(page);
  await expect(page.locator('[data-ship="dog"]')).toBeVisible();
- await expect(page.locator('[data-ship="dog"] .dog-frame-icon path')).toHaveAttribute('d',/M-.64-.67/);
+ await expect(page.locator('[data-ship="dog"] .dog-frame-icon path')).toHaveCount(9);
  await expect(page.locator('[data-ship="dog"] .dog-beta')).toHaveCount(0);
  await page.locator('[data-ship="dog"]').click();
  await page.locator('#openTitleLab').click();
