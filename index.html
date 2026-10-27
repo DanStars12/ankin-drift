@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.8.2 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.9 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.8.2 | HEDGEHOG EMP</title>
+<title>ANKIN DRIFT v13.9 | ANIMAL REVAMP</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1692,7 +1692,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.8.2 · HEDGEHOG EMP</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.9 · ANIMAL REVAMP</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2383,21 +2383,21 @@ SKILLS.push(
  skill('dogEggPower','rare','🥚','たまごころころ','ヒヨコ／ニワトリが撃つ卵のダメージ+22、卵サイズ+10%。',p=>{p.dogEggDamage+=22;p.dogEggSize=(p.dogEggSize||1)*1.1},{shipOnly:'dog',available:p=>p.dogChicks>0}),
  skill('dogEggTempo','epic','🐔','コケコッコ・リズム','卵の発射間隔-18%、卵の速度+24。',p=>{p.dogEggRate=Math.max(.58,p.dogEggRate*.82);p.dogEggSpeed+=24},{shipOnly:'dog',available:p=>p.dogChicks>0}),
  skill('dogDolphin','rare','🐬','ドルフィン・リング','風属性。イルカが1匹、機体の周囲を泳いで敵を迎撃。',p=>p.orbit=Math.min(p.limitOrbit,p.orbit+1),{shipOnly:'dog',available:p=>p.orbit<p.limitOrbit}),
- skill('dogDuet','epic','🐬','ドルフィン・デュエット','風属性。イルカがペアで泳ぎ、攻撃方向が増える。個々の攻撃リーチ-35%、一撃威力-15%。',p=>{p.orbit=Math.max(1,p.orbit);p.dogDolphinDuet=1},{shipOnly:'dog',stackable:false}),
+ skill('dogDuet','epic','🐬','ドルフィン・デュエット','風属性。イルカがペアで泳ぎ、攻撃方向が増える。個々の攻撃リーチ-35%、一撃威力-15%。',p=>{p.orbit=Math.max(1,p.orbit);p.dogDolphinDuet=1},shipOnly:\'dog\',stackable:false,available:p=>p.orbit>0),
  skill('dogHurricane','uncommon','🐬','ドルフィン・ハリケーン','風属性。イルカ型の旋風が飛んで敵を押し返す。サイクロン+1発（最大7）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1},{shipOnly:'dog',available:p=>p.windCount<7}),
- skill('dogHurricanePlus','rare','🌪️','ドルフィン・スプラッシュ','風属性。ドルフィン・ハリケーンの範囲+35・威力+25。',p=>{p.windCount=Math.max(1,p.windCount);p.windRadius+=35;p.windDps+=25},{shipOnly:'dog'}),
+ skill('dogHurricanePlus','rare','🌪️','ドルフィン・スプラッシュ','風属性。ドルフィン・ハリケーンの範囲+35・威力+25。',p=>{p.windCount=Math.max(1,p.windCount);p.windRadius+=35;p.windDps+=25},shipOnly:\'dog\',available:p=>p.windCount>0),
  skill('dogFox','epic','🦊','フォックスミサイル','炎属性。狐火の追尾ミサイル+1発（最大8）。命中時は爆炎と燃焼。',p=>{p.rocketCd=Math.min(8,p.rocketCd+1);p.flameMissiles++;p.rocketTimer=0},{shipOnly:'dog',available:p=>p.rocketCd<8}),
- skill('dogNineTail','epic','🦊','九尾・フレア','炎属性。狐火を低速の巨大な1発に統合。爆風・燃焼威力が上がるが発射間隔が増える。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.gigaNapalm=1;p.rocketTimer=0},{shipOnly:'dog',stackable:false}),
+ skill('dogNineTail','epic','🦊','九尾・フレア','炎属性。狐火を低速の巨大な1発に統合。爆風・燃焼威力が上がるが発射間隔が増える。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.gigaNapalm=1;p.rocketTimer=0},shipOnly:\'dog\',stackable:false,available:p=>p.rocketCd>0),
  skill('dogPawLava','rare','🐾','パウ・ラヴァ','炎属性。肉球型のマグマ領域を形成。持続燃焼ダメージを与える。',p=>{p.magmaLevel++;p.magmaDps+=18},{shipOnly:'dog'}),
- skill('dogPawBloom','epic','🔥','もえもえ・肉球','炎属性。肉球マグマの半径+32、持続ダメージ+34。',p=>{p.magmaLevel=Math.max(1,p.magmaLevel);p.magmaRadius+=32;p.magmaDps+=34},{shipOnly:'dog'}),
+ skill('dogPawBloom','epic','🔥','もえもえ・肉球','炎属性。肉球マグマの半径+32、持続ダメージ+34。',p=>{p.magmaLevel=Math.max(1,p.magmaLevel);p.magmaRadius+=32;p.magmaDps+=34},shipOnly:\'dog\',available:p=>p.magmaLevel>0),
  skill('dogRabbit','uncommon','🐰','スノー・ラビット','氷属性。ウサギ型アイスボール+1発（最大5）。凍結とスロウの既存ルールに従う。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallDamage+=5},{shipOnly:'dog',available:p=>p.iceBallCount<5}),
- skill('dogRabbitFrost','rare','❄️','ぴょんぴょん・フロスト','氷属性。ウサギ型氷球のダメージ+28、凍結確率+9%。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=28;p.iceBallChance=Math.min(.78,p.iceBallChance+.09)},{shipOnly:'dog'}),
+ skill('dogRabbitFrost','rare','❄️','ぴょんぴょん・フロスト','氷属性。ウサギ型氷球のダメージ+28、凍結確率+9%。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=28;p.iceBallChance=Math.min(.78,p.iceBallChance+.09)},shipOnly:\'dog\',available:p=>p.iceBallCount>0),
  skill('dogCat','uncommon','🐱','キャット・ディフェンダー','岩属性。自機の周囲を回る猫ブロッカー+1匹（最大18）。敵・敵弾を迎撃。',p=>p.rockWalls=Math.min(18,p.rockWalls+1),{shipOnly:'dog',available:p=>p.rockWalls<18}),
  skill('dogCatFort','rare','🐈','にゃんこ・ガード','岩属性。猫ブロッカー+2匹、迎撃威力+24。',p=>{p.rockWalls=Math.min(18,p.rockWalls+2);p.rockDamage+=24},{shipOnly:'dog',available:p=>p.rockWalls<18}),
  skill('dogHamMeteor','rare','🐹','ハム・スターメテオ','岩属性。ころころ転がるハムスター型の巨大貫通弾を発射。',p=>{p.meteorCount=1;p.meteorDamage+=40},{shipOnly:'dog',stackable:false}),
- skill('dogHamPlus','epic','🐹','ハム・クラッシュ','岩属性。ハム・スターメテオの威力+160・成長上限+16。発射間隔+25%。',p=>{p.meteorCount=1;p.meteorDamage+=160;p.meteorRadius+=16;p.meteorInterval*=1.25},{shipOnly:'dog',stackable:false}),
- skill('dogHedgehog','rare','🦔','エレキ・ハリネズミ','雷属性。自機を取り巻く電磁パルスを発生。敵に継続ダメージ。',p=>{p.empRadius=Math.max(p.empRadius,108);p.empDps+=58},{shipOnly:'dog'}),
- skill('dogHedgeSpark','epic','⚡','ハリネズミ・ビリビリ','雷属性。電磁パルスの範囲+38、威力+68。',p=>{p.empRadius=Math.max(108,p.empRadius)+38;p.empDps+=68},{shipOnly:'dog'}),
+ skill('dogHamPlus','epic','🐹','ハム・クラッシュ','岩属性。ハム・スターメテオの威力+160・成長上限+16。発射間隔+25%。',p=>{p.meteorCount=1;p.meteorDamage+=160;p.meteorRadius+=16;p.meteorInterval*=1.25},shipOnly:\'dog\',stackable:false,available:p=>p.meteorCount>0),
+ skill('dogHedgehog','rare','🦔','エレキ・ハリネズミ','雷属性。自機を取り巻く電磁パルスを解放。重複取得不可。',p=>{p.empRadius=Math.max(p.empRadius,108);p.empDps+=58},{shipOnly:'dog',stackable:false,available:p=>p.empRadius<=0}),
+ skill('dogHedgeSpark','epic','⚡','ハリネズミ・ビリビリ','雷属性。解放済み電磁パルスの範囲+38、威力+68。',p=>{p.empRadius=Math.max(108,p.empRadius)+38;p.empDps+=68},{shipOnly:'dog',available:p=>p.empRadius>0}),
  skill('dogAnimalPack','epic','🐾','ワンワン・パック','アニマルの攻撃力+18%。骨ブーメラン1発威力-10%。',p=>{p.dogAnimalBoost*=1.18;p.dogBonePower*=.90},{shipOnly:'dog',stackable:false})
 );
 POWERS.push(
@@ -3564,7 +3564,7 @@ function glow(x,y,r,c,blur=14){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=
 
 
 /* v13.8: cached neon-only outlines; no emoji glyphs, eyes, mouth or filled animal bodies. */
-const ANIMAL_OUTLINES={"dog":"M-.64-.67 Q-.45-1.06 0-.93 Q.45-1.06 .64-.67 C.85-1.12 1.18-.74 1.13-.13 Q1.12.44 .85.52 C.91.88 .43 1.09 0 1.06 C-.43 1.09-.91.88-.85.52 Q-1.12.44-1.13-.13 C-1.18-.74-.85-1.12-.64-.67 Z","chick":"M-.28-.93 Q-.33-1.18-.07-1.13 Q.04-1.29 .19-1.10 Q.35-1.16 .36-.87 C1.08-.52 1.10.55 .42.9 L.35 1.07 L.05 1.07 L0 .94 L-.12 1.09 L-.42 1.09 L-.40 .90 C-1.04.62-1.10-.44-.28-.93 Z","chicken":"M-.53-.72 Q-.72-1.02-.38-1.09 Q-.32-1.36-.02-1.19 Q.23-1.42 .37-1.10 Q.68-1.14 .59-.76 Q.96-.51 .95-.03 Q1.30.02 1.27-.40 Q1.55 .23 .97 .51 Q.73 .91 .39 .99 L.36 1.19 L.08 1.19 L.03 1.01 L-.28 1.19 L-.55 1.19 L-.48 .90 C-1.02.64-1.10-.30-.53-.72 Z","dolphin":"M 1.42 -.21 L 1.05 -.27 Q .82 -.59 .48 -.56 C .21 -.60 -.12 -.51 -.32 -.39 L -.38 -.88 Q -.60 -.72 -.62 -.24 C -.83 -.21 -1.00 -.13 -1.14 -.08 L -1.43 -.40 L -1.38 -.08 L -1.50 .24 L -1.08 .08 C -.84 .30 -.38 .48 -.08 .44 L .08 .86 L .43 .43 C .68 .30 .82 .10 .96 -.02 L 1.45 -.08 L .98 -.12 Q 1.13 -.20 1.42 -.21 Z","fox":"M-.96-1.30 L-.18-.85 Q0-.95 .18-.85 L.96-1.30 L.81-.33 Q1.05 .17 .68 .66 L.27 1.02 L0 .87 L-.27 1.02 L-.68 .66 Q-1.05 .17-.81-.33 Z","cat":"M-1.03-1.24 L-.28-.83 Q0-.95 .28-.83 L1.03-1.24 L.89-.17 Q1.07 .41 .64 .86 Q0 1.12-.64 .86 Q-1.07 .41-.89-.17 Z","rabbit":"M-.81-.30 Q-.94-.94-.66-1.59 Q-.34-1.80-.27-.77 Q0-.91 .22-.77 Q.29-1.77 .64-1.62 Q.98-1.28 .75-.30 C1.12 .18 .77 .94 0 1.06 C-.77 .94-1.12 .18-.81-.30 Z","ham":"M-1.00-.47 Q-1.20-1.08-.69-1.13 Q-.35-1.16-.23-.87 Q0-.98 .23-.87 Q.35-1.16 .69-1.13 Q1.20-1.08 1.00-.47 C1.25 .31 .72 1.03 0 1.02 C-.72 1.03-1.25 .31-1.00-.47 Z","hedgehog":"M-.96-.24 L-1.21-.58 L-.79-.60 L-.94-1.03 L-.48-.86 L-.31-1.23 L0-.94 L.31-1.23 L.47-.86 L.95-1.03 L.78-.60 L1.17-.55 L.91-.19 Q1.03 .66 .47 .95 Q0 1.08-.50 .91 Q-1.08 .53-.96-.24 Z"};
+const ANIMAL_OUTLINES={"dog":"M-.64-.67 Q-.45-1.06 0-.93 Q.45-1.06 .64-.67 C.85-1.12 1.18-.74 1.13-.13 Q1.12.44 .85.52 C.91.88 .43 1.09 0 1.06 C-.43 1.09-.91.88-.85.52 Q-1.12.44-1.13-.13 C-1.18-.74-.85-1.12-.64-.67 Z","chick":"M-.28-.93 Q-.33-1.18-.07-1.13 Q.04-1.29 .19-1.10 Q.35-1.16 .36-.87 C1.08-.52 1.10.55 .42.9 L.35 1.07 L.05 1.07 L0 .94 L-.12 1.09 L-.42 1.09 L-.40 .90 C-1.04.62-1.10-.44-.28-.93 Z","chicken":"M-.53-.72 Q-.72-1.02-.38-1.09 Q-.32-1.36-.02-1.19 Q.23-1.42 .37-1.10 Q.68-1.14 .59-.76 Q.96-.51 .95-.03 Q1.30.02 1.27-.40 Q1.55 .23 .97 .51 Q.73 .91 .39 .99 L.36 1.19 L.08 1.19 L.03 1.01 L-.28 1.19 L-.55 1.19 L-.48 .90 C-1.02.64-1.10-.30-.53-.72 Z","dolphin":"M 1.42 -.21 L 1.05 -.27 Q .82 -.59 .48 -.56 C .21 -.60 -.12 -.51 -.32 -.39 L -.38 -.88 Q -.60 -.72 -.62 -.24 C -.83 -.21 -1.00 -.13 -1.14 -.08 L -1.43 -.40 L -1.38 -.08 L -1.50 .24 L -1.08 .08 C -.84 .30 -.38 .48 -.08 .44 L .08 .86 L .43 .43 C .68 .30 .82 .10 .96 -.02 L 1.45 -.08 L .98 -.12 Q 1.13 -.20 1.42 -.21 Z","fox":"M-.96-1.30 L-.18-.85 Q0-.95 .18-.85 L.96-1.30 L.81-.33 Q1.05 .17 .68 .66 L.27 1.02 L0 .87 L-.27 1.02 L-.68 .66 Q-1.05 .17-.81-.33 Z","cat":"M-1.03-1.24 L-.28-.83 Q0-.95 .28-.83 L1.03-1.24 L.89-.17 Q1.07 .41 .64 .86 Q0 1.12-.64 .86 Q-1.07 .41-.89-.17 Z","rabbit":"M-.81-.30 Q-.94-.94-.66-1.59 Q-.34-1.80-.27-.77 Q0-.91 .22-.77 Q.29-1.77 .64-1.62 Q.98-1.28 .75-.30 C1.12 .18 .77 .94 0 1.06 C-.77 .94-1.12 .18-.81-.30 Z","ham":"M-1.00-.47 Q-1.20-1.08-.69-1.13 Q-.35-1.16-.23-.87 Q0-.98 .23-.87 Q.35-1.16 .69-1.13 Q1.20-1.08 1.00-.47 C1.25 .31 .72 1.03 0 1.02 C-.72 1.03-1.25 .31-1.00-.47 Z","hedgehog":"M-0.054 -0.728 L0 -1.13 L0.054 -0.728 L0.185 -0.706 L0.367 -1.069 L0.288 -0.671 L0.404 -0.608 L0.694 -0.892 L0.49 -0.541 L0.58 -0.444 L0.946 -0.618 L0.639 -0.353 L0.692 -0.231 L1.095 -0.277 L0.719 -0.126 L0.73 0.006 L1.126 0.093 L0.721 0.114 L0.688 0.243 L1.035 0.454 L0.645 0.342 L0.572 0.453 L0.831 0.765 L0.499 0.533 L0.394 0.614 L0.538 0.994 L0.299 0.666 L0.173 0.709 L0.186 1.115 L0.066 0.727 L-0.066 0.727 L-0.186 1.115 L-0.173 0.709 L-0.299 0.666 L-0.538 0.994 L-0.394 0.614 L-0.499 0.533 L-0.831 0.765 L-0.572 0.453 L-0.645 0.342 L-1.035 0.454 L-0.688 0.243 L-0.721 0.114 L-1.126 0.093 L-0.73 0.006 L-0.719 -0.126 L-1.095 -0.277 L-0.692 -0.231 L-0.639 -0.353 L-0.946 -0.618 L-0.58 -0.444 L-0.49 -0.541 L-0.694 -0.892 L-0.404 -0.608 L-0.288 -0.671 L-0.367 -1.069 L-0.185 -0.706 Z"};
 
 /* v13.8.1 dog fighter: canine-ear winglets and tapered snout on an angular starfighter.
    Title SVG and Canvas deliberately use the same geometry. */
@@ -3808,14 +3808,24 @@ function drawHedgehogPulseEmitter(field){
  ctx.save();ctx.translate(field.x,field.y);ctx.lineJoin='round';ctx.lineCap='round';
  // The spiky shell replaces the old round field and nearly reaches its original radius.
  // Keep the silhouette cached, and do not use this path for collision checks.
- ctx.save();ctx.rotate(Math.sin(t*.82)*.035);ctx.scale(r*.76*pulse,r*.70*pulse);
+ ctx.save();ctx.rotate(Math.sin(t*.82)*.035);ctx.scale(r*.83*pulse,r*.83*pulse);
  ctx.fillStyle='#7542ba';ctx.globalAlpha=simple?.055:.105;ctx.fill(outline);
- ctx.strokeStyle=ELEMENTS.thunder.color;ctx.lineWidth=2.7/(r*.72);ctx.globalAlpha=.83+.06*Math.sin(t*3.1);
+ ctx.strokeStyle=ELEMENTS.thunder.color;ctx.lineWidth=2.9/(r*.83);ctx.globalAlpha=.83+.06*Math.sin(t*3.1);
  ctx.shadowColor='#a06dff';ctx.shadowBlur=low||simple?0:high?16:8;
  ctx.stroke(outline);ctx.shadowBlur=0;
  if(!simple&&!low){
-  ctx.strokeStyle='#f2ddff';ctx.globalAlpha=.27;ctx.lineWidth=1.1/(r*.72);ctx.stroke(outline);
+  ctx.strokeStyle='#f2ddff';ctx.globalAlpha=.27;ctx.lineWidth=1.1/(r*.83);ctx.stroke(outline);
  }
+ ctx.restore();
+ // Hedgehog identity: a small lower muzzle and face kept well inside the all-around quills.
+ ctx.save();ctx.scale(r*.60,r*.60);
+ ctx.globalAlpha=.52;ctx.fillStyle='#9a63d7';ctx.beginPath();
+ ctx.ellipse(0,.14,.63,.55,0,0,TAU);ctx.fill();
+ ctx.globalAlpha=.90;ctx.fillStyle='#efe1ff';ctx.beginPath();
+ ctx.ellipse(-.32,-.04,.12,.15,0,0,TAU);ctx.ellipse(.32,-.04,.12,.15,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#47306d';ctx.beginPath();
+ ctx.arc(-.32,-.04,.055,0,TAU);ctx.arc(.32,-.04,.055,0,TAU);ctx.fill();
+ ctx.fillStyle='#ffe3ff';ctx.beginPath();ctx.arc(0,.33,.11,0,TAU);ctx.fill();
  ctx.restore();
  // Stable electric branches, animated by time rather than frame-random flicker.
  const bolts=simple?2:low?3:high?(compact?5:8):(compact?3:5);
@@ -4079,7 +4089,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.8.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.9.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
