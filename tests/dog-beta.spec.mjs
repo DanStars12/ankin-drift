@@ -72,10 +72,11 @@ async function setup(page){
  });
  await page.goto('./');return errors;
 }
-test('dog β ship is playable from title and displays build LAB',async({page,isMobile})=>{
+test('dog neon ship is playable from title and displays build LAB',async({page,isMobile})=>{
  const errors=await setup(page);
  await expect(page.locator('[data-ship="dog"]')).toBeVisible();
- await expect(page.locator('[data-ship="dog"] .dog-beta')).toContainText('β版');
+ await expect(page.locator('[data-ship="dog"] .dog-frame-icon path')).toHaveAttribute('d',/M-.64-.67/);
+ await expect(page.locator('[data-ship="dog"] .dog-beta')).toHaveCount(0);
  await page.locator('[data-ship="dog"]').click();
  await page.locator('#openTitleLab').click();
  await expect(page.locator('#atlasResults')).toBeVisible();
@@ -90,7 +91,7 @@ test('dog β ship is playable from title and displays build LAB',async({page,isM
 });
 test('dog skill pools contain dedicated animals, six relics and four fusions',async({page})=>{
  const errors=await setup(page),x=await page.evaluate(()=>window.__dogTest.catalog());
- expect(x.beta).toBeTruthy();
+ expect(x.beta).toBeFalsy();
  expect(x.dogSkillCount).toBeGreaterThanOrEqual(24);
  expect(x.dogPowerCount).toBeGreaterThanOrEqual(6);
  expect(x.dogLegendCount).toBeGreaterThanOrEqual(5);
