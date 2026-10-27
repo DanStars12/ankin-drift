@@ -7,7 +7,7 @@ const KEY='ankin_drift_pilot_archive';
 const OLD='ankin_drift_v96_damage_records';
 const LEGACY=['ankin_drift_v71_records','ankin_drift_v7_records','ankin_drift_v6_records','ankin_drift_v5_records'];
 const MAX_BYTES=1024*1024,MAX_CLEARS=1000,MAX_RUNS=200,SCHEMA=2;
-const SHIPS=['shot','laser','charge','drill'],MODES=['normal','challenge'];
+const SHIPS=['shot','laser','charge','drill','dog'],MODES=['normal','challenge'];
 const finite=(v,max=1e15)=>Number.isFinite(+v)?Math.min(max,Math.max(0,+v)):0;
 const safeDate=v=>typeof v==='string'&&v.length<=36?v:new Date(0).toISOString();
 const text=(v,max=110)=>typeof v==='string'?v.slice(0,max):'';
@@ -24,7 +24,9 @@ const DEFINITIONS=[
  ['thousand_kills','千機を越えて','1回のプレイで敵を1000体撃破','silver',1000],
  ['survive_fifteen','長き戦い','1回のプレイで15分間生存','silver',900],
  ['challenge_clear','試練への第一歩','CHALLENGEモードをクリア','silver',1],
- ['four_frames','四機の英雄','4種類すべての機体でクリア','gold',4],
+ ['four_frames','四機の英雄','異なる4種類の機体でクリア','gold',4],
+ ['five_frames','五機の英雄','5種類すべての機体でクリア','rainbow',5],
+ ['dog_clear','わんこの新星','ドッグ型β版で初クリア','gold',1],
  ['both_modes','双極の勝者','NORMALとCHALLENGEの両方でクリア','gold',2],
  ['ten_clears','不屈の挑戦者','累計10回クリア','gold',10],
  ['dual_fusion','融合の極致','1プレイで属性融合を2回完成してクリア','gold',1],
@@ -70,7 +72,7 @@ function stripClear(v,i){
   level:finite(o.level,1e7),damage:finite(o.damage),date:safeDate(o.date),endless:!!o.endless,
   ship:SHIPS.includes(o.ship)?o.ship:null,title:text(o.title,90),
   subtitle:text(o.subtitle,160),rank:text(o.rank,32),
-  challenges:unique(o.challenges,['fragile','onslaught','armored']).slice(0,3),
+  challenges:unique(o.challenges,['fragile','onslaught','armored','swift','vicious','ironclad','ballistic','famine','novaTax','dashTax','repairTax']).slice(0,11),
   fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,2),
   evolutionIds:array(o.evolutionIds).map(x=>text(x,70)).slice(0,30),
   finalSource:text(o.finalSource,40),ending:stripEnding(o.ending),
@@ -127,7 +129,7 @@ function profileOf(raw,r,legacy=false){
  );
  p.fusionsDiscovered=[...new Set(p.fusionsDiscovered)];
  p.dualFusion=!!o.dualFusion;p.evolutionMaster=!!o.evolutionMaster;
- p.endlessClear=!!o.endlessClear;p.bestChallenges=finite(o.bestChallenges,3);
+ p.endlessClear=!!o.endlessClear;p.bestChallenges=finite(o.bestChallenges,11);
  p.totalClears=Math.max(p.totalClears,r.clears.length);
  p.maxLevel=Math.max(p.maxLevel,r.level);p.maxTime=Math.max(p.maxTime,r.time);
  p.maxKills=Math.max(p.maxKills,...r.runs.map(x=>x.kills),0);
@@ -151,7 +153,8 @@ function progressValue(id,p){
  case 'survive_five':case 'survive_fifteen':return p.maxTime;
  case 'first_clear':case 'three_clears':case 'ten_clears':case 'thirty_clears':return p.totalClears;
  case 'challenge_clear':return p.modesCleared.includes('challenge')?1:0;
- case 'four_frames':return p.shipsCleared.length;
+ case 'four_frames':case 'five_frames':return p.shipsCleared.length;
+  case 'dog_clear':return p.shipsCleared.includes('dog')?1:0;
  case 'both_modes':return p.modesCleared.length;
  case 'fusion_scholar':return p.fusionsDiscovered.length;
  case 'dual_fusion':return p.dualFusion?1:0;
