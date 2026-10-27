@@ -2917,7 +2917,47 @@ function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source
    ttl:6,hit:new Set(),napalm:true,missileCount:units,seekTimer:0});
   return;
  } if(source==='echo'&&shots.length>currentShotBudget()*.82)return;const base=Math.atan2(target.y-y,target.x-x),width=n>7?.18:.15,volley=source==='primary'&&player.shipType==='shot'?Math.min(n,12):n;const balancedDamage=source==='primary'&&player.shipType==='shot'?damage*(1+Math.min(.45,Math.max(0,n-volley)*.035)):damage;for(let i=0;i<volley;i++){if(shots.length>=currentShotBudget())break;const a=base+(i-(volley-1)/2)*width;shots.push(addPlayerShot({x:x+Math.cos(a)*11,y:y+Math.sin(a)*11,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:source==='rocket'?7:4.5,damage:balancedDamage,pierce:player.pierce,kind:source==='rocket'?'rocket':player.bulletKind,ttl:source==='rocket'?2.4:1.9,hit:new Set(),source}))}if(source==='primary'&&runClock-(player.lastShotSfxAt??-99)>.11){player.lastShotSfxAt=runClock;tone(580,.025,'triangle',.012)}}
-function shoot(){const tgt=visibleTarget(player.x,player.y);if(tgt){player.bulletKind=player.bulletModes[player.shotCycle++%player.bulletModes.length];fireFrom(player.x,player.y,tgt,player.multishot);if(player.relicRear)fireRear();if(player.relicSide)fireSide();if(Math.random()<Math.min(.85,player.echoShots))fireFrom(player.x,player.y,tgt,Math.min(4,player.multishot),player.dmg*.42,player.shotSpeed*.85,'echo')}}
+
+function fireDogBones(isNova=false){
+ const p=player;if(!p||p.shipType!=='dog')return;
+ const n=isNova?8:Math.min(8,p.dogBones),speed=isNova?350:p.dogBoneSpeed;
+ const target=visibleTarget(p.x,p.y);
+ const heading=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
+ for(let i=0;i<n&&shots.length<currentShotBudget();i++){
+  const ang=isNova?i*TAU/8:heading+(i-(n-1)/2)*.22,rad=isNova?6.5:Math.min(20,7*p.dogBoneSize);
+  shots.push({x:p.x+Math.cos(ang)*16,y:p.y+Math.sin(ang)*16,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,r:rad,
+    damage:isNova?effectiveNovaDamage(p)*.82:p.dmg*p.dogBonePower,pierce:999,kind:'bone',source:isNova?'nova':'shot',
+    ttl:isNova?4:3.4,returning:false,flight:0,range:isNova?300:p.dogBoneRange,
+    homeSpeed:speed*1.2,hit:new Set(),novaBone:isNova});
+ }
+ if(!isNova&&n&&runClock-(p.lastShotSfxAt??-99)>.15){p.lastShotSfxAt=runClock;tone(455,.05,'triangle',.018)}
+}
+function tickDogChicks(dt){
+ const p=player;if(p.shipType!=='dog')return;
+ const threshold=game.gameMode==='challenge'?480:900;
+ if(!p.dogChickenEvolved&&game.total>=threshold){
+  p.dogChickenEvolved=true;
+  if(p.dogChicks){tone(990,.15,'sine',.095);burst(p.x,p.y,'#ffe287',28,135);announce('🐔 PIYO! チック・タックが全員ニワトリに進化！',3.8)}
+ }
+ if(p.dogChicks<=0)return;
+ p.dogChickTimer-=dt;if(p.dogChickTimer>0)return;
+ if(shots.length>=currentShotBudget()-12){p.dogChickTimer=.2;return;}
+ p.dogChickTimer=Math.max(.57,p.dogEggRate*(p.dogChickenEvolved?.68:1));
+ const target=visibleTarget(p.x,p.y),n=Math.min(10,p.dogChicks);
+ if(!target)return;
+ for(let i=0;i<n&&shots.length<currentShotBudget();i++){
+  const pos=ringPosition(i,n,t,52,24,7,-.88),a=Math.atan2(target.y-pos.y,target.x-pos.x);
+  const volley=p.dogChickenEvolved&&i%3===0?2:1;
+  for(let k=0;k<volley&&shots.length<currentShotBudget();k++){
+   const ang=a+(k-(volley-1)/2)*.20,sp=p.dogEggSpeed*(p.dogChickenEvolved?1.33:1);
+   shots.push({x:pos.x,y:pos.y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,r:Math.min(11,6.5*(p.dogEggSize||1)),
+     damage:p.dogEggDamage*(p.dogChickenEvolved?1.48:1)*p.dogAnimalBoost,pierce:0,
+     kind:'dogEgg',ttl:4.1,hit:new Set(),source:'dogEgg'});
+  }
+ }
+}
+
+function shoot(){if(player.shipType==='dog'){fireDogBones();return;}const tgt=visibleTarget(player.x,player.y);if(tgt){player.bulletKind=player.bulletModes[player.shotCycle++%player.bulletModes.length];fireFrom(player.x,player.y,tgt,player.multishot);if(player.relicRear)fireRear();if(player.relicSide)fireSide();if(Math.random()<Math.min(.85,player.echoShots))fireFrom(player.x,player.y,tgt,Math.min(4,player.multishot),player.dmg*.42,player.shotSpeed*.85,'echo')}}
 // v10.3: diminishing returns and movement incentives for mature weapon builds.
 function laserBalance(p,count){
  const excess=Math.max(0,p.laserScale-1);
