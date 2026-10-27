@@ -9,7 +9,7 @@ const SHIPS={
  laser:{name:'PRISM LANCER',jp:'レーザー型',epithet:'光条の狙撃手',weapon:'光の軌跡'},
  charge:{name:'COMET RAIDER',jp:'チャージ型',epithet:'彗星の砲撃手',weapon:'溜め込んだ一撃'},
  drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',epithet:'鋼の突破者',weapon:'燃える刃先'},
- dog:{name:'PAW PATROL β',jp:'ドッグ型',epithet:'アニマルの指揮官',weapon:'仲間と骨ブーメラン'}
+ dog:{name:'BONE BUDDY β',jp:'ドッグ型',epithet:'アニマルの指揮官',weapon:'仲間と骨ブーメラン'}
 };
 const ELEMENTS={
  fire:{name:'炎',title:'紅蓮',scene:'焔の残光'},
