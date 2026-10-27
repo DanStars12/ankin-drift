@@ -3562,53 +3562,19 @@ function hudUpdate(){if(!game||!player)return;
 
 function glow(x,y,r,c,blur=14){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=settings.fx==='low'||settings.fx==='simple'?0:renderHeavyLoad?Math.min(blur,2):settings.fx==='high'?blur:settings.fx==='medium'?blur*.45:0;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.shadowBlur=0}
 
+
+/* v13.8: cached neon-only outlines; no emoji glyphs, eyes, mouth or filled animal bodies. */
+const ANIMAL_OUTLINES={"dog":"M-.64-.67 Q-.45-1.06 0-.93 Q.45-1.06 .64-.67 C.85-1.12 1.18-.74 1.13-.13 Q1.12.44 .85.52 C.91.88 .43 1.09 0 1.06 C-.43 1.09-.91.88-.85.52 Q-1.12.44-1.13-.13 C-1.18-.74-.85-1.12-.64-.67 Z","chick":"M-.28-.93 Q-.33-1.18-.07-1.13 Q.04-1.29 .19-1.10 Q.35-1.16 .36-.87 C1.08-.52 1.10.55 .42.9 L.35 1.07 L.05 1.07 L0 .94 L-.12 1.09 L-.42 1.09 L-.40 .90 C-1.04.62-1.10-.44-.28-.93 Z","chicken":"M-.53-.72 Q-.72-1.02-.38-1.09 Q-.32-1.36-.02-1.19 Q.23-1.42 .37-1.10 Q.68-1.14 .59-.76 Q.96-.51 .95-.03 Q1.30.02 1.27-.40 Q1.55 .23 .97 .51 Q.73 .91 .39 .99 L.36 1.19 L.08 1.19 L.03 1.01 L-.28 1.19 L-.55 1.19 L-.48 .90 C-1.02.64-1.10-.30-.53-.72 Z","dolphin":"M-.65-1.11 L-.19-1.14 Q.10-1.37 .40-1.15 Q.75-.88 .50-.42 Q.42-.26 .49-.08 L.92-.35 L.64 .28 Q.40 .51 .21 .83 L.18 1.06 L.72 1.23 L.09 1.17 L0 1.03 L-.12 1.19 L-.73 1.23 L-.18 1.00 Q-.30 .66-.43 .35 L-.94 .53 L-.80-.03 L-.50-.17 Q-.66-.61-.35-.95 L-.80-1.10 Z","fox":"M-.96-1.30 L-.18-.85 Q0-.95 .18-.85 L.96-1.30 L.81-.33 Q1.05 .17 .68 .66 L.27 1.02 L0 .87 L-.27 1.02 L-.68 .66 Q-1.05 .17-.81-.33 Z","cat":"M-1.03-1.24 L-.28-.83 Q0-.95 .28-.83 L1.03-1.24 L.89-.17 Q1.07 .41 .64 .86 Q0 1.12-.64 .86 Q-1.07 .41-.89-.17 Z","rabbit":"M-.81-.30 Q-.94-.94-.66-1.59 Q-.34-1.80-.27-.77 Q0-.91 .22-.77 Q.29-1.77 .64-1.62 Q.98-1.28 .75-.30 C1.12 .18 .77 .94 0 1.06 C-.77 .94-1.12 .18-.81-.30 Z","ham":"M-1.00-.47 Q-1.20-1.08-.69-1.13 Q-.35-1.16-.23-.87 Q0-.98 .23-.87 Q.35-1.16 .69-1.13 Q1.20-1.08 1.00-.47 C1.25 .31 .72 1.03 0 1.02 C-.72 1.03-1.25 .31-1.00-.47 Z","hedgehog":"M-.96-.24 L-1.21-.58 L-.79-.60 L-.94-1.03 L-.48-.86 L-.31-1.23 L0-.94 L.31-1.23 L.47-.86 L.95-1.03 L.78-.60 L1.17-.55 L.91-.19 Q1.03 .66 .47 .95 Q0 1.08-.50 .91 Q-1.08 .53-.96-.24 Z"};
+const ANIMAL_PATHS=new Map();
 function drawAnimal(kind,x,y,r=14,angle=0){
- ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.lineCap='round';ctx.lineJoin='round';
- const fur={dog:'#f3c481',fox:'#ff944d',cat:'#d8a8f2',ham:'#efbd85',rabbit:'#f0ecff',
-  dolphin:'#6acbdf',chick:'#ffdf61',chicken:'#f6e6bb',hedgehog:'#a47a65'}[kind]||'#f1dba7';
- ctx.strokeStyle='#5a3542';ctx.lineWidth=Math.max(1.1,r*.105);ctx.fillStyle=fur;
- if(kind==='dolphin'){
-  // Sideways dolphin: a curved dorsal fin, narrow beak, two tail tips.
-  ctx.rotate(Math.PI/2);
-  ctx.beginPath();ctx.moveTo(0,-r*.83);ctx.bezierCurveTo(r*.60,-r*.54,r*.68,r*.10,r*.28,r*.68);
-  ctx.lineTo(r*.69,r*1.02);ctx.lineTo(r*.10,r*.82);ctx.lineTo(-r*.10,r*.82);
-  ctx.lineTo(-r*.69,r*1.02);ctx.lineTo(-r*.28,r*.68);
-  ctx.bezierCurveTo(-r*.69,r*.06,-r*.58,-r*.55,0,-r*.83);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle='#9cf3ff';ctx.beginPath();ctx.ellipse(0,-r*.26,r*.40,r*.28,0,0,TAU);ctx.fill();
-  ctx.fillStyle='#263c55';ctx.beginPath();ctx.arc(-r*.19,-r*.48,Math.max(1.3,r*.09),0,TAU);ctx.fill();
-  ctx.restore();return;
- }
- if(kind==='hedgehog'){
-  ctx.fillStyle='#8d6555';ctx.beginPath();for(let i=0;i<16;i++){const a=i*TAU/16,rad=r*(i%2?1:1.20);i?ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad):ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();
- }
- if(kind==='rabbit'){
-  ctx.beginPath();ctx.ellipse(-r*.42,-r*.92,r*.25,r*.75,-.16,0,TAU);ctx.ellipse(r*.42,-r*.92,r*.25,r*.75,.16,0,TAU);ctx.fill();ctx.stroke();
-  ctx.fillStyle='#f8afc8';ctx.beginPath();ctx.ellipse(-r*.42,-r*.95,r*.11,r*.55,-.16,0,TAU);ctx.ellipse(r*.42,-r*.95,r*.11,r*.55,.16,0,TAU);ctx.fill();ctx.fillStyle=fur;
- }
- if(kind==='fox'||kind==='cat'){
-  ctx.beginPath();ctx.moveTo(-r*.83,-r*.43);ctx.lineTo(-r*.88,-r*1.22);ctx.lineTo(-r*.25,-r*.85);
-  ctx.lineTo(r*.25,-r*.85);ctx.lineTo(r*.88,-r*1.22);ctx.lineTo(r*.83,-r*.43);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle='#ffb6c1';ctx.beginPath();ctx.moveTo(-r*.69,-r*.80);ctx.lineTo(-r*.72,-r*1.08);ctx.lineTo(-r*.43,-r*.80);ctx.moveTo(r*.69,-r*.80);ctx.lineTo(r*.72,-r*1.08);ctx.lineTo(r*.43,-r*.80);ctx.fill();ctx.fillStyle=fur;
- }
- if(kind==='dog'){
-  ctx.fillStyle='#b87a50';ctx.beginPath();ctx.ellipse(-r*.91,-r*.22,r*.35,r*.74,-.36,0,TAU);ctx.ellipse(r*.91,-r*.22,r*.35,r*.74,.36,0,TAU);ctx.fill();ctx.fillStyle=fur;
- }
- if(kind==='ham'){
-  ctx.beginPath();ctx.arc(-r*.74,-r*.72,r*.40,0,TAU);ctx.arc(r*.74,-r*.72,r*.40,0,TAU);ctx.fill();ctx.stroke();
- }
- if(kind==='chicken'){
-  ctx.fillStyle='#f55f72';for(let k=-1;k<=1;k++){ctx.beginPath();ctx.arc(k*r*.32,-r*.96,r*.29,0,TAU);ctx.fill()}ctx.fillStyle=fur;
- }
- ctx.beginPath();ctx.ellipse(0,0,r,r*.89,0,0,TAU);ctx.fill();ctx.stroke();
- if(kind==='dog'||kind==='fox'||kind==='ham'||kind==='cat'||kind==='rabbit'){
-  ctx.fillStyle='#fff3df';ctx.beginPath();ctx.ellipse(0,r*.32,r*.52,r*.33,0,0,TAU);ctx.fill();
- }
- if(kind==='ham'){ctx.fillStyle='#f09a97';for(const i of [-1,1]){ctx.beginPath();ctx.arc(i*r*.64,r*.19,r*.25,0,TAU);ctx.fill();}}
- ctx.fillStyle='#31283d';for(const i of [-1,1]){ctx.beginPath();ctx.arc(i*r*.38,-r*.16,Math.max(1.45,r*.115),0,TAU);ctx.fill();}
- ctx.fillStyle=kind==='chick'||kind==='chicken'?'#f89c47':'#86536c';
- if(kind==='chick'||kind==='chicken'){ctx.beginPath();ctx.moveTo(-r*.18,r*.21);ctx.lineTo(r*.18,r*.21);ctx.lineTo(0,r*.50);ctx.closePath();ctx.fill();}
- else {ctx.beginPath();ctx.ellipse(0,r*.27,r*.17,r*.12,0,0,TAU);ctx.fill();}
- ctx.restore();
+ const shape=ANIMAL_OUTLINES[kind];if(!shape)return;
+ let path=ANIMAL_PATHS.get(kind);if(!path){path=new Path2D(shape);ANIMAL_PATHS.set(kind,path);}
+ const color=kind==='dog'?'#ffd5a1':kind==='dolphin'?'#7ceaff':kind==='chick'?'#ffe771':kind==='chicken'?'#fff1bf':kind==='fox'?'#ffa66f':kind==='rabbit'?'#c8f3ff':kind==='cat'?'#dcb5ff':kind==='ham'?'#ffcf95':'#eac09c';
+ ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.scale(r,r);
+ ctx.strokeStyle=kind==='dog'&&player?.evolutionTint?player.evolutionTint:color;
+ ctx.lineWidth=.15;ctx.lineJoin='round';ctx.lineCap='round';
+ ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:settings.fx==='high'?10:5;
+ ctx.stroke(path);ctx.restore();
 }
 function drawDogBone(b){
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
