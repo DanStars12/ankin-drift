@@ -77,7 +77,7 @@ test('neon outlines use stroke only and path cache is shared by all animal kinds
  expect(r.paint.fill).toBe(0);expect(r.paint.stroke).toBe(10);
  expect(r.cache).toBe(9);
  expect(r.dogPath).not.toMatch(/eye|mouth/i);
- expect(r.dolphinPath).toContain('L.92-.35');
+ expect(r.dolphinPath).toContain('L -1.43 -.40');
  expect(errors).toEqual([]);
 });
 test('dog bone spins slowly independently of travel and returns from upgraded range',async({page})=>{
