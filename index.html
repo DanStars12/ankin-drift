@@ -2431,7 +2431,17 @@ FUSIONS.push(
  {id:'dogDolphinEvo',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogLegendSea',name:'ドルフィン・オーケストラ',icon:'🐬',desc:'イルカ数と旋回威力・ハリケーンの発生数を強化。',apply:p=>{p.orbit=Math.min(10,p.orbit+2);p.bladePower=(p.bladePower||1)*1.5;p.windCount=7}},
  {id:'dogRabbitEvo',shipOnly:'dog',power:'dogPwrRabbit',legend:'dogLegendRabbit',name:'スノー・ラビット大行進',icon:'🐰',desc:'雪うさぎ氷球の火力・凍結確率を大幅強化。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=235;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)}}
 );
-for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS])if(c.shipOnly==='dog'){
+
+RELICS.push(
+ skill('dogRelicBone','relic','🦴','ゴールデン・ボーン','骨ブーメラン+2本・飛行射程+100、帰還威力+35%。',p=>{p.dogBones=Math.min(8,p.dogBones+2);p.dogBoneRange=Math.min(480,p.dogBoneRange+100);p.dogBoneReturn+=.35},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicChick','relic','🐔','ぴよぴよ・キング','チック・タック+3匹、卵威力+80。時刻進化ルールはそのまま。',p=>{p.dogChicks=Math.min(10,p.dogChicks+3);p.dogEggDamage+=80},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicFox','relic','🦊','きつね火の宝珠','フォックスミサイル+2発、燃焼ダメージ強化。',p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.thermal+=.85},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicCat','relic','🐱','にゃんこの首輪','猫ブロッカー+4匹、シールド最大値+70。',p=>{p.rockWalls=Math.min(18,p.rockWalls+4);p.shieldMax+=70;p.shield+=70},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicRabbit','relic','🐰','雪うさぎの足あと','スノー・ラビットを5発にし、凍結確率+15%。',p=>{p.iceBallCount=5;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicDolphin','relic','🐬','うみかぜの指揮棒','イルカ+3匹、ハリケーン+2発。',p=>{p.orbit=Math.min(10,p.orbit+3);p.windCount=Math.min(7,p.windCount+2)},{shipOnly:'dog',stackable:false})
+);
+
+for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS])if(c.shipOnly==='dog'){
  const animal=['アニマル'];
  if(/Bone|GoodBoy|Fetch|Puppy|UniquePack|AnimalPack/i.test(c.id))animal.push('骨ブーメラン');
  if(/Fox|NineTail|PawLava|PawBloom|PwrLava|LegendFox/i.test(c.id))animal.push('属性：炎',/PawLava|PawBloom|PwrLava/.test(c.id)?'マグマ床':'ミサイル');
