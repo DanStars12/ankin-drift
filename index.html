@@ -3585,21 +3585,64 @@ function drawDogFrame(){
 }
 
 const ANIMAL_PATHS=new Map();
+/* v13.9: readable miniature animals — colored bodies, expressive essential facial landmarks.
+   Shared cached silhouettes remain the foundation, so silhouettes and gameplay stay consistent. */
 function drawAnimal(kind,x,y,r=14,angle=0){
  const shape=ANIMAL_OUTLINES[kind];if(!shape)return;
  let path=ANIMAL_PATHS.get(kind);if(!path){path=new Path2D(shape);ANIMAL_PATHS.set(kind,path);}
- const color=kind==='dog'?'#ffd5a1':kind==='dolphin'?'#7ceaff':kind==='chick'?'#ffe771':kind==='chicken'?'#fff1bf':kind==='fox'?'#ffa66f':kind==='rabbit'?'#c8f3ff':kind==='cat'?'#dcb5ff':kind==='ham'?'#ffcf95':'#eac09c';
+ const colors={
+  dog:['#ffd5a1','#b57d53'],chick:['#fff27d','#e8ae38'],
+  chicken:['#fff4d6','#db8e50'],dolphin:['#8bedff','#249bc5'],
+  fox:['#ffbe7b','#f47736'],rabbit:['#e5f9ff','#9ecde8'],
+  cat:['#e8bdff','#aa80d3'],ham:['#ffe0a9','#c99067'],
+  hedgehog:['#c49aff','#8555c3']
+ };
+ const [outline,body]=colors[kind];
+ const heavy=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low';
  ctx.save();ctx.translate(x,y);ctx.rotate(kind==='dolphin'?angle-Math.PI/2:angle);ctx.scale(r,r);
- ctx.strokeStyle=kind==='dog'&&player?.evolutionTint?player.evolutionTint:color;
- ctx.lineWidth=.15;ctx.lineJoin='round';ctx.lineCap='round';
- ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:settings.fx==='high'?10:5;
- ctx.stroke(path);ctx.restore();
+ ctx.lineJoin='round';ctx.lineCap='round';ctx.lineWidth=.13;
+ ctx.shadowColor=outline;ctx.shadowBlur=heavy?0:settings.fx==='high'?9:4;
+ ctx.fillStyle=body;ctx.globalAlpha=kind==='dolphin'?.82:.94;
+ ctx.fill(path);ctx.globalAlpha=1;
+ ctx.strokeStyle=kind==='dog'&&player?.evolutionTint?player.evolutionTint:outline;
+ ctx.stroke(path);ctx.shadowBlur=0;
+ if(r>=8){
+  // Eye/highlight pairs make small sprites recognizable even in SIMPLE mode.
+  ctx.fillStyle='#251d36';
+  if(kind==='chick'||kind==='chicken'){
+   ctx.beginPath();ctx.arc(-.35,-.15,.105,0,TAU);ctx.arc(.35,-.15,.105,0,TAU);ctx.fill();
+   ctx.fillStyle='#ff983b';ctx.beginPath();ctx.moveTo(-.18,.05);ctx.lineTo(.23,.05);ctx.lineTo(0,.33);ctx.closePath();ctx.fill();
+   if(kind==='chicken'){ctx.fillStyle='#ff685e';ctx.beginPath();ctx.ellipse(0,-1.01,.28,.18,0,0,TAU);ctx.fill();}
+  }else if(kind==='fox'){
+   ctx.beginPath();ctx.ellipse(-.37,-.12,.09,.15,-.23,0,TAU);ctx.ellipse(.37,-.12,.09,.15,.23,0,TAU);ctx.fill();
+   ctx.fillStyle='#fff0d8';ctx.beginPath();ctx.moveTo(-.65,.47);ctx.quadraticCurveTo(0,.22,.65,.47);ctx.lineTo(0,.87);ctx.closePath();ctx.fill();
+   ctx.fillStyle='#4b2935';ctx.beginPath();ctx.moveTo(-.14,.56);ctx.lineTo(.14,.56);ctx.lineTo(0,.69);ctx.closePath();ctx.fill();
+  }else if(kind==='ham'){
+   ctx.fillStyle='#fff2dd';ctx.beginPath();ctx.arc(-.51,.34,.31,0,TAU);ctx.arc(.51,.34,.31,0,TAU);ctx.fill();
+   ctx.fillStyle='#281c32';ctx.beginPath();ctx.arc(-.38,-.13,.11,0,TAU);ctx.arc(.38,-.13,.11,0,TAU);ctx.fill();
+   ctx.fillStyle='#ee91a2';ctx.beginPath();ctx.arc(0,.29,.12,0,TAU);ctx.fill();
+  }else if(kind==='cat'||kind==='rabbit'){
+   ctx.beginPath();ctx.ellipse(-.34,-.12,.085,.14,0,0,TAU);ctx.ellipse(.34,-.12,.085,.14,0,0,TAU);ctx.fill();
+   ctx.fillStyle='#f99bbf';ctx.beginPath();ctx.moveTo(-.12,.30);ctx.lineTo(.12,.30);ctx.lineTo(0,.42);ctx.closePath();ctx.fill();
+   if(kind==='cat'){
+    ctx.strokeStyle='#fbe4ff';ctx.lineWidth=.065;ctx.beginPath();
+    for(const side of [-1,1]){ctx.moveTo(side*.24,.39);ctx.lineTo(side*.78,.32);ctx.moveTo(side*.26,.48);ctx.lineTo(side*.74,.57);}
+    ctx.stroke();
+   }
+  }else if(kind==='dolphin'){
+   ctx.beginPath();ctx.arc(.88,-.24,.085,0,TAU);ctx.fill();
+   ctx.strokeStyle='#e4ffff';ctx.lineWidth=.085;ctx.beginPath();ctx.moveTo(.67,-.08);ctx.quadraticCurveTo(.95,.02,1.19,-.03);ctx.stroke();
+  }
+ }
+ ctx.restore();
 }
 function drawDogEgg(b){
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
- ctx.strokeStyle='#ffe7a5';ctx.lineWidth=Math.max(1.4,b.r*.24);
- ctx.shadowColor='#ffde89';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:5;
- ctx.beginPath();ctx.ellipse(0,0,b.r*.82,b.r*1.23,0,0,TAU);ctx.stroke();ctx.restore();
+ ctx.shadowColor='#ffdc8c';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
+ ctx.fillStyle='#fff4d7';ctx.strokeStyle='#ffc66f';ctx.lineWidth=Math.max(1.5,b.r*.18);
+ ctx.beginPath();ctx.ellipse(0,0,b.r*.80,b.r*1.19,0,0,TAU);ctx.fill();ctx.stroke();
+ ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
+ ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
 function drawDogBone(b){
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
