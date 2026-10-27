@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.6 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.7 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.6 | ELEMENTAL ARSENAL</title>
+<title>ANKIN DRIFT v13.7 | ELEMENTAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -738,7 +738,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 .v13-challenge button.active{border-color:#f8ca73;box-shadow:0 0 14px #f8ca7344;background:#393454}
 .v13-challenge button small{display:block;margin-top:6px;color:#c9dce9}
 
-/* v13.6 — compact, accessible ANKIN TRIAL section on the title. */
+/* v13.7 — compact, accessible ANKIN TRIAL section on the title. */
 .v13-trial{width:100%;border:1px solid #395574;border-radius:11px;background:linear-gradient(130deg,#111c35,#162238);margin:8px 0 11px;overflow:hidden}
 .v13-trial>summary{display:flex;gap:9px;align-items:center;padding:11px 14px;cursor:pointer;list-style:none;min-height:44px;font-weight:900;letter-spacing:.04em;color:#f2dcae;touch-action:manipulation}
 .v13-trial>summary::-webkit-details-marker{display:none}
@@ -767,6 +767,16 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(prefers-reduced-motion:reduce){.v13-victory-badge{animation:none}}
 
 .bar.shield{background:#102e30;border:1px solid #408d84}.bar.shield>span{background:linear-gradient(90deg,#35bfae,#aaffdf);box-shadow:0 0 8px #53ddbe55;display:block;height:100%;border-radius:inherit;transition:width .13s}
+
+/* v13.7 DOG TYPE β — a fifth selectable frame, responsive title and accessible beta mark. */
+.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(5,minmax(0,1fr))}
+.ship-card.dog{--sh:#ffd09b;background:linear-gradient(145deg,#423029,#251d33)}
+.ship-graphic.dog i{clip-path:none!important;width:41px;height:38px;background:#f6c88d;border-radius:48% 48% 44% 44%;box-shadow:-16px -8px 0 -8px #ac774f,16px -8px 0 -8px #ac774f;transform:none}
+.ship-graphic.dog em{height:8px;width:9px;background:#613d38;border-radius:50%;top:25px;left:calc(50% - 5px)}
+.dog-beta{display:inline-block;background:#ffdba8;color:#392326;border:1px solid #fff0d7;border-radius:5px;padding:1px 4px;font-size:9px;font-weight:900;vertical-align:middle}
+@media(max-width:800px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}.ship-card.dog{grid-column:span 2}.ship-card.dog .ship-description{max-width:290px}}
+
 </style>
 <style>
 .choice-pick{display:none}
@@ -806,7 +816,7 @@ let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, boss
  let controlMode=/(Android|iPhone|iPod|iPad)/i.test(navigator.userAgent)||(matchMedia('(pointer:coarse)').matches&&innerWidth<900)?'mobile':'desktop'; // On phones select touch controls by default; title choice remains available.
  const touchMove={id:null,x:0,y:0,startX:0,startY:0,lastTap:0,lastX:0,lastY:0,moved:false,captureOk:false};
  const stick=U('floatingStick'),stickDot=U('stickDot'),novaTouch=U('novaTouch'),dashTouch=U('dashTouch');
-const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射しない。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'}};
+const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射しない。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'},dog:{name:'BONE BUDDY · BETA',jp:'ドッグ型',color:'#ffd2a0',sub:'🐶 β版 / 骨ブーメラン・アニマル',desc:'骨ブーメランが往復攻撃。犬と仲間たちだけのアニマルスキルで育てるβ版機体。',nova:'BOW SHOCK：小さな骨を8方向へ投げ、帰還でもう一度攻撃'}};
 let W=innerWidth,H=innerHeight,dpr=1,mode='menu',backMode='playing',last=0,t=0,shake=0,flash=0,stars=[],particles=[],floats=[],enemies=[],shots=[],hostile=[],pickups=[],hazards=[],zones=[],player=null,game=null,boss=null,choices=[],keys=new Set(),soundOn=true,audio=null;
 const MAX_ENEMIES=235,MAX_SHOTS=290,MAX_HOSTILE=440,MAX_PICKUPS=620;
 // Normal enemy movement is tuned independently from boss movement. Never exceed each cap.
@@ -837,7 +847,7 @@ const BOSS_POOLS={minor:['guardian','raptor','hive'],major:['titan','rail','vort
 function pickBossVariant(type){const pool=BOSS_POOLS[type],last=game.bossHistory?.[type];const options=pool.filter(v=>v!==last);const id=options[Math.floor(Math.random()*options.length)];game.bossHistory[type]=id;return id;}
 const bossInfo=e=>ENEMY_CODEX.find(b=>b.id===(typeof e==='string'?e:e?.variant))||null;
 
-const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99});
+const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99,dogBones:1,dogBoneSize:1,dogBoneRange:270,dogBoneSpeed:380,dogBonePower:1,dogBoneReturn:1,dogChicks:0,dogChickTimer:0,dogChickenEvolved:false,dogEggDamage:35,dogEggRate:2.4,dogEggSpeed:125,dogFox:0,dogDolphinDuet:0,dogHamster:0,dogAnimalBoost:1});
 let adaptiveRenderScale=1;
 let overloadClock=0,recoveryClock=0,lastAdaptiveTime=0;
 function applyCanvasResolution(){
@@ -944,7 +954,7 @@ const hasTrial=id=>!!game?.activeChallenges?.includes(id);
 function v13ClearTitle(){
  const source=(game.elementCombos||[]).at(-1);
  if(source){const themes={fire:'焔を導く者',ice:'氷晶の守護者',thunder:'雷鳴を統べる者',wind:'嵐の先導者',rock:'大地の城塞'};return themes[source.main]||'属性の支配者'}
- return {shot:'弾幕の支配者',laser:'光の指揮者',charge:'彗星を導く者',drill:'鋼鉄の突破者'}[player.shipType]||'星を超えし者';
+ return {shot:'弾幕の支配者',laser:'光の指揮者',charge:'彗星を導く者',drill:'鋼鉄の突破者',dog:'アニマルたちのリーダー'}[player.shipType]||'星を超えし者';
 }
 function v13Rank(count){return ['BRONZE','SILVER','GOLD','ANKIN MASTER'][Math.min(3,Math.max(0,count))]}
 
@@ -1024,7 +1034,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.6 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.7 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1078,7 +1088,7 @@ const CROSS_VARIANTS={
  rock:[['fire','メテオ・シールド','岩壁が高火力の燃焼衝撃波を放つ。隕石は通常どおり残る。炎属性を失う。','🪨',{meteorWall:1}],['ice','ダイヤモンド・ロック','転がる隕石が接触時にスロウ・凍結を与え、通常敵弾を消す。氷属性を失う。','💎',{diamondWall:1}],['thunder','ガイア・インパクト','岩壁が敵をはじくたびに周囲へ衝撃波。雷属性を失う。','⛰️',{gaiaShock:1}],['wind','オービット・フォートレス','岩壁が高速に旋回し接触攻撃も強化。風属性を失う。','🛡️',{orbitFort:1}]]
 };
 const ELEMENT_FUSION_RECIPES=Object.entries(CROSS_VARIANTS).flatMap(([main,list])=>list.map(([sub,name,desc,icon,mod])=>({id:`${main}_${sub}`,main,sub,name,desc,icon,mod})));
-const DAMAGE_LABELS={iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
+const DAMAGE_LABELS={bone:'骨ブーメラン',dogEgg:'チック・タックの卵',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
 function targetDefinitions(){return [...activeFusions().map(r=>({key:'f:'+r.id,name:r.name,desc:r.desc,materials:[r.power,r.legend],kind:'evolution'})),...ELEMENT_FUSION_RECIPES.map(r=>({key:'e:'+r.id,name:r.name,desc:r.desc,materials:[r.main,r.sub],kind:'element',main:r.main,sub:r.sub}))]}
 function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub);const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||game.elementCombos.length>=2);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
 function reconcileTargets(){if(!game)return;const defs=new Map(targetDefinitions().map(t=>[t.key,t]));const seen=new Set();const kept=[];game.targetHistory=game.targetHistory||[];for(const key of game.targets||[]){if(seen.has(key))continue;seen.add(key);const t=defs.get(key),status=t?targetStatus(t):null;if(!t||status.done||status.sealed){if(!game.targetHistory.some(h=>h.key===key)){game.targetHistory.push({key,name:t?.name||game.targetNameCache?.[key]||key,status:status?.done?'completed':'sealed'});}continue;}if(kept.length<3)kept.push(key)}game.targets=kept;}
@@ -1538,7 +1548,7 @@ function bindSafeChoice(el){
   });
 }
 function state(s){if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay()}
-function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.dmg=35;p.hp=94;p.maxHp=94;p.spd=235;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}}
+function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.dmg=35;p.hp=94;p.maxHp=94;p.spd=235;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}if(p.shipType==='dog'){p.hp=118;p.maxHp=118;p.spd=238;p.dmg=39;p.rate=1.12;p.novaRadius=175;p.novaDamage=160;p.shotSpeed=375;p.r=15;p.limitShot=12;p.limitOrbit=10;p.dogBones=1;p.dogBoneSize=1;p.dogBoneRange=245;}}
 function boot(){setupAudio();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');if(!first)sfx('level')}
 const GUIDE_KEY='ankin_drift_release_guide_seen';let guideReturn='playing';function guideSeen(){try{return localStorage.getItem(GUIDE_KEY)==='1'}catch{return false}}function markGuide(){try{localStorage.setItem(GUIDE_KEY,'1')}catch{}}
 function click(id,fn){U(id)?.addEventListener('click',fn)}
@@ -1682,7 +1692,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.6 · ELEMENTAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.7 · DOG TYPE β</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}"><span class="ship-graphic ${id}"><i></i><em></em></span><b>${sh.name}</b><strong>${sh.jp}${id==='dog'?' <span class="dog-beta">β版</span>':''}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -1825,7 +1835,7 @@ click('pauseButton',togglePause);click('optionsButton',openOptions);click('build
  bindMobileAction(novaTouch,()=>nova());
  bindMobileAction(dashTouch,()=>dash());
 
-addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(mode==='playing'&&!e.repeat&&!e.isComposing&&!e.target?.closest?.('input,textarea,select,[contenteditable]')&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))keys.add(e.code);if(e.repeat)return;if(mode==='menu'&&e.code==='Enter'){boot();return}if(mode==='dead'&&e.code==='Enter'){boot();return}if(mode==='choice'&&['Digit1','Digit2','Digit3','Digit4','Numpad1','Numpad2','Numpad3','Numpad4'].includes(e.code)){choose(Number(e.code.at(-1))-1);return}if(mode==='choice'&&e.code==='KeyR'){reroll();return}if(mode==='fusion'&&(e.code==='Enter'||e.code==='Space')){dismissFusion();return}if(mode==='uniqueReward'&&(e.code==='Enter'||e.code==='Space')){continueAfterReward();return}if(e.code==='KeyL'&&mode==='playing'){openStored();return}if(e.code==='KeyB'){if(mode==='build')state(backMode);else showBuild();return}if(e.code==='KeyP'||e.code==='Escape'){if(mode==='options')state(optionsBack);else if(mode==='quitConfirm')state('paused');else if(mode==='build')state(backMode);else togglePause();return}if(mode==='playing'&&e.code==='Space')dash();if(mode==='playing'&&e.code==='KeyE')nova()});addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>{keys.clear();clearTouch();if(mode==='playing')state('paused')});
+addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(mode==='playing'&&!e.repeat&&!e.isComposing&&!e.target?.closest?.('input,textarea,select,[contenteditable]')&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))keys.add(e.code);if(e.repeat)return;if(mode==='menu'&&e.code==='Enter'&&!(e.target?.closest?.('button,summary,input,select,textarea'))){boot();return}if(mode==='dead'&&e.code==='Enter'){boot();return}if(mode==='choice'&&['Digit1','Digit2','Digit3','Digit4','Numpad1','Numpad2','Numpad3','Numpad4'].includes(e.code)){choose(Number(e.code.at(-1))-1);return}if(mode==='choice'&&e.code==='KeyR'){reroll();return}if(mode==='fusion'&&(e.code==='Enter'||e.code==='Space')){dismissFusion();return}if(mode==='uniqueReward'&&(e.code==='Enter'||e.code==='Space')){continueAfterReward();return}if(e.code==='KeyL'&&mode==='playing'){openStored();return}if(e.code==='KeyB'){if(mode==='build')state(menuLabBackup?'menu':backMode);else showBuild();return}if(e.code==='KeyP'||e.code==='Escape'){if(mode==='options')state(optionsBack);else if(mode==='quitConfirm')state('paused');else if(mode==='build')state(menuLabBackup?'menu':backMode);else togglePause();return}if(mode==='playing'&&e.code==='Space')dash();if(mode==='playing'&&e.code==='KeyE')nova()});addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>{keys.clear();clearTouch();if(mode==='playing')state('paused')});
 
 // v10.1 combat balance: slightly lower numeric skill gains, preserving discrete unlocks,
 // projectile counts, one-off healing, attribute seals and upgrade requirements.
@@ -2200,7 +2210,7 @@ const RELICS=[
  skill('rDrillTempo','relic','⚡','ハイギア・アクセル','ダッシュ再使用-0.23秒。オーバードライブ中は最短0.5秒。',p=>p.dashCd=Math.max(.52,p.dashCd-.23),{shipOnly:'drill',stackable:false})
 ];
 
-// v13.6: strictly independent attack families (a card upgrades exactly its advertised family).
+// v13.7: strictly independent attack families (a card upgrades exactly its advertised family).
 SKILLS.push(
  skill('iceBall','uncommon','🧊','アイスボール','水色の氷弾+1発（最大5発）。基本凍結確率23%。スロウなし。繰り返し取得で同時発射数が増える。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallTimer=.1},{available:p=>p.iceBallCount<5}),
  skill('iceBallFocus','rare','💠','フロスト・オーブ','アイスボール威力+38、凍結確率+10%。スロウは発生しない。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=38;p.iceBallChance=Math.min(.78,p.iceBallChance+.1)}),
@@ -2234,7 +2244,7 @@ FUSIONS.push(
 );
 
 
-// v13.6: one-time trade-offs. Visual transformations are governed by these persistent build flags.
+// v13.7: one-time trade-offs. Visual transformations are governed by these persistent build flags.
 SKILLS.push(
  skill('crossBlade','epic','✖️','クロスブレード','旋回刃の長さ-50%・1命中の威力-15%。代わりに1枚が2方向の十字刃になり、刃の本数が倍になる。',p=>{p.orbit=Math.max(1,p.orbit);p.bladeCross=1},{stackable:false}),
  skill('tridentPulse','epic','⚡','トライデントパルス','EMPを小型の3領域に分割して旋回させる。中心の防御範囲は薄くなるが、威力が高いほど旋回が速い。',p=>{p.empRadius=Math.max(96,p.empRadius);p.empDps+=35;p.empTrident=1},{stackable:false}),
@@ -2305,7 +2315,7 @@ const EXTRA_SKILL_TAGS={
  rChargeShatter:['分裂','チャージ'],rChargeNova:['爆発','チャージ'],rChargeEcho:['追加弾','チャージ'],rChargeGravity:['吸引','チャージ'],rChargeFlame:['属性：炎','マグマ床','チャージ'],rChargeMomentum:['機動','チャージ'],rDrillRotor:['プラズマ','蓄積','機動'],rDrillWide:['近接','ドリル'],rDrillImpact:['突進','爆発'],rDrillHeat:['近接','属性：炎','燃焼'],rDrillRefund:['突進','蓄積'],rDrillIce:['近接','属性：氷','スロウ']
 };
 for(const c of ALL_SKILL_DEFS())if(EXTRA_SKILL_TAGS[c.id])c.tags=[...new Set([...(c.tags||[]),...EXTRA_SKILL_TAGS[c.id]])];
-// v13.6: tags must reflect the ability actually granted, never a second weapon family.
+// v13.7: tags must reflect the ability actually granted, never a second weapon family.
 const ELEMENT_ATTACK_TAGS={
  missileFlare:['属性：炎','ミサイル','燃焼'],rain:['属性：炎','ミサイル','燃焼'],rocket:['属性：炎','ミサイル','燃焼'],volcanoLegend:['属性：炎','マグマ床'],magmaCore:['属性：炎','マグマ床'],magmaPulse:['属性：炎','マグマ床'],static:['属性：炎','マグマ床'],thermal:['属性：炎','燃焼'],emberSeed:['属性：炎','燃焼'],
  freeze:['属性：氷','凍結'],coldCoil:['属性：氷','スロウ'],iceLock:['属性：氷','凍結'],crystalStasis:['属性：氷','凍結'],iceLegend:['属性：氷','凍結'],
@@ -2319,7 +2329,7 @@ const ELEMENT_ATTACK_TAGS={
 for(const c of ALL_SKILL_DEFS())if(ELEMENT_ATTACK_TAGS[c.id])c.tags=ELEMENT_ATTACK_TAGS[c.id];
 
 // v9.8: canonical element ownership. These cards grant an elemental attack, not just a named effect.
-// v13.6 mutator classification for codex and elemental fusion.
+// v13.7 mutator classification for codex and elemental fusion.
 const V135_TAGS={
  crossBlade:['属性：風','ブレード','変異'],tridentPulse:['属性：雷','パルス','変異'],lavaConstrain:['属性：炎','マグマ床','変異'],
  thrusterEngine:['機動','変異'],gigaNapalm:['属性：炎','ミサイル','燃焼','変異'],meteorAnvil:['属性：岩','隕石','変異'],
@@ -2360,8 +2370,91 @@ for(const c of ALL_SKILL_DEFS())if(elementFromCard(c)){
 }
 function owned(id){return !!((game.skills[id]||game.powers[id]||game.legends[id]||game.uniques[id]||game.relics[id])>0)}
 function cName(id){return [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS].find(c=>c.id===id)?.name||id}
+
+// DOG TYPE β — isolated animal arsenal. Shared defensive/economy picks remain universal.
+const DOG_SHARED=new Set(['damage','hp','speed','pickup','refit','battery','dash','regen','critical','radius','repair','barrier','life','spark','shieldEpic','critEpic','novaEpic','superDash','xp','armor','iceBarrier','bounty','expShield','field','magnet','novaAmp','critPower','phoenix','seraph','reaper','void','eternalBody','unboundNova','overlord','halo','novaFracture','glassReactor','stoneAnchor','thrusterEngine']);
+SKILLS.push(
+ skill('dogBonePack','uncommon','🦴','ツイン・フェッチ','骨ブーメラン+1本（最大8本）。一発ごとの威力-8%。',p=>{p.dogBones=Math.min(8,p.dogBones+1);p.dogBonePower*=.92},{shipOnly:'dog',available:p=>p.dogBones<8}),
+ skill('dogBigBone','uncommon','🦴','ビッグ・ボーン','骨ブーメランの大きさ+30%、飛行速度-5%。',p=>{p.dogBoneSize=Math.min(2.8,p.dogBoneSize*1.3);p.dogBoneSpeed=Math.max(235,p.dogBoneSpeed*.95)},{shipOnly:'dog',available:p=>p.dogBoneSize<2.7}),
+ skill('dogGoodBoy','rare','🐶','グッド・ボーイ！','骨の帰還ダメージ+24%、基本攻撃力+10。',p=>{p.dogBoneReturn+=.24;p.dmg+=10},{shipOnly:'dog'}),
+ skill('dogFetchRun','common','🎾','ロング・フェッチ','骨の往路射程+42、飛行速度+20。',p=>{p.dogBoneRange=Math.min(480,p.dogBoneRange+42);p.dogBoneSpeed+=20},{shipOnly:'dog',available:p=>p.dogBoneRange<480}),
+ skill('dogPuppyCheer','rare','🐾','わんわん応援団','骨ブーメラン威力+18%、ダッシュ間隔-0.12秒。',p=>{p.dogBonePower+=.18;p.dashCd=Math.max(.75,p.dashCd-.12)},{shipOnly:'dog'}),
+ skill('dogChick','uncommon','🐤','チック・タック','ヒヨコミニオン+1匹（最大10匹）。ゆっくりした卵を放つ。NORMAL 15分／CHALLENGE 8分で全員ニワトリへ進化。',p=>p.dogChicks=Math.min(10,p.dogChicks+1),{shipOnly:'dog',available:p=>p.dogChicks<10}),
+ skill('dogEggPower','rare','🥚','たまごころころ','ヒヨコ／ニワトリが撃つ卵のダメージ+22、卵サイズ+10%。',p=>{p.dogEggDamage+=22;p.dogEggSize=(p.dogEggSize||1)*1.1},{shipOnly:'dog',available:p=>p.dogChicks>0}),
+ skill('dogEggTempo','epic','🐔','コケコッコ・リズム','卵の発射間隔-18%、卵の速度+24。',p=>{p.dogEggRate=Math.max(.58,p.dogEggRate*.82);p.dogEggSpeed+=24},{shipOnly:'dog',available:p=>p.dogChicks>0}),
+ skill('dogDolphin','rare','🐬','ドルフィン・リング','風属性。イルカが1匹、機体の周囲を泳いで敵を迎撃。',p=>p.orbit=Math.min(p.limitOrbit,p.orbit+1),{shipOnly:'dog',available:p=>p.orbit<p.limitOrbit}),
+ skill('dogDuet','epic','🐬','ドルフィン・デュエット','風属性。イルカがペアで泳ぎ、攻撃方向が増える。個々の攻撃リーチ-35%、一撃威力-15%。',p=>{p.orbit=Math.max(1,p.orbit);p.dogDolphinDuet=1},{shipOnly:'dog',stackable:false}),
+ skill('dogHurricane','uncommon','🐬','ドルフィン・ハリケーン','風属性。イルカ型の旋風が飛んで敵を押し返す。サイクロン+1発（最大7）。',p=>{p.windCount=Math.min(7,p.windCount+1);p.windTimer=.1},{shipOnly:'dog',available:p=>p.windCount<7}),
+ skill('dogHurricanePlus','rare','🌪️','ドルフィン・スプラッシュ','風属性。ドルフィン・ハリケーンの範囲+35・威力+25。',p=>{p.windCount=Math.max(1,p.windCount);p.windRadius+=35;p.windDps+=25},{shipOnly:'dog'}),
+ skill('dogFox','epic','🦊','フォックスミサイル','炎属性。狐火の追尾ミサイル+1発（最大8）。命中時は爆炎と燃焼。',p=>{p.rocketCd=Math.min(8,p.rocketCd+1);p.flameMissiles++;p.rocketTimer=0},{shipOnly:'dog',available:p=>p.rocketCd<8}),
+ skill('dogNineTail','epic','🦊','九尾・フレア','炎属性。狐火を低速の巨大な1発に統合。爆風・燃焼威力が上がるが発射間隔が増える。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.gigaNapalm=1;p.rocketTimer=0},{shipOnly:'dog',stackable:false}),
+ skill('dogPawLava','rare','🐾','パウ・ラヴァ','炎属性。肉球型のマグマ領域を形成。持続燃焼ダメージを与える。',p=>{p.magmaLevel++;p.magmaDps+=18},{shipOnly:'dog'}),
+ skill('dogPawBloom','epic','🔥','もえもえ・肉球','炎属性。肉球マグマの半径+32、持続ダメージ+34。',p=>{p.magmaLevel=Math.max(1,p.magmaLevel);p.magmaRadius+=32;p.magmaDps+=34},{shipOnly:'dog'}),
+ skill('dogRabbit','uncommon','🐰','スノー・ラビット','氷属性。ウサギ型アイスボール+1発（最大5）。凍結とスロウの既存ルールに従う。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+1);p.iceBallDamage+=5},{shipOnly:'dog',available:p=>p.iceBallCount<5}),
+ skill('dogRabbitFrost','rare','❄️','ぴょんぴょん・フロスト','氷属性。ウサギ型氷球のダメージ+28、凍結確率+9%。',p=>{p.iceBallCount=Math.max(1,p.iceBallCount);p.iceBallDamage+=28;p.iceBallChance=Math.min(.78,p.iceBallChance+.09)},{shipOnly:'dog'}),
+ skill('dogCat','uncommon','🐱','キャット・ディフェンダー','岩属性。自機の周囲を回る猫ブロッカー+1匹（最大18）。敵・敵弾を迎撃。',p=>p.rockWalls=Math.min(18,p.rockWalls+1),{shipOnly:'dog',available:p=>p.rockWalls<18}),
+ skill('dogCatFort','rare','🐈','にゃんこ・ガード','岩属性。猫ブロッカー+2匹、迎撃威力+24。',p=>{p.rockWalls=Math.min(18,p.rockWalls+2);p.rockDamage+=24},{shipOnly:'dog',available:p=>p.rockWalls<18}),
+ skill('dogHamMeteor','rare','🐹','ハム・スターメテオ','岩属性。ころころ転がるハムスター型の巨大貫通弾を発射。',p=>{p.meteorCount=1;p.meteorDamage+=40},{shipOnly:'dog',stackable:false}),
+ skill('dogHamPlus','epic','🐹','ハム・クラッシュ','岩属性。ハム・スターメテオの威力+160・成長上限+16。発射間隔+25%。',p=>{p.meteorCount=1;p.meteorDamage+=160;p.meteorRadius+=16;p.meteorInterval*=1.25},{shipOnly:'dog',stackable:false}),
+ skill('dogHedgehog','rare','🦔','エレキ・ハリネズミ','雷属性。自機を取り巻く電磁パルスを発生。敵に継続ダメージ。',p=>{p.empRadius=Math.max(p.empRadius,108);p.empDps+=58},{shipOnly:'dog'}),
+ skill('dogHedgeSpark','epic','⚡','ハリネズミ・ビリビリ','雷属性。電磁パルスの範囲+38、威力+68。',p=>{p.empRadius=Math.max(108,p.empRadius)+38;p.empDps+=68},{shipOnly:'dog'}),
+ skill('dogAnimalPack','epic','🐾','ワンワン・パック','アニマルの攻撃力+18%。骨ブーメラン1発威力-10%。',p=>{p.dogAnimalBoost*=1.18;p.dogBonePower*=.90},{shipOnly:'dog',stackable:false})
+);
+POWERS.push(
+ skill('dogPwrChicks','power','🐔','ANKIN ぴよぴよ隊','チック・タック+2匹、卵の威力+28。',p=>{p.dogChicks=Math.min(10,p.dogChicks+2);p.dogEggDamage+=28},{shipOnly:'dog',available:p=>p.dogChicks<10}),
+ skill('dogPwrFox','power','🦊','ANKIN 狐火パレード','フォックスミサイル+2発、追尾威力を強化。',p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.thermal+=.25},{shipOnly:'dog',available:p=>p.rocketCd<8}),
+ skill('dogPwrDolphin','power','🐬','ANKIN ドルフィン隊','イルカ+2匹、ハリケーン+1発。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.windCount=Math.min(7,p.windCount+1)},{shipOnly:'dog'}),
+ skill('dogPwrRabbit','power','🐰','ANKIN 雪うさぎ隊','ウサギ型氷球+2発、凍結確率+10%。',p=>{p.iceBallCount=Math.min(5,p.iceBallCount+2);p.iceBallChance=Math.min(.78,p.iceBallChance+.1)},{shipOnly:'dog'}),
+ skill('dogPwrCat','power','🐱','ANKIN にゃんこ城塞','猫ブロッカー+4匹、反撃威力+40。',p=>{p.rockWalls=Math.min(18,p.rockWalls+4);p.rockDamage+=40},{shipOnly:'dog'}),
+ skill('dogPwrLava','power','🐾','ANKIN 肉球フレア','肉球マグマ+2レベル、半径+25。',p=>{p.magmaLevel+=2;p.magmaRadius+=25;p.magmaDps+=28},{shipOnly:'dog'})
+);
+LEGENDS.push(
+ skill('dogLegendChicken','legendary','🐔','伝説のコケコッコ軍団','チック・タック+3匹、卵の威力+100。時間進化後は全員ニワトリ。',p=>{p.dogChicks=Math.min(10,p.dogChicks+3);p.dogEggDamage+=100},{shipOnly:'dog'}),
+ skill('dogLegendFox','legendary','🦊','九尾の狐火','フォックスミサイル+3発、炎上強化。',p=>{p.rocketCd=Math.min(8,p.rocketCd+3);p.thermal+=.85},{shipOnly:'dog'}),
+ skill('dogLegendSea','legendary','🐬','イルカの大行進','イルカ+4匹、ハリケーン+2発、風ダメージ強化。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+4);p.windCount=Math.min(7,p.windCount+2);p.windDps+=50},{shipOnly:'dog'}),
+ skill('dogLegendHam','legendary','🐹','銀河のまんまるハム','ハム・スターメテオ威力+290、成長上限+24。',p=>{p.meteorCount=1;p.meteorDamage+=290;p.meteorRadius+=24},{shipOnly:'dog'}),
+ skill('dogLegendRabbit','legendary','🐰','雪うさぎの大行進','スノー・ラビットを5発にし、氷球威力+135。',p=>{p.iceBallCount=5;p.iceBallDamage+=135},{shipOnly:'dog'})
+);
+UNIQUE_SKILLS.push(
+ skill('dogUniquePack','unique','🐾','アニマル・パラダイス','全アニマル攻撃力+45%、骨ブーメラン+3本、ヒヨコ+3匹、イルカ+2匹。',p=>{p.dogAnimalBoost*=1.45;p.dogBones=Math.min(8,p.dogBones+3);p.dogChicks=Math.min(10,p.dogChicks+3);p.orbit=Math.min(10,p.orbit+2)},{shipOnly:'dog'})
+);
+SYNERGIES.push(
+ {id:'dogChickenEgg',shipOnly:'dog',need:['dogChick','dogEggPower'],name:'おやつの時間',desc:'たまご威力+35、発射間隔-10%。',apply:p=>{p.dogEggDamage+=35;p.dogEggRate=Math.max(.58,p.dogEggRate*.9)}},
+ {id:'dogDolphinDuetSynergy',shipOnly:'dog',need:['dogDolphin','dogDuet'],name:'イルカのハーモニー',desc:'イルカの周回攻撃力+20%、ドルフィン・ハリケーン+1発。',apply:p=>{p.bladePower=(p.bladePower||1)*1.2;p.windCount=Math.min(7,p.windCount+1)}},
+ {id:'dogFoxPaw',shipOnly:'dog',need:['dogFox','dogPawLava'],name:'こんこん・足あと',desc:'肉球マグマ威力+65、狐火ミサイル+1発。',apply:p=>{p.magmaDps+=65;p.rocketCd=Math.min(8,p.rocketCd+1)}},
+ {id:'dogHamCat',shipOnly:'dog',need:['dogHamMeteor','dogCat'],name:'まんまる守備隊',desc:'ハムスター威力+100、猫ブロッカー反撃+35。',apply:p=>{p.meteorDamage+=100;p.rockDamage+=35}},
+ {id:'dogRabbitHedge',shipOnly:'dog',need:['dogRabbit','dogHedgehog'],name:'びりびり・ぴょん',desc:'氷球凍結+10%、電磁パルス威力+65。',apply:p=>{p.iceBallChance=Math.min(.78,p.iceBallChance+.10);p.empDps+=65}}
+);
+FUSIONS.push(
+ {id:'dogChickenEvo',shipOnly:'dog',power:'dogPwrChicks',legend:'dogLegendChicken',name:'コケコッコ・フェスティバル',icon:'🐔',desc:'卵が大幅強化。ヒヨコ+2匹、発射間隔-30%。',apply:p=>{p.dogEggDamage+=190;p.dogChicks=Math.min(10,p.dogChicks+2);p.dogEggRate=Math.max(.58,p.dogEggRate*.7)}},
+ {id:'dogFoxEvo',shipOnly:'dog',power:'dogPwrFox',legend:'dogLegendFox',name:'九尾のフォックスストーム',icon:'🦊',desc:'フォックスミサイルを強化。狐火がさらに大きな爆風を残す。',apply:p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.dmg+=110;p.thermal+=1.1}},
+ {id:'dogDolphinEvo',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogLegendSea',name:'ドルフィン・オーケストラ',icon:'🐬',desc:'イルカ数と旋回威力・ハリケーンの発生数を強化。',apply:p=>{p.orbit=Math.min(10,p.orbit+2);p.bladePower=(p.bladePower||1)*1.5;p.windCount=7}},
+ {id:'dogRabbitEvo',shipOnly:'dog',power:'dogPwrRabbit',legend:'dogLegendRabbit',name:'スノー・ラビット大行進',icon:'🐰',desc:'雪うさぎ氷球の火力・凍結確率を大幅強化。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=235;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)}}
+);
+
+RELICS.push(
+ skill('dogRelicBone','relic','🦴','ゴールデン・ボーン','骨ブーメラン+2本・飛行射程+100、帰還威力+35%。',p=>{p.dogBones=Math.min(8,p.dogBones+2);p.dogBoneRange=Math.min(480,p.dogBoneRange+100);p.dogBoneReturn+=.35},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicChick','relic','🐔','ぴよぴよ・キング','チック・タック+3匹、卵威力+80。時刻進化ルールはそのまま。',p=>{p.dogChicks=Math.min(10,p.dogChicks+3);p.dogEggDamage+=80},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicFox','relic','🦊','きつね火の宝珠','フォックスミサイル+2発、燃焼ダメージ強化。',p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.thermal+=.85},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicCat','relic','🐱','にゃんこの首輪','猫ブロッカー+4匹、シールド最大値+70。',p=>{p.rockWalls=Math.min(18,p.rockWalls+4);p.shieldMax+=70;p.shield+=70},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicRabbit','relic','🐰','雪うさぎの足あと','スノー・ラビットを5発にし、凍結確率+15%。',p=>{p.iceBallCount=5;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)},{shipOnly:'dog',stackable:false}),
+ skill('dogRelicDolphin','relic','🐬','うみかぜの指揮棒','イルカ+3匹、ハリケーン+2発。',p=>{p.orbit=Math.min(10,p.orbit+3);p.windCount=Math.min(7,p.windCount+2)},{shipOnly:'dog',stackable:false})
+);
+
+for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS])if(c.shipOnly==='dog'){
+ const animal=['アニマル'];
+ if(/Bone|GoodBoy|Fetch|Puppy|UniquePack|AnimalPack/i.test(c.id))animal.push('骨ブーメラン');
+ if(/Fox|NineTail|PawLava|PawBloom|PwrLava|LegendFox/i.test(c.id))animal.push('属性：炎',/PawLava|PawBloom|PwrLava/.test(c.id)?'マグマ床':'ミサイル');
+ if(/Dolphin|Hurricane|Duet/i.test(c.id))animal.push('属性：風','イルカ');
+ if(/Rabbit/i.test(c.id))animal.push('属性：氷','ウサギ');
+ if(/Cat|Ham/i.test(c.id))animal.push('属性：岩');
+ if(/Hedge/i.test(c.id))animal.push('属性：雷');
+ if(/Chick|Egg|Chicken/i.test(c.id))animal.push('ヒヨコ');
+ c.tags=animal;
+}
+
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
-function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))}
+function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&fitsShip(skillById(a.power))&&fitsShip(skillById(a.legend))&&!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)))}
 function synergiesFor(id){return activeSynergies().filter(a=>a.need.includes(id))}
@@ -2807,7 +2900,7 @@ function tickVacuum(dt){game.compactTimer-=dt;if(game.compactTimer<=0){game.comp
  const core=game.vacuum;if(!core)return;core.pulse+=dt;const distance=dst(core,player);if(distance<Math.max(95,player.magnet*.8)&&distance>1){const speed=clamp(180+(105-distance)*2,140,620);core.x+=(player.x-core.x)/distance*speed*dt;core.y+=(player.y-core.y)/distance*speed*dt}if(distance<player.r+23)collectVacuum();}
 function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!Number.isFinite(damage))return;
  // Central bonus applies exactly once to every damage source, regardless of ship.
- damage*=1+Math.min(.84,Math.max(0,player?.fusionOutputBonus||0));
+ damage*=1+Math.min(.84,Math.max(0,player?.fusionOutputBonus||0));if(player?.shipType==='dog'&&['dogEgg','blade','meteor','rock','missile','iceball','magma','pulseField','element','explosion'].includes(meta.source))damage*=player.dogAnimalBoost||1;
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
@@ -2845,7 +2938,47 @@ function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source
    ttl:6,hit:new Set(),napalm:true,missileCount:units,seekTimer:0});
   return;
  } if(source==='echo'&&shots.length>currentShotBudget()*.82)return;const base=Math.atan2(target.y-y,target.x-x),width=n>7?.18:.15,volley=source==='primary'&&player.shipType==='shot'?Math.min(n,12):n;const balancedDamage=source==='primary'&&player.shipType==='shot'?damage*(1+Math.min(.45,Math.max(0,n-volley)*.035)):damage;for(let i=0;i<volley;i++){if(shots.length>=currentShotBudget())break;const a=base+(i-(volley-1)/2)*width;shots.push(addPlayerShot({x:x+Math.cos(a)*11,y:y+Math.sin(a)*11,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:source==='rocket'?7:4.5,damage:balancedDamage,pierce:player.pierce,kind:source==='rocket'?'rocket':player.bulletKind,ttl:source==='rocket'?2.4:1.9,hit:new Set(),source}))}if(source==='primary'&&runClock-(player.lastShotSfxAt??-99)>.11){player.lastShotSfxAt=runClock;tone(580,.025,'triangle',.012)}}
-function shoot(){const tgt=visibleTarget(player.x,player.y);if(tgt){player.bulletKind=player.bulletModes[player.shotCycle++%player.bulletModes.length];fireFrom(player.x,player.y,tgt,player.multishot);if(player.relicRear)fireRear();if(player.relicSide)fireSide();if(Math.random()<Math.min(.85,player.echoShots))fireFrom(player.x,player.y,tgt,Math.min(4,player.multishot),player.dmg*.42,player.shotSpeed*.85,'echo')}}
+
+function fireDogBones(isNova=false){
+ const p=player;if(!p||p.shipType!=='dog')return;
+ const n=isNova?8:Math.min(8,p.dogBones),speed=isNova?350:p.dogBoneSpeed;
+ const target=visibleTarget(p.x,p.y);
+ const heading=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
+ for(let i=0;i<n&&shots.length<currentShotBudget();i++){
+  const ang=isNova?i*TAU/8:heading+(i-(n-1)/2)*.22,rad=isNova?6.5:Math.min(20,7*p.dogBoneSize);
+  shots.push({x:p.x+Math.cos(ang)*16,y:p.y+Math.sin(ang)*16,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,r:rad,
+    damage:isNova?effectiveNovaDamage(p)*.82:p.dmg*p.dogBonePower,pierce:999,kind:'bone',source:isNova?'nova':'shot',
+    ttl:isNova?4:3.4,returning:false,flight:0,range:isNova?300:p.dogBoneRange,
+    homeSpeed:speed*1.2,hit:new Set(),novaBone:isNova});
+ }
+ if(!isNova&&n&&runClock-(p.lastShotSfxAt??-99)>.15){p.lastShotSfxAt=runClock;tone(455,.05,'triangle',.018)}
+}
+function tickDogChicks(dt){
+ const p=player;if(p.shipType!=='dog')return;
+ const threshold=game.gameMode==='challenge'?480:900;
+ if(!p.dogChickenEvolved&&game.total>=threshold){
+  p.dogChickenEvolved=true;
+  if(p.dogChicks){tone(990,.15,'sine',.095);burst(p.x,p.y,'#ffe287',28,135);announce('🐔 PIYO! チック・タックが全員ニワトリに進化！',3.8)}
+ }
+ if(p.dogChicks<=0)return;
+ p.dogChickTimer-=dt;if(p.dogChickTimer>0)return;
+ if(shots.length>=currentShotBudget()-12){p.dogChickTimer=.2;return;}
+ p.dogChickTimer=Math.max(.57,p.dogEggRate*(p.dogChickenEvolved?.68:1));
+ const target=visibleTarget(p.x,p.y),n=Math.min(10,p.dogChicks);
+ if(!target)return;
+ for(let i=0;i<n&&shots.length<currentShotBudget();i++){
+  const pos=ringPosition(i,n,t,52,24,7,-.88),a=Math.atan2(target.y-pos.y,target.x-pos.x);
+  const volley=p.dogChickenEvolved&&i%3===0?2:1;
+  for(let k=0;k<volley&&shots.length<currentShotBudget();k++){
+   const ang=a+(k-(volley-1)/2)*.20,sp=p.dogEggSpeed*(p.dogChickenEvolved?1.33:1);
+   shots.push({x:pos.x,y:pos.y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,r:Math.min(11,6.5*(p.dogEggSize||1)),
+     damage:p.dogEggDamage*(p.dogChickenEvolved?1.48:1),pierce:0,
+     kind:'dogEgg',ttl:4.1,hit:new Set(),source:'dogEgg'});
+  }
+ }
+}
+
+function shoot(){if(player.shipType==='dog'){fireDogBones();return;}const tgt=visibleTarget(player.x,player.y);if(tgt){player.bulletKind=player.bulletModes[player.shotCycle++%player.bulletModes.length];fireFrom(player.x,player.y,tgt,player.multishot);if(player.relicRear)fireRear();if(player.relicSide)fireSide();if(Math.random()<Math.min(.85,player.echoShots))fireFrom(player.x,player.y,tgt,Math.min(4,player.multishot),player.dmg*.42,player.shotSpeed*.85,'echo')}}
 // v10.3: diminishing returns and movement incentives for mature weapon builds.
 function laserBalance(p,count){
  const excess=Math.max(0,p.laserScale-1);
@@ -2938,7 +3071,7 @@ function dash(){if(!player||player.dashLeft>0)return;if(controlMode==='mobile')v
   if(player.drillRushActive){player.drillPlasma=player.drillOverdriveTime>0?player.drillCap:0;player.iframes=Math.max(player.iframes,.27);sfx('novaLaser');burst(player.x,player.y,'#ff64af',15,110);}
  }
  if(game?.combatLog)game.combatLog.dashCount++;player.dashTime=(player.shipType==='drill'?.24:.2)*(player.thrusterEngine?1.65:1);player.dashLeft=player.shipType==='drill'&&player.drillOverdriveTime>0?Math.min(.65,player.dashCd*.42):player.dashCd;player.dashGaugeFade=1;player.iframes=Math.max(.31,player.iframes);burst(player.x,player.y,'#75fff2',16,90);tone(260,.18,'sawtooth',.045)}
-function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaCooldown>0)))return;if(!force){player.energy=0;player.novaCooldown=NOVA_COOLDOWN;if(game?.combatLog)game.combatLog.novaCount++;}if(player.shipType==='drill'){
+function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaCooldown>0)))return;if(!force){player.energy=0;player.novaCooldown=NOVA_COOLDOWN;if(game?.combatLog)game.combatLog.novaCount++;}if(player.shipType==='dog'){sfx('novaShot');fireDogBones(true);ring(player.x,player.y,65,'#ffe2ac');burst(player.x,player.y,'#ffd6aa',22,165);announce('🐶 BOW SHOCK · 8方向骨ブーメラン！',2.6);return;}if(player.shipType==='drill'){
   sfx('novaLaser');flash=.09;shake=0;
   player.drillOverdriveTime=5.5+Math.min(2,player.drillNovaBonusTime||0);player.drillPlasma=player.drillCap;player.iframes=Math.max(player.iframes,.35);
   ring(player.x,player.y,88,'#86fff0');burst(player.x,player.y,'#85fff0',24,130);
@@ -3120,7 +3253,7 @@ function tickGusts(dt){
  gusts=gusts.filter(g=>g.life>0&&g.x>-130&&g.y>-130&&g.x<W+130&&g.y<H+130);
 }
 
-// v13.6 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
+// v13.7 independent family attacks: iceballs, electromagnetic field, and one rolling meteor.
 // Trident pulse: three separate orbiting Tesla fields, combined hits never stack in one tick.
 function empEmitters(p){
  if(p.empRadius<=0)return[];
@@ -3209,10 +3342,10 @@ function explodeGigaNapalm(b,target,dmg){
 }
 function projectileHit(b,e){let dmg=b.damage;if(Math.random()<Math.min(.97,player.crit)){dmg*=player.critMult;if(Math.random()<.08)pop(e.x,e.y-14,'CRIT!','#ffe296')}
  if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))dmg*=player.bossBane;
- damageEnemy(e,dmg,{projectileAngle:Math.atan2(b.vy,b.vx),source:b.kind==='iceball'?'iceball':b.kind==='meteor'?'meteor':b.source==='drone'?'drone':b.source==='rocket'?'missile':b.kind==='novaCharge'?'nova':b.kind==='comet'?'charge':player.shipType==='charge'?'charge':'shot'});
+ damageEnemy(e,dmg,{projectileAngle:Math.atan2(b.vy,b.vx),source:b.novaBone?'nova':b.kind==='bone'?'bone':b.kind==='dogEgg'?'dogEgg':b.kind==='iceball'?'iceball':b.kind==='meteor'?'meteor':b.source==='drone'?'drone':b.source==='rocket'?'missile':b.kind==='novaCharge'?'nova':b.kind==='comet'?'charge':player.shipType==='charge'?'charge':'shot'});
   if(player.shipType==='charge'&&b.chargeFull&&b.source!=='fragment'&&!b.fragmented){if(player.relicChargeShatter)fireFragment(b,e);if(player.relicChargeNova){detonate(e.x,e.y,160,Math.max(12,dmg*.62),e,5);ring(e.x,e.y,158,'#ffd5a0')}b.fragmented=true}
   if(player.shipType==='shot'&&e.dead&&player.relicBurst&&['primary','rear','side','echo'].includes(b.source)&&!b.splitDepth){const others=nearestThreeVisible(e.x,e.y,e,240);for(const other of others){if(shots.length>=currentShotBudget())break;const a=Math.atan2(other.y-e.y,other.x-e.x);shots.push(addPlayerShot({x:e.x,y:e.y,vx:Math.cos(a)*player.shotSpeed*.9,vy:Math.sin(a)*player.shotSpeed*.9,r:3.5,damage:Math.max(7,dmg*.32),pierce:0,kind:player.bulletKind,ttl:1.45,hit:new Set([e]),source:'burst',splitDepth:1}))}}
-  const primaryAttack=['primary','charge'].includes(b.source)&&b.kind!=='novaCharge';
+  const primaryAttack=(['primary','charge'].includes(b.source)||player.shipType==='dog'&&b.kind==='bone')&&b.kind!=='novaCharge';
   if(((b.kind==='plasma'&&primaryAttack)||b.kind==='rocket'||(primaryAttack&&Math.random()<player.burnChance))&&!e.dead)setBurn(e,Math.max(15,dmg*(.28+player.thermal*.8)*(b.kind==='rocket'?(1+(player.missileBurnBonus||0)):1)),2.7);
  if(b.kind==='cryo'&&primaryAttack&&!e.dead){applySlow(e,2.9);if(player.iceBurst>0&&Math.random()<.13)detonate(e.x,e.y,74,dmg*.55,e,5)}
  if(b.kind==='arc'&&primaryAttack&&!e.dead)applyChain(e,dmg*.52+18);if(b.kind==='iceball'&&!e.dead)chillEnemy(e,1.5,Math.min(.78,player.iceBallChance));if(b.kind==='meteor'&&!e.dead&&player.elementMods?.diamondWall){applySlow(e,2.2);chillEnemy(e,1.1,.32)}
@@ -3260,19 +3393,21 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  }p.x=clamp(p.x,p.r+13,W-p.r-13);p.y=clamp(p.y,p.r+13,H-p.r-13);
  tickEchoShots(p,dt);
   if(p.shipType==='laser'){p.laserIdleTime=m>.19?Math.max(0,(p.laserIdleTime||0)-dt*2.3):Math.min(4,(p.laserIdleTime||0)+dt);updateLaser(dt)}else if(p.shipType==='charge'){updateCharge(dt,m)}else if(p.shipType==='drill'){updateDrill(dt,m,oldDrillX,oldDrillY,dashWasActive)}else{p.shotTimer-=dt;if(p.shotTimer<=0){shoot();p.shotTimer=efficientShotRate(p)}}
+ tickDogChicks(dt);
  const count=p.droneCount;for(let i=0;i<count;i++){const pos=ringPosition(i,count,t),xx=pos.x,yy=pos.y;p.droneTimers[i]=(p.droneTimers[i]||0)-dt;if(p.droneTimers[i]<=0){const target=visibleTarget(xx,yy);if(target)fireFrom(xx,yy,target,1,p.dmg*(.58+p.droneThunder*.10),p.shotSpeed*.9,'drone');p.droneTimers[i]=Math.max(.16,.72/(p.droneBoost||1))}}
  if(p.orbit){
-  const length=Math.min(58,p.bladeReach||19)*(p.bladeCross?.5:1),width=7;
-  for(let i=0;i<p.orbit;i++){
-   const pos=ringPosition(i,p.orbit,t,73,30,6,2.2),angle=pos.a+Math.PI/2;
-   for(let arm=0;arm<(p.bladeCross?2:1);arm++){
+  const dogDuet=p.shipType==='dog'&&p.dogDolphinDuet,orbitN=dogDuet?Math.min(20,p.orbit*2):p.orbit;
+  const length=Math.min(58,p.bladeReach||19)*(dogDuet?.65:p.bladeCross?.5:1),width=7;
+  for(let i=0;i<orbitN;i++){
+   const pos=ringPosition(i,orbitN,t,73,30,6,2.2),angle=pos.a+Math.PI/2;
+   for(let arm=0;arm<(dogDuet?1:p.bladeCross?2:1);arm++){
     const a=angle+arm*Math.PI/2,ux=Math.cos(a)*length,uy=Math.sin(a)*length;
     const x0=pos.x-ux,y0=pos.y-uy,x1=pos.x+ux,y1=pos.y+uy,den=Math.max(1,4*(ux*ux+uy*uy));
     for(const e of segmentCandidates(x0,y0,x1,y1,width)){
      if(e.dead||e.bladeHit>0)continue;
      const q=clamp(((e.x-x0)*(x1-x0)+(e.y-y0)*(y1-y0))/den,0,1);
      if((e.x-x0-(x1-x0)*q)**2+(e.y-y0-(y1-y0)*q)**2>(e.r+width)**2)continue;
-     damageEnemy(e,(p.dmg*.55+14)*(p.bladePower||1)*(p.bladeCross?.85:1),{special:true,source:'blade'});
+     damageEnemy(e,(p.dmg*.55+14)*(p.bladePower||1)*((p.bladeCross||dogDuet)?.85:1),{special:true,source:'blade'});
      if(p.bladeFireBurn)setBurn(e,Math.max(16,p.dmg*.16),1.8);
      if(p.bladeIceSlow)applySlow(e,1.3);
      e.bladeHit=.22;
@@ -3298,7 +3433,17 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  // Index is already current when neither wind nor rock attacks displaced a target.
  if(enemyIndexDirtyDuringForces)refreshEnemyIndex();
  // Projectiles persist across wave boundaries, including those already airborne.
- for(const b of shots){b.ttl-=dt;if(b.ttl<=0)continue;const bx=b.x,by=b.y;if(b.kind==='rocket'||b.relicHoming){b.seekTimer=(b.seekTimer||0)-dt;if(b.seekTimer<=0){b.seekTimer=.19+Math.random()*.06;const target=(b.cachedTarget&&!b.cachedTarget.dead&&isVisibleAutoTarget(b.cachedTarget)&&d2(b,b.cachedTarget)<330*330)?b.cachedTarget:nearTarget(b.x,b.y,null,Math.min(500,Math.max(W,H)*.75),true);b.cachedTarget=target;if(target){const v=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);const steer=b.napalm?.70:b.kind==='rocket'?.48:.42;b.vx=b.vx*(1-steer)+Math.cos(a)*v*steer;b.vy=b.vy*(1-steer)+Math.sin(a)*v*steer}}}b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.kind==='meteor'){b.meteorDistance=(b.meteorDistance||0)+Math.hypot(b.vx,b.vy)*dt;b.r=Math.min(b.meteorMaxRadius||45,12+b.meteorDistance*.065);if(b.x+b.r<0||b.y+b.r<0||b.x-b.r>W||b.y-b.r>H){b.ttl=0;continue;}}if(engageBarrierBlocks(bx,by,b.x,b.y,b.r||3)){b.ttl=0;continue}if(b.relicGrowth)b.r=Math.min(b.growthLimit||8.1,(b.r||4.5)+dt*(b.source==='burst'?1.55:1.85));if(p.shipType==='charge'&&b.chargeFull){if(p.relicChargeGravity){for(const e of circleCandidates(b.x,b.y,135)){if(e.dead||['minor','major','unique'].includes(e.type))continue;const dd=Math.hypot(e.x-b.x,e.y-b.y);if(dd>1&&dd<135){e.x+=(b.x-e.x)/dd*100*dt;e.y+=(b.y-e.y)/dd*100*dt}}}if(p.relicChargeFlame){b.trailTimer=(b.trailTimer||0)-dt;if(b.trailTimer<=0){b.trailTimer=.23;zones.push({x:b.x,y:b.y,r:34,life:1.1,ttl:0,dps:Math.max(18,p.dmg*.42),type:'magma'})}}}if(b.bounces>0&&(b.x<12||b.x>W-12||b.y<12||b.y>H-12)){if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<12||b.y>H-12)b.vy*=-1;b.x=clamp(b.x,13,W-13);b.y=clamp(b.y,13,H-13);const target=visibleTarget(b.x,b.y);if(target){const sp=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);b.vx=Math.cos(a)*sp;b.vy=Math.sin(a)*sp}b.bounces--;b.ttl=Math.max(b.ttl,.8);if(settings.fx!=='low'&&settings.fx!=='simple')ring(b.x,b.y,26,'#b8ffed')}if(b.x<-90||b.y<-90||b.x>W+90||b.y>H+90){b.ttl=0;continue}
+ for(const b of shots){b.ttl-=dt;if(b.ttl<=0)continue;const bx=b.x,by=b.y;
+ if(b.kind==='bone'){
+  b.flight+=dt;
+  if(!b.returning&&b.flight>=b.range/Math.max(20,Math.hypot(b.vx,b.vy))){b.returning=true;b.hit.clear();}
+  if(b.returning){
+   const dx=p.x-b.x,dy=p.y-b.y,d=Math.hypot(dx,dy);
+   if(d<Math.max(17,p.r+5)){b.ttl=0;continue;}
+   const sp=b.homeSpeed||420;b.vx=dx/Math.max(1,d)*sp;b.vy=dy/Math.max(1,d)*sp;
+  }
+ }
+ if(b.kind==='rocket'||b.relicHoming){b.seekTimer=(b.seekTimer||0)-dt;if(b.seekTimer<=0){b.seekTimer=.19+Math.random()*.06;const target=(b.cachedTarget&&!b.cachedTarget.dead&&isVisibleAutoTarget(b.cachedTarget)&&d2(b,b.cachedTarget)<330*330)?b.cachedTarget:nearTarget(b.x,b.y,null,Math.min(500,Math.max(W,H)*.75),true);b.cachedTarget=target;if(target){const v=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);const steer=b.napalm?.70:b.kind==='rocket'?.48:.42;b.vx=b.vx*(1-steer)+Math.cos(a)*v*steer;b.vy=b.vy*(1-steer)+Math.sin(a)*v*steer}}}b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.kind==='meteor'){b.meteorDistance=(b.meteorDistance||0)+Math.hypot(b.vx,b.vy)*dt;b.r=Math.min(b.meteorMaxRadius||45,12+b.meteorDistance*.065);if(b.x+b.r<0||b.y+b.r<0||b.x-b.r>W||b.y-b.r>H){b.ttl=0;continue;}}if(engageBarrierBlocks(bx,by,b.x,b.y,b.r||3)){b.ttl=0;continue}if(b.relicGrowth)b.r=Math.min(b.growthLimit||8.1,(b.r||4.5)+dt*(b.source==='burst'?1.55:1.85));if(p.shipType==='charge'&&b.chargeFull){if(p.relicChargeGravity){for(const e of circleCandidates(b.x,b.y,135)){if(e.dead||['minor','major','unique'].includes(e.type))continue;const dd=Math.hypot(e.x-b.x,e.y-b.y);if(dd>1&&dd<135){e.x+=(b.x-e.x)/dd*100*dt;e.y+=(b.y-e.y)/dd*100*dt}}}if(p.relicChargeFlame){b.trailTimer=(b.trailTimer||0)-dt;if(b.trailTimer<=0){b.trailTimer=.23;zones.push({x:b.x,y:b.y,r:34,life:1.1,ttl:0,dps:Math.max(18,p.dmg*.42),type:'magma'})}}}if(b.bounces>0&&(b.x<12||b.x>W-12||b.y<12||b.y>H-12)){if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<12||b.y>H-12)b.vy*=-1;b.x=clamp(b.x,13,W-13);b.y=clamp(b.y,13,H-13);const target=visibleTarget(b.x,b.y);if(target){const sp=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);b.vx=Math.cos(a)*sp;b.vy=Math.sin(a)*sp}b.bounces--;b.ttl=Math.max(b.ttl,.8);if(settings.fx!=='low'&&settings.fx!=='simple')ring(b.x,b.y,26,'#b8ffed')}if(b.x<-90||b.y<-90||b.x>W+90||b.y>H+90){b.ttl=0;continue}
  const travelX=b.x-bx,travelY=b.y-by,travelSq=travelX*travelX+travelY*travelY,travelLen=Math.sqrt(travelSq);
  // Scan occupied spatial cells directly: no per-bullet candidate arrays or spreads.
  const pad=(b.r||0)+enemyMaxRadius;
@@ -3309,7 +3454,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  for(const e of cell){if(b.ttl<=0)break bulletCells;if(e.dead||e.isoWarp||(e.isoSafe||0)>0||b.hit.has(e))continue;
  const hitFrac=travelSq>0?clamp(((e.x-bx)*travelX+(e.y-by)*travelY)/travelSq,0,1):0;
  const hitX=bx+travelX*hitFrac,hitY=by+travelY*hitFrac;
- if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.pierce>0)b.pierce--;else b.ttl=0;}}
+ if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.kind==='bone'&&b.returning)damageEnemy(e,b.damage*Math.max(0,player.dogBoneReturn-1),{special:true,source:b.novaBone?'nova':'bone'});if(b.pierce>0)b.pierce--;else b.ttl=0;}}
  }}shots=shots.filter(b=>b.ttl>0);
  for(const e of enemies){if(e.dead)continue;
  if(e.type==='ultimatePart'){locateUltimatePart(e);e.hurt=Math.max(0,e.hurt-dt);e.phase+=dt;tickBurn(e,dt);continue;}
@@ -3416,7 +3561,75 @@ function hudUpdate(){if(!game||!player)return;
 }
 
 function glow(x,y,r,c,blur=14){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=settings.fx==='low'||settings.fx==='simple'?0:renderHeavyLoad?Math.min(blur,2):settings.fx==='high'?blur:settings.fx==='medium'?blur*.45:0;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.shadowBlur=0}
-function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor=player?.evolutionTint|| (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle=player?.evolutionTint|| (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='drill'){
+
+function drawAnimal(kind,x,y,r=14,angle=0){
+ ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.lineCap='round';ctx.lineJoin='round';
+ const fur={dog:'#f3c481',fox:'#ff944d',cat:'#d8a8f2',ham:'#efbd85',rabbit:'#f0ecff',
+  dolphin:'#6acbdf',chick:'#ffdf61',chicken:'#f6e6bb',hedgehog:'#a47a65'}[kind]||'#f1dba7';
+ ctx.strokeStyle='#5a3542';ctx.lineWidth=Math.max(1.1,r*.105);ctx.fillStyle=fur;
+ if(kind==='dolphin'){
+  // Sideways dolphin: a curved dorsal fin, narrow beak, two tail tips.
+  ctx.rotate(Math.PI/2);
+  ctx.beginPath();ctx.moveTo(0,-r*.83);ctx.bezierCurveTo(r*.60,-r*.54,r*.68,r*.10,r*.28,r*.68);
+  ctx.lineTo(r*.69,r*1.02);ctx.lineTo(r*.10,r*.82);ctx.lineTo(-r*.10,r*.82);
+  ctx.lineTo(-r*.69,r*1.02);ctx.lineTo(-r*.28,r*.68);
+  ctx.bezierCurveTo(-r*.69,r*.06,-r*.58,-r*.55,0,-r*.83);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#9cf3ff';ctx.beginPath();ctx.ellipse(0,-r*.26,r*.40,r*.28,0,0,TAU);ctx.fill();
+  ctx.fillStyle='#263c55';ctx.beginPath();ctx.arc(-r*.19,-r*.48,Math.max(1.3,r*.09),0,TAU);ctx.fill();
+  ctx.restore();return;
+ }
+ if(kind==='hedgehog'){
+  ctx.fillStyle='#8d6555';ctx.beginPath();for(let i=0;i<16;i++){const a=i*TAU/16,rad=r*(i%2?1:1.20);i?ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad):ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();
+ }
+ if(kind==='rabbit'){
+  ctx.beginPath();ctx.ellipse(-r*.42,-r*.92,r*.25,r*.75,-.16,0,TAU);ctx.ellipse(r*.42,-r*.92,r*.25,r*.75,.16,0,TAU);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#f8afc8';ctx.beginPath();ctx.ellipse(-r*.42,-r*.95,r*.11,r*.55,-.16,0,TAU);ctx.ellipse(r*.42,-r*.95,r*.11,r*.55,.16,0,TAU);ctx.fill();ctx.fillStyle=fur;
+ }
+ if(kind==='fox'||kind==='cat'){
+  ctx.beginPath();ctx.moveTo(-r*.83,-r*.43);ctx.lineTo(-r*.88,-r*1.22);ctx.lineTo(-r*.25,-r*.85);
+  ctx.lineTo(r*.25,-r*.85);ctx.lineTo(r*.88,-r*1.22);ctx.lineTo(r*.83,-r*.43);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#ffb6c1';ctx.beginPath();ctx.moveTo(-r*.69,-r*.80);ctx.lineTo(-r*.72,-r*1.08);ctx.lineTo(-r*.43,-r*.80);ctx.moveTo(r*.69,-r*.80);ctx.lineTo(r*.72,-r*1.08);ctx.lineTo(r*.43,-r*.80);ctx.fill();ctx.fillStyle=fur;
+ }
+ if(kind==='dog'){
+  ctx.fillStyle='#b87a50';ctx.beginPath();ctx.ellipse(-r*.91,-r*.22,r*.35,r*.74,-.36,0,TAU);ctx.ellipse(r*.91,-r*.22,r*.35,r*.74,.36,0,TAU);ctx.fill();ctx.fillStyle=fur;
+ }
+ if(kind==='ham'){
+  ctx.beginPath();ctx.arc(-r*.74,-r*.72,r*.40,0,TAU);ctx.arc(r*.74,-r*.72,r*.40,0,TAU);ctx.fill();ctx.stroke();
+ }
+ if(kind==='chicken'){
+  ctx.fillStyle='#f55f72';for(let k=-1;k<=1;k++){ctx.beginPath();ctx.arc(k*r*.32,-r*.96,r*.29,0,TAU);ctx.fill()}ctx.fillStyle=fur;
+ }
+ ctx.beginPath();ctx.ellipse(0,0,r,r*.89,0,0,TAU);ctx.fill();ctx.stroke();
+ if(kind==='dog'||kind==='fox'||kind==='ham'||kind==='cat'||kind==='rabbit'){
+  ctx.fillStyle='#fff3df';ctx.beginPath();ctx.ellipse(0,r*.32,r*.52,r*.33,0,0,TAU);ctx.fill();
+ }
+ if(kind==='ham'){ctx.fillStyle='#f09a97';for(const i of [-1,1]){ctx.beginPath();ctx.arc(i*r*.64,r*.19,r*.25,0,TAU);ctx.fill();}}
+ ctx.fillStyle='#31283d';for(const i of [-1,1]){ctx.beginPath();ctx.arc(i*r*.38,-r*.16,Math.max(1.45,r*.115),0,TAU);ctx.fill();}
+ ctx.fillStyle=kind==='chick'||kind==='chicken'?'#f89c47':'#86536c';
+ if(kind==='chick'||kind==='chicken'){ctx.beginPath();ctx.moveTo(-r*.18,r*.21);ctx.lineTo(r*.18,r*.21);ctx.lineTo(0,r*.50);ctx.closePath();ctx.fill();}
+ else {ctx.beginPath();ctx.ellipse(0,r*.27,r*.17,r*.12,0,0,TAU);ctx.fill();}
+ ctx.restore();
+}
+function drawDogBone(b){
+ ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
+ const r=b.r;ctx.shadowColor=b.novaBone?'#ffb2e7':'#ffe4a4';ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
+ ctx.strokeStyle=b.novaBone?'#fff6fc':'#fff0c2';ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
+ ctx.fillStyle=b.novaBone?'#ffe3fa':'#fff1ce';
+ for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
+ ctx.restore();
+}
+function drawDogPaw(z){
+ const r=z.r,hot=Math.sin(t*3+z.x*.12)*.07,fade=clamp(z.life*.30,0,.80);
+ ctx.globalAlpha=fade*.8;ctx.fillStyle='#b4311c';
+ ctx.beginPath();ctx.ellipse(0,r*.20,r*.70,r*.51,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#ff7637';ctx.beginPath();ctx.ellipse(0,r*.16,r*.55,r*.38,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#ef6b2c';const toes=[[-.65,-.35],[-.24,-.64],[.25,-.64],[.65,-.35]];
+ for(const [xx,yy] of toes){ctx.beginPath();ctx.ellipse(xx*r,yy*r,r*.22,r*.25,xx*.20,0,TAU);ctx.fill();}
+ ctx.globalAlpha=fade*.7;ctx.strokeStyle='#ffdc7a';ctx.lineWidth=2.3;
+ ctx.beginPath();ctx.ellipse(0,r*.16,r*(.44+hot),r*.29,0,0,TAU);ctx.stroke();
+}
+
+function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor=player?.evolutionTint|| (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle=player?.evolutionTint|| (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='dog'){ctx.shadowBlur=0;drawAnimal('dog',0,0,17);ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
   const hot=(player.drillRushActive||0)>0,charge=clamp((player.drillPlasma||0)/Math.max(.001,player.drillCap||1),0,1);
   // Magenta plated chassis + a distinct, mechanical auger at the nose.
   ctx.shadowColor=player?.evolutionTint||(hot?'#ffd0ee':'#ff4898');ctx.fillStyle=player?.evolutionTint||(hot?'#ffe2f3':'#f95da7');ctx.strokeStyle=player?.evolutionTint||'#6c164f';ctx.lineWidth=2.8;
@@ -3521,7 +3734,7 @@ function drawEvolutionShotMotifs(){
 }
 
 
-/* v13.6 — Circular cyclone: consistent radius under all effect presets. */
+/* v13.7 — Circular cyclone: consistent radius under all effect presets. */
 function drawCyclone(g){
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
@@ -3537,7 +3750,7 @@ function drawCyclone(g){
  if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count,rad=r*.87;ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);ctx.arc(0,0,rad,a,a+.44);}ctx.stroke();}
  ctx.restore();
 }
-/* v13.6 — Tesla EMP: blue-white discharge with purple field accents. */
+/* v13.7 — Tesla EMP: blue-white discharge with purple field accents. */
 function drawTeslaField(p){for(const field of empEmitters(p))drawTeslaEmitter(field);}
 function drawTeslaEmitter(p){
  if(p.empRadius<=0)return;
@@ -3569,8 +3782,8 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  // Magma is an organic, irregular burning puddle, not a targeting circle.
  for(const z of zones){if(z.x+z.r<0||z.x-z.r>W||z.y+z.r<0||z.y-z.r>H)continue;ctx.save();ctx.translate(z.x,z.y);const fade=Math.min(.78,z.life*.25);ctx.globalAlpha=fade;
   if(z.type==='magma'){
-   // Only explicit SIMPLE mode uses circular rendering. Pressure cannot change shape.
-   if(settings.fx==='simple'){
+   // Dog visuals swap magma into a paw print without changing circular gameplay hit detection.
+   if(player?.shipType==='dog'&&settings.fx!=='simple'){drawDogPaw(z);}else if(settings.fx==='simple'){
     ctx.fillStyle=z.tint?'#142f49':'#7d321a';ctx.beginPath();ctx.arc(0,0,z.r,0,TAU);ctx.fill();
     ctx.strokeStyle=z.tint||'#e9843d';ctx.lineWidth=2;ctx.stroke();
     ctx.fillStyle=z.tint||'#ff8c39';ctx.beginPath();ctx.arc(0,0,z.r*.56,0,TAU);ctx.fill();
@@ -3595,7 +3808,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   }else{ctx.fillStyle='#9b81ff';ctx.strokeStyle='#e1aaff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,z.r,0,TAU);ctx.fill();ctx.stroke()}
   ctx.restore()}
  // Circular cyclone with subtle rotating arcs; true radius matches enemy hit detection.
- for(const g of gusts){if(g.x+g.r<-25||g.x-g.r>W+25||g.y+g.r<-25||g.y-g.r>H+25)continue;drawCyclone(g);}
+ for(const g of gusts){if(g.x+g.r<-25||g.x-g.r>W+25||g.y-g.r>H+25)continue;drawCyclone(g);if(player.shipType==='dog'&&g.kind!=='fireTornado')drawAnimal('dolphin',g.x,g.y,Math.min(19,g.r*.22),Math.atan2(g.vy,g.vx)+Math.PI/2);}
  // ENGAGE barriers: collision geometry matches the filled rectangles. Enemy projectiles ignore them.
  for(const wall of activeEngageWalls()){ctx.save();const fade=clamp(wall.ttl/.5,0,1);ctx.globalAlpha=.88*fade;
   ctx.fillStyle='#37172c';ctx.strokeStyle='#ff9bbb';ctx.lineWidth=3;ctx.shadowColor='#ff8dc1';ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:13;
@@ -3620,7 +3833,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   }ctx.restore()}
  if(game?.vacuum){const v=game.vacuum,tw=t*4;ctx.save();ctx.translate(v.x,v.y+Math.sin(tw)*5);ctx.rotate(t*.85);const rad=21+Math.sin(t*6)*3;ctx.shadowColor='#fff8ab';ctx.shadowBlur=28+Math.sin(t*8)*8;const gr=ctx.createRadialGradient(0,0,0,0,0,rad*2);gr.addColorStop(0,'#ffffff');gr.addColorStop(.22,'#fff3a3');gr.addColorStop(.55,'#fee27b77');gr.addColorStop(1,'#fffab400');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,rad*2,0,TAU);ctx.fill();ctx.fillStyle='#ffffff';ctx.strokeStyle='#fff9c2';ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<8;i++){const a=i*TAU/8,r=i%2?rad*.56:rad*1.35;i?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.rotate(-t*1.9);ctx.strokeStyle='#ffe9a3';ctx.lineWidth=2;ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(0,0,rad+12,0,TAU);ctx.stroke();ctx.restore();ctx.save();ctx.fillStyle='#fff9d4';ctx.shadowColor='#ffda68';ctx.shadowBlur=11;ctx.textAlign='center';ctx.font='900 11px system-ui';ctx.fillText('✦ ALL EXP',v.x,v.y-39);ctx.restore();}
  for(const e of pickups){if(e.x<-22||e.y<-22||e.x>W+22||e.y>H+22)continue;const yy=e.y+Math.sin(e.phase)*3;ctx.save();ctx.translate(e.x,yy);ctx.rotate(e.phase*.35);ctx.shadowColor=e.type==='heal'?'#66ffa5':'#af8dff';ctx.shadowBlur=renderHeavyLoad?0:13;ctx.fillStyle=e.type==='heal'?'#73ffb9':'#bd93ff';ctx.beginPath();ctx.moveTo(0,-e.r*1.5);ctx.lineTo(e.r,0);ctx.lineTo(0,e.r*1.5);ctx.lineTo(-e.r,0);ctx.closePath();ctx.fill();ctx.restore()}
- ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(b.napalm){
+ ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?9:4);for(const b of shots){if(b.x<-40||b.y<-40||b.x>W+40||b.y>H+40)continue;if(player.shipType==='dog'&&b.kind==='bone'){drawDogBone(b);continue;}if(player.shipType==='dog'&&b.kind==='dogEgg'){ctx.save();ctx.fillStyle='#fff4cc';ctx.strokeStyle='#dfa96f';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(b.x,b.y,b.r*.82,b.r*1.23,Math.atan2(b.vy,b.vx),0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}if(player.shipType==='dog'&&b.kind==='rocket'){drawAnimal('fox',b.x,b.y,Math.min(24,b.r*(b.napalm?1.1:1.5)),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.napalm){
    ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
    const simple=renderHeavyLoad||settings.fx==='simple',rr=b.r;
    ctx.shadowColor='#ff9747';ctx.shadowBlur=simple?0:18;
@@ -3631,10 +3844,10 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    ctx.fillStyle='#d45232';ctx.beginPath();ctx.moveTo(-rr*.55,rr*.34);ctx.lineTo(-rr,rr);ctx.lineTo(-rr*.22,rr*.72);ctx.lineTo(rr*.22,rr*.72);ctx.lineTo(rr,rr);ctx.lineTo(rr*.55,rr*.34);ctx.closePath();ctx.fill();
    ctx.fillStyle='#ffbd51';ctx.beginPath();ctx.moveTo(-rr*.30,rr*.9);ctx.lineTo(0,rr*(simple?1.45:1.8+.15*Math.sin(t*21)));ctx.lineTo(rr*.30,rr*.9);ctx.closePath();ctx.fill();
    ctx.restore();continue;
-  }if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
-   if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
+  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(52,b.r),t*.9);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
+   if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
- if(player.empRadius>0)drawTeslaField(player);
+ if(player.empRadius>0){drawTeslaField(player);if(player.shipType==='dog')drawAnimal('hedgehog',player.x,player.y-37,12+Math.sin(t*3)*1.2);}
   for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
@@ -3657,7 +3870,9 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
   glow(b.x,b.y,b.r,b.color,12);
  }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&(e.bomberAlert||e.blastWarn>0)){ctx.save();ctx.globalAlpha=.35+.55*(Math.sin(t*23)>0?1:0);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,86,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
- if(player.orbit){for(let i=0;i<player.orbit;i++){
+ if(player.orbit){if(player.shipType==='dog'){const n=player.dogDolphinDuet?Math.min(20,player.orbit*2):player.orbit;
+  for(let i=0;i<n;i++){const pos=ringPosition(i,n,t,73,30,6,2.2);drawAnimal('dolphin',pos.x,pos.y,13,pos.a+Math.PI/2);}
+ }else for(let i=0;i<player.orbit;i++){
   const pos=ringPosition(i,player.orbit,t,73,30,6,2.2),length=Math.min(58,player.bladeReach||19)*(player.bladeCross?.5:1);
   ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+Math.PI/2);
   ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'?0:7;
@@ -3667,8 +3882,9 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   ctx.lineTo(-length+4,4);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.fillStyle='#fff';ctx.fillRect(-Math.max(2,length-7),-1,Math.max(4,length*2-14),2);if(player.bladeCross){ctx.fillStyle=player.evolutionTint||'#7affdb';ctx.fillRect(-4,-length,8,length*2);ctx.fillStyle='#fff';ctx.fillRect(-1,-Math.max(2,length-7),2,Math.max(4,length*2-14));}ctx.restore();
  }} 
- for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor=fusedColor('rock')||player.evolutionTint||'#e3bd88';ctx.shadowBlur=renderHeavyLoad?0:11;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':(fusedColor('rock')||player.evolutionTint||'#bca388');ctx.strokeStyle=fusedColor('rock')?'#ffffff':'#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
+ for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);if(player.shipType==='dog'){ctx.save();ctx.globalAlpha=(player.rockCooldowns[i]||0)>0?.50:1;drawAnimal('cat',pos.x,pos.y,Math.max(9,player.rockSize),pos.a+t*.25);ctx.restore();continue;}ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor=fusedColor('rock')||player.evolutionTint||'#e3bd88';ctx.shadowBlur=renderHeavyLoad?0:11;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':(fusedColor('rock')||player.evolutionTint||'#bca388');ctx.strokeStyle=fusedColor('rock')?'#ffffff':'#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
  if(player.relicLaserOrbit){for(let k=0;k<2;k++){const a=t*1.65+k*Math.PI;const xx=player.x+Math.cos(a)*28,yy=player.y+Math.sin(a)*28;glow(xx,yy,5,'#d9b6ff',11);ctx.strokeStyle='#9e8cff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(xx,yy,9,0,TAU);ctx.stroke()}}
+  if(player.shipType==='dog')for(let i=0;i<player.dogChicks;i++){const pos=ringPosition(i,player.dogChicks,t,52,24,7,-.88);drawAnimal(player.dogChickenEvolved?'chicken':'chick',pos.x,pos.y,12+Math.sin(t*5+i)*.65);}
   for(let i=0;i<player.droneCount;i++){const pos=ringPosition(i,player.droneCount,t);ship(pos.x,pos.y,pos.a+Math.PI/2,.55,true)}
  if(player.iframes>0&&Math.floor(t*14)%2===0)ctx.globalAlpha=.44;ship(player.x,player.y,Math.atan2(player.dy,player.dx)+Math.PI/2);ctx.globalAlpha=1;
  const dashFill=1-clamp(player.dashLeft/Math.max(.001,player.dashCd),0,1),dashAlpha=player.dashLeft>0?.98:(player.dashGaugeFade||0);if(dashAlpha>.02){const gw=Math.max(34,player.r*4.2),gh=6,gx=player.x-gw/2,gy=player.y+player.r+12;ctx.save();ctx.globalAlpha=Math.min(.92,dashAlpha);ctx.fillStyle='#07111f';ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect?ctx.roundRect(gx,gy,gw,gh,gh/2):(ctx.rect(gx,gy,gw,gh));ctx.fill();ctx.stroke();ctx.globalAlpha=Math.min(1,dashAlpha);ctx.shadowColor='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:10;ctx.fillStyle='#ffffff';const inner=Math.max(0,(gw-2)*dashFill);ctx.fillRect(gx+1,gy+1,inner,gh-2);ctx.shadowBlur=0;ctx.restore();}
@@ -3753,7 +3969,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.6.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.7.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;

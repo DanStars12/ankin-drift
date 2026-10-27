@@ -8,7 +8,8 @@ const SHIPS={
  shot:{name:'PULSE STRIKER',jp:'ショット型',epithet:'弾幕の航行者',weapon:'無数の弾丸'},
  laser:{name:'PRISM LANCER',jp:'レーザー型',epithet:'光条の狙撃手',weapon:'光の軌跡'},
  charge:{name:'COMET RAIDER',jp:'チャージ型',epithet:'彗星の砲撃手',weapon:'溜め込んだ一撃'},
- drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',epithet:'鋼の突破者',weapon:'燃える刃先'}
+ drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',epithet:'鋼の突破者',weapon:'燃える刃先'},
+ dog:{name:'BONE BUDDY β',jp:'ドッグ型',epithet:'アニマルの指揮官',weapon:'仲間と骨ブーメラン'}
 };
 const ELEMENTS={
  fire:{name:'炎',title:'紅蓮',scene:'焔の残光'},
@@ -18,7 +19,7 @@ const ELEMENTS={
  rock:{name:'岩',title:'巌壁',scene:'砕けた岩の粒子'}
 };
 const SOURCE={
- shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',drill:'近接ドリル',nova:'NOVA',
+ dogEgg:'チック・タックの卵',bone:'骨ブーメラン',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',drill:'近接ドリル',nova:'NOVA',
  dot:'燃焼DoT',magma:'マグマ',element:'属性攻撃',drone:'僚機',
  missile:'ミサイル',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'貫通隕石',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発',other:'複合攻撃'
 };
@@ -40,6 +41,8 @@ const STYLES={
  iceball:{name:'氷晶の名手',lead:'無数の氷晶を撃ち放ち',close:'冷たい光が戦いの結末を告げた。'},
  pulse:{name:'雷円の守り手',lead:'自機の周囲に雷の陣を敷き',close:'円環の雷が勝利を刻んだ。'},
  meteor:{name:'隕石の先導者',lead:'成長する隕石で道を切り開き',close:'長く続いた戦場に新しい軌跡が残った。'},
+ dogfetch:{name:'ボーン・マスター',lead:'往復する骨ブーメランを自在に操り',close:'帰ってきた骨と仲間たちが、勝利を運んできた。'},
+ dogpack:{name:'アニマルたちのリーダー',lead:'大切な動物の仲間たちと息を合わせ',close:'あたたかな足あとが、銀河に新しい物語を残した。'},
  adaptive:{name:'戦場の開拓者',lead:'多彩な武装を組み合わせて道を開き',close:'選び抜いた戦術が、その結末を導いた。'}
 };
 const sane=(v,max=1e12)=>Number.isFinite(Number(v))?Math.max(0,Math.min(max,Number(v))):0;
@@ -72,6 +75,8 @@ function chooseStyle(s,primary,share){
  if(primary==='nova'&&share>=.22&&s.novaCount>=3)return 'nova';
  // A dash-focused victory needs sustained movement, not a few routine dodges over 30 minutes.
  if(s.dashCount>=Math.max(24,Math.floor(s.seconds/60*1.5))&&s.dashCount>=s.hits*2)return 'dash';
+ if(s.ship==='dog'&&primary==='bone'&&share>=.25)return 'dogfetch';
+ if(s.ship==='dog'&&primary==='dogEgg'&&share>=.25)return 'dogpack';
  if(primary==='drone'&&share>=.28)return 'drone';
  if(primary==='iceball'&&share>=.28)return 'iceball';
  if(primary==='pulseField'&&share>=.28)return 'pulse';
