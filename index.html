@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.8.1 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.8.2 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.8.1 | DOG FIGHTER FRAME</title>
+<title>ANKIN DRIFT v13.8.2 | HEDGEHOG EMP</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1692,7 +1692,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.8.1 · DOG FIGHTER FRAME</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.8.2 · HEDGEHOG EMP</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -3741,8 +3741,71 @@ function drawCyclone(g){
  if(!simple){ctx.globalAlpha=opacity*.43;ctx.lineWidth=1.5;const count=low?2:3;ctx.beginPath();for(let i=0;i<count;i++){const a=phase*.74+i*TAU/count,rad=r*.87;ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);ctx.arc(0,0,rad,a,a+.44);}ctx.stroke();}
  ctx.restore();
 }
-/* v13.8 — Tesla EMP: blue-white discharge with purple field accents. */
-function drawTeslaField(p){for(const field of empEmitters(p))drawTeslaEmitter(field);}
+/* v13.8.2: dog EMP fills the field with a purple neon hedgehog silhouette.
+   Its actual circular hit geometry is still exclusively defined by empEmitters().
+   The cached animal outline is also shared with other animal effects. */
+function drawTeslaField(p){
+ const isHedgehog=p.shipType==='dog';
+ for(const field of empEmitters(p)){
+  const r=field.empRadius;
+  // Completely invisible orbiting emitters need no Canvas work (damage still applies).
+  if(field.x+r+14<0||field.x-r-14>W||field.y+r+14<0||field.y-r-14>H)continue;
+  if(isHedgehog)drawHedgehogPulseEmitter(field);
+  else drawTeslaEmitter(field);
+ }
+}
+function drawHedgehogPulseEmitter(field){
+ const r=field.empRadius;
+ if(r<=0)return;
+ let outline=ANIMAL_PATHS.get('hedgehog');
+ if(!outline){outline=new Path2D(ANIMAL_OUTLINES.hedgehog);ANIMAL_PATHS.set('hedgehog',outline);}
+ const simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low';
+ const high=settings.fx==='high'&&!low,compact=field.split;
+ const pulse=1+Math.sin(t*4.4+(compact?field.x*.006:0))*.017;
+ ctx.save();ctx.translate(field.x,field.y);ctx.lineJoin='round';ctx.lineCap='round';
+ // The spiky shell replaces the old round field and nearly reaches its original radius.
+ // Keep the silhouette cached, and do not use this path for collision checks.
+ ctx.save();ctx.rotate(Math.sin(t*.82)*.035);ctx.scale(r*.76*pulse,r*.70*pulse);
+ ctx.fillStyle='#7542ba';ctx.globalAlpha=simple?.055:.105;ctx.fill(outline);
+ ctx.strokeStyle=ELEMENTS.thunder.color;ctx.lineWidth=2.7/(r*.72);ctx.globalAlpha=.83+.06*Math.sin(t*3.1);
+ ctx.shadowColor='#a06dff';ctx.shadowBlur=low||simple?0:high?16:8;
+ ctx.stroke(outline);ctx.shadowBlur=0;
+ if(!simple&&!low){
+  ctx.strokeStyle='#f2ddff';ctx.globalAlpha=.27;ctx.lineWidth=1.1/(r*.72);ctx.stroke(outline);
+ }
+ ctx.restore();
+ // Stable electric branches, animated by time rather than frame-random flicker.
+ const bolts=simple?2:low?3:high?(compact?5:8):(compact?3:5);
+ const segments=simple?3:5;
+ ctx.globalAlpha=simple?.52:.73;ctx.strokeStyle='#ba8dff';ctx.lineWidth=low||simple?1.65:2.25;
+ ctx.shadowColor='#9658ff';ctx.shadowBlur=low||simple?0:5;
+ ctx.beginPath();
+ for(let i=0;i<bolts;i++){
+  const a=i*TAU/bolts+t*.55+(compact?.2:0);
+  for(let j=0;j<=segments;j++){
+   const q=j/segments,dist=r*(.13+q*.55);
+   const jitter=(j===0||j===segments?0:(j%2?1:-1)*r*.045*Math.sin(t*5.5+i*2.1+j));
+   const x=Math.cos(a)*dist-Math.sin(a)*jitter;
+   const y=Math.sin(a)*dist+Math.cos(a)*jitter;
+   if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+ }
+ ctx.stroke();ctx.shadowBlur=0;
+ if(!simple&&!low){
+  ctx.globalAlpha=.42;ctx.strokeStyle='#f7eaff';ctx.lineWidth=1;
+  ctx.stroke();
+ }
+ // Oscillating inner induction loops communicate an active electric field.
+ ctx.globalAlpha=simple?.24:.34;ctx.strokeStyle='#c4a2ff';ctx.lineWidth=1.35;
+ ctx.beginPath();ctx.ellipse(0,0,r*.38,r*.27,Math.sin(t*.85)*.36,0,TAU);
+ if(high&&!compact)ctx.ellipse(0,0,r*.51,r*.36,Math.cos(t*.7)*.28,0,TAU);
+ ctx.stroke();
+ const core=Math.max(2.8,Math.min(12,r*.11));
+ ctx.globalAlpha=.85;ctx.fillStyle='#f5e7ff';ctx.beginPath();ctx.arc(0,0,core,0,TAU);ctx.fill();
+ ctx.globalAlpha=.62;ctx.strokeStyle='#b77cff';ctx.lineWidth=1.5;ctx.beginPath();
+ ctx.arc(0,0,core*1.65,t*.9,t*.9+Math.PI*1.3);ctx.stroke();
+ ctx.restore();
+}
 function drawTeslaEmitter(p){
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
@@ -3838,7 +3901,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(52,b.r),t*.9);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
- if(player.empRadius>0){drawTeslaField(player);if(player.shipType==='dog')drawAnimal('hedgehog',player.x,player.y-37,12+Math.sin(t*3)*1.2);}
+ if(player.empRadius>0)drawTeslaField(player);
   for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
