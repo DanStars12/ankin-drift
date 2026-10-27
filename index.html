@@ -767,6 +767,16 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(prefers-reduced-motion:reduce){.v13-victory-badge{animation:none}}
 
 .bar.shield{background:#102e30;border:1px solid #408d84}.bar.shield>span{background:linear-gradient(90deg,#35bfae,#aaffdf);box-shadow:0 0 8px #53ddbe55;display:block;height:100%;border-radius:inherit;transition:width .13s}
+
+/* v13.7 DOG TYPE β — a fifth selectable frame, responsive title and accessible beta mark. */
+.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(5,minmax(0,1fr))}
+.ship-card.dog{--sh:#ffd09b;background:linear-gradient(145deg,#423029,#251d33)}
+.ship-graphic.dog i{clip-path:none!important;width:41px;height:38px;background:#f6c88d;border-radius:48% 48% 44% 44%;box-shadow:-16px -8px 0 -8px #ac774f,16px -8px 0 -8px #ac774f;transform:none}
+.ship-graphic.dog em{height:8px;width:9px;background:#613d38;border-radius:50%;top:25px;left:calc(50% - 5px)}
+.dog-beta{display:inline-block;background:#ffdba8;color:#392326;border:1px solid #fff0d7;border-radius:5px;padding:1px 4px;font-size:9px;font-weight:900;vertical-align:middle}
+@media(max-width:800px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}.ship-card.dog{grid-column:span 2}.ship-card.dog .ship-description{max-width:290px}}
+
 </style>
 <style>
 .choice-pick{display:none}
@@ -944,7 +954,7 @@ const hasTrial=id=>!!game?.activeChallenges?.includes(id);
 function v13ClearTitle(){
  const source=(game.elementCombos||[]).at(-1);
  if(source){const themes={fire:'焔を導く者',ice:'氷晶の守護者',thunder:'雷鳴を統べる者',wind:'嵐の先導者',rock:'大地の城塞'};return themes[source.main]||'属性の支配者'}
- return {shot:'弾幕の支配者',laser:'光の指揮者',charge:'彗星を導く者',drill:'鋼鉄の突破者'}[player.shipType]||'星を超えし者';
+ return {shot:'弾幕の支配者',laser:'光の指揮者',charge:'彗星を導く者',drill:'鋼鉄の突破者',dog:'アニマルたちのリーダー'}[player.shipType]||'星を超えし者';
 }
 function v13Rank(count){return ['BRONZE','SILVER','GOLD','ANKIN MASTER'][Math.min(3,Math.max(0,count))]}
 
@@ -2422,8 +2432,9 @@ FUSIONS.push(
  {id:'dogRabbitEvo',shipOnly:'dog',power:'dogPwrRabbit',legend:'dogLegendRabbit',name:'スノー・ラビット大行進',icon:'🐰',desc:'雪うさぎ氷球の火力・凍結確率を大幅強化。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=235;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)}}
 );
 for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS])if(c.shipOnly==='dog'){
- const animal=['骨ブーメラン','アニマル'];
- if(/Fox|NineTail|PawLava|PawBloom|PwrLava|LegendFox/i.test(c.id))animal.push('属性：炎','ミサイル');
+ const animal=['アニマル'];
+ if(/Bone|GoodBoy|Fetch|Puppy|UniquePack|AnimalPack/i.test(c.id))animal.push('骨ブーメラン');
+ if(/Fox|NineTail|PawLava|PawBloom|PwrLava|LegendFox/i.test(c.id))animal.push('属性：炎',/PawLava|PawBloom|PwrLava/.test(c.id)?'マグマ床':'ミサイル');
  if(/Dolphin|Hurricane|Duet/i.test(c.id))animal.push('属性：風','イルカ');
  if(/Rabbit/i.test(c.id))animal.push('属性：氷','ウサギ');
  if(/Cat|Ham/i.test(c.id))animal.push('属性：岩');
@@ -3826,7 +3837,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(52,b.r),t*.9);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
- if(player.empRadius>0)drawTeslaField(player);
+ if(player.empRadius>0){drawTeslaField(player);if(player.shipType==='dog')drawAnimal('hedgehog',player.x,player.y-37,12+Math.sin(t*3)*1.2);}
   for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
@@ -3861,8 +3872,9 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   ctx.lineTo(-length+4,4);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.fillStyle='#fff';ctx.fillRect(-Math.max(2,length-7),-1,Math.max(4,length*2-14),2);if(player.bladeCross){ctx.fillStyle=player.evolutionTint||'#7affdb';ctx.fillRect(-4,-length,8,length*2);ctx.fillStyle='#fff';ctx.fillRect(-1,-Math.max(2,length-7),2,Math.max(4,length*2-14));}ctx.restore();
  }} 
- for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor=fusedColor('rock')||player.evolutionTint||'#e3bd88';ctx.shadowBlur=renderHeavyLoad?0:11;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':(fusedColor('rock')||player.evolutionTint||'#bca388');ctx.strokeStyle=fusedColor('rock')?'#ffffff':'#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
+ for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);if(player.shipType==='dog'){ctx.save();ctx.globalAlpha=(player.rockCooldowns[i]||0)>0?.50:1;drawAnimal('cat',pos.x,pos.y,Math.max(9,player.rockSize),pos.a+t*.25);ctx.restore();continue;}ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor=fusedColor('rock')||player.evolutionTint||'#e3bd88';ctx.shadowBlur=renderHeavyLoad?0:11;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':(fusedColor('rock')||player.evolutionTint||'#bca388');ctx.strokeStyle=fusedColor('rock')?'#ffffff':'#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
  if(player.relicLaserOrbit){for(let k=0;k<2;k++){const a=t*1.65+k*Math.PI;const xx=player.x+Math.cos(a)*28,yy=player.y+Math.sin(a)*28;glow(xx,yy,5,'#d9b6ff',11);ctx.strokeStyle='#9e8cff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(xx,yy,9,0,TAU);ctx.stroke()}}
+  if(player.shipType==='dog')for(let i=0;i<player.dogChicks;i++){const pos=ringPosition(i,player.dogChicks,t,52,24,7,-.88);drawAnimal(player.dogChickenEvolved?'chicken':'chick',pos.x,pos.y,12+Math.sin(t*5+i)*.65);}
   for(let i=0;i<player.droneCount;i++){const pos=ringPosition(i,player.droneCount,t);ship(pos.x,pos.y,pos.a+Math.PI/2,.55,true)}
  if(player.iframes>0&&Math.floor(t*14)%2===0)ctx.globalAlpha=.44;ship(player.x,player.y,Math.atan2(player.dy,player.dx)+Math.PI/2);ctx.globalAlpha=1;
  const dashFill=1-clamp(player.dashLeft/Math.max(.001,player.dashCd),0,1),dashAlpha=player.dashLeft>0?.98:(player.dashGaugeFade||0);if(dashAlpha>.02){const gw=Math.max(34,player.r*4.2),gh=6,gx=player.x-gw/2,gy=player.y+player.r+12;ctx.save();ctx.globalAlpha=Math.min(.92,dashAlpha);ctx.fillStyle='#07111f';ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect?ctx.roundRect(gx,gy,gw,gh,gh/2):(ctx.rect(gx,gy,gw,gh));ctx.fill();ctx.stroke();ctx.globalAlpha=Math.min(1,dashAlpha);ctx.shadowColor='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:10;ctx.fillStyle='#ffffff';const inner=Math.max(0,(gw-2)*dashFill);ctx.fillRect(gx+1,gy+1,inner,gh-2);ctx.shadowBlur=0;ctx.restore();}
