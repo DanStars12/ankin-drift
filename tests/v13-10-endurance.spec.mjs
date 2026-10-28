@@ -38,6 +38,18 @@ test('stale choices cannot re-activate a consumed secondary element',async({page
  expect(r.taken).toBe(false);expect(r.stillChoice).toBe(true);expect(r.sealed).toContain('ice');
  expect(errors).toEqual([]);
 });
+test('new endurance rewards stay out of the opening pool and unlock by level 20',async({page})=>{
+ const errors=await setup(page);
+ const r=await page.evaluate(()=>{
+  window.__enduranceV1310.reset('dog');game.level=1;game.total=0;
+  const early=selectable(SKILLS).filter(c=>c.id.startsWith('end')||c.id.startsWith('dogEnd')).map(c=>c.id);
+  game.level=20;
+  const middle=selectable(SKILLS).filter(c=>c.id.startsWith('end')||c.id.startsWith('dogEnd')).map(c=>c.id);
+  return {early,middle};
+ });
+ expect(r.early).toEqual([]);expect(r.middle).toContain('endHull');
+ expect(r.middle).toContain('dogEndBoneTorque');expect(errors).toEqual([]);
+});
 test('dense dog effects and new upgrades remain finite in SIMPLE mode',async({page})=>{
  const errors=await setup(page),r=await page.evaluate(()=>window.__enduranceV1310.crowded());
  expect(r.ms).toBeLessThan(5000);expect(r.stats).toBe(true);expect(r.hp).toBeLessThanOrEqual(r.maxHp);
