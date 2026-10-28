@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.9 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.10 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.9 | ANIMAL REVAMP</title>
+<title>ANKIN DRIFT v13.10 | ENDURANCE ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1692,7 +1692,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.9 · ANIMAL REVAMP</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.10 · ENDURANCE ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2453,6 +2453,49 @@ for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS])if(c.
  c.tags=animal;
 }
 
+
+// v13.10 ENDURANCE ARSENAL. Capped repeatable choices keep 30+ minute builds
+// meaningful without reviving a consumed secondary element or adding particles.
+function enduranceRoom(id,max){return (game?.skills?.[id]||0)<max;}
+function enduranceMainIs(name){return !!game?.elementCombos?.some(x=>x.main===name)&&!game?.sealedElements?.includes(name);}
+const ENDURANCE_SKILLS=[
+ skill('endHull','common','🛡️','継戦装甲','最大HP+12、HP+12、基本攻撃力+5。',p=>{p.maxHp+=12;p.hp=Math.min(p.maxHp,p.hp+12);p.dmg+=5},{enduranceShared:true,available:()=>enduranceRoom('endHull',12),tags:['装甲','継戦']}),
+ skill('endBarrier','uncommon','⬡','守護コンデンサー','最大シールド+15、再充填+0.8/秒。',p=>{p.shieldMax+=15;p.shield+=15;p.shieldRecharge+=.8},{enduranceShared:true,available:()=>enduranceRoom('endBarrier',10),tags:['防御','継戦']}),
+ skill('endDrive','rare','➤','持久スラスター','移動速度+12、ダッシュ再使用-0.05秒（下限0.7秒）。',p=>{p.spd+=12;p.dashCd=Math.max(.7,p.dashCd-.05)},{enduranceShared:true,available:()=>enduranceRoom('endDrive',8),tags:['機動','継戦']}),
+ skill('endNova','epic','✦','ノヴァ・リザーバー','NOVA威力+50、ゲージ獲得倍率+0.025（上限1.55）。',p=>{p.novaDamage+=50;p.novaGain=Math.min(1.55,p.novaGain+.025)},{enduranceShared:true,available:()=>enduranceRoom('endNova',8),tags:['ノヴァ','継戦']}),
+ // Resonance cards require an active primary fusion, not merely a past affinity.
+ skill('endFireFuel','uncommon','🔥','炎共鳴・残り火','炎主属性融合後、マグマまたは狐火／燃焼を強化。',p=>{if(p.magmaLevel>0)p.magmaDps+=36;else if(p.rocketCd>0)p.missileBurnBonus=(p.missileBurnBonus||0)+.18;else p.burnChance=Math.min(.85,p.burnChance+.06)},{enduranceShared:true,available:()=>enduranceMainIs('fire')&&enduranceRoom('endFireFuel',7),tags:['属性：炎','燃焼','共鳴']}),
+ skill('endFirePressure','rare','☀️','炎共鳴・灼熱圧縮','炎主属性融合後、既存の炎系範囲・継続火力を強化。',p=>{if(p.magmaLevel>0)p.magmaRadius+=7;else if(p.rocketCd>0)p.thermal+=.12;else p.burnChance=Math.min(.85,p.burnChance+.045);p.dmg+=5},{enduranceShared:true,available:()=>enduranceMainIs('fire')&&enduranceRoom('endFirePressure',6),tags:['属性：炎','燃焼','共鳴']}),
+ skill('endIceCrystal','uncommon','❄️','氷共鳴・結晶回路','氷主属性融合後、氷球または凍結能力を強化。',p=>{if(p.iceBallCount>0)p.iceBallDamage+=28;else p.freezeChance=Math.min(.85,p.freezeChance+.065)},{enduranceShared:true,available:()=>enduranceMainIs('ice')&&enduranceRoom('endIceCrystal',7),tags:['属性：氷','凍結','共鳴']}),
+ skill('endIceAnchor','rare','🧊','氷共鳴・極低温場','氷主属性融合後、凍結性能と冷気防御を強化。',p=>{if(p.iceBallCount>0)p.iceBallChance=Math.min(.78,p.iceBallChance+.055);else p.freezeChance=Math.min(.85,p.freezeChance+.055);p.iceBurst+=.04},{enduranceShared:true,available:()=>enduranceMainIs('ice')&&enduranceRoom('endIceAnchor',6),tags:['属性：氷','凍結','共鳴']}),
+ skill('endThunderCoil','uncommon','⚡','雷共鳴・過電流','雷主属性融合後、EMPまたは連鎖雷撃の威力を強化。',p=>{if(p.empRadius>0)p.empDps+=42;else p.chainDamage+=38},{enduranceShared:true,available:()=>enduranceMainIs('thunder')&&enduranceRoom('endThunderCoil',7),tags:['属性：雷','共鳴']}),
+ skill('endThunderFocus','rare','🌩️','雷共鳴・放電制御','雷主属性融合後、EMPまたは連鎖雷撃を強化。',p=>{if(p.empRadius>0)p.empDps+=52;else{p.chainDamage+=32;p.chain=Math.min(1,p.chain+.025)}},{enduranceShared:true,available:()=>enduranceMainIs('thunder')&&enduranceRoom('endThunderFocus',6),tags:['属性：雷','共鳴']}),
+ skill('endWindCurrent','uncommon','🌀','風共鳴・追い風','風主属性融合後、旋回刃かサイクロンの威力を強化。',p=>{if(p.orbit>0&&p.windCount===0)p.bladePower=(p.bladePower||1)*1.07;else p.windDps+=36},{enduranceShared:true,available:()=>enduranceMainIs('wind')&&enduranceRoom('endWindCurrent',7),tags:['属性：風','共鳴']}),
+ skill('endWindEdge','rare','💨','風共鳴・風圧整流','風主属性融合後、旋回刃のリーチかサイクロン威力を強化。',p=>{if(p.orbit>0&&p.windCount===0)p.bladeReach=(p.bladeReach||19)+6;else{p.windDps+=20;p.windStrength+=35}},{enduranceShared:true,available:()=>enduranceMainIs('wind')&&enduranceRoom('endWindEdge',6),tags:['属性：風','共鳴']}),
+ skill('endRockCore','uncommon','🪨','岩共鳴・重芯','岩主属性融合後、隕石または岩壁の反撃威力を強化。',p=>{if(p.meteorCount>0)p.meteorDamage+=47;else p.rockDamage+=38},{enduranceShared:true,available:()=>enduranceMainIs('rock')&&enduranceRoom('endRockCore',7),tags:['属性：岩','共鳴']}),
+ skill('endRockShell','rare','💎','岩共鳴・堅牢結晶','岩主属性融合後、既存の岩武装と最大シールドを強化。',p=>{if(p.meteorCount>0)p.meteorDamage+=25;else p.rockDamage+=24;p.shieldMax+=12;p.shield+=12},{enduranceShared:true,available:()=>enduranceMainIs('rock')&&enduranceRoom('endRockShell',6),tags:['属性：岩','防御','共鳴']}),
+ // Two scalable frame skills for each of the four original ships.
+ skill('endShotBore','uncommon','🔫','精密バレル','ショット威力+11、射撃間隔-2%。',p=>{p.dmg+=11;p.rate=Math.max(p.limitRate,p.rate*.98)},{shipOnly:'shot',available:()=>enduranceRoom('endShotBore',8),tags:['ショット','継戦']}),
+ skill('endShotRail','rare','🎯','弾道キャリブレーション','弾速+40、基本ダメージ+9、貫通+1。',p=>{p.shotSpeed+=40;p.dmg+=9;p.pierce++},{shipOnly:'shot',available:()=>enduranceRoom('endShotRail',7),tags:['ショット','継戦']}),
+ skill('endLaserLoop','uncommon','🔮','プリズム循環路','レーザー威力+9%、射程+35。',p=>{p.laserScale+=.09;p.laserReach+=35},{shipOnly:'laser',available:()=>enduranceRoom('endLaserLoop',8),tags:['専用：レーザー型','継戦']}),
+ skill('endLaserSurface','rare','✧','光子面拡張','レーザー線幅+0.6、威力+6%。',p=>{p.laserWidth+=.6;p.laserScale+=.06},{shipOnly:'laser',available:()=>enduranceRoom('endLaserSurface',7),tags:['専用：レーザー型','継戦']}),
+ skill('endChargeCircuit','uncommon','☄️','彗星蓄電路','チャージ速度+0.11、チャージ威力+9%。',p=>{p.chargeRate+=.11;p.chargeScale+=.09},{shipOnly:'charge',available:()=>enduranceRoom('endChargeCircuit',8),tags:['専用：チャージ型','継戦']}),
+ skill('endChargeImpact','rare','💥','コメット高密度化','チャージ弾威力+13%、貫通+1。',p=>{p.chargeScale+=.13;p.chargePenetration++},{shipOnly:'charge',available:()=>enduranceRoom('endChargeImpact',7),tags:['専用：チャージ型','継戦']}),
+ skill('endDrillTorque','uncommon','⚙️','ローター持久軸','接触威力+15、突進威力+19。',p=>{p.drillContact+=15;p.drillDamage+=19},{shipOnly:'drill',available:()=>enduranceRoom('endDrillTorque',8),tags:['専用：ドリル型','継戦']}),
+ skill('endDrillGuard','rare','🔩','スピン装甲','ドリルリーチ+8、最大HP+16。',p=>{p.drillReach+=8;p.maxHp+=16;p.hp=Math.min(p.maxHp,p.hp+16)},{shipOnly:'drill',available:()=>enduranceRoom('endDrillGuard',7),tags:['専用：ドリル型','装甲','継戦']}),
+ // Dog gets its own non-elemental bone, companion and NOVA growth branches.
+ skill('dogEndBoneTorque','common','🦴','骨あそび・強化','骨ブーメラン威力+10%、帰還威力+5%。',p=>{p.dogBonePower+=.10;p.dogBoneReturn+=.05},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneTorque',9),tags:['アニマル','骨ブーメラン','継戦']}),
+ skill('dogEndBoneFlight','uncommon','🎾','リターン・トレーニング','骨の帰還威力+12%、飛行速度+12。',p=>{p.dogBoneReturn+=.12;p.dogBoneSpeed+=12},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneFlight',8),tags:['アニマル','骨ブーメラン','継戦']}),
+ skill('dogEndEggCare','uncommon','🥚','たまごお世話係','仲間がいれば卵の威力+18、発射間隔-4%。',p=>{p.dogEggDamage+=18;p.dogEggRate=Math.max(.58,p.dogEggRate*.96)},{shipOnly:'dog',available:p=>p.dogChicks>0&&enduranceRoom('dogEndEggCare',8),tags:['アニマル','ヒヨコ','継戦']}),
+ skill('dogEndPackBond','rare','🐾','アニマル・ボンド','アニマル攻撃力+5%、最大HP+12。',p=>{p.dogAnimalBoost*=1.05;p.maxHp+=12;p.hp=Math.min(p.maxHp,p.hp+12)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndPackBond',8),tags:['アニマル','装甲','継戦']}),
+ skill('dogEndHowl','epic','🐶','バウショック・共鳴','BOW SHOCK威力+70、NOVA範囲+12。',p=>{p.novaDamage+=70;p.novaRadius+=12},{shipOnly:'dog',available:()=>enduranceRoom('dogEndHowl',7),tags:['アニマル','骨ブーメラン','継戦']}),
+ skill('dogEndGuard','common','🦴','おさんぽガード','最大シールド+14、再充填+0.7/秒。',p=>{p.shieldMax+=14;p.shield+=14;p.shieldRecharge+=.7},{shipOnly:'dog',available:()=>enduranceRoom('dogEndGuard',9),tags:['アニマル','防御','継戦']}),
+ skill('dogEndFoxEmber','rare','🦊','狐火の追い風','解放済み狐火ミサイルの威力・燃焼を強化。',p=>{p.dmg+=9;p.missileBurnBonus=(p.missileBurnBonus||0)+.12},{shipOnly:'dog',available:p=>p.rocketCd>0&&enduranceRoom('dogEndFoxEmber',6),tags:['アニマル','属性：炎','ミサイル','継戦']}),
+ skill('dogEndHedgeGlow','rare','🦔','ハリネズミ・放電強化','解放済みEMPの威力+46。範囲は維持。',p=>p.empDps+=46,{shipOnly:'dog',available:p=>p.empRadius>0&&enduranceRoom('dogEndHedgeGlow',6),tags:['アニマル','属性：雷','継戦']})
+];
+SKILLS.push(...ENDURANCE_SKILLS);
+for(const c of ENDURANCE_SKILLS)if(c.enduranceShared)DOG_SHARED.add(c.id);
+
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
@@ -2593,7 +2636,7 @@ function enterChoice(kind){if(mode!=='playing')return;game.lastChoice=kind;if(ki
 function reroll(){if(mode!=='choice'||game.rerolls<1||choices.every(c=>c.isSupply))return;game.rerolls--;const previous=new Set(choices.map(c=>c.id));choices=offerCards(game.lastChoice,previous,true);choiceOpenedAt=performance.now();choiceTouchArms.clear();drawOverlay();tone(530,.1,'triangle',.04)}
 function beginNextFusion(){if(!pendingFusions.length)return false;pendingFusion=pendingFusions.shift();const fx=evolutionVisualProfile(pendingFusion.id),color=fx?.color||'#ffd88e';flash=.9;shake=24;burst(player.x,player.y,color,70,310);ring(player.x,player.y,450,color);ring(player.x,player.y,270,'#ffffff');pop(player.x,player.y-65,'EVOLUTION: '+pendingFusion.name,color);state('fusion');celebrateFusion([pendingFusion.power,pendingFusion.legend].some(id=>skillById(id)?.rarity==='unique'));return true}
 function continueAfterReward(){state('playing');if(beginNextFusion())return;if(pendingSynergy.length)notifySynergies();if(game.lastChoice==='normal'&&!game.autoBank&&game.pendingLevels>0){game.pendingLevels--;choices=offerCards('normal');state('choice');return}game.choiceBatchTotal=0;game.choiceBatchDone=0;processTransitions()}
-function choose(i){if(mode!=='choice'||!choices[i])return;const c=choices[i];if(rewardAlreadyTaken(c)||!skillHasRoom(c)||(c.available&&!c.available(player))){choices=offerCards(game.lastChoice);drawOverlay();return;}if(c.isSupply){c.apply(player);state('playing');announce('✦ SUPPLY RECEIVED · '+c.name,2.8);sfx('pickupSpawn');continueAfterReward();return;}const wasNormal=game.lastChoice==='normal';c.apply(player);const bucket=c.rarity==='relic'?game.relics:c.rarity==='legendary'?game.legends:c.rarity==='power'?game.powers:c.rarity==='unique'?game.uniques:game.skills;bucket[c.id]=(bucket[c.id]||0)+1;game.acquisitionLog.push(c.id);activateUpgrades();reconcileTargets();if(wasNormal)game.choiceBatchDone++;state('playing');
+function choose(i){if(mode!=='choice'||!choices[i])return;const c=choices[i];if(!c.isSupply&&(!fitsShip(c)||isSealedCard(c)||rewardAlreadyTaken(c)||!skillHasRoom(c)||(c.available&&!c.available(player)))){choices=offerCards(game.lastChoice);drawOverlay();return;}if(c.isSupply){c.apply(player);state('playing');announce('✦ SUPPLY RECEIVED · '+c.name,2.8);sfx('pickupSpawn');continueAfterReward();return;}const wasNormal=game.lastChoice==='normal';c.apply(player);const bucket=c.rarity==='relic'?game.relics:c.rarity==='legendary'?game.legends:c.rarity==='power'?game.powers:c.rarity==='unique'?game.uniques:game.skills;bucket[c.id]=(bucket[c.id]||0)+1;game.acquisitionLog.push(c.id);activateUpgrades();reconcileTargets();if(wasNormal)game.choiceBatchDone++;state('playing');
  if(c.rarity==='relic'){sfx('relicEarned');confetti();announce('✦ RELIC ACQUIRED · '+c.name,4.5);}if(c.rarity==='unique'){lastUniqueCard=c;state('uniqueReward');celebrateUnique();return}if(beginNextFusion())return;tone(c.rarity==='legendary'?920:730,.2,'triangle',.065);continueAfterReward()}
 function dismissFusion(){if(mode!=='fusion')return;pendingFusion=null;continueAfterReward()}
 function deferNormal(){if(mode!=='choice'||game.lastChoice!=='normal')return;game.storedLevels+=game.pendingLevels+1;game.pendingLevels=0;game.autoBank=true;game.choiceBatchTotal=0;game.choiceBatchDone=0;state('playing');announce('✦ '+game.storedLevels+'回分の強化をストック！ Lキーでまとめて選択',4);processTransitions()}
@@ -3585,7 +3628,7 @@ function drawDogFrame(){
 }
 
 const ANIMAL_PATHS=new Map();
-/* v13.9: readable miniature animals — colored bodies, expressive essential facial landmarks.
+/* v13.10: readable miniature animals — colored bodies, expressive essential facial landmarks.
    Shared cached silhouettes remain the foundation, so silhouettes and gameplay stay consistent. */
 function drawAnimal(kind,x,y,r=14,angle=0){
  const shape=ANIMAL_OUTLINES[kind];if(!shape)return;
@@ -3817,15 +3860,19 @@ function drawHedgehogPulseEmitter(field){
   ctx.strokeStyle='#f2ddff';ctx.globalAlpha=.27;ctx.lineWidth=1.1/(r*.83);ctx.stroke(outline);
  }
  ctx.restore();
- // Hedgehog identity: a small lower muzzle and face kept well inside the all-around quills.
- ctx.save();ctx.scale(r*.60,r*.60);
- ctx.globalAlpha=.52;ctx.fillStyle='#9a63d7';ctx.beginPath();
- ctx.ellipse(0,.14,.63,.55,0,0,TAU);ctx.fill();
- ctx.globalAlpha=.90;ctx.fillStyle='#efe1ff';ctx.beginPath();
- ctx.ellipse(-.32,-.04,.12,.15,0,0,TAU);ctx.ellipse(.32,-.04,.12,.15,0,0,TAU);ctx.fill();
- ctx.fillStyle='#47306d';ctx.beginPath();
- ctx.arc(-.32,-.04,.055,0,TAU);ctx.arc(.32,-.04,.055,0,TAU);ctx.fill();
- ctx.fillStyle='#ffe3ff';ctx.beginPath();ctx.arc(0,.33,.11,0,TAU);ctx.fill();
+ // v13.10 high-contrast hedgehog face, stable in SIMPLE and split pulse.
+ ctx.save();ctx.scale(r*.65,r*.65);
+ ctx.globalAlpha=.98;ctx.fillStyle='#d5adff';ctx.strokeStyle='#fff0ff';ctx.lineWidth=.038;
+ ctx.beginPath();ctx.ellipse(0,.12,.67,.56,0,0,TAU);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#ffe9f4';ctx.beginPath();
+ ctx.ellipse(-.33,.32,.19,.15,-.2,0,TAU);ctx.ellipse(.33,.32,.19,.15,.2,0,TAU);ctx.fill();
+ ctx.fillStyle='#34204b';ctx.beginPath();
+ ctx.ellipse(-.29,-.05,.105,.14,0,0,TAU);ctx.ellipse(.29,-.05,.105,.14,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-.32,-.095,.034,0,TAU);ctx.arc(.26,-.095,.034,0,TAU);ctx.fill();
+ ctx.fillStyle='#ffe8f5';ctx.beginPath();ctx.ellipse(0,.39,.24,.19,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#40244d';ctx.beginPath();ctx.ellipse(0,.31,.115,.09,0,0,TAU);ctx.fill();
+ ctx.strokeStyle='#663b7b';ctx.lineWidth=.035;ctx.beginPath();ctx.moveTo(0,.40);ctx.lineTo(0,.46);
+ ctx.quadraticCurveTo(-.10,.52,-.18,.46);ctx.moveTo(0,.46);ctx.quadraticCurveTo(.10,.52,.18,.46);ctx.stroke();
  ctx.restore();
  // Stable electric branches, animated by time rather than frame-random flicker.
  const bolts=simple?2:low?3:high?(compact?5:8):(compact?3:5);
@@ -4089,7 +4136,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.9.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.10.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
