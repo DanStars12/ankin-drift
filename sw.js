@@ -1,5 +1,5 @@
-/* ANKIN DRIFT v13.9 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-9-animal-revamp';
+/* ANKIN DRIFT v13.10 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v13-10-endurance-arsenal';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js',
