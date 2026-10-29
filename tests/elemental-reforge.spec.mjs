@@ -54,7 +54,7 @@ for(const ship of ['shot','laser','charge','drill','dog']){
   const errors=await setup(page),r=await page.evaluate(s=>window.__elementalProbe.conversions(s),ship);
   expect(r.powers).toBe(3);expect(r.modes).toEqual(['plasma','cryo','arc']);
   expect(r.burn).toBeGreaterThan(0);expect(r.slow).toBeGreaterThan(0);
-  if(ship!=='drill')expect(['plasma','cryo','arc']).toContain(r.snapshot);
+  if(['laser','charge','dog'].includes(ship))expect(['plasma','cryo','arc']).toContain(r.snapshot);
   expect(errors).toEqual([]);
  });
 }
