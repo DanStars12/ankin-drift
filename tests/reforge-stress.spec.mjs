@@ -17,7 +17,7 @@ const injection=[
 " enemies=[];hostile=[];shots=[];zones=[];gusts=[];particles=[];enemyIndexReady=false;",
 " const count=ship==='dog'?125:115;",
 " for(let i=0;i<count;i++){const angle=2*Math.PI*i/count,rad=Math.min(W,H)*(.20+(i%4)*.035);",
-"  spawnEnemy(i%7===0?'shooter':'drone',{x:clamp(p.x+Math.cos(angle)*rad,20,W-20),y:clamp(p.y+Math.sin(angle)*rad,20,H-20)});}",
+"  const e=spawnEnemy(i%7===0?'shooter':'drone',{x:clamp(p.x+Math.cos(angle)*rad,20,W-20),y:clamp(p.y+Math.sin(angle)*rad,20,H-20)});e.hp=1e7;e.maxHp=1e7;}",
 " for(let i=0;i<130;i++){const a=2*Math.PI*i/130;hostileShot(clamp(p.x+Math.cos(a)*150,20,W-20),clamp(p.y+Math.sin(a)*150,20,H-20),a+Math.PI/2,78,2,2.3,'#ff99be',7);}",
 " return {ship:p.shipType,initialEnemies:enemies.length,initialHostile:hostile.length,elapsed:game.total,fx:settings.fx};",
 "},",
@@ -44,7 +44,7 @@ test('synthetic 30+ minute elemental stress across all five ships, NORMAL/SIMPLE
   const s=await page.evaluate(()=>window.__reforgeStress.snapshot());
   expect(setup.ship).toBe(ship);expect(setup.initialEnemies).toBeGreaterThan(60);expect(setup.initialHostile).toBeGreaterThan(80);
   expect(s.spikeGroups).toBeLessThanOrEqual(3);expect(s.spikeVisuals).toBeLessThanOrEqual(28);expect(s.boltVisuals).toBeLessThanOrEqual(22);
-  expect(s.countShots).toBeLessThan(500);expect(s.countZones).toBeLessThan(150);
+  expect(s.countEnemies).toBeGreaterThan(60);expect(s.countShots).toBeLessThan(500);expect(s.countZones).toBeLessThan(150);
   expect(s.frame?.samples||0).toBeGreaterThan(10);expect(s.frame.p95Ms).toBeGreaterThan(0);
   expect(s.simulation.p95Ms).toBeGreaterThanOrEqual(0);expect(s.drawing.p95Ms).toBeGreaterThanOrEqual(0);
   results.push({ship,fx,elapsed,frameP95:s.frame.p95Ms,simP95:s.simulation.p95Ms,drawP95:s.drawing.p95Ms,counts:{shots:s.countShots,zones:s.countZones,enemies:s.countEnemies}});
