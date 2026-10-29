@@ -1,5 +1,5 @@
-/* ANKIN DRIFT v13.22 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-22-dog-custom-names';
+/* ANKIN DRIFT v13.23 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v13-23-codex-name-sync';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js',
@@ -7,7 +7,7 @@ const SHELL = [
   './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
 ];
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL.map(url => new Request(url, {cache:'reload'})))).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', event => {
   event.waitUntil(caches.keys().then(names => Promise.all(names.filter(name => name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME).map(name => caches.delete(name)))).then(() => self.clients.claim()));
@@ -19,7 +19,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
   if (!url.pathname.startsWith(new URL(self.registration.scope).pathname)) return;
   if (req.mode === 'navigate') {
-    event.respondWith(fetch(req).then(response => {
+    event.respondWith(fetch(req, {cache:'no-store'}).then(response => {
       if (response.ok) { const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy)).catch(()=>{}); }
       return response;
     }).catch(async () => (await caches.match('./index.html')) || Response.error()));
