@@ -3975,33 +3975,31 @@ function tickReforgeWeapons(dt){
 /* Shape-based lightning snake. Only the visual path is affected; chain targets,
    damage, hit history and timing are still computed by the existing combat logic. */
 /* v13.19: chubby round reptile face; chain combat is unaffected. */
+/* v13.20: small smiling snake head without the old purple oval eye plate.
+   Only visual endpoints, never collision history or chain damage, are read. */
 function drawDogLightningSnake(p,b,ctx,now=t){
  const dx=b.x2-b.x,dy=b.y2-b.y,len=Math.max(1,Math.hypot(dx,dy));
  const px=-dy/len,py=dx/len,steps=Math.max(8,Math.ceil(len/14));
  const royal=!!p.dogViper,apex=!!p.dogViperAscended;
  const skin=apex?'#fff0c2':royal?'#e8b954':'#ab80e7';
  const rim=apex?'#fffdf0':royal?'#fff0a9':'#e3cfff';
- const belly=apex?'#fffaf0':royal?'#ffebb4':'#e3d0ff';
+ const face=apex?'#fffdf1':royal?'#fff1c6':'#f6e8ff';
  ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';
  ctx.shadowColor=rim;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
- ctx.strokeStyle=skin;ctx.lineWidth=royal?11:8.4;ctx.beginPath();ctx.moveTo(b.x,b.y);
+ ctx.strokeStyle=skin;ctx.lineWidth=royal?10:8.1;ctx.beginPath();ctx.moveTo(b.x,b.y);
  for(let i=1;i<=steps;i++){const u=i/steps,wiggle=Math.sin(u*Math.PI*3.2-now*3.8+b.x*.017)*Math.sin(u*Math.PI)*Math.min(14,len*.095);ctx.lineTo(b.x+dx*u+px*wiggle,b.y+dy*u+py*wiggle);}
  ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle=rim;ctx.lineWidth=1.8;ctx.stroke();
  ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));
- // Rounded cheeks and separate muzzle, without the old sharp arrowhead.
- ctx.fillStyle=skin;ctx.strokeStyle=rim;ctx.lineWidth=1.5;ctx.beginPath();
- ctx.moveTo(-12,0);ctx.bezierCurveTo(-11,-14,8,-17,16,-8);
- ctx.quadraticCurveTo(23,0,16,8);ctx.bezierCurveTo(8,17,-11,14,-12,0);ctx.closePath();ctx.fill();ctx.stroke();
- ctx.fillStyle=belly;ctx.beginPath();ctx.ellipse(15,0,8,7,0,0,TAU);ctx.fill();
- ctx.fillStyle='#30233d';ctx.beginPath();ctx.arc(6,-8,2.7,0,TAU);ctx.arc(6,8,2.7,0,TAU);ctx.fill();
- ctx.fillStyle='#fffdf6';ctx.beginPath();ctx.arc(6.6,-9,.85,0,TAU);ctx.arc(6.6,7,.85,0,TAU);ctx.fill();
- ctx.save();ctx.globalAlpha=.67;ctx.fillStyle=apex?'#f6b1bd':royal?'#f5a188':'#f1a9d5';
- ctx.beginPath();ctx.ellipse(11,-9,3,1.3,-.3,0,TAU);ctx.ellipse(11,9,3,1.3,.3,0,TAU);ctx.fill();ctx.restore();
- ctx.fillStyle='#886275';ctx.beginPath();ctx.arc(19,-2,.9,0,TAU);ctx.arc(19,2,.9,0,TAU);ctx.fill();
- ctx.strokeStyle='#875477';ctx.lineWidth=1.05;ctx.beginPath();ctx.moveTo(16,4);ctx.quadraticCurveTo(21,7,23,3);ctx.stroke();
- // Tiny forked tongue: reptile identity without long whisker-like lines.
- ctx.strokeStyle='#f38eaa';ctx.lineWidth=1.2;ctx.beginPath();
- ctx.moveTo(23,1);ctx.lineTo(26,1);ctx.moveTo(26,1);ctx.lineTo(28,-.5);ctx.moveTo(26,1);ctx.lineTo(28,2.5);ctx.stroke();
+ // Only a miniature light-coloured head survives, not the preceding 40px purple oval.
+ ctx.fillStyle=face;ctx.strokeStyle=rim;ctx.lineWidth=1.4;ctx.beginPath();
+ ctx.moveTo(-2,-5);ctx.bezierCurveTo(3,-10,13,-11,18,-5);
+ ctx.quadraticCurveTo(23,0,18,5);ctx.bezierCurveTo(13,11,3,10,-2,5);
+ ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#33283d';ctx.beginPath();ctx.arc(9,-3.8,1.8,0,TAU);ctx.arc(9,3.8,1.8,0,TAU);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(9.5,-4.3,.55,0,TAU);ctx.arc(9.5,3.3,.55,0,TAU);ctx.fill();
+ ctx.fillStyle=apex?'#e7a0a4':'#efb8d7';ctx.globalAlpha*=.7;ctx.beginPath();ctx.ellipse(13,5.8,2.9,1.1,0,0,TAU);ctx.ellipse(13,-5.8,2.9,1.1,0,0,TAU);ctx.fill();
+ ctx.globalAlpha=Math.min(1,b.life/.14);ctx.fillStyle='#ad748c';ctx.beginPath();ctx.arc(19,-1.7,.65,0,TAU);ctx.arc(19,1.7,.65,0,TAU);ctx.fill();
+ ctx.strokeStyle='#e883a8';ctx.lineWidth=1.25;ctx.beginPath();ctx.moveTo(22,1);ctx.lineTo(27,1);ctx.moveTo(27,1);ctx.lineTo(29,-.5);ctx.moveTo(27,1);ctx.lineTo(29,2.5);ctx.stroke();
  ctx.restore();
 }
 
@@ -4010,23 +4008,29 @@ function drawReforgeWeapons(p,drawCtx=ctx,visualTime=t){const ctx=drawCtx;
   const k=Math.min(1,s.life/.22),height=(p.shipType==='dog'?43:35)*s.scale,width=(p.shipType==='dog'?19:16)*s.scale;
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
   if(p.shipType==='dog'){
-   // Two independent, asymmetric wild-hare ears. The original collision geometry is unchanged.
+   // Wild hare: two separate long rounded ears and inner ice-pink ear insets.
    const moon=!!p.dogMoon,glow=p.dogMoonAscended?'#fff7df':moon?'#ddc7ff':'#c1ffff';
-   ctx.shadowColor=glow;ctx.fillStyle=moon?'#baa8e489':'#72d7eb89';ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
+   ctx.shadowColor=glow;ctx.strokeStyle=glow;ctx.lineWidth=2.2;ctx.fillStyle=moon?'#c6b8ee':'#9ee6f9';
    for(const side of [-1,1]){
-    const base=side*width*.23,tip=side*width*(side===1?.93:.79),rise=height*(side===1?.94:1.11);
-    ctx.beginPath();ctx.moveTo(base-side*width*.20,0);
-    ctx.quadraticCurveTo(base-side*width*.35,-rise*.62,tip,-rise);
-    ctx.quadraticCurveTo(tip+side*width*.23,-rise*.72,base+side*width*.20,0);
+    const base=side*width*.31,tip=side*width*(side<0?.70:.82),rise=height*(side<0?1.00:1.11);
+    ctx.beginPath();ctx.moveTo(base-side*width*.20,-height*.11);
+    ctx.bezierCurveTo(base-side*width*.36,-rise*.40,tip-side*width*.23,-rise*.92,tip,-rise);
+    ctx.bezierCurveTo(tip+side*width*.26,-rise*1.04,tip+side*width*.34,-rise*.83,tip+side*width*.25,-rise*.71);
+    ctx.bezierCurveTo(base+side*width*.28,-rise*.30,base+side*width*.20,-height*.11,base-side*width*.20,-height*.11);
     ctx.closePath();ctx.fill();ctx.stroke();
-    ctx.strokeStyle=moon?'#fff9ff':'#efffff';ctx.lineWidth=1.3;
-    ctx.beginPath();ctx.moveTo(base,-height*.16);ctx.quadraticCurveTo(base,-rise*.66,tip,-rise*.87);ctx.stroke();
-    ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
+    ctx.strokeStyle=moon?'#e8caff':'#f1c9e7';ctx.lineWidth=Math.max(2,2.15*s.scale);
+    ctx.beginPath();ctx.moveTo(base,-height*.25);
+    ctx.quadraticCurveTo(tip-side*width*.10,-rise*.62,tip,-rise*.85);ctx.stroke();
+    ctx.strokeStyle=glow;ctx.lineWidth=2.2;
    }
-   ctx.beginPath();ctx.moveTo(0,-height*.31);ctx.lineTo(width*.32,-height*.12);
-   ctx.lineTo(width*.23,height*.10);ctx.lineTo(0,height*.23);ctx.lineTo(-width*.23,height*.10);
-   ctx.lineTo(-width*.32,-height*.12);ctx.closePath();ctx.fill();ctx.stroke();
-   if(moon){ctx.fillStyle='#fff5d8';ctx.beginPath();ctx.arc(0,-height*.18,Math.max(2.4,width*.16),0,TAU);ctx.fill();}
+   // Distinct rounded bunny forehead and small face under the ears.
+   ctx.fillStyle=moon?'#e4d1ff':'#d8f6ff';ctx.beginPath();
+   ctx.ellipse(0,-height*.08,width*.53,height*.25,0,0,TAU);ctx.fill();ctx.stroke();
+   ctx.fillStyle='#28476b';ctx.beginPath();
+   ctx.arc(-width*.20,-height*.10,Math.max(1.4,1.5*s.scale),0,TAU);
+   ctx.arc(width*.20,-height*.10,Math.max(1.4,1.5*s.scale),0,TAU);ctx.fill();
+   ctx.fillStyle='#f6abc5';ctx.beginPath();ctx.arc(0,-height*.005,Math.max(1.1,1.3*s.scale),0,TAU);ctx.fill();
+   if(moon){ctx.fillStyle='#fff5d8';ctx.beginPath();ctx.arc(0,-height*.30,Math.max(2.4,width*.14),0,TAU);ctx.fill();}
   }else{
    ctx.fillStyle='#80dfff88';ctx.strokeStyle='#c4faff';ctx.lineWidth=2.3;
    ctx.beginPath();ctx.moveTo(-width,3);ctx.lineTo(-width*.7,-height*.40);ctx.lineTo(-width*.44,-height);
@@ -4414,6 +4418,13 @@ function drawAnimal(kind,x,y,r=14,angle=0,drawCtx=ctx,visualPlayer=player){
  ctx.save();ctx.translate(x,y);
  ctx.rotate(kind==='dolphin'||kind==='whale'?angle-Math.PI/2:angle);
  ctx.scale(r,r);ctx.lineJoin='round';ctx.lineCap='round';
+ // A luminous miniature iceball is the snow rabbit's fluffy icy tail.
+ if(kind==='rabbit'){
+  ctx.save();ctx.globalAlpha=.96;ctx.shadowColor='#8ee9ff';ctx.shadowBlur=low?0:5;
+  ctx.fillStyle='#78dfff';ctx.strokeStyle='#efffff';ctx.lineWidth=.085;
+  ctx.beginPath();ctx.arc(0,1.09,.34,0,TAU);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fffaff';ctx.beginPath();ctx.arc(-.11,.98,.12,0,TAU);ctx.fill();ctx.restore();
+ }
  // Draw the roots behind the fox head, never emerging from its muzzle.
  if(kind==='fox'){
   ctx.lineWidth=.075;ctx.strokeStyle=nine?'#fff3ca':'#ffdfae';
