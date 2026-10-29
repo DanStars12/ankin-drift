@@ -76,6 +76,7 @@ test('all familiar companion silhouettes remain visible under SIMPLE and HIGH',a
 test('visual codex renders normal / mutation / apex without changing run data and captures review screenshots',async({page},testInfo)=>{
  const errors=await ready(page);
  await page.locator('#openTitleLab').click();await page.locator('[data-tab="visual"]').click();
+ await page.locator('[data-visual-ship="dog"]').click();
  const cases=[['dogFox','dogNine','dogNineApex'],['dogDolphin','dogWhale','dogWhaleApex'],
   ['dogSnake','dogViper','dogViperApex'],['dogHam','dogArmor','dogHamApex']];
  for(let i=0;i<cases.length;i++)for(let j=0;j<cases[i].length;j++){
