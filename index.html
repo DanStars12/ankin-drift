@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.19 | CODEX QUALITY UPDATE</title>
+<title>ANKIN DRIFT v13.20 | VISUAL CODEX REFINEMENT</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -843,6 +843,11 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 .v13-ach-tier-group>summary:focus-visible{outline:2px solid #f9e4a9}
 .v13-ach-tier-group .v13-grid{padding:9px 0 3px}
 
+
+/* v13.20: independent common skills entry. */
+.visual-ship-switch [data-visual-ship="common"]{border-color:#e9c38f;color:#ffe1b4;font-weight:900}
+.visual-ship-switch [data-visual-ship="common"].active{background:#4b3a2b;color:#fff2cf}
+.visual-layout .visual-browser-hint{line-height:1.6}
 /* v13.17 weapon preview: no gameplay overlays or image downloads */
 .lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
 .visual-codex{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -1873,7 +1878,22 @@ const escHtml=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'
 function atlasList(){const q=atlasQuery.toLocaleLowerCase('ja'),filtered=ALL_SKILL_DEFS().filter(c=>(atlasRarity==='all'||c.rarity===atlasRarity)&&(atlasAttr==='all'||c.tags.includes(atlasAttr))&&[c.name,c.desc,c.rarity,...c.tags,SHIPS[c.shipOnly]?.jp||''].join(' ').toLocaleLowerCase('ja').includes(q));
  const order={common:0,uncommon:1,rare:2,epic:3,power:4,legendary:5,unique:6,relic:7};filtered.sort((a,b)=>order[a.rarity]-order[b.rarity]||a.name.localeCompare(b.name,'ja'));
  const items=filtered.map(c=>{const have=game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0;const fits=fitsShip(c),claimed=rewardAlreadyTaken(c);const evol=FUSIONS.filter(a=>fusionMaterials(a).includes(c.id)).map(a=>a.name+'（素材：'+fusionMaterials(a).filter(id=>id!==c.id).map(cName).join('＋')+'）');const syn=SYNERGIES.filter(a=>a.need.includes(c.id));const synActive=syn.filter(a=>game.synergies[a.id]&&!a.need.some(x=>isSealedCard(skillById(x)))).length;const synReady=syn.filter(a=>!game.synergies[a.id]&&a.need.filter(x=>x!==c.id).every(owned)&&(!a.shipOnly||a.shipOnly===player.shipType)).length;return `<article class="atlas-card ${c.rarity} atlas-interactive" role="button" tabindex="0" data-atlas-card="${escHtml(c.id)}" aria-label="${escHtml(c.name)}の詳細を開く"><div class="atlas-head"><span class="rarity-name ${c.rarity}">${c.icon} ${escHtml(c.name)}</span><span class="atlas-rank ${c.rarity}">${RARITY_NAMES[c.rarity]}</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${escHtml(c.desc)}</div><div class="atlas-meta">${c.shipOnly?`専用機体：${SHIPS[c.shipOnly].jp}`:c.excludeShips?.length?`使用不可：${c.excludeShips.map(id=>SHIPS[id].jp).join('・')}`:'全機体で使用可能'}　${have?`<b class="atlas-owned">✓ 取得済み ×${have}</b>`:claimed?'<b class="atlas-owned">✓ 取得済み（融合で消費）</b>':'未取得'} ${!fits?' · 現在の機体では選択不可':''}</div><div class="atlas-open-hint">ⓘ カードをクリック・タップで詳細表示</div>${evol.length?`<div class="atlas-assoc fusion">進化合成：${evol.map(escHtml).join(' ／ ')}</div>`:''}${syn.length?`<div class="atlas-assoc synergy"><b class="synergy-gradient">✧ 関連シナジー ${syn.length}件</b> ${synActive?`<span class="atlas-syn-ready">✓ 発動中 ${synActive}件</span>`:''} ${synReady?`<span class="atlas-syn-ready">✦ 相方所持 ${synReady}件</span>`:''}<div class="atlas-syn-hint">${syn.slice(0,2).map(a=>escHtml(a.name)).join(' ／ ')}${syn.length>2?' ほか':''} — クリックで相方・発動効果・所持状況を確認</div></div>`:''}</article>`}).join('');return `<p class="atlas-count">表示 ${filtered.length} / 全${ALL_SKILL_DEFS().length}種類　｜　現在の機体：${SHIPS[player.shipType].jp}</p><div class="atlas-grid">${items||'<p class="atlas-empty">該当するスキルがありません。検索条件を変更してください。</p>'}</div>`}
-function atlasMarkup(){const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tags))].sort((a,b)=>a.localeCompare(b,'ja'));return `<div class="atlas-controls"><label>名称・効果を検索<input id="atlasSearch" type="search" placeholder="例：炎 / 貫通 / 壁 / レーザー" value="${escHtml(atlasQuery)}"></label><label>レアリティ<select id="atlasRarity">${[['all','すべて'],...Object.entries(RARITY_NAMES).map(([k,v])=>[k,v])].map(([key,title])=>`<option value="${key}" ${atlasRarity===key?'selected':''}>${title}</option>`).join('')}</select></label><label>属性・種類<select id="atlasAttr">${[['all','すべて'],...attrs.map(x=>[x,x])].map(([key,title])=>`<option value="${escHtml(key)}" ${atlasAttr===key?'selected':''}>${escHtml(title)}</option>`).join('')}</select></label></div><div id="atlasResults">${atlasList()}</div>`}
+function atlasTagCategory(tag){
+ if(tag.startsWith('属性：'))return '属性';
+ if(['属性融合素材','進化合成素材','変異','共鳴','レリック','限界突破'].includes(tag))return '進化・特殊';
+ if(['アニマル','ウサギ','ネコ','キツネ','ヘビ','ハムスター','クジラ','ハリネズミ','ヒヨコ','イルカ','肉球','骨ブーメラン'].includes(tag))return 'アニマル';
+ if(['追加射撃','射撃','射撃性能','弾数','レーザー','チャージ','ドリル','ドリル蓄積','近接','突進','貫通','反射','追尾','分裂','分岐','連射','ミサイル','アイスボール','フロストスパイク','パルス','ライトニングボルト','サイクロン','ブレード','マグマ床','岩壁','防御壁','隕石'].includes(tag))return '武装・戦闘';
+ return '能力・その他';
+}
+function atlasMarkup(){
+ const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tags||[]))].sort((a,b)=>a.localeCompare(b,'ja'));
+ const categories=['属性','武装・戦闘','アニマル','能力・その他','進化・特殊'];
+ const options=categories.map(group=>{
+  const tags=attrs.filter(tag=>atlasTagCategory(tag)===group);if(!tags.length)return '';
+  return '<optgroup label="'+escHtml(group)+'">'+tags.map(tag=>'<option value="'+escHtml(tag)+'" '+(atlasAttr===tag?'selected':'')+'>'+escHtml(tag)+'</option>').join('')+'</optgroup>';
+ }).join('');
+ return `<div class="atlas-controls"><label>名称・効果・タグで検索<input id="atlasSearch" type="search" placeholder="例：炎 / 貫通 / ウサギ / レーザー" value="${escHtml(atlasQuery)}"></label><label>レアリティ<select id="atlasRarity">${[['all','すべて'],...Object.entries(RARITY_NAMES).map(([k,v])=>[k,v])].map(([key,title])=>`<option value="${key}" ${atlasRarity===key?'selected':''}>${title}</option>`).join('')}</select></label><label>スキルタグ<select id="atlasAttr"><option value="all">すべて</option>${options}</select></label></div><div id="atlasResults">${atlasList()}</div>`;
+}
 
 
 
@@ -1885,19 +1905,31 @@ const VISUAL_CODEX_ROWS=[
  ['chargeComet','basic','charge','チャージ彗星弾','停止中にチャージし、移動すると発射する貫通弾。','comet','cForge'],
  ['drillAuger','basic','drill','プラズマドリル','通常弾は発射せず、先端のドリルで接触攻撃。ダッシュで突進する。','drill','dRotor'],
  ['dogBone','basic','dog','骨ブーメラン','回転しながら往復する基本武装。帰還時も攻撃する。','bone','dogBonePack'],
- ['plasma','element',null,'プラズマ弾換装','基本武装の炎換装。対応するPOWERで初めて燃焼が付与される。','plasma','plasma'],
- ['cryo','element',null,'フロスト弾換装','基本武装の氷換装。スロウを付与し、凍結はしない。','cryo','cryo'],
- ['arc','element',null,'サンダー弾換装','基本武装の雷換装。連鎖には再発動制限がある。','arc','arc'],
- ['rocket','element',null,'炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
- ['magma','element',null,'マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
- ['iceball','element',null,'アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
- ['spike','element',null,'フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','frostSpike'],
- ['emp','element',null,'電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
- ['bolt','element',null,'ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','lightningBolt'],
- ['cyclone','element',null,'サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
- ['blade','element',null,'ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
- ['wall','element',null,'ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
- ['meteor','element',null,'ローリング・メテオ','回転して進む貫通隕石。進むほど大きくなるが威力は一定。','meteor','meteorSeed'],
+ ['shotPlasma','element','shot','パルスショット・炎換装','橙赤色の基本ショット。燃焼を付与。進化合成カラー優先。','shot:plasma','plasma'],
+ ['shotCryo','element','shot','パルスショット・氷換装','氷青色の基本ショット。スロウを付与。進化合成カラー優先。','shot:cryo','cryo'],
+ ['shotArc','element','shot','パルスショット・雷換装','雷紫色の基本ショット。雷連鎖を付与。進化合成カラー優先。','shot:arc','arc'],
+ ['laserPlasma','element','laser','プリズムレーザー・炎換装','赤橙色レーザー。燃焼を付与。進化合成カラー優先。','laser:plasma','plasma'],
+ ['laserCryo','element','laser','プリズムレーザー・氷換装','氷青色レーザー。スロウを付与。進化合成カラー優先。','laser:cryo','cryo'],
+ ['laserArc','element','laser','プリズムレーザー・雷換装','通常より濃い紫色レーザー。雷連鎖を付与。進化合成カラー優先。','laser:arc','arc'],
+ ['chargePlasma','element','charge','チャージ彗星・炎換装','元のオレンジより赤みを強くした彗星。燃焼を付与。進化合成カラー優先。','comet:plasma','plasma'],
+ ['chargeCryo','element','charge','チャージ彗星・氷換装','氷青色の彗星。スロウを付与。進化合成カラー優先。','comet:cryo','cryo'],
+ ['chargeArc','element','charge','チャージ彗星・雷換装','濃紫色の彗星。雷連鎖を付与。進化合成カラー優先。','comet:arc','arc'],
+ ['dogPlasma','element','dog','骨ブーメラン・炎換装','炎色の骨ブーメラン。燃焼を付与。進化合成カラー優先。','bone:plasma','plasma'],
+ ['dogCryo','element','dog','骨ブーメラン・氷換装','氷青色の骨ブーメラン。スロウを付与。進化合成カラー優先。','bone:cryo','cryo'],
+ ['dogArc','element','dog','骨ブーメラン・雷換装','雷紫色の骨ブーメラン。雷連鎖を付与。進化合成カラー優先。','bone:arc','arc'],
+ ['drillPlasma','element','drill','プラズマドリル・炎換装','炎色のドリル先端。燃焼を付与。進化合成カラー優先。','drill:plasma','dPowerFire'],
+ ['drillCryo','element','drill','プラズマドリル・氷換装','氷青色のドリル先端。スロウを付与。進化合成カラー優先。','drill:cryo','dPowerIce'],
+ ['drillArc','element','drill','プラズマドリル・雷換装','濃紫色のドリル先端。雷連鎖を付与。進化合成カラー優先。','drill:arc','dPowerThunder'],
+ ['rocket','element','common','炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
+ ['magma','element','common','マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
+ ['iceball','element','common','アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
+ ['spike','element','common','フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','frostSpike'],
+ ['emp','element','common','電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
+ ['bolt','element','common','ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','lightningBolt'],
+ ['cyclone','element','common','サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
+ ['blade','element','common','ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
+ ['wall','element','common','ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
+ ['meteor','element','common','ローリング・メテオ','回転して進む貫通隕石。進むほど大きくなるが威力は一定。','meteor','meteorSeed'],
  ['dogChick','animal','dog','チック・タック（ヒヨコ）','卵を発射するミニオン。時間経過後にニワトリへ成長。','chick','dogChick'],
  ['dogChicken','animal','dog','成長後のニワトリ','規定時間後にヒヨコが成長した姿。','chicken','dogLegendChicken'],
  ['dogEgg','animal','dog','たまご弾','ヒヨコ・ニワトリが放つゆっくりした卵弾。','egg','dogEggPower'],
@@ -1923,8 +1955,8 @@ const VISUAL_CODEX_ROWS=[
  ['dogHamApex','mutation','dog','星穿つ装甲獣','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
 const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>({id,group,ship,name,desc,kind,card}));
-const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性武装'],['animal','アニマル'],['mutation','変異・上位進化']];
-function visualCodexItems(){return VISUAL_CODEX.filter(v=>(!v.ship||v.ship===visualShip)&&!(visualShip==='drill'&&['plasma','cryo','arc'].includes(v.id))&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
+const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性換装'],['animal','アニマル'],['mutation','変異・上位進化']];
+function visualCodexItems(){return VISUAL_CODEX.filter(v=>v.ship===visualShip&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
 function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
 /* v13.19 — preview first; selection remains isolated from gameplay state. */
 function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex"><div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
@@ -1944,10 +1976,10 @@ function visualCodexContent(){
  '<p class="visual-stage-notice">武装を選んでもスキル・能力値・セーブは変わりません。右下は戦闘中の小サイズ表示目安です。実寸・発射数はビルドによって変わります。</p></details></section>'+
  '<section class="visual-browser" aria-label="武装を選ぶ"><div class="visual-toolbar">'+
  '<div class="visual-tool-label">機体を選択</div><div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+
- Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
+ [['common','共通スキル'],...Object.entries(SHIPS).map(([id,sh])=>[id,sh.jp])].map(([id,name])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
  '<div class="visual-tool-label">武装カテゴリ</div><div class="visual-group-switch" role="group" aria-label="武装の種類">'+
- VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
- '<div class="visual-browser-hint">武装を選択、または ‹ › で連続比較</div></div>'+
+ VISUAL_GROUPS.filter(([id])=>id==='all'||VISUAL_CODEX.some(v=>v.ship===visualShip&&v.group===id)).map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(visualShip==='common'&&id==='element'?'共通武装':name)+'</button>').join('')+'</div>'+
+ '<div class="visual-browser-hint">共通スキルは通常機体で同じ表示。各機体の属性換装は専用の色で確認。‹ › で連続比較</div></div>'+
  '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
  '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div></section></div>';
 }
@@ -1976,12 +2008,12 @@ function drawWeaponVisualPreview(ts){
  for(let i=0;i<=480;i+=40){g.moveTo(i,0);g.lineTo(i,240);}
  for(let j=0;j<=240;j+=40){g.moveTo(0,j);g.lineTo(480,j);}g.stroke();
  g.save();g.strokeStyle='#ffffff2b';g.lineWidth=1.2;g.setLineDash([4,6]);g.beginPath();g.arc(x,y,100,0,TAU);g.stroke();g.setLineDash([]);g.restore();
- const p={shipType:visualShip,drillReach:44,drillWidth:30,drillCap:1,drillPlasma:.8,
+ const p={shipType:visualShip==='common'?'shot':visualShip,drillReach:44,drillWidth:30,drillCap:1,drillPlasma:.8,
   x,y,dx:0,dy:-1,evolutionTint:null,spikeVisuals:[],boltVisuals:[],
   dogMoon:false,dogMoonAscended:false,dogViper:false,dogViperAscended:false,
   dogWhaleAscended:false,dogNineTailMorph:false,dogNineTailAscended:false,
   dogArmorHam:false,dogArmorHamAscended:false};
- const kind=v.kind,move=((time*.5)%1);
+ const kind=v.kind,[family,variant]=kind.split(':'),move=((time*.5)%1);if(variant)p.drillVisualMode=variant;
  const bullet=(color,r=7)=>{
   g.save();g.lineCap='round';g.strokeStyle=color;g.shadowColor=color;g.shadowBlur=14;
   g.lineWidth=r>9?6:3.5;g.beginPath();g.moveTo(x-90+move*90,y);g.lineTo(x-45+move*90,y);g.stroke();
@@ -1993,19 +2025,21 @@ function drawWeaponVisualPreview(ts){
   g.beginPath();for(let i=0;i<9;i++){const a=i*TAU/9,rr=radius*(i%2?.90:1.06);i?g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):g.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);}
   g.closePath();g.fill();g.stroke();g.restore();
  };
- switch(kind){
- case 'pulse':case 'plasma':case 'cryo':case 'arc':
-  bullet(BULLET_COLOR[kind]||'#70fff1',8);break;
- case 'laser':
-  g.save();g.lineCap='round';for(const [width,color,alpha] of [[29,'#a38fff',.17],[12,'#b6a5ff',.7],[2.4,'#ffffff',1]]){g.globalAlpha=alpha;g.lineWidth=width;g.strokeStyle=color;g.shadowColor='#b99aff';g.shadowBlur=14;g.beginPath();g.moveTo(58,177);g.lineTo(410,85);g.stroke();}g.restore();break;
- case 'comet':
-  g.save();g.translate(x,y);g.rotate(time*.25);g.shadowColor='#ffbd78';g.shadowBlur=19;
-  g.strokeStyle='#ffb77599';g.lineWidth=13;g.beginPath();g.moveTo(-108,58);g.lineTo(0,0);g.stroke();
-  g.fillStyle='#e77f45';g.beginPath();g.arc(0,0,25,0,TAU);g.fill();g.fillStyle='#ffe9bb';g.beginPath();g.arc(0,0,13,0,TAU);g.fill();g.restore();break;
+ switch(family){
+ case 'pulse':case 'shot':
+  bullet(weaponElementPalette('shot',variant||null).accent,8);break;
+ case 'laser':{
+  const pal=weaponElementPalette('laser',variant||null);
+  g.save();g.lineCap='round';for(const [width,color,alpha] of [[29,pal.accent,.17],[12,pal.body,.75],[2.4,pal.core,1]]){g.globalAlpha=alpha;g.lineWidth=width;g.strokeStyle=color;g.shadowColor=pal.accent;g.shadowBlur=14;g.beginPath();g.moveTo(58,177);g.lineTo(410,85);g.stroke();}g.restore();break;}
+ case 'comet':{
+  const pal=weaponElementPalette('charge',variant||null);
+  g.save();g.translate(x,y);g.rotate(time*.25);g.shadowColor=pal.accent;g.shadowBlur=19;
+  g.globalAlpha=.65;g.strokeStyle=pal.accent;g.lineWidth=13;g.beginPath();g.moveTo(-108,58);g.lineTo(0,0);g.stroke();
+  g.globalAlpha=1;g.fillStyle=pal.body;g.beginPath();g.arc(0,0,25,0,TAU);g.fill();g.fillStyle=pal.core;g.beginPath();g.arc(0,0,13,0,TAU);g.fill();g.restore();break;}
  case 'drill':
   drawDrillAuger(p,true,g,time);break;
  case 'bone':
-  drawDogBone({x,y:132,r:19,spinAngle:time*2.5},g);break;
+  drawDogBone({x,y:132,r:19,spinAngle:time*2.5,elementMode:variant||null},g,p);break;
  case 'rocket':case 'fox':case 'nineTail':case 'nineTailApex':
   if(kind==='rocket'){
    g.save();g.translate(x,y);g.rotate(.6);g.fillStyle='#b93921';g.strokeStyle='#ffcc8d';g.lineWidth=3;
@@ -2035,7 +2069,7 @@ function drawWeaponVisualPreview(ts){
  case 'blade':
   g.save();g.translate(x,y);g.rotate(time*.85);g.fillStyle='#7affdb';g.strokeStyle='#efffff';g.shadowColor='#84ffdf';g.shadowBlur=12;g.lineWidth=2.6;
   g.beginPath();g.moveTo(-95,0);g.lineTo(-85,-9);g.lineTo(85,-9);g.lineTo(95,0);g.lineTo(85,9);g.lineTo(-85,9);g.closePath();g.fill();g.stroke();g.fillStyle='#fff';g.fillRect(-82,-2,164,4);g.restore();break;
- case 'wall':rockShape(36);break;
+ case 'wall':for(let i=0;i<3;i++){const a=time*.7+i*TAU/3;drawRockWallShape(x+Math.cos(a)*63,y+Math.sin(a)*60,19,a+time*.4,g);}break;
  case 'meteor':rockShape(45);break;
  case 'cat':
   for(let i=0;i<3;i++){const a=time*.7+i*TAU/3;animal('cat',24,x+Math.cos(a)*63,y+Math.sin(a)*60);}break;
@@ -2100,7 +2134,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.19 · CODEX QUALITY UPDATE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.20 · VISUAL CODEX REFINEMENT</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -3061,6 +3095,49 @@ for(const [element,ids] of Object.entries(DOG_ELEMENT_ASSETS))for(const id of id
  c.element=element;
  c.tags=[...new Set([...(c.tags||[]),...(c.mutation?['変異','アニマル']:[]),'属性：'+ELEMENTS[element].name])];
 }
+// v13.20: canonical, gameplay-safe tag vocabulary. Keep all '属性：' entries,
+// '共鳴', and fusion/evolution material flags: they are read by game rules.
+const SKILL_TAG_ALIASES={
+ '後方射撃':'追加射撃','側方射撃':'追加射撃','追加弾':'追加射撃',
+ 'オプション':'僚機','弾丸':'射撃','弾速':'射撃性能','弾サイズ':'射撃性能',
+ '線幅':'レーザー','プラズマ':'ドリル蓄積','蓄積':'ドリル蓄積',
+ '専用：DOG':null,'機体専用':null
+};
+const SKILL_TAG_EXACT={
+ // These categories previously conflated different DOG weapons.
+ dogRabbit:['ウサギ','アイスボール'],
+ dogRabbitFrost:['ウサギ','アイスボール'],
+ dogRelicRabbit:['ウサギ','アイスボール'],
+ dogPwrRabbit:['ウサギ','アイスボール'],
+ dogLegendRabbit:['ウサギ','アイスボール'],
+ dogCat:['ネコ','岩壁'],dogCatFort:['ネコ','岩壁'],dogPwrCat:['ネコ','岩壁'],
+ dogRelicCat:['ネコ','岩壁'],
+ dogHamMeteor:['ハムスター','隕石'],dogHamPlus:['ハムスター','隕石'],
+ dogLegendHam:['ハムスター','隕石'],dogMutHam:['ハムスター','隕石'],
+ dogMutWhale:['クジラ','サイクロン'],dogMutMoon:['ウサギ','フロストスパイク'],
+ dogMutViper:['ヘビ','ライトニングボルト'],dogMutNineTail:['キツネ','ミサイル']
+};
+for(const c of ALL_SKILL_DEFS()){
+ let tags=[...(c.tags||[])];
+ if(c.shipOnly==='dog'){
+  if(/Bone|GoodBoy|Fetch|Puppy/.test(c.id))tags=tags.filter(v=>v!=='アニマル');
+  if(/Hare|Moon/.test(c.id))tags.push('ウサギ','フロストスパイク');
+  if(/Hedge/.test(c.id))tags.push('ハリネズミ','パルス');
+  if(/Fox|NineTail/.test(c.id))tags.push('キツネ','ミサイル');
+  if(/Paw/.test(c.id))tags.push('肉球','マグマ床');
+  if(/Dolphin|Duet|Hurricane/.test(c.id))tags.push('イルカ','サイクロン');
+  if(/Snake|Viper/.test(c.id))tags.push('ヘビ','ライトニングボルト');
+  if(/Ham/.test(c.id))tags.push('ハムスター','隕石');
+  if(/Cat/.test(c.id))tags.push('ネコ','岩壁');
+  if(/Rabbit/.test(c.id)){tags=tags.filter(v=>v!=='フロストスパイク');tags.push('ウサギ','アイスボール');}
+  if(c.mutation)tags.push('変異');
+ }
+ tags.push(...(SKILL_TAG_EXACT[c.id]||[]));
+ // Keep the UI taxonomy intentionally compact; exclude machine-only
+ // '専用' repetitions already present in the dedicated vehicle metadata.
+ c.tags=[...new Set(tags.map(v=>Object.hasOwn(SKILL_TAG_ALIASES,v)?SKILL_TAG_ALIASES[v]:v).filter(Boolean))];
+}
+
 
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
@@ -3551,7 +3628,20 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
  }if(game.kills%16===0)pop(e.x,e.y,`${format(game.kills)} KILLS`,'#ffe08e');
 }
 
-const BULLET_COLOR={iceball:'#98edff',meteor:'#d4bc9a',pulse:'#70fff1',plasma:'#ffac57',cryo:'#76ceff',arc:'#d1a0ff',rocket:'#ffe5a4',comet:'#ffba6e',novaCharge:'#fff0b3'};
+/* Primary-weapon palette: only cosmetic. Evolution fusion overrides every element.
+   Shooting modes cycle between equipped elements; their renderer reads the active mode. */
+const WEAPON_ELEMENT_COLORS={
+ shot:{pulse:['#70fff1','#70fff1','#ffffff'],plasma:['#ff633f','#ff9652','#fff4d8'],cryo:['#63d8ff','#8eeaff','#ffffff'],arc:['#ab62ff','#b58dff','#f2eaff']},
+ laser:{pulse:['#a38fff','#b6a5ff','#ffffff'],plasma:['#f44d40','#ff8e64','#fff0dd'],cryo:['#52cfff','#88eeff','#ffffff'],arc:['#6720ce','#8732dc','#f0d8ff']},
+ charge:{pulse:['#ffae79','#e77f45','#ffe9bb'],plasma:['#ff4a3d','#df4b34','#ffe0b0'],cryo:['#5fddff','#5bc2ed','#edffff'],arc:['#7e3ae6','#6b38c8','#efd9ff']},
+ drill:{pulse:['#ff5aa8','#ff8bbc','#fff4e4'],plasma:['#ff573e','#fc7851','#fff1ce'],cryo:['#5de0ff','#88dfff','#f7ffff'],arc:['#792cda','#a978f7','#fbecff']},
+ dog:{pulse:['#ffe4a4','#fff1ce','#fffaf2'],plasma:['#ff6939','#ffba6e','#fff3d6'],cryo:['#6bdcff','#b5f4ff','#ffffff'],arc:['#8545e4','#c2a0ff','#ffffff']}
+};
+function weaponElementPalette(ship,mode,tint=null){
+ const v=(WEAPON_ELEMENT_COLORS[ship]||WEAPON_ELEMENT_COLORS.shot)[mode]||(WEAPON_ELEMENT_COLORS[ship]||WEAPON_ELEMENT_COLORS.shot).pulse;
+ return tint?{accent:tint,body:tint,core:'#ffffff',overridden:true}:{accent:v[0],body:v[1],core:v[2],overridden:false};
+}
+const BULLET_COLOR={iceball:'#98edff',meteor:'#d4bc9a',pulse:WEAPON_ELEMENT_COLORS.shot.pulse[0],plasma:WEAPON_ELEMENT_COLORS.shot.plasma[0],cryo:WEAPON_ELEMENT_COLORS.shot.cryo[0],arc:WEAPON_ELEMENT_COLORS.shot.arc[0],rocket:'#ffe5a4',comet:'#ffba6e',novaCharge:'#fff0b3'};
 function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source='primary'){if(!target)return;
  if(source==='rocket'&&player.shipType==='dog'){speed*=player.dogFoxSpeed||1;damage*=player.dogFoxDamage||1;}
  if(source==='rocket'&&player.gigaNapalm){
@@ -3634,9 +3724,10 @@ function updateLaser(dt){const p=player;p.laserNovaTimer=Math.max(0,p.laserNovaT
   // intersecting a beam are still hit by segment collision checks.
   p.laserTargetsCache.length=Math.min(p.laserTargetsCache.length,Math.max(24,Math.min(64,p.laserCount*2+6)));
  }
+ p.laserVisualMode=beamElementMode(p);
  const targets=p.laserTargetsCache;const count=Math.min(p.laserLimit,p.laserCount+(p.laserNovaTimer>0?2:0)),width=(Math.min(p.laserWidth,8)+Math.max(0,p.laserWidth-8)*.34)*(p.laserNovaTimer>0?1.2:1),balance=laserBalance(p,count);if(!targets.length)return;const targeted=new Set();
  for(let i=0;i<count;i++){const a=-Math.PI/2+TAU*i/count,ox=p.x+Math.cos(a)*14,oy=p.y+Math.sin(a)*14;let trg=null,dd=Infinity;for(const e of targets){if(e.dead||!isVisibleAutoTarget(e)||targeted.has(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}if(!trg){for(const e of targets){if(e.dead||!isVisibleAutoTarget(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}}if(!trg)continue;targeted.add(trg);let lx=trg.x,ly=trg.y;const collision=engageImpact(ox,oy,lx,ly,Math.min(5,width*.2));if(collision!==null){const t=Math.max(0,collision-.006);lx=ox+(lx-ox)*t;ly=oy+(ly-oy)*t}if(Math.hypot(lx-ox,ly-oy)>2)laserLinks.push({x:ox,y:oy,x2:lx,y2:ly,width,nova:p.laserNovaTimer>0})}
- p.laserTick-=dt;if(p.laserTick>0)return;const tick=.09,beamMode=beamElementMode(p);p.laserTick+=tick;for(const l of laserLinks){const vx=l.x2-l.x,vy=l.y2-l.y,den=vx*vx+vy*vy;if(den<1)continue;for(const e of segmentCandidates(l.x,l.y,l.x2,l.y2,l.width*.52)){if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;const along=((e.x-l.x)*vx+(e.y-l.y)*vy)/den;if(along<0||along>1.05)continue;const cx=l.x+vx*clamp(along,0,1),cy=l.y+vy*clamp(along,0,1);if((e.x-cx)**2+(e.y-cy)**2>(e.r+l.width*.52)**2)continue;let damage=(p.dmg*.87+p.laserBonus)*balance.effectiveScale*balance.emitterScale*balance.movementScale*tick*(p.laserNovaTimer>0?1.30+Math.min(.65,effectiveNovaDamage(p)/1100):1);if(Math.random()<Math.min(.95,p.crit))damage*=p.critMult;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damage*=p.bossBane;if(e.type==='guard')damage*=.70;if(p.relicLaserHunter&&e.hp<e.maxHp*.5)damage*=1.6;damageEnemy(e,damage,{special:true,source:'laser'});if(e.dead)continue;applyBasicElement(e,beamMode,damage,.85);if(p.relicLaserPulse&&Math.random()<.10)detonate(e.x,e.y,72,damage*.8,e,5);if(p.relicLaserFork&&Math.random()<.16){const other=visibleTarget(e.x,e.y,e,195);if(other){let sideDmg=damage*.55;if(p.relicLaserHunter&&other.hp<other.maxHp*.5)sideDmg*=1.6;
+ p.laserTick-=dt;if(p.laserTick>0)return;const tick=.09,beamMode=p.laserVisualMode;p.laserTick+=tick;for(const l of laserLinks){const vx=l.x2-l.x,vy=l.y2-l.y,den=vx*vx+vy*vy;if(den<1)continue;for(const e of segmentCandidates(l.x,l.y,l.x2,l.y2,l.width*.52)){if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;const along=((e.x-l.x)*vx+(e.y-l.y)*vy)/den;if(along<0||along>1.05)continue;const cx=l.x+vx*clamp(along,0,1),cy=l.y+vy*clamp(along,0,1);if((e.x-cx)**2+(e.y-cy)**2>(e.r+l.width*.52)**2)continue;let damage=(p.dmg*.87+p.laserBonus)*balance.effectiveScale*balance.emitterScale*balance.movementScale*tick*(p.laserNovaTimer>0?1.30+Math.min(.65,effectiveNovaDamage(p)/1100):1);if(Math.random()<Math.min(.95,p.crit))damage*=p.critMult;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damage*=p.bossBane;if(e.type==='guard')damage*=.70;if(p.relicLaserHunter&&e.hp<e.maxHp*.5)damage*=1.6;damageEnemy(e,damage,{special:true,source:'laser'});if(e.dead)continue;applyBasicElement(e,beamMode,damage,.85);if(p.relicLaserPulse&&Math.random()<.10)detonate(e.x,e.y,72,damage*.8,e,5);if(p.relicLaserFork&&Math.random()<.16){const other=visibleTarget(e.x,e.y,e,195);if(other){let sideDmg=damage*.55;if(p.relicLaserHunter&&other.hp<other.maxHp*.5)sideDmg*=1.6;
  damageEnemy(other,sideDmg,{special:true,source:'laser'});if(!other.dead)applyBasicElement(other,beamMode,sideDmg,.85)
  particles.push({x:e.x,y:e.y,x2:other.x,y2:other.y,life:.22,total:.22,lightning:true,color:'#e3c5ff'})}}if(p.explosion>0&&Math.random()<p.explosion*.12)detonate(e.x,e.y,58+p.thermal*13,Math.max(8,damage*3),e,5);}}
 }
@@ -3652,7 +3743,7 @@ function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player;
  if(!dashWasActive){p.drillRushActive=0;const moved=Math.hypot(p.x-fromX,p.y-fromY);const gain=(m>.22&&moved>dt*28?p.drillGain*clamp(m,.3,1):0);p.drillPlasma=clamp(p.drillPlasma+dt*(gain||-p.drillDecay),0,p.drillCap);}
  else p.drillRushActive=Math.max(0,p.drillRushActive-dt);
  if(p.drillOverdriveTime>0)p.drillPlasma=p.drillCap;
- const drillMode=drillElementMode(p);
+ const drillMode=drillElementMode(p);p.drillVisualMode=drillMode;
  // Forward swept capsule: reaches beyond the ship nose; never enlarges player hurtbox.
  if(m>.18&&!dashWasActive){
   const sx=p.x+p.dx*12,sy=p.y+p.dy*12,ex=p.x+p.dx*(32+p.drillReach),ey=p.y+p.dy*(32+p.drillReach),radius=11+p.drillWidth*.53;
@@ -3942,33 +4033,31 @@ function tickReforgeWeapons(dt){
 /* Shape-based lightning snake. Only the visual path is affected; chain targets,
    damage, hit history and timing are still computed by the existing combat logic. */
 /* v13.19: chubby round reptile face; chain combat is unaffected. */
+/* v13.20: small smiling snake head without the old purple oval eye plate.
+   Only visual endpoints, never collision history or chain damage, are read. */
 function drawDogLightningSnake(p,b,ctx,now=t){
  const dx=b.x2-b.x,dy=b.y2-b.y,len=Math.max(1,Math.hypot(dx,dy));
  const px=-dy/len,py=dx/len,steps=Math.max(8,Math.ceil(len/14));
  const royal=!!p.dogViper,apex=!!p.dogViperAscended;
  const skin=apex?'#fff0c2':royal?'#e8b954':'#ab80e7';
  const rim=apex?'#fffdf0':royal?'#fff0a9':'#e3cfff';
- const belly=apex?'#fffaf0':royal?'#ffebb4':'#e3d0ff';
+ const face=apex?'#fffdf1':royal?'#fff1c6':'#f6e8ff';
  ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';
  ctx.shadowColor=rim;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
- ctx.strokeStyle=skin;ctx.lineWidth=royal?11:8.4;ctx.beginPath();ctx.moveTo(b.x,b.y);
+ ctx.strokeStyle=skin;ctx.lineWidth=royal?10:8.1;ctx.beginPath();ctx.moveTo(b.x,b.y);
  for(let i=1;i<=steps;i++){const u=i/steps,wiggle=Math.sin(u*Math.PI*3.2-now*3.8+b.x*.017)*Math.sin(u*Math.PI)*Math.min(14,len*.095);ctx.lineTo(b.x+dx*u+px*wiggle,b.y+dy*u+py*wiggle);}
  ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle=rim;ctx.lineWidth=1.8;ctx.stroke();
  ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));
- // Rounded cheeks and separate muzzle, without the old sharp arrowhead.
- ctx.fillStyle=skin;ctx.strokeStyle=rim;ctx.lineWidth=1.5;ctx.beginPath();
- ctx.moveTo(-12,0);ctx.bezierCurveTo(-11,-14,8,-17,16,-8);
- ctx.quadraticCurveTo(23,0,16,8);ctx.bezierCurveTo(8,17,-11,14,-12,0);ctx.closePath();ctx.fill();ctx.stroke();
- ctx.fillStyle=belly;ctx.beginPath();ctx.ellipse(15,0,8,7,0,0,TAU);ctx.fill();
- ctx.fillStyle='#30233d';ctx.beginPath();ctx.arc(6,-8,2.7,0,TAU);ctx.arc(6,8,2.7,0,TAU);ctx.fill();
- ctx.fillStyle='#fffdf6';ctx.beginPath();ctx.arc(6.6,-9,.85,0,TAU);ctx.arc(6.6,7,.85,0,TAU);ctx.fill();
- ctx.save();ctx.globalAlpha=.67;ctx.fillStyle=apex?'#f6b1bd':royal?'#f5a188':'#f1a9d5';
- ctx.beginPath();ctx.ellipse(11,-9,3,1.3,-.3,0,TAU);ctx.ellipse(11,9,3,1.3,.3,0,TAU);ctx.fill();ctx.restore();
- ctx.fillStyle='#886275';ctx.beginPath();ctx.arc(19,-2,.9,0,TAU);ctx.arc(19,2,.9,0,TAU);ctx.fill();
- ctx.strokeStyle='#875477';ctx.lineWidth=1.05;ctx.beginPath();ctx.moveTo(16,4);ctx.quadraticCurveTo(21,7,23,3);ctx.stroke();
- // Tiny forked tongue: reptile identity without long whisker-like lines.
- ctx.strokeStyle='#f38eaa';ctx.lineWidth=1.2;ctx.beginPath();
- ctx.moveTo(23,1);ctx.lineTo(26,1);ctx.moveTo(26,1);ctx.lineTo(28,-.5);ctx.moveTo(26,1);ctx.lineTo(28,2.5);ctx.stroke();
+ // Only a miniature light-coloured head survives, not the preceding 40px purple oval.
+ ctx.fillStyle=face;ctx.strokeStyle=rim;ctx.lineWidth=1.4;ctx.beginPath();
+ ctx.moveTo(-2,-5);ctx.bezierCurveTo(3,-10,13,-11,18,-5);
+ ctx.quadraticCurveTo(23,0,18,5);ctx.bezierCurveTo(13,11,3,10,-2,5);
+ ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#33283d';ctx.beginPath();ctx.arc(9,-3.8,1.8,0,TAU);ctx.arc(9,3.8,1.8,0,TAU);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(9.5,-4.3,.55,0,TAU);ctx.arc(9.5,3.3,.55,0,TAU);ctx.fill();
+ ctx.fillStyle=apex?'#e7a0a4':'#efb8d7';ctx.globalAlpha*=.7;ctx.beginPath();ctx.ellipse(13,5.8,2.9,1.1,0,0,TAU);ctx.ellipse(13,-5.8,2.9,1.1,0,0,TAU);ctx.fill();
+ ctx.globalAlpha=Math.min(1,b.life/.14);ctx.fillStyle='#ad748c';ctx.beginPath();ctx.arc(19,-1.7,.65,0,TAU);ctx.arc(19,1.7,.65,0,TAU);ctx.fill();
+ ctx.strokeStyle='#e883a8';ctx.lineWidth=1.25;ctx.beginPath();ctx.moveTo(22,1);ctx.lineTo(27,1);ctx.moveTo(27,1);ctx.lineTo(29,-.5);ctx.moveTo(27,1);ctx.lineTo(29,2.5);ctx.stroke();
  ctx.restore();
 }
 
@@ -3977,23 +4066,29 @@ function drawReforgeWeapons(p,drawCtx=ctx,visualTime=t){const ctx=drawCtx;
   const k=Math.min(1,s.life/.22),height=(p.shipType==='dog'?43:35)*s.scale,width=(p.shipType==='dog'?19:16)*s.scale;
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
   if(p.shipType==='dog'){
-   // Two independent, asymmetric wild-hare ears. The original collision geometry is unchanged.
+   // Wild hare: two separate long rounded ears and inner ice-pink ear insets.
    const moon=!!p.dogMoon,glow=p.dogMoonAscended?'#fff7df':moon?'#ddc7ff':'#c1ffff';
-   ctx.shadowColor=glow;ctx.fillStyle=moon?'#baa8e489':'#72d7eb89';ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
+   ctx.shadowColor=glow;ctx.strokeStyle=glow;ctx.lineWidth=2.2;ctx.fillStyle=moon?'#c6b8ee':'#9ee6f9';
    for(const side of [-1,1]){
-    const base=side*width*.23,tip=side*width*(side===1?.93:.79),rise=height*(side===1?.94:1.11);
-    ctx.beginPath();ctx.moveTo(base-side*width*.20,0);
-    ctx.quadraticCurveTo(base-side*width*.35,-rise*.62,tip,-rise);
-    ctx.quadraticCurveTo(tip+side*width*.23,-rise*.72,base+side*width*.20,0);
+    const base=side*width*.31,tip=side*width*(side<0?.70:.82),rise=height*(side<0?1.00:1.11);
+    ctx.beginPath();ctx.moveTo(base-side*width*.20,-height*.11);
+    ctx.bezierCurveTo(base-side*width*.36,-rise*.40,tip-side*width*.23,-rise*.92,tip,-rise);
+    ctx.bezierCurveTo(tip+side*width*.26,-rise*1.04,tip+side*width*.34,-rise*.83,tip+side*width*.25,-rise*.71);
+    ctx.bezierCurveTo(base+side*width*.28,-rise*.30,base+side*width*.20,-height*.11,base-side*width*.20,-height*.11);
     ctx.closePath();ctx.fill();ctx.stroke();
-    ctx.strokeStyle=moon?'#fff9ff':'#efffff';ctx.lineWidth=1.3;
-    ctx.beginPath();ctx.moveTo(base,-height*.16);ctx.quadraticCurveTo(base,-rise*.66,tip,-rise*.87);ctx.stroke();
-    ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
+    ctx.strokeStyle=moon?'#e8caff':'#f1c9e7';ctx.lineWidth=Math.max(2,2.15*s.scale);
+    ctx.beginPath();ctx.moveTo(base,-height*.25);
+    ctx.quadraticCurveTo(tip-side*width*.10,-rise*.62,tip,-rise*.85);ctx.stroke();
+    ctx.strokeStyle=glow;ctx.lineWidth=2.2;
    }
-   ctx.beginPath();ctx.moveTo(0,-height*.31);ctx.lineTo(width*.32,-height*.12);
-   ctx.lineTo(width*.23,height*.10);ctx.lineTo(0,height*.23);ctx.lineTo(-width*.23,height*.10);
-   ctx.lineTo(-width*.32,-height*.12);ctx.closePath();ctx.fill();ctx.stroke();
-   if(moon){ctx.fillStyle='#fff5d8';ctx.beginPath();ctx.arc(0,-height*.18,Math.max(2.4,width*.16),0,TAU);ctx.fill();}
+   // Distinct rounded bunny forehead and small face under the ears.
+   ctx.fillStyle=moon?'#e4d1ff':'#d8f6ff';ctx.beginPath();
+   ctx.ellipse(0,-height*.08,width*.53,height*.25,0,0,TAU);ctx.fill();ctx.stroke();
+   ctx.fillStyle='#28476b';ctx.beginPath();
+   ctx.arc(-width*.20,-height*.10,Math.max(1.4,1.5*s.scale),0,TAU);
+   ctx.arc(width*.20,-height*.10,Math.max(1.4,1.5*s.scale),0,TAU);ctx.fill();
+   ctx.fillStyle='#f6abc5';ctx.beginPath();ctx.arc(0,-height*.005,Math.max(1.1,1.3*s.scale),0,TAU);ctx.fill();
+   if(moon){ctx.fillStyle='#fff5d8';ctx.beginPath();ctx.arc(0,-height*.30,Math.max(2.4,width*.14),0,TAU);ctx.fill();}
   }else{
    ctx.fillStyle='#80dfff88';ctx.strokeStyle='#c4faff';ctx.lineWidth=2.3;
    ctx.beginPath();ctx.moveTo(-width,3);ctx.lineTo(-width*.7,-height*.40);ctx.lineTo(-width*.44,-height);
@@ -4381,6 +4476,13 @@ function drawAnimal(kind,x,y,r=14,angle=0,drawCtx=ctx,visualPlayer=player){
  ctx.save();ctx.translate(x,y);
  ctx.rotate(kind==='dolphin'||kind==='whale'?angle-Math.PI/2:angle);
  ctx.scale(r,r);ctx.lineJoin='round';ctx.lineCap='round';
+ // A luminous miniature iceball is the snow rabbit's fluffy icy tail.
+ if(kind==='rabbit'){
+  ctx.save();ctx.globalAlpha=.96;ctx.shadowColor='#8ee9ff';ctx.shadowBlur=low?0:5;
+  ctx.fillStyle='#78dfff';ctx.strokeStyle='#efffff';ctx.lineWidth=.085;
+  ctx.beginPath();ctx.arc(0,1.09,.34,0,TAU);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fffaff';ctx.beginPath();ctx.arc(-.11,.98,.12,0,TAU);ctx.fill();ctx.restore();
+ }
  // Draw the roots behind the fox head, never emerging from its muzzle.
  if(kind==='fox'){
   ctx.lineWidth=.075;ctx.strokeStyle=nine?'#fff3ca':'#ffdfae';
@@ -4474,6 +4576,15 @@ function drawAnimal(kind,x,y,r=14,angle=0,drawCtx=ctx,visualPlayer=player){
  }
  ctx.restore();
 }
+/* Shared six-sided rock visual, independent of the meteor's jagged silhouette. */
+function drawRockWallShape(x,y,r,angle=0,drawCtx=ctx,dim=false){
+ const g=drawCtx;g.save();g.translate(x,y);g.rotate(angle);g.shadowColor='#e3bd88';g.shadowBlur=renderHeavyLoad?0:9;
+ g.fillStyle=dim?'#655c60':'#bca388';g.strokeStyle='#f4dcb5';g.lineWidth=2.3;
+ g.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,rr=r*(j%2?.83:1);
+  if(j)g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);else g.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);}
+ g.closePath();g.fill();g.stroke();g.restore();
+}
+
 function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
  ctx.shadowColor='#ffdc8c';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
@@ -4482,11 +4593,12 @@ function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
  ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
-function drawDogBone(b,drawCtx=ctx){const ctx=drawCtx;
+function drawDogBone(b,drawCtx=ctx,visualPlayer=player){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
- const r=b.r;ctx.shadowColor=b.novaBone?'#ffb2e7':'#ffe4a4';ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
- ctx.strokeStyle=b.novaBone?'#fff6fc':'#fff0c2';ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
- ctx.fillStyle=b.novaBone?'#ffe3fa':'#fff1ce';
+ const r=b.r,pal=weaponElementPalette('dog',b.novaBone?null:b.elementMode,visualPlayer?.evolutionTint);
+ ctx.shadowColor=b.novaBone?'#ffb2e7':pal.accent;ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
+ ctx.strokeStyle=b.novaBone?'#fff6fc':pal.accent;ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
+ ctx.fillStyle=b.novaBone?'#ffe3fa':pal.body;
  for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
  ctx.restore();
 }
@@ -4518,10 +4630,10 @@ function drawDrillAuger(p,active,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=v
   const len=Math.max(36,reach-12),tip=-reach,baseY=13;
   ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.dy,p.dx)+Math.PI/2);
   // Soft readable reach guide stays inside the original melee capsule; purely decorative.
-  ctx.lineCap='round';ctx.globalAlpha=active?.20:.10;ctx.strokeStyle=p.evolutionTint||'#ff5aa8';ctx.lineWidth=rad*2;
+  ctx.lineCap='round';ctx.globalAlpha=active?.20:.10;const drillPalette=weaponElementPalette('drill',p.drillVisualMode,p.evolutionTint);ctx.strokeStyle=drillPalette.accent;ctx.lineWidth=rad*2;
   ctx.beginPath();ctx.moveTo(0,baseY);ctx.lineTo(0,tip+5);ctx.stroke();
   ctx.globalAlpha=active?.94:.76;ctx.lineJoin='round';
-  ctx.fillStyle=p.evolutionTint||(active?'#ffd9f0':'#ff8bbc');ctx.strokeStyle=p.evolutionTint||(active?'#fff7e7':'#9e2d69');ctx.lineWidth=2.1;
+  ctx.fillStyle=drillPalette.body;ctx.strokeStyle=active?drillPalette.core:drillPalette.accent;ctx.lineWidth=2.1;
   ctx.beginPath();ctx.moveTo(-rad*.88,baseY);ctx.lineTo(-rad*.74,-17);ctx.lineTo(-rad*.51,tip+len*.22);ctx.lineTo(0,tip);
   ctx.lineTo(rad*.51,tip+len*.22);ctx.lineTo(rad*.74,-17);ctx.lineTo(rad*.88,baseY);ctx.closePath();ctx.fill();ctx.stroke();
   // Steel center axis and moving diagonal helical threads, clipped to taper envelope.
@@ -4795,9 +4907,9 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    ctx.restore();continue;
   }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(75,Math.max(14,b.r)),player.dogArmorHam?Math.sin(t*2)*.06:t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
-   if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
+   if(b.kind==='comet'||b.kind==='novaCharge'){const pal=weaponElementPalette('charge',b.kind==='novaCharge'?null:b.elementMode,player.evolutionTint),c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':pal.accent);ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':pal.body);ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':pal.core;ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle=pal.accent;ctx.globalAlpha=.55;ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
  if(player.empRadius>0)drawTeslaField(player);
-  for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ebd3ff':'#7a5df2');ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=player.evolutionTint||'#bc94ff';ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=player.evolutionTint||(l.nova?'#ffedff':'#ada1ff');ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
+  for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5,lc=weaponElementPalette('laser',player.laserVisualMode,player.evolutionTint);ctx.strokeStyle=l.nova?'#ebd3ff':lc.accent;ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=renderHeavyLoad?0:18;ctx.shadowColor=lc.accent;ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=renderHeavyLoad?0:13;ctx.strokeStyle=l.nova?'#ffedff':lc.body;ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle=lc.core;ctx.shadowBlur=renderHeavyLoad?0:4;ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
  if(renderHeavyLoad||settings.fx==='low'){

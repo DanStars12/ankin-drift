@@ -26,13 +26,14 @@ async function openCodex(page){
 test('title BUILD LAB contains a responsive animated weapon preview, separate from gameplay',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await openCodex(page);
- await expect(page.locator('[data-visual-ship]')).toHaveCount(5);
+ await expect(page.locator('[data-visual-ship]')).toHaveCount(6);
  const canvas=page.locator('#weaponVisualCanvas');
  await expect.poll(()=>canvas.evaluate(node=>{
   const c=node.getContext('2d'),pixels=c.getImageData(0,0,node.width,node.height).data;
   return pixels[2000]+pixels[2001]+pixels[2002];
  })).toBeGreaterThan(0);
  const first=await canvas.evaluate(node=>node.toDataURL('image/png'));
+ await page.locator('[data-visual-ship="common"]').click();
  await page.locator('[data-visual-group="element"]').click();
  await page.locator('[data-visual-id="cyclone"]').click();
  await expect(page.locator('.visual-stage-heading strong')).toContainText('サイクロン');
