@@ -3139,6 +3139,92 @@ for(const c of ALL_SKILL_DEFS()){
 }
 
 
+
+// v13.21 DOG card names: display-only aliases. Stable IDs, effects, rarity,
+// tags, acquisition history and save format never depend on the localized name.
+const DOG_CUTE_SKILL_NAMES={
+ "dogBonePack": "ほねっこ・ふたつ！",
+ "dogBigBone": "でっかい・ほねっこ",
+ "dogGoodBoy": "いいこだね！",
+ "dogFetchRun": "とってこい・ダッシュ",
+ "dogPuppyCheer": "わんわん・おうえん隊",
+ "dogChick": "ぴよぴよ・チック・タック",
+ "dogEggPower": "ころころ・たまご",
+ "dogEggTempo": "こけこっこ・リズム",
+ "dogDolphin": "くるくる・ドルフィンリング",
+ "dogDuet": "なかよし・ドルフィン・デュエット",
+ "dogHurricane": "ぐるぐる・ドルフィンハリケーン",
+ "dogHurricanePlus": "いるかの・しぶきジャンプ",
+ "dogFox": "こんこん・フォックスミサイル",
+ "dogNineTail": "きらきら・九尾フレア",
+ "dogPawLava": "ぽかぽか・パウ・ラヴァ",
+ "dogPawBloom": "ぽんぽん・肉球フレア",
+ "dogRabbit": "ぴょんぴょん・スノー・ラビット",
+ "dogRabbitFrost": "ふわふわ・ラビットフロスト",
+ "dogCat": "にゃんにゃん・キャットディフェンダー",
+ "dogCatFort": "にゃんこ・まもり隊",
+ "dogHamMeteor": "ころころ・ハム・スターメテオ",
+ "dogHamPlus": "ハムちゃん・どっすん！",
+ "dogHedgehog": "びりびり・エレキハリネズミ",
+ "dogHedgeSpark": "ぱちぱち・ハリネズミ",
+ "dogAnimalPack": "みんなで・わんわん！",
+ "dogPwrChicks": "ANKIN・ぴよぴよマーチ",
+ "dogPwrFox": "ANKIN・こんこんパレード",
+ "dogPwrDolphin": "ANKIN・いるかの大行進",
+ "dogPwrRabbit": "ANKIN・雪うさぎの行進",
+ "dogPwrCat": "ANKIN・にゃんこのおしろ",
+ "dogPwrLava": "ANKIN・にくきゅうぽかぽか",
+ "dogLegendChicken": "ぴよぴよ・だいかぞく",
+ "dogLegendFox": "こんこん・九尾の狐火",
+ "dogLegendSea": "いるかの・おおうみパレード",
+ "dogLegendHam": "うちゅうの・まんまるハム",
+ "dogLegendRabbit": "雪うさぎの・おおきな行進",
+ "dogUniquePack": "アニマル・わくわくパラダイス",
+ "dogRelicBone": "きらきら・ほねっこ",
+ "dogRelicChick": "ぴよぴよ・おうさま",
+ "dogRelicFox": "こんこん・きつね火の宝珠",
+ "dogRelicCat": "にゃんこの・おまもり首輪",
+ "dogRelicRabbit": "雪うさぎの・ふわふわ足あと",
+ "dogRelicDolphin": "いるかの・うみかぜ笛",
+ "dogHare": "ぴょこぴょこ・フロスト・ヘア",
+ "dogHareFocus": "ぴょんっと・野ウサギの足跡",
+ "dogHareFissure": "ぴょんぴょん・氷晶",
+ "dogSnake": "ぴかぴか・ライトニング・スネーク",
+ "dogSnakeFocus": "へびさんの・びりびりタッチ",
+ "dogSnakeChain": "くねくね・れんさ",
+ "dogHarePower": "ANKIN・ぴょんぴょんフロスト・ヘア",
+ "dogSnakePower": "ANKIN・へびさんのビリビリ巣",
+ "dogHareLegend": "まんまる・雪うさぎ王",
+ "dogSnakeLegend": "ぴかぴか・らいじゃ王",
+ "dogMutWhale": "くじらさん・タイダル・モノサイクロン",
+ "dogMutMoon": "おつきさま・ムーンラビット結晶化",
+ "dogMutViper": "ぴかぴか・ヴァイパー・オーバードライブ",
+ "dogMutNineTail": "こんこん・九尾導火",
+ "dogMutHam": "ころころ・ギガ・ハムスターメテオ",
+ "dogLegendBoneKing": "ほねっこの・おうさま",
+ "dogLegendFlockWard": "ぴよぴよ・まもり大隊",
+ "dogRelicMoonCharm": "おつきさま・うさみみ飾り",
+ "dogRelicSnakeSkin": "ぬぎぬぎ・へびの皮",
+ "dogRelicWhaleFlute": "くじらさんの潮笛",
+ "dogRelicFoxTalisman": "きつねさんの尾札",
+ "dogRelicReturnBone": "ほねっこ・おかえり護符",
+ "dogEndBoneTorque": "ほねっこ・もっとパワー",
+ "dogEndBoneFlight": "ほねっこ・おかえり練習",
+ "dogEndEggCare": "たまごの・お世話係",
+ "dogEndPackBond": "アニマル・なかよしボンド",
+ "dogEndHowl": "わんわん・バウショック",
+ "dogEndGuard": "おさんぽ・まもり隊",
+ "dogEndFoxEmber": "こんこん・狐火の追い風",
+ "dogEndHedgeGlow": "ぱちぱち・ハリネズミ",
+ "dogEndBoneAura": "ほねっこ・おかえり名人",
+ "dogEndMutation": "みんなの・へんしん絆"
+};
+for(const c of ALL_SKILL_DEFS()){
+ if(c.shipOnly!=='dog')continue;
+ if(!DOG_CUTE_SKILL_NAMES[c.id])throw Error('DOG card name missing: '+c.id);
+ c.name=DOG_CUTE_SKILL_NAMES[c.id];
+}
+
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
