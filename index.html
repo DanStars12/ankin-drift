@@ -777,6 +777,29 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(max-width:800px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}.ship-card.dog{grid-column:span 2}.ship-card.dog .ship-description{max-width:290px}}
 
+
+/* v13.17 weapon preview: no gameplay overlays or image downloads */
+.lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
+.visual-codex{display:flex;flex-direction:column;gap:10px;min-width:0}
+.visual-ship-switch,.visual-group-switch{display:flex;gap:6px;flex-wrap:wrap}
+.visual-ship-switch button,.visual-group-switch button{background:#16263d;color:#c9e4f8;border:1px solid #415e7a;border-radius:9px;padding:8px 10px;min-height:39px;font-size:12px;font-weight:800;cursor:pointer}
+.visual-ship-switch button.active,.visual-group-switch button.active,.visual-choice.active{border-color:#8affed;color:#d5fff8;background:#1b4554;box-shadow:inset 0 -2px 0 #72ecd8}
+.visual-ship-switch button:focus-visible,.visual-group-switch button:focus-visible,.visual-choice:focus-visible{outline:3px solid #fbe4a8;outline-offset:2px}
+.visual-stage{border:1px solid #4c718e;border-radius:14px;background:#0b172e;padding:12px;min-width:0}
+.visual-stage-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-bottom:9px}
+.visual-stage-heading strong{font-size:17px;color:#b7fff5}.visual-stage-heading span{font-size:11px;color:#a9c9e6;font-weight:800}
+#weaponVisualCanvas{display:block;width:100%;height:auto;aspect-ratio:2/1;max-width:640px;margin:auto;border:1px solid #49677d;border-radius:9px;background:#091326}
+.visual-stage p{font-size:13px;line-height:1.65;color:#e0eeff;margin:9px 0}
+.visual-stage-foot{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap;font-size:11px;color:#8cefe9}
+.visual-stage-notice{margin-top:9px;color:#b1c6dd;font-size:11px;line-height:1.65}
+.visual-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.visual-choice{padding:10px 8px;min-width:0;border:1px solid #345874;border-radius:10px;background:#101f37;color:#dce9ff;cursor:pointer;text-align:left;min-height:58px}
+.visual-choice span{display:block;font-size:12px;font-weight:850;line-height:1.45;overflow-wrap:anywhere}
+.visual-choice small{display:block;margin-top:4px;color:#98afc9;font-size:10px}
+.visual-choice:hover{border-color:#8dd6ea}
+@media(max-width:700px){.visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-ship-switch button{flex:1 1 28%}.visual-stage{padding:8px}.visual-stage-heading strong{font-size:15px}.visual-group-switch button{font-size:11px;padding:8px 6px}}
+@media(max-width:380px){.visual-choice-grid{gap:5px}.visual-ship-switch button{min-height:37px}.visual-choice{padding:8px 6px}.visual-stage-heading strong{font-size:13px}}
+
 </style>
 <style>
 .choice-pick{display:none}
