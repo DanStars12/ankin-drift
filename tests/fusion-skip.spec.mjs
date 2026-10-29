@@ -49,7 +49,7 @@ test('Lv12 with two elements enters fusion; Lv28 skips with 1 unused until 2 exi
  const second=await page.evaluate(()=>window.__fusionProbe.reset(28,['fire','ice','thunder'],['fire','ice']));
  expect(second.mode).toBe('playing');expect(second.usable).toEqual(['thunder']);
  const later=await page.evaluate(()=>window.__fusionProbe.add(['rock']));
- expect(later.mode).toBe('elementChoice');expect(later.pairs).toHaveLength(1);
+ expect(later.mode).toBe('elementChoice');expect(later.pairs).toHaveLength(2);
  await expect(page.locator('[data-element-main="thunder"]')).toBeEnabled();
  await expect(page.locator('[data-element-main="rock"]')).toBeEnabled();
  expect(errors).toEqual([]);
