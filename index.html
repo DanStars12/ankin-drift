@@ -2024,7 +2024,18 @@ function expandedTagDetails(tag,base){
   ?['現在のラン：Lv'+(game.level||1)+'／プレイ'+Math.floor((game.total||0)/60)+'分'+Math.floor((game.total||0)%60)+'秒',
     (game.level>=20||game.total>=600)?'継戦の基礎条件は達成済みです（カード固有の条件は別途適用）。':'継戦の基礎条件は未達成です。Lv20または10分経過が目安です。']
   :[];
- const details=[...progress,...(base.details||[]),...notes.slice(1),
+ const overview=[...(base.details||[]),...notes.slice(1)];
+ // Rare/new tags still explain their intent without listing specific card examples.
+ if(overview.length<2){
+  const category=atlasTagCategory(tag);
+  overview.push('分類：'+category+'。'+(notes[0]||base.desc||fallback));
+  if(overview.length<2)overview.push(
+   category==='アニマル'?'動物ごとに攻撃手段は異なります。武装名や属性を合わせて確認してください。':
+   category==='武装・戦闘'?'強化が適用される攻撃の種類と条件は、スキルの効果本文で確認できます。':
+   category==='進化・特殊'?'使用条件や強化段階は、必要なレアリティ・素材・発動条件によって異なります。':
+   'この分類はスキルの役割を示します。実際に変わる数値と適用先はカード本文の表記が優先されます。');
+ }
+ const details=[...progress,...overview,
   'タグは図鑑の分類です。タグをタップしただけで効果が発動・取得されることはありません。'];
  const previous=base.desc||'';
  const better=notes[0]&&notes[0].length>previous.length?notes[0]:previous;
