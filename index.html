@@ -836,6 +836,13 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
  .visual-layout .visual-stage-details:not([open]){padding-top:2px}
 }
 
+
+/* Achievement tiers can be collapsed without hiding progress or changing save data. */
+.v13-ach-tier-group{border:1px solid #36506b;border-radius:10px;padding:8px 10px;margin:10px 0;background:#0c1b2f}
+.v13-ach-tier-group>summary{cursor:pointer;list-style-position:inside;min-height:31px;padding:4px;font-weight:900}
+.v13-ach-tier-group>summary:focus-visible{outline:2px solid #f9e4a9}
+.v13-ach-tier-group .v13-grid{padding:9px 0 3px}
+
 /* v13.17 weapon preview: no gameplay overlays or image downloads */
 .lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
 .visual-codex{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -1101,7 +1108,7 @@ function v13ObserveRun(){
 }
 function v13AchievementList(){
  const items=AnkinArchive.progress(),tiers=[['bronze','🥉 銅枠 · BEGINNER'],['silver','🥈 銀枠 · ADVANCED'],['gold','🥇 金枠 · EXPERT'],['rainbow','🌈 虹枠 · LEGEND']];
- return tiers.map(([tier,label])=>'<h4 class="v13-ach-tier" data-tier="'+tier+'">'+label+'</h4><div class="v13-grid">'+
+ return tiers.map(([tier,label])=>'<details class="v13-ach-tier-group" open><summary class="v13-ach-tier" data-tier="'+tier+'">'+label+'　'+items.filter(a=>a.tier===tier&&a.unlocked).length+' / '+items.filter(a=>a.tier===tier).length+' 達成</summary><div class="v13-grid">'+
  items.filter(a=>a.tier===tier).map(a=>{
  const pct=Math.round(100*a.current/Math.max(1,a.target));
  return '<div class="v13-achievement '+(a.unlocked?'is-unlocked':'locked')+'" data-achievement-id="'+a.id+'" data-tier="'+tier+'">'+
@@ -1110,7 +1117,7 @@ function v13AchievementList(){
  '<div class="v13-progress-label">'+format(Math.floor(a.current))+' / '+format(a.target)+'</div>'+
  '<div class="v13-progress-track" role="progressbar" aria-label="'+escHtml(a.name)+'の進捗" aria-valuemin="0" aria-valuemax="'+a.target+'" aria-valuenow="'+Math.floor(a.current)+'"><span style="width:'+pct+'%"></span></div>'+
  (a.unlocked?'<small>✦ 解除済み</small>':'')+'</div>';
- }).join('')+'</div>').join('');
+ }).join('')+'</div></details>').join('');
 }
 
 function v13ArchiveMarkup(){
