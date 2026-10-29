@@ -90,7 +90,7 @@ test('three-part DOG evolutions display all required materials in guide and tool
  expect(m.triple.every(r=>r.ingredients===3)).toBe(true);
  await page.locator('[data-tab="evolution"]').click();
  await expect(page.locator('#recipeResults')).toContainText('深海の巨鯨');
- await expect(page.locator('#recipeResults')).toContainText('永月フロスト・ヘア');
+ await expect(page.locator('#recipeResults')).toContainText('永月・フロストヘア');
  await expect(page.locator('#recipeResults')).toContainText('必要 3 種類');
  expect(errors).toEqual([]);
 });

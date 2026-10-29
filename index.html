@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.21 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.22 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.21 | DOG CHARM & TAG GUIDE</title>
+<title>ANKIN DRIFT v13.22 | DOG CUSTOM NAMES & SNAKE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -2013,8 +2013,8 @@ const TAG_PLAY_GUIDE={
 };
 function expandedTagDetails(tag,base){
  const notes=TAG_PLAY_GUIDE[tag]||[];
- const matches=ALL_SKILL_DEFS().filter(c=>(c.tags||[]).includes(tag));
- const examples=matches.slice(0,3).map(c=>'具体例｜'+c.name+'：'+c.desc);
+ // Keep the guide about the tag's meaning, conditions and practical behavior,
+ // without unrelated card-name examples or long per-card catalog listings.
  const fallback=tag.startsWith('専用：')
   ?'この機体でのみ取得できるスキル群です。ほかの機体では選択候補に出ません。'
   :tag.startsWith('属性：')
@@ -2024,9 +2024,18 @@ function expandedTagDetails(tag,base){
   ?['現在のラン：Lv'+(game.level||1)+'／プレイ'+Math.floor((game.total||0)/60)+'分'+Math.floor((game.total||0)%60)+'秒',
     (game.level>=20||game.total>=600)?'継戦の基礎条件は達成済みです（カード固有の条件は別途適用）。':'継戦の基礎条件は未達成です。Lv20または10分経過が目安です。']
   :[];
- const details=[...progress,...(base.details||[]),...notes.slice(1),
-  matches.length?'このタグを持つスキル：'+matches.length+'種類（例は最大3件）':'このタグを持つ現行カードはありません。',
-  ...examples,
+ const overview=[...(base.details||[]),...notes.slice(1)];
+ // Rare/new tags still explain their intent without listing specific card examples.
+ if(overview.length<2){
+  const category=atlasTagCategory(tag);
+  overview.push('分類：'+category+'。'+(notes[0]||base.desc||fallback));
+  if(overview.length<2)overview.push(
+   category==='アニマル'?'動物ごとに攻撃手段は異なります。武装名や属性を合わせて確認してください。':
+   category==='武装・戦闘'?'強化が適用される攻撃の種類と条件は、スキルの効果本文で確認できます。':
+   category==='進化・特殊'?'使用条件や強化段階は、必要なレアリティ・素材・発動条件によって異なります。':
+   'この分類はスキルの役割を示します。実際に変わる数値と適用先はカード本文の表記が優先されます。');
+ }
+ const details=[...progress,...overview,
   'タグは図鑑の分類です。タグをタップしただけで効果が発動・取得されることはありません。'];
  const previous=base.desc||'';
  const better=notes[0]&&notes[0].length>previous.length?notes[0]:previous;
@@ -2418,7 +2427,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.21 · DOG CHARM & TAG GUIDE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.22 · DOG CUSTOM NAMES & SNAKE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -3222,13 +3231,13 @@ UNIQUE_SKILLS.push(
 SYNERGIES.push(
  {id:'dogChickenEgg',shipOnly:'dog',need:['dogChick','dogEggPower'],name:'おやつの時間',desc:'たまご威力+35、発射間隔-10%。',apply:p=>{p.dogEggDamage+=35;p.dogEggRate=Math.max(.58,p.dogEggRate*.9)}},
  {id:'dogDolphinDuetSynergy',shipOnly:'dog',need:['dogDolphin','dogDuet'],name:'イルカのハーモニー',desc:'イルカの周回攻撃力+20%、ドルフィン・ハリケーン+1発。',apply:p=>{p.bladePower=(p.bladePower||1)*1.2;p.windCount=Math.min(7,p.windCount+1)}},
- {id:'dogFoxPaw',shipOnly:'dog',need:['dogFox','dogPawLava'],name:'こんこん・足あと',desc:'肉球マグマ威力+65、狐火ミサイル+1発。',apply:p=>{p.magmaDps+=65;p.rocketCd=Math.min(8,p.rocketCd+1)}},
+ {id:'dogFoxPaw',shipOnly:'dog',need:['dogFox','dogPawLava'],name:'こんこん・肉球マーク',desc:'肉球マグマ威力+65、狐火ミサイル+1発。',apply:p=>{p.magmaDps+=65;p.rocketCd=Math.min(8,p.rocketCd+1)}},
  {id:'dogHamCat',shipOnly:'dog',need:['dogHamMeteor','dogCat'],name:'まんまる守備隊',desc:'ハムスター威力+100、猫ブロッカー反撃+35。',apply:p=>{p.meteorDamage+=100;p.rockDamage+=35}},
- {id:'dogRabbitHedge',shipOnly:'dog',need:['dogRabbit','dogHedgehog'],name:'びりびり・ぴょん',desc:'氷球凍結+10%、電磁パルス威力+65。',apply:p=>{p.iceBallChance=Math.min(.78,p.iceBallChance+.10);p.empDps+=65}}
+ {id:'dogRabbitHedge',shipOnly:'dog',need:['dogRabbit','dogHedgehog'],name:'びりびり・ぴょんぴょん',desc:'氷球凍結+10%、電磁パルス威力+65。',apply:p=>{p.iceBallChance=Math.min(.78,p.iceBallChance+.10);p.empDps+=65}}
 );
 FUSIONS.push(
  {id:'dogChickenEvo',shipOnly:'dog',power:'dogPwrChicks',legend:'dogLegendChicken',name:'コケコッコ・フェスティバル',icon:'🐔',desc:'卵が大幅強化。ヒヨコ+2匹、発射間隔-30%。',apply:p=>{p.dogEggDamage+=190;p.dogChicks=Math.min(10,p.dogChicks+2);p.dogEggRate=Math.max(.58,p.dogEggRate*.7)}},
- {id:'dogFoxEvo',shipOnly:'dog',power:'dogPwrFox',legend:'dogLegendFox',name:'九尾のフォックスストーム',icon:'🦊',desc:'フォックスミサイルを強化。狐火がさらに大きな爆風を残す。',apply:p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.dmg+=110;p.thermal+=1.1}},
+ {id:'dogFoxEvo',shipOnly:'dog',power:'dogPwrFox',legend:'dogLegendFox',name:'きゅうびの・フォックスストーム',icon:'🦊',desc:'フォックスミサイルを強化。狐火がさらに大きな爆風を残す。',apply:p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.dmg+=110;p.thermal+=1.1}},
  {id:'dogDolphinEvo',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogLegendSea',name:'ドルフィン・オーケストラ',icon:'🐬',desc:'イルカ数と旋回威力・ハリケーンの発生数を強化。',apply:p=>{p.orbit=Math.min(10,p.orbit+2);p.bladePower=(p.bladePower||1)*1.5;p.windCount=7}},
  {id:'dogRabbitEvo',shipOnly:'dog',power:'dogPwrRabbit',legend:'dogLegendRabbit',name:'スノー・ラビット大行進',icon:'🐰',desc:'雪うさぎ氷球の火力・凍結確率を大幅強化。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=235;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)}}
 );
@@ -3261,7 +3270,7 @@ LEGENDS.push(
  skill('dogSnakeLegend','legendary','🐍','雷帝の大蛇','雷蛇威力+200、伝播+2、周期-20%。',p=>{p.boltCount=1;p.boltDamage+=200;p.boltJumps=Math.min(6,p.boltJumps+2);p.boltPeriod=Math.max(1.5,p.boltPeriod*.8)},{shipOnly:'dog'})
 );
 FUSIONS.push(
- {id:'dogHareEvo',shipOnly:'dog',power:'dogHarePower',legend:'dogHareLegend',name:'月影フロスト・ヘア',icon:'🐇',desc:'野ウサギの氷柱を拡幅し威力+280。',apply:p=>{p.spikeCount=6;p.spikeArea=Math.min(30,p.spikeArea+12);p.spikeDamage+=280}},
+ {id:'dogHareEvo',shipOnly:'dog',power:'dogHarePower',legend:'dogHareLegend',name:'ムーンシャドウ・フロストヘア',icon:'🐇',desc:'野ウサギの氷柱を拡幅し威力+280。',apply:p=>{p.spikeCount=6;p.spikeArea=Math.min(30,p.spikeArea+12);p.spikeDamage+=280}},
  {id:'dogSnakeEvo',shipOnly:'dog',power:'dogSnakePower',legend:'dogSnakeLegend',name:'サーペント・サンダー',icon:'🐍',desc:'雷蛇威力+260・伝播距離+70。',apply:p=>{p.boltDamage+=260;p.boltReach=Math.min(380,p.boltReach+70)}}
 );
 for(const id of ['rDrillHeat','rDrillIce','rLaserFrost','rChargeFlame','lStorm','lPowerIon']){const c=ALL_SKILL_DEFS().find(x=>x.id===id);if(c)c.tags=[...(c.shipOnly?[c.shipOnly==='drill'?'ドリル':'レーザー']:[]),'火力','機体専用'];}
@@ -3299,25 +3308,25 @@ RELICS.push(
  skill('dogRelicReturnBone','relic','🪃','回転骨の護符','骨ブーメランの帰還威力+40%、射程+52、往復速度+25。属性は換装POWER取得時のみ。',p=>{p.dogBoneReturn+=.4;p.dogBoneRange=Math.min(480,p.dogBoneRange+52);p.dogBoneSpeed+=25},{shipOnly:'dog',stackable:false,tags:['骨ブーメラン','専用：DOG']})
 );
 SYNERGIES.push(
- {id:'dogWindWake',shipOnly:'dog',need:['dogHurricane','dogDolphin'],name:'青潮の輪舞',desc:'サイクロン威力+40・風圧+25。',apply:p=>{p.windDps+=40;p.windStrength+=25}},
- {id:'dogWhaleDuet',shipOnly:'dog',need:['dogMutWhale','dogDuet'],name:'大海の共鳴',desc:'巨大サイクロン威力+55、旋回イルカ威力+18%。',apply:p=>{p.windDps+=55;p.bladePower=(p.bladePower||1)*1.18}},
- {id:'dogFoxPawTrail',shipOnly:'dog',need:['dogNineTail','dogPawLava'],name:'狐火の足跡',desc:'マグマ威力+70、炎ミサイルの爆風を強化。',apply:p=>{p.magmaDps+=70;p.thermal+=.18}},
- {id:'dogNineTailFire',shipOnly:'dog',need:['dogMutNineTail','dogFox'],name:'九尾の連火',desc:'狐火の燃焼+18%、本体ミサイル威力+16%。',apply:p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.dogFoxDamage=(p.dogFoxDamage||1)*1.16}},
- {id:'dogRabbitMoon',shipOnly:'dog',need:['dogHare','dogRabbit'],name:'雪野の跳躍',desc:'フロスト・ヘア威力+60、氷球威力+42。',apply:p=>{p.spikeDamage+=60;p.iceBallDamage+=42}},
- {id:'dogMoonTracks',shipOnly:'dog',need:['dogMutMoon','dogHareFocus'],name:'月影の足跡',desc:'氷柱威力+90、スロウ範囲+3。',apply:p=>{p.spikeDamage+=90;p.spikeArea=Math.min(32,p.spikeArea+3)}},
- {id:'dogSnakeHedge',shipOnly:'dog',need:['dogSnake','dogHedgehog'],name:'雷鳴の双牙',desc:'雷蛇威力+72、EMP威力+45。',apply:p=>{p.boltDamage+=72;p.empDps+=45}},
- {id:'dogViperChain',shipOnly:'dog',need:['dogMutViper','dogSnakeChain'],name:'皇雷蛇行',desc:'雷蛇伝播+1・威力+70（上限6）。',apply:p=>{p.boltJumps=Math.min(6,p.boltJumps+1);p.boltDamage+=70}},
- {id:'dogHamCatShield',shipOnly:'dog',need:['dogHamMeteor','dogCatFort'],name:'ごろごろ要塞',desc:'猫の迎撃+48、ハムスターの転がり威力+95。',apply:p=>{p.rockDamage+=48;p.meteorDamage+=95}},
+ {id:'dogWindWake',shipOnly:'dog',need:['dogHurricane','dogDolphin'],name:'あおいうみの輪舞',desc:'サイクロン威力+40・風圧+25。',apply:p=>{p.windDps+=40;p.windStrength+=25}},
+ {id:'dogWhaleDuet',shipOnly:'dog',need:['dogMutWhale','dogDuet'],name:'うみなりのうた',desc:'巨大サイクロン威力+55、旋回イルカ威力+18%。',apply:p=>{p.windDps+=55;p.bladePower=(p.bladePower||1)*1.18}},
+ {id:'dogFoxPawTrail',shipOnly:'dog',need:['dogNineTail','dogPawLava'],name:'きつね火の足跡',desc:'マグマ威力+70、炎ミサイルの爆風を強化。',apply:p=>{p.magmaDps+=70;p.thermal+=.18}},
+ {id:'dogNineTailFire',shipOnly:'dog',need:['dogMutNineTail','dogFox'],name:'九尾のほのお',desc:'狐火の燃焼+18%、本体ミサイル威力+16%。',apply:p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.dogFoxDamage=(p.dogFoxDamage||1)*1.16}},
+ {id:'dogRabbitMoon',shipOnly:'dog',need:['dogHare','dogRabbit'],name:'雪原の大ジャンプ',desc:'フロスト・ヘア威力+60、氷球威力+42。',apply:p=>{p.spikeDamage+=60;p.iceBallDamage+=42}},
+ {id:'dogMoonTracks',shipOnly:'dog',need:['dogMutMoon','dogHareFocus'],name:'ムーンシャドウ・スキップ',desc:'氷柱威力+90、スロウ範囲+3。',apply:p=>{p.spikeDamage+=90;p.spikeArea=Math.min(32,p.spikeArea+3)}},
+ {id:'dogSnakeHedge',shipOnly:'dog',need:['dogSnake','dogHedgehog'],name:'かみなりのキバ',desc:'雷蛇威力+72、EMP威力+45。',apply:p=>{p.boltDamage+=72;p.empDps+=45}},
+ {id:'dogViperChain',shipOnly:'dog',need:['dogMutViper','dogSnakeChain'],name:'キング・サンダースネーク',desc:'雷蛇伝播+1・威力+70（上限6）。',apply:p=>{p.boltJumps=Math.min(6,p.boltJumps+1);p.boltDamage+=70}},
+ {id:'dogHamCatShield',shipOnly:'dog',need:['dogHamMeteor','dogCatFort'],name:'ごろごろキャッスル',desc:'猫の迎撃+48、ハムスターの転がり威力+95。',apply:p=>{p.rockDamage+=48;p.meteorDamage+=95}},
  {id:'dogArmoredGuard',shipOnly:'dog',need:['dogMutHam','dogCat'],name:'重装にゃんこ砦',desc:'装甲獣威力+100、シールド最大+60。',apply:p=>{p.meteorDamage+=100;p.shieldMax+=60;p.shield+=60}},
- {id:'dogBoneMoon',shipOnly:'dog',need:['dogGoodBoy','dogMutMoon'],name:'月下の骨追い',desc:'骨帰還威力+23%、氷柱威力+50。',apply:p=>{p.dogBoneReturn+=.23;p.spikeDamage+=50}},
- {id:'dogWhaleArmor',shipOnly:'dog',need:['dogMutWhale','dogMutHam'],name:'巨鯨と装甲獣',desc:'サイクロン威力+55、メテオ威力+85。',apply:p=>{p.windDps+=55;p.meteorDamage+=85}}
+ {id:'dogBoneMoon',shipOnly:'dog',need:['dogGoodBoy','dogMutMoon'],name:'月まで届け！',desc:'骨帰還威力+23%、氷柱威力+50。',apply:p=>{p.dogBoneReturn+=.23;p.spikeDamage+=50}},
+ {id:'dogWhaleArmor',shipOnly:'dog',need:['dogMutWhale','dogMutHam'],name:'ハム・スターホエール',desc:'サイクロン威力+55、メテオ威力+85。',apply:p=>{p.windDps+=55;p.meteorDamage+=85}}
 );
 FUSIONS.push(
  {id:'dogWhaleApex',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogMutWhale',required:['dogHurricane'],name:'深海の巨鯨',icon:'🐳',desc:'巨鯨が深海色に進化。巨大サイクロン威力+135、風圧+85。',apply:p=>{p.dogWhaleAscended=1;p.windDps+=135;p.windStrength+=85}},
- {id:'dogMoonApex',shipOnly:'dog',power:'dogHarePower',legend:'dogMutMoon',required:['dogHare'],name:'永月フロスト・ヘア',icon:'🌙',desc:'月兎の長耳結晶が強化。氷柱威力+220、スロウ範囲+5。',apply:p=>{p.dogMoonAscended=1;p.spikeDamage+=220;p.spikeArea=Math.min(32,p.spikeArea+5)}},
- {id:'dogViperApex',shipOnly:'dog',power:'dogSnakeLegend',legend:'dogMutViper',required:['dogSnake'],name:'皇雷大蛇',icon:'🐍',desc:'金白の太い雷蛇に進化。威力+230、伝播距離+25。',apply:p=>{p.dogViperAscended=1;p.boltDamage+=230;p.boltReach=Math.min(380,p.boltReach+25)}},
- {id:'dogFoxApex',shipOnly:'dog',power:'dogPwrFox',legend:'dogMutNineTail',required:['dogFox'],name:'九尾神炎',icon:'🦊',desc:'狐が白金の九尾神炎へ。狐火の燃焼と爆風を強化、発射数は増やさない。',apply:p=>{p.dogNineTailAscended=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.5;p.thermal+=.35}},
- {id:'dogHamApex',shipOnly:'dog',power:'dogLegendHam',legend:'dogMutHam',required:['dogHamMeteor'],name:'星穿つ装甲獣',icon:'🐹',desc:'装甲獣が白金の星装甲に進化。貫通威力+260、回転弾速+12%。',apply:p=>{p.dogArmorHamAscended=1;p.meteorDamage+=260;p.meteorSpeed*=1.12}}
+ {id:'dogMoonApex',shipOnly:'dog',power:'dogHarePower',legend:'dogMutMoon',required:['dogHare'],name:'永月・フロストヘア',icon:'🌙',desc:'月兎の長耳結晶が強化。氷柱威力+220、スロウ範囲+5。',apply:p=>{p.dogMoonAscended=1;p.spikeDamage+=220;p.spikeArea=Math.min(32,p.spikeArea+5)}},
+ {id:'dogViperApex',shipOnly:'dog',power:'dogSnakeLegend',legend:'dogMutViper',required:['dogSnake'],name:'おおあらしのだいじゃ',icon:'🐍',desc:'金白の太い雷蛇に進化。威力+230、伝播距離+25。',apply:p=>{p.dogViperAscended=1;p.boltDamage+=230;p.boltReach=Math.min(380,p.boltReach+25)}},
+ {id:'dogFoxApex',shipOnly:'dog',power:'dogPwrFox',legend:'dogMutNineTail',required:['dogFox'],name:'いなりのかみさま',icon:'🦊',desc:'狐が白金の九尾神炎へ。狐火の燃焼と爆風を強化、発射数は増やさない。',apply:p=>{p.dogNineTailAscended=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.5;p.thermal+=.35}},
+ {id:'dogHamApex',shipOnly:'dog',power:'dogLegendHam',legend:'dogMutHam',required:['dogHamMeteor'],name:'ちいさなおうさま',icon:'🐹',desc:'装甲獣が白金の星装甲に進化。貫通威力+260、回転弾速+12%。',apply:p=>{p.dogArmorHamAscended=1;p.meteorDamage+=260;p.meteorSpeed*=1.12}}
 );
 
 // v13.11 NOVA SWARM TUNING. Capped repeatable choices keep 30+ minute builds
@@ -3434,11 +3443,11 @@ const DOG_CUTE_SKILL_NAMES={
  "dogPuppyCheer": "わんわん・おうえん隊",
  "dogChick": "ぴよぴよ・チック・タック",
  "dogEggPower": "ころころ・たまご",
- "dogEggTempo": "こけこっこ・リズム",
+ "dogEggTempo": "コッコ・リズム",
  "dogDolphin": "くるくる・ドルフィンリング",
  "dogDuet": "なかよし・ドルフィン・デュエット",
  "dogHurricane": "ぐるぐる・ドルフィンハリケーン",
- "dogHurricanePlus": "いるかの・しぶきジャンプ",
+ "dogHurricanePlus": "いるかのしぶきジャンプ",
  "dogFox": "こんこん・フォックスミサイル",
  "dogNineTail": "きらきら・九尾フレア",
  "dogPawLava": "ぽかぽか・パウ・ラヴァ",
@@ -3446,62 +3455,62 @@ const DOG_CUTE_SKILL_NAMES={
  "dogRabbit": "ぴょんぴょん・スノー・ラビット",
  "dogRabbitFrost": "ふわふわ・ラビットフロスト",
  "dogCat": "にゃんにゃん・キャットディフェンダー",
- "dogCatFort": "にゃんこ・まもり隊",
- "dogHamMeteor": "ころころ・ハム・スターメテオ",
+ "dogCatFort": "にゃんこ・おまもり隊",
+ "dogHamMeteor": "ころころ・ハムスターメテオ",
  "dogHamPlus": "ハムちゃん・どっすん！",
- "dogHedgehog": "びりびり・エレキハリネズミ",
+ "dogHedgehog": "びりびり・ハリネズミ",
  "dogHedgeSpark": "ぱちぱち・ハリネズミ",
  "dogAnimalPack": "みんなで・わんわん！",
  "dogPwrChicks": "ANKIN・ぴよぴよマーチ",
  "dogPwrFox": "ANKIN・こんこんパレード",
  "dogPwrDolphin": "ANKIN・いるかの大行進",
- "dogPwrRabbit": "ANKIN・雪うさぎの行進",
- "dogPwrCat": "ANKIN・にゃんこのおしろ",
- "dogPwrLava": "ANKIN・にくきゅうぽかぽか",
+ "dogPwrRabbit": "雪うさぎの行進",
+ "dogPwrCat": "にゃんこのおしろ",
+ "dogPwrLava": "ぽかぽかにくきゅう",
  "dogLegendChicken": "ぴよぴよ・だいかぞく",
  "dogLegendFox": "こんこん・九尾の狐火",
  "dogLegendSea": "いるかの・おおうみパレード",
  "dogLegendHam": "うちゅうの・まんまるハム",
- "dogLegendRabbit": "雪うさぎの・おおきな行進",
- "dogUniquePack": "アニマル・わくわくパラダイス",
+ "dogLegendRabbit": "雪うさぎの大行進",
+ "dogUniquePack": "アニマルわくわくパラダイス",
  "dogRelicBone": "きらきら・ほねっこ",
  "dogRelicChick": "ぴよぴよ・おうさま",
- "dogRelicFox": "こんこん・きつね火の宝珠",
+ "dogRelicFox": "こんこん・きつね火のおたから",
  "dogRelicCat": "にゃんこの・おまもり首輪",
  "dogRelicRabbit": "雪うさぎの・ふわふわ足あと",
- "dogRelicDolphin": "いるかの・うみかぜ笛",
+ "dogRelicDolphin": "いるかのみんな集合",
  "dogHare": "ぴょこぴょこ・フロスト・ヘア",
- "dogHareFocus": "ぴょんっと・野ウサギの足跡",
- "dogHareFissure": "ぴょんぴょん・氷晶",
+ "dogHareFocus": "ぴょんと・野ウサギ行進",
+ "dogHareFissure": "ぴょんぴょん・うさぎ耳",
  "dogSnake": "ぴかぴか・ライトニング・スネーク",
  "dogSnakeFocus": "へびさんの・びりびりタッチ",
  "dogSnakeChain": "くねくね・れんさ",
- "dogHarePower": "ANKIN・ぴょんぴょんフロスト・ヘア",
- "dogSnakePower": "ANKIN・へびさんのビリビリ巣",
- "dogHareLegend": "まんまる・雪うさぎ王",
- "dogSnakeLegend": "ぴかぴか・らいじゃ王",
+ "dogHarePower": "ぴょんぴょんフロスト・ヘア",
+ "dogSnakePower": "へびさんのビリビリハウス",
+ "dogHareLegend": "まんまる・うさぎのおうさま",
+ "dogSnakeLegend": "ぴかぴか・だいじゃおう",
  "dogMutWhale": "くじらさん・タイダル・モノサイクロン",
- "dogMutMoon": "おつきさま・ムーンラビット結晶化",
+ "dogMutMoon": "おつきさま・ムーンラビット行進",
  "dogMutViper": "ぴかぴか・ヴァイパー・オーバードライブ",
- "dogMutNineTail": "こんこん・九尾導火",
- "dogMutHam": "ころころ・ギガ・ハムスターメテオ",
- "dogLegendBoneKing": "ほねっこの・おうさま",
- "dogLegendFlockWard": "ぴよぴよ・まもり大隊",
+ "dogMutNineTail": "こんこん・九尾のちから",
+ "dogMutHam": "ころころ・ギガハム・スターメテオ",
+ "dogLegendBoneKing": "ほねっこのおうさま",
+ "dogLegendFlockWard": "ぴよぴよ・おまもり大隊",
  "dogRelicMoonCharm": "おつきさま・うさみみ飾り",
  "dogRelicSnakeSkin": "ぬぎぬぎ・へびの皮",
- "dogRelicWhaleFlute": "くじらさんの潮笛",
- "dogRelicFoxTalisman": "きつねさんの尾札",
- "dogRelicReturnBone": "ほねっこ・おかえり護符",
+ "dogRelicWhaleFlute": "くじらさんの潮吹き",
+ "dogRelicFoxTalisman": "きつねさんのおふだ",
+ "dogRelicReturnBone": "ほねっこ・おかえりブーメラン",
  "dogEndBoneTorque": "ほねっこ・もっとパワー",
  "dogEndBoneFlight": "ほねっこ・おかえり練習",
- "dogEndEggCare": "たまごの・お世話係",
+ "dogEndEggCare": "たまごのお世話係",
  "dogEndPackBond": "アニマル・なかよしボンド",
  "dogEndHowl": "わんわん・バウショック",
- "dogEndGuard": "おさんぽ・まもり隊",
- "dogEndFoxEmber": "こんこん・狐火の追い風",
- "dogEndHedgeGlow": "ぱちぱち・ハリネズミ応援",
+ "dogEndGuard": "おさんぽ・おまもり隊",
+ "dogEndFoxEmber": "こんこん・きつね火の追い風",
+ "dogEndHedgeGlow": "ぱちぱち・ハリネズミ応援団",
  "dogEndBoneAura": "ほねっこ・おかえり名人",
- "dogEndMutation": "みんなの・へんしん絆"
+ "dogEndMutation": "みんなのきずな"
 };
 for(const c of ALL_SKILL_DEFS()){
  if(c.shipOnly!=='dog')continue;
@@ -4407,44 +4416,45 @@ function tickReforgeWeapons(dt){
    Only visual endpoints, never collision history or chain damage, are read. */
 /* v13.21: a compact wedge-shaped snake face with broad-set eyes.
    The tongue remains the same forked design as v13.20. Only decoration changes. */
+/* v13.22: gentle, reference-style snake head; smooth tapered cheeks and a
+   short rounded nose, NOT the old angular wedge / long ellipse / separate plate.
+   Dark, separated almond eyes and two subtle nostrils, no scary details.
+   Keep the approved tiny forked tongue; combat and hitboxes remain unchanged. */
 function drawDogLightningSnake(p,b,ctx,now=t){
  const dx=b.x2-b.x,dy=b.y2-b.y,len=Math.max(1,Math.hypot(dx,dy));
  const px=-dy/len,py=dx/len,steps=Math.max(8,Math.ceil(len/14));
  const royal=!!p.dogViper,apex=!!p.dogViperAscended;
  const skin=apex?'#fff0c2':royal?'#e8b954':'#ab80e7';
  const rim=apex?'#fffdf0':royal?'#fff0a9':'#e3cfff';
- const face=apex?'#fffdf1':royal?'#fff1c6':'#f6e8ff';
  ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';
- ctx.shadowColor=rim;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
+ ctx.shadowColor=rim;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:5;
  ctx.strokeStyle=skin;ctx.lineWidth=royal?10:8.1;ctx.beginPath();ctx.moveTo(b.x,b.y);
  for(let i=1;i<=steps;i++){
   const u=i/steps,wiggle=Math.sin(u*Math.PI*3.2-now*3.8+b.x*.017)*Math.sin(u*Math.PI)*Math.min(14,len*.095);
   ctx.lineTo(b.x+dx*u+px*wiggle,b.y+dy*u+py*wiggle);
  }
- ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle=rim;ctx.lineWidth=1.8;ctx.stroke();
+ ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle=rim;ctx.lineWidth=1.15;ctx.stroke();
  ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));
- // Broader cheeks at the back, distinct brow corners, and a narrow pointed snout.
- // This is deliberately NOT an ellipse/oval sitting on a purple pill.
- ctx.fillStyle=face;ctx.strokeStyle=rim;ctx.lineWidth=1.4;ctx.beginPath();
- ctx.moveTo(-6,-3);ctx.lineTo(-2,-8);
- ctx.quadraticCurveTo(3,-12,9,-11);ctx.lineTo(13,-8);
- ctx.quadraticCurveTo(20,-7,23,-4);
- ctx.lineTo(27,0);ctx.lineTo(23,4);
- ctx.quadraticCurveTo(20,7,13,8);
- ctx.lineTo(9,11);ctx.quadraticCurveTo(3,12,-2,8);
- ctx.lineTo(-6,3);ctx.closePath();ctx.fill();ctx.stroke();
- // Eyes sit toward the broad back of the face, well apart across the head.
- ctx.fillStyle='#34253d';ctx.beginPath();
- ctx.ellipse(3,-7,2.1,2.65,-.16,0,TAU);
- ctx.ellipse(3,7,2.1,2.65,.16,0,TAU);ctx.fill();
- ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(3.3,-7.8,.72,0,TAU);
- ctx.arc(3.3,6.2,.72,0,TAU);ctx.fill();
- // Little cheek/scale accents keep the snout identifiable at miniature size.
- ctx.strokeStyle=apex?'#e8c68f':royal?'#dcaa80':'#c49ad7';ctx.lineWidth=.9;
- ctx.beginPath();ctx.moveTo(12,-7);ctx.lineTo(15,-5.7);ctx.moveTo(12,7);ctx.lineTo(15,5.7);ctx.stroke();
- ctx.fillStyle='#ad748c';ctx.beginPath();ctx.arc(23,-1.7,.7,0,TAU);
- ctx.arc(23,1.7,.7,0,TAU);ctx.fill();
- // Preserve the already approved small split tongue.
+ // The head is the SAME skin as the body, shaped as a softened triangular
+ // snake head: broad soft brow at the neck, narrowing toward the nose.
+ ctx.fillStyle=skin;ctx.strokeStyle=rim;ctx.lineWidth=1.25;ctx.beginPath();
+ ctx.moveTo(-12,-5);
+ ctx.bezierCurveTo(-12,-11,-5,-13,3,-13);
+ ctx.quadraticCurveTo(11,-12,16,-8);
+ ctx.quadraticCurveTo(23,-5,26,-2);
+ ctx.quadraticCurveTo(28,0,26,2);
+ ctx.quadraticCurveTo(23,5,16,8);
+ ctx.quadraticCurveTo(11,12,3,13);
+ ctx.bezierCurveTo(-5,13,-12,11,-12,5);
+ ctx.closePath();ctx.fill();ctx.stroke();
+ // Eyes: widely separated simple black almond-shapes, as in the reference.
+ ctx.fillStyle='#241c29';ctx.beginPath();
+ ctx.ellipse(3,-7.65,2.55,1.95,-.42,0,TAU);
+ ctx.ellipse(3,7.65,2.55,1.95,.42,0,TAU);ctx.fill();
+ // Only two nostril dots. No scales, brow lines, mouth, or secondary face oval.
+ ctx.fillStyle=apex?'#85704c':royal?'#8d7540':'#584071';ctx.beginPath();
+ ctx.arc(23,-1.55,.72,0,TAU);ctx.arc(23,1.55,.72,0,TAU);ctx.fill();
+ // Preserve the previously approved forked tongue exactly.
  ctx.strokeStyle='#e883a8';ctx.lineWidth=1.25;ctx.beginPath();
  ctx.moveTo(27,1);ctx.lineTo(32,1);ctx.moveTo(32,1);ctx.lineTo(34,-.5);
  ctx.moveTo(32,1);ctx.lineTo(34,2.5);ctx.stroke();

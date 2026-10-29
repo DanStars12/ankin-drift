@@ -24,14 +24,14 @@ test('all 75 DOG-only cards have cute unique names and unchanged ID-based skills
  expect(byId.dogMutViper).toContain('ヴァイパー');
  expect(errors).toEqual([]);
 });
-test('long-run tag explains unlock time, repeated upgrade limits, and concrete examples',async({page})=>{
+test('long-run tag explains unlock time and repeated upgrade limits without skill examples',async({page})=>{
  const errors=await launch(page);
  const tag=await page.evaluate(()=>window.__dogGuide1321.tagGuide('継戦'));
  expect(tag.desc).toContain('長時間');
  expect(tag.details.join(' ')).toContain('Lv20');
  expect(tag.details.join(' ')).toContain('600秒');
  expect(tag.details.join(' ')).toContain('上限');
- expect(tag.details.some(x=>x.includes('具体例｜'))).toBe(true);
+ expect(tag.details.some(x=>x.includes('具体例｜'))).toBe(false);
  await page.locator('[data-tab="atlas"]').click();
  await page.locator('#atlasAttr').selectOption('継戦');
  await expect(page.locator('#atlasResults')).toContainText('ほねっこ・もっとパワー');
@@ -40,14 +40,14 @@ test('long-run tag explains unlock time, repeated upgrade limits, and concrete e
  await expect(page.locator('.attr-stats')).toContainText('Lv20');
  expect(errors).toEqual([]);
 });
-test('every live skill tag has meaningful, actionable description plus actual card examples',async({page})=>{
+test('every live skill tag has clear actionable details without specific card examples',async({page})=>{
  const errors=await launch(page);
  const guides=await page.evaluate(()=>window.__dogGuide1321.everyTag());
  expect(guides.length).toBeGreaterThan(45);
  for(const g of guides){
   expect(g.desc.length,g.tag).toBeGreaterThan(20);
   expect(g.details.length,g.tag).toBeGreaterThanOrEqual(3);
-  expect(g.details.some(x=>x.startsWith('具体例｜')),g.tag).toBe(true);
+  expect(g.details.some(x=>x.startsWith('具体例｜')),g.tag).toBe(false);
   expect(g.details.at(-1),g.tag).toContain('タグ');
  }
  expect(errors).toEqual([]);
