@@ -1978,7 +1978,7 @@ function visualCodexContent(){
  '<div class="visual-tool-label">機体を選択</div><div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+
  [['common','共通スキル'],...Object.entries(SHIPS).map(([id,sh])=>[id,sh.jp])].map(([id,name])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
  '<div class="visual-tool-label">武装カテゴリ</div><div class="visual-group-switch" role="group" aria-label="武装の種類">'+
- VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
+ VISUAL_GROUPS.filter(([id])=>id==='all'||VISUAL_CODEX.some(v=>v.ship===visualShip&&v.group===id)).map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(visualShip==='common'&&id==='element'?'共通武装':name)+'</button>').join('')+'</div>'+
  '<div class="visual-browser-hint">共通スキルは通常機体で同じ表示。各機体の属性換装は専用の色で確認。‹ › で連続比較</div></div>'+
  '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
  '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div></section></div>';
