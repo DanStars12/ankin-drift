@@ -1129,7 +1129,7 @@ function resonanceNames(main){return({
 })[main]||[];}
 const DAMAGE_LABELS={frostSpike:'フロストスパイク',lightningBolt:'ライトニングボルト',bone:'骨ブーメラン',dogEgg:'チック・タックの卵',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
 function targetDefinitions(){return [...activeFusions().map(r=>({key:'f:'+r.id,name:r.name,desc:r.desc,materials:[r.power,r.legend],kind:'evolution'})),...ELEMENT_FUSION_RECIPES.map(r=>({key:'e:'+r.id,name:r.name,desc:r.desc,materials:[r.main,r.sub],kind:'element',main:r.main,sub:r.sub}))]}
-function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub);const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||game.elementCombos.length>=2);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
+function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub&&(t.slot!=='B'||c.weapon==='B'));const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||fusionStageIndex()>=2);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
 function reconcileTargets(){if(!game)return;const defs=new Map(targetDefinitions().map(t=>[t.key,t]));const seen=new Set();const kept=[];game.targetHistory=game.targetHistory||[];for(const key of game.targets||[]){if(seen.has(key))continue;seen.add(key);const t=defs.get(key),status=t?targetStatus(t):null;if(!t||status.done||status.sealed){if(!game.targetHistory.some(h=>h.key===key)){game.targetHistory.push({key,name:t?.name||game.targetNameCache?.[key]||key,status:status?.done?'completed':'sealed'});}continue;}if(kept.length<3)kept.push(key)}game.targets=kept;}
 
 function targetBox(kind){reconcileTargets();const recipes=targetDefinitions().filter(r=>r.kind===kind),ids=game.targets||[];return `<section class="target-toolbox"><h3>✦ TARGET BUILD · 進化ターゲット ${ids.length}/3</h3><div class="target-mini">狙う進化を最大3件登録。完成済み・属性使用済みの目標は登録枠から自動解除されます。再抽選時のみ、目標素材・所持属性に関連する候補の抽選を補助します（確定入手ではありません）。</div><div class="target-grid">${recipes.map(r=>{const f=targetStatus(r),on=ids.includes(r.key);return `<button type="button" class="target-entry ${on?'selected':''}" data-target="${r.key}" aria-pressed="${on}" ${!on&&(ids.length>=3||f.done||f.sealed)?'disabled':''}><b>${on?'★':'☆'} ${escHtml(r.name)} ${f.done?'✓完成':f.sealed?'⊘使用済み':''}</b><div class="target-progress"><span style="width:${100*f.have/f.total}%"></span></div><small>素材 ${f.have}/${f.total} · ${f.done?'達成済み':f.sealed?'属性使用済み':r.materials.filter(x=>r.kind==='element'?elementInvestments(x).count===0:!owned(x)).map(x=>r.kind==='element'?ELEMENTS[x].name+'属性カード':skillById(x)?.name||x).join(' / ')||'素材所持済み'}</small></button>`}).join('')}</div>${(game.targetHistory||[]).filter(h=>h.key.startsWith(kind==='evolution'?'f:':'e:')).length?`<div class="target-mini">達成・解除履歴：${(game.targetHistory||[]).filter(h=>h.key.startsWith(kind==='evolution'?'f:':'e:')).slice(-6).map(h=>`<span style="margin-right:10px">${h.status==='completed'?'✓':'⊘'} ${escHtml(h.name)}</span>`).join('')}</div>`:''}</section>`}
@@ -1227,56 +1227,61 @@ function restorePlayerBuild(){const current=retainCombatState(player),next=initi
  for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
  Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0});player=next;
 }
+// Auto-resonance is derived from a committed fusion; no additional acquisition or repeated stack in game.skills.
+function applyAutoFusionResonance(p,combo){
+ const slot=combo.weapon||'A';
+ if(combo.main==='fire'){
+  if(slot==='A'){p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.thermal+=.12;}
+  else{p.magmaDps+=36;p.magmaRadius+=7;}
+ }else if(combo.main==='ice'){
+  if(slot==='A'){p.iceBallDamage+=28;p.iceBallChance=Math.min(.78,p.iceBallChance+.055);}
+  else{p.spikeDamage+=28;p.spikeArea=Math.min(35,p.spikeArea+5);}
+ }else if(combo.main==='thunder'){
+  if(slot==='A'){p.empDps+=94;p.empRadius+=8;}else{p.boltDamage+=88;p.boltReach+=10;}
+ }else if(combo.main==='wind'){
+  if(slot==='A'){p.windDps+=56;p.windStrength+=35;}else{p.bladePower=(p.bladePower||1)*1.07;p.bladeReach=(p.bladeReach||19)+6;}
+ }else if(combo.main==='rock'){
+  if(slot==='A'){p.rockDamage+=62;p.rockSize+=3;}else{p.meteorDamage+=72;p.meteorRadius+=4;}
+ }
+}
 function applyElementFusionStats(p,combo){
- const {main,sub}=combo,r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);
- if(!r)return;
- p.elementMods=p.elementMods||{};
- for(const [key,value] of Object.entries(r.mod))p.elementMods[key]=(p.elementMods[key]||0)+value;
+ const main=combo.main,sub=combo.sub,slot=combo.weapon||'A',r=fusionOutcome(main,sub,slot);if(!r)return;
  const echo=Math.min(24,Math.max(1,combo.resonance||1));
- // Transfer consumed-attribute investment into ONE dominant attack family only.
+ p.elementMods=p.elementMods||{};
+ if(slot==='A'){
+  // Preserve existing directed fusion side effects on the matching primary weapon.
+  for(const [key,value] of Object.entries(r.mod||{}))p.elementMods[key]=(p.elementMods[key]||0)+value;
+ }else if(r.effect)p.elementMods[r.effect]=1;
  if(main==='fire'){
-  if(p.magmaLevel>0&&p.rocketCd<=0){p.magmaLevel+=2;p.magmaDps+=90+echo*32;p.magmaRadius+=20;}
-  else if(p.rocketCd>0){p.rocketCd+=2;p.missileBurnBonus=(p.missileBurnBonus||0)+.45+echo*.02;}
-  else p.burnChance=Math.min(.85,p.burnChance+.22+echo*.01);
-  if(sub==='wind')p.fireTornadoTimer=.2; // explicit fusion grants the hybrid tornado
-  if(sub==='rock'&&p.magmaLevel>0)p.magmaDps+=130;
+  if(slot==='A'){p.rocketCd=Math.min(14,p.rocketCd+2);p.missileBurnBonus=(p.missileBurnBonus||0)+.40+echo*.02;}
+  else{p.magmaLevel+=2;p.magmaDps+=100+echo*30;p.magmaRadius+=22;}
+  if(slot==='A'&&sub==='wind')p.fireTornadoTimer=.2;
  }
  if(main==='ice'){
-  if(p.iceBallCount>0){p.iceBallDamage+=70+echo*16;p.iceBallChance=Math.min(.78,p.iceBallChance+.12);}
-  else if(p.slowChance>p.freezeChance){p.slowChance=Math.min(.9,p.slowChance+.25);p.iceAttackSlow=Math.min(.85,p.iceAttackSlow+.12);}
-  else{p.freezeChance=Math.min(.85,p.freezeChance+.28);p.freezeDuration+=.5;}
-  if(sub==='rock'){p.shieldMax+=125;p.shield+=125;p.shieldRecharge+=3;}
+  if(slot==='A'){p.iceBallDamage+=70+echo*16;p.iceBallChance=Math.min(.78,p.iceBallChance+.12);}
+  else{p.spikeCount=Math.min(6,p.spikeCount+1);p.spikeDamage+=85+echo*16;p.spikeArea=Math.min(38,p.spikeArea+5);}
+  if(sub==='rock'){p.shieldMax+=85;p.shield+=85;p.shieldRecharge+=2;}
  }
  if(main==='thunder'){
-  if(p.empRadius>0){p.empRadius+=35+Math.min(35,echo);p.empDps+=125+echo*42;}
-  else{p.chain=Math.min(1,p.chain+.25);p.chainDamage+=110+echo*52;}
-  if(sub==='rock'){if(p.empRadius>0)p.empDps+=80;else p.chainDamage+=180;}
-  if(sub==='wind'&&p.empRadius===0)p.arcNova+=2;
-  if(sub==='ice'&&p.empRadius===0)p.chainDamage+=90;
+  if(slot==='A'){p.empRadius+=35+Math.min(35,echo);p.empDps+=125+echo*38;}
+  else{p.boltDamage+=105+echo*34;p.boltReach=Math.min(410,p.boltReach+30);}
+  if(slot==='B'&&sub==='wind')p.boltJumps=Math.min(6,p.boltJumps+1);
  }
  if(main==='wind'){
-  if(p.orbit>0&&p.windCount===0){
-   p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladeReach=(p.bladeReach||19)+16;p.bladePower=(p.bladePower||1)*(1.8+echo*.035);
-  }else{
-   p.windCount=Math.min(7,Math.max(1,p.windCount)+2);p.windRadius+=45;p.windStrength+=120+echo*12;p.windDps+=40+echo*18;p.windTimer=.2;
-  }
-  if(sub==='fire'){if(p.orbit>0&&p.windCount===0)p.bladeFireBurn=1;else p.cycloneBurn=1;}
-  if(sub==='ice'){if(p.orbit>0&&p.windCount===0)p.bladeIceSlow=1;else p.cycloneSlow=1;}
-  if(sub==='rock')p.windStrength+=120;
+  if(slot==='A'){p.windCount=Math.min(7,p.windCount+2);p.windRadius+=36;p.windStrength+=120+echo*12;p.windDps+=60+echo*16;p.windTimer=.2;}
+  else{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladeReach=(p.bladeReach||19)+16;p.bladePower=(p.bladePower||1)*(1.65+echo*.025);}
+  if(slot==='A'&&sub==='fire')p.cycloneBurn=1;
+  if(slot==='A'&&sub==='ice')p.cycloneSlow=1;
+  if(slot==='B'&&sub==='fire')p.bladeFireBurn=1;
+  if(slot==='B'&&sub==='ice')p.bladeIceSlow=1;
  }
  if(main==='rock'){
-  if(sub==='ice'){ // DIAMOND ROCK: meteor, not wall-reflection bullets.
-   p.meteorCount=1;p.meteorDamage+=105+echo*25;p.meteorRadius+=14;
-  }else{
-   p.rockWalls=Math.min(18,Math.max(1,p.rockWalls)+3);
-   p.rockDamage+=105+echo*35;p.rockSize+=5;
-   if(sub==='fire')p.rockDamage+=85;
-   if(sub==='wind')p.rockSize+=8;
-  }
+  if(slot==='A'){p.rockWalls=Math.min(18,p.rockWalls+3);p.rockDamage+=105+echo*35;p.rockSize+=5;}
+  else{p.meteorCount=1;p.meteorDamage+=105+echo*26;p.meteorRadius+=14;}
  }
- // Rebalance compensates for the removed secondary family, without creating
- // an unwanted missile, magma, iceball, cyclone, wall or meteor implicitly.
- p.fusionOutputBonus=(p.fusionOutputBonus||0)+.42;
+ applyAutoFusionResonance(p,combo);
+ // Two separate bonuses cannot reach the old +84% global multiplier.
+ p.fusionOutputBonus=(p.fusionOutputBonus||0)+.17;
 }
 function selectElementFusion(sub){
  if(mode!=='elementChoice'||!elementChoice?.main||!fusionSubChoices(elementChoice.main).includes(sub))return;
@@ -1322,7 +1327,7 @@ function elementLabMarkup(){
  const stage=fusionStageIndex();
  const cards=[...ELEMENT_FUSION_RECIPES,...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({...v,main:id.split('_')[0],sub:id.split('_')[1],slot:'B',icon:'✧'}))].map(r=>{
   const mainReady=ready.includes(r.main),subReady=ready.includes(r.sub);
-  const done=game.elementCombos.some(x=>x.main===r.main&&x.sub===r.sub);
+  const done=game.elementCombos.some(x=>x.main===r.main&&x.sub===r.sub&&(r.slot!=='B'||x.weapon==='B'));
   const unavailable=(used.has(r.main)||used.has(r.sub));
   const color=FUSION_PALETTES[r.main][r.sub];
   const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ 選択可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
@@ -1737,7 +1742,7 @@ function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady
 function skillRow(c,n){const dormant=isSealedCard(c);return `<div class="owned-skill ${c.rarity} ${dormant?'rebirth-dormant':''}"><div class="owned-skill-top"><span class="rarity-name ${c.rarity}">${c.icon} ${c.name}</span>${n>1?'<b>×'+n+'</b>':''}${dormant?'<b class="rebirth-rest">✦ 属性効果喪失・共鳴素材として記録</b>':''}</div><div class="owned-tags">${attrMarkup(c)}</div><div class="skill-details">${c.desc}</div></div>`;}
 function listBuild(){const part=(obj,defs)=>Object.entries(obj).map(([id,n])=>{const c=defs.find(x=>x.id===id);return c?skillRow(c,n):''}).join('');return{skills:part(game.skills,SKILLS),powers:part(game.powers,POWERS),legends:part(game.legends,LEGENDS),uniques:part(game.uniques,UNIQUE_SKILLS),relics:part(game.relics,RELICS)}}
 function inventoryMarkup(b){let html='';for(const [kind,title,body] of [['relic','✦ RELIC / WEAPON MOD',b.relics],['unique','✺ UNIQUE ANKIN',b.uniques],['legendary','★ LEGENDARY',b.legends],['power','◈ ANKIN POWER',b.powers]])html+=`<section class="lab-section ${kind}"><h3>${title}</h3><div class="inventory-grid">${body||'<div class="empty-inventory">まだ取得していません</div>'}</div></section>`;
- if(game.elementCombos.length){html+=`<section class="lab-section"><h3 style="color:#ffd68c">✦ 属性融合 · ELEMENTAL CROSS</h3><div class="inventory-grid">${game.elementCombos.map(x=>{const r=ELEMENT_FUSION_RECIPES.find(v=>v.main===x.main&&v.sub===x.sub),color=FUSION_PALETTES[x.main][x.sub];return `<div class="owned-skill rebirth-card" style="--fusion-color:${color};border-color:${color};background:#18213d"><div class="rarity-name" style="color:${color}">${r.icon} ${r.name}</div><div class="skill-details">主属性：${ELEMENTS[x.main].name} / 共鳴：${ELEMENTS[x.sub].name}<br>カード保持 ${x.cards||0}枚・共鳴出力 ${(x.resonance||0).toFixed(1)}<br>${r.desc}</div></div>`}).join('')}</div></section>`}
+ if(game.elementCombos.length){html+=`<section class="lab-section"><h3 style="color:#ffd68c">✦ 属性融合 · ELEMENTAL CROSS</h3><div class="inventory-grid">${game.elementCombos.map(x=>{const r=fusionOutcome(x.main,x.sub,x.weapon||'A'),color=FUSION_PALETTES[x.main][x.sub];return `<div class="owned-skill rebirth-card" style="--fusion-color:${color};border-color:${color};background:#18213d"><div class="rarity-name" style="color:${color}">${r.icon} ${r.name}</div><div class="skill-details">主属性：${ELEMENTS[x.main].name} / 共鳴：${ELEMENTS[x.sub].name}<br>カード保持 ${x.cards||0}枚・共鳴出力 ${(x.resonance||0).toFixed(1)}<br>${r.desc}</div></div>`}).join('')}</div></section>`}
  for(const [kind,title] of [['epic','EPIC'],['rare','RARE'],['uncommon','UNCOMMON'],['common','COMMON']]){const rows=Object.entries(game.skills).map(([id,n])=>{const c=skillById(id);return c?.rarity===kind?skillRow(c,n):''}).join('');if(rows)html+=`<section class="lab-section ${kind}"><h3>${title}</h3><div class="inventory-grid">${rows}</div></section>`}return html}
 function recipeBuild(){const recipes=activeFusions().filter(a=>{const done=!!game.fusions[a.id],near=owned(a.power)||owned(a.legend);return labRecipeFilters.evolution==='all'||(labRecipeFilters.evolution==='done'?done:labRecipeFilters.evolution==='near'?!done&&near:!done&&!near)}).sort((a,b)=>((game.fusions[b.id]?3:owned(b.power)&&owned(b.legend)?2:owned(b.power)||owned(b.legend)?1:0)-(game.fusions[a.id]?3:owned(a.power)&&owned(a.legend)?2:owned(a.power)||owned(a.legend)?1:0)));return recipes.map(a=>{const hasP=owned(a.power),hasL=owned(a.legend),done=!!game.fusions[a.id];const missing=[a.power,a.legend].filter(id=>!owned(id));return `<article class="lab-recipe ${done?'done':hasP&&hasL?'ready':hasP||hasL?'partial':''}"><div class="lab-recipe-head"><strong>${a.icon} ${a.name}</strong><span>${done?'✓ 進化完了':hasP&&hasL?'✦ 合成可能':hasP||hasL?'あと1種類':'未完成'}</span></div><div class="recipe-parts">${recipePartnerMarkup(a.power)}<span class="fusion-plus">＋</span>${recipePartnerMarkup(a.legend)}</div>${!done&&missing.length===1?`<div class="recipe-missing">次に必要：${coloredName(missing[0])}</div>`:''}<div class="recipe-effect">進化効果：${a.desc}</div></article>`}).join('')||'<p class="lab-empty">この条件の進化レシピはありません。</p>'}
 function synergyBuild(){const recipes=activeSynergies().filter(a=>{const done=!!game.synergies[a.id],near=a.need.some(owned);return labRecipeFilters.synergy==='all'||(labRecipeFilters.synergy==='done'?done:labRecipeFilters.synergy==='near'?!done&&near:!done&&!near)}).sort((a,b)=>((game.synergies[b.id]?2:b.need.some(owned)?1:0)-(game.synergies[a.id]?2:a.need.some(owned)?1:0)));return recipes.map(a=>{const done=!!game.synergies[a.id],missing=a.need.filter(id=>!owned(id));return `<article class="lab-recipe synergy-recipe ${done?'done':missing.length===1?'partial':''}"><div class="lab-recipe-head"><strong class="synergy-gradient">✧ ${a.name}</strong><span>${done?'✓ 発動中':missing.length===1?'✦ 相方あと1つ':'未完成'}</span></div><div class="recipe-parts">${a.need.map(id=>`<span class="requirement ${owned(id)?'owned':'missing'}">${skillPeekLink(id)}</span>`).join('<span class="fusion-plus">＋</span>')}</div>${!done&&missing.length===1?`<div class="recipe-missing">あと1つで完成：${skillPeekLink(missing[0])}　（名前をタップして効果を確認）</div>`:''}<div class="recipe-effect">発動効果：${a.desc}</div></article>`}).join('')||'<p class="lab-empty">この条件のシナジーはありません。</p>'}
@@ -2722,7 +2727,7 @@ function skillHasRoom(c,p=player){
  const check=SKILL_CAP_CHECKS[c.id];
  return !check||check(p);
 }
-function selectable(cards){return cards.filter(c=>!isSealedCard(c)&&fitsShip(c)&&!rewardAlreadyTaken(c)&&skillHasRoom(c)&&(!c.available||c.available(player))&&(c.stackable!==false||!(game.skills[c.id]||game.powers[c.id]||game.legends[c.id])))}
+function selectable(cards){return cards.filter(c=>!(c.tags||[]).includes('共鳴')&&!isSealedCard(c)&&fitsShip(c)&&!rewardAlreadyTaken(c)&&skillHasRoom(c)&&(!c.available||c.available(player))&&(c.stackable!==false||!(game.skills[c.id]||game.powers[c.id]||game.legends[c.id])))}
 // Bounded, repeatable support rewards appear ONLY when one-time skill stock is depleted.
 // No passive stats, stackable damage or new acquisition entries: endless-safe.
 const REWARD_SUPPLIES=[
@@ -2982,7 +2987,7 @@ function recordVictory(){
  game.lastClearAt=game.ultimateEncounterAt;game.clearCount++;game.completed=true;
  v13ObserveRun();const r=record.read();r.damage=Math.max(r.damage,Math.floor(game.damage));r.time=Math.max(r.time||0,Math.floor(game.total));r.level=Math.max(r.level||0,game.level);
  r.clears=r.clears||[];
- const fusionIds=game.elementCombos.map(x=>x.main+'_'+x.sub);
+ const fusionIds=game.elementCombos.map(x=>x.main+'_'+x.sub+(x.weapon==='B'?'_B':''));
  const evolutionIds=Object.keys(game.fusions).filter(k=>game.fusions[k]);
  const source=Object.entries(game.damageStats).sort((a,b)=>b[1]-a[1])[0]?.[0]||'other';
  const ending=AnkinEnding.create({
@@ -3471,10 +3476,12 @@ function spikePosition(group,i){if(i===0)return{x:group.x,y:group.y};const a=(i-
 function fireReforgeBolt(p){
  let target=visibleTarget(p.x,p.y);if(!target)return;
  const seen=new Set();let sx=p.x,sy=p.y;
- for(let i=0;target&&i<=Math.min(6,p.boltJumps);i++){
+ for(let i=0;target&&i<=Math.min(6,p.boltJumps+(p.elementMods?.boltWind?1:0));i++){
   if(target.dead||seen.has(target))break;seen.add(target);
   p.boltVisuals.push({x:sx,y:sy,x2:target.x,y2:target.y,life:.32,total:.32});
-  damageEnemy(target,Math.max(10,p.boltDamage)*(1-i*.09),{special:true,source:'lightningBolt'});
+  const isBoss=['minor','major','unique','ultimate','ultimatePart'].includes(target.type),mods=p.elementMods||{};
+  damageEnemy(target,Math.max(10,p.boltDamage)*(1-i*.09)*(isBoss&&mods.boltRock?1.48:1),{special:true,source:'lightningBolt'});
+  if(!target.dead){if(mods.boltBurn)setBurn(target,Math.max(20,p.boltDamage*.24),2);if(mods.boltSlow)applySlow(target,isBoss?1.2:2);}
   sx=target.x;sy=target.y;let next=null,closest=p.boltReach*p.boltReach;
   for(const e of circleCandidates(sx,sy,p.boltReach+26)){if(e.dead||seen.has(e)||e.isoWarp||(e.isoSafe||0)>0)continue;const d=(e.x-sx)**2+(e.y-sy)**2;if(d<closest){closest=d;next=e;}}
   target=next;
@@ -3493,13 +3500,16 @@ function tickReforgeWeapons(dt){
  for(const g of p.spikeGroups){
   g.age+=dt;
   while(g.step<g.count&&g.age>=g.step*.13){
-   const point=spikePosition(g,g.step),range=19+p.spikeArea;
+   const point=spikePosition(g,g.step),range=19+p.spikeArea+(p.elementMods?.spikeBlizzard?12:0);
    p.spikeVisuals.push({x:point.x,y:point.y,life:.52,scale:Math.min(1.7,1+g.step*.10)});
    for(const e of circleCandidates(point.x,point.y,range+25)){
     if(e.dead||g.hit.has(e)||e.isoWarp||(e.isoSafe||0)>0||(e.x-point.x)**2+(e.y-point.y)**2>(range+e.r)**2)continue;
-    g.hit.add(e);const boss=['minor','major','unique','ultimate','ultimatePart'].includes(e.type);
-    damageEnemy(e,g.damage*(boss?(p.spikeBossMultiplier||1):1),{special:true,source:'frostSpike'});
-    if(!e.dead)applySlow(e,boss?1.2:2);
+    g.hit.add(e);const boss=['minor','major','unique','ultimate','ultimatePart'].includes(e.type),mods=p.elementMods||{};
+    damageEnemy(e,g.damage*(boss?(mods.spikeDiamond?1.5:1):1),{special:true,source:'frostSpike'});
+    if(!e.dead){applySlow(e,boss?1.2:2);
+     if(mods.spikeBurn){setBurn(e,Math.max(18,g.damage*.4),1.8);if((g.blastHits||0)<3){g.blastHits=(g.blastHits||0)+1;detonate(e.x,e.y,43,g.damage*.22,e,5);}}
+     if(mods.spikeArc&&(g.arcHits||0)<3){g.arcHits=(g.arcHits||0)+1;applyChain(e,Math.min(140,g.damage*.34));}
+    }
    }
    g.step++;
   }
@@ -3617,7 +3627,7 @@ function projectileHit(b,e){let dmg=b.damage;if(Math.random()<Math.min(.97,playe
   const basicMode=primaryAttack?(b.elementMode||(['plasma','cryo','arc'].includes(b.kind)?b.kind:null)):null;
   if(b.kind==='rocket'&&!e.dead)setBurn(e,Math.max(15,dmg*(.28+player.thermal*.8)*(1+(player.missileBurnBonus||0))),2.7);
  if(primaryAttack&&!e.dead)applyBasicElement(e,basicMode,dmg);
- if(b.kind==='iceball'&&!e.dead)chillEnemy(e,1.5,Math.min(.78,player.iceBallChance));if(b.kind==='meteor'&&!e.dead&&player.elementMods?.diamondWall){applySlow(e,2.2);chillEnemy(e,1.1,.32)}
+ if(b.kind==='iceball'&&!e.dead)chillEnemy(e,1.5,Math.min(.78,player.iceBallChance));if(b.kind==='meteor'&&!e.dead){const mods=player.elementMods||{};if(mods.meteorBurn)setBurn(e,Math.max(22,dmg*.25),2.1);if(mods.meteorSlow)applySlow(e,2);if(mods.meteorArc&&(e.meteorArcUntil||0)<=runClock){e.meteorArcUntil=runClock+.9;applyChain(e,dmg*.3+22);}if(mods.meteorWind){const dx=b.x-e.x,dy=b.y-e.y,l=Math.max(1,Math.hypot(dx,dy));e.x+=dx/l*21;e.y+=dy/l*21;}}
  if(b.kind==='rocket'){
   if(b.napalm)explodeGigaNapalm(b,e,dmg);
   else{detonate(b.x,b.y,95+Math.min(70,player.thermal*20),dmg*.8,e,5);if(player.elementMods?.volcanicCore)magmaPatch(b.x,b.y,1);}
@@ -3677,6 +3687,10 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
      if((e.x-x0-(x1-x0)*q)**2+(e.y-y0-(y1-y0)*q)**2>(e.r+width)**2)continue;
      damageEnemy(e,(p.dmg*.55+14)*(p.bladePower||1)*((p.bladeCross||dogDuet)?.85:1),{special:true,source:'blade'});
      if(p.bladeFireBurn)setBurn(e,Math.max(16,p.dmg*.16),1.8);
+      if(p.elementMods?.bladeBurn&&!e.dead){setBurn(e,Math.max(18,p.dmg*.25),1.9);if((e.bladeFusionBlastUntil||0)<=runClock){e.bladeFusionBlastUntil=runClock+.75;detonate(e.x,e.y,46,p.dmg*.25,e,5);}}
+      if(p.elementMods?.bladeArc&&!e.dead&&(e.bladeFusionArcUntil||0)<=runClock){e.bladeFusionArcUntil=runClock+.8;applyChain(e,Math.max(30,p.chainDamage*.45+p.dmg*.23));}
+      if(p.elementMods?.bladeRock&&!e.dead){const dist=Math.max(1,Math.hypot(e.x-p.x,e.y-p.y));e.x+=(e.x-p.x)/dist*13;e.y+=(e.y-p.y)/dist*13;}
+      if(p.elementMods?.bladeFrost&&!e.dead)applySlow(e,1.6);
      if(p.bladeIceSlow)applySlow(e,1.3);
      e.bladeHit=.22;
     }
@@ -3696,7 +3710,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(p.magmaLevel>0){p.magmaTimer-=dt;if(p.magmaTimer<=0){p.magmaTimer=Math.max(1.5,4.6-p.magmaLevel*.38);magmaPatch(p.x+rand(-90,90),p.y+rand(-90,90))}}
  if(p.lavaConstrain)unifyMagma();
  const zoneWalls=activeEngageWalls();for(const z of zones){
-  if(z.type==='magma'&&p.lavaConstrain){z.r=Math.min(185,z.r+dt*(4+(p.lavaGrowth||0)));if(!z.visualRadius||z.r-z.visualRadius>8)z.visualPaths=null;}if(zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma')setBurn(e,Math.max(12,z.dps*.55),1.6)}}}zones=zones.filter(z=>z.life>0);
+  if(z.type==='magma'&&p.lavaConstrain){z.r=Math.min(185,z.r+dt*(4+(p.lavaGrowth||0)));if(!z.visualRadius||z.r-z.visualRadius>8)z.visualPaths=null;}if(zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma'){setBurn(e,Math.max(12,z.dps*.55),1.6);const mods=p.elementMods||{};if(mods.magmaSlow)applySlow(e,1.4);if(mods.magmaArc&&(e.magmaArcUntil||0)<=runClock){e.magmaArcUntil=runClock+1.4;applyChain(e,Math.min(135,z.dps*.25));}if(mods.magmaWind){const dx=z.x-e.x,dy=z.y-e.y,l=Math.max(1,Math.hypot(dx,dy));e.x+=dx/l*7;e.y+=dy/l*7;}if(mods.magmaRock&&['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damageEnemy(e,z.dps*.11,{special:true,source:'magma'});}}}}zones=zones.filter(z=>z.life>0);
  tickIndependentElements(dt);enemyIndexDirtyDuringForces=false;tickGusts(dt);gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(22,g.r)));tickRocks(dt);tickCrossFusion(dt);
  // Index is already current when neither wind nor rock attacks displaced a target.
  if(enemyIndexDirtyDuringForces)refreshEnemyIndex();
@@ -4254,11 +4268,11 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   const pos=ringPosition(i,player.orbit,t,73,30,6,2.2),length=Math.min(58,player.bladeReach||19)*(player.bladeCross?.5:1);
   ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+Math.PI/2);
   ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'?0:7;
-  ctx.shadowColor='#84ffdf';ctx.fillStyle=player.evolutionTint||'#7affdb';ctx.strokeStyle='#efffff';ctx.lineWidth=1.5;
+  ctx.shadowColor=player.elementMods?.bladeBurn?'#ff6251':'#84ffdf';ctx.fillStyle=player.elementMods?.bladeBurn?'#ef5a44':player.evolutionTint||'#7affdb';ctx.strokeStyle='#efffff';ctx.lineWidth=1.5;
   ctx.beginPath();ctx.moveTo(-length-5,0);ctx.lineTo(-length+4,-4);
   ctx.lineTo(length-4,-4);ctx.lineTo(length+5,0);ctx.lineTo(length-4,4);
   ctx.lineTo(-length+4,4);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle='#fff';ctx.fillRect(-Math.max(2,length-7),-1,Math.max(4,length*2-14),2);if(player.bladeCross){ctx.fillStyle=player.evolutionTint||'#7affdb';ctx.fillRect(-4,-length,8,length*2);ctx.fillStyle='#fff';ctx.fillRect(-1,-Math.max(2,length-7),2,Math.max(4,length*2-14));}ctx.restore();
+  ctx.fillStyle='#fff';ctx.fillRect(-Math.max(2,length-7),-1,Math.max(4,length*2-14),2);if(player.bladeCross){ctx.fillStyle=player.elementMods?.bladeBurn?'#ef5a44':player.evolutionTint||'#7affdb';ctx.fillRect(-4,-length,8,length*2);ctx.fillStyle='#fff';ctx.fillRect(-1,-Math.max(2,length-7),2,Math.max(4,length*2-14));}ctx.restore();
  }} 
  for(let i=0;i<player.rockWalls;i++){const pos=rockPos(i);if(player.shipType==='dog'){ctx.save();ctx.globalAlpha=(player.rockCooldowns[i]||0)>0?.50:1;drawAnimal('cat',pos.x,pos.y,Math.max(12,player.rockSize),pos.a+t*.25);ctx.restore();continue;}ctx.save();ctx.translate(pos.x,pos.y);ctx.rotate(pos.a+t*.4);ctx.shadowColor=fusedColor('rock')||player.evolutionTint||'#e3bd88';ctx.shadowBlur=renderHeavyLoad?0:11;ctx.fillStyle=(player.rockCooldowns[i]||0)>0?'#655c60':(fusedColor('rock')||player.evolutionTint||'#bca388');ctx.strokeStyle=fusedColor('rock')?'#ffffff':'#f4dcb5';ctx.lineWidth=2.5;ctx.beginPath();for(let j=0;j<6;j++){const a=TAU*j/6,r=player.rockSize*(j%2?.83:1);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}
  if(player.relicLaserOrbit){for(let k=0;k<2;k++){const a=t*1.65+k*Math.PI;const xx=player.x+Math.cos(a)*28,yy=player.y+Math.sin(a)*28;glow(xx,yy,5,'#d9b6ff',11);ctx.strokeStyle='#9e8cff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(xx,yy,9,0,TAU);ctx.stroke()}}
