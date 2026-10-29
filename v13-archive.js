@@ -18,17 +18,22 @@ const DEFINITIONS=[
  ['new_pilot','新人パイロット','初めて出撃する','bronze',1],
  ['rookie_level','基礎訓練修了','1回のプレイでLv10に到達','bronze',10],
  ['hundred_kills','百機撃墜','1回のプレイで敵を100体撃破','bronze',100],
+ ['survive_three','最初の3分','1回のプレイで3分間生存','bronze',180],
  ['survive_five','最初の5分','1回のプレイで5分間生存','bronze',300],
  ['three_clears','次なる挑戦者','累計3回クリア','silver',3],
+ ['level_thirty','成長する翼','1回のプレイでLv30に到達','silver',30],
  ['veteran_level','熟練パイロット','1回のプレイでLv50に到達','silver',50],
+ ['five_hundred_kills','空を駆ける狩人','1回のプレイで敵を500体撃破','silver',500],
  ['thousand_kills','千機を越えて','1回のプレイで敵を1000体撃破','silver',1000],
  ['survive_fifteen','長き戦い','1回のプレイで15分間生存','silver',900],
  ['challenge_clear','試練への第一歩','CHALLENGEモードをクリア','silver',1],
  ['four_frames','四機の英雄','異なる4種類の機体でクリア','gold',4],
  ['five_frames','五機の英雄','5種類すべての機体でクリア','rainbow',5],
- ['dog_clear','わんこの新星','ドッグ型β版で初クリア','gold',1],
+ ['dog_clear','わんこの新星','ドッグ型で初クリア','gold',1],
  ['both_modes','双極の勝者','NORMALとCHALLENGEの両方でクリア','gold',2],
  ['ten_clears','不屈の挑戦者','累計10回クリア','gold',10],
+ ['twenty_clears','揺るがぬエース','累計20回クリア','gold',20],
+ ['survive_twenty','戦場の生還者','1回のプレイで20分間生存','gold',1200],
  ['dual_fusion','融合の極致','1プレイで属性融合を2回完成してクリア','gold',1],
  ['evolution_master','究極の進化','1プレイで進化合成を2件以上完成してクリア','gold',1],
  ['challenge_two','試練の征服者','追加制約を2つ適用してクリア','gold',1],
@@ -37,7 +42,8 @@ const DEFINITIONS=[
  ['endless_clear','終わりなき英雄','ENDLESSで最終ボスを再撃破','rainbow',1],
  ['challenge_three','ANKIN MASTER','追加制約を3つ適用してクリア','rainbow',1],
  ['thirty_clears','歴戦の英雄','累計30回クリア','rainbow',30],
- ['pilot_sense','パイロットセンス','全プレイ累計で1億ダメージを与える','rainbow',100000000]
+ ['pilot_sense','パイロットセンス','全プレイ累計で1億ダメージを与える','rainbow',100000000],
+ ['fifty_clears','伝説への航跡','累計50回クリア','rainbow',50]
 ];
 const definitionById=new Map(DEFINITIONS.map(d=>[d[0],d]));
 // Personal ending is optional: v12/v13 records remain valid without it.
@@ -148,10 +154,10 @@ function lifetimeDamage(p){return finite(p.legacyDamage+Object.values(p.damageBy
 function progressValue(id,p){
  switch(id){
  case 'new_pilot':return p.started?1:0;
- case 'rookie_level':case 'veteran_level':return p.maxLevel;
- case 'hundred_kills':case 'thousand_kills':return p.maxKills;
- case 'survive_five':case 'survive_fifteen':return p.maxTime;
- case 'first_clear':case 'three_clears':case 'ten_clears':case 'thirty_clears':return p.totalClears;
+ case 'rookie_level':case 'level_thirty':case 'veteran_level':return p.maxLevel;
+ case 'hundred_kills':case 'five_hundred_kills':case 'thousand_kills':return p.maxKills;
+ case 'survive_three':case 'survive_five':case 'survive_fifteen':case 'survive_twenty':return p.maxTime;
+ case 'first_clear':case 'three_clears':case 'ten_clears':case 'twenty_clears':case 'thirty_clears':case 'fifty_clears':return p.totalClears;
  case 'challenge_clear':return p.modesCleared.includes('challenge')?1:0;
  case 'four_frames':case 'five_frames':return p.shipsCleared.length;
   case 'dog_clear':return p.shipsCleared.includes('dog')?1:0;
