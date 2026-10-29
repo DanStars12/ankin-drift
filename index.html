@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.18 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.19 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.18 | ANIMAL VISUAL REFORGE</title>
+<title>ANKIN DRIFT v13.19 | CODEX QUALITY UPDATE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -768,7 +768,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 
 .bar.shield{background:#102e30;border:1px solid #408d84}.bar.shield>span{background:linear-gradient(90deg,#35bfae,#aaffdf);box-shadow:0 0 8px #53ddbe55;display:block;height:100%;border-radius:inherit;transition:width .13s}
 
-/* v13.8 DOG TYPE β — a fifth selectable frame, responsive title and accessible beta mark. */
+/* DOG TYPE — the fifth selectable production frame. */
 .ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(5,minmax(0,1fr))}
 .ship-card.dog{--sh:#ffd09b;background:linear-gradient(155deg,#2d2a3c,#12182d)}
 .ship-graphic.dog{display:flex;align-items:center;justify-content:center}
@@ -777,6 +777,71 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(max-width:800px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}.ship-card.dog{grid-column:span 2}.ship-card.dog .ship-description{max-width:290px}}
 
+
+
+/* v13.19: compact, accessible LAB navigation and preview-first responsive gallery. */
+.panel.lab-panel{width:min(1180px,calc(100vw - 16px))}
+.lab-panel .lab-tabs,body.pilot-mobile .lab-panel .lab-tabs{
+ display:grid!important;grid-template-columns:repeat(8,minmax(99px,1fr))!important;
+ gap:5px!important;margin:5px 0 8px;overflow-x:auto;overflow-y:hidden;
+ scrollbar-width:thin;scrollbar-color:#6092ab #15263e;scroll-snap-type:x proximity;
+}
+.lab-panel .lab-tabs .lab-tab,body.pilot-mobile .lab-panel .lab-tabs .lab-tab{
+ grid-column:auto!important;grid-row:auto!important;min-height:44px!important;
+ padding:5px 4px!important;font-size:11px!important;scroll-snap-align:center;
+}
+.lab-panel .lab-tab small{font-size:9px}
+.lab-panel .lab-tab:focus-visible{outline:2px solid #fff1ba;outline-offset:-2px}
+.lab-panel.visual-lab>.eyebrow,.lab-panel.visual-lab>.text-stats,.lab-panel.visual-lab>.lab-ship-tip{display:none}
+.lab-panel.visual-lab>.logo.small{font-size:clamp(19px,3vw,25px);line-height:1;margin:0 0 4px}
+.lab-panel.visual-lab .lab-scroll{padding:2px;min-height:150px}
+.visual-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,1fr);gap:12px;align-items:start}
+.visual-layout .visual-stage{position:sticky;top:0;z-index:2;box-shadow:0 8px 20px #0004}
+.visual-layout .visual-browser{min-width:0;max-height:min(64dvh,650px);overflow:auto;scrollbar-width:thin;overscroll-behavior:contain}
+.visual-layout .visual-toolbar{position:sticky;top:0;z-index:2;background:#101d33;padding:8px;border:1px solid #3c627d;border-radius:10px;margin-bottom:8px}
+.visual-layout .visual-tool-label{font-size:10px;font-weight:850;color:#b1d8ed;margin:2px 0 5px;text-align:left}
+.visual-layout .visual-ship-switch,.visual-layout .visual-group-switch{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.visual-layout .visual-ship-switch button,.visual-layout .visual-group-switch button{flex:0 0 auto;min-height:34px;padding:5px 9px;font-size:11px}
+.visual-layout .visual-browser-hint{font-size:10px;color:#aec8d7;margin:4px 0 0}
+.visual-layout .visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.visual-layout .visual-choice{min-height:49px;padding:7px;font-size:11px}
+.visual-layout .visual-choice span{font-size:11px}
+.visual-layout .visual-stage{padding:9px}
+.visual-layout .visual-stage-heading{margin-bottom:5px;gap:4px}
+.visual-layout .visual-stage-heading strong{font-size:clamp(13px,1.8vw,17px)}
+.visual-layout #weaponVisualCanvas{max-width:none;width:100%}
+.visual-layout .visual-step-controls{display:flex;gap:5px}
+.visual-layout .visual-step-controls button{border:1px solid #67b5c4;border-radius:8px;background:#183f58;color:#e6fffa;min-width:40px;min-height:35px;font-size:24px;cursor:pointer}
+.visual-layout .visual-step-controls button:focus-visible{outline:2px solid #fff1a9}
+.visual-layout .visual-stage-caption{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#a8deed;margin:5px 1px}
+.visual-layout .visual-stage-details{border-top:1px solid #34536b;margin-top:5px;padding-top:4px;font-size:11px;color:#d4ebfa}
+.visual-layout .visual-stage-details summary{cursor:pointer;font-weight:850;min-height:28px;padding:4px}
+.visual-layout .visual-stage-details p{font-size:11px;margin:4px 0}
+@media(max-width:780px){
+ .panel.lab-panel{width:calc(100vw - 12px)}
+ .lab-panel .lab-tabs,body.pilot-mobile .lab-panel .lab-tabs{grid-template-columns:repeat(8,minmax(95px,1fr))!important}
+ .lab-panel.visual-lab .lab-scroll{min-height:180px}
+ .visual-layout{display:flex;flex-direction:column;gap:9px}
+ .visual-layout .visual-stage{position:sticky;top:0;width:100%;background:#0b172e;z-index:4}
+ .visual-layout .visual-browser{width:100%;max-height:none;overflow:visible}
+ .visual-layout .visual-toolbar{position:static}
+ .visual-layout #weaponVisualCanvas{max-width:480px}
+ .visual-layout .visual-stage{padding:6px}
+ .visual-layout .visual-stage-heading strong{font-size:14px}
+ .visual-layout .visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-height:600px){
+ .lab-panel.visual-lab .visual-stage{position:static}
+ .lab-panel.visual-lab .logo.small{display:none}
+ .visual-layout .visual-stage-details:not([open]){padding-top:2px}
+}
+
+
+/* Achievement tiers can be collapsed without hiding progress or changing save data. */
+.v13-ach-tier-group{border:1px solid #36506b;border-radius:10px;padding:8px 10px;margin:10px 0;background:#0c1b2f}
+.v13-ach-tier-group>summary{cursor:pointer;list-style-position:inside;min-height:31px;padding:4px;font-weight:900}
+.v13-ach-tier-group>summary:focus-visible{outline:2px solid #f9e4a9}
+.v13-ach-tier-group .v13-grid{padding:9px 0 3px}
 
 /* v13.17 weapon preview: no gameplay overlays or image downloads */
 .lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
@@ -1043,7 +1108,7 @@ function v13ObserveRun(){
 }
 function v13AchievementList(){
  const items=AnkinArchive.progress(),tiers=[['bronze','🥉 銅枠 · BEGINNER'],['silver','🥈 銀枠 · ADVANCED'],['gold','🥇 金枠 · EXPERT'],['rainbow','🌈 虹枠 · LEGEND']];
- return tiers.map(([tier,label])=>'<h4 class="v13-ach-tier" data-tier="'+tier+'">'+label+'</h4><div class="v13-grid">'+
+ return tiers.map(([tier,label])=>'<details class="v13-ach-tier-group" open><summary class="v13-ach-tier" data-tier="'+tier+'">'+label+'　'+items.filter(a=>a.tier===tier&&a.unlocked).length+' / '+items.filter(a=>a.tier===tier).length+' 達成</summary><div class="v13-grid">'+
  items.filter(a=>a.tier===tier).map(a=>{
  const pct=Math.round(100*a.current/Math.max(1,a.target));
  return '<div class="v13-achievement '+(a.unlocked?'is-unlocked':'locked')+'" data-achievement-id="'+a.id+'" data-tier="'+tier+'">'+
@@ -1052,7 +1117,7 @@ function v13AchievementList(){
  '<div class="v13-progress-label">'+format(Math.floor(a.current))+' / '+format(a.target)+'</div>'+
  '<div class="v13-progress-track" role="progressbar" aria-label="'+escHtml(a.name)+'の進捗" aria-valuemin="0" aria-valuemax="'+a.target+'" aria-valuenow="'+Math.floor(a.current)+'"><span style="width:'+pct+'%"></span></div>'+
  (a.unlocked?'<small>✦ 解除済み</small>':'')+'</div>';
- }).join('')+'</div>').join('');
+ }).join('')+'</div></details>').join('');
 }
 
 function v13ArchiveMarkup(){
@@ -1861,22 +1926,44 @@ const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>
 const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性武装'],['animal','アニマル'],['mutation','変異・上位進化']];
 function visualCodexItems(){return VISUAL_CODEX.filter(v=>(!v.ship||v.ship===visualShip)&&!(visualShip==='drill'&&['plasma','cryo','arc'].includes(v.id))&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
 function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
-function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex">'+
- '<p class="lab-help">機体の弾や属性スキル・DOGアニマルを大きく確認できる練習用の見本です。<b>画像を拡大して描画</b>しています。武装やスキルは獲得せず、プレイ中の能力値・所持履歴も変わりません。</p>'+
- '<div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
- '<div class="visual-group-switch" role="group" aria-label="武装の種類">'+VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
- '<div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
-function visualCodexContent(){const v=visualSelected(),all=visualCodexItems();if(!v)return '<p class="lab-empty">この機体の武装はありません。</p>';
+/* v13.19 — preview first; selection remains isolated from gameplay state. */
+function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex"><div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
+function visualCodexContent(){
+ const v=visualSelected(),all=visualCodexItems();if(!v)return '<p class="lab-empty">この機体の武装はありません。</p>';
  visualChoice=v.id;
- return '<div class="visual-stage"><div class="visual-stage-heading"><strong>'+escHtml(v.name)+'</strong><span>'+escHtml(SHIPS[visualShip].jp)+'</span></div>'+
+ return '<div class="visual-layout"><section class="visual-stage" aria-label="選択中の武装プレビュー">'+
+ '<div class="visual-stage-heading"><strong>'+escHtml(v.name)+'</strong>'+
+ '<div class="visual-step-controls" role="group" aria-label="前後の武装に切替">'+
+ '<button type="button" data-visual-step="-1" aria-label="前の武装">‹</button>'+
+ '<button type="button" data-visual-step="1" aria-label="次の武装">›</button></div></div>'+
  '<canvas id="weaponVisualCanvas" width="720" height="360" role="img" aria-label="'+escHtml(v.name)+'の武装アニメーション" aria-describedby="visualWeaponDescription"></canvas>'+
- '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot"><span>◉ アニメーション見本</span>'+
- (skillById(v.card)?skillPeekLink(v.card):'<span>基本装備</span>')+'</div>'+
- '<div class="visual-stage-notice">実際の攻撃判定・発射数・速度はビルドで変化します。中央は拡大見本、右下は戦闘中の小サイズに近い表示目安です（端末の画面倍率で変化）。</div></div>'+
+ '<div class="visual-stage-caption">◉ 拡大アニメーション <span>右下：戦闘サイズ目安</span></div>'+
+ '<details class="visual-stage-details"><summary>効果・説明を見る</summary>'+
+ '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot">'+
+ (skillById(v.card)?skillPeekLink(v.card):'<span>基本武装</span>')+'</div>'+
+ '<p class="visual-stage-notice">武装を選んでもスキル・能力値・セーブは変わりません。右下は戦闘中の小サイズ表示目安です。実寸・発射数はビルドによって変わります。</p></details></section>'+
+ '<section class="visual-browser" aria-label="武装を選ぶ"><div class="visual-toolbar">'+
+ '<div class="visual-tool-label">機体を選択</div><div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+
+ Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
+ '<div class="visual-tool-label">武装カテゴリ</div><div class="visual-group-switch" role="group" aria-label="武装の種類">'+
+ VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
+ '<div class="visual-browser-hint">武装を選択、または ‹ › で連続比較</div></div>'+
  '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
- '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div>';}
-function visualCodexUpdate(){const root=U('visualCodexRoot');if(root){root.outerHTML=visualCodexMarkup();visualLastFrame=0;}}
-
+ '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div></section></div>';
+}
+function visualCodexUpdate(){
+ const root=U('visualCodexRoot');if(!root)return;
+ const oldBrowser=root.querySelector('.visual-browser'),oldShip=root.querySelector('.visual-ship-switch'),oldGroup=root.querySelector('.visual-group-switch');
+ const top=oldBrowser?.scrollTop||0,shipX=oldShip?.scrollLeft||0,groupX=oldGroup?.scrollLeft||0;
+ const focus=document.activeElement,focusKey=['visualStep','visualId','visualGroup','visualShip'].find(k=>focus?.dataset?.[k]!==undefined);
+ const focusVal=focusKey?focus.dataset[focusKey]:null;
+ root.outerHTML=visualCodexMarkup();visualLastFrame=0;
+ const next=U('visualCodexRoot');if(!next)return;
+ next.querySelector('.visual-browser').scrollTop=top;
+ next.querySelector('.visual-ship-switch').scrollLeft=shipX;
+ next.querySelector('.visual-group-switch').scrollLeft=groupX;
+ if(focusKey){const attr='data-'+focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());next.querySelector('['+attr+'="'+focusVal+'"]')?.focus({preventScroll:true});}
+}
 
 function drawWeaponVisualPreview(ts){
  if(mode!=='build'||buildTab!=='visual'||document.hidden||ts-visualLastFrame<50)return;
@@ -2013,7 +2100,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.18 · ANIMAL VISUAL REFORGE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.19 · CODEX QUALITY UPDATE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2041,7 +2128,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  }else if(mode==='dead'||mode==='retired'){
  const retired=mode==='retired';const r=record.read(),duration=Math.floor(game.total);html=`<p class="eyebrow">${retired?'RUN TERMINATED · FINAL RECORD':'TRANSMISSION LOST · FINAL RECORD'} · ${game.gameMode==='challenge'?'CHALLENGE':'NORMAL'}</p><h2 class="logo small">${retired?'RUN ENDED':'GAME OVER'}</h2><div class="subtitle">${retired?'途中終了したプレイの記録':'最後まで戦った記録'} · ${SHIPS[player.shipType].jp}</div>${game.bestBroke?'<div class="newbest">✦ NEW PERSONAL BEST ✦</div>':''}<div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">FINAL LEVEL</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><div class="report-metrics"><div class="report-metric"><strong>${format(game.bossDamage)}</strong><small>ボスへのダメージ</small></div><div class="report-metric"><strong>${format(game.damage/Math.max(game.total,1)*60)}</strong><small>1分あたりのダメージ</small></div><div class="report-metric"><strong>${format(game.kills)}</strong><small>撃破数</small></div></div><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div><details><summary>通常スキル一覧（${buildSummary().cards.length}種類）</summary><div class="report-chips">${buildSummary().cards.map(n=>`<span>${escHtml(n)}</span>`).join('')}</div></details><div class="history"><b>戦績</b>：${format(game.kills)} KILLS<br>レリック ${Object.keys(game.relics).length} · シナジー ${Object.keys(game.synergies).length} · 進化 ${Object.keys(game.fusions).length} · UNIQUE ANKIN ${Object.keys(game.uniques).length}<br>自己ベスト：${fmtTime(r.time||0)} 生存 / LV ${format(r.level)} / DAMAGE ${format(r.damage)}</div></div><div class="actions"><button class="primary" id="restart">↻ リトライ</button><button class="secondary" id="inspect">◈ 今回のビルド</button><button class="secondary" id="title">タイトルへ</button></div><div class="fine">${saveWarning?"⚠ 保存失敗。バックアップを取得してください。":"今回の記録はこのブラウザに保存しました。"} · リトライで再挑戦できます</div>`;
  }
- panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.innerHTML=html;
+ panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('visual-lab',mode==='build'&&buildTab==='visual');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.innerHTML=html;
  panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));panel.querySelectorAll('[data-fusion-weapon]').forEach(el=>el.addEventListener('click',()=>selectFusionWeapon(el.dataset.fusionWeapon)));click('fusionBackMain',backElementMain);click('fusionBackSub',backFusionSub);click('fusionBackWeapon',()=>{if(elementChoice){elementChoice={main:elementChoice.main,sub:elementChoice.sub};drawOverlay()}});click('fusionConfirm',confirmElementFusion);click('fusionSkip',skipElementFusion);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',()=>{state('playing');processTransitions()});click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
  U('ankinTrial')?.addEventListener('toggle',e=>{ankinTrialOpen=e.target.open;});
  panel.querySelectorAll('[data-v13-challenge]').forEach(el=>el.addEventListener('click',()=>{if(!record.read().clears.length)return;ankinTrialOpen=true;const id=el.dataset.v13Challenge;if(!CHALLENGE_RULES.some(c=>c.id===id))return;if(selectedChallenges.has(id))selectedChallenges.delete(id);else selectedChallenges.add(id);const selected=selectedChallenges.has(id);el.classList.toggle('active',selected);el.setAttribute('aria-pressed',String(selected));const counter=U('ankinTrial')?.querySelector('.trial-counter');if(counter)counter.textContent=selectedChallenges.size+' / '+CHALLENGE_RULES.length+' 選択中';}));
@@ -2049,7 +2136,8 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  U('v13ImportFile')?.addEventListener('change',v13ReadImport);click('v13Merge',()=>v13Restore('merge'));click('v13Replace',()=>v13Restore('replace'));
  U('graphicsQuality')?.addEventListener('change',e=>{settings.quality=e.target.value;saveSettings();resize();fitFestival();renderBudget=0});
  U('fpsTarget')?.addEventListener('change',e=>{settings.fps=Number(e.target.value);saveSettings();renderBudget=0});
- U('showFps')?.addEventListener('change',e=>{settings.showFps=e.target.checked;saveSettings();refreshFpsDisplay()});U('perfExport')?.addEventListener('click',exportAnkinPerfReport);click('reroll',reroll);click('defer',deferNormal);click('fusionNext',dismissFusion);click('uniqueContinue',continueAfterReward);panel.querySelectorAll('[data-choice]').forEach(bindSafeChoice);if(!menuLabBackup)panel.querySelectorAll('[data-target]').forEach(el=>el.addEventListener('click',()=>toggleTarget(el.dataset.target)));panel.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{if(el.dataset.tab==='visual'&&buildTab!=='visual'){visualShip=player.shipType;visualGroup='all';visualChoice='';}buildTab=el.dataset.tab;drawOverlay()}));if(mode==='build'&&(buildTab==='synergy'||buildTab==='evolution')){panel.querySelectorAll('[data-recipe-filter]').forEach(el=>el.addEventListener('click',()=>{const kind=el.dataset.recipeKind;labRecipeFilters[kind]=el.dataset.recipeFilter;panel.querySelectorAll(`[data-recipe-kind="${kind}"]`).forEach(b=>{const active=b.dataset.recipeFilter===labRecipeFilters[kind];b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});const result=U('recipeResults');if(result)result.innerHTML=kind==='synergy'?synergyBuild():recipeBuild()}))}if(mode==='build'&&buildTab==='enemies'){panel.querySelectorAll('[data-enemy-filter]').forEach(el=>el.addEventListener('click',()=>{enemyCodexFilter=el.dataset.enemyFilter;panel.querySelectorAll('[data-enemy-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.enemyFilter===enemyCodexFilter);b.setAttribute('aria-pressed',String(b.dataset.enemyFilter===enemyCodexFilter))});const r=U('enemyCodexResults');if(r)r.innerHTML=enemyCodexList();}))}if(mode==='build'&&buildTab==='atlas'){const updateAtlas=()=>{const r=U('atlasResults');if(r)r.innerHTML=atlasList()};U('atlasSearch')?.addEventListener('input',e=>{atlasQuery=e.target.value;updateAtlas()});U('atlasRarity')?.addEventListener('change',e=>{atlasRarity=e.target.value;updateAtlas()});U('atlasAttr')?.addEventListener('change',e=>{atlasAttr=e.target.value;updateAtlas()});}
+ U('showFps')?.addEventListener('change',e=>{settings.showFps=e.target.checked;saveSettings();refreshFpsDisplay()});U('perfExport')?.addEventListener('click',exportAnkinPerfReport);click('reroll',reroll);click('defer',deferNormal);click('fusionNext',dismissFusion);click('uniqueContinue',continueAfterReward);panel.querySelectorAll('[data-choice]').forEach(bindSafeChoice);if(!menuLabBackup)panel.querySelectorAll('[data-target]').forEach(el=>el.addEventListener('click',()=>toggleTarget(el.dataset.target)));panel.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{if(el.dataset.tab==='visual'&&buildTab!=='visual'){visualShip=player.shipType;visualGroup='all';visualChoice='';}buildTab=el.dataset.tab;drawOverlay()}));if(mode==='build'){const nav=panel.querySelector('.lab-tabs'),active=nav?.querySelector('.active');if(nav&&active)nav.scrollLeft=Math.max(0,active.offsetLeft-nav.offsetLeft-(nav.clientWidth-active.clientWidth)/2);}
+ if(mode==='build'&&(buildTab==='synergy'||buildTab==='evolution')){panel.querySelectorAll('[data-recipe-filter]').forEach(el=>el.addEventListener('click',()=>{const kind=el.dataset.recipeKind;labRecipeFilters[kind]=el.dataset.recipeFilter;panel.querySelectorAll(`[data-recipe-kind="${kind}"]`).forEach(b=>{const active=b.dataset.recipeFilter===labRecipeFilters[kind];b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});const result=U('recipeResults');if(result)result.innerHTML=kind==='synergy'?synergyBuild():recipeBuild()}))}if(mode==='build'&&buildTab==='enemies'){panel.querySelectorAll('[data-enemy-filter]').forEach(el=>el.addEventListener('click',()=>{enemyCodexFilter=el.dataset.enemyFilter;panel.querySelectorAll('[data-enemy-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.enemyFilter===enemyCodexFilter);b.setAttribute('aria-pressed',String(b.dataset.enemyFilter===enemyCodexFilter))});const r=U('enemyCodexResults');if(r)r.innerHTML=enemyCodexList();}))}if(mode==='build'&&buildTab==='atlas'){const updateAtlas=()=>{const r=U('atlasResults');if(r)r.innerHTML=atlasList()};U('atlasSearch')?.addEventListener('input',e=>{atlasQuery=e.target.value;updateAtlas()});U('atlasRarity')?.addEventListener('change',e=>{atlasRarity=e.target.value;updateAtlas()});U('atlasAttr')?.addEventListener('change',e=>{atlasAttr=e.target.value;updateAtlas()});}
 }
 
 
@@ -2125,17 +2213,27 @@ panel.addEventListener('focusin',ev=>{const trigger=peekTarget(ev.target);if(tri
 panel.addEventListener('focusout',ev=>{const trigger=peekTarget(ev.target);if(trigger&&!skillPeekPinned)closeSkillPeek(true)});
 panel.addEventListener('pointerdown',ev=>{const trigger=peekTarget(ev.target);if(!trigger)return;ev.stopPropagation();if(ev.pointerType==='touch'||ev.pointerType==='pen')openAnyPeek(trigger,true)},true);
 panel.addEventListener('click',ev=>{
- const s=ev.target.closest?.('[data-visual-ship]'),group=ev.target.closest?.('[data-visual-group]'),choice=ev.target.closest?.('[data-visual-id]');
- if(mode==='build'&&buildTab==='visual'&&(s||group||choice)){
+ const s=ev.target.closest?.('[data-visual-ship]'),group=ev.target.closest?.('[data-visual-group]'),choice=ev.target.closest?.('[data-visual-id]'),step=ev.target.closest?.('[data-visual-step]');
+ if(mode==='build'&&buildTab==='visual'&&(s||group||choice||step)){
   ev.preventDefault();ev.stopPropagation();
   if(s){visualShip=s.dataset.visualShip;visualGroup='all';visualChoice='';}
   if(group){visualGroup=group.dataset.visualGroup;visualChoice='';}
   if(choice)visualChoice=choice.dataset.visualId;
+  if(step){const entries=visualCodexItems(),at=entries.findIndex(v=>v.id===visualSelected()?.id);if(entries.length)visualChoice=entries[(at+Number(step.dataset.visualStep)+entries.length)%entries.length].id;}
   visualCodexUpdate();return;
  }
  const trigger=peekTarget(ev.target);if(trigger){ev.preventDefault();ev.stopPropagation();peekHistory=[];openAnyPeek(trigger,true);return}const card=ev.target.closest?.('[data-atlas-card]');if(card){ev.preventDefault();peekHistory=[];openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
 panel.addEventListener('keydown',ev=>{
- const visualButton=ev.target.closest?.('[data-visual-ship],[data-visual-group],[data-visual-id]');
+ const tab=ev.target.closest?.('.lab-tab');
+ if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(ev.key)){
+  const tabs=[...panel.querySelectorAll('.lab-tab')],index=tabs.indexOf(tab);
+  if(index>=0){ev.preventDefault();ev.stopPropagation();
+   const target=ev.key==='Home'?0:ev.key==='End'?tabs.length-1:(index+(ev.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+   const id=tabs[target]?.dataset.tab;
+   if(id){buildTab=id;drawOverlay();panel.querySelector('[data-tab="'+id+'"]')?.focus({preventScroll:true});}
+  }return;
+ }
+ const visualButton=ev.target.closest?.('[data-visual-ship],[data-visual-group],[data-visual-id],[data-visual-step]');
  if(visualButton&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();visualButton.click();return;}
  const trigger=peekTarget(ev.target);const card=ev.target.closest?.('[data-atlas-card]');if((trigger||card)&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();ev.stopPropagation();if(trigger)openAnyPeek(trigger,true);else openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
 document.addEventListener('pointerdown',ev=>{if(skillPeekPanel.hidden)return;if(!ev.target.closest?.('[data-attr-peek],[data-evo-peek],[data-skill-peek]')&&!skillPeekPanel.contains(ev.target))closeSkillPeek(true)},true);
@@ -2756,7 +2854,7 @@ for(const c of ALL_SKILL_DEFS())if(elementFromCard(c)){
 function owned(id){return !!((game.skills[id]||game.powers[id]||game.legends[id]||game.uniques[id]||game.relics[id])>0)}
 function cName(id){return [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS].find(c=>c.id===id)?.name||id}
 
-// DOG TYPE β — isolated animal arsenal. Shared defensive/economy picks remain universal.
+// DOG TYPE — isolated animal arsenal. Shared defensive/economy picks remain universal.
 const DOG_SHARED=new Set(['plasma','cryo','arc','novaFastCycle','novaPulseRelay','damage','hp','speed','pickup','refit','battery','dash','regen','critical','radius','repair','barrier','life','spark','shieldEpic','critEpic','novaEpic','superDash','xp','armor','iceBarrier','bounty','expShield','field','magnet','novaAmp','critPower','phoenix','seraph','reaper','void','eternalBody','unboundNova','overlord','halo','novaFracture','glassReactor','stoneAnchor','thrusterEngine']);
 SKILLS.push(
  skill('dogBonePack','uncommon','🦴','ツイン・フェッチ','骨ブーメラン+1本（最大8本）。一発ごとの威力-8%。',p=>{p.dogBones=Math.min(8,p.dogBones+1);p.dogBonePower*=.92},{shipOnly:'dog',available:p=>p.dogBones<8}),
@@ -3843,31 +3941,34 @@ function tickReforgeWeapons(dt){
 }
 /* Shape-based lightning snake. Only the visual path is affected; chain targets,
    damage, hit history and timing are still computed by the existing combat logic. */
+/* v13.19: chubby round reptile face; chain combat is unaffected. */
 function drawDogLightningSnake(p,b,ctx,now=t){
  const dx=b.x2-b.x,dy=b.y2-b.y,len=Math.max(1,Math.hypot(dx,dy));
- const nx=dx/len,ny=dy/len,px=-ny,py=nx,steps=Math.max(8,Math.ceil(len/14));
+ const px=-dy/len,py=dx/len,steps=Math.max(8,Math.ceil(len/14));
  const royal=!!p.dogViper,apex=!!p.dogViperAscended;
- const skin=apex?'#ffe7a9':royal?'#e1aa3c':'#9162d9';
- const rim=apex?'#fff9e1':royal?'#ffe88d':'#d9b9ff';
- const thick=royal?11:8.4;
- ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);
- ctx.lineJoin='round';ctx.lineCap='round';ctx.shadowColor=rim;
- ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
- ctx.strokeStyle=skin;ctx.lineWidth=thick;ctx.beginPath();ctx.moveTo(b.x,b.y);
- for(let i=1;i<=steps;i++){
-  const u=i/steps,wiggle=Math.sin(u*Math.PI*3.2-now*3.8+b.x*.017)*Math.sin(u*Math.PI)*Math.min(14,len*.095);
-  ctx.lineTo(b.x+dx*u+px*wiggle,b.y+dy*u+py*wiggle);
- }ctx.stroke();ctx.shadowBlur=0;
- ctx.strokeStyle=rim;ctx.lineWidth=2.15;ctx.stroke();
- // Blunt, wider face with two eyes: a recognizable serpent rather than a bolt arrow.
+ const skin=apex?'#fff0c2':royal?'#e8b954':'#ab80e7';
+ const rim=apex?'#fffdf0':royal?'#fff0a9':'#e3cfff';
+ const belly=apex?'#fffaf0':royal?'#ffebb4':'#e3d0ff';
+ ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';
+ ctx.shadowColor=rim;ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
+ ctx.strokeStyle=skin;ctx.lineWidth=royal?11:8.4;ctx.beginPath();ctx.moveTo(b.x,b.y);
+ for(let i=1;i<=steps;i++){const u=i/steps,wiggle=Math.sin(u*Math.PI*3.2-now*3.8+b.x*.017)*Math.sin(u*Math.PI)*Math.min(14,len*.095);ctx.lineTo(b.x+dx*u+px*wiggle,b.y+dy*u+py*wiggle);}
+ ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle=rim;ctx.lineWidth=1.8;ctx.stroke();
  ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));
+ // Rounded cheeks and separate muzzle, without the old sharp arrowhead.
  ctx.fillStyle=skin;ctx.strokeStyle=rim;ctx.lineWidth=1.5;ctx.beginPath();
- ctx.moveTo(-12,-7);ctx.bezierCurveTo(-3,-12,10,-11,17,-4);
- ctx.quadraticCurveTo(20,0,17,4);ctx.bezierCurveTo(10,11,-3,12,-12,7);
- ctx.closePath();ctx.fill();ctx.stroke();
- ctx.fillStyle='#1b1b32';ctx.beginPath();ctx.ellipse(8,-5,2.2,2.8,0,0,TAU);
- ctx.ellipse(8,5,2.2,2.8,0,0,TAU);ctx.fill();
- ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(8.7,-5.5,.8,0,TAU);ctx.arc(8.7,4.5,.8,0,TAU);ctx.fill();
+ ctx.moveTo(-12,0);ctx.bezierCurveTo(-11,-14,8,-17,16,-8);
+ ctx.quadraticCurveTo(23,0,16,8);ctx.bezierCurveTo(8,17,-11,14,-12,0);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle=belly;ctx.beginPath();ctx.ellipse(15,0,8,7,0,0,TAU);ctx.fill();
+ ctx.fillStyle='#30233d';ctx.beginPath();ctx.arc(6,-8,2.7,0,TAU);ctx.arc(6,8,2.7,0,TAU);ctx.fill();
+ ctx.fillStyle='#fffdf6';ctx.beginPath();ctx.arc(6.6,-9,.85,0,TAU);ctx.arc(6.6,7,.85,0,TAU);ctx.fill();
+ ctx.save();ctx.globalAlpha=.67;ctx.fillStyle=apex?'#f6b1bd':royal?'#f5a188':'#f1a9d5';
+ ctx.beginPath();ctx.ellipse(11,-9,3,1.3,-.3,0,TAU);ctx.ellipse(11,9,3,1.3,.3,0,TAU);ctx.fill();ctx.restore();
+ ctx.fillStyle='#886275';ctx.beginPath();ctx.arc(19,-2,.9,0,TAU);ctx.arc(19,2,.9,0,TAU);ctx.fill();
+ ctx.strokeStyle='#875477';ctx.lineWidth=1.05;ctx.beginPath();ctx.moveTo(16,4);ctx.quadraticCurveTo(21,7,23,3);ctx.stroke();
+ // Tiny forked tongue: reptile identity without long whisker-like lines.
+ ctx.strokeStyle='#f38eaa';ctx.lineWidth=1.2;ctx.beginPath();
+ ctx.moveTo(23,1);ctx.lineTo(26,1);ctx.moveTo(26,1);ctx.lineTo(28,-.5);ctx.moveTo(26,1);ctx.lineTo(28,2.5);ctx.stroke();
  ctx.restore();
 }
 

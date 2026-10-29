@@ -166,3 +166,21 @@ test('old clear logs keep their original title and never fabricate a missing end
  h.api.start();assert.equal(h.api.read().clears[0].title,'昔の英雄');
  assert.equal(h.api.read().clears[0].ending,null);
 });
+
+
+test('v13.19 new milestones backfill from existing safe profile and preserve old DOG achievement ID',()=>{
+ const h=harness();h.api.start();h.api.markStarted();
+ h.api.observeRun('run-expanded',12000000,32,550,1210);
+ const ids=['survive_three','level_thirty','five_hundred_kills','survive_twenty'];
+ for(const id of ids){const a=h.api.progress().find(x=>x.id===id);assert.ok(a,id);assert.equal(a.unlocked,true,id);}
+ const dog=h.api.definitions.find(x=>x[0]==='dog_clear');
+ assert.ok(dog);assert.equal(dog[2].includes('β'),false);
+ const record=h.api.read();
+ record.clears=Array.from({length:51},(_,i)=>clear('v13-19-'+i,{ship:i===0?'dog':'shot'}));
+ assert.equal(h.api.write(record),true);
+ for(const id of ['twenty_clears','fifty_clears','dog_clear'])assert.equal(h.api.progress().find(x=>x.id===id).unlocked,true,id);
+ const backup=h.api.exported(),reloaded=harness(Object.fromEntries(h.memory));reloaded.api.start();
+ assert.equal(reloaded.api.progress().find(x=>x.id==='fifty_clears').unlocked,true);
+ const merged=harness();merged.api.start();merged.api.restore(backup,'merge');
+ assert.equal(merged.api.progress().find(x=>x.id==='level_thirty').unlocked,true);
+});
