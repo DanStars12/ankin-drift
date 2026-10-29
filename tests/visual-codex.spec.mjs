@@ -83,7 +83,7 @@ test('three-part DOG evolutions display all required materials in guide and tool
  await page.route('**/ankin-drift/',async route=>{
   const res=await route.fetch(),html=await res.text();await route.fulfill({response:res,body:html.replace(anchor,hook+'\n'+anchor)});
  });
- await page.goto('./');await page.locator('#openTitleLab').click();
+ await page.goto('./');await page.locator('[data-ship="dog"]').click();await page.locator('#openTitleLab').click();
  const m=await page.evaluate(()=>window.__visualAudit.metadata());
  expect(m.mutations).toBe(10);expect(m.triple.length).toBe(5);
  expect(m.triple.every(r=>r.ingredients===3)).toBe(true);
