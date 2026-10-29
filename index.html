@@ -1423,12 +1423,13 @@ function startRaid(){
 // unchanged, but collision/index updates no longer receive a one-frame allocation spike.
 // v13.11: diverse, level-appropriate roster, distinct perimeter entrances.
 function raidWaveRoster(mins){
- const unlocked=['drone','stinger','brute','shooter','guard','bomber','support'].filter(type=>mins>=ENEMY_INTRO[type]);
- const count=Math.min(unlocked.length,mins<11?3:mins<22?4:5);
- for(let i=unlocked.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[unlocked[i],unlocked[j]]=[unlocked[j],unlocked[i]];}
- const roster=unlocked.slice(0,count);
- if(!roster.includes('drone')&&mins<11)roster[roster.length-1]='drone';
- return roster;
+ const cores=['drone','stinger'].filter(type=>mins>=ENEMY_INTRO[type]);
+ const specialists=['brute','shooter','guard','bomber','support'].filter(type=>mins>=ENEMY_INTRO[type]);
+ const count=Math.min(cores.length+specialists.length,mins<11?3:mins<22?4:5);
+ for(let i=specialists.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[specialists[i],specialists[j]]=[specialists[j],specialists[i]];}
+ // Preserve recognizable basic swarms and avoid randomly rolling five elite
+ // types in a single wave, particularly on mobile hardware.
+ return [...cores,...specialists.slice(0,Math.max(0,count-cores.length))];
 }
 function raidWaveOrigins(total){
  const sectors=Math.min(4,Math.max(2,Math.ceil(total/9))),start=Math.floor(Math.random()*4);
@@ -1439,7 +1440,12 @@ function raidWaveOrigins(total){
  });
 }
 function raidWaveTypeList(mins,count){
- const roster=raidWaveRoster(mins),types=Array.from({length:count},(_,i)=>roster[i%roster.length]);
+ const roster=raidWaveRoster(mins),special=roster.filter(type=>type!=='drone'&&type!=='stinger');
+ const coreCount=special.length?Math.ceil(count*(mins<5?.60:.50)):count;
+ const types=Array.from({length:count},(_,i)=>{
+  if(i<coreCount)return roster.includes('stinger')&&i%3===2?'stinger':'drone';
+  return special[(i-coreCount)%special.length];
+ });
  for(let i=types.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[types[i],types[j]]=[types[j],types[i]];}
  return types;
 }
