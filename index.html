@@ -3205,10 +3205,11 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
 
 const BULLET_COLOR={iceball:'#98edff',meteor:'#d4bc9a',pulse:'#70fff1',plasma:'#ffac57',cryo:'#76ceff',arc:'#d1a0ff',rocket:'#ffe5a4',comet:'#ffba6e',novaCharge:'#fff0b3'};
 function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source='primary'){if(!target)return;
+ if(source==='rocket'&&player.shipType==='dog'){speed*=player.dogFoxSpeed||1;damage*=player.dogFoxDamage||1;}
  if(source==='rocket'&&player.gigaNapalm){
   if(shots.length>=currentShotBudget())return;
   const units=Math.min(36,Math.max(1,Math.round(player.rocketCd)));
-  const a=Math.atan2(target.y-y,target.x-x),v=Math.max(95,player.shotSpeed*.27);
+  const a=Math.atan2(target.y-y,target.x-x),v=Math.max(95,speed*.27);
   shots.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:Math.min(30,13+units*.55),
    damage:damage*(1+Math.min(20,units-1)*.48),pierce:0,kind:'rocket',source:'rocket',
    ttl:6,hit:new Set(),napalm:true,missileCount:units,seekTimer:0});
@@ -3465,15 +3466,17 @@ function tickGusts(dt){
   player.windTimer+=Math.max(1.25,player.windPeriod);
   const target=visibleTarget(player.x,player.y);
   const angle=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);
-  const n=Math.min(WIND_BULLET_CAP,player.windCount);
+  const whale=player.shipType==='dog'&&!!player.dogWhale;
+  const n=whale?1:Math.min(WIND_BULLET_CAP,player.windCount);
   const extra=Math.max(0,player.windCount-n);
   for(let i=0;i<n;i++){
    const a=angle+(i-(n-1)/2)*.36;
    gusts.push({
     x:player.x,y:player.y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?230:150),
     vy:Math.sin(a)*(player.elementMods?.galeOrbit?230:150),
-    r:Math.min(WIND_VISUAL_CAP,Math.max(46,player.windRadius)),
-    bonus:1+extra*.18+Math.max(0,player.windRadius-WIND_VISUAL_CAP)*.004,
+    r:Math.min(WIND_VISUAL_CAP,Math.max(46,player.windRadius+(whale?Math.min(35,extra*6):0))),
+    bonus:1+extra*(whale?.24:.18)+(whale&&player.dogWhaleAscended?.20:0)+Math.max(0,player.windRadius-WIND_VISUAL_CAP)*.004,
+    whale,
     color:fusedColor('wind')||'#78ead1',
     life:player.elementMods?.galeOrbit?3.8:2.8,tick:0
    });
@@ -3594,7 +3597,7 @@ function drawReforgeWeapons(p){
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
   if(p.shipType==='dog'){
    // Two independent, asymmetric wild-hare ears. The original collision geometry is unchanged.
-   const moon=!!p.dogMoon,glow=moon?'#ddc7ff':'#c1ffff';
+   const moon=!!p.dogMoon,glow=p.dogMoonAscended?'#fff7df':moon?'#ddc7ff':'#c1ffff';
    ctx.shadowColor=glow;ctx.fillStyle=moon?'#baa8e489':'#72d7eb89';ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
    for(const side of [-1,1]){
     const base=side*width*.23,tip=side*width*(side===1?.93:.79),rise=height*(side===1?.94:1.11);
@@ -3621,10 +3624,10 @@ function drawReforgeWeapons(p){
  for(const b of p.boltVisuals){
   const dx=b.x2-b.x,dy=b.y2-b.y,l=Math.max(1,Math.hypot(dx,dy)),px=-dy/l,py=dx/l,n=Math.max(2,Math.ceil(l/22));
   ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';ctx.shadowColor='#bc9cff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:7;
-  ctx.lineWidth=p.shipType==='dog'?5.8:3.6;ctx.strokeStyle='#b88aff';ctx.beginPath();ctx.moveTo(b.x,b.y);
-  for(let i=1;i<n;i++){const t=i/n,j=Math.sin(i*3.7+l*.04)*Math.min(9,l*.06);ctx.lineTo(b.x+dx*t+px*j,b.y+dy*t+py*j);}
+  ctx.lineWidth=p.shipType==='dog'?(p.dogViper?7.6:5.8):3.6;ctx.strokeStyle=p.dogViper?(p.dogViperAscended?'#fff4c3':'#ffe68c'):'#b88aff';ctx.beginPath();ctx.moveTo(b.x,b.y);
+  for(let i=1;i<n;i++){const t=i/n,j=Math.sin(i*(p.dogViper?4.7:3.7)+l*.04)*Math.min(p.dogViper?12:9,l*.075);ctx.lineTo(b.x+dx*t+px*j,b.y+dy*t+py*j);}
   ctx.lineTo(b.x2,b.y2);ctx.stroke();ctx.lineWidth=1.2;ctx.strokeStyle='#fff';ctx.stroke();
-  if(p.shipType==='dog'){ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));ctx.fillStyle='#9a76e0';ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(11,0);ctx.lineTo(-6,-6);ctx.lineTo(-3,0);ctx.lineTo(-6,6);ctx.closePath();ctx.fill();ctx.stroke();}
+  if(p.shipType==='dog'){ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));ctx.fillStyle=p.dogViper?'#d6a84b':'#9a76e0';ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.dogViper?17:11,0);ctx.lineTo(-6,-6);ctx.lineTo(-3,0);ctx.lineTo(-6,6);ctx.closePath();ctx.fill();ctx.stroke();}
   ctx.restore();
  }
 }
@@ -3953,6 +3956,18 @@ function drawDogFrame(){
  ctx.restore();
 }
 
+ANIMAL_OUTLINES.whale='M 1.62 -.20 Q 1.36 -.45 1.06 -.49 C .78 -.78 -.09 -.73 -.71 -.39 L -1.08 -.52 L -1.45 -.92 L -1.42 -.25 L -1.64 .22 L -1.22 .20 L -1.01 -.04 C -.69 .48 .07 .69 .80 .35 Q 1.25 .29 1.46 .13 L 1.72 .02 L 1.30 -.05 Q 1.67 -.10 1.62 -.20 Z';
+const DOG_MUTATION_VISUALS={
+ whale:{base:['#a8faff','#16677f'],apex:['#f5fbd5','#315a99']},
+ fox:{base:['#fff3b8','#eab04f'],apex:['#fffef2','#d48b57']},
+ ham:{base:['#ffe7a4','#9d7947'],apex:['#ffffff','#c0a162']}
+};
+function dogAnimalPalette(kind,p){
+ if(kind==='whale')return p?.dogWhaleAscended?DOG_MUTATION_VISUALS.whale.apex:DOG_MUTATION_VISUALS.whale.base;
+ if(kind==='fox'&&p?.dogNineTailMorph)return p.dogNineTailAscended?DOG_MUTATION_VISUALS.fox.apex:DOG_MUTATION_VISUALS.fox.base;
+ if(kind==='ham'&&p?.dogArmorHam)return p.dogArmorHamAscended?DOG_MUTATION_VISUALS.ham.apex:DOG_MUTATION_VISUALS.ham.base;
+ return null;
+}
 const ANIMAL_PATHS=new Map();
 /* v13.11: readable miniature animals — colored bodies, expressive essential facial landmarks.
    Shared cached silhouettes remain the foundation, so silhouettes and gameplay stay consistent. */
@@ -3966,16 +3981,26 @@ function drawAnimal(kind,x,y,r=14,angle=0){
   cat:['#f4dcb5','#bca388'],ham:['#ffe0a9','#c99067'],
   hedgehog:['#c49aff','#8555c3']
  };
- const [outline,body]=colors[kind];
+ const [outline,body]=dogAnimalPalette(kind,player)||colors[kind];
  const heavy=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low';
- ctx.save();ctx.translate(x,y);ctx.rotate(kind==='dolphin'?angle-Math.PI/2:angle);ctx.scale(r,r);
+ ctx.save();ctx.translate(x,y);ctx.rotate(kind==='dolphin'||kind==='whale'?angle-Math.PI/2:angle);ctx.scale(r,r);
  ctx.lineJoin='round';ctx.lineCap='round';ctx.lineWidth=.13;
  ctx.shadowColor=outline;ctx.shadowBlur=heavy?0:settings.fx==='high'?9:4;
  ctx.fillStyle=body;ctx.globalAlpha=kind==='dolphin'?.82:.94;
  ctx.fill(path);ctx.globalAlpha=1;
  ctx.strokeStyle=kind==='dog'&&player?.evolutionTint?player.evolutionTint:outline;
  ctx.stroke(path);ctx.shadowBlur=0;
- if(r>=8){
+ if(kind==='fox'&&player?.dogNineTailMorph){
+  ctx.strokeStyle=outline;ctx.lineWidth=.09;ctx.beginPath();
+  for(let k=-3;k<=3;k++){const v=k*.14;ctx.moveTo(v,.52);ctx.quadraticCurveTo(v*2,1.12,v*1.8,1.30+Math.abs(k)*.035);}ctx.stroke();
+ }
+ if(kind==='ham'&&player?.dogArmorHam){
+  ctx.strokeStyle=outline;ctx.lineWidth=.12;ctx.beginPath();
+  ctx.moveTo(-.8,-.15);ctx.lineTo(-.43,-.68);ctx.lineTo(.38,-.68);ctx.lineTo(.82,-.15);
+  ctx.moveTo(-.65,.47);ctx.lineTo(0,.68);ctx.lineTo(.65,.47);ctx.stroke();
+  ctx.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*TAU/10,rad=i%2?.15:.30;i?ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad):ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);}ctx.closePath();ctx.stroke();
+ }
+ if(r>=8&&!(kind==='fox'&&player?.dogNineTailMorph)&&!(kind==='ham'&&player?.dogArmorHam)){
   // Eye/highlight pairs make small sprites recognizable even in SIMPLE mode.
   ctx.fillStyle='#251d36';
   if(kind==='chick'||kind==='chicken'){
@@ -4278,6 +4303,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  drawCyclone(g);
  if(player.shipType==='dog'&&g.kind!=='fireTornado'&&player.windCount>0){
   const heading=Math.atan2(g.vy,g.vx)+Math.PI/2;
+  if(g.whale){drawAnimal('whale',g.x,g.y,Math.min(53,Math.max(23,g.r*.47)),heading);continue;}
   // A clear dolphin at the center, plus one tangentially swimming around its cyclone.
   drawAnimal('dolphin',g.x,g.y,Math.max(15,Math.min(32,g.r*.43)),heading);
   if(!renderHeavyLoad&&settings.fx!=='simple'&&settings.fx!=='low'){
@@ -4323,7 +4349,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    ctx.fillStyle='#d45232';ctx.beginPath();ctx.moveTo(-rr*.55,rr*.34);ctx.lineTo(-rr,rr);ctx.lineTo(-rr*.22,rr*.72);ctx.lineTo(rr*.22,rr*.72);ctx.lineTo(rr,rr);ctx.lineTo(rr*.55,rr*.34);ctx.closePath();ctx.fill();
    ctx.fillStyle='#ffbd51';ctx.beginPath();ctx.moveTo(-rr*.30,rr*.9);ctx.lineTo(0,rr*(simple?1.45:1.8+.15*Math.sin(t*21)));ctx.lineTo(rr*.30,rr*.9);ctx.closePath();ctx.fill();
    ctx.restore();continue;
-  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(52,Math.max(14,b.r)),t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
+  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(75,Math.max(14,b.r)),t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
  if(player.empRadius>0)drawTeslaField(player);
