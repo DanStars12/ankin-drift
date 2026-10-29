@@ -812,7 +812,7 @@ const ui={wave:U('hudWave'),waveType:U('waveType'),waveFill:U('waveFill'),waveTe
 const TAU=Math.PI*2,RARITY_NAMES={common:'COMMON',uncommon:'UNCOMMON',rare:'RARE',epic:'EPIC',legendary:'LEGENDARY',power:'ANKIN POWER',unique:'UNIQUE ANKIN',relic:'RELIC',supply:'SUPPLY'};
 const RARITY_NAMES_JP={common:'コモン',uncommon:'アンコモン',rare:'レア',epic:'エピック',legendary:'レジェンダリー',power:'ANKIN POWER',unique:'ユニーク',relic:'レリック',supply:'補給'};
 const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.max(a,Math.min(n,b)),d2=(a,b)=>((a.x-b.x)**2+(a.y-b.y)**2),dst=(a,b)=>Math.sqrt(d2(a,b));
-let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, bossAlertUntil=0, lastUniqueCard=null, announceUntil=0, pendingFusion=null, pendingFusions=[], pendingSynergy=[],runClock=0,buildTab='inventory',synergyNotices=[],selectedShip='shot',laserLinks=[],gusts=[],atlasRarity='all',atlasAttr='all',atlasQuery='',enemyCodexFilter='all',labRecipeFilters={synergy:'all',evolution:'all'};
+let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, bossAlertUntil=0, lastUniqueCard=null, announceUntil=0, pendingFusion=null, pendingFusions=[], pendingSynergy=[],runClock=0,buildTab='inventory',synergyNotices=[],selectedShip='shot',laserLinks=[],gusts=[],atlasRarity='all',atlasAttr='all',atlasQuery='',enemyCodexFilter='all',visualShip='shot',visualChoice='shotPulse',visualGroup='all',visualLastFrame=0,labRecipeFilters={synergy:'all',evolution:'all'};
  let controlMode=/(Android|iPhone|iPod|iPad)/i.test(navigator.userAgent)||(matchMedia('(pointer:coarse)').matches&&innerWidth<900)?'mobile':'desktop'; // On phones select touch controls by default; title choice remains available.
  const touchMove={id:null,x:0,y:0,startX:0,startY:0,lastTap:0,lastX:0,lastY:0,moved:false,captureOk:false};
  const stick=U('floatingStick'),stickDot=U('stickDot'),novaTouch=U('novaTouch'),dashTouch=U('dashTouch');
@@ -1791,8 +1791,8 @@ function enemyCodexMarkup(){return `<p class="lab-help">敵の見た目・名前
 function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipType);return `<p class="lab-help">🌈 レリック・ワンダラーを撃破すると、この機体の未取得レリック3択が出現します（最大4種類まで取得）。レリックは攻撃の動作を変え、1種類につき1回取得可能です。<br>取得数 ${Object.keys(game.relics).length} / ${items.length}</p><div class="atlas-grid">${items.map(c=>`<article class="atlas-card relic"><div class="atlas-head"><span class="rarity-name relic">${c.icon} ${c.name}</span><span class="atlas-rank relic">RELIC</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${c.desc}</div><div class="atlas-meta">${game.relics[c.id]?'✦ 取得済み':'◇ 未取得'}</div></article>`).join('')}</div>`}
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&(owned(a.power)||owned(a.legend)))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','あと1種類',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
-function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。必要カードの所持状況が確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/6':id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ALL_SKILL_DEFS().length:ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel">${content}</div>`}
+function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。必要カードの所持状況が確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ALL_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel">${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
@@ -3594,7 +3594,7 @@ function tickReforgeWeapons(dt){
  for(const v of p.boltVisuals)v.life-=dt;
  p.boltVisuals=p.boltVisuals.filter(v=>v.life>0).slice(-22);
 }
-function drawReforgeWeapons(p){
+function drawReforgeWeapons(p,drawCtx=ctx){const ctx=drawCtx;
  for(const s of p.spikeVisuals){
   const k=Math.min(1,s.life/.22),height=(p.shipType==='dog'?43:35)*s.scale,width=(p.shipType==='dog'?19:16)*s.scale;
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
@@ -3974,7 +3974,7 @@ function dogAnimalPalette(kind,p){
 const ANIMAL_PATHS=new Map();
 /* v13.11: readable miniature animals — colored bodies, expressive essential facial landmarks.
    Shared cached silhouettes remain the foundation, so silhouettes and gameplay stay consistent. */
-function drawAnimal(kind,x,y,r=14,angle=0){
+function drawAnimal(kind,x,y,r=14,angle=0,drawCtx=ctx,visualPlayer=player){const ctx=drawCtx,player=visualPlayer;
  const shape=ANIMAL_OUTLINES[kind];if(!shape)return;
  let path=ANIMAL_PATHS.get(kind);if(!path){path=new Path2D(shape);ANIMAL_PATHS.set(kind,path);}
  const colors={
@@ -4033,7 +4033,7 @@ function drawAnimal(kind,x,y,r=14,angle=0){
  }
  ctx.restore();
 }
-function drawDogEgg(b){
+function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
  ctx.shadowColor='#ffdc8c';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
  ctx.fillStyle='#fff4d7';ctx.strokeStyle='#ffc66f';ctx.lineWidth=Math.max(1.5,b.r*.18);
@@ -4041,7 +4041,7 @@ function drawDogEgg(b){
  ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
  ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
-function drawDogBone(b){
+function drawDogBone(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
  const r=b.r;ctx.shadowColor=b.novaBone?'#ffb2e7':'#ffe4a4';ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
  ctx.strokeStyle=b.novaBone?'#fff6fc':'#fff0c2';ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
@@ -4049,7 +4049,7 @@ function drawDogBone(b){
  for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
  ctx.restore();
 }
-function drawDogPaw(z){
+function drawDogPaw(z,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  const r=z.r,hot=Math.sin(t*3+z.x*.12)*.07,fade=clamp(z.life*.30,0,.80);
  ctx.globalAlpha=fade*.8;ctx.fillStyle='#b4311c';
  ctx.beginPath();ctx.ellipse(0,r*.20,r*.70,r*.51,0,0,TAU);ctx.fill();
@@ -4072,7 +4072,7 @@ function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx
   glow(0,5,3+charge*3,hot?'#fff6e8':'#ffb46a',settings.fx==='low'||settings.fx==='simple'?0:8);
   ctx.restore();return;}
   if(!secondary&&player?.shipType==='laser'){ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(8,-2);ctx.lineTo(17,12);ctx.lineTo(4,7);ctx.lineTo(0,13);ctx.lineTo(-4,7);ctx.lineTo(-17,12);ctx.lineTo(-8,-2);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||'#6755d6';ctx.fillRect(-3,-7,6,13);ctx.fillStyle=player?.evolutionTint||'#e7d9ff';ctx.fillRect(-11,5,5,4);ctx.fillRect(6,5,5,4);ctx.restore();return;}if(!secondary&&player?.shipType==='charge'){ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(8,-9);ctx.lineTo(17,9);ctx.lineTo(10,15);ctx.lineTo(0,8);ctx.lineTo(-10,15);ctx.lineTo(-17,9);ctx.lineTo(-8,-9);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||'#c55e46';ctx.fillRect(-7,1,14,10);glow(0,-3,5,player?.evolutionTint||'#ffdfa3',8);ctx.restore();return;}ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(12,12);ctx.lineTo(0,6);ctx.lineTo(-12,12);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||(secondary?'#7458cf':'#20afb5');ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.fillStyle='#ffbb83';ctx.beginPath();ctx.moveTo(-5,12);ctx.lineTo(0,18+Math.sin(t*22)*3);ctx.lineTo(5,12);ctx.fill();ctx.restore()}
-function drawDrillAuger(p,active){
+function drawDrillAuger(p,active,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
   const reach=32+p.drillReach,rad=11+p.drillWidth*.53,charge=clamp(p.drillPlasma/Math.max(.001,p.drillCap),0,1);
   const len=Math.max(36,reach-12),tip=-reach,baseY=13;
   ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.dy,p.dx)+Math.PI/2);
@@ -4166,7 +4166,7 @@ function drawEvolutionShotMotifs(){
 
 
 /* v13.8 — Circular cyclone: consistent radius under all effect presets. */
-function drawCyclone(g){
+function drawCyclone(g,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
  ctx.save();ctx.translate(g.x,g.y);ctx.lineCap='round';
@@ -4194,7 +4194,7 @@ function drawTeslaField(p){
   else drawTeslaEmitter(field);
  }
 }
-function drawHedgehogPulseEmitter(field){
+function drawHedgehogPulseEmitter(field,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  const r=field.empRadius;
  if(r<=0)return;
  let outline=ANIMAL_PATHS.get('hedgehog');
@@ -4245,7 +4245,7 @@ function drawHedgehogPulseEmitter(field){
  ctx.restore();
  ctx.restore();
 }
-function drawTeslaEmitter(p){
+function drawTeslaEmitter(p,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
  const n=p.split?(simple?1:low?2:high?4:3):(simple?2:low?4:high?9:6);
