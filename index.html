@@ -2841,7 +2841,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
    const weighted=Math.random()<.19&&completedDiverse.length?completedDiverse:(poolForRarity.length?poolForRarity:diverse);
    const drillEligible=player.shipType==='drill'?diverse.filter(c=>c.shipOnly==='drill'):[];
    const shared=player.shipType==='dog'&&options.filter(o=>o.shipOnly==='dog').length>=2
-    ?weighted.filter(c=>c.shipOnly!=='dog'):[];
+    ?possible.filter(c=>c.shipOnly!=='dog'):[];
    const pickPool=shared.length?shared:weighted;
    c=drillEligible.length&&Math.random()<.39?drillEligible[Math.floor(Math.random()*drillEligible.length)]:pickPool[Math.floor(Math.random()*pickPool.length)];
   }else{
