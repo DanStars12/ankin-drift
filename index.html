@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.16 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.17 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.16 | DOG EVOLUTION REFORGE</title>
+<title>ANKIN DRIFT v13.17 | WEAPON VISUAL CODEX</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -777,6 +777,29 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(max-width:800px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}.ship-card.dog{grid-column:span 2}.ship-card.dog .ship-description{max-width:290px}}
 
+
+/* v13.17 weapon preview: no gameplay overlays or image downloads */
+.lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
+.visual-codex{display:flex;flex-direction:column;gap:10px;min-width:0}
+.visual-ship-switch,.visual-group-switch{display:flex;gap:6px;flex-wrap:wrap}
+.visual-ship-switch button,.visual-group-switch button{background:#16263d;color:#c9e4f8;border:1px solid #415e7a;border-radius:9px;padding:8px 10px;min-height:39px;font-size:12px;font-weight:800;cursor:pointer}
+.visual-ship-switch button.active,.visual-group-switch button.active,.visual-choice.active{border-color:#8affed;color:#d5fff8;background:#1b4554;box-shadow:inset 0 -2px 0 #72ecd8}
+.visual-ship-switch button:focus-visible,.visual-group-switch button:focus-visible,.visual-choice:focus-visible{outline:3px solid #fbe4a8;outline-offset:2px}
+.visual-stage{border:1px solid #4c718e;border-radius:14px;background:#0b172e;padding:12px;min-width:0}
+.visual-stage-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-bottom:9px}
+.visual-stage-heading strong{font-size:17px;color:#b7fff5}.visual-stage-heading span{font-size:11px;color:#a9c9e6;font-weight:800}
+#weaponVisualCanvas{display:block;width:100%;height:auto;aspect-ratio:2/1;max-width:640px;margin:auto;border:1px solid #49677d;border-radius:9px;background:#091326}
+.visual-stage p{font-size:13px;line-height:1.65;color:#e0eeff;margin:9px 0}
+.visual-stage-foot{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap;font-size:11px;color:#8cefe9}
+.visual-stage-notice{margin-top:9px;color:#b1c6dd;font-size:11px;line-height:1.65}
+.visual-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.visual-choice{padding:10px 8px;min-width:0;border:1px solid #345874;border-radius:10px;background:#101f37;color:#dce9ff;cursor:pointer;text-align:left;min-height:58px}
+.visual-choice span{display:block;font-size:12px;font-weight:850;line-height:1.45;overflow-wrap:anywhere}
+.visual-choice small{display:block;margin-top:4px;color:#98afc9;font-size:10px}
+.visual-choice:hover{border-color:#8dd6ea}
+@media(max-width:700px){.visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-ship-switch button{flex:1 1 28%}.visual-stage{padding:8px}.visual-stage-heading strong{font-size:15px}.visual-group-switch button{font-size:11px;padding:8px 6px}}
+@media(max-width:380px){.visual-choice-grid{gap:5px}.visual-ship-switch button{min-height:37px}.visual-choice{padding:8px 6px}.visual-stage-heading strong{font-size:13px}}
+
 </style>
 <style>
 .choice-pick{display:none}
@@ -812,7 +835,7 @@ const ui={wave:U('hudWave'),waveType:U('waveType'),waveFill:U('waveFill'),waveTe
 const TAU=Math.PI*2,RARITY_NAMES={common:'COMMON',uncommon:'UNCOMMON',rare:'RARE',epic:'EPIC',legendary:'LEGENDARY',power:'ANKIN POWER',unique:'UNIQUE ANKIN',relic:'RELIC',supply:'SUPPLY'};
 const RARITY_NAMES_JP={common:'コモン',uncommon:'アンコモン',rare:'レア',epic:'エピック',legendary:'レジェンダリー',power:'ANKIN POWER',unique:'ユニーク',relic:'レリック',supply:'補給'};
 const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.max(a,Math.min(n,b)),d2=(a,b)=>((a.x-b.x)**2+(a.y-b.y)**2),dst=(a,b)=>Math.sqrt(d2(a,b));
-let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, bossAlertUntil=0, lastUniqueCard=null, announceUntil=0, pendingFusion=null, pendingFusions=[], pendingSynergy=[],runClock=0,buildTab='inventory',synergyNotices=[],selectedShip='shot',laserLinks=[],gusts=[],atlasRarity='all',atlasAttr='all',atlasQuery='',enemyCodexFilter='all',labRecipeFilters={synergy:'all',evolution:'all'};
+let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, bossAlertUntil=0, lastUniqueCard=null, announceUntil=0, pendingFusion=null, pendingFusions=[], pendingSynergy=[],runClock=0,buildTab='inventory',synergyNotices=[],selectedShip='shot',laserLinks=[],gusts=[],atlasRarity='all',atlasAttr='all',atlasQuery='',enemyCodexFilter='all',visualShip='shot',visualChoice='shotPulse',visualGroup='all',visualLastFrame=0,labRecipeFilters={synergy:'all',evolution:'all'};
  let controlMode=/(Android|iPhone|iPod|iPad)/i.test(navigator.userAgent)||(matchMedia('(pointer:coarse)').matches&&innerWidth<900)?'mobile':'desktop'; // On phones select touch controls by default; title choice remains available.
  const touchMove={id:null,x:0,y:0,startX:0,startY:0,lastTap:0,lastX:0,lastY:0,moved:false,captureOk:false};
  const stick=U('floatingStick'),stickDot=U('stickDot'),novaTouch=U('novaTouch'),dashTouch=U('dashTouch');
@@ -1739,12 +1762,21 @@ function coloredName(id){const c=skillById(id);return c?`<span class="rarity-nam
 function evolutionPeekLink(id){const r=FUSIONS.find(x=>x.id===id);return r?`<span class="skill-peek-trigger" data-evo-peek="${escHtml(id)}" tabindex="0" role="button" aria-label="${escHtml(r.name)}の進化レシピ詳細">${escHtml(r.name)} <span class="peek-icon">ⓘ</span></span>`:id}
 function skillPeekLink(id){const c=skillById(id);if(!c)return coloredName(id);return `<span class="skill-peek-trigger rarity-name ${c.rarity}" role="button" tabindex="0" data-skill-peek="${escHtml(id)}" aria-label="${escHtml(c.name)}のスキル詳細を表示">${escHtml(c.name)}<span class="peek-icon" aria-hidden="true">ⓘ</span></span>`}
 function choiceSynergyReady(c){return synergiesFor(c.id).some(a=>!game.synergies[a.id]&&a.need.some(id=>id!==c.id&&owned(id)))}
-function choiceEvolutionReady(c){return fusionFor(c.id).some(r=>!game.fusions[r.id]&&owned(c.id===r.power?r.legend:r.power))}
+function choiceEvolutionReady(c){return fusionFor(c.id).some(r=>!game.fusions[r.id]&&fusionMaterials(r).filter(id=>id!==c.id).every(owned))}
 // All elemental choices already show the always-valid 属性融合素材 tag;
  // no level-up banner should repeat the same 'fusion available' message.
-function recipePartnerMarkup(id){const c=skillById(id);return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':'＋ 未所持'} ${skillPeekLink(id)} <small>${c?.rarity==='unique'?'UNIQUE ANKIN':c?.rarity==='legendary'?'LEGENDARY':'ANKIN POWER'}</small></span>`}
-function evolutionMarkup(c){const recipes=fusionFor(c.id);if(!recipes.length)return '';
- return recipes.map(a=>{const done=!!game.fusions[a.id],partner=c.id===a.power?a.legend:a.power,ready=owned(partner);return `<div class="evolve ${ready&&!done?'ready':''}"><div class="evo-title">${done?'✓ 進化済み':ready?'✦ 進化可能スキル！':'◈ 進化合成の組み合わせ'}：${a.icon} ${a.name}</div><div class="recipe-parts">${recipePartnerMarkup(a.power)}<span class="fusion-plus">＋</span>${recipePartnerMarkup(a.legend)}</div><div class="recipe-effect">${a.desc}</div>${ready&&!done?'<b>このカードで自動的に進化！</b>':''}</div>`}).join('')}
+function recipePartnerMarkup(id){const c=skillById(id);return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':'＋ 未所持'} ${skillPeekLink(id)} <small>${RARITY_NAMES[c?.rarity]||'スキル'}</small></span>`}
+function evolutionMarkup(c){
+ const recipes=fusionFor(c.id);if(!recipes.length)return '';
+ return recipes.map(a=>{
+  const materials=fusionMaterials(a),done=!!game.fusions[a.id],needed=materials.filter(id=>!owned(id));
+  const ready=needed.length===0;
+  return '<div class="evolve '+(ready&&!done?'ready':'')+'"><div class="evo-title">'+
+   (done?'✓ 進化済み':ready?'✦ 進化可能スキル！':'◈ 進化合成の組み合わせ')+'：'+a.icon+' '+escHtml(a.name)+'</div>'+
+   '<div class="recipe-parts">'+materials.map(recipePartnerMarkup).join('<span class="fusion-plus">＋</span>')+'</div>'+
+   '<div class="recipe-effect">必要 '+materials.length+' 種類 · '+escHtml(a.desc)+'</div></div>';
+ }).join('');
+}
 function synergyMarkup(c){return synergiesFor(c.id).filter(a=>!game.synergies[a.id]).sort((a,b)=>Number(owned(b.need.find(x=>x!==c.id)))-Number(owned(a.need.find(x=>x!==c.id)))).slice(0,3).map(a=>{const partner=a.need.find(x=>x!==c.id),ready=owned(partner);return `<div class="synergy-note ${ready?'combo-ready':''}"><div class="synergy-note-head"><b>${a.name}</b>${ready?'<span class="combo-ready-pill">✦ 今選ぶと完成！</span>':'<span>◇ シナジー候補</span>'}</div><div class="synergy-partner-row">相方：${skillPeekLink(partner)} <span class="${ready?'partner-owned':'partner-missing'}">${ready?'✓ 取得済み':'未取得'}</span></div><span class="synergy-effect-line">完成時の効果：${escHtml(a.desc)}</span></div>`}).join('')}
 function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady(c),evoReady=choiceEvolutionReady(c),targets=choiceTargetMatches(c);return `<button class="choice ${c.rarity} ${ready?'synergy-ready-choice':''} ${evoReady?'evolution-ready-choice':''} ${targets.length?'target-matching':''}" data-choice="${i}"><div class="choice-head"><span class="choice-num">${i+1}</span><span class="rarity">${RARITY_NAMES[c.rarity]}</span>${evoReady?'<span class="evolution-ready-banner">◇ 進化合成可能！</span>':''}${ready?'<span class="synergy-ready-banner">✦ シナジー完成可能</span>':''}</div>${targets.length?`<span class="target-banner">✦ 目標進化の素材：${targets.map(t=>escHtml(t.name)).join(' / ')}</span>`:''}<span class="choice-icon">${c.icon}</span><div class="choice-name rarity-name ${c.rarity}">${c.name}${owned(c.id)?' <span class="stack-indicator">[強化]</span>':''}</div><div class="choice-attrs">${attrMarkup(c)}</div><div class="choice-desc">${c.desc}</div>${evolutionMarkup(c)}${!['legendary','power','unique'].includes(c.rarity)?synergyMarkup(c):''}<span class="choice-pick">✓ タップして取得</span></button>`}).join('')}
 function skillRow(c,n){const dormant=isSealedCard(c);return `<div class="owned-skill ${c.rarity} ${dormant?'rebirth-dormant':''}"><div class="owned-skill-top"><span class="rarity-name ${c.rarity}">${c.icon} ${c.name}</span>${n>1?'<b>×'+n+'</b>':''}${dormant?'<b class="rebirth-rest">✦ 属性効果喪失・共鳴素材として記録</b>':''}</div><div class="owned-tags">${attrMarkup(c)}</div><div class="skill-details">${c.desc}</div></div>`;}
@@ -1752,15 +1784,183 @@ function listBuild(){const part=(obj,defs)=>Object.entries(obj).map(([id,n])=>{c
 function inventoryMarkup(b){let html='';for(const [kind,title,body] of [['relic','✦ RELIC / WEAPON MOD',b.relics],['unique','✺ UNIQUE ANKIN',b.uniques],['legendary','★ LEGENDARY',b.legends],['power','◈ ANKIN POWER',b.powers]])html+=`<section class="lab-section ${kind}"><h3>${title}</h3><div class="inventory-grid">${body||'<div class="empty-inventory">まだ取得していません</div>'}</div></section>`;
  if(game.elementCombos.length){html+=`<section class="lab-section"><h3 style="color:#ffd68c">✦ 属性融合 · ELEMENTAL CROSS</h3><div class="inventory-grid">${game.elementCombos.map(x=>{const r=fusionOutcome(x.main,x.sub,x.weapon||'A'),color=FUSION_PALETTES[x.main][x.sub];return `<div class="owned-skill rebirth-card" style="--fusion-color:${color};border-color:${color};background:#18213d"><div class="rarity-name" style="color:${color}">${r.icon} ${r.name}</div><div class="skill-details">主属性：${ELEMENTS[x.main].name} / 共鳴：${ELEMENTS[x.sub].name}<br>カード保持 ${x.cards||0}枚・共鳴出力 ${(x.resonance||0).toFixed(1)}<br>${r.desc}</div></div>`}).join('')}</div></section>`}
  for(const [kind,title] of [['epic','EPIC'],['rare','RARE'],['uncommon','UNCOMMON'],['common','COMMON']]){const rows=Object.entries(game.skills).map(([id,n])=>{const c=skillById(id);return c?.rarity===kind?skillRow(c,n):''}).join('');if(rows)html+=`<section class="lab-section ${kind}"><h3>${title}</h3><div class="inventory-grid">${rows}</div></section>`}return html}
-function recipeBuild(){const recipes=activeFusions().filter(a=>{const done=!!game.fusions[a.id],near=owned(a.power)||owned(a.legend);return labRecipeFilters.evolution==='all'||(labRecipeFilters.evolution==='done'?done:labRecipeFilters.evolution==='near'?!done&&near:!done&&!near)}).sort((a,b)=>((game.fusions[b.id]?3:owned(b.power)&&owned(b.legend)?2:owned(b.power)||owned(b.legend)?1:0)-(game.fusions[a.id]?3:owned(a.power)&&owned(a.legend)?2:owned(a.power)||owned(a.legend)?1:0)));return recipes.map(a=>{const hasP=owned(a.power),hasL=owned(a.legend),done=!!game.fusions[a.id];const missing=[a.power,a.legend].filter(id=>!owned(id));return `<article class="lab-recipe ${done?'done':hasP&&hasL?'ready':hasP||hasL?'partial':''}"><div class="lab-recipe-head"><strong>${a.icon} ${a.name}</strong><span>${done?'✓ 進化完了':hasP&&hasL?'✦ 合成可能':hasP||hasL?'あと1種類':'未完成'}</span></div><div class="recipe-parts">${recipePartnerMarkup(a.power)}<span class="fusion-plus">＋</span>${recipePartnerMarkup(a.legend)}</div>${!done&&missing.length===1?`<div class="recipe-missing">次に必要：${coloredName(missing[0])}</div>`:''}<div class="recipe-effect">進化効果：${a.desc}</div></article>`}).join('')||'<p class="lab-empty">この条件の進化レシピはありません。</p>'}
+function recipeBuild(){
+ const recipes=activeFusions().filter(a=>{
+  const mats=fusionMaterials(a),ownedCount=mats.filter(owned).length,done=!!game.fusions[a.id];
+  return labRecipeFilters.evolution==='all'||(labRecipeFilters.evolution==='done'?done:labRecipeFilters.evolution==='near'?!done&&ownedCount>0:!done&&ownedCount===0);
+ }).sort((a,b)=>{
+  const score=r=>(game.fusions[r.id]?99:fusionMaterials(r).filter(owned).length*10/fusionMaterials(r).length);
+  return score(b)-score(a);
+ });
+ return recipes.map(a=>{
+  const mats=fusionMaterials(a),missing=mats.filter(id=>!owned(id)),done=!!game.fusions[a.id],complete=missing.length===0;
+  const status=done?'✓ 進化完了':complete?'✦ 合成可能':missing.length===1?'あと1種類':'あと'+missing.length+'種類';
+  return '<article class="lab-recipe '+(done?'done':complete?'ready':missing.length<mats.length?'partial':'')+'">'+
+   '<div class="lab-recipe-head"><strong>'+escHtml(a.icon+' '+a.name)+'</strong><span>'+status+'</span></div>'+
+   '<div class="recipe-parts">'+mats.map(recipePartnerMarkup).join('<span class="fusion-plus">＋</span>')+'</div>'+
+   (!done&&missing.length?'<div class="recipe-missing">不足：'+missing.map(coloredName).join('・')+'</div>':'')+
+   '<div class="recipe-effect">必要 '+mats.length+' 種類 · 進化効果：'+escHtml(a.desc)+'</div></article>';
+ }).join('')||'<p class="lab-empty">この条件の進化レシピはありません。</p>';
+}
 function synergyBuild(){const recipes=activeSynergies().filter(a=>{const done=!!game.synergies[a.id],near=a.need.some(owned);return labRecipeFilters.synergy==='all'||(labRecipeFilters.synergy==='done'?done:labRecipeFilters.synergy==='near'?!done&&near:!done&&!near)}).sort((a,b)=>((game.synergies[b.id]?2:b.need.some(owned)?1:0)-(game.synergies[a.id]?2:a.need.some(owned)?1:0)));return recipes.map(a=>{const done=!!game.synergies[a.id],missing=a.need.filter(id=>!owned(id));return `<article class="lab-recipe synergy-recipe ${done?'done':missing.length===1?'partial':''}"><div class="lab-recipe-head"><strong class="synergy-gradient">✧ ${a.name}</strong><span>${done?'✓ 発動中':missing.length===1?'✦ 相方あと1つ':'未完成'}</span></div><div class="recipe-parts">${a.need.map(id=>`<span class="requirement ${owned(id)?'owned':'missing'}">${skillPeekLink(id)}</span>`).join('<span class="fusion-plus">＋</span>')}</div>${!done&&missing.length===1?`<div class="recipe-missing">あと1つで完成：${skillPeekLink(missing[0])}　（名前をタップして効果を確認）</div>`:''}<div class="recipe-effect">発動効果：${a.desc}</div></article>`}).join('')||'<p class="lab-empty">この条件のシナジーはありません。</p>'}
 const ALL_SKILL_DEFS=()=>[...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS];
 const escHtml=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 function atlasList(){const q=atlasQuery.toLocaleLowerCase('ja'),filtered=ALL_SKILL_DEFS().filter(c=>(atlasRarity==='all'||c.rarity===atlasRarity)&&(atlasAttr==='all'||c.tags.includes(atlasAttr))&&[c.name,c.desc,c.rarity,...c.tags,SHIPS[c.shipOnly]?.jp||''].join(' ').toLocaleLowerCase('ja').includes(q));
  const order={common:0,uncommon:1,rare:2,epic:3,power:4,legendary:5,unique:6,relic:7};filtered.sort((a,b)=>order[a.rarity]-order[b.rarity]||a.name.localeCompare(b.name,'ja'));
- const items=filtered.map(c=>{const have=game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0;const fits=fitsShip(c),claimed=rewardAlreadyTaken(c);const evol=FUSIONS.filter(a=>a.power===c.id||a.legend===c.id).map(a=>`${a.name}（相方：${cName(a.power===c.id?a.legend:a.power)}）`);const syn=SYNERGIES.filter(a=>a.need.includes(c.id));const synActive=syn.filter(a=>game.synergies[a.id]&&!a.need.some(x=>isSealedCard(skillById(x)))).length;const synReady=syn.filter(a=>!game.synergies[a.id]&&a.need.filter(x=>x!==c.id).every(owned)&&(!a.shipOnly||a.shipOnly===player.shipType)).length;return `<article class="atlas-card ${c.rarity} atlas-interactive" role="button" tabindex="0" data-atlas-card="${escHtml(c.id)}" aria-label="${escHtml(c.name)}の詳細を開く"><div class="atlas-head"><span class="rarity-name ${c.rarity}">${c.icon} ${escHtml(c.name)}</span><span class="atlas-rank ${c.rarity}">${RARITY_NAMES[c.rarity]}</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${escHtml(c.desc)}</div><div class="atlas-meta">${c.shipOnly?`専用機体：${SHIPS[c.shipOnly].jp}`:c.excludeShips?.length?`使用不可：${c.excludeShips.map(id=>SHIPS[id].jp).join('・')}`:'全機体で使用可能'}　${have?`<b class="atlas-owned">✓ 取得済み ×${have}</b>`:claimed?'<b class="atlas-owned">✓ 取得済み（融合で消費）</b>':'未取得'} ${!fits?' · 現在の機体では選択不可':''}</div><div class="atlas-open-hint">ⓘ カードをクリック・タップで詳細表示</div>${evol.length?`<div class="atlas-assoc fusion">進化合成：${evol.map(escHtml).join(' ／ ')}</div>`:''}${syn.length?`<div class="atlas-assoc synergy"><b class="synergy-gradient">✧ 関連シナジー ${syn.length}件</b> ${synActive?`<span class="atlas-syn-ready">✓ 発動中 ${synActive}件</span>`:''} ${synReady?`<span class="atlas-syn-ready">✦ 相方所持 ${synReady}件</span>`:''}<div class="atlas-syn-hint">${syn.slice(0,2).map(a=>escHtml(a.name)).join(' ／ ')}${syn.length>2?' ほか':''} — クリックで相方・発動効果・所持状況を確認</div></div>`:''}</article>`}).join('');return `<p class="atlas-count">表示 ${filtered.length} / 全${ALL_SKILL_DEFS().length}種類　｜　現在の機体：${SHIPS[player.shipType].jp}</p><div class="atlas-grid">${items||'<p class="atlas-empty">該当するスキルがありません。検索条件を変更してください。</p>'}</div>`}
+ const items=filtered.map(c=>{const have=game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0;const fits=fitsShip(c),claimed=rewardAlreadyTaken(c);const evol=FUSIONS.filter(a=>fusionMaterials(a).includes(c.id)).map(a=>a.name+'（素材：'+fusionMaterials(a).filter(id=>id!==c.id).map(cName).join('＋')+'）');const syn=SYNERGIES.filter(a=>a.need.includes(c.id));const synActive=syn.filter(a=>game.synergies[a.id]&&!a.need.some(x=>isSealedCard(skillById(x)))).length;const synReady=syn.filter(a=>!game.synergies[a.id]&&a.need.filter(x=>x!==c.id).every(owned)&&(!a.shipOnly||a.shipOnly===player.shipType)).length;return `<article class="atlas-card ${c.rarity} atlas-interactive" role="button" tabindex="0" data-atlas-card="${escHtml(c.id)}" aria-label="${escHtml(c.name)}の詳細を開く"><div class="atlas-head"><span class="rarity-name ${c.rarity}">${c.icon} ${escHtml(c.name)}</span><span class="atlas-rank ${c.rarity}">${RARITY_NAMES[c.rarity]}</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${escHtml(c.desc)}</div><div class="atlas-meta">${c.shipOnly?`専用機体：${SHIPS[c.shipOnly].jp}`:c.excludeShips?.length?`使用不可：${c.excludeShips.map(id=>SHIPS[id].jp).join('・')}`:'全機体で使用可能'}　${have?`<b class="atlas-owned">✓ 取得済み ×${have}</b>`:claimed?'<b class="atlas-owned">✓ 取得済み（融合で消費）</b>':'未取得'} ${!fits?' · 現在の機体では選択不可':''}</div><div class="atlas-open-hint">ⓘ カードをクリック・タップで詳細表示</div>${evol.length?`<div class="atlas-assoc fusion">進化合成：${evol.map(escHtml).join(' ／ ')}</div>`:''}${syn.length?`<div class="atlas-assoc synergy"><b class="synergy-gradient">✧ 関連シナジー ${syn.length}件</b> ${synActive?`<span class="atlas-syn-ready">✓ 発動中 ${synActive}件</span>`:''} ${synReady?`<span class="atlas-syn-ready">✦ 相方所持 ${synReady}件</span>`:''}<div class="atlas-syn-hint">${syn.slice(0,2).map(a=>escHtml(a.name)).join(' ／ ')}${syn.length>2?' ほか':''} — クリックで相方・発動効果・所持状況を確認</div></div>`:''}</article>`}).join('');return `<p class="atlas-count">表示 ${filtered.length} / 全${ALL_SKILL_DEFS().length}種類　｜　現在の機体：${SHIPS[player.shipType].jp}</p><div class="atlas-grid">${items||'<p class="atlas-empty">該当するスキルがありません。検索条件を変更してください。</p>'}</div>`}
 function atlasMarkup(){const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tags))].sort((a,b)=>a.localeCompare(b,'ja'));return `<div class="atlas-controls"><label>名称・効果を検索<input id="atlasSearch" type="search" placeholder="例：炎 / 貫通 / 壁 / レーザー" value="${escHtml(atlasQuery)}"></label><label>レアリティ<select id="atlasRarity">${[['all','すべて'],...Object.entries(RARITY_NAMES).map(([k,v])=>[k,v])].map(([key,title])=>`<option value="${key}" ${atlasRarity===key?'selected':''}>${title}</option>`).join('')}</select></label><label>属性・種類<select id="atlasAttr">${[['all','すべて'],...attrs.map(x=>[x,x])].map(([key,title])=>`<option value="${escHtml(key)}" ${atlasAttr===key?'selected':''}>${escHtml(title)}</option>`).join('')}</select></label></div><div id="atlasResults">${atlasList()}</div>`}
 
+
+
+/* VISUAL CODEX: isolated, 20fps offscreen canvas using production weapon renderers.
+   This gallery must not grant cards, spawn projectiles, or mutate player/game state. */
+const VISUAL_CODEX_ROWS=[
+ ['shotPulse','basic','shot','パルスショット','通常弾の軌跡。ショット型の基本武装。','pulse','damage'],
+ ['laserRay','basic','laser','プリズムレーザー','敵を自動照準する即着弾の持続ビーム。','laser','lWidth'],
+ ['chargeComet','basic','charge','チャージ彗星弾','停止中にチャージし、移動すると発射する貫通弾。','comet','cForge'],
+ ['drillAuger','basic','drill','プラズマドリル','通常弾は発射せず、先端のドリルで接触攻撃。ダッシュで突進する。','drill','dRotor'],
+ ['dogBone','basic','dog','骨ブーメラン','回転しながら往復する基本武装。帰還時も攻撃する。','bone','dogBonePack'],
+ ['plasma','element',null,'プラズマ弾換装','基本武装の炎換装。対応するPOWERで初めて燃焼が付与される。','plasma','plasma'],
+ ['cryo','element',null,'フロスト弾換装','基本武装の氷換装。スロウを付与し、凍結はしない。','cryo','cryo'],
+ ['arc','element',null,'サンダー弾換装','基本武装の雷換装。連鎖には再発動制限がある。','arc','arc'],
+ ['rocket','element',null,'炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
+ ['magma','element',null,'マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
+ ['iceball','element',null,'アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
+ ['spike','element',null,'フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','frostSpike'],
+ ['emp','element',null,'電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
+ ['bolt','element',null,'ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','lightningBolt'],
+ ['cyclone','element',null,'サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
+ ['blade','element',null,'ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
+ ['wall','element',null,'ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
+ ['meteor','element',null,'ローリング・メテオ','回転して進む貫通隕石。進むほど大きくなるが威力は一定。','meteor','meteorSeed'],
+ ['dogChick','animal','dog','チック・タック（ヒヨコ）','卵を発射するミニオン。時間経過後にニワトリへ成長。','chick','dogChick'],
+ ['dogChicken','animal','dog','成長後のニワトリ','規定時間後にヒヨコが成長した姿。','chicken','dogLegendChicken'],
+ ['dogEgg','animal','dog','たまご弾','ヒヨコ・ニワトリが放つゆっくりした卵弾。','egg','dogEggPower'],
+ ['dogFox','animal','dog','フォックスミサイル','狐の姿をした炎の追尾ミサイル。','fox','dogFox'],
+ ['dogPaw','animal','dog','パウ・ラヴァ','肉球型のマグマ領域。円形のダメージ判定を持つ。','paw','dogPawLava'],
+ ['dogRabbit','animal','dog','スノー・ラビット','ウサギの形の氷球。凍結とスロウの違いに注意。','rabbit','dogRabbit'],
+ ['dogHare','animal','dog','フロスト・ヘア','長く独立したウサギ耳の氷柱。確定スロウ・凍結なし。','hare','dogHare'],
+ ['dogHedge','animal','dog','エレキ・ハリネズミ','紫色のハリネズミ型EMP。表示と攻撃範囲は円形のパルス。','hedgehog','dogHedgehog'],
+ ['dogSnake','animal','dog','ライトニング・スネーク','紫の雷蛇が蛇行して敵から敵へ伝播する。','snake','dogSnake'],
+ ['dogDolphin','animal','dog','ドルフィン・リング','自機の周囲を泳ぐイルカの迎撃武装。','dolphin','dogDolphin'],
+ ['dogHurricane','animal','dog','ドルフィン・ハリケーン','サイクロンにイルカが一体となって移動する。','dolphinCyclone','dogHurricane'],
+ ['dogCat','animal','dog','キャット・ディフェンダー','機体の周囲を回る猫壁。敵弾を迎撃する。','cat','dogCat'],
+ ['dogHam','animal','dog','ハム・スターメテオ','転がるハムスター型貫通弾。','ham','dogHamMeteor'],
+ ['dogWhale','mutation','dog','タイダル・モノサイクロン','イルカ→クジラ。サイクロンを単一の大型竜巻へ圧縮。','whale','dogMutWhale'],
+ ['dogMoon','mutation','dog','ムーンラビット結晶化','月兎の長耳と銀紫の発光。氷柱に凍結を追加しない。','moon','dogMutMoon'],
+ ['dogViper','mutation','dog','ヴァイパー・オーバードライブ','金色の太い蛇と伝播の強化。','viper','dogMutViper'],
+ ['dogNine','mutation','dog','九尾導火','白熱金色の狐と複数の尾。燃焼と爆風を強化。','nineTail','dogMutNineTail'],
+ ['dogArmor','mutation','dog','ギガ・ハムスターメテオ','装甲化したハムスターが貫通回転する。','armorHam','dogMutHam'],
+ ['dogWhaleApex','mutation','dog','深海の巨鯨','クジラの上位進化。深海色の巨大サイクロン。','whaleApex','dogMutWhale'],
+ ['dogMoonApex','mutation','dog','永月フロスト・ヘア','白金色の月兎結晶。','moonApex','dogMutMoon'],
+ ['dogViperApex','mutation','dog','皇雷大蛇','金白色の上位雷蛇。','viperApex','dogMutViper'],
+ ['dogNineApex','mutation','dog','九尾神炎','白金色の九尾神炎。','nineTailApex','dogMutNineTail'],
+ ['dogHamApex','mutation','dog','星穿つ装甲獣','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
+];
+const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>({id,group,ship,name,desc,kind,card}));
+const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性武装'],['animal','アニマル'],['mutation','変異・上位進化']];
+function visualCodexItems(){return VISUAL_CODEX.filter(v=>(!v.ship||v.ship===visualShip)&&!(visualShip==='drill'&&['plasma','cryo','arc'].includes(v.id))&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
+function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
+function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex">'+
+ '<p class="lab-help">機体の弾や属性スキル・DOGアニマルを大きく確認できる練習用の見本です。<b>画像を拡大して描画</b>しています。武装やスキルは獲得せず、プレイ中の能力値・所持履歴も変わりません。</p>'+
+ '<div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
+ '<div class="visual-group-switch" role="group" aria-label="武装の種類">'+VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
+ '<div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
+function visualCodexContent(){const v=visualSelected(),all=visualCodexItems();if(!v)return '<p class="lab-empty">この機体の武装はありません。</p>';
+ visualChoice=v.id;
+ return '<div class="visual-stage"><div class="visual-stage-heading"><strong>'+escHtml(v.name)+'</strong><span>'+escHtml(SHIPS[visualShip].jp)+'</span></div>'+
+ '<canvas id="weaponVisualCanvas" width="720" height="360" role="img" aria-label="'+escHtml(v.name)+'の武装アニメーション" aria-describedby="visualWeaponDescription"></canvas>'+
+ '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot"><span>◉ アニメーション見本</span>'+
+ (skillById(v.card)?skillPeekLink(v.card):'<span>基本装備</span>')+'</div>'+
+ '<div class="visual-stage-notice">実際の攻撃判定・発射数・速度はビルドで変化します。大きさは見やすさ優先のため画面上の実寸とは異なります。</div></div>'+
+ '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
+ '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div>';}
+function visualCodexUpdate(){const root=U('visualCodexRoot');if(root){root.outerHTML=visualCodexMarkup();visualLastFrame=0;}}
+
+
+function drawWeaponVisualPreview(ts){
+ if(mode!=='build'||buildTab!=='visual'||document.hidden||ts-visualLastFrame<50)return;
+ const canvas=U('weaponVisualCanvas'),v=visualSelected();if(!canvas||!v)return;visualLastFrame=ts;
+ const g=canvas.getContext('2d');if(!g)return;const time=ts/1000,x=238,y=122,bob=Math.sin(time*2)*5;
+ g.setTransform(1.5,0,0,1.5,0,0);g.clearRect(0,0,480,240);
+ const sky=g.createLinearGradient(0,0,480,240);sky.addColorStop(0,'#10263e');sky.addColorStop(1,'#090f24');
+ g.fillStyle=sky;g.fillRect(0,0,480,240);
+ g.strokeStyle='#6296b620';g.lineWidth=1;g.beginPath();
+ for(let i=0;i<=480;i+=40){g.moveTo(i,0);g.lineTo(i,240);}
+ for(let j=0;j<=240;j+=40){g.moveTo(0,j);g.lineTo(480,j);}g.stroke();
+ g.save();g.strokeStyle='#ffffff2b';g.lineWidth=1.2;g.setLineDash([4,6]);g.beginPath();g.arc(x,y,100,0,TAU);g.stroke();g.setLineDash([]);g.restore();
+ const p={shipType:visualShip,drillReach:44,drillWidth:30,drillCap:1,drillPlasma:.8,
+  x,y,dx:0,dy:-1,evolutionTint:null,spikeVisuals:[],boltVisuals:[],
+  dogMoon:false,dogMoonAscended:false,dogViper:false,dogViperAscended:false,
+  dogWhaleAscended:false,dogNineTailMorph:false,dogNineTailAscended:false,
+  dogArmorHam:false,dogArmorHamAscended:false};
+ const kind=v.kind,move=((time*.5)%1);
+ const bullet=(color,r=7)=>{
+  g.save();g.lineCap='round';g.strokeStyle=color;g.shadowColor=color;g.shadowBlur=14;
+  g.lineWidth=r>9?6:3.5;g.beginPath();g.moveTo(x-90+move*90,y);g.lineTo(x-45+move*90,y);g.stroke();
+  g.fillStyle='#ffffff';g.beginPath();g.arc(x-45+move*90,y,r*.43,0,TAU);g.fill();g.restore();
+ };
+ const animal=(name,r=31,px=x,py=y)=>drawAnimal(name,px,py,r,Math.PI/2,g,p);
+ const rockShape=(radius)=>{
+  g.save();g.translate(x,y);g.rotate(time*.7);g.fillStyle='#947b5e';g.strokeStyle='#eed2a7';g.lineWidth=3;g.shadowColor='#dac096';g.shadowBlur=11;
+  g.beginPath();for(let i=0;i<9;i++){const a=i*TAU/9,rr=radius*(i%2?.90:1.06);i?g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):g.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);}
+  g.closePath();g.fill();g.stroke();g.restore();
+ };
+ switch(kind){
+ case 'pulse':case 'plasma':case 'cryo':case 'arc':
+  bullet(BULLET_COLOR[kind]||'#70fff1',8);break;
+ case 'laser':
+  g.save();g.lineCap='round';for(const [width,color,alpha] of [[29,'#a38fff',.17],[12,'#b6a5ff',.7],[2.4,'#ffffff',1]]){g.globalAlpha=alpha;g.lineWidth=width;g.strokeStyle=color;g.shadowColor='#b99aff';g.shadowBlur=14;g.beginPath();g.moveTo(58,177);g.lineTo(410,85);g.stroke();}g.restore();break;
+ case 'comet':
+  g.save();g.translate(x,y);g.rotate(time*.25);g.shadowColor='#ffbd78';g.shadowBlur=19;
+  g.strokeStyle='#ffb77599';g.lineWidth=13;g.beginPath();g.moveTo(-108,58);g.lineTo(0,0);g.stroke();
+  g.fillStyle='#e77f45';g.beginPath();g.arc(0,0,25,0,TAU);g.fill();g.fillStyle='#ffe9bb';g.beginPath();g.arc(0,0,13,0,TAU);g.fill();g.restore();break;
+ case 'drill':
+  drawDrillAuger(p,true,g,time);break;
+ case 'bone':
+  drawDogBone({x,y:132,r:19,spinAngle:time*2.5},g);break;
+ case 'rocket':case 'fox':case 'nineTail':case 'nineTailApex':
+  if(kind==='rocket'){
+   g.save();g.translate(x,y);g.rotate(.6);g.fillStyle='#b93921';g.strokeStyle='#ffcc8d';g.lineWidth=3;
+   g.beginPath();g.ellipse(0,0,15,34,0,0,TAU);g.fill();g.stroke();
+   g.fillStyle='#ffbe60';g.beginPath();g.moveTo(-10,28);g.lineTo(0,50+10*Math.sin(time*7));g.lineTo(10,28);g.fill();g.restore();
+  }else{p.dogNineTailMorph=kind==='nineTail'||kind==='nineTailApex';p.dogNineTailAscended=kind==='nineTailApex';animal('fox',35,x+Math.sin(time*1.7)*15,y+bob);}break;
+ case 'magma':case 'paw':
+  g.save();g.translate(x,y);if(kind==='paw')drawDogPaw({x,y,r:77,life:4},g,time);
+  else {const paths=magmaVisualPaths(70,1.7);g.fillStyle='#4b1a14';g.fill(paths[0]);g.strokeStyle='#c36631';g.lineWidth=4;g.stroke(paths[0]);g.fillStyle='#ed602a';g.fill(paths[1]);g.fillStyle='#ffbd62';g.fill(paths[2]);}g.restore();break;
+ case 'iceball':
+  g.save();g.shadowColor='#80e8ff';g.shadowBlur=14;g.fillStyle='#7edaff';g.strokeStyle='#edffff';g.lineWidth=3;g.beginPath();g.arc(x,y,26,0,TAU);g.fill();g.stroke();g.restore();break;
+ case 'rabbit':animal('rabbit',30,x,y+bob);break;
+ case 'spike':case 'hare':case 'moon':case 'moonApex':
+  p.shipType=kind==='spike'?'shot':'dog';p.dogMoon=kind==='moon'||kind==='moonApex';p.dogMoonAscended=kind==='moonApex';
+  p.spikeVisuals=[{x:x-46,y:y+27,life:.45,scale:1.5},{x:x+54,y:y+24,life:.48,scale:1.17}];
+  drawReforgeWeapons(p,g);break;
+ case 'emp':drawTeslaEmitter({x,y,empRadius:81},g,time);break;
+ case 'hedgehog':drawHedgehogPulseEmitter({x,y,empRadius:79,split:false},g,time);break;
+ case 'bolt':case 'snake':case 'viper':case 'viperApex':
+  p.shipType=kind==='bolt'?'shot':'dog';p.dogViper=kind==='viper'||kind==='viperApex';p.dogViperAscended=kind==='viperApex';
+  p.boltVisuals=[{x:65,y:177,x2:x+122,y2:85,life:.28}];drawReforgeWeapons(p,g);break;
+ case 'cyclone':case 'dolphinCyclone':case 'whale':case 'whaleApex':
+  drawCyclone({x,y,r:kind.startsWith('whale')?90:73,color:'#78ead1',life:2.7},g,time);
+  if(kind==='dolphinCyclone')animal('dolphin',31,x,y);
+  if(kind.startsWith('whale')){p.dogWhaleAscended=kind==='whaleApex';animal('whale',37,x,y);}
+  break;
+ case 'blade':
+  g.save();g.translate(x,y);g.rotate(time*.85);g.fillStyle='#7affdb';g.strokeStyle='#efffff';g.shadowColor='#84ffdf';g.shadowBlur=12;g.lineWidth=2.6;
+  g.beginPath();g.moveTo(-95,0);g.lineTo(-85,-9);g.lineTo(85,-9);g.lineTo(95,0);g.lineTo(85,9);g.lineTo(-85,9);g.closePath();g.fill();g.stroke();g.fillStyle='#fff';g.fillRect(-82,-2,164,4);g.restore();break;
+ case 'wall':rockShape(36);break;
+ case 'meteor':rockShape(45);break;
+ case 'cat':
+  for(let i=0;i<3;i++){const a=time*.7+i*TAU/3;animal('cat',24,x+Math.cos(a)*63,y+Math.sin(a)*60);}break;
+ case 'ham':case 'armorHam':case 'armorHamApex':
+  p.dogArmorHam=kind!=='ham';p.dogArmorHamAscended=kind==='armorHamApex';animal('ham',kind==='ham'?37:49,x,y+bob);break;
+ case 'dolphin':animal('dolphin',39,x,y+bob);break;
+ case 'chick':case 'chicken':animal(kind,37,x,y+bob);break;
+ case 'egg':drawDogEgg({x,y,r:26,vx:0,vy:120},g);break;
+ default:bullet('#70fff1');
+ }
+ // All rendering runs on this isolated canvas; no live shots or player state are modified.
+}
 
 function enemySpriteMarkup(e){
  const n={star12:12,star16:16,star20:20}[e.shape];
@@ -1790,17 +1990,17 @@ function enemyCodexMarkup(){return `<p class="lab-help">敵の見た目・名前
 
 function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipType);return `<p class="lab-help">🌈 レリック・ワンダラーを撃破すると、この機体の未取得レリック3択が出現します（最大4種類まで取得）。レリックは攻撃の動作を変え、1種類につき1回取得可能です。<br>取得数 ${Object.keys(game.relics).length} / ${items.length}</p><div class="atlas-grid">${items.map(c=>`<article class="atlas-card relic"><div class="atlas-head"><span class="rarity-name relic">${c.icon} ${c.name}</span><span class="atlas-rank relic">RELIC</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${c.desc}</div><div class="atlas-meta">${game.relics[c.id]?'✦ 取得済み':'◇ 未取得'}</div></article>`).join('')}</div>`}
 
-function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&(owned(a.power)||owned(a.legend)))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','あと1種類',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
-function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。必要カードの所持状況が確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/6':id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ALL_SKILL_DEFS().length:ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel">${content}</div>`}
+function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
+function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ALL_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel">${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.16 · DOG EVOLUTION REFORGE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.17 · WEAPON VISUAL CODEX</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
- html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑と合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12で1回目、Lv28で2回目が解放されます。異なる属性スキルを各1種類持てばレアリティ不問で融合可能。0〜1属性なら画面を出さずにスキップし、後から2属性揃えば選択できます。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
+ html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12で1回目、Lv28で2回目が解放されます。異なる属性スキルを各1種類持てばレアリティ不問で融合可能。0〜1属性なら画面を出さずにスキップし、後から2属性揃えば選択できます。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
  const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。':major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
  html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3'}キーまたはカードで選択。<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div><div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div><div class="actions"><button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選 [R] 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑 [B]</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
@@ -1832,7 +2032,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  U('v13ImportFile')?.addEventListener('change',v13ReadImport);click('v13Merge',()=>v13Restore('merge'));click('v13Replace',()=>v13Restore('replace'));
  U('graphicsQuality')?.addEventListener('change',e=>{settings.quality=e.target.value;saveSettings();resize();fitFestival();renderBudget=0});
  U('fpsTarget')?.addEventListener('change',e=>{settings.fps=Number(e.target.value);saveSettings();renderBudget=0});
- U('showFps')?.addEventListener('change',e=>{settings.showFps=e.target.checked;saveSettings();refreshFpsDisplay()});U('perfExport')?.addEventListener('click',exportAnkinPerfReport);click('reroll',reroll);click('defer',deferNormal);click('fusionNext',dismissFusion);click('uniqueContinue',continueAfterReward);panel.querySelectorAll('[data-choice]').forEach(bindSafeChoice);if(!menuLabBackup)panel.querySelectorAll('[data-target]').forEach(el=>el.addEventListener('click',()=>toggleTarget(el.dataset.target)));panel.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{buildTab=el.dataset.tab;drawOverlay()}));if(mode==='build'&&(buildTab==='synergy'||buildTab==='evolution')){panel.querySelectorAll('[data-recipe-filter]').forEach(el=>el.addEventListener('click',()=>{const kind=el.dataset.recipeKind;labRecipeFilters[kind]=el.dataset.recipeFilter;panel.querySelectorAll(`[data-recipe-kind="${kind}"]`).forEach(b=>{const active=b.dataset.recipeFilter===labRecipeFilters[kind];b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});const result=U('recipeResults');if(result)result.innerHTML=kind==='synergy'?synergyBuild():recipeBuild()}))}if(mode==='build'&&buildTab==='enemies'){panel.querySelectorAll('[data-enemy-filter]').forEach(el=>el.addEventListener('click',()=>{enemyCodexFilter=el.dataset.enemyFilter;panel.querySelectorAll('[data-enemy-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.enemyFilter===enemyCodexFilter);b.setAttribute('aria-pressed',String(b.dataset.enemyFilter===enemyCodexFilter))});const r=U('enemyCodexResults');if(r)r.innerHTML=enemyCodexList();}))}if(mode==='build'&&buildTab==='atlas'){const updateAtlas=()=>{const r=U('atlasResults');if(r)r.innerHTML=atlasList()};U('atlasSearch')?.addEventListener('input',e=>{atlasQuery=e.target.value;updateAtlas()});U('atlasRarity')?.addEventListener('change',e=>{atlasRarity=e.target.value;updateAtlas()});U('atlasAttr')?.addEventListener('change',e=>{atlasAttr=e.target.value;updateAtlas()});}
+ U('showFps')?.addEventListener('change',e=>{settings.showFps=e.target.checked;saveSettings();refreshFpsDisplay()});U('perfExport')?.addEventListener('click',exportAnkinPerfReport);click('reroll',reroll);click('defer',deferNormal);click('fusionNext',dismissFusion);click('uniqueContinue',continueAfterReward);panel.querySelectorAll('[data-choice]').forEach(bindSafeChoice);if(!menuLabBackup)panel.querySelectorAll('[data-target]').forEach(el=>el.addEventListener('click',()=>toggleTarget(el.dataset.target)));panel.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{if(el.dataset.tab==='visual'&&buildTab!=='visual'){visualShip=player.shipType;visualGroup='all';visualChoice='';}buildTab=el.dataset.tab;drawOverlay()}));if(mode==='build'&&(buildTab==='synergy'||buildTab==='evolution')){panel.querySelectorAll('[data-recipe-filter]').forEach(el=>el.addEventListener('click',()=>{const kind=el.dataset.recipeKind;labRecipeFilters[kind]=el.dataset.recipeFilter;panel.querySelectorAll(`[data-recipe-kind="${kind}"]`).forEach(b=>{const active=b.dataset.recipeFilter===labRecipeFilters[kind];b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});const result=U('recipeResults');if(result)result.innerHTML=kind==='synergy'?synergyBuild():recipeBuild()}))}if(mode==='build'&&buildTab==='enemies'){panel.querySelectorAll('[data-enemy-filter]').forEach(el=>el.addEventListener('click',()=>{enemyCodexFilter=el.dataset.enemyFilter;panel.querySelectorAll('[data-enemy-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.enemyFilter===enemyCodexFilter);b.setAttribute('aria-pressed',String(b.dataset.enemyFilter===enemyCodexFilter))});const r=U('enemyCodexResults');if(r)r.innerHTML=enemyCodexList();}))}if(mode==='build'&&buildTab==='atlas'){const updateAtlas=()=>{const r=U('atlasResults');if(r)r.innerHTML=atlasList()};U('atlasSearch')?.addEventListener('input',e=>{atlasQuery=e.target.value;updateAtlas()});U('atlasRarity')?.addEventListener('change',e=>{atlasRarity=e.target.value;updateAtlas()});U('atlasAttr')?.addEventListener('change',e=>{atlasAttr=e.target.value;updateAtlas()});}
 }
 
 
@@ -1860,8 +2060,17 @@ function synergyDetailForSkill(id){
  }).join('');
  return `<section class="peek-section"><div class="peek-section-heading"><span class="synergy-gradient">✧ 関連シナジー</span><span class="peek-count">${related.length} 件 ${related.some(s=>s.need.some(owned))?'· 所持状況を表示':''}</span></div>${items||'<div class="peek-syn-empty">このスキルを素材にする通常シナジーはありません。LEGENDARY・POWERの場合は下の進化合成をご確認ください。</div>'}</section>`;
 }
-function evolutionDetailForSkill(id){const list=FUSIONS.filter(s=>s.power===id||s.legend===id);if(!list.length)return '';
- return `<section class="peek-section"><div class="peek-section-heading"><span>✦ 関連する進化合成</span><span class="peek-count">${list.length} 件</span></div>${list.map(r=>{const other=r.power===id?r.legend:r.power,def=skillById(other),done=!!game.fusions[r.id];return `<div class="peek-evo-row"><div class="peek-evo-name">${escHtml(r.icon)} ${escHtml(r.name)} ${done?'✓ 進化済み':''}</div><span>相方：</span><button type="button" class="peek-subskill rarity-name ${escHtml(def?.rarity||'power')}" data-peek-child="${escHtml(other)}">${escHtml(def?.name||other)} ⓘ</button><span class="${owned(other)?'atlas-owned':''}">${owned(other)?'✓ 所持':'◇ 未所持'}</span><div class="peek-evo-desc">進化効果：${escHtml(r.desc)}</div></div>`}).join('')}</section>`;
+function evolutionDetailForSkill(id){
+ const list=FUSIONS.filter(r=>fusionMaterials(r).includes(id));if(!list.length)return '';
+ return '<section class="peek-section"><div class="peek-section-heading"><span>✦ 関連する進化合成</span><span class="peek-count">'+list.length+' 件</span></div>'+
+ list.map(r=>{
+  const mats=fusionMaterials(r),missing=mats.filter(mat=>!owned(mat)),done=!!game.fusions[r.id];
+  return '<div class="peek-evo-row"><div class="peek-evo-name">'+escHtml(r.icon+' '+r.name)+(done?' ✓ 進化済み':'')+'</div>'+
+   '<span>必要 '+mats.length+' 種類 / 未所持 '+missing.length+' 種類</span><div class="peek-syn-requires">'+mats.map(mat=>{
+    const d=skillById(mat);return '<button type="button" class="peek-subskill rarity-name '+escHtml(d?.rarity||'epic')+
+    '" data-peek-child="'+escHtml(mat)+'">'+(owned(mat)?'✓ ':'◇ ')+escHtml(d?.name||mat)+' ⓘ</button>';
+   }).join('<span>＋</span>')+'</div><div class="peek-evo-desc">進化効果：'+escHtml(r.desc)+'</div></div>';
+ }).join('')+'</section>';
 }
 function showSkillPeek(id,anchor,pin=false){const c=skillById(id);if(!c||!game)return;peekSkillId=id;skillPeekAnchor=anchor;skillPeekPinned=pin;
  const count=(game.skills[id]||game.powers[id]||game.legends[id]||game.uniques[id]||game.relics[id]||0),sources={common:'レベルアップ',uncommon:'レベルアップ',rare:'レベルアップ',epic:'レベルアップ',power:'中ボス報酬',legendary:'大ボス報酬',unique:'UNIQUE ANKIN報酬',relic:'レリックエネミー報酬'};
@@ -1872,9 +2081,17 @@ function showSkillPeek(id,anchor,pin=false){const c=skillById(id);if(!c||!game)r
 function showAttrPeek(tag,anchor,pin=false){const d=attrDetails(tag),mobile=controlMode==='mobile'||matchMedia('(pointer:coarse)').matches;skillPeekAnchor=anchor;skillPeekPinned=pin;
  skillPeekPanel.innerHTML=`${peekHistory.length?'<button type="button" class="peek-back">← 前のスキルに戻る</button>':''}<div class="peek-top"><div><div class="peek-rank">TAG GUIDE · 現在の機体ステータス</div><div class="peek-title">${escHtml(d.name)}</div></div><button type="button" class="peek-close" aria-label="属性詳細を閉じる">×</button></div><div class="peek-desc">${escHtml(d.desc)}</div><ul class="attr-stats">${d.details.map(x=>`<li>${escHtml(x)}</li>`).join('')}</ul><div class="peek-hint">${mobile?'× または画面外タップで戻る':'クリックで固定 · マウスを離すと閉じる'}</div>`;
  skillPeekPanel.hidden=false;skillPeekPanel.classList.toggle('is-touch',mobile);positionPeek(anchor,mobile);}
-function showEvolutionPeek(id,anchor,pin=false){const r=FUSIONS.find(x=>x.id===id);if(!r)return;const mobile=controlMode==='mobile'||matchMedia('(pointer:coarse)').matches;skillPeekAnchor=anchor;skillPeekPinned=pin;
- skillPeekPanel.innerHTML=`<div class="peek-top"><div><div class="peek-rank">EVOLUTION RECIPE · ${game.fusions[id]?'進化済み':'未完成'}</div><div class="peek-title">${escHtml(r.icon+' '+r.name)}</div></div><button type="button" class="peek-close">×</button></div><div class="peek-desc">${escHtml(r.desc)}</div><div class="attr-stats">${[r.power,r.legend].map(id=>{const c=skillById(id);return `<p>${owned(id)?'✓ 所持':'◇ 未所持'}：${escHtml(c?.name||id)} — ${escHtml(c?.desc||'')}</p>`}).join('')}</div>`;
- skillPeekPanel.hidden=false;skillPeekPanel.classList.toggle('is-touch',mobile);positionPeek(anchor,mobile);}
+function showEvolutionPeek(id,anchor,pin=false){
+ const r=FUSIONS.find(x=>x.id===id);if(!r)return;
+ const mobile=controlMode==='mobile'||matchMedia('(pointer:coarse)').matches;
+ skillPeekAnchor=anchor;skillPeekPinned=pin;
+ skillPeekPanel.innerHTML='<div class="peek-top"><div><div class="peek-rank">EVOLUTION RECIPE · '+(game.fusions[id]?'進化済み':'未完成')+
+ '</div><div class="peek-title">'+escHtml(r.icon+' '+r.name)+'</div></div><button type="button" class="peek-close">×</button></div>'+
+ '<div class="peek-desc">'+escHtml(r.desc)+'</div><div class="attr-stats">'+fusionMaterials(r).map(mat=>{
+  const c=skillById(mat);return '<p>'+(owned(mat)?'✓ 所持':'◇ 未所持')+'：'+escHtml(c?.name||mat)+' — '+escHtml(c?.desc||'')+'</p>';
+ }).join('')+'</div>';
+ skillPeekPanel.hidden=false;skillPeekPanel.classList.toggle('is-touch',mobile);positionPeek(anchor,mobile);
+}
 function positionPeek(anchor,mobile){if(mobile){skillPeekPanel.style.left='';skillPeekPanel.style.top='';skillPeekPanel.style.right='';return}const rect=anchor.getBoundingClientRect(),pw=skillPeekPanel.offsetWidth,ph=skillPeekPanel.offsetHeight;skillPeekPanel.style.left=Math.max(10,Math.min(rect.left,innerWidth-pw-10))+'px';let y=rect.bottom+9;if(y+ph>innerHeight-8)y=rect.top-ph-9;skillPeekPanel.style.top=Math.max(8,y)+'px';skillPeekPanel.style.right='auto'}
 function peekTarget(el){return el.closest?.('[data-attr-peek],[data-evo-peek],[data-skill-peek]')}
 function openAnyPeek(trigger,pin=false){if(!trigger)return;const a=trigger.dataset;if(a.attrPeek)showAttrPeek(a.attrPeek,trigger,pin);else if(a.evoPeek)showEvolutionPeek(a.evoPeek,trigger,pin);else if(a.skillPeek)showSkillPeek(a.skillPeek,trigger,pin)}
@@ -1890,8 +2107,20 @@ panel.addEventListener('pointerout',ev=>{const trigger=peekTarget(ev.target);if(
 panel.addEventListener('focusin',ev=>{const trigger=peekTarget(ev.target);if(trigger)openAnyPeek(trigger,controlMode==='mobile')});
 panel.addEventListener('focusout',ev=>{const trigger=peekTarget(ev.target);if(trigger&&!skillPeekPinned)closeSkillPeek(true)});
 panel.addEventListener('pointerdown',ev=>{const trigger=peekTarget(ev.target);if(!trigger)return;ev.stopPropagation();if(ev.pointerType==='touch'||ev.pointerType==='pen')openAnyPeek(trigger,true)},true);
-panel.addEventListener('click',ev=>{const trigger=peekTarget(ev.target);if(trigger){ev.preventDefault();ev.stopPropagation();peekHistory=[];openAnyPeek(trigger,true);return}const card=ev.target.closest?.('[data-atlas-card]');if(card){ev.preventDefault();peekHistory=[];openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
-panel.addEventListener('keydown',ev=>{const trigger=peekTarget(ev.target);const card=ev.target.closest?.('[data-atlas-card]');if((trigger||card)&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();ev.stopPropagation();if(trigger)openAnyPeek(trigger,true);else openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
+panel.addEventListener('click',ev=>{
+ const s=ev.target.closest?.('[data-visual-ship]'),group=ev.target.closest?.('[data-visual-group]'),choice=ev.target.closest?.('[data-visual-id]');
+ if(mode==='build'&&buildTab==='visual'&&(s||group||choice)){
+  ev.preventDefault();ev.stopPropagation();
+  if(s){visualShip=s.dataset.visualShip;visualGroup='all';visualChoice='';}
+  if(group){visualGroup=group.dataset.visualGroup;visualChoice='';}
+  if(choice)visualChoice=choice.dataset.visualId;
+  visualCodexUpdate();return;
+ }
+ const trigger=peekTarget(ev.target);if(trigger){ev.preventDefault();ev.stopPropagation();peekHistory=[];openAnyPeek(trigger,true);return}const card=ev.target.closest?.('[data-atlas-card]');if(card){ev.preventDefault();peekHistory=[];openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
+panel.addEventListener('keydown',ev=>{
+ const visualButton=ev.target.closest?.('[data-visual-ship],[data-visual-group],[data-visual-id]');
+ if(visualButton&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();visualButton.click();return;}
+ const trigger=peekTarget(ev.target);const card=ev.target.closest?.('[data-atlas-card]');if((trigger||card)&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();ev.stopPropagation();if(trigger)openAnyPeek(trigger,true);else openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
 document.addEventListener('pointerdown',ev=>{if(skillPeekPanel.hidden)return;if(!ev.target.closest?.('[data-attr-peek],[data-evo-peek],[data-skill-peek]')&&!skillPeekPanel.contains(ev.target))closeSkillPeek(true)},true);
 window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!skillPeekPanel.hidden){closeSkillPeek(true);ev.preventDefault();ev.stopImmediatePropagation()}},true);
 
@@ -2723,7 +2952,8 @@ function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&[a.power,a.legend,...(a.required||[])].every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function synergiesFor(id){return activeSynergies().filter(a=>a.need.includes(id))}
-function fusionFor(id){return activeFusions().filter(a=>a.power===id||a.legend===id)}
+function fusionMaterials(r){return [r.power,r.legend,...(r.required||[])];}
+function fusionFor(id){return activeFusions().filter(a=>fusionMaterials(a).includes(id))}
 
 /* Every POWER × LEGENDARY (or UNIQUE × LEGENDARY) synthesis receives its own
    stable visual identity. Colors vary even for recipes in the same family. */
@@ -3594,7 +3824,7 @@ function tickReforgeWeapons(dt){
  for(const v of p.boltVisuals)v.life-=dt;
  p.boltVisuals=p.boltVisuals.filter(v=>v.life>0).slice(-22);
 }
-function drawReforgeWeapons(p){
+function drawReforgeWeapons(p,drawCtx=ctx){const ctx=drawCtx;
  for(const s of p.spikeVisuals){
   const k=Math.min(1,s.life/.22),height=(p.shipType==='dog'?43:35)*s.scale,width=(p.shipType==='dog'?19:16)*s.scale;
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
@@ -3974,7 +4204,7 @@ function dogAnimalPalette(kind,p){
 const ANIMAL_PATHS=new Map();
 /* v13.11: readable miniature animals — colored bodies, expressive essential facial landmarks.
    Shared cached silhouettes remain the foundation, so silhouettes and gameplay stay consistent. */
-function drawAnimal(kind,x,y,r=14,angle=0){
+function drawAnimal(kind,x,y,r=14,angle=0,drawCtx=ctx,visualPlayer=player){const ctx=drawCtx,player=visualPlayer;
  const shape=ANIMAL_OUTLINES[kind];if(!shape)return;
  let path=ANIMAL_PATHS.get(kind);if(!path){path=new Path2D(shape);ANIMAL_PATHS.set(kind,path);}
  const colors={
@@ -4033,7 +4263,7 @@ function drawAnimal(kind,x,y,r=14,angle=0){
  }
  ctx.restore();
 }
-function drawDogEgg(b){
+function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
  ctx.shadowColor='#ffdc8c';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:6;
  ctx.fillStyle='#fff4d7';ctx.strokeStyle='#ffc66f';ctx.lineWidth=Math.max(1.5,b.r*.18);
@@ -4041,7 +4271,7 @@ function drawDogEgg(b){
  ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
  ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
-function drawDogBone(b){
+function drawDogBone(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
  const r=b.r;ctx.shadowColor=b.novaBone?'#ffb2e7':'#ffe4a4';ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
  ctx.strokeStyle=b.novaBone?'#fff6fc':'#fff0c2';ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
@@ -4049,7 +4279,7 @@ function drawDogBone(b){
  for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
  ctx.restore();
 }
-function drawDogPaw(z){
+function drawDogPaw(z,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  const r=z.r,hot=Math.sin(t*3+z.x*.12)*.07,fade=clamp(z.life*.30,0,.80);
  ctx.globalAlpha=fade*.8;ctx.fillStyle='#b4311c';
  ctx.beginPath();ctx.ellipse(0,r*.20,r*.70,r*.51,0,0,TAU);ctx.fill();
@@ -4072,7 +4302,7 @@ function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx
   glow(0,5,3+charge*3,hot?'#fff6e8':'#ffb46a',settings.fx==='low'||settings.fx==='simple'?0:8);
   ctx.restore();return;}
   if(!secondary&&player?.shipType==='laser'){ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(8,-2);ctx.lineTo(17,12);ctx.lineTo(4,7);ctx.lineTo(0,13);ctx.lineTo(-4,7);ctx.lineTo(-17,12);ctx.lineTo(-8,-2);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||'#6755d6';ctx.fillRect(-3,-7,6,13);ctx.fillStyle=player?.evolutionTint||'#e7d9ff';ctx.fillRect(-11,5,5,4);ctx.fillRect(6,5,5,4);ctx.restore();return;}if(!secondary&&player?.shipType==='charge'){ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(8,-9);ctx.lineTo(17,9);ctx.lineTo(10,15);ctx.lineTo(0,8);ctx.lineTo(-10,15);ctx.lineTo(-17,9);ctx.lineTo(-8,-9);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||'#c55e46';ctx.fillRect(-7,1,14,10);glow(0,-3,5,player?.evolutionTint||'#ffdfa3',8);ctx.restore();return;}ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(12,12);ctx.lineTo(0,6);ctx.lineTo(-12,12);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||(secondary?'#7458cf':'#20afb5');ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.fillStyle='#ffbb83';ctx.beginPath();ctx.moveTo(-5,12);ctx.lineTo(0,18+Math.sin(t*22)*3);ctx.lineTo(5,12);ctx.fill();ctx.restore()}
-function drawDrillAuger(p,active){
+function drawDrillAuger(p,active,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
   const reach=32+p.drillReach,rad=11+p.drillWidth*.53,charge=clamp(p.drillPlasma/Math.max(.001,p.drillCap),0,1);
   const len=Math.max(36,reach-12),tip=-reach,baseY=13;
   ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.dy,p.dx)+Math.PI/2);
@@ -4166,7 +4396,7 @@ function drawEvolutionShotMotifs(){
 
 
 /* v13.8 — Circular cyclone: consistent radius under all effect presets. */
-function drawCyclone(g){
+function drawCyclone(g,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  const r=g.r,c=g.color||(g.kind==='fireTornado'?'#ff913e':'#78ead1'),simple=settings.fx==='simple',low=settings.fx==='low';
  const opacity=Math.min(.78,Math.max(0,g.life)*.29),phase=t*.62+g.x*.011+g.y*.013;
  ctx.save();ctx.translate(g.x,g.y);ctx.lineCap='round';
@@ -4194,7 +4424,7 @@ function drawTeslaField(p){
   else drawTeslaEmitter(field);
  }
 }
-function drawHedgehogPulseEmitter(field){
+function drawHedgehogPulseEmitter(field,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  const r=field.empRadius;
  if(r<=0)return;
  let outline=ANIMAL_PATHS.get('hedgehog');
@@ -4245,7 +4475,7 @@ function drawHedgehogPulseEmitter(field){
  ctx.restore();
  ctx.restore();
 }
-function drawTeslaEmitter(p){
+function drawTeslaEmitter(p,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  if(p.empRadius<=0)return;
  const r=Math.min(290,p.empRadius),simple=settings.fx==='simple',low=renderHeavyLoad||settings.fx==='low',high=settings.fx==='high'&&!low;
  const n=p.split?(simple?1:low?2:high?4:3):(simple?2:low?4:high?9:6);
@@ -4537,7 +4767,7 @@ function frame(ts){
   else renderBudget=0;
   const festivalStep=frame.lastDraw?Math.min(.12,(ts-frame.lastDraw)/1000):effectsDt;
   const drawStart=performance.now();
-  render();updateFestival(festivalStep);frame.lastDraw=ts;
+  render();updateFestival(festivalStep);drawWeaponVisualPreview(ts);frame.lastDraw=ts;
   perfDrawMs=performance.now()-drawStart;
   if(mode==='playing')tuneRenderResolution(elapsed,perfDrawMs);
   if(mode==='playing'){
