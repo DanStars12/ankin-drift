@@ -1878,7 +1878,22 @@ const escHtml=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'
 function atlasList(){const q=atlasQuery.toLocaleLowerCase('ja'),filtered=ALL_SKILL_DEFS().filter(c=>(atlasRarity==='all'||c.rarity===atlasRarity)&&(atlasAttr==='all'||c.tags.includes(atlasAttr))&&[c.name,c.desc,c.rarity,...c.tags,SHIPS[c.shipOnly]?.jp||''].join(' ').toLocaleLowerCase('ja').includes(q));
  const order={common:0,uncommon:1,rare:2,epic:3,power:4,legendary:5,unique:6,relic:7};filtered.sort((a,b)=>order[a.rarity]-order[b.rarity]||a.name.localeCompare(b.name,'ja'));
  const items=filtered.map(c=>{const have=game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0;const fits=fitsShip(c),claimed=rewardAlreadyTaken(c);const evol=FUSIONS.filter(a=>fusionMaterials(a).includes(c.id)).map(a=>a.name+'（素材：'+fusionMaterials(a).filter(id=>id!==c.id).map(cName).join('＋')+'）');const syn=SYNERGIES.filter(a=>a.need.includes(c.id));const synActive=syn.filter(a=>game.synergies[a.id]&&!a.need.some(x=>isSealedCard(skillById(x)))).length;const synReady=syn.filter(a=>!game.synergies[a.id]&&a.need.filter(x=>x!==c.id).every(owned)&&(!a.shipOnly||a.shipOnly===player.shipType)).length;return `<article class="atlas-card ${c.rarity} atlas-interactive" role="button" tabindex="0" data-atlas-card="${escHtml(c.id)}" aria-label="${escHtml(c.name)}の詳細を開く"><div class="atlas-head"><span class="rarity-name ${c.rarity}">${c.icon} ${escHtml(c.name)}</span><span class="atlas-rank ${c.rarity}">${RARITY_NAMES[c.rarity]}</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${escHtml(c.desc)}</div><div class="atlas-meta">${c.shipOnly?`専用機体：${SHIPS[c.shipOnly].jp}`:c.excludeShips?.length?`使用不可：${c.excludeShips.map(id=>SHIPS[id].jp).join('・')}`:'全機体で使用可能'}　${have?`<b class="atlas-owned">✓ 取得済み ×${have}</b>`:claimed?'<b class="atlas-owned">✓ 取得済み（融合で消費）</b>':'未取得'} ${!fits?' · 現在の機体では選択不可':''}</div><div class="atlas-open-hint">ⓘ カードをクリック・タップで詳細表示</div>${evol.length?`<div class="atlas-assoc fusion">進化合成：${evol.map(escHtml).join(' ／ ')}</div>`:''}${syn.length?`<div class="atlas-assoc synergy"><b class="synergy-gradient">✧ 関連シナジー ${syn.length}件</b> ${synActive?`<span class="atlas-syn-ready">✓ 発動中 ${synActive}件</span>`:''} ${synReady?`<span class="atlas-syn-ready">✦ 相方所持 ${synReady}件</span>`:''}<div class="atlas-syn-hint">${syn.slice(0,2).map(a=>escHtml(a.name)).join(' ／ ')}${syn.length>2?' ほか':''} — クリックで相方・発動効果・所持状況を確認</div></div>`:''}</article>`}).join('');return `<p class="atlas-count">表示 ${filtered.length} / 全${ALL_SKILL_DEFS().length}種類　｜　現在の機体：${SHIPS[player.shipType].jp}</p><div class="atlas-grid">${items||'<p class="atlas-empty">該当するスキルがありません。検索条件を変更してください。</p>'}</div>`}
-function atlasMarkup(){const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tags))].sort((a,b)=>a.localeCompare(b,'ja'));return `<div class="atlas-controls"><label>名称・効果を検索<input id="atlasSearch" type="search" placeholder="例：炎 / 貫通 / 壁 / レーザー" value="${escHtml(atlasQuery)}"></label><label>レアリティ<select id="atlasRarity">${[['all','すべて'],...Object.entries(RARITY_NAMES).map(([k,v])=>[k,v])].map(([key,title])=>`<option value="${key}" ${atlasRarity===key?'selected':''}>${title}</option>`).join('')}</select></label><label>属性・種類<select id="atlasAttr">${[['all','すべて'],...attrs.map(x=>[x,x])].map(([key,title])=>`<option value="${escHtml(key)}" ${atlasAttr===key?'selected':''}>${escHtml(title)}</option>`).join('')}</select></label></div><div id="atlasResults">${atlasList()}</div>`}
+function atlasTagCategory(tag){
+ if(tag.startsWith('属性：'))return '属性';
+ if(['属性融合素材','進化合成素材','変異','共鳴','レリック','限界突破'].includes(tag))return '進化・特殊';
+ if(['アニマル','ウサギ','ネコ','キツネ','ヘビ','ハムスター','クジラ','ハリネズミ','ヒヨコ','イルカ','肉球','骨ブーメラン'].includes(tag))return 'アニマル';
+ if(['追加射撃','射撃','射撃性能','弾数','レーザー','チャージ','ドリル','ドリル蓄積','近接','突進','貫通','反射','追尾','分裂','分岐','連射','ミサイル','アイスボール','フロストスパイク','パルス','ライトニングボルト','サイクロン','ブレード','マグマ床','岩壁','防御壁','隕石'].includes(tag))return '武装・戦闘';
+ return '能力・その他';
+}
+function atlasMarkup(){
+ const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tags||[]))].sort((a,b)=>a.localeCompare(b,'ja'));
+ const categories=['属性','武装・戦闘','アニマル','能力・その他','進化・特殊'];
+ const options=categories.map(group=>{
+  const tags=attrs.filter(tag=>atlasTagCategory(tag)===group);if(!tags.length)return '';
+  return '<optgroup label="'+escHtml(group)+'">'+tags.map(tag=>'<option value="'+escHtml(tag)+'" '+(atlasAttr===tag?'selected':'')+'>'+escHtml(tag)+'</option>').join('')+'</optgroup>';
+ }).join('');
+ return `<div class="atlas-controls"><label>名称・効果・タグで検索<input id="atlasSearch" type="search" placeholder="例：炎 / 貫通 / ウサギ / レーザー" value="${escHtml(atlasQuery)}"></label><label>レアリティ<select id="atlasRarity">${[['all','すべて'],...Object.entries(RARITY_NAMES).map(([k,v])=>[k,v])].map(([key,title])=>`<option value="${key}" ${atlasRarity===key?'selected':''}>${title}</option>`).join('')}</select></label><label>スキルタグ<select id="atlasAttr"><option value="all">すべて</option>${options}</select></label></div><div id="atlasResults">${atlasList()}</div>`;
+}
 
 
 
@@ -3080,6 +3095,49 @@ for(const [element,ids] of Object.entries(DOG_ELEMENT_ASSETS))for(const id of id
  c.element=element;
  c.tags=[...new Set([...(c.tags||[]),...(c.mutation?['変異','アニマル']:[]),'属性：'+ELEMENTS[element].name])];
 }
+// v13.20: canonical, gameplay-safe tag vocabulary. Keep all '属性：' entries,
+// '共鳴', and fusion/evolution material flags: they are read by game rules.
+const SKILL_TAG_ALIASES={
+ '後方射撃':'追加射撃','側方射撃':'追加射撃','追加弾':'追加射撃',
+ 'オプション':'僚機','弾丸':'射撃','弾速':'射撃性能','弾サイズ':'射撃性能',
+ '線幅':'レーザー','プラズマ':'ドリル蓄積','蓄積':'ドリル蓄積',
+ '専用：DOG':null,'機体専用':null
+};
+const SKILL_TAG_EXACT={
+ // These categories previously conflated different DOG weapons.
+ dogRabbit:['ウサギ','アイスボール'],
+ dogRabbitFrost:['ウサギ','アイスボール'],
+ dogRelicRabbit:['ウサギ','アイスボール'],
+ dogPwrRabbit:['ウサギ','アイスボール'],
+ dogLegendRabbit:['ウサギ','アイスボール'],
+ dogCat:['ネコ','岩壁'],dogCatFort:['ネコ','岩壁'],dogPwrCat:['ネコ','岩壁'],
+ dogRelicCat:['ネコ','岩壁'],
+ dogHamMeteor:['ハムスター','隕石'],dogHamPlus:['ハムスター','隕石'],
+ dogLegendHam:['ハムスター','隕石'],dogMutHam:['ハムスター','隕石'],
+ dogMutWhale:['クジラ','サイクロン'],dogMutMoon:['ウサギ','フロストスパイク'],
+ dogMutViper:['ヘビ','ライトニングボルト'],dogMutNineTail:['キツネ','ミサイル']
+};
+for(const c of ALL_SKILL_DEFS()){
+ let tags=[...(c.tags||[])];
+ if(c.shipOnly==='dog'){
+  if(/Bone|GoodBoy|Fetch|Puppy/.test(c.id))tags=tags.filter(v=>v!=='アニマル');
+  if(/Hare|Moon/.test(c.id))tags.push('ウサギ','フロストスパイク');
+  if(/Hedge/.test(c.id))tags.push('ハリネズミ','パルス');
+  if(/Fox|NineTail/.test(c.id))tags.push('キツネ','ミサイル');
+  if(/Paw/.test(c.id))tags.push('肉球','マグマ床');
+  if(/Dolphin|Duet|Hurricane/.test(c.id))tags.push('イルカ','サイクロン');
+  if(/Snake|Viper/.test(c.id))tags.push('ヘビ','ライトニングボルト');
+  if(/Ham/.test(c.id))tags.push('ハムスター','隕石');
+  if(/Cat/.test(c.id))tags.push('ネコ','岩壁');
+  if(/Rabbit/.test(c.id))tags.push('ウサギ','アイスボール');
+  if(c.mutation)tags.push('変異');
+ }
+ tags.push(...(SKILL_TAG_EXACT[c.id]||[]));
+ // Keep the UI taxonomy intentionally compact; exclude machine-only
+ // '専用' repetitions already present in the dedicated vehicle metadata.
+ c.tags=[...new Set(tags.map(v=>Object.hasOwn(SKILL_TAG_ALIASES,v)?SKILL_TAG_ALIASES[v]:v).filter(Boolean))];
+}
+
 
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
