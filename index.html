@@ -2028,8 +2028,10 @@ function expandedTagDetails(tag,base){
   matches.length?'このタグを持つスキル：'+matches.length+'種類（例は最大3件）':'このタグを持つ現行カードはありません。',
   ...examples,
   'タグは図鑑の分類です。タグをタップしただけで効果が発動・取得されることはありません。'];
- return {name:base.name||tag,
-  desc:base.desc&&!base.desc.startsWith('このスキルの戦い方')?base.desc:(notes[0]||fallback),details};
+ const previous=base.desc||'';
+ const better=notes[0]&&notes[0].length>previous.length?notes[0]:previous;
+ const description=better.length>=32?better:(better?better+' '+fallback:fallback);
+ return {name:base.name||tag,desc:description,details};
 }
 
 function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.max(0,n)*100)}%`,burn=Math.max(15,p.dmg*(.28+p.thermal*.8)),magma=Math.round(p.magmaDps+p.magmaLevel*18+p.dmg*.25);
