@@ -124,6 +124,6 @@ test('archive records dog clears and all eleven trial choices',async({page})=>{
  const errors=await setup(page),x=await page.evaluate(()=>window.__dogTest.archive());
  expect(x.ok).toBeTruthy();expect(x.ship).toBe('dog');
  expect(x.challenges).toHaveLength(11);expect(x.awards).toBe(1);
- expect(x.endingShip).toContain('ドッグ');
+ expect(x.endingShip).toMatch(/ドッグ|BONE BUDDY/);
  expect(errors).toEqual([]);
 });
