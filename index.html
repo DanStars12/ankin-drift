@@ -3641,7 +3641,7 @@ function weaponElementPalette(ship,mode,tint=null){
  const v=(WEAPON_ELEMENT_COLORS[ship]||WEAPON_ELEMENT_COLORS.shot)[mode]||(WEAPON_ELEMENT_COLORS[ship]||WEAPON_ELEMENT_COLORS.shot).pulse;
  return tint?{accent:tint,body:tint,core:'#ffffff',overridden:true}:{accent:v[0],body:v[1],core:v[2],overridden:false};
 }
-const BULLET_COLOR={iceball:'#98edff',meteor:'#d4bc9a',pulse:'#70fff1',plasma:'#ffac57',cryo:'#76ceff',arc:'#d1a0ff',rocket:'#ffe5a4',comet:'#ffba6e',novaCharge:'#fff0b3'};
+const BULLET_COLOR={iceball:'#98edff',meteor:'#d4bc9a',pulse:WEAPON_ELEMENT_COLORS.shot.pulse[0],plasma:WEAPON_ELEMENT_COLORS.shot.plasma[0],cryo:WEAPON_ELEMENT_COLORS.shot.cryo[0],arc:WEAPON_ELEMENT_COLORS.shot.arc[0],rocket:'#ffe5a4',comet:'#ffba6e',novaCharge:'#fff0b3'};
 function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source='primary'){if(!target)return;
  if(source==='rocket'&&player.shipType==='dog'){speed*=player.dogFoxSpeed||1;damage*=player.dogFoxDamage||1;}
  if(source==='rocket'&&player.gigaNapalm){
