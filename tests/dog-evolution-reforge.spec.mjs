@@ -29,6 +29,7 @@ window.__dogReforge={
  combatStats(){return {wind:player.windDps,spike:player.spikeDamage,bolt:player.boltDamage,rocket:player.missileBurnBonus,meteor:player.meteorDamage};},
  apexStyles(){return [!!player.dogWhaleAscended,!!player.dogMoonAscended,!!player.dogViperAscended,!!player.dogNineTailAscended,!!player.dogArmorHamAscended];},
  neutralIsSealed(){return isSealedCard(skillById('dogRelicReturnBone'));},
+ neutralBoneAvailable(){return !isSealedCard(skillById('dogBonePack'));},
  pool(){return {ordinary:selectable(SKILLS).map(c=>c.id),power:selectable(POWERS).map(c=>c.id),
   legendary:selectable(LEGENDS).map(c=>c.id),relic:selectable(RELICS).map(c=>c.id)};},
  meta(){return {elements:Object.fromEntries(Object.keys(DOG_ELEMENT_ASSETS).map(k=>[k,DOG_ELEMENT_ASSETS[k].map(id=>({id,element:elementFromCard(skillById(id)),sealed:isSealedCard(skillById(id))}))])),
@@ -65,7 +66,7 @@ test('five DOG attributes have explicit owners and sealed cards stay out of ever
   for(const element of p.elementKeys()){
    p.reset();p.seal(element);
    const all=Object.values(p.pool()).flat(),metadata=p.meta().elements[element];
-   results[element]={typed:metadata.every(c=>c.element===element&&c.sealed),excluded:metadata.every(c=>!all.includes(c.id)),bone:!isSealedCard(skillById('dogBonePack'))};
+   results[element]={typed:metadata.every(c=>c.element===element&&c.sealed),excluded:metadata.every(c=>!all.includes(c.id)),bone:p.neutralBoneAvailable()};
   }
   return{before,results};
  });
