@@ -1762,6 +1762,72 @@ function atlasList(){const q=atlasQuery.toLocaleLowerCase('ja'),filtered=ALL_SKI
 function atlasMarkup(){const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tags))].sort((a,b)=>a.localeCompare(b,'ja'));return `<div class="atlas-controls"><label>名称・効果を検索<input id="atlasSearch" type="search" placeholder="例：炎 / 貫通 / 壁 / レーザー" value="${escHtml(atlasQuery)}"></label><label>レアリティ<select id="atlasRarity">${[['all','すべて'],...Object.entries(RARITY_NAMES).map(([k,v])=>[k,v])].map(([key,title])=>`<option value="${key}" ${atlasRarity===key?'selected':''}>${title}</option>`).join('')}</select></label><label>属性・種類<select id="atlasAttr">${[['all','すべて'],...attrs.map(x=>[x,x])].map(([key,title])=>`<option value="${escHtml(key)}" ${atlasAttr===key?'selected':''}>${escHtml(title)}</option>`).join('')}</select></label></div><div id="atlasResults">${atlasList()}</div>`}
 
 
+
+/* VISUAL CODEX: isolated, 20fps offscreen canvas using production weapon renderers.
+   This gallery must not grant cards, spawn projectiles, or mutate player/game state. */
+const VISUAL_CODEX_ROWS=[
+ ['shotPulse','basic','shot','パルスショット','通常弾の軌跡。ショット型の基本武装。','pulse','damage'],
+ ['laserRay','basic','laser','プリズムレーザー','敵を自動照準する即着弾の持続ビーム。','laser','lPowerPrism'],
+ ['chargeComet','basic','charge','チャージ彗星弾','停止中にチャージし、移動すると発射する貫通弾。','comet','chargeBlast'],
+ ['drillAuger','basic','drill','プラズマドリル','通常弾は発射せず、先端のドリルで接触攻撃。ダッシュで突進する。','drill','dRotor'],
+ ['dogBone','basic','dog','骨ブーメラン','回転しながら往復する基本武装。帰還時も攻撃する。','bone','dogBonePack'],
+ ['plasma','element',null,'プラズマ弾換装','基本武装の炎換装。対応するPOWERで初めて燃焼が付与される。','plasma','plasma'],
+ ['cryo','element',null,'フロスト弾換装','基本武装の氷換装。スロウを付与し、凍結はしない。','cryo','cryo'],
+ ['arc','element',null,'サンダー弾換装','基本武装の雷換装。連鎖には再発動制限がある。','arc','arc'],
+ ['rocket','element',null,'炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
+ ['magma','element',null,'マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
+ ['iceball','element',null,'アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
+ ['spike','element',null,'フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','spikeSeed'],
+ ['emp','element',null,'電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
+ ['bolt','element',null,'ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','boltSeed'],
+ ['cyclone','element',null,'サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
+ ['blade','element',null,'ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
+ ['wall','element',null,'ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
+ ['meteor','element',null,'ローリング・メテオ','回転して進む貫通隕石。進むほど大きくなるが威力は一定。','meteor','meteorSeed'],
+ ['dogChick','animal','dog','チック・タック（ヒヨコ）','卵を発射するミニオン。時間経過後にニワトリへ成長。','chick','dogChick'],
+ ['dogChicken','animal','dog','成長後のニワトリ','規定時間後にヒヨコが成長した姿。','chicken','dogLegendChicken'],
+ ['dogEgg','animal','dog','たまご弾','ヒヨコ・ニワトリが放つゆっくりした卵弾。','egg','dogEggPower'],
+ ['dogFox','animal','dog','フォックスミサイル','狐の姿をした炎の追尾ミサイル。','fox','dogFox'],
+ ['dogPaw','animal','dog','パウ・ラヴァ','肉球型のマグマ領域。円形のダメージ判定を持つ。','paw','dogPawLava'],
+ ['dogRabbit','animal','dog','スノー・ラビット','ウサギの形の氷球。凍結とスロウの違いに注意。','rabbit','dogRabbit'],
+ ['dogHare','animal','dog','フロスト・ヘア','長く独立したウサギ耳の氷柱。確定スロウ・凍結なし。','hare','dogHare'],
+ ['dogHedge','animal','dog','エレキ・ハリネズミ','紫色のハリネズミ型EMP。表示と攻撃範囲は円形のパルス。','hedgehog','dogHedgehog'],
+ ['dogSnake','animal','dog','ライトニング・スネーク','紫の雷蛇が蛇行して敵から敵へ伝播する。','snake','dogSnake'],
+ ['dogDolphin','animal','dog','ドルフィン・リング','自機の周囲を泳ぐイルカの迎撃武装。','dolphin','dogDolphin'],
+ ['dogHurricane','animal','dog','ドルフィン・ハリケーン','サイクロンにイルカが一体となって移動する。','dolphinCyclone','dogHurricane'],
+ ['dogCat','animal','dog','キャット・ディフェンダー','機体の周囲を回る猫壁。敵弾を迎撃する。','cat','dogCat'],
+ ['dogHam','animal','dog','ハム・スターメテオ','転がるハムスター型貫通弾。','ham','dogHamMeteor'],
+ ['dogWhale','mutation','dog','タイダル・モノサイクロン','イルカ→クジラ。サイクロンを単一の大型竜巻へ圧縮。','whale','dogMutWhale'],
+ ['dogMoon','mutation','dog','ムーンラビット結晶化','月兎の長耳と銀紫の発光。氷柱に凍結を追加しない。','moon','dogMutMoon'],
+ ['dogViper','mutation','dog','ヴァイパー・オーバードライブ','金色の太い蛇と伝播の強化。','viper','dogMutViper'],
+ ['dogNine','mutation','dog','九尾導火','白熱金色の狐と複数の尾。燃焼と爆風を強化。','nineTail','dogMutNineTail'],
+ ['dogArmor','mutation','dog','ギガ・ハムスターメテオ','装甲化したハムスターが貫通回転する。','armorHam','dogMutHam'],
+ ['dogWhaleApex','mutation','dog','深海の巨鯨','クジラの上位進化。深海色の巨大サイクロン。','whaleApex','dogMutWhale'],
+ ['dogMoonApex','mutation','dog','永月フロスト・ヘア','白金色の月兎結晶。','moonApex','dogMutMoon'],
+ ['dogViperApex','mutation','dog','皇雷大蛇','金白色の上位雷蛇。','viperApex','dogMutViper'],
+ ['dogNineApex','mutation','dog','九尾神炎','白金色の九尾神炎。','nineTailApex','dogMutNineTail'],
+ ['dogHamApex','mutation','dog','星穿つ装甲獣','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
+];
+const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>({id,group,ship,name,desc,kind,card}));
+const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性武装'],['animal','アニマル'],['mutation','変異・上位進化']];
+function visualCodexItems(){return VISUAL_CODEX.filter(v=>(!v.ship||v.ship===visualShip)&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
+function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
+function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex">'+
+ '<p class="lab-help">機体の弾や属性スキル・DOGアニマルを大きく確認できる練習用の見本です。<b>画像を拡大して描画</b>しています。武装やスキルは獲得せず、プレイ中の能力値・所持履歴も変わりません。</p>'+
+ '<div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
+ '<div class="visual-group-switch" role="group" aria-label="武装の種類">'+VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
+ '<div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
+function visualCodexContent(){const v=visualSelected(),all=visualCodexItems();if(!v)return '<p class="lab-empty">この機体の武装はありません。</p>';
+ visualChoice=v.id;
+ return '<div class="visual-stage"><div class="visual-stage-heading"><strong>'+escHtml(v.name)+'</strong><span>'+escHtml(SHIPS[visualShip].jp)+'</span></div>'+
+ '<canvas id="weaponVisualCanvas" width="720" height="360" role="img" aria-label="'+escHtml(v.name)+'の武装アニメーション" aria-describedby="visualWeaponDescription"></canvas>'+
+ '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot"><span>◉ アニメーション見本</span>'+
+ (skillById(v.card)?skillPeekLink(v.card):'<span>基本装備</span>')+'</div>'+
+ '<div class="visual-stage-notice">実際の攻撃判定・発射数・速度はビルドで変化します。大きさは見やすさ優先のため画面上の実寸とは異なります。</div></div>'+
+ '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
+ '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div>';}
+function visualCodexUpdate(){const root=U('visualCodexRoot');if(root){root.outerHTML=visualCodexMarkup();visualLastFrame=0;}}
+
 function enemySpriteMarkup(e){
  const n={star12:12,star16:16,star20:20}[e.shape];
  const pts=n?Array.from({length:n},(_,i)=>{const a=i*Math.PI*2/n-Math.PI/2,r=30*(i%2?.73:1.12);return `${(48+Math.cos(a)*r).toFixed(1)},${(48+Math.sin(a)*r).toFixed(1)}`}).join(' '):'';
