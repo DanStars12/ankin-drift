@@ -89,13 +89,13 @@ test('dog neon ship is playable from title and displays build LAB',async({page,i
  await page.waitForTimeout(480);
  expect(errors).toEqual([]);
 });
-test('dog skill pools contain dedicated animals, six relics and four fusions',async({page})=>{
+test('dog skill pools contain dedicated animals, eleven relics and expanded fusions',async({page})=>{
  const errors=await setup(page),x=await page.evaluate(()=>window.__dogTest.catalog());
  expect(x.beta).toBeFalsy();
  expect(x.dogSkillCount).toBeGreaterThanOrEqual(24);
  expect(x.dogPowerCount).toBeGreaterThanOrEqual(6);
  expect(x.dogLegendCount).toBeGreaterThanOrEqual(5);
- expect(x.dogRelics).toBe(6);expect(x.dogFusions).toBeGreaterThanOrEqual(4);
+ expect(x.dogRelics).toBeGreaterThanOrEqual(11);expect(x.dogFusions).toBeGreaterThanOrEqual(4);
  expect(x.dogSynergies).toBeGreaterThanOrEqual(5);
  expect(x.noOtherDrone&&x.exact).toBeTruthy();
  expect(x.dogOnly).toContain('dogChick');expect(errors).toEqual([]);
@@ -124,6 +124,6 @@ test('archive records dog clears and all eleven trial choices',async({page})=>{
  const errors=await setup(page),x=await page.evaluate(()=>window.__dogTest.archive());
  expect(x.ok).toBeTruthy();expect(x.ship).toBe('dog');
  expect(x.challenges).toHaveLength(11);expect(x.awards).toBe(1);
- expect(x.endingShip).toContain('ドッグ');
+ expect(x.endingShip).toMatch(/ドッグ|BONE BUDDY/);
  expect(errors).toEqual([]);
 });

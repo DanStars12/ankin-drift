@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.15 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.16 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.15 | ELEMENTAL REFORGE IV</title>
+<title>ANKIN DRIFT v13.16 | DOG EVOLUTION REFORGE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1128,7 +1128,7 @@ function resonanceNames(main){return({
  wind:['endWindCurrent','endWindEdge'],rock:['endRockCore','endRockShell']
 })[main]||[];}
 const DAMAGE_LABELS={frostSpike:'フロストスパイク',lightningBolt:'ライトニングボルト',bone:'骨ブーメラン',dogEgg:'チック・タックの卵',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
-function targetDefinitions(){return [...activeFusions().map(r=>({key:'f:'+r.id,name:r.name,desc:r.desc,materials:[r.power,r.legend],kind:'evolution'})),...ELEMENT_FUSION_RECIPES.map(r=>({key:'e:'+r.id,name:r.name,desc:r.desc,materials:[r.main,r.sub],kind:'element',main:r.main,sub:r.sub,slot:'A'})),...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({key:'e:'+id+'_B',name:v.name,desc:v.desc,materials:id.split('_'),kind:'element',main:id.split('_')[0],sub:id.split('_')[1],slot:'B'}))]}
+function targetDefinitions(){return [...activeFusions().map(r=>({key:'f:'+r.id,name:r.name,desc:r.desc,materials:[r.power,r.legend,...(r.required||[])],kind:'evolution'})),...ELEMENT_FUSION_RECIPES.map(r=>({key:'e:'+r.id,name:r.name,desc:r.desc,materials:[r.main,r.sub],kind:'element',main:r.main,sub:r.sub,slot:'A'})),...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({key:'e:'+id+'_B',name:v.name,desc:v.desc,materials:id.split('_'),kind:'element',main:id.split('_')[0],sub:id.split('_')[1],slot:'B'}))]}
 function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub&&(c.weapon||'A')===(t.slot||'A'));const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||fusionStageIndex()>=2);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
 function reconcileTargets(){if(!game)return;const defs=new Map(targetDefinitions().map(t=>[t.key,t]));const seen=new Set();const kept=[];game.targetHistory=game.targetHistory||[];for(const key of game.targets||[]){if(seen.has(key))continue;seen.add(key);const t=defs.get(key),status=t?targetStatus(t):null;if(!t||status.done||status.sealed){if(!game.targetHistory.some(h=>h.key===key)){game.targetHistory.push({key,name:t?.name||game.targetNameCache?.[key]||key,status:status?.done?'completed':'sealed'});}continue;}if(kept.length<3)kept.push(key)}game.targets=kept;}
 
@@ -1137,7 +1137,7 @@ function toggleTarget(key){reconcileTargets();const r=targetDefinitions().find(x
 function choiceTargetMatches(c){reconcileTargets();if(owned(c.id))return[];const defs=new Map(targetDefinitions().map(t=>[t.key,t]));return (game.targets||[]).map(key=>defs.get(key)).filter(t=>t&&!targetStatus(t).done&&!targetStatus(t).sealed&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id)))}
 function resultBreakdown(){const stats=game.damageStats||{},sum=Object.values(stats).reduce((a,b)=>a+b,0);return Object.keys(DAMAGE_LABELS).filter(k=>stats[k]>0).sort((a,b)=>stats[b]-stats[a]).map(k=>`<div class="damage-row"><span>${DAMAGE_LABELS[k]}</span><div class="damage-meter"><span style="width:${Math.max(1,stats[k]/Math.max(1,sum)*100).toFixed(2)}%"></span></div><strong>${format(stats[k])}</strong></div>`).join('')||'<p class="fine">まだ与ダメージはありません。</p>'}
 function buildSummary(){const cards=Object.entries(game.skills).map(([id,n])=>{const c=skillById(id);return c?`${c.name}${n>1?' ×'+n:''}`:null}).filter(Boolean);const specials=[...Object.keys(game.relics).map(id=>skillById(id)?.name),...Object.keys(game.fusions).map(id=>FUSIONS.find(f=>f.id===id)?.name),...game.elementCombos.map(c=>fusionResultName(c))].filter(Boolean);return{cards,specials}}
-function elementFromCard(c){if(!c)return null;for(const [k,v] of Object.entries(ELEMENTS))if(c.tags?.includes('属性：'+v.name))return k;return null}
+function elementFromCard(c){if(!c)return null;if(c.element&&ELEMENTS[c.element])return c.element;for(const [k,v] of Object.entries(ELEMENTS))if(c.tags?.includes('属性：'+v.name))return k;return null}
 function isSealedCard(c){return !!(game?.sealedElements?.length&&c&&game.sealedElements.includes(elementFromCard(c)))}
 // v12: Ordinary elemental skills establish affinity; rarity-gated base evolutions are
 // optional bonuses, not a four-specific-card requirement for elemental fusion.
@@ -1223,7 +1223,7 @@ function restorePlayerBuild(){const current=retainCombatState(player),next=initi
  for(const id of game.acquisitionLog){const c=skillById(id);if(c&&owned(id)&&!isSealedCard(c))c.apply(next)}
  // Recalculate passive bonuses without triggering presentations or double-applying the original selection.
  for(const a of activeSynergies())if(game.synergies[a.id])applyBalancedUpgrade(next,a.apply,'synergy');
- for(const a of activeFusions())if(game.fusions[a.id]){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
+ for(const a of activeFusions())if(game.fusions[a.id]&&[a.power,a.legend,...(a.required||[])].every(owned)){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
  for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
  Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0});player=next;
 }
@@ -1309,6 +1309,8 @@ function clearConsumedElementAttacks(sub){
  if(sub==='ice')shots=shots.filter(b=>b.kind!=='iceball');
  if(sub==='rock')shots=shots.filter(b=>b.kind!=='meteor');
  if(sub==='wind')gusts=gusts.filter(g=>g.kind==='fireTornado');
+ if(sub==='ice'&&player?.spikeVisuals)player.spikeVisuals.length=0;
+ if(sub==='thunder'&&player?.boltVisuals)player.boltVisuals.length=0;
 }
 function confirmElementFusion(){
  if(mode!=='elementChoice'||!elementChoice?.main||!elementChoice.sub||!elementChoice.weapon)return;
@@ -1794,7 +1796,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.15 · ELEMENTAL REFORGE IV</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.16 · DOG EVOLUTION REFORGE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2553,7 +2555,7 @@ LEGENDS.push(
  skill('dogLegendRabbit','legendary','🐰','雪うさぎの大行進','スノー・ラビットを5発にし、氷球威力+135。',p=>{p.iceBallCount=5;p.iceBallDamage+=135},{shipOnly:'dog'})
 );
 UNIQUE_SKILLS.push(
- skill('dogUniquePack','unique','🐾','アニマル・パラダイス','全アニマル攻撃力+45%、骨ブーメラン+3本、ヒヨコ+3匹、イルカ+2匹。',p=>{p.dogAnimalBoost*=1.45;p.dogBones=Math.min(8,p.dogBones+3);p.dogChicks=Math.min(10,p.dogChicks+3);p.orbit=Math.min(10,p.orbit+2)},{shipOnly:'dog'})
+ skill('dogUniquePack','unique','🐾','アニマル・パラダイス','全アニマル攻撃力+45%、骨ブーメラン+3本、ヒヨコ+3匹、イルカ+2匹。',p=>{p.dogAnimalBoost*=1.45;p.dogBones=Math.min(8,p.dogBones+3);p.dogChicks=Math.min(10,p.dogChicks+3);if(!game?.sealedElements?.includes('wind'))p.orbit=Math.min(10,p.orbit+2)},{shipOnly:'dog'})
 );
 SYNERGIES.push(
  {id:'dogChickenEgg',shipOnly:'dog',need:['dogChick','dogEggPower'],name:'おやつの時間',desc:'たまご威力+35、発射間隔-10%。',apply:p=>{p.dogEggDamage+=35;p.dogEggRate=Math.max(.58,p.dogEggRate*.9)}},
@@ -2615,6 +2617,47 @@ for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS])if(c.
 }
 
 
+// DOG EVOLUTION REFORGE — persistent mutations are separate from existing POWER + LEGENDARY evolution.
+SKILLS.push(
+ skill('dogMutWhale','epic','🐳','タイダル・モノサイクロン','変異：イルカを巨鯨へ。複数サイクロンを巨大な一基に圧縮し、元の発射数を半径と威力へ換算。',p=>{p.dogWhale=1;p.windDps+=45;p.windStrength+=40},{shipOnly:'dog',element:'wind',mutation:true,stackable:false,available:p=>p.windCount>0&&['dogHurricane','dogPwrDolphin','dogLegendSea'].some(owned)}),
+ skill('dogMutMoon','epic','🐇','ムーンラビット結晶化','変異：フロスト・ヘアが月兎の長耳へ。氷柱威力+95、スロウ範囲+5、月光色の結晶。凍結なし。',p=>{p.dogMoon=1;p.spikeDamage+=95;p.spikeArea=Math.min(32,p.spikeArea+5)},{shipOnly:'dog',element:'ice',mutation:true,stackable:false,available:p=>p.spikeCount>0&&['dogHare','dogHarePower','dogHareLegend'].some(owned)}),
+ skill('dogMutViper','epic','🐍','ヴァイパー・オーバードライブ','変異：金雷の雷蛇王へ。雷撃威力+90、伝播距離+30、連鎖+1。同一敵再伝播なし。',p=>{p.dogViper=1;p.boltDamage+=90;p.boltReach=Math.min(380,p.boltReach+30);p.boltJumps=Math.min(6,p.boltJumps+1)},{shipOnly:'dog',element:'thunder',mutation:true,stackable:false,available:p=>p.boltCount>0&&['dogSnake','dogSnakePower','dogSnakeLegend'].some(owned)}),
+ skill('dogMutNineTail','epic','🦊','九尾導火','変異：狐が白熱金色の九尾へ。燃焼+28%、爆風強化。ミサイル数は増やさない。',p=>{p.dogNineTailMorph=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.28;p.thermal+=.22},{shipOnly:'dog',element:'fire',mutation:true,stackable:false,available:p=>p.rocketCd>0&&['dogFox','dogPwrFox','dogLegendFox'].some(owned)}),
+ skill('dogMutHam','epic','🐹','ギガ・ハムスターメテオ','変異：金茶色の装甲獣へ。転がる貫通弾の威力+125、最大半径+8、貫通を維持。',p=>{p.dogArmorHam=1;p.meteorDamage+=125;p.meteorRadius=Math.min(46,p.meteorRadius+8)},{shipOnly:'dog',element:'rock',mutation:true,stackable:false,available:p=>p.meteorCount>0&&['dogHamMeteor','dogLegendHam'].some(owned)})
+);
+LEGENDS.push(
+ skill('dogLegendBoneKing','legendary','🦴','骨界の覇王','骨ブーメラン+2本（最大8）、帰還威力+60%、往復速度+40。',p=>{p.dogBones=Math.min(8,p.dogBones+2);p.dogBoneReturn+=.6;p.dogBoneSpeed+=40},{shipOnly:'dog',stackable:false,tags:['骨ブーメラン','専用：DOG']}),
+ skill('dogLegendFlockWard','legendary','🐔','守護する大群','ヒヨコ+2匹、最大シールド+105、再充填+4/秒。',p=>{p.dogChicks=Math.min(10,p.dogChicks+2);p.shieldMax+=105;p.shield+=105;p.shieldRecharge+=4},{shipOnly:'dog',stackable:false,tags:['アニマル','防御','専用：DOG']})
+);
+RELICS.push(
+ skill('dogRelicMoonCharm','relic','🌙','月兎の耳飾り','フロスト・ヘアの威力+85、スロウ範囲+4。',p=>{p.spikeDamage+=85;p.spikeArea=Math.min(32,p.spikeArea+4)},{shipOnly:'dog',element:'ice',stackable:false,available:p=>p.spikeCount>0}),
+ skill('dogRelicSnakeSkin','relic','⚡','脱皮した雷蛇の皮','ライトニング・スネークの威力+110、連鎖距離+22。',p=>{p.boltDamage+=110;p.boltReach=Math.min(380,p.boltReach+22)},{shipOnly:'dog',element:'thunder',stackable:false,available:p=>p.boltCount>0}),
+ skill('dogRelicWhaleFlute','relic','🐳','潮鯨の潮笛','サイクロン威力+65、ノックバック+55。巨大化しても判定半径上限を維持。',p=>{p.windDps+=65;p.windStrength+=55},{shipOnly:'dog',element:'wind',stackable:false,available:p=>p.windCount>0}),
+ skill('dogRelicFoxTalisman','relic','🦊','狐火の尾札','フォックスミサイルの燃焼威力+35%、追尾弾速+10%。骨には燃焼を付与しない。',p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.35;p.dogFoxSpeed=1.1},{shipOnly:'dog',element:'fire',stackable:false,available:p=>p.rocketCd>0}),
+ skill('dogRelicReturnBone','relic','🪃','回転骨の護符','骨ブーメランの帰還威力+40%、射程+52、往復速度+25。属性は換装POWER取得時のみ。',p=>{p.dogBoneReturn+=.4;p.dogBoneRange=Math.min(480,p.dogBoneRange+52);p.dogBoneSpeed+=25},{shipOnly:'dog',stackable:false,tags:['骨ブーメラン','専用：DOG']})
+);
+SYNERGIES.push(
+ {id:'dogWindWake',shipOnly:'dog',need:['dogHurricane','dogDolphin'],name:'青潮の輪舞',desc:'サイクロン威力+40・風圧+25。',apply:p=>{p.windDps+=40;p.windStrength+=25}},
+ {id:'dogWhaleDuet',shipOnly:'dog',need:['dogMutWhale','dogDuet'],name:'大海の共鳴',desc:'巨大サイクロン威力+55、旋回イルカ威力+18%。',apply:p=>{p.windDps+=55;p.bladePower=(p.bladePower||1)*1.18}},
+ {id:'dogFoxPawTrail',shipOnly:'dog',need:['dogNineTail','dogPawLava'],name:'狐火の足跡',desc:'マグマ威力+70、炎ミサイルの爆風を強化。',apply:p=>{p.magmaDps+=70;p.thermal+=.18}},
+ {id:'dogNineTailFire',shipOnly:'dog',need:['dogMutNineTail','dogFox'],name:'九尾の連火',desc:'狐火の燃焼+18%、本体ミサイル威力+16%。',apply:p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.dogFoxDamage=(p.dogFoxDamage||1)*1.16}},
+ {id:'dogRabbitMoon',shipOnly:'dog',need:['dogHare','dogRabbit'],name:'雪野の跳躍',desc:'フロスト・ヘア威力+60、氷球威力+42。',apply:p=>{p.spikeDamage+=60;p.iceBallDamage+=42}},
+ {id:'dogMoonTracks',shipOnly:'dog',need:['dogMutMoon','dogHareFocus'],name:'月影の足跡',desc:'氷柱威力+90、スロウ範囲+3。',apply:p=>{p.spikeDamage+=90;p.spikeArea=Math.min(32,p.spikeArea+3)}},
+ {id:'dogSnakeHedge',shipOnly:'dog',need:['dogSnake','dogHedgehog'],name:'雷鳴の双牙',desc:'雷蛇威力+72、EMP威力+45。',apply:p=>{p.boltDamage+=72;p.empDps+=45}},
+ {id:'dogViperChain',shipOnly:'dog',need:['dogMutViper','dogSnakeChain'],name:'皇雷蛇行',desc:'雷蛇伝播+1・威力+70（上限6）。',apply:p=>{p.boltJumps=Math.min(6,p.boltJumps+1);p.boltDamage+=70}},
+ {id:'dogHamCatShield',shipOnly:'dog',need:['dogHamMeteor','dogCatFort'],name:'ごろごろ要塞',desc:'猫の迎撃+48、ハムスターの転がり威力+95。',apply:p=>{p.rockDamage+=48;p.meteorDamage+=95}},
+ {id:'dogArmoredGuard',shipOnly:'dog',need:['dogMutHam','dogCat'],name:'重装にゃんこ砦',desc:'装甲獣威力+100、シールド最大+60。',apply:p=>{p.meteorDamage+=100;p.shieldMax+=60;p.shield+=60}},
+ {id:'dogBoneMoon',shipOnly:'dog',need:['dogGoodBoy','dogMutMoon'],name:'月下の骨追い',desc:'骨帰還威力+23%、氷柱威力+50。',apply:p=>{p.dogBoneReturn+=.23;p.spikeDamage+=50}},
+ {id:'dogWhaleArmor',shipOnly:'dog',need:['dogMutWhale','dogMutHam'],name:'巨鯨と装甲獣',desc:'サイクロン威力+55、メテオ威力+85。',apply:p=>{p.windDps+=55;p.meteorDamage+=85}}
+);
+FUSIONS.push(
+ {id:'dogWhaleApex',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogMutWhale',required:['dogHurricane'],name:'深海の巨鯨',icon:'🐳',desc:'巨鯨が深海色に進化。巨大サイクロン威力+135、風圧+85。',apply:p=>{p.dogWhaleAscended=1;p.windDps+=135;p.windStrength+=85}},
+ {id:'dogMoonApex',shipOnly:'dog',power:'dogHarePower',legend:'dogMutMoon',required:['dogHare'],name:'永月フロスト・ヘア',icon:'🌙',desc:'月兎の長耳結晶が強化。氷柱威力+220、スロウ範囲+5。',apply:p=>{p.dogMoonAscended=1;p.spikeDamage+=220;p.spikeArea=Math.min(32,p.spikeArea+5)}},
+ {id:'dogViperApex',shipOnly:'dog',power:'dogSnakeLegend',legend:'dogMutViper',required:['dogSnake'],name:'皇雷大蛇',icon:'🐍',desc:'金白の太い雷蛇に進化。威力+230、伝播距離+25。',apply:p=>{p.dogViperAscended=1;p.boltDamage+=230;p.boltReach=Math.min(380,p.boltReach+25)}},
+ {id:'dogFoxApex',shipOnly:'dog',power:'dogPwrFox',legend:'dogMutNineTail',required:['dogFox'],name:'九尾神炎',icon:'🦊',desc:'狐が白金の九尾神炎へ。狐火の燃焼と爆風を強化、発射数は増やさない。',apply:p=>{p.dogNineTailAscended=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.5;p.thermal+=.35}},
+ {id:'dogHamApex',shipOnly:'dog',power:'dogLegendHam',legend:'dogMutHam',required:['dogHamMeteor'],name:'星穿つ装甲獣',icon:'🐹',desc:'装甲獣が白金の星装甲に進化。貫通威力+260、回転弾速+12%。',apply:p=>{p.dogArmorHamAscended=1;p.meteorDamage+=260;p.meteorSpeed*=1.12}}
+);
+
 // v13.11 NOVA SWARM TUNING. Capped repeatable choices keep 30+ minute builds
 // meaningful without reviving a consumed secondary element or adding particles.
 function enduranceRoom(id,max){return !!game&&(game.level>=20||game.total>=600)&&(game.skills[id]||0)<max;}
@@ -2654,13 +2697,31 @@ const ENDURANCE_SKILLS=[
  skill('dogEndFoxEmber','rare','🦊','狐火の追い風','解放済み狐火ミサイルの威力・燃焼を強化。',p=>{p.dmg+=9;p.missileBurnBonus=(p.missileBurnBonus||0)+.12},{shipOnly:'dog',available:p=>p.rocketCd>0&&enduranceRoom('dogEndFoxEmber',6),tags:['アニマル','属性：炎','ミサイル','継戦']}),
  skill('dogEndHedgeGlow','rare','🦔','ハリネズミ・放電強化','解放済みEMPの威力+46。範囲は維持。',p=>p.empDps+=46,{shipOnly:'dog',available:p=>p.empRadius>0&&enduranceRoom('dogEndHedgeGlow',6),tags:['アニマル','属性：雷','継戦']})
 ];
+ENDURANCE_SKILLS.push(
+ skill('dogEndBoneAura','uncommon','🦴','リターン・マイスター','骨ブーメランの帰還威力+10%、射程+7。',p=>{p.dogBoneReturn+=.10;p.dogBoneRange=Math.min(480,p.dogBoneRange+7)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneAura',8),tags:['骨ブーメラン','継戦']}),
+ skill('dogEndMutation','rare','🐾','変異の絆','所有変異アニマルの攻撃力+4%、最大HP+10（最大8回）。',p=>{p.dogAnimalBoost*=1.04;p.maxHp+=10;p.hp=Math.min(p.maxHp,p.hp+10)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndMutation',8)&&['dogMutWhale','dogMutMoon','dogMutViper','dogMutNineTail','dogMutHam'].some(owned),tags:['アニマル','変異','継戦']})
+);
 SKILLS.push(...ENDURANCE_SKILLS);
 for(const c of ENDURANCE_SKILLS)if(c.enduranceShared)DOG_SHARED.add(c.id);
+// Explicit gameplay attribute; UI tags alone are not an authorization to fire.
+const DOG_ELEMENT_ASSETS={
+ fire:['dogMutNineTail','dogRelicFoxTalisman','dogFox','dogNineTail','dogPawLava','dogPawBloom','dogPwrFox','dogPwrLava','dogLegendFox','dogRelicFox','dogEndFoxEmber'],
+ ice:['dogMutMoon','dogRelicMoonCharm','dogRabbit','dogRabbitFrost','dogHare','dogHareFocus','dogHareFissure','dogPwrRabbit','dogHarePower','dogLegendRabbit','dogHareLegend','dogRelicRabbit'],
+ thunder:['dogMutViper','dogRelicSnakeSkin','dogHedgehog','dogHedgeSpark','dogSnake','dogSnakeFocus','dogSnakeChain','dogSnakePower','dogSnakeLegend','dogEndHedgeGlow'],
+ wind:['dogMutWhale','dogRelicWhaleFlute','dogDolphin','dogDuet','dogHurricane','dogHurricanePlus','dogPwrDolphin','dogLegendSea','dogRelicDolphin'],
+ rock:['dogMutHam','dogCat','dogCatFort','dogHamMeteor','dogHamPlus','dogPwrCat','dogLegendHam','dogRelicCat']
+};
+for(const [element,ids] of Object.entries(DOG_ELEMENT_ASSETS))for(const id of ids){
+ const c=[...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS].find(x=>x.id===id);
+ if(!c)throw Error('Missing DOG element card '+id);
+ c.element=element;
+ c.tags=[...new Set([...(c.tags||[]),...(c.mutation?['変異','アニマル']:[]),'属性：'+ELEMENTS[element].name])];
+}
 
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
-function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&fitsShip(skillById(a.power))&&fitsShip(skillById(a.legend))&&!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)))}
+function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&[a.power,a.legend,...(a.required||[])].every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function synergiesFor(id){return activeSynergies().filter(a=>a.need.includes(id))}
 function fusionFor(id){return activeFusions().filter(a=>a.power===id||a.legend===id)}
 
@@ -2692,7 +2753,7 @@ function syncEvolutionVisuals(p){
  p.evolutionMotif=latest?.motif||'';
 }
 
-function activateUpgrades(){pendingSynergy=[];for(const a of activeSynergies()){if(!game.synergies[a.id]&&a.need.every(owned)){game.synergies[a.id]=1;applyBalancedUpgrade(player,a.apply,'synergy');pendingSynergy.push(a)}}for(const a of activeFusions()){if(!game.fusions[a.id]&&owned(a.power)&&owned(a.legend)){game.fusions[a.id]=1;applyBalancedUpgrade(player,a.apply,'fusion');pendingFusions.push(a);player.fusionList.push(a.id)}}syncEvolutionVisuals(player)}
+function activateUpgrades(){pendingSynergy=[];for(const a of activeSynergies()){if(!game.synergies[a.id]&&a.need.every(owned)){game.synergies[a.id]=1;applyBalancedUpgrade(player,a.apply,'synergy');pendingSynergy.push(a)}}for(const a of activeFusions()){if(!game.fusions[a.id]&&[a.power,a.legend,...(a.required||[])].every(owned)){game.fusions[a.id]=1;applyBalancedUpgrade(player,a.apply,'fusion');pendingFusions.push(a);player.fusionList.push(a.id)}}syncEvolutionVisuals(player)}
 function kindLabel(k){return({pulse:'パルス',plasma:'プラズマ',cryo:'フロスト',arc:'サンダー'})[k]||'パルス'}
 function rarityWeights(){const k=clamp((game.level-1)/60,0,1);return{common:.50-.26*k,uncommon:.32-.02*k,rare:.15+.17*k,epic:.03+.11*k}}
 function weightedRarity(){const w=rarityWeights();let r=Math.random();for(const k of ['common','uncommon','rare','epic']){r-=w[k];if(r<=0)return k}return'epic'}
@@ -2779,7 +2840,10 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
    const completedDiverse=completed.filter(c=>diverse.includes(c)),poolForRarity=same.filter(c=>diverse.includes(c));
    const weighted=Math.random()<.19&&completedDiverse.length?completedDiverse:(poolForRarity.length?poolForRarity:diverse);
    const drillEligible=player.shipType==='drill'?diverse.filter(c=>c.shipOnly==='drill'):[];
-   c=drillEligible.length&&Math.random()<.39?drillEligible[Math.floor(Math.random()*drillEligible.length)]:weighted[Math.floor(Math.random()*weighted.length)];
+   const shared=player.shipType==='dog'&&options.filter(o=>o.shipOnly==='dog').length>=2
+    ?possible.filter(c=>c.shipOnly!=='dog'):[];
+   const pickPool=shared.length?shared:weighted;
+   c=drillEligible.length&&Math.random()<.39?drillEligible[Math.floor(Math.random()*drillEligible.length)]:pickPool[Math.floor(Math.random()*pickPool.length)];
   }else{
    const ready=possible.filter(c=>fusionFor(c.id).some(a=>!game.fusions[a.id]&&owned(c.id===a.power?a.legend:a.power)));
    const weighted=(i===0&&ready.length)||Math.random()<.75&&ready.length?ready:possible;
@@ -3144,10 +3208,11 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
 
 const BULLET_COLOR={iceball:'#98edff',meteor:'#d4bc9a',pulse:'#70fff1',plasma:'#ffac57',cryo:'#76ceff',arc:'#d1a0ff',rocket:'#ffe5a4',comet:'#ffba6e',novaCharge:'#fff0b3'};
 function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source='primary'){if(!target)return;
+ if(source==='rocket'&&player.shipType==='dog'){speed*=player.dogFoxSpeed||1;damage*=player.dogFoxDamage||1;}
  if(source==='rocket'&&player.gigaNapalm){
   if(shots.length>=currentShotBudget())return;
   const units=Math.min(36,Math.max(1,Math.round(player.rocketCd)));
-  const a=Math.atan2(target.y-y,target.x-x),v=Math.max(95,player.shotSpeed*.27);
+  const a=Math.atan2(target.y-y,target.x-x),v=Math.max(95,speed*.27);
   shots.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:Math.min(30,13+units*.55),
    damage:damage*(1+Math.min(20,units-1)*.48),pierce:0,kind:'rocket',source:'rocket',
    ttl:6,hit:new Set(),napalm:true,missileCount:units,seekTimer:0});
@@ -3404,15 +3469,17 @@ function tickGusts(dt){
   player.windTimer+=Math.max(1.25,player.windPeriod);
   const target=visibleTarget(player.x,player.y);
   const angle=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);
-  const n=Math.min(WIND_BULLET_CAP,player.windCount);
+  const whale=player.shipType==='dog'&&!!player.dogWhale;
+  const n=whale?1:Math.min(WIND_BULLET_CAP,player.windCount);
   const extra=Math.max(0,player.windCount-n);
   for(let i=0;i<n;i++){
    const a=angle+(i-(n-1)/2)*.36;
    gusts.push({
     x:player.x,y:player.y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?230:150),
     vy:Math.sin(a)*(player.elementMods?.galeOrbit?230:150),
-    r:Math.min(WIND_VISUAL_CAP,Math.max(46,player.windRadius)),
-    bonus:1+extra*.18+Math.max(0,player.windRadius-WIND_VISUAL_CAP)*.004,
+    r:Math.min(WIND_VISUAL_CAP,Math.max(46,player.windRadius+(whale?Math.min(35,extra*6):0))),
+    bonus:1+extra*(whale?.24:.18)+(whale&&player.dogWhaleAscended?.20:0)+Math.max(0,player.windRadius-WIND_VISUAL_CAP)*.004,
+    whale,
     color:fusedColor('wind')||'#78ead1',
     life:player.elementMods?.galeOrbit?3.8:2.8,tick:0
    });
@@ -3531,19 +3598,39 @@ function drawReforgeWeapons(p){
  for(const s of p.spikeVisuals){
   const k=Math.min(1,s.life/.22),height=(p.shipType==='dog'?43:35)*s.scale,width=(p.shipType==='dog'?19:16)*s.scale;
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
-  ctx.fillStyle=p.shipType==='dog'?'#4ca9cb99':'#80dfff88';ctx.strokeStyle='#c4faff';ctx.lineWidth=2.3;
-  ctx.beginPath();ctx.moveTo(-width,3);ctx.lineTo(-width*.7,-height*.40);ctx.lineTo(-width*.44,-height);
-  ctx.lineTo(-width*.08,-height*.44);ctx.lineTo(width*.08,-height*.44);ctx.lineTo(width*.44,-height);
-  ctx.lineTo(width*.7,-height*.40);ctx.lineTo(width,3);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,-height*.4);ctx.lineTo(0,3);ctx.stroke();ctx.restore();
+  if(p.shipType==='dog'){
+   // Two independent, asymmetric wild-hare ears. The original collision geometry is unchanged.
+   const moon=!!p.dogMoon,glow=p.dogMoonAscended?'#fff7df':moon?'#ddc7ff':'#c1ffff';
+   ctx.shadowColor=glow;ctx.fillStyle=moon?'#baa8e489':'#72d7eb89';ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
+   for(const side of [-1,1]){
+    const base=side*width*.23,tip=side*width*(side===1?.93:.79),rise=height*(side===1?.94:1.11);
+    ctx.beginPath();ctx.moveTo(base-side*width*.20,0);
+    ctx.quadraticCurveTo(base-side*width*.35,-rise*.62,tip,-rise);
+    ctx.quadraticCurveTo(tip+side*width*.23,-rise*.72,base+side*width*.20,0);
+    ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.strokeStyle=moon?'#fff9ff':'#efffff';ctx.lineWidth=1.3;
+    ctx.beginPath();ctx.moveTo(base,-height*.16);ctx.quadraticCurveTo(base,-rise*.66,tip,-rise*.87);ctx.stroke();
+    ctx.strokeStyle=glow;ctx.lineWidth=Math.max(2.5,2.8*s.scale);
+   }
+   ctx.beginPath();ctx.moveTo(0,-height*.31);ctx.lineTo(width*.32,-height*.12);
+   ctx.lineTo(width*.23,height*.10);ctx.lineTo(0,height*.23);ctx.lineTo(-width*.23,height*.10);
+   ctx.lineTo(-width*.32,-height*.12);ctx.closePath();ctx.fill();ctx.stroke();
+   if(moon){ctx.fillStyle='#fff5d8';ctx.beginPath();ctx.arc(0,-height*.18,Math.max(2.4,width*.16),0,TAU);ctx.fill();}
+  }else{
+   ctx.fillStyle='#80dfff88';ctx.strokeStyle='#c4faff';ctx.lineWidth=2.3;
+   ctx.beginPath();ctx.moveTo(-width,3);ctx.lineTo(-width*.7,-height*.40);ctx.lineTo(-width*.44,-height);
+   ctx.lineTo(-width*.08,-height*.44);ctx.lineTo(width*.08,-height*.44);ctx.lineTo(width*.44,-height);
+   ctx.lineTo(width*.7,-height*.40);ctx.lineTo(width,3);ctx.closePath();ctx.fill();ctx.stroke();
+   ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,-height*.4);ctx.lineTo(0,3);ctx.stroke();
+  }ctx.restore();
  }
  for(const b of p.boltVisuals){
   const dx=b.x2-b.x,dy=b.y2-b.y,l=Math.max(1,Math.hypot(dx,dy)),px=-dy/l,py=dx/l,n=Math.max(2,Math.ceil(l/22));
   ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';ctx.shadowColor='#bc9cff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:7;
-  ctx.lineWidth=p.shipType==='dog'?5.8:3.6;ctx.strokeStyle='#b88aff';ctx.beginPath();ctx.moveTo(b.x,b.y);
-  for(let i=1;i<n;i++){const t=i/n,j=Math.sin(i*3.7+l*.04)*Math.min(9,l*.06);ctx.lineTo(b.x+dx*t+px*j,b.y+dy*t+py*j);}
+  ctx.lineWidth=p.shipType==='dog'?(p.dogViper?7.6:5.8):3.6;ctx.strokeStyle=p.dogViper?(p.dogViperAscended?'#fff4c3':'#ffe68c'):'#b88aff';ctx.beginPath();ctx.moveTo(b.x,b.y);
+  for(let i=1;i<n;i++){const t=i/n,j=Math.sin(i*(p.dogViper?4.7:3.7)+l*.04)*Math.min(p.dogViper?12:9,l*.075);ctx.lineTo(b.x+dx*t+px*j,b.y+dy*t+py*j);}
   ctx.lineTo(b.x2,b.y2);ctx.stroke();ctx.lineWidth=1.2;ctx.strokeStyle='#fff';ctx.stroke();
-  if(p.shipType==='dog'){ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));ctx.fillStyle='#9a76e0';ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(11,0);ctx.lineTo(-6,-6);ctx.lineTo(-3,0);ctx.lineTo(-6,6);ctx.closePath();ctx.fill();ctx.stroke();}
+  if(p.shipType==='dog'){ctx.translate(b.x2,b.y2);ctx.rotate(Math.atan2(dy,dx));ctx.fillStyle=p.dogViper?'#d6a84b':'#9a76e0';ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.dogViper?17:11,0);ctx.lineTo(-6,-6);ctx.lineTo(-3,0);ctx.lineTo(-6,6);ctx.closePath();ctx.fill();ctx.stroke();}
   ctx.restore();
  }
 }
@@ -3872,6 +3959,18 @@ function drawDogFrame(){
  ctx.restore();
 }
 
+ANIMAL_OUTLINES.whale='M 1.62 -.20 Q 1.36 -.45 1.06 -.49 C .78 -.78 -.09 -.73 -.71 -.39 L -1.08 -.52 L -1.45 -.92 L -1.42 -.25 L -1.64 .22 L -1.22 .20 L -1.01 -.04 C -.69 .48 .07 .69 .80 .35 Q 1.25 .29 1.46 .13 L 1.72 .02 L 1.30 -.05 Q 1.67 -.10 1.62 -.20 Z';
+const DOG_MUTATION_VISUALS={
+ whale:{base:['#a8faff','#16677f'],apex:['#f5fbd5','#315a99']},
+ fox:{base:['#fff3b8','#eab04f'],apex:['#fffef2','#d48b57']},
+ ham:{base:['#ffe7a4','#9d7947'],apex:['#ffffff','#c0a162']}
+};
+function dogAnimalPalette(kind,p){
+ if(kind==='whale')return p?.dogWhaleAscended?DOG_MUTATION_VISUALS.whale.apex:DOG_MUTATION_VISUALS.whale.base;
+ if(kind==='fox'&&p?.dogNineTailMorph)return p.dogNineTailAscended?DOG_MUTATION_VISUALS.fox.apex:DOG_MUTATION_VISUALS.fox.base;
+ if(kind==='ham'&&p?.dogArmorHam)return p.dogArmorHamAscended?DOG_MUTATION_VISUALS.ham.apex:DOG_MUTATION_VISUALS.ham.base;
+ return null;
+}
 const ANIMAL_PATHS=new Map();
 /* v13.11: readable miniature animals — colored bodies, expressive essential facial landmarks.
    Shared cached silhouettes remain the foundation, so silhouettes and gameplay stay consistent. */
@@ -3885,16 +3984,26 @@ function drawAnimal(kind,x,y,r=14,angle=0){
   cat:['#f4dcb5','#bca388'],ham:['#ffe0a9','#c99067'],
   hedgehog:['#c49aff','#8555c3']
  };
- const [outline,body]=colors[kind];
+ const [outline,body]=dogAnimalPalette(kind,player)||colors[kind];
  const heavy=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low';
- ctx.save();ctx.translate(x,y);ctx.rotate(kind==='dolphin'?angle-Math.PI/2:angle);ctx.scale(r,r);
+ ctx.save();ctx.translate(x,y);ctx.rotate(kind==='dolphin'||kind==='whale'?angle-Math.PI/2:angle);ctx.scale(r,r);
  ctx.lineJoin='round';ctx.lineCap='round';ctx.lineWidth=.13;
  ctx.shadowColor=outline;ctx.shadowBlur=heavy?0:settings.fx==='high'?9:4;
  ctx.fillStyle=body;ctx.globalAlpha=kind==='dolphin'?.82:.94;
  ctx.fill(path);ctx.globalAlpha=1;
  ctx.strokeStyle=kind==='dog'&&player?.evolutionTint?player.evolutionTint:outline;
  ctx.stroke(path);ctx.shadowBlur=0;
- if(r>=8){
+ if(kind==='fox'&&player?.dogNineTailMorph){
+  ctx.strokeStyle=outline;ctx.lineWidth=.09;ctx.beginPath();
+  for(let k=-3;k<=3;k++){const v=k*.14;ctx.moveTo(v,.52);ctx.quadraticCurveTo(v*2,1.12,v*1.8,1.30+Math.abs(k)*.035);}ctx.stroke();
+ }
+ if(kind==='ham'&&player?.dogArmorHam){
+  ctx.strokeStyle=outline;ctx.lineWidth=.12;ctx.beginPath();
+  ctx.moveTo(-.8,-.15);ctx.lineTo(-.43,-.68);ctx.lineTo(.38,-.68);ctx.lineTo(.82,-.15);
+  ctx.moveTo(-.65,.47);ctx.lineTo(0,.68);ctx.lineTo(.65,.47);ctx.stroke();
+  ctx.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*TAU/10,rad=i%2?.15:.30;i?ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad):ctx.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);}ctx.closePath();ctx.stroke();
+ }
+ if(r>=8&&!(kind==='fox'&&player?.dogNineTailMorph)&&!(kind==='ham'&&player?.dogArmorHam)){
   // Eye/highlight pairs make small sprites recognizable even in SIMPLE mode.
   ctx.fillStyle='#251d36';
   if(kind==='chick'||kind==='chicken'){
@@ -4197,6 +4306,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  drawCyclone(g);
  if(player.shipType==='dog'&&g.kind!=='fireTornado'&&player.windCount>0){
   const heading=Math.atan2(g.vy,g.vx)+Math.PI/2;
+  if(g.whale){drawAnimal('whale',g.x,g.y,Math.min(53,Math.max(23,g.r*.47)),heading);continue;}
   // A clear dolphin at the center, plus one tangentially swimming around its cyclone.
   drawAnimal('dolphin',g.x,g.y,Math.max(15,Math.min(32,g.r*.43)),heading);
   if(!renderHeavyLoad&&settings.fx!=='simple'&&settings.fx!=='low'){
@@ -4242,7 +4352,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    ctx.fillStyle='#d45232';ctx.beginPath();ctx.moveTo(-rr*.55,rr*.34);ctx.lineTo(-rr,rr);ctx.lineTo(-rr*.22,rr*.72);ctx.lineTo(rr*.22,rr*.72);ctx.lineTo(rr,rr);ctx.lineTo(rr*.55,rr*.34);ctx.closePath();ctx.fill();
    ctx.fillStyle='#ffbd51';ctx.beginPath();ctx.moveTo(-rr*.30,rr*.9);ctx.lineTo(0,rr*(simple?1.45:1.8+.15*Math.sin(t*21)));ctx.lineTo(rr*.30,rr*.9);ctx.closePath();ctx.fill();
    ctx.restore();continue;
-  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(52,Math.max(14,b.r)),t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
+  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(75,Math.max(14,b.r)),t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':'#ffb16c');ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':'#e77f45');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':'#ffe0ae';ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle='#ffb77599';ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
  if(player.empRadius>0)drawTeslaField(player);
