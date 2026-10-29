@@ -4,15 +4,15 @@ const probe=[
  "window.__fusionProbe={",
  "reset(level,elements=[],consumed=[]){",
  " newRun();game.level=level;game.pendingLevels=0;game.rewards=[];game.bossQueue=[];game.ultimatePending=false;",
- " game.skills={};game.acquisitionLog=[];game.elementCombos=[];game.sealedElements=[];",
- " if(consumed.length){game.elementCombos.push({main:consumed[0],sub:consumed[1],resonance:2,cards:1});game.sealedElements.push(consumed[1]);}",
+ " game.skills={};game.acquisitionLog=[];game.elementCombos=[];game.sealedElements=[];game.fusionMilestoneIndex=0;game.fusionMilestoneResults=[];",
+ " if(consumed.length){game.elementCombos.push({main:consumed[0],sub:consumed[1],weapon:'A',resonance:2,cards:1});game.sealedElements.push(consumed[1]);game.fusionMilestoneIndex=1;game.fusionMilestoneResults=['fused'];}",
  " state('playing');return window.__fusionProbe.add(elements);",
  "},",
  "add(elements=[]){",
  " for(const element of elements){",
- "  const c=ALL_SKILL_DEFS().find(x=>elementFromCard(x)===element);",
+ "  const id=({fire:'emberSeed',ice:'iceBall',thunder:'empPulse',wind:'windOrigin',rock:'stoneSeed'})[element];const c=skillById(id);",
  "  if(!c)throw Error('Missing elemental skill: '+element);",
- "  game.skills[c.id]=1;game.acquisitionLog.push(c.id);",
+ "  game.skills[c.id]=1;game.acquisitionLog.push(c.id);c.apply(player);",
  " }",
  " processTransitions();return window.__fusionProbe.inspect();",
  "},",
@@ -49,7 +49,7 @@ test('Lv12 with two elements enters fusion; Lv28 skips with 1 unused until 2 exi
  const second=await page.evaluate(()=>window.__fusionProbe.reset(28,['fire','ice','thunder'],['fire','ice']));
  expect(second.mode).toBe('playing');expect(second.usable).toEqual(['thunder']);
  const later=await page.evaluate(()=>window.__fusionProbe.add(['rock']));
- expect(later.mode).toBe('elementChoice');expect(later.pairs).toHaveLength(1);
+ expect(later.mode).toBe('elementChoice');expect(later.pairs).toHaveLength(2);
  await expect(page.locator('[data-element-main="thunder"]')).toBeEnabled();
  await expect(page.locator('[data-element-main="rock"]')).toBeEnabled();
  expect(errors).toEqual([]);
