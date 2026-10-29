@@ -3222,13 +3222,13 @@ UNIQUE_SKILLS.push(
 SYNERGIES.push(
  {id:'dogChickenEgg',shipOnly:'dog',need:['dogChick','dogEggPower'],name:'おやつの時間',desc:'たまご威力+35、発射間隔-10%。',apply:p=>{p.dogEggDamage+=35;p.dogEggRate=Math.max(.58,p.dogEggRate*.9)}},
  {id:'dogDolphinDuetSynergy',shipOnly:'dog',need:['dogDolphin','dogDuet'],name:'イルカのハーモニー',desc:'イルカの周回攻撃力+20%、ドルフィン・ハリケーン+1発。',apply:p=>{p.bladePower=(p.bladePower||1)*1.2;p.windCount=Math.min(7,p.windCount+1)}},
- {id:'dogFoxPaw',shipOnly:'dog',need:['dogFox','dogPawLava'],name:'こんこん・足あと',desc:'肉球マグマ威力+65、狐火ミサイル+1発。',apply:p=>{p.magmaDps+=65;p.rocketCd=Math.min(8,p.rocketCd+1)}},
+ {id:'dogFoxPaw',shipOnly:'dog',need:['dogFox','dogPawLava'],name:'こんこん・肉球マーク',desc:'肉球マグマ威力+65、狐火ミサイル+1発。',apply:p=>{p.magmaDps+=65;p.rocketCd=Math.min(8,p.rocketCd+1)}},
  {id:'dogHamCat',shipOnly:'dog',need:['dogHamMeteor','dogCat'],name:'まんまる守備隊',desc:'ハムスター威力+100、猫ブロッカー反撃+35。',apply:p=>{p.meteorDamage+=100;p.rockDamage+=35}},
- {id:'dogRabbitHedge',shipOnly:'dog',need:['dogRabbit','dogHedgehog'],name:'びりびり・ぴょん',desc:'氷球凍結+10%、電磁パルス威力+65。',apply:p=>{p.iceBallChance=Math.min(.78,p.iceBallChance+.10);p.empDps+=65}}
+ {id:'dogRabbitHedge',shipOnly:'dog',need:['dogRabbit','dogHedgehog'],name:'びりびり・ぴょんぴょん',desc:'氷球凍結+10%、電磁パルス威力+65。',apply:p=>{p.iceBallChance=Math.min(.78,p.iceBallChance+.10);p.empDps+=65}}
 );
 FUSIONS.push(
  {id:'dogChickenEvo',shipOnly:'dog',power:'dogPwrChicks',legend:'dogLegendChicken',name:'コケコッコ・フェスティバル',icon:'🐔',desc:'卵が大幅強化。ヒヨコ+2匹、発射間隔-30%。',apply:p=>{p.dogEggDamage+=190;p.dogChicks=Math.min(10,p.dogChicks+2);p.dogEggRate=Math.max(.58,p.dogEggRate*.7)}},
- {id:'dogFoxEvo',shipOnly:'dog',power:'dogPwrFox',legend:'dogLegendFox',name:'九尾のフォックスストーム',icon:'🦊',desc:'フォックスミサイルを強化。狐火がさらに大きな爆風を残す。',apply:p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.dmg+=110;p.thermal+=1.1}},
+ {id:'dogFoxEvo',shipOnly:'dog',power:'dogPwrFox',legend:'dogLegendFox',name:'きゅうびの・フォックスストーム',icon:'🦊',desc:'フォックスミサイルを強化。狐火がさらに大きな爆風を残す。',apply:p=>{p.rocketCd=Math.min(8,p.rocketCd+2);p.dmg+=110;p.thermal+=1.1}},
  {id:'dogDolphinEvo',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogLegendSea',name:'ドルフィン・オーケストラ',icon:'🐬',desc:'イルカ数と旋回威力・ハリケーンの発生数を強化。',apply:p=>{p.orbit=Math.min(10,p.orbit+2);p.bladePower=(p.bladePower||1)*1.5;p.windCount=7}},
  {id:'dogRabbitEvo',shipOnly:'dog',power:'dogPwrRabbit',legend:'dogLegendRabbit',name:'スノー・ラビット大行進',icon:'🐰',desc:'雪うさぎ氷球の火力・凍結確率を大幅強化。',apply:p=>{p.iceBallCount=5;p.iceBallDamage+=235;p.iceBallChance=Math.min(.78,p.iceBallChance+.15)}}
 );
@@ -3261,7 +3261,7 @@ LEGENDS.push(
  skill('dogSnakeLegend','legendary','🐍','雷帝の大蛇','雷蛇威力+200、伝播+2、周期-20%。',p=>{p.boltCount=1;p.boltDamage+=200;p.boltJumps=Math.min(6,p.boltJumps+2);p.boltPeriod=Math.max(1.5,p.boltPeriod*.8)},{shipOnly:'dog'})
 );
 FUSIONS.push(
- {id:'dogHareEvo',shipOnly:'dog',power:'dogHarePower',legend:'dogHareLegend',name:'月影フロスト・ヘア',icon:'🐇',desc:'野ウサギの氷柱を拡幅し威力+280。',apply:p=>{p.spikeCount=6;p.spikeArea=Math.min(30,p.spikeArea+12);p.spikeDamage+=280}},
+ {id:'dogHareEvo',shipOnly:'dog',power:'dogHarePower',legend:'dogHareLegend',name:'ムーンシャドウ・フロストヘア',icon:'🐇',desc:'野ウサギの氷柱を拡幅し威力+280。',apply:p=>{p.spikeCount=6;p.spikeArea=Math.min(30,p.spikeArea+12);p.spikeDamage+=280}},
  {id:'dogSnakeEvo',shipOnly:'dog',power:'dogSnakePower',legend:'dogSnakeLegend',name:'サーペント・サンダー',icon:'🐍',desc:'雷蛇威力+260・伝播距離+70。',apply:p=>{p.boltDamage+=260;p.boltReach=Math.min(380,p.boltReach+70)}}
 );
 for(const id of ['rDrillHeat','rDrillIce','rLaserFrost','rChargeFlame','lStorm','lPowerIon']){const c=ALL_SKILL_DEFS().find(x=>x.id===id);if(c)c.tags=[...(c.shipOnly?[c.shipOnly==='drill'?'ドリル':'レーザー']:[]),'火力','機体専用'];}
@@ -3299,25 +3299,25 @@ RELICS.push(
  skill('dogRelicReturnBone','relic','🪃','回転骨の護符','骨ブーメランの帰還威力+40%、射程+52、往復速度+25。属性は換装POWER取得時のみ。',p=>{p.dogBoneReturn+=.4;p.dogBoneRange=Math.min(480,p.dogBoneRange+52);p.dogBoneSpeed+=25},{shipOnly:'dog',stackable:false,tags:['骨ブーメラン','専用：DOG']})
 );
 SYNERGIES.push(
- {id:'dogWindWake',shipOnly:'dog',need:['dogHurricane','dogDolphin'],name:'青潮の輪舞',desc:'サイクロン威力+40・風圧+25。',apply:p=>{p.windDps+=40;p.windStrength+=25}},
- {id:'dogWhaleDuet',shipOnly:'dog',need:['dogMutWhale','dogDuet'],name:'大海の共鳴',desc:'巨大サイクロン威力+55、旋回イルカ威力+18%。',apply:p=>{p.windDps+=55;p.bladePower=(p.bladePower||1)*1.18}},
- {id:'dogFoxPawTrail',shipOnly:'dog',need:['dogNineTail','dogPawLava'],name:'狐火の足跡',desc:'マグマ威力+70、炎ミサイルの爆風を強化。',apply:p=>{p.magmaDps+=70;p.thermal+=.18}},
- {id:'dogNineTailFire',shipOnly:'dog',need:['dogMutNineTail','dogFox'],name:'九尾の連火',desc:'狐火の燃焼+18%、本体ミサイル威力+16%。',apply:p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.dogFoxDamage=(p.dogFoxDamage||1)*1.16}},
- {id:'dogRabbitMoon',shipOnly:'dog',need:['dogHare','dogRabbit'],name:'雪野の跳躍',desc:'フロスト・ヘア威力+60、氷球威力+42。',apply:p=>{p.spikeDamage+=60;p.iceBallDamage+=42}},
- {id:'dogMoonTracks',shipOnly:'dog',need:['dogMutMoon','dogHareFocus'],name:'月影の足跡',desc:'氷柱威力+90、スロウ範囲+3。',apply:p=>{p.spikeDamage+=90;p.spikeArea=Math.min(32,p.spikeArea+3)}},
- {id:'dogSnakeHedge',shipOnly:'dog',need:['dogSnake','dogHedgehog'],name:'雷鳴の双牙',desc:'雷蛇威力+72、EMP威力+45。',apply:p=>{p.boltDamage+=72;p.empDps+=45}},
- {id:'dogViperChain',shipOnly:'dog',need:['dogMutViper','dogSnakeChain'],name:'皇雷蛇行',desc:'雷蛇伝播+1・威力+70（上限6）。',apply:p=>{p.boltJumps=Math.min(6,p.boltJumps+1);p.boltDamage+=70}},
- {id:'dogHamCatShield',shipOnly:'dog',need:['dogHamMeteor','dogCatFort'],name:'ごろごろ要塞',desc:'猫の迎撃+48、ハムスターの転がり威力+95。',apply:p=>{p.rockDamage+=48;p.meteorDamage+=95}},
+ {id:'dogWindWake',shipOnly:'dog',need:['dogHurricane','dogDolphin'],name:'あおいうみの輪舞',desc:'サイクロン威力+40・風圧+25。',apply:p=>{p.windDps+=40;p.windStrength+=25}},
+ {id:'dogWhaleDuet',shipOnly:'dog',need:['dogMutWhale','dogDuet'],name:'うみなりのうた',desc:'巨大サイクロン威力+55、旋回イルカ威力+18%。',apply:p=>{p.windDps+=55;p.bladePower=(p.bladePower||1)*1.18}},
+ {id:'dogFoxPawTrail',shipOnly:'dog',need:['dogNineTail','dogPawLava'],name:'きつね火の足跡',desc:'マグマ威力+70、炎ミサイルの爆風を強化。',apply:p=>{p.magmaDps+=70;p.thermal+=.18}},
+ {id:'dogNineTailFire',shipOnly:'dog',need:['dogMutNineTail','dogFox'],name:'九尾のほのお',desc:'狐火の燃焼+18%、本体ミサイル威力+16%。',apply:p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.dogFoxDamage=(p.dogFoxDamage||1)*1.16}},
+ {id:'dogRabbitMoon',shipOnly:'dog',need:['dogHare','dogRabbit'],name:'雪原の大ジャンプ',desc:'フロスト・ヘア威力+60、氷球威力+42。',apply:p=>{p.spikeDamage+=60;p.iceBallDamage+=42}},
+ {id:'dogMoonTracks',shipOnly:'dog',need:['dogMutMoon','dogHareFocus'],name:'ムーンシャドウ・スキップ',desc:'氷柱威力+90、スロウ範囲+3。',apply:p=>{p.spikeDamage+=90;p.spikeArea=Math.min(32,p.spikeArea+3)}},
+ {id:'dogSnakeHedge',shipOnly:'dog',need:['dogSnake','dogHedgehog'],name:'かみなりのキバ',desc:'雷蛇威力+72、EMP威力+45。',apply:p=>{p.boltDamage+=72;p.empDps+=45}},
+ {id:'dogViperChain',shipOnly:'dog',need:['dogMutViper','dogSnakeChain'],name:'キング・サンダースネーク',desc:'雷蛇伝播+1・威力+70（上限6）。',apply:p=>{p.boltJumps=Math.min(6,p.boltJumps+1);p.boltDamage+=70}},
+ {id:'dogHamCatShield',shipOnly:'dog',need:['dogHamMeteor','dogCatFort'],name:'ごろごろキャッスル',desc:'猫の迎撃+48、ハムスターの転がり威力+95。',apply:p=>{p.rockDamage+=48;p.meteorDamage+=95}},
  {id:'dogArmoredGuard',shipOnly:'dog',need:['dogMutHam','dogCat'],name:'重装にゃんこ砦',desc:'装甲獣威力+100、シールド最大+60。',apply:p=>{p.meteorDamage+=100;p.shieldMax+=60;p.shield+=60}},
- {id:'dogBoneMoon',shipOnly:'dog',need:['dogGoodBoy','dogMutMoon'],name:'月下の骨追い',desc:'骨帰還威力+23%、氷柱威力+50。',apply:p=>{p.dogBoneReturn+=.23;p.spikeDamage+=50}},
- {id:'dogWhaleArmor',shipOnly:'dog',need:['dogMutWhale','dogMutHam'],name:'巨鯨と装甲獣',desc:'サイクロン威力+55、メテオ威力+85。',apply:p=>{p.windDps+=55;p.meteorDamage+=85}}
+ {id:'dogBoneMoon',shipOnly:'dog',need:['dogGoodBoy','dogMutMoon'],name:'月まで届け！',desc:'骨帰還威力+23%、氷柱威力+50。',apply:p=>{p.dogBoneReturn+=.23;p.spikeDamage+=50}},
+ {id:'dogWhaleArmor',shipOnly:'dog',need:['dogMutWhale','dogMutHam'],name:'ハム・スターホエール',desc:'サイクロン威力+55、メテオ威力+85。',apply:p=>{p.windDps+=55;p.meteorDamage+=85}}
 );
 FUSIONS.push(
  {id:'dogWhaleApex',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogMutWhale',required:['dogHurricane'],name:'深海の巨鯨',icon:'🐳',desc:'巨鯨が深海色に進化。巨大サイクロン威力+135、風圧+85。',apply:p=>{p.dogWhaleAscended=1;p.windDps+=135;p.windStrength+=85}},
- {id:'dogMoonApex',shipOnly:'dog',power:'dogHarePower',legend:'dogMutMoon',required:['dogHare'],name:'永月フロスト・ヘア',icon:'🌙',desc:'月兎の長耳結晶が強化。氷柱威力+220、スロウ範囲+5。',apply:p=>{p.dogMoonAscended=1;p.spikeDamage+=220;p.spikeArea=Math.min(32,p.spikeArea+5)}},
- {id:'dogViperApex',shipOnly:'dog',power:'dogSnakeLegend',legend:'dogMutViper',required:['dogSnake'],name:'皇雷大蛇',icon:'🐍',desc:'金白の太い雷蛇に進化。威力+230、伝播距離+25。',apply:p=>{p.dogViperAscended=1;p.boltDamage+=230;p.boltReach=Math.min(380,p.boltReach+25)}},
- {id:'dogFoxApex',shipOnly:'dog',power:'dogPwrFox',legend:'dogMutNineTail',required:['dogFox'],name:'九尾神炎',icon:'🦊',desc:'狐が白金の九尾神炎へ。狐火の燃焼と爆風を強化、発射数は増やさない。',apply:p=>{p.dogNineTailAscended=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.5;p.thermal+=.35}},
- {id:'dogHamApex',shipOnly:'dog',power:'dogLegendHam',legend:'dogMutHam',required:['dogHamMeteor'],name:'星穿つ装甲獣',icon:'🐹',desc:'装甲獣が白金の星装甲に進化。貫通威力+260、回転弾速+12%。',apply:p=>{p.dogArmorHamAscended=1;p.meteorDamage+=260;p.meteorSpeed*=1.12}}
+ {id:'dogMoonApex',shipOnly:'dog',power:'dogHarePower',legend:'dogMutMoon',required:['dogHare'],name:'永月・フロストヘア',icon:'🌙',desc:'月兎の長耳結晶が強化。氷柱威力+220、スロウ範囲+5。',apply:p=>{p.dogMoonAscended=1;p.spikeDamage+=220;p.spikeArea=Math.min(32,p.spikeArea+5)}},
+ {id:'dogViperApex',shipOnly:'dog',power:'dogSnakeLegend',legend:'dogMutViper',required:['dogSnake'],name:'おおあらしのだいじゃ',icon:'🐍',desc:'金白の太い雷蛇に進化。威力+230、伝播距離+25。',apply:p=>{p.dogViperAscended=1;p.boltDamage+=230;p.boltReach=Math.min(380,p.boltReach+25)}},
+ {id:'dogFoxApex',shipOnly:'dog',power:'dogPwrFox',legend:'dogMutNineTail',required:['dogFox'],name:'いなりのかみさま',icon:'🦊',desc:'狐が白金の九尾神炎へ。狐火の燃焼と爆風を強化、発射数は増やさない。',apply:p=>{p.dogNineTailAscended=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.5;p.thermal+=.35}},
+ {id:'dogHamApex',shipOnly:'dog',power:'dogLegendHam',legend:'dogMutHam',required:['dogHamMeteor'],name:'ちいさなおうさま',icon:'🐹',desc:'装甲獣が白金の星装甲に進化。貫通威力+260、回転弾速+12%。',apply:p=>{p.dogArmorHamAscended=1;p.meteorDamage+=260;p.meteorSpeed*=1.12}}
 );
 
 // v13.11 NOVA SWARM TUNING. Capped repeatable choices keep 30+ minute builds
@@ -3434,11 +3434,11 @@ const DOG_CUTE_SKILL_NAMES={
  "dogPuppyCheer": "わんわん・おうえん隊",
  "dogChick": "ぴよぴよ・チック・タック",
  "dogEggPower": "ころころ・たまご",
- "dogEggTempo": "こけこっこ・リズム",
+ "dogEggTempo": "コッコ・リズム",
  "dogDolphin": "くるくる・ドルフィンリング",
  "dogDuet": "なかよし・ドルフィン・デュエット",
  "dogHurricane": "ぐるぐる・ドルフィンハリケーン",
- "dogHurricanePlus": "いるかの・しぶきジャンプ",
+ "dogHurricanePlus": "いるかのしぶきジャンプ",
  "dogFox": "こんこん・フォックスミサイル",
  "dogNineTail": "きらきら・九尾フレア",
  "dogPawLava": "ぽかぽか・パウ・ラヴァ",
@@ -3446,62 +3446,62 @@ const DOG_CUTE_SKILL_NAMES={
  "dogRabbit": "ぴょんぴょん・スノー・ラビット",
  "dogRabbitFrost": "ふわふわ・ラビットフロスト",
  "dogCat": "にゃんにゃん・キャットディフェンダー",
- "dogCatFort": "にゃんこ・まもり隊",
- "dogHamMeteor": "ころころ・ハム・スターメテオ",
+ "dogCatFort": "にゃんこ・おまもり隊",
+ "dogHamMeteor": "ころころ・ハムスターメテオ",
  "dogHamPlus": "ハムちゃん・どっすん！",
- "dogHedgehog": "びりびり・エレキハリネズミ",
+ "dogHedgehog": "びりびり・ハリネズミ",
  "dogHedgeSpark": "ぱちぱち・ハリネズミ",
  "dogAnimalPack": "みんなで・わんわん！",
  "dogPwrChicks": "ANKIN・ぴよぴよマーチ",
  "dogPwrFox": "ANKIN・こんこんパレード",
  "dogPwrDolphin": "ANKIN・いるかの大行進",
- "dogPwrRabbit": "ANKIN・雪うさぎの行進",
- "dogPwrCat": "ANKIN・にゃんこのおしろ",
- "dogPwrLava": "ANKIN・にくきゅうぽかぽか",
+ "dogPwrRabbit": "雪うさぎの行進",
+ "dogPwrCat": "にゃんこのおしろ",
+ "dogPwrLava": "ぽかぽかにくきゅう",
  "dogLegendChicken": "ぴよぴよ・だいかぞく",
  "dogLegendFox": "こんこん・九尾の狐火",
  "dogLegendSea": "いるかの・おおうみパレード",
  "dogLegendHam": "うちゅうの・まんまるハム",
- "dogLegendRabbit": "雪うさぎの・おおきな行進",
- "dogUniquePack": "アニマル・わくわくパラダイス",
+ "dogLegendRabbit": "雪うさぎの大行進",
+ "dogUniquePack": "アニマルわくわくパラダイス",
  "dogRelicBone": "きらきら・ほねっこ",
  "dogRelicChick": "ぴよぴよ・おうさま",
- "dogRelicFox": "こんこん・きつね火の宝珠",
+ "dogRelicFox": "こんこん・きつね火のおたから",
  "dogRelicCat": "にゃんこの・おまもり首輪",
  "dogRelicRabbit": "雪うさぎの・ふわふわ足あと",
- "dogRelicDolphin": "いるかの・うみかぜ笛",
+ "dogRelicDolphin": "いるかのみんな集合",
  "dogHare": "ぴょこぴょこ・フロスト・ヘア",
- "dogHareFocus": "ぴょんっと・野ウサギの足跡",
- "dogHareFissure": "ぴょんぴょん・氷晶",
+ "dogHareFocus": "ぴょんと・野ウサギ行進",
+ "dogHareFissure": "ぴょんぴょん・うさぎ耳",
  "dogSnake": "ぴかぴか・ライトニング・スネーク",
  "dogSnakeFocus": "へびさんの・びりびりタッチ",
  "dogSnakeChain": "くねくね・れんさ",
- "dogHarePower": "ANKIN・ぴょんぴょんフロスト・ヘア",
- "dogSnakePower": "ANKIN・へびさんのビリビリ巣",
- "dogHareLegend": "まんまる・雪うさぎ王",
- "dogSnakeLegend": "ぴかぴか・らいじゃ王",
+ "dogHarePower": "ぴょんぴょんフロスト・ヘア",
+ "dogSnakePower": "へびさんのビリビリハウス",
+ "dogHareLegend": "まんまる・うさぎのおうさま",
+ "dogSnakeLegend": "ぴかぴか・だいじゃおう",
  "dogMutWhale": "くじらさん・タイダル・モノサイクロン",
- "dogMutMoon": "おつきさま・ムーンラビット結晶化",
+ "dogMutMoon": "おつきさま・ムーンラビット行進",
  "dogMutViper": "ぴかぴか・ヴァイパー・オーバードライブ",
- "dogMutNineTail": "こんこん・九尾導火",
- "dogMutHam": "ころころ・ギガ・ハムスターメテオ",
- "dogLegendBoneKing": "ほねっこの・おうさま",
- "dogLegendFlockWard": "ぴよぴよ・まもり大隊",
+ "dogMutNineTail": "こんこん・九尾のちから",
+ "dogMutHam": "ころころ・ギガハム・スターメテオ",
+ "dogLegendBoneKing": "ほねっこのおうさま",
+ "dogLegendFlockWard": "ぴよぴよ・おまもり大隊",
  "dogRelicMoonCharm": "おつきさま・うさみみ飾り",
  "dogRelicSnakeSkin": "ぬぎぬぎ・へびの皮",
- "dogRelicWhaleFlute": "くじらさんの潮笛",
- "dogRelicFoxTalisman": "きつねさんの尾札",
- "dogRelicReturnBone": "ほねっこ・おかえり護符",
+ "dogRelicWhaleFlute": "くじらさんの潮吹き",
+ "dogRelicFoxTalisman": "きつねさんのおふだ",
+ "dogRelicReturnBone": "ほねっこ・おかえりブーメラン",
  "dogEndBoneTorque": "ほねっこ・もっとパワー",
  "dogEndBoneFlight": "ほねっこ・おかえり練習",
- "dogEndEggCare": "たまごの・お世話係",
+ "dogEndEggCare": "たまごのお世話係",
  "dogEndPackBond": "アニマル・なかよしボンド",
  "dogEndHowl": "わんわん・バウショック",
- "dogEndGuard": "おさんぽ・まもり隊",
- "dogEndFoxEmber": "こんこん・狐火の追い風",
- "dogEndHedgeGlow": "ぱちぱち・ハリネズミ応援",
+ "dogEndGuard": "おさんぽ・おまもり隊",
+ "dogEndFoxEmber": "こんこん・きつね火の追い風",
+ "dogEndHedgeGlow": "ぱちぱち・ハリネズミ応援団",
  "dogEndBoneAura": "ほねっこ・おかえり名人",
- "dogEndMutation": "みんなの・へんしん絆"
+ "dogEndMutation": "みんなのきずな"
 };
 for(const c of ALL_SKILL_DEFS()){
  if(c.shipOnly!=='dog')continue;
