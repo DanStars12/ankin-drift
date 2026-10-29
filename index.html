@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.13 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.14 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.13 | ELEMENTAL REFORGE II</title>
+<title>ANKIN DRIFT v13.14 | ELEMENTAL REFORGE III</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1088,6 +1088,45 @@ const CROSS_VARIANTS={
  rock:[['fire','メテオ・シールド','岩壁が高火力の燃焼衝撃波を放つ。隕石は通常どおり残る。炎属性を失う。','🪨',{meteorWall:1}],['ice','ダイヤモンド・ロック','転がる隕石が接触時にスロウ・凍結を与え、通常敵弾を消す。氷属性を失う。','💎',{diamondWall:1}],['thunder','ガイア・インパクト','岩壁が敵をはじくたびに周囲へ衝撃波。雷属性を失う。','⛰️',{gaiaShock:1}],['wind','オービット・フォートレス','岩壁が高速に旋回し接触攻撃も強化。風属性を失う。','🛡️',{orbitFort:1}]]
 };
 const ELEMENT_FUSION_RECIPES=Object.entries(CROSS_VARIANTS).flatMap(([main,list])=>list.map(([sub,name,desc,icon,mod])=>({id:`${main}_${sub}`,main,sub,name,desc,icon,mod})));
+// Direction and weapon slot are explicit; the original 20 CROSS_VARIANTS remain slot A.
+const FUSION_WEAPON_CHOICES={
+ fire:[['A','ホーミングミサイル','rocketCd'],['B','マグマ','magmaLevel']],
+ ice:[['A','アイスボール','iceBallCount'],['B','フロストスパイク','spikeCount']],
+ thunder:[['A','電磁パルス','empRadius'],['B','ライトニングボルト','boltCount']],
+ wind:[['A','サイクロン','windCount'],['B','ウィンドブレード','orbit']],
+ rock:[['A','岩壁','rockWalls'],['B','ローリング・メテオ','meteorCount']]
+};
+const FUSION_B_VARIANTS={
+ fire_ice:{name:'クライオ・カルデラ',desc:'マグマ床が氷の減速領域を生み、燃焼とスロウを重ねる。',effect:'magmaSlow'},
+ fire_thunder:{name:'ヴォルテック・カルデラ',desc:'マグマ床から制限付きの短距離雷撃を放つ。',effect:'magmaArc'},
+ fire_wind:{name:'ストーム・マグマ',desc:'マグマ領域を拡幅し、敵をゆるやかに中心へ引き寄せる。',effect:'magmaWind'},
+ fire_rock:{name:'ヴォルカニック・リッジ',desc:'マグマ床が岩の衝撃波を伴い、ボスにも追加威力。',effect:'magmaRock'},
+ ice_fire:{name:'フロストバーン・スパイク',desc:'氷柱が燃焼を付与し、命中時に小爆発。確定スロウを維持。',effect:'spikeBurn'},
+ ice_thunder:{name:'サンダーフロスト・ピラー',desc:'氷柱命中位置から短距離の雷連鎖。再発動を制限。',effect:'spikeArc'},
+ ice_wind:{name:'ブリザード・ランス',desc:'氷柱の判定幅とスロウ範囲を拡大。',effect:'spikeBlizzard'},
+ ice_rock:{name:'ダイヤモンド・ピラー',desc:'重装敵やボスに氷柱の大ダメージ。',effect:'spikeDiamond'},
+ thunder_fire:{name:'フレア・スネーク',desc:'蛇状雷撃の命中した敵に燃焼を付与。',effect:'boltBurn'},
+ thunder_ice:{name:'サンダーフロスト・サーペント',desc:'蛇状雷撃にスロウを付与。',effect:'boltSlow'},
+ thunder_wind:{name:'テンペスト・サーペント',desc:'雷撃の伝播距離と連鎖経路を延長。',effect:'boltWind'},
+ thunder_rock:{name:'ガイア・サンダーボルト',desc:'重装敵・ボスへの雷撃威力を増大。',effect:'boltRock'},
+ wind_fire:{name:'バーニングブレード',desc:'ブレードが赤色化。命中時に燃焼と再発動制限付きの爆発。',effect:'bladeBurn'},
+ wind_ice:{name:'フロストエッジ',desc:'ブレードが氷晶化し、命中時にスロウ。',effect:'bladeFrost'},
+ wind_thunder:{name:'スパーク・ブレード',desc:'ブレード命中時に短距離の雷連鎖。',effect:'bladeArc'},
+ wind_rock:{name:'グラビティ・ブレード',desc:'ブレードに押し返し衝撃を追加。',effect:'bladeRock'},
+ rock_fire:{name:'イグニス・ローラー',desc:'転がる隕石が燃焼を付与する。',effect:'meteorBurn'},
+ rock_ice:{name:'ダイヤモンド・ローラー',desc:'隕石命中時にスロウを付与する。',effect:'meteorSlow'},
+ rock_thunder:{name:'サンダー・メテオ',desc:'隕石命中時に短距離雷連鎖。',effect:'meteorArc'},
+ rock_wind:{name:'サイクロン・メテオ',desc:'隕石の近傍に吸引力を持たせる。',effect:'meteorWind'}
+};
+function fusionWeaponDefinitions(main){return (FUSION_WEAPON_CHOICES[main]||[]).map(([slot,name,field])=>({slot,name,owned:!!player&&player[field]>0,field}));}
+function fusionOutcome(main,sub,slot='A'){return slot==='B'?FUSION_B_VARIANTS[main+'_'+sub]||null:ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);}
+function fusionResultName(combo){return fusionOutcome(combo.main,combo.sub,combo.weapon||'A')?.name||combo.main+' × '+combo.sub;}
+function fusionStageIndex(){return Math.min(2,Math.max(0,game?.fusionMilestoneIndex??game?.elementCombos?.length??0));}
+function fusionReadyMainKeys(){return ownedElementKeys().filter(k=>fusionWeaponDefinitions(k).some(w=>w.owned));}
+function resonanceNames(main){return({
+ fire:['endFireFuel','endFirePressure'],ice:['endIceCrystal','endIceAnchor'],thunder:['endThunderCoil','endThunderFocus'],
+ wind:['endWindCurrent','endWindEdge'],rock:['endRockCore','endRockShell']
+})[main]||[];}
 const DAMAGE_LABELS={frostSpike:'フロストスパイク',lightningBolt:'ライトニングボルト',bone:'骨ブーメラン',dogEgg:'チック・タックの卵',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
 function targetDefinitions(){return [...activeFusions().map(r=>({key:'f:'+r.id,name:r.name,desc:r.desc,materials:[r.power,r.legend],kind:'evolution'})),...ELEMENT_FUSION_RECIPES.map(r=>({key:'e:'+r.id,name:r.name,desc:r.desc,materials:[r.main,r.sub],kind:'element',main:r.main,sub:r.sub}))]}
 function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub);const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||game.elementCombos.length>=2);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
@@ -1097,7 +1136,7 @@ function targetBox(kind){reconcileTargets();const recipes=targetDefinitions().fi
 function toggleTarget(key){reconcileTargets();const r=targetDefinitions().find(x=>x.key===key);if(!r)return;let list=game.targets||[];const status=targetStatus(r);game.targetNameCache=game.targetNameCache||{};game.targetNameCache[key]=r.name;if(list.includes(key))list=list.filter(v=>v!==key);else if(list.length<3&&!status.done&&!status.sealed)list=[...list,key];game.targets=list;const sc=panel.querySelector('.lab-scroll'),y=sc?.scrollTop||0;drawOverlay();const next=panel.querySelector('.lab-scroll');if(next)next.scrollTop=y}
 function choiceTargetMatches(c){reconcileTargets();if(owned(c.id))return[];const defs=new Map(targetDefinitions().map(t=>[t.key,t]));return (game.targets||[]).map(key=>defs.get(key)).filter(t=>t&&!targetStatus(t).done&&!targetStatus(t).sealed&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id)))}
 function resultBreakdown(){const stats=game.damageStats||{},sum=Object.values(stats).reduce((a,b)=>a+b,0);return Object.keys(DAMAGE_LABELS).filter(k=>stats[k]>0).sort((a,b)=>stats[b]-stats[a]).map(k=>`<div class="damage-row"><span>${DAMAGE_LABELS[k]}</span><div class="damage-meter"><span style="width:${Math.max(1,stats[k]/Math.max(1,sum)*100).toFixed(2)}%"></span></div><strong>${format(stats[k])}</strong></div>`).join('')||'<p class="fine">まだ与ダメージはありません。</p>'}
-function buildSummary(){const cards=Object.entries(game.skills).map(([id,n])=>{const c=skillById(id);return c?`${c.name}${n>1?' ×'+n:''}`:null}).filter(Boolean);const specials=[...Object.keys(game.relics).map(id=>skillById(id)?.name),...Object.keys(game.fusions).map(id=>FUSIONS.find(f=>f.id===id)?.name),...game.elementCombos.map(c=>ELEMENT_FUSION_RECIPES.find(r=>r.main===c.main&&r.sub===c.sub)?.name)].filter(Boolean);return{cards,specials}}
+function buildSummary(){const cards=Object.entries(game.skills).map(([id,n])=>{const c=skillById(id);return c?`${c.name}${n>1?' ×'+n:''}`:null}).filter(Boolean);const specials=[...Object.keys(game.relics).map(id=>skillById(id)?.name),...Object.keys(game.fusions).map(id=>FUSIONS.find(f=>f.id===id)?.name),...game.elementCombos.map(c=>fusionResultName(c))].filter(Boolean);return{cards,specials}}
 function elementFromCard(c){if(!c)return null;for(const [k,v] of Object.entries(ELEMENTS))if(c.tags?.includes('属性：'+v.name))return k;return null}
 function isSealedCard(c){return !!(game?.sealedElements?.length&&c&&game.sealedElements.includes(elementFromCard(c)))}
 // v12: Ordinary elemental skills establish affinity; rarity-gated base evolutions are
@@ -1114,19 +1153,15 @@ function elementInvestments(element){
 function fusedElementKeys(){return new Set((game?.elementCombos||[]).flatMap(({main,sub})=>[main,sub]));}
 function ownedElementKeys(){const used=fusedElementKeys();return Object.keys(ELEMENTS).filter(e=>!used.has(e)&&!game.sealedElements.includes(e)&&elementInvestments(e).count>0);}
 function availableElementPairs(){
- if(!game||!player||game.elementCombos.length>=ELEMENT_FUSION_LEVELS.length||game.level<ELEMENT_FUSION_LEVELS[game.elementCombos.length])return[];
- const keys=ownedElementKeys();
- // 0–1 distinct unused attributes: skip without opening a panel or consuming the milestone.
- if(keys.length<2)return[];
+ if(!game||!player||fusionStageIndex()>=2||game.level<ELEMENT_FUSION_LEVELS[fusionStageIndex()])return[];
+ const keys=ownedElementKeys(),mainKeys=fusionReadyMainKeys();
+ if(keys.length<2||mainKeys.length===0)return[];
  const pairs=[];
- for(let i=0;i<keys.length;i++)for(let j=i+1;j<keys.length;j++)pairs.push({a:keys[i],b:keys[j]});
+ for(const main of mainKeys)for(const sub of keys)if(main!==sub)pairs.push({main,sub});
  return pairs;
 }
-function fusionMainChoices(){return [...new Set(availableElementPairs().flatMap(pair=>[pair.a,pair.b]))];}
-function fusionSubChoices(main){
- if(!ELEMENTS[main]||!fusionMainChoices().includes(main))return[];
- return ownedElementKeys().filter(k=>k!==main);
-}
+function fusionMainChoices(){return [...new Set(availableElementPairs().map(p=>p.main))];}
+function fusionSubChoices(main){return availableElementPairs().filter(p=>p.main===main).map(p=>p.sub);}
 const FUSION_PALETTES={
  fire:{ice:'#50bfff',thunder:'#b66aff',wind:'#ff519a',rock:'#ffdd72'},
  ice:{fire:'#ff8fd9',thunder:'#bcb8ff',wind:'#5beee0',rock:'#a7fff1'},
@@ -1138,7 +1173,7 @@ function fusedColor(main){const combo=game?.elementCombos?.findLast(c=>c.main===
 function enterElementChoice(){
  if(mode!=='playing'||pendingFusions.length||pendingFusion)return false;
  const options=availableElementPairs();
- if(!options.length){pendingElementPairs=[];elementChoice=null;return false;}
+ if(!options.length){pendingElementPairs=[];elementChoice=null;if(fusionStageIndex()===0&&game.level>=28){game.fusionMilestoneResults[0]='unavailable';game.fusionMilestoneIndex=1;return enterElementChoice();}return false;}
  pendingElementPairs=options;elementChoice=null;
  flash=Math.max(flash,.55);shake=Math.max(shake,6);
  ring(player.x,player.y,155,'#ffffff');
@@ -1151,6 +1186,7 @@ function chooseFusionMain(main){
  elementChoice={main};tone(660,.14,'triangle',.05);drawOverlay();
 }
 function backElementMain(){if(mode!=='elementChoice')return;elementChoice=null;drawOverlay();}
+function backFusionSub(){if(mode!=='elementChoice'||!elementChoice)return;elementChoice={main:elementChoice.main};drawOverlay();}
 function fusionPreview(main,sub){
  const material=elementInvestments(sub);
  return {material,summary:material.cards.map(c=>c.name+(game.skills[c.id]>1?' ×'+game.skills[c.id]:''))};
@@ -1158,25 +1194,29 @@ function fusionPreview(main,sub){
 function fusionAttributeButton(key,stage,main){
  const def=ELEMENTS[key],used=fusedElementKeys(),isUsed=used.has(key),has=elementInvestments(key).count>0,
   allowed=stage==='main'?fusionMainChoices().includes(key):key!==main&&fusionSubChoices(main).includes(key);
- const why=isUsed?'前回の融合で使用済み':stage==='sub'&&key===main?'特化属性として選択済み':!has?'属性スキル未取得':'この融合では選択できません';
+ const why=isUsed?'前回の融合で使用済み':stage==='sub'&&key===main?'特化属性として選択済み':!has?'属性スキル未取得':stage==='main'&&!fusionWeaponDefinitions(key).some(w=>w.owned)?'進化対象武装が未取得':'この融合では選択できません';
  const sub=stage==='sub';
  return `<button type="button" class="fusion-attribute ${allowed?'':'unavailable'}" style="--element-color:${def.color}" data-element-${sub?'sub':'main'}="${key}" ${allowed?'':'disabled'} aria-disabled="${!allowed}" aria-label="${def.name}属性${allowed?'を選択':'：'+why}">
   <span class="fusion-attr-icon">${def.icon}</span><strong>${def.name}</strong><small>${allowed?(sub?'融合に使用':'特化する属性'):(why)}</small></button>`;
 }
 function elementChoiceMarkup(){
- const stage=game.elementCombos.length+1,level=ELEMENT_FUSION_LEVELS[game.elementCombos.length],
-  main=elementChoice?.main;
- const banner=`<div class="fusion-unlock" role="status" aria-live="polite"><span class="fusion-unlock-stars">✦ ✧ ✦</span><p class="eyebrow">ELEMENTAL REBIRTH · ${stage}/2</p><h2>属性融合解放</h2><p class="fusion-unlock-level">Lv${level} · ${stage===1?'1回目':'2回目'}の属性融合</p></div>`;
- if(!main)return `${banner}<h3 class="fusion-choice-heading">特化する属性を選んでください</h3>
-  <div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'main')).join('')}</div>
-  <p class="fine">取得済みの属性から選択できます。2回目は、前回融合した2属性を選べません。</p>`;
- const def=ELEMENTS[main];
- return `${banner}<h3 class="fusion-choice-heading">素材にする属性を1つ選んでください</h3>
-  <p class="fusion-selected-main" style="--element-color:${def.color}">特化する属性：${def.icon} ${def.name}</p>
-  <p class="fusion-farewell">※選択した属性は融合され、失います！</p>
-  <div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'sub',main)).join('')}</div>
-  <p class="fine">失う属性の攻撃・効果は無効になります。取得済みカードの記録は残り、特化属性の共鳴強化に変換されます。</p>
-  <div class="actions"><button type="button" id="fusionBackMain" class="secondary">← 特化する属性を選び直す</button></div>`;
+ const stage=fusionStageIndex(),level=ELEMENT_FUSION_LEVELS[stage],
+  main=elementChoice?.main,sub=elementChoice?.sub,weapon=elementChoice?.weapon;
+ const banner=`<div class="fusion-unlock" role="status" aria-live="polite"><span class="fusion-unlock-stars">✦ ✧ ✦</span><p class="eyebrow">ELEMENTAL REFORGE · ${stage+1}/2</p><h2>属性融合 · 任意選択</h2><p class="fusion-unlock-level">Lv${level} · 実行済み ${game.elementCombos.length}回</p></div>`;
+ const skip=`<div class="actions"><button type="button" id="fusionSkip" class="secondary">今回は融合を見送る（独立武装を保持）</button></div>`;
+ if(!main)return `${banner}<h3 class="fusion-choice-heading">1. 主属性を選択</h3><div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'main')).join('')}</div>${skip}`;
+ if(!sub)return `${banner}<h3 class="fusion-choice-heading">2. 消費する副属性を選択</h3><p>主属性：${ELEMENTS[main].name}</p>
+ <div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'sub',main)).join('')}</div>
+ <div class="actions"><button type="button" id="fusionBackMain" class="secondary">← 主属性を選び直す</button></div>${skip}`;
+ if(!weapon)return `${banner}<h3 class="fusion-choice-heading">3. 進化させる主属性武装を選択</h3><p>${ELEMENTS[main].name} × ${ELEMENTS[sub].name}</p>
+ <div class="fusion-attribute-grid">${fusionWeaponDefinitions(main).map(w=>`<button type="button" class="fusion-attribute ${w.owned?'':'unavailable'}" data-fusion-weapon="${w.slot}" ${w.owned?'':'disabled'} aria-disabled="${!w.owned}"><strong>${w.name}</strong><small>${w.owned?escHtml(fusionOutcome(main,sub,w.slot)?.name||'進化可能'):'この武装を取得していません'}</small></button>`).join('')}</div>
+ <div class="actions"><button type="button" id="fusionBackSub" class="secondary">← 副属性を選び直す</button></div>${skip}`;
+ const w=fusionWeaponDefinitions(main).find(x=>x.slot===weapon),out=fusionOutcome(main,sub,weapon);
+ return `${banner}<h3 class="fusion-choice-heading">4. 融合内容を確認</h3>
+ <p><strong>${escHtml(w?.name||'武装')}</strong> → <strong>${escHtml(out?.name||'進化')}</strong></p>
+ <p>${escHtml(out?.desc||'')}</p><p class="fusion-farewell">注意：${ELEMENTS[sub].name}属性の独立武装・スキルは停止します。進化武装に継承された効果は維持されます。</p>
+ <p class="fine">主属性共鳴スキル2種類を1段階ずつ自動付与します。</p>
+ <div class="actions"><button type="button" class="primary" id="fusionConfirm">この内容で融合する</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
 }
 function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
@@ -1239,30 +1279,48 @@ function applyElementFusionStats(p,combo){
  p.fusionOutputBonus=(p.fusionOutputBonus||0)+.42;
 }
 function selectElementFusion(sub){
- if(mode!=='elementChoice'||!elementChoice?.main)return;
- const main=elementChoice.main,validSub=fusionSubChoices(main);
- if(!validSub.includes(sub)||sub===main)return;
- const r=ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);if(!r)return;
- const resonance=elementInvestments(sub);
- // Gameplay effects of the secondary element are lost, while its collected
- // cards remain visible as an immutable acquisition record / resonance value.
+ if(mode!=='elementChoice'||!elementChoice?.main||!fusionSubChoices(elementChoice.main).includes(sub))return;
+ elementChoice={main:elementChoice.main,sub};drawOverlay();
+}
+function selectFusionWeapon(slot){
+ if(mode!=='elementChoice'||!elementChoice?.sub)return;
+ if(!fusionWeaponDefinitions(elementChoice.main).some(w=>w.slot===slot&&w.owned))return;
+ elementChoice={...elementChoice,weapon:slot};drawOverlay();
+}
+function skipElementFusion(){
+ if(mode!=='elementChoice'||fusionStageIndex()>=2)return;
+ const idx=fusionStageIndex();game.fusionMilestoneResults[idx]='skipped';game.fusionMilestoneIndex=idx+1;
+ pendingElementPairs=[];elementChoice=null;announce('✦ 今回の融合を見送りました。独立属性武装は維持されます。',3.3);
+ state('playing');processTransitions();
+}
+function clearConsumedElementAttacks(sub){
+ if(sub==='fire'){shots=shots.filter(b=>b.kind!=='rocket');zones=zones.filter(z=>z.type!=='magma');}
+ if(sub==='ice')shots=shots.filter(b=>b.kind!=='iceball');
+ if(sub==='rock')shots=shots.filter(b=>b.kind!=='meteor');
+ if(sub==='wind')gusts=gusts.filter(g=>g.kind==='fireTornado');
+}
+function confirmElementFusion(){
+ if(mode!=='elementChoice'||!elementChoice?.main||!elementChoice.sub||!elementChoice.weapon)return;
+ const {main,sub,weapon}=elementChoice;
+ if(!fusionSubChoices(main).includes(sub)||!fusionWeaponDefinitions(main).some(w=>w.slot===weapon&&w.owned))return;
+ const r=fusionOutcome(main,sub,weapon);if(!r)return;
+ const resonance=elementInvestments(sub),idx=fusionStageIndex();
  game.sealedElements.push(sub);
- game.elementCombos.push({main,sub,resonance:resonance.points,cards:resonance.count});
+ game.elementCombos.push({main,sub,weapon,resonance:resonance.points,cards:resonance.count,resonanceRewards:resonanceNames(main)});
+ game.fusionMilestoneResults[idx]='fused';game.fusionMilestoneIndex=idx+1;
  pendingFusions=pendingFusions.filter(a=>!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)));
  pendingSynergy=pendingSynergy.filter(a=>a.need.every(id=>!isSealedCard(skillById(id))));
- restorePlayerBuild();if(sub==='wind')gusts=gusts.filter(g=>g.kind==='fireTornado');reconcileTargets();elementChoice=null;pendingElementPairs=[];
- const mainColor=ELEMENTS[main].color;
- flash=Math.max(flash,.85);shake=Math.max(shake,12);
- ring(player.x,player.y,190,mainColor);ring(player.x,player.y,245,mainColor);ring(player.x,player.y,130,'#ffffff');
- burst(player.x,player.y,mainColor,Math.min(65,30+resonance.count*4),245);
+ restorePlayerBuild();clearConsumedElementAttacks(sub);reconcileTargets();elementChoice=null;pendingElementPairs=[];
+ const color=ELEMENTS[main].color;flash=Math.max(flash,.85);shake=Math.max(shake,12);
+ ring(player.x,player.y,190,color);ring(player.x,player.y,245,color);burst(player.x,player.y,color,45,245);
  celebrateElementFusion(main,r.name);
- announce(`✦ 属性融合成功！ ${r.name} ／ ${ELEMENTS[sub].name}属性を失いました`,5);
+ announce(`✦ 融合成功：${r.name} ／ ${ELEMENTS[sub].name}属性を消費`,5);
  state('elementResult');
 }
 function elementLabMarkup(){
- const used=fusedElementKeys(),ready=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[game.elementCombos.length],fused=game.elementCombos,outputPct=Math.round(Math.min(.84,fused.length*.42)*100);
- const stage=game.elementCombos.length;
- const cards=ELEMENT_FUSION_RECIPES.map(r=>{
+ const used=fusedElementKeys(),ready=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[fusionStageIndex()],fused=game.elementCombos,outputPct=Math.round(Math.min(.34,fused.length*.17)*100);
+ const stage=fusionStageIndex();
+ const cards=[...ELEMENT_FUSION_RECIPES,...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({...v,main:id.split('_')[0],sub:id.split('_')[1],slot:'B',icon:'✧'}))].map(r=>{
   const mainReady=ready.includes(r.main),subReady=ready.includes(r.sub);
   const done=game.elementCombos.some(x=>x.main===r.main&&x.sub===r.sub);
   const unavailable=(used.has(r.main)||used.has(r.sub));
@@ -1272,7 +1330,7 @@ function elementLabMarkup(){
    <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性</span><span class="fusion-plus">＋</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性</span></div>
    <div class="recipe-effect">${r.desc}</div><small class="fusion-cost">${ELEMENTS[r.sub].name}属性の効果を失う代わりに、取得済みカードの蓄積を主属性の共鳴出力に変換します。</small></article>`;
  }).join('');
- return `<section class="lab-help"><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+84%）</b><div class="v13-note">融合1件につき全攻撃+42%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12で1回目、Lv28で2回目が解放されます。素材が0〜1属性なら選択画面をスキップし、後から2属性揃えば融合できます。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
+ return `<section class="lab-help"><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+34%）</b><div class="v13-note">融合1件につき全攻撃+17%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12で1回目、Lv28で2回目が解放されます。素材が0〜1属性なら選択画面をスキップし、後から2属性揃えば融合できます。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
  <div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${v.color}">${v.icon} ${v.name}：${used.has(k)?'融合に使用済み':ready.includes(k)?'取得済み・選択可能':'属性素材未取得'}</span>`).join('')}</div>
  <p class="fine">現在 Lv${game.level} ／ ${next?'次の融合解放：Lv'+next:'融合2回完了'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：選択画面をスキップ中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
 }
@@ -1281,7 +1339,7 @@ function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;con
 let selectedGameMode="normal";
 const ULTIMATE_NAME="THE・END・OF・ANKIN";
 function ultimateThreshold(runMode=game?.gameMode||selectedGameMode){return runMode==="challenge"?900:1800} function ultimateSecond(runMode=game?.gameMode||selectedGameMode){return runMode==="challenge"?1800:2700}
-function newRun(){player=initialP();applyShipPreset(player);game={gameMode:selectedGameMode,completed:false,endless:false,clearCount:0,ultimatePending:false,ultimateEncounterAt:0,ultimateParts:[],lastClearAt:0,nextUltimateAt:ultimateThreshold(selectedGameMode),lastUltimateQueuedAt:0,runOutcome:null,targetHistory:[],targetNameCache:{},ship:selectedShip,spawn:.78,nextBossAt:60,nextRaidAt:105,raid:null,raidsCleared:0,lastRaidEvent:null,nextVacuumAt:rand(85,135),lastVacuumAt:0,nextRelicAt:rand(125,205),vacuum:null,compactTimer:5,bossQueue:[],bossHistory:{minor:null,major:null,unique:null},lastBossAt:0,damage:0,kills:0,total:0,rerolls:3,skills:{},powers:{},legends:{},uniques:{},relics:{},fusions:{},synergies:{},elementCombos:[],sealedElements:[],acquisitionLog:[],lastChoice:'',bestBroke:false,targets:[],damageStats:{},bossDamage:0,level:1,xp:0,need:expNeed(1),pendingLevels:0,storedLevels:0,autoBank:false,choiceBatchTotal:0,choiceBatchDone:0,rewards:[]};game.activeChallenges=record.read().clears.length?[...selectedChallenges]:[];game.runId='run-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);game.lastClear=null;game.lastUnlocked=[];game.finisherSource='';game.combatLog={dashCount:0,novaCount:0,hits:0,damageTaken:0};game.startedMarked=false;achievementSyncClock=0;if(game.activeChallenges.includes('fragile')){player.maxHp=Math.max(1,Math.round(player.maxHp*.75));player.hp=Math.min(player.hp,player.maxHp)}if(game.activeChallenges.includes('dashTax'))player.dashCd+=.65;enemies=[];enemyIndex.clear();enemyIndexReady=false;shots=[];hostile=[];pickups=[];hazards=[];zones=[];particles=[];floats=[];boss=null;pendingFusion=null;pendingFusions=[];elementChoice=null;pendingElementPairs=[];pendingElementChoice=false;bossAlertUntil=0;lastUniqueCard=null;pendingSynergy=[];synergyNotices=[];laserLinks=[];gusts=[];buildTab='inventory';atlasRarity='all';atlasAttr='all';atlasQuery='';enemyCodexFilter='all';runClock=0;hudClock=.2;lastHudBuildMarkup='';announceUntil=0;ui.announcement.classList.remove('show');renderSynergyNotices();shake=0;flash=0;keys.clear();clearTouch();nextMusicBeat=0;musicStep=0;celebrationParticles=[];celebrationRockets=[];celebrationEvents=[];celebrationLabel='';celebrationClock=0;spawnOpeningScouts();}
+function newRun(){player=initialP();applyShipPreset(player);game={gameMode:selectedGameMode,completed:false,endless:false,clearCount:0,ultimatePending:false,ultimateEncounterAt:0,ultimateParts:[],lastClearAt:0,nextUltimateAt:ultimateThreshold(selectedGameMode),lastUltimateQueuedAt:0,runOutcome:null,targetHistory:[],targetNameCache:{},ship:selectedShip,spawn:.78,nextBossAt:60,nextRaidAt:105,raid:null,raidsCleared:0,lastRaidEvent:null,nextVacuumAt:rand(85,135),lastVacuumAt:0,nextRelicAt:rand(125,205),vacuum:null,compactTimer:5,bossQueue:[],bossHistory:{minor:null,major:null,unique:null},lastBossAt:0,damage:0,kills:0,total:0,rerolls:3,skills:{},powers:{},legends:{},uniques:{},relics:{},fusions:{},synergies:{},elementCombos:[],sealedElements:[],fusionMilestoneIndex:0,fusionMilestoneResults:[],acquisitionLog:[],lastChoice:'',bestBroke:false,targets:[],damageStats:{},bossDamage:0,level:1,xp:0,need:expNeed(1),pendingLevels:0,storedLevels:0,autoBank:false,choiceBatchTotal:0,choiceBatchDone:0,rewards:[]};game.activeChallenges=record.read().clears.length?[...selectedChallenges]:[];game.runId='run-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);game.lastClear=null;game.lastUnlocked=[];game.finisherSource='';game.combatLog={dashCount:0,novaCount:0,hits:0,damageTaken:0};game.startedMarked=false;achievementSyncClock=0;if(game.activeChallenges.includes('fragile')){player.maxHp=Math.max(1,Math.round(player.maxHp*.75));player.hp=Math.min(player.hp,player.maxHp)}if(game.activeChallenges.includes('dashTax'))player.dashCd+=.65;enemies=[];enemyIndex.clear();enemyIndexReady=false;shots=[];hostile=[];pickups=[];hazards=[];zones=[];particles=[];floats=[];boss=null;pendingFusion=null;pendingFusions=[];elementChoice=null;pendingElementPairs=[];pendingElementChoice=false;bossAlertUntil=0;lastUniqueCard=null;pendingSynergy=[];synergyNotices=[];laserLinks=[];gusts=[];buildTab='inventory';atlasRarity='all';atlasAttr='all';atlasQuery='';enemyCodexFilter='all';runClock=0;hudClock=.2;lastHudBuildMarkup='';announceUntil=0;ui.announcement.classList.remove('show');renderSynergyNotices();shake=0;flash=0;keys.clear();clearTouch();nextMusicBeat=0;musicStep=0;celebrationParticles=[];celebrationRockets=[];celebrationEvents=[];celebrationLabel='';celebrationClock=0;spawnOpeningScouts();}
 // Growth is deliberately super-quadratic while shard income grows only slowly over time.
 function expNeed(level){if(level<=35)return Math.round(34+18*level+2.7*Math.pow(level,2.08));const excess=level-35;return Math.round(34+18*35+2.7*Math.pow(35,2.08)+165*excess+2*Math.pow(excess,1.72))}
 function settleExpLevels(limit=192){if(!game||!player)return 0;let loops=0,healed=0;while(game.xp>=game.need&&loops<limit){game.xp-=game.need;game.level++;game.need=expNeed(game.level);if(game.autoBank)game.storedLevels++;else game.pendingLevels++;const heal=Math.min(player.maxHp-player.hp,Math.max(4,Math.min(18,Math.round(player.maxHp*.045))));if(heal>0){player.hp+=heal;healed+=heal}loops++}if(healed>0){pop(player.x,player.y-38,`LEVEL HEAL +${Math.ceil(healed)} HP`,'#8cffc8');sfx('level')}return loops}
@@ -1725,7 +1783,7 @@ function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],[
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.13 · ELEMENTAL REFORGE II</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.14 · ELEMENTAL REFORGE III</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -1754,7 +1812,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  const retired=mode==='retired';const r=record.read(),duration=Math.floor(game.total);html=`<p class="eyebrow">${retired?'RUN TERMINATED · FINAL RECORD':'TRANSMISSION LOST · FINAL RECORD'} · ${game.gameMode==='challenge'?'CHALLENGE':'NORMAL'}</p><h2 class="logo small">${retired?'RUN ENDED':'GAME OVER'}</h2><div class="subtitle">${retired?'途中終了したプレイの記録':'最後まで戦った記録'} · ${SHIPS[player.shipType].jp}</div>${game.bestBroke?'<div class="newbest">✦ NEW PERSONAL BEST ✦</div>':''}<div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">FINAL LEVEL</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><div class="report-metrics"><div class="report-metric"><strong>${format(game.bossDamage)}</strong><small>ボスへのダメージ</small></div><div class="report-metric"><strong>${format(game.damage/Math.max(game.total,1)*60)}</strong><small>1分あたりのダメージ</small></div><div class="report-metric"><strong>${format(game.kills)}</strong><small>撃破数</small></div></div><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div><details><summary>通常スキル一覧（${buildSummary().cards.length}種類）</summary><div class="report-chips">${buildSummary().cards.map(n=>`<span>${escHtml(n)}</span>`).join('')}</div></details><div class="history"><b>戦績</b>：${format(game.kills)} KILLS<br>レリック ${Object.keys(game.relics).length} · シナジー ${Object.keys(game.synergies).length} · 進化 ${Object.keys(game.fusions).length} · UNIQUE ANKIN ${Object.keys(game.uniques).length}<br>自己ベスト：${fmtTime(r.time||0)} 生存 / LV ${format(r.level)} / DAMAGE ${format(r.damage)}</div></div><div class="actions"><button class="primary" id="restart">↻ リトライ</button><button class="secondary" id="inspect">◈ 今回のビルド</button><button class="secondary" id="title">タイトルへ</button></div><div class="fine">${saveWarning?"⚠ 保存失敗。バックアップを取得してください。":"今回の記録はこのブラウザに保存しました。"} · リトライで再挑戦できます</div>`;
  }
  panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.innerHTML=html;
- panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));click('fusionBackMain',backElementMain);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',()=>{state('playing');processTransitions()});click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
+ panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));panel.querySelectorAll('[data-fusion-weapon]').forEach(el=>el.addEventListener('click',()=>selectFusionWeapon(el.dataset.fusionWeapon)));click('fusionBackMain',backElementMain);click('fusionBackSub',backFusionSub);click('fusionBackWeapon',()=>{if(elementChoice){elementChoice={main:elementChoice.main,sub:elementChoice.sub};drawOverlay()}});click('fusionConfirm',confirmElementFusion);click('fusionSkip',skipElementFusion);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',()=>{state('playing');processTransitions()});click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
  U('ankinTrial')?.addEventListener('toggle',e=>{ankinTrialOpen=e.target.open;});
  panel.querySelectorAll('[data-v13-challenge]').forEach(el=>el.addEventListener('click',()=>{if(!record.read().clears.length)return;ankinTrialOpen=true;const id=el.dataset.v13Challenge;if(!CHALLENGE_RULES.some(c=>c.id===id))return;if(selectedChallenges.has(id))selectedChallenges.delete(id);else selectedChallenges.add(id);const selected=selectedChallenges.has(id);el.classList.toggle('active',selected);el.setAttribute('aria-pressed',String(selected));const counter=U('ankinTrial')?.querySelector('.trial-counter');if(counter)counter.textContent=selectedChallenges.size+' / '+CHALLENGE_RULES.length+' 選択中';}));
  click('v13ArchiveBack',()=>state(archiveBack));click('v13Export',v13Download);
