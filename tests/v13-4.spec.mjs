@@ -27,12 +27,12 @@ test('iceball freezes without SLOW; independent SLOW does not freeze',async({pag
  expect(v.hit.frozen).toBeGreaterThan(0);expect(v.hit.slow).toBe(0);
  expect(v.slow.slow).toBeGreaterThan(0);expect(v.slow.frozen).toBe(0);expect(errors).toEqual([]);
 });
-test('only one growing piercing meteor and Diamond Rock takes effect',async({page})=>{
+test('only one growing piercing meteor; Diamond Rock now upgrades the owned wall A weapon',async({page})=>{
  const errors=await setup(page);const v=await page.evaluate(()=>window.__v134.rock());
  expect(v.initial).toBe(12);expect(v.grown).toBeGreaterThan(v.initial);
  expect(v.afterDamage).toBe(v.damage);expect(v.multiple).toBe(1);
  expect(v.diamond).toBe(true);expect(v.meteor).toBe(1);
- expect(v.wallAfter).toBe(v.wallBefore);expect(errors).toEqual([]);
+ expect(v.wallAfter).toBeGreaterThan(v.wallBefore);expect(errors).toEqual([]);
 });
 test('missile burns without generating magma; Meteo Shield buffs walls without deleting meteor',async({page})=>{
  const errors=await setup(page);const fire=await page.evaluate(()=>window.__v134.fire());
