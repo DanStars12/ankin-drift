@@ -2008,7 +2008,7 @@ function drawWeaponVisualPreview(ts){
  for(let i=0;i<=480;i+=40){g.moveTo(i,0);g.lineTo(i,240);}
  for(let j=0;j<=240;j+=40){g.moveTo(0,j);g.lineTo(480,j);}g.stroke();
  g.save();g.strokeStyle='#ffffff2b';g.lineWidth=1.2;g.setLineDash([4,6]);g.beginPath();g.arc(x,y,100,0,TAU);g.stroke();g.setLineDash([]);g.restore();
- const p={shipType:visualShip,drillReach:44,drillWidth:30,drillCap:1,drillPlasma:.8,
+ const p={shipType:visualShip==='common'?'shot':visualShip,drillReach:44,drillWidth:30,drillCap:1,drillPlasma:.8,
   x,y,dx:0,dy:-1,evolutionTint:null,spikeVisuals:[],boltVisuals:[],
   dogMoon:false,dogMoonAscended:false,dogViper:false,dogViperAscended:false,
   dogWhaleAscended:false,dogNineTailMorph:false,dogNineTailAscended:false,
@@ -2039,7 +2039,7 @@ function drawWeaponVisualPreview(ts){
  case 'drill':
   drawDrillAuger(p,true,g,time);break;
  case 'bone':
-  drawDogBone({x,y:132,r:19,spinAngle:time*2.5,elementMode:variant||null},g);break;
+  drawDogBone({x,y:132,r:19,spinAngle:time*2.5,elementMode:variant||null},g,p);break;
  case 'rocket':case 'fox':case 'nineTail':case 'nineTailApex':
   if(kind==='rocket'){
    g.save();g.translate(x,y);g.rotate(.6);g.fillStyle='#b93921';g.strokeStyle='#ffcc8d';g.lineWidth=3;
@@ -3129,7 +3129,7 @@ for(const c of ALL_SKILL_DEFS()){
   if(/Snake|Viper/.test(c.id))tags.push('ヘビ','ライトニングボルト');
   if(/Ham/.test(c.id))tags.push('ハムスター','隕石');
   if(/Cat/.test(c.id))tags.push('ネコ','岩壁');
-  if(/Rabbit/.test(c.id))tags.push('ウサギ','アイスボール');
+  if(/Rabbit/.test(c.id)){tags=tags.filter(v=>v!=='フロストスパイク');tags.push('ウサギ','アイスボール');}
   if(c.mutation)tags.push('変異');
  }
  tags.push(...(SKILL_TAG_EXACT[c.id]||[]));
@@ -4593,9 +4593,9 @@ function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
  ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
-function drawDogBone(b,drawCtx=ctx){const ctx=drawCtx;
+function drawDogBone(b,drawCtx=ctx,visualPlayer=player){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
- const r=b.r,pal=weaponElementPalette('dog',b.novaBone?null:b.elementMode,player?.evolutionTint);
+ const r=b.r,pal=weaponElementPalette('dog',b.novaBone?null:b.elementMode,visualPlayer?.evolutionTint);
  ctx.shadowColor=b.novaBone?'#ffb2e7':pal.accent;ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
  ctx.strokeStyle=b.novaBone?'#fff6fc':pal.accent;ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
  ctx.fillStyle=b.novaBone?'#ffe3fa':pal.body;
