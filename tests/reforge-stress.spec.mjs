@@ -5,7 +5,7 @@ const injection=[
 "window.__reforgeStress={",
 "setup(ship,fx='normal',elapsed=1900){",
 " selectedShip=ship;selectedGameMode=elapsed<=900?'challenge':'normal';newRun();state('playing');soundOn=false;",
-" game.total=elapsed;game.level=48;game.endless=true;game.nextBossAt=999999;game.nextRaidAt=999999;game.nextRelicAt=999999;game.nextVacuumAt=999999;",
+" game.total=elapsed;game.level=48;game.endless=true;game.nextUltimateAt=999999;game.nextBossAt=999999;game.nextRaidAt=999999;game.nextRelicAt=999999;game.nextVacuumAt=999999;",
 " game.spawn=999999;game.raid=null;game.vacuum=null;game.bossQueue=[];game.ultimatePending=false;game.rewards=[];game.pendingLevels=0;",
 " settings.fx=fx;const p=player;p.maxHp=1e8;p.hp=p.maxHp;p.iframes=1e4;p.shotTimer=.15;",
 " p.spikeCount=6;p.spikeDamage=340;p.spikePeriod=1.7;p.spikeTimer=.05;p.spikeArea=20;",
