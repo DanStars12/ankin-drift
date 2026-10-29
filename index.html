@@ -1939,11 +1939,11 @@ function drawWeaponVisualPreview(ts){
  case 'hedgehog':drawHedgehogPulseEmitter({x,y,empRadius:79,split:false},g,time);break;
  case 'bolt':case 'snake':case 'viper':case 'viperApex':
   p.shipType=kind==='bolt'?'shot':'dog';p.dogViper=kind==='viper'||kind==='viperApex';p.dogViperAscended=kind==='viperApex';
-  p.boltVisuals=[{x:65,y:177,x2:x+122,y2:85,life:.28}];drawReforgeWeapons(p,g);break;
+  p.boltVisuals=[{x:65,y:177,x2:x+122,y2:85,life:.28}];drawReforgeWeapons(p,g,time);break;
  case 'cyclone':case 'dolphinCyclone':case 'whale':case 'whaleApex':
   drawCyclone({x,y,r:kind.startsWith('whale')?90:73,color:'#78ead1',life:2.7},g,time);
   if(kind==='dolphinCyclone')animal('dolphin',31,x,y);
-  if(kind.startsWith('whale')){p.dogWhaleAscended=kind==='whaleApex';animal('whale',37,x,y);}
+  if(kind.startsWith('whale')){p.dogWhaleAscended=kind==='whaleApex';animal('whale',43,x+Math.sin(time*.7)*5,y+Math.sin(time*.9)*3);}
   break;
  case 'blade':
   g.save();g.translate(x,y);g.rotate(time*.85);g.fillStyle='#7affdb';g.strokeStyle='#efffff';g.shadowColor='#84ffdf';g.shadowBlur=12;g.lineWidth=2.6;
@@ -3871,7 +3871,7 @@ function drawDogLightningSnake(p,b,ctx,now=t){
  ctx.restore();
 }
 
-function drawReforgeWeapons(p,drawCtx=ctx){const ctx=drawCtx;
+function drawReforgeWeapons(p,drawCtx=ctx,visualTime=t){const ctx=drawCtx;
  for(const s of p.spikeVisuals){
   const k=Math.min(1,s.life/.22),height=(p.shipType==='dog'?43:35)*s.scale,width=(p.shipType==='dog'?19:16)*s.scale;
   ctx.save();ctx.translate(s.x,s.y);ctx.globalAlpha=k;ctx.shadowColor='#adf8ff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:8;
@@ -3902,7 +3902,7 @@ function drawReforgeWeapons(p,drawCtx=ctx){const ctx=drawCtx;
   }ctx.restore();
  }
  for(const b of p.boltVisuals){
-  if(p.shipType==='dog'){drawDogLightningSnake(p,b,ctx);continue;}
+  if(p.shipType==='dog'){drawDogLightningSnake(p,b,ctx,visualTime);continue;}
   const dx=b.x2-b.x,dy=b.y2-b.y,l=Math.max(1,Math.hypot(dx,dy)),px=-dy/l,py=dx/l,n=Math.max(2,Math.ceil(l/22));
   ctx.save();ctx.globalAlpha=Math.min(1,b.life/.14);ctx.lineJoin='round';ctx.lineCap='round';ctx.shadowColor='#bc9cff';ctx.shadowBlur=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low'?0:7;
   ctx.lineWidth=p.shipType==='dog'?(p.dogViper?7.6:5.8):3.6;ctx.strokeStyle=p.dogViper?(p.dogViperAscended?'#fff4c3':'#ffe68c'):'#b88aff';ctx.beginPath();ctx.moveTo(b.x,b.y);
