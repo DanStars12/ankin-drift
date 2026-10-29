@@ -9,7 +9,7 @@ const SHIPS={
  laser:{name:'PRISM LANCER',jp:'レーザー型',epithet:'光条の狙撃手',weapon:'光の軌跡'},
  charge:{name:'COMET RAIDER',jp:'チャージ型',epithet:'彗星の砲撃手',weapon:'溜め込んだ一撃'},
  drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',epithet:'鋼の突破者',weapon:'燃える刃先'},
- dog:{name:'BONE BUDDY β',jp:'ドッグ型',epithet:'アニマルの指揮官',weapon:'仲間と骨ブーメラン'}
+ dog:{name:'BONE BUDDY',jp:'ドッグ型',epithet:'アニマルの指揮官',weapon:'仲間と骨ブーメラン'}
 };
 const ELEMENTS={
  fire:{name:'炎',title:'紅蓮',scene:'焔の残光'},
@@ -19,7 +19,7 @@ const ELEMENTS={
  rock:{name:'岩',title:'巌壁',scene:'砕けた岩の粒子'}
 };
 const SOURCE={
- dogEgg:'チック・タックの卵',bone:'骨ブーメラン',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',drill:'近接ドリル',nova:'NOVA',
+ dogEgg:'ヒヨコのたまご弾',bone:'骨ブーメラン',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',drill:'近接ドリル',nova:'NOVA',
  dot:'燃焼DoT',magma:'マグマ',element:'属性攻撃',drone:'僚機',
  missile:'ミサイル',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'貫通隕石',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発',other:'複合攻撃'
 };
