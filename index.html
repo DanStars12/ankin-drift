@@ -1872,7 +1872,7 @@ function visualCodexContent(){const v=visualSelected(),all=visualCodexItems();if
  '<canvas id="weaponVisualCanvas" width="720" height="360" role="img" aria-label="'+escHtml(v.name)+'の武装アニメーション" aria-describedby="visualWeaponDescription"></canvas>'+
  '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot"><span>◉ アニメーション見本</span>'+
  (skillById(v.card)?skillPeekLink(v.card):'<span>基本装備</span>')+'</div>'+
- '<div class="visual-stage-notice">実際の攻撃判定・発射数・速度はビルドで変化します。大きさは見やすさ優先のため画面上の実寸とは異なります。</div></div>'+
+ '<div class="visual-stage-notice">実際の攻撃判定・発射数・速度はビルドで変化します。中央は拡大見本、右下は戦闘中の小サイズに近い表示目安です（端末の画面倍率で変化）。</div></div>'+
  '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
  '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div>';}
 function visualCodexUpdate(){const root=U('visualCodexRoot');if(root){root.outerHTML=visualCodexMarkup();visualLastFrame=0;}}
@@ -1958,6 +1958,23 @@ function drawWeaponVisualPreview(ts){
  case 'chick':case 'chicken':animal(kind,37,x,y+bob);break;
  case 'egg':drawDogEgg({x,y,r:26,vx:0,vy:120},g);break;
  default:bullet('#70fff1');
+ }
+ // A second, compact production-rendered reference reveals miniature readability.
+ // Codex objects are never applied to the actual player or game.
+ const miniature={fox:'fox',nineTail:'fox',nineTailApex:'fox',
+  whale:'whale',whaleApex:'whale',dolphin:'dolphin',dolphinCyclone:'dolphin',
+  rabbit:'rabbit',moon:'rabbit',moonApex:'rabbit',hare:'rabbit',
+  ham:'ham',armorHam:'ham',armorHamApex:'ham',chick:'chick',chicken:'chicken',
+  cat:'cat',hedgehog:'hedgehog'};
+ const mini=miniature[kind],serpent=['snake','viper','viperApex'].includes(kind);
+ if(mini||serpent){
+  g.save();g.globalAlpha=1;g.shadowBlur=0;g.fillStyle='#091326f4';
+  g.fillRect(371,168,102,67);g.strokeStyle='#82b3c8a0';g.lineWidth=.9;g.strokeRect(371.5,168.5,101,66);
+  g.fillStyle='#b9e9ee';g.font='10px system-ui';g.fillText('戦闘サイズ目安',378,181);
+  if(serpent)drawDogLightningSnake(p,{x:396,y:213,x2:442,y2:207,life:.32},g,time);
+  else drawAnimal(mini,422,209,mini==='whale'?15:mini==='fox'?12:14,
+    mini==='whale'||mini==='dolphin'?Math.PI/2:0,g,p);
+  g.restore();
  }
  // All rendering runs on this isolated canvas; no live shots or player state are modified.
 }
