@@ -843,6 +843,11 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 .v13-ach-tier-group>summary:focus-visible{outline:2px solid #f9e4a9}
 .v13-ach-tier-group .v13-grid{padding:9px 0 3px}
 
+
+/* v13.20: independent common skills entry. */
+.visual-ship-switch [data-visual-ship="common"]{border-color:#e9c38f;color:#ffe1b4;font-weight:900}
+.visual-ship-switch [data-visual-ship="common"].active{background:#4b3a2b;color:#fff2cf}
+.visual-layout .visual-browser-hint{line-height:1.6}
 /* v13.17 weapon preview: no gameplay overlays or image downloads */
 .lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
 .visual-codex{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -1885,19 +1890,31 @@ const VISUAL_CODEX_ROWS=[
  ['chargeComet','basic','charge','チャージ彗星弾','停止中にチャージし、移動すると発射する貫通弾。','comet','cForge'],
  ['drillAuger','basic','drill','プラズマドリル','通常弾は発射せず、先端のドリルで接触攻撃。ダッシュで突進する。','drill','dRotor'],
  ['dogBone','basic','dog','骨ブーメラン','回転しながら往復する基本武装。帰還時も攻撃する。','bone','dogBonePack'],
- ['plasma','element',null,'プラズマ弾換装','基本武装の炎換装。対応するPOWERで初めて燃焼が付与される。','plasma','plasma'],
- ['cryo','element',null,'フロスト弾換装','基本武装の氷換装。スロウを付与し、凍結はしない。','cryo','cryo'],
- ['arc','element',null,'サンダー弾換装','基本武装の雷換装。連鎖には再発動制限がある。','arc','arc'],
- ['rocket','element',null,'炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
- ['magma','element',null,'マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
- ['iceball','element',null,'アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
- ['spike','element',null,'フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','frostSpike'],
- ['emp','element',null,'電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
- ['bolt','element',null,'ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','lightningBolt'],
- ['cyclone','element',null,'サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
- ['blade','element',null,'ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
- ['wall','element',null,'ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
- ['meteor','element',null,'ローリング・メテオ','回転して進む貫通隕石。進むほど大きくなるが威力は一定。','meteor','meteorSeed'],
+ ['shotPlasma','element','shot','パルスショット・炎換装','橙赤色の基本ショット。燃焼を付与。進化合成カラー優先。','shot:plasma','plasma'],
+ ['shotCryo','element','shot','パルスショット・氷換装','氷青色の基本ショット。スロウを付与。進化合成カラー優先。','shot:cryo','cryo'],
+ ['shotArc','element','shot','パルスショット・雷換装','雷紫色の基本ショット。雷連鎖を付与。進化合成カラー優先。','shot:arc','arc'],
+ ['laserPlasma','element','laser','プリズムレーザー・炎換装','赤橙色レーザー。燃焼を付与。進化合成カラー優先。','laser:plasma','plasma'],
+ ['laserCryo','element','laser','プリズムレーザー・氷換装','氷青色レーザー。スロウを付与。進化合成カラー優先。','laser:cryo','cryo'],
+ ['laserArc','element','laser','プリズムレーザー・雷換装','通常より濃い紫色レーザー。雷連鎖を付与。進化合成カラー優先。','laser:arc','arc'],
+ ['chargePlasma','element','charge','チャージ彗星・炎換装','元のオレンジより赤みを強くした彗星。燃焼を付与。進化合成カラー優先。','comet:plasma','plasma'],
+ ['chargeCryo','element','charge','チャージ彗星・氷換装','氷青色の彗星。スロウを付与。進化合成カラー優先。','comet:cryo','cryo'],
+ ['chargeArc','element','charge','チャージ彗星・雷換装','濃紫色の彗星。雷連鎖を付与。進化合成カラー優先。','comet:arc','arc'],
+ ['dogPlasma','element','dog','骨ブーメラン・炎換装','炎色の骨ブーメラン。燃焼を付与。進化合成カラー優先。','bone:plasma','plasma'],
+ ['dogCryo','element','dog','骨ブーメラン・氷換装','氷青色の骨ブーメラン。スロウを付与。進化合成カラー優先。','bone:cryo','cryo'],
+ ['dogArc','element','dog','骨ブーメラン・雷換装','雷紫色の骨ブーメラン。雷連鎖を付与。進化合成カラー優先。','bone:arc','arc'],
+ ['drillPlasma','element','drill','プラズマドリル・炎換装','炎色のドリル先端。燃焼を付与。進化合成カラー優先。','drill:plasma','dPowerFire'],
+ ['drillCryo','element','drill','プラズマドリル・氷換装','氷青色のドリル先端。スロウを付与。進化合成カラー優先。','drill:cryo','dPowerIce'],
+ ['drillArc','element','drill','プラズマドリル・雷換装','濃紫色のドリル先端。雷連鎖を付与。進化合成カラー優先。','drill:arc','dPowerThunder'],
+ ['rocket','element','common','炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
+ ['magma','element','common','マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
+ ['iceball','element','common','アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
+ ['spike','element','common','フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','frostSpike'],
+ ['emp','element','common','電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
+ ['bolt','element','common','ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','lightningBolt'],
+ ['cyclone','element','common','サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
+ ['blade','element','common','ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
+ ['wall','element','common','ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
+ ['meteor','element','common','ローリング・メテオ','回転して進む貫通隕石。進むほど大きくなるが威力は一定。','meteor','meteorSeed'],
  ['dogChick','animal','dog','チック・タック（ヒヨコ）','卵を発射するミニオン。時間経過後にニワトリへ成長。','chick','dogChick'],
  ['dogChicken','animal','dog','成長後のニワトリ','規定時間後にヒヨコが成長した姿。','chicken','dogLegendChicken'],
  ['dogEgg','animal','dog','たまご弾','ヒヨコ・ニワトリが放つゆっくりした卵弾。','egg','dogEggPower'],
@@ -1923,8 +1940,8 @@ const VISUAL_CODEX_ROWS=[
  ['dogHamApex','mutation','dog','星穿つ装甲獣','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
 const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>({id,group,ship,name,desc,kind,card}));
-const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性武装'],['animal','アニマル'],['mutation','変異・上位進化']];
-function visualCodexItems(){return VISUAL_CODEX.filter(v=>(!v.ship||v.ship===visualShip)&&!(visualShip==='drill'&&['plasma','cryo','arc'].includes(v.id))&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
+const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性換装'],['animal','アニマル'],['mutation','変異・上位進化']];
+function visualCodexItems(){return VISUAL_CODEX.filter(v=>v.ship===visualShip&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
 function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
 /* v13.19 — preview first; selection remains isolated from gameplay state. */
 function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex"><div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
@@ -1944,10 +1961,10 @@ function visualCodexContent(){
  '<p class="visual-stage-notice">武装を選んでもスキル・能力値・セーブは変わりません。右下は戦闘中の小サイズ表示目安です。実寸・発射数はビルドによって変わります。</p></details></section>'+
  '<section class="visual-browser" aria-label="武装を選ぶ"><div class="visual-toolbar">'+
  '<div class="visual-tool-label">機体を選択</div><div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+
- Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
+ [['common','共通スキル'],...Object.entries(SHIPS).map(([id,sh])=>[id,sh.jp])].map(([id,name])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
  '<div class="visual-tool-label">武装カテゴリ</div><div class="visual-group-switch" role="group" aria-label="武装の種類">'+
  VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
- '<div class="visual-browser-hint">武装を選択、または ‹ › で連続比較</div></div>'+
+ '<div class="visual-browser-hint">共通スキルは通常機体で同じ表示。各機体の属性換装は専用の色で確認。‹ › で連続比較</div></div>'+
  '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
  '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div></section></div>';
 }
