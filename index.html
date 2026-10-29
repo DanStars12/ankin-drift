@@ -1299,6 +1299,12 @@ function skipElementFusion(){
  state('playing');processTransitions();
 }
 function clearConsumedElementAttacks(sub){
+ // Projectiles fired before the fusion must not carry a now-consumed conversion.
+ const spentMode={fire:'plasma',ice:'cryo',thunder:'arc'}[sub];
+ if(spentMode)for(const shot of shots){
+  if(shot.elementMode===spentMode)shot.elementMode=null;
+  if(shot.kind===spentMode&&shot.source==='primary')shot.kind='pulse';
+ }
  if(sub==='fire'){shots=shots.filter(b=>b.kind!=='rocket');zones=zones.filter(z=>z.type!=='magma');}
  if(sub==='ice')shots=shots.filter(b=>b.kind!=='iceball');
  if(sub==='rock')shots=shots.filter(b=>b.kind!=='meteor');
