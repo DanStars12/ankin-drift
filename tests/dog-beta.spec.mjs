@@ -19,7 +19,7 @@ window.__dogTest={
    dogSynergies:activeSynergies().filter(x=>x.shipOnly==='dog').length,
    dogOnly:selectable(SKILLS).filter(x=>x.shipOnly==='dog').map(x=>x.id),
    noOtherDrone:!selectable(SKILLS).some(x=>['minorDrone','squad','orbit','rocket','iceBall'].includes(x.id)),
-   exact:!!skillById('dogFox')&&skillById('dogFox').name==='フォックスミサイル'&&skillById('dogHamMeteor').name==='ハム・スターメテオ'&&skillById('dogDuet').name==='ドルフィン・デュエット'
+   exact:!!skillById('dogFox')&&skillById('dogFox').name==='こんこん・フォックスミサイル'&&skillById('dogHamMeteor').name==='ころころ・ハム・スターメテオ'&&skillById('dogDuet').name==='なかよし・ドルフィン・デュエット'
   };
  },
  bone(){
