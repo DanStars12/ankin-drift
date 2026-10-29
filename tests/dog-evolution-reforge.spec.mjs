@@ -23,6 +23,12 @@ window.__dogReforge={
   mods:[!!player.dogWhale,!!player.dogMoon,!!player.dogViper,!!player.dogNineTailMorph,!!player.dogArmorHam],
   fusions:Object.keys(game.fusions),relics:Object.keys(game.relics),sealed:[...game.sealedElements]};},
  reapply(){restorePlayerBuild();return this.snapshot();},
+ elementKeys(){return Object.keys(DOG_ELEMENT_ASSETS);},
+ getGustCount(){return gusts.length;},
+ whaleAppearance(){return {shape:ANIMAL_OUTLINES.whale,paint:dogAnimalPalette('whale',player)};},
+ combatStats(){return {wind:player.windDps,spike:player.spikeDamage,bolt:player.boltDamage,rocket:player.missileBurnBonus,meteor:player.meteorDamage};},
+ apexStyles(){return [!!player.dogWhaleAscended,!!player.dogMoonAscended,!!player.dogViperAscended,!!player.dogNineTailAscended,!!player.dogArmorHamAscended];},
+ neutralIsSealed(){return isSealedCard(skillById('dogRelicReturnBone'));},
  pool(){return {ordinary:selectable(SKILLS).map(c=>c.id),power:selectable(POWERS).map(c=>c.id),
   legendary:selectable(LEGENDS).map(c=>c.id),relic:selectable(RELICS).map(c=>c.id)};},
  meta(){return {elements:Object.fromEntries(Object.keys(DOG_ELEMENT_ASSETS).map(k=>[k,DOG_ELEMENT_ASSETS[k].map(id=>({id,element:elementFromCard(skillById(id)),sealed:isSealedCard(skillById(id))}))])),
@@ -56,7 +62,7 @@ test('five DOG attributes have explicit owners and sealed cards stay out of ever
  const result=await page.evaluate(()=>{
   const p=window.__dogReforge;p.reset();
   const before=p.meta(),results={};
-  for(const element of Object.keys(DOG_ELEMENT_ASSETS)){
+  for(const element of p.elementKeys()){
    p.reset();p.seal(element);
    const all=Object.values(p.pool()).flat(),metadata=p.meta().elements[element];
    results[element]={typed:metadata.every(c=>c.element===element&&c.sealed),excluded:metadata.every(c=>!all.includes(c.id)),bone:!isSealedCard(skillById('dogBonePack'))};
@@ -93,7 +99,7 @@ test('whale mutation consolidates up to seven cyclones into exactly one bounded,
   p.add('dogHurricane');const normal=p.whale();
   p.add('dogHurricane');p.add('dogHurricane');p.add('dogHurricane');p.add('dogMutWhale');
   const whale=p.whale();for(let i=0;i<10;i++)p.whale();
-  return{normal,whale,active:gusts.length,shape:ANIMAL_OUTLINES.whale,paint:dogAnimalPalette('whale',player)};
+  return{normal,whale,active:p.getGustCount(),...p.whaleAppearance()};
  });
  expect(result.normal).toHaveLength(1);expect(result.normal[0].whale).toBe(false);
  expect(result.whale).toHaveLength(1);expect(result.whale[0].whale).toBe(true);
@@ -111,10 +117,10 @@ test('five apex evolutions unlock on 3 materials and do not double-stack on rest
   ['dogHurricane','dogHare','dogSnake','dogFox','dogHamMeteor'].forEach(id=>p.add(id));
   ['dogMutWhale','dogMutMoon','dogMutViper','dogMutNineTail','dogMutHam'].forEach(id=>p.add(id));
   ['dogPwrDolphin','dogHarePower','dogSnakeLegend','dogPwrFox','dogLegendHam'].forEach(id=>p.add(id));
-  const after=p.snapshot(),stat={wind:player.windDps,spike:player.spikeDamage,bolt:player.boltDamage,rocket:player.missileBurnBonus,meteor:player.meteorDamage};
+  const after=p.snapshot(),stat=p.combatStats();
   p.reapply();
-  const statAfter={wind:player.windDps,spike:player.spikeDamage,bolt:player.boltDamage,rocket:player.missileBurnBonus,meteor:player.meteorDamage};
-  return{after,stat,statAfter,styles:[!!player.dogWhaleAscended,!!player.dogMoonAscended,!!player.dogViperAscended,!!player.dogNineTailAscended,!!player.dogArmorHamAscended]};
+  const statAfter=p.combatStats();
+  return{after,stat,statAfter,styles:p.apexStyles()};
  });
  expect(result.after.fusions.filter(x=>x.endsWith('Apex'))).toHaveLength(5);
  expect(result.statAfter).toEqual(result.stat);
@@ -127,7 +133,7 @@ test('consuming secondary wind stops whale and even owned wind legendaries while
  const result=await page.evaluate(()=>{
   const p=window.__dogReforge;p.reset();p.add('dogHurricane');p.add('dogMutWhale');p.add('dogLegendSea');
   const before=p.snapshot();const sealed=p.seal('wind');const choices=p.pool(),rebuild=p.reapply();
-  return{before,sealed,rebuild,choices,neutralSealed:isSealedCard(skillById('dogRelicReturnBone'))};
+  return{before,sealed,rebuild,choices,neutralSealed:p.neutralIsSealed()};
  });
  expect(result.before.mods[0]).toBe(true);
  expect(result.sealed.wind).toBe(0);expect(result.sealed.mods[0]).toBe(false);
