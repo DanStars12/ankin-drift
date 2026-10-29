@@ -778,6 +778,64 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}.ship-card.dog{grid-column:span 2}.ship-card.dog .ship-description{max-width:290px}}
 
 
+
+/* v13.19: compact, accessible LAB navigation and preview-first responsive gallery. */
+.panel.lab-panel{width:min(1180px,calc(100vw - 16px))}
+.lab-panel .lab-tabs,body.pilot-mobile .lab-panel .lab-tabs{
+ display:grid!important;grid-template-columns:repeat(8,minmax(99px,1fr))!important;
+ gap:5px!important;margin:5px 0 8px;overflow-x:auto;overflow-y:hidden;
+ scrollbar-width:thin;scrollbar-color:#6092ab #15263e;scroll-snap-type:x proximity;
+}
+.lab-panel .lab-tabs .lab-tab,body.pilot-mobile .lab-panel .lab-tabs .lab-tab{
+ grid-column:auto!important;grid-row:auto!important;min-height:44px!important;
+ padding:5px 4px!important;font-size:11px!important;scroll-snap-align:center;
+}
+.lab-panel .lab-tab small{font-size:9px}
+.lab-panel .lab-tab:focus-visible{outline:2px solid #fff1ba;outline-offset:-2px}
+.lab-panel.visual-lab>.eyebrow,.lab-panel.visual-lab>.text-stats,.lab-panel.visual-lab>.lab-ship-tip{display:none}
+.lab-panel.visual-lab>.logo.small{font-size:clamp(19px,3vw,25px);line-height:1;margin:0 0 4px}
+.lab-panel.visual-lab .lab-scroll{padding:2px;min-height:150px}
+.visual-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,1fr);gap:12px;align-items:start}
+.visual-layout .visual-stage{position:sticky;top:0;z-index:2;box-shadow:0 8px 20px #0004}
+.visual-layout .visual-browser{min-width:0;max-height:min(64dvh,650px);overflow:auto;scrollbar-width:thin;overscroll-behavior:contain}
+.visual-layout .visual-toolbar{position:sticky;top:0;z-index:2;background:#101d33;padding:8px;border:1px solid #3c627d;border-radius:10px;margin-bottom:8px}
+.visual-layout .visual-tool-label{font-size:10px;font-weight:850;color:#b1d8ed;margin:2px 0 5px;text-align:left}
+.visual-layout .visual-ship-switch,.visual-layout .visual-group-switch{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.visual-layout .visual-ship-switch button,.visual-layout .visual-group-switch button{flex:0 0 auto;min-height:34px;padding:5px 9px;font-size:11px}
+.visual-layout .visual-browser-hint{font-size:10px;color:#aec8d7;margin:4px 0 0}
+.visual-layout .visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.visual-layout .visual-choice{min-height:49px;padding:7px;font-size:11px}
+.visual-layout .visual-choice span{font-size:11px}
+.visual-layout .visual-stage{padding:9px}
+.visual-layout .visual-stage-heading{margin-bottom:5px;gap:4px}
+.visual-layout .visual-stage-heading strong{font-size:clamp(13px,1.8vw,17px)}
+.visual-layout #weaponVisualCanvas{max-width:none;width:100%}
+.visual-layout .visual-step-controls{display:flex;gap:5px}
+.visual-layout .visual-step-controls button{border:1px solid #67b5c4;border-radius:8px;background:#183f58;color:#e6fffa;min-width:40px;min-height:35px;font-size:24px;cursor:pointer}
+.visual-layout .visual-step-controls button:focus-visible{outline:2px solid #fff1a9}
+.visual-layout .visual-stage-caption{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#a8deed;margin:5px 1px}
+.visual-layout .visual-stage-details{border-top:1px solid #34536b;margin-top:5px;padding-top:4px;font-size:11px;color:#d4ebfa}
+.visual-layout .visual-stage-details summary{cursor:pointer;font-weight:850;min-height:28px;padding:4px}
+.visual-layout .visual-stage-details p{font-size:11px;margin:4px 0}
+@media(max-width:780px){
+ .panel.lab-panel{width:calc(100vw - 12px)}
+ .lab-panel .lab-tabs,body.pilot-mobile .lab-panel .lab-tabs{grid-template-columns:repeat(8,minmax(95px,1fr))!important}
+ .lab-panel.visual-lab .lab-scroll{min-height:180px}
+ .visual-layout{display:flex;flex-direction:column;gap:9px}
+ .visual-layout .visual-stage{position:sticky;top:0;width:100%;background:#0b172e;z-index:4}
+ .visual-layout .visual-browser{width:100%;max-height:none;overflow:visible}
+ .visual-layout .visual-toolbar{position:static}
+ .visual-layout #weaponVisualCanvas{max-width:480px}
+ .visual-layout .visual-stage{padding:6px}
+ .visual-layout .visual-stage-heading strong{font-size:14px}
+ .visual-layout .visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-height:600px){
+ .lab-panel.visual-lab .visual-stage{position:static}
+ .lab-panel.visual-lab .logo.small{display:none}
+ .visual-layout .visual-stage-details:not([open]){padding-top:2px}
+}
+
 /* v13.17 weapon preview: no gameplay overlays or image downloads */
 .lab-tab[data-tab="visual"].active{color:#aefaff;border-color:#58d9e7;background:#143a51;box-shadow:inset 0 -3px 0 #68d9ed}
 .visual-codex{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -1861,22 +1919,44 @@ const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>
 const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性武装'],['animal','アニマル'],['mutation','変異・上位進化']];
 function visualCodexItems(){return VISUAL_CODEX.filter(v=>(!v.ship||v.ship===visualShip)&&!(visualShip==='drill'&&['plasma','cryo','arc'].includes(v.id))&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
 function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
-function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex">'+
- '<p class="lab-help">機体の弾や属性スキル・DOGアニマルを大きく確認できる練習用の見本です。<b>画像を拡大して描画</b>しています。武装やスキルは獲得せず、プレイ中の能力値・所持履歴も変わりません。</p>'+
- '<div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
- '<div class="visual-group-switch" role="group" aria-label="武装の種類">'+VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
- '<div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
-function visualCodexContent(){const v=visualSelected(),all=visualCodexItems();if(!v)return '<p class="lab-empty">この機体の武装はありません。</p>';
+/* v13.19 — preview first; selection remains isolated from gameplay state. */
+function visualCodexMarkup(){return '<section id="visualCodexRoot" class="visual-codex"><div id="visualCodexResults">'+visualCodexContent()+'</div></section>';}
+function visualCodexContent(){
+ const v=visualSelected(),all=visualCodexItems();if(!v)return '<p class="lab-empty">この機体の武装はありません。</p>';
  visualChoice=v.id;
- return '<div class="visual-stage"><div class="visual-stage-heading"><strong>'+escHtml(v.name)+'</strong><span>'+escHtml(SHIPS[visualShip].jp)+'</span></div>'+
+ return '<div class="visual-layout"><section class="visual-stage" aria-label="選択中の武装プレビュー">'+
+ '<div class="visual-stage-heading"><strong>'+escHtml(v.name)+'</strong>'+
+ '<div class="visual-step-controls" role="group" aria-label="前後の武装に切替">'+
+ '<button type="button" data-visual-step="-1" aria-label="前の武装">‹</button>'+
+ '<button type="button" data-visual-step="1" aria-label="次の武装">›</button></div></div>'+
  '<canvas id="weaponVisualCanvas" width="720" height="360" role="img" aria-label="'+escHtml(v.name)+'の武装アニメーション" aria-describedby="visualWeaponDescription"></canvas>'+
- '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot"><span>◉ アニメーション見本</span>'+
- (skillById(v.card)?skillPeekLink(v.card):'<span>基本装備</span>')+'</div>'+
- '<div class="visual-stage-notice">実際の攻撃判定・発射数・速度はビルドで変化します。中央は拡大見本、右下は戦闘中の小サイズに近い表示目安です（端末の画面倍率で変化）。</div></div>'+
+ '<div class="visual-stage-caption">◉ 拡大アニメーション <span>右下：戦闘サイズ目安</span></div>'+
+ '<details class="visual-stage-details"><summary>効果・説明を見る</summary>'+
+ '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot">'+
+ (skillById(v.card)?skillPeekLink(v.card):'<span>基本武装</span>')+'</div>'+
+ '<p class="visual-stage-notice">武装を選んでもスキル・能力値・セーブは変わりません。実寸・発射数はビルドによって変わります。</p></details></section>'+
+ '<section class="visual-browser" aria-label="武装を選ぶ"><div class="visual-toolbar">'+
+ '<div class="visual-tool-label">機体を選択</div><div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+
+ Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
+ '<div class="visual-tool-label">武装カテゴリ</div><div class="visual-group-switch" role="group" aria-label="武装の種類">'+
+ VISUAL_GROUPS.map(([id,name])=>'<button type="button" data-visual-group="'+id+'" aria-pressed="'+(visualGroup===id)+'" class="'+(visualGroup===id?'active':'')+'">'+escHtml(name)+'</button>').join('')+'</div>'+
+ '<div class="visual-browser-hint">武装を選択、または ‹ › で連続比較</div></div>'+
  '<div class="visual-choice-grid" role="group" aria-label="プレビューする武装">'+all.map(row=>
- '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div>';}
-function visualCodexUpdate(){const root=U('visualCodexRoot');if(root){root.outerHTML=visualCodexMarkup();visualLastFrame=0;}}
-
+ '<button type="button" class="visual-choice '+(row.id===v.id?'active':'')+'" aria-pressed="'+(row.id===v.id)+'" data-visual-id="'+escHtml(row.id)+'"><span>'+escHtml(row.name)+'</span><small>'+escHtml(VISUAL_GROUPS.find(x=>x[0]===row.group)?.[1]||'')+'</small></button>').join('')+'</div></section></div>';
+}
+function visualCodexUpdate(){
+ const root=U('visualCodexRoot');if(!root)return;
+ const oldBrowser=root.querySelector('.visual-browser'),oldShip=root.querySelector('.visual-ship-switch'),oldGroup=root.querySelector('.visual-group-switch');
+ const top=oldBrowser?.scrollTop||0,shipX=oldShip?.scrollLeft||0,groupX=oldGroup?.scrollLeft||0;
+ const focus=document.activeElement,focusKey=['visualStep','visualId','visualGroup','visualShip'].find(k=>focus?.dataset?.[k]!==undefined);
+ const focusVal=focusKey?focus.dataset[focusKey]:null;
+ root.outerHTML=visualCodexMarkup();visualLastFrame=0;
+ const next=U('visualCodexRoot');if(!next)return;
+ next.querySelector('.visual-browser').scrollTop=top;
+ next.querySelector('.visual-ship-switch').scrollLeft=shipX;
+ next.querySelector('.visual-group-switch').scrollLeft=groupX;
+ if(focusKey){const attr='data-'+focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());next.querySelector('['+attr+'="'+focusVal+'"]')?.focus({preventScroll:true});}
+}
 
 function drawWeaponVisualPreview(ts){
  if(mode!=='build'||buildTab!=='visual'||document.hidden||ts-visualLastFrame<50)return;
