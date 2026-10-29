@@ -1941,7 +1941,7 @@ function visualCodexContent(){
  '<details class="visual-stage-details"><summary>効果・説明を見る</summary>'+
  '<p id="visualWeaponDescription">'+escHtml(v.desc)+'</p><div class="visual-stage-foot">'+
  (skillById(v.card)?skillPeekLink(v.card):'<span>基本武装</span>')+'</div>'+
- '<p class="visual-stage-notice">武装を選んでもスキル・能力値・セーブは変わりません。実寸・発射数はビルドによって変わります。</p></details></section>'+
+ '<p class="visual-stage-notice">武装を選んでもスキル・能力値・セーブは変わりません。右下は戦闘中の小サイズ表示目安です。実寸・発射数はビルドによって変わります。</p></details></section>'+
  '<section class="visual-browser" aria-label="武装を選ぶ"><div class="visual-toolbar">'+
  '<div class="visual-tool-label">機体を選択</div><div class="visual-ship-switch" role="group" aria-label="プレビューする機体">'+
  Object.entries(SHIPS).map(([id,sh])=>'<button type="button" data-visual-ship="'+id+'" aria-pressed="'+(visualShip===id)+'" class="'+(visualShip===id?'active':'')+'">'+escHtml(sh.jp)+'</button>').join('')+'</div>'+
