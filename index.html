@@ -1816,8 +1816,8 @@ function atlasMarkup(){const attrs=[...new Set(ALL_SKILL_DEFS().flatMap(c=>c.tag
    This gallery must not grant cards, spawn projectiles, or mutate player/game state. */
 const VISUAL_CODEX_ROWS=[
  ['shotPulse','basic','shot','パルスショット','通常弾の軌跡。ショット型の基本武装。','pulse','damage'],
- ['laserRay','basic','laser','プリズムレーザー','敵を自動照準する即着弾の持続ビーム。','laser','lPowerPrism'],
- ['chargeComet','basic','charge','チャージ彗星弾','停止中にチャージし、移動すると発射する貫通弾。','comet','chargeBlast'],
+ ['laserRay','basic','laser','プリズムレーザー','敵を自動照準する即着弾の持続ビーム。','laser','lWidth'],
+ ['chargeComet','basic','charge','チャージ彗星弾','停止中にチャージし、移動すると発射する貫通弾。','comet','cForge'],
  ['drillAuger','basic','drill','プラズマドリル','通常弾は発射せず、先端のドリルで接触攻撃。ダッシュで突進する。','drill','dRotor'],
  ['dogBone','basic','dog','骨ブーメラン','回転しながら往復する基本武装。帰還時も攻撃する。','bone','dogBonePack'],
  ['plasma','element',null,'プラズマ弾換装','基本武装の炎換装。対応するPOWERで初めて燃焼が付与される。','plasma','plasma'],
@@ -1826,9 +1826,9 @@ const VISUAL_CODEX_ROWS=[
  ['rocket','element',null,'炎ミサイル','敵を追尾し爆炎と燃焼を与える独立武器。','rocket','rocket'],
  ['magma','element',null,'マグマ床','継続燃焼領域。床の見た目と実際のダメージ領域を見比べよう。','magma','static'],
  ['iceball','element',null,'アイスボール','氷球の独立弾。凍結判定があり、スロウは付与しない。','iceball','iceBall'],
- ['spike','element',null,'フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','spikeSeed'],
+ ['spike','element',null,'フロストスパイク','地面から出現する結晶状の氷柱。確定スロウ、凍結なし。','spike','frostSpike'],
  ['emp','element',null,'電磁パルス','周囲への独立した継続雷攻撃。基本弾の属性は変えない。','emp','empPulse'],
- ['bolt','element',null,'ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','boltSeed'],
+ ['bolt','element',null,'ライトニングボルト','蛇行する連鎖雷。伝播した敵へ同じ連鎖が戻らない。','bolt','lightningBolt'],
  ['cyclone','element',null,'サイクロン','円形の移動する突風。通常敵を押し返し、ボスを押し返さない。','cyclone','windOrigin'],
  ['blade','element',null,'ウィンドブレード','自機の周囲を旋回する棒状の刃。長い刃全体に当たり判定。','blade','orbit'],
  ['wall','element',null,'ロックウォール','周囲を回る岩壁。防御・迎撃を行う。','wall','stoneSeed'],
