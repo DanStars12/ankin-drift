@@ -2617,6 +2617,47 @@ for(const c of [...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS])if(c.
 }
 
 
+// DOG EVOLUTION REFORGE — persistent mutations are separate from existing POWER + LEGENDARY evolution.
+SKILLS.push(
+ skill('dogMutWhale','epic','🐳','タイダル・モノサイクロン','変異：イルカを巨鯨へ。複数サイクロンを巨大な一基に圧縮し、元の発射数を半径と威力へ換算。',p=>{p.dogWhale=1;p.windDps+=45;p.windStrength+=40},{shipOnly:'dog',element:'wind',mutation:true,stackable:false,available:p=>p.windCount>0&&['dogHurricane','dogPwrDolphin','dogLegendSea'].some(owned)}),
+ skill('dogMutMoon','epic','🐇','ムーンラビット結晶化','変異：フロスト・ヘアが月兎の長耳へ。氷柱威力+95、スロウ範囲+5、月光色の結晶。凍結なし。',p=>{p.dogMoon=1;p.spikeDamage+=95;p.spikeArea=Math.min(32,p.spikeArea+5)},{shipOnly:'dog',element:'ice',mutation:true,stackable:false,available:p=>p.spikeCount>0&&['dogHare','dogHarePower','dogHareLegend'].some(owned)}),
+ skill('dogMutViper','epic','🐍','ヴァイパー・オーバードライブ','変異：金雷の雷蛇王へ。雷撃威力+90、伝播距離+30、連鎖+1。同一敵再伝播なし。',p=>{p.dogViper=1;p.boltDamage+=90;p.boltReach=Math.min(380,p.boltReach+30);p.boltJumps=Math.min(6,p.boltJumps+1)},{shipOnly:'dog',element:'thunder',mutation:true,stackable:false,available:p=>p.boltCount>0&&['dogSnake','dogSnakePower','dogSnakeLegend'].some(owned)}),
+ skill('dogMutNineTail','epic','🦊','九尾導火','変異：狐が白熱金色の九尾へ。燃焼+28%、爆風強化。ミサイル数は増やさない。',p=>{p.dogNineTailMorph=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.28;p.thermal+=.22},{shipOnly:'dog',element:'fire',mutation:true,stackable:false,available:p=>p.rocketCd>0&&['dogFox','dogPwrFox','dogLegendFox'].some(owned)}),
+ skill('dogMutHam','epic','🐹','ギガ・ハムスターメテオ','変異：金茶色の装甲獣へ。転がる貫通弾の威力+125、最大半径+8、貫通を維持。',p=>{p.dogArmorHam=1;p.meteorDamage+=125;p.meteorRadius=Math.min(46,p.meteorRadius+8)},{shipOnly:'dog',element:'rock',mutation:true,stackable:false,available:p=>p.meteorCount>0&&['dogHamMeteor','dogLegendHam'].some(owned)})
+);
+LEGENDS.push(
+ skill('dogLegendBoneKing','legendary','🦴','骨界の覇王','骨ブーメラン+2本（最大8）、帰還威力+60%、往復速度+40。',p=>{p.dogBones=Math.min(8,p.dogBones+2);p.dogBoneReturn+=.6;p.dogBoneSpeed+=40},{shipOnly:'dog',stackable:false,tags:['骨ブーメラン','専用：DOG']}),
+ skill('dogLegendFlockWard','legendary','🐔','守護する大群','ヒヨコ+2匹、最大シールド+105、再充填+4/秒。',p=>{p.dogChicks=Math.min(10,p.dogChicks+2);p.shieldMax+=105;p.shield+=105;p.shieldRecharge+=4},{shipOnly:'dog',stackable:false,tags:['アニマル','防御','専用：DOG']})
+);
+RELICS.push(
+ skill('dogRelicMoonCharm','relic','🌙','月兎の耳飾り','フロスト・ヘアの威力+85、スロウ範囲+4。',p=>{p.spikeDamage+=85;p.spikeArea=Math.min(32,p.spikeArea+4)},{shipOnly:'dog',element:'ice',stackable:false,available:p=>p.spikeCount>0}),
+ skill('dogRelicSnakeSkin','relic','⚡','脱皮した雷蛇の皮','ライトニング・スネークの威力+110、連鎖距離+22。',p=>{p.boltDamage+=110;p.boltReach=Math.min(380,p.boltReach+22)},{shipOnly:'dog',element:'thunder',stackable:false,available:p=>p.boltCount>0}),
+ skill('dogRelicWhaleFlute','relic','🐳','潮鯨の潮笛','サイクロン威力+65、ノックバック+55。巨大化しても判定半径上限を維持。',p=>{p.windDps+=65;p.windStrength+=55},{shipOnly:'dog',element:'wind',stackable:false,available:p=>p.windCount>0}),
+ skill('dogRelicFoxTalisman','relic','🦊','狐火の尾札','フォックスミサイルの燃焼威力+35%、追尾弾速+10%。骨には燃焼を付与しない。',p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.35;p.dogFoxSpeed=1.1},{shipOnly:'dog',element:'fire',stackable:false,available:p=>p.rocketCd>0}),
+ skill('dogRelicReturnBone','relic','🪃','回転骨の護符','骨ブーメランの帰還威力+40%、射程+52、往復速度+25。属性は換装POWER取得時のみ。',p=>{p.dogBoneReturn+=.4;p.dogBoneRange=Math.min(480,p.dogBoneRange+52);p.dogBoneSpeed+=25},{shipOnly:'dog',stackable:false,tags:['骨ブーメラン','専用：DOG']})
+);
+SYNERGIES.push(
+ {id:'dogWindWake',shipOnly:'dog',need:['dogHurricane','dogDolphin'],name:'青潮の輪舞',desc:'サイクロン威力+40・風圧+25。',apply:p=>{p.windDps+=40;p.windStrength+=25}},
+ {id:'dogWhaleDuet',shipOnly:'dog',need:['dogMutWhale','dogDuet'],name:'大海の共鳴',desc:'巨大サイクロン威力+55、旋回イルカ威力+18%。',apply:p=>{p.windDps+=55;p.bladePower=(p.bladePower||1)*1.18}},
+ {id:'dogFoxPawTrail',shipOnly:'dog',need:['dogNineTail','dogPawLava'],name:'狐火の足跡',desc:'マグマ威力+70、炎ミサイルの爆風を強化。',apply:p=>{p.magmaDps+=70;p.thermal+=.18}},
+ {id:'dogNineTailFire',shipOnly:'dog',need:['dogMutNineTail','dogFox'],name:'九尾の連火',desc:'狐火の燃焼+18%、本体ミサイル威力+16%。',apply:p=>{p.missileBurnBonus=(p.missileBurnBonus||0)+.18;p.dogFoxDamage=(p.dogFoxDamage||1)*1.16}},
+ {id:'dogRabbitMoon',shipOnly:'dog',need:['dogHare','dogRabbit'],name:'雪野の跳躍',desc:'フロスト・ヘア威力+60、氷球威力+42。',apply:p=>{p.spikeDamage+=60;p.iceBallDamage+=42}},
+ {id:'dogMoonTracks',shipOnly:'dog',need:['dogMutMoon','dogHareFocus'],name:'月影の足跡',desc:'氷柱威力+90、スロウ範囲+3。',apply:p=>{p.spikeDamage+=90;p.spikeArea=Math.min(32,p.spikeArea+3)}},
+ {id:'dogSnakeHedge',shipOnly:'dog',need:['dogSnake','dogHedgehog'],name:'雷鳴の双牙',desc:'雷蛇威力+72、EMP威力+45。',apply:p=>{p.boltDamage+=72;p.empDps+=45}},
+ {id:'dogViperChain',shipOnly:'dog',need:['dogMutViper','dogSnakeChain'],name:'皇雷蛇行',desc:'雷蛇伝播+1・威力+70（上限6）。',apply:p=>{p.boltJumps=Math.min(6,p.boltJumps+1);p.boltDamage+=70}},
+ {id:'dogHamCatShield',shipOnly:'dog',need:['dogHamMeteor','dogCatFort'],name:'ごろごろ要塞',desc:'猫の迎撃+48、ハムスターの転がり威力+95。',apply:p=>{p.rockDamage+=48;p.meteorDamage+=95}},
+ {id:'dogArmoredGuard',shipOnly:'dog',need:['dogMutHam','dogCat'],name:'重装にゃんこ砦',desc:'装甲獣威力+100、シールド最大+60。',apply:p=>{p.meteorDamage+=100;p.shieldMax+=60;p.shield+=60}},
+ {id:'dogBoneMoon',shipOnly:'dog',need:['dogGoodBoy','dogMutMoon'],name:'月下の骨追い',desc:'骨帰還威力+23%、氷柱威力+50。',apply:p=>{p.dogBoneReturn+=.23;p.spikeDamage+=50}},
+ {id:'dogWhaleArmor',shipOnly:'dog',need:['dogMutWhale','dogMutHam'],name:'巨鯨と装甲獣',desc:'サイクロン威力+55、メテオ威力+85。',apply:p=>{p.windDps+=55;p.meteorDamage+=85}}
+);
+FUSIONS.push(
+ {id:'dogWhaleApex',shipOnly:'dog',power:'dogPwrDolphin',legend:'dogMutWhale',required:['dogHurricane'],name:'深海の巨鯨',icon:'🐳',desc:'巨鯨が深海色に進化。巨大サイクロン威力+135、風圧+85。',apply:p=>{p.dogWhaleAscended=1;p.windDps+=135;p.windStrength+=85}},
+ {id:'dogMoonApex',shipOnly:'dog',power:'dogHarePower',legend:'dogMutMoon',required:['dogHare'],name:'永月フロスト・ヘア',icon:'🌙',desc:'月兎の長耳結晶が強化。氷柱威力+220、スロウ範囲+5。',apply:p=>{p.dogMoonAscended=1;p.spikeDamage+=220;p.spikeArea=Math.min(32,p.spikeArea+5)}},
+ {id:'dogViperApex',shipOnly:'dog',power:'dogSnakeLegend',legend:'dogMutViper',required:['dogSnake'],name:'皇雷大蛇',icon:'🐍',desc:'金白の太い雷蛇に進化。威力+230、伝播距離+25。',apply:p=>{p.dogViperAscended=1;p.boltDamage+=230;p.boltReach=Math.min(380,p.boltReach+25)}},
+ {id:'dogFoxApex',shipOnly:'dog',power:'dogPwrFox',legend:'dogMutNineTail',required:['dogFox'],name:'九尾神炎',icon:'🦊',desc:'狐が白金の九尾神炎へ。狐火の燃焼と爆風を強化、発射数は増やさない。',apply:p=>{p.dogNineTailAscended=1;p.missileBurnBonus=(p.missileBurnBonus||0)+.5;p.thermal+=.35}},
+ {id:'dogHamApex',shipOnly:'dog',power:'dogLegendHam',legend:'dogMutHam',required:['dogHamMeteor'],name:'星穿つ装甲獣',icon:'🐹',desc:'装甲獣が白金の星装甲に進化。貫通威力+260、回転弾速+12%。',apply:p=>{p.dogArmorHamAscended=1;p.meteorDamage+=260;p.meteorSpeed*=1.12}}
+);
+
 // v13.11 NOVA SWARM TUNING. Capped repeatable choices keep 30+ minute builds
 // meaningful without reviving a consumed secondary element or adding particles.
 function enduranceRoom(id,max){return !!game&&(game.level>=20||game.total>=600)&&(game.skills[id]||0)<max;}
@@ -2656,15 +2697,19 @@ const ENDURANCE_SKILLS=[
  skill('dogEndFoxEmber','rare','🦊','狐火の追い風','解放済み狐火ミサイルの威力・燃焼を強化。',p=>{p.dmg+=9;p.missileBurnBonus=(p.missileBurnBonus||0)+.12},{shipOnly:'dog',available:p=>p.rocketCd>0&&enduranceRoom('dogEndFoxEmber',6),tags:['アニマル','属性：炎','ミサイル','継戦']}),
  skill('dogEndHedgeGlow','rare','🦔','ハリネズミ・放電強化','解放済みEMPの威力+46。範囲は維持。',p=>p.empDps+=46,{shipOnly:'dog',available:p=>p.empRadius>0&&enduranceRoom('dogEndHedgeGlow',6),tags:['アニマル','属性：雷','継戦']})
 ];
+ENDURANCE_SKILLS.push(
+ skill('dogEndBoneAura','uncommon','🦴','リターン・マイスター','骨ブーメランの帰還威力+10%、射程+7。',p=>{p.dogBoneReturn+=.10;p.dogBoneRange=Math.min(480,p.dogBoneRange+7)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneAura',8),tags:['骨ブーメラン','継戦']}),
+ skill('dogEndMutation','rare','🐾','変異の絆','所有変異アニマルの攻撃力+4%、最大HP+10（最大8回）。',p=>{p.dogAnimalBoost*=1.04;p.maxHp+=10;p.hp=Math.min(p.maxHp,p.hp+10)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndMutation',8)&&['dogMutWhale','dogMutMoon','dogMutViper','dogMutNineTail','dogMutHam'].some(owned),tags:['アニマル','変異','継戦']})
+);
 SKILLS.push(...ENDURANCE_SKILLS);
 for(const c of ENDURANCE_SKILLS)if(c.enduranceShared)DOG_SHARED.add(c.id);
 // Explicit gameplay attribute; UI tags alone are not an authorization to fire.
 const DOG_ELEMENT_ASSETS={
- fire:['dogFox','dogNineTail','dogPawLava','dogPawBloom','dogPwrFox','dogPwrLava','dogLegendFox','dogRelicFox','dogEndFoxEmber'],
- ice:['dogRabbit','dogRabbitFrost','dogHare','dogHareFocus','dogHareFissure','dogPwrRabbit','dogHarePower','dogLegendRabbit','dogHareLegend','dogRelicRabbit'],
- thunder:['dogHedgehog','dogHedgeSpark','dogSnake','dogSnakeFocus','dogSnakeChain','dogSnakePower','dogSnakeLegend','dogEndHedgeGlow'],
- wind:['dogDolphin','dogDuet','dogHurricane','dogHurricanePlus','dogPwrDolphin','dogLegendSea','dogRelicDolphin'],
- rock:['dogCat','dogCatFort','dogHamMeteor','dogHamPlus','dogPwrCat','dogLegendHam','dogRelicCat']
+ fire:['dogMutNineTail','dogRelicFoxTalisman','dogFox','dogNineTail','dogPawLava','dogPawBloom','dogPwrFox','dogPwrLava','dogLegendFox','dogRelicFox','dogEndFoxEmber'],
+ ice:['dogMutMoon','dogRelicMoonCharm','dogRabbit','dogRabbitFrost','dogHare','dogHareFocus','dogHareFissure','dogPwrRabbit','dogHarePower','dogLegendRabbit','dogHareLegend','dogRelicRabbit'],
+ thunder:['dogMutViper','dogRelicSnakeSkin','dogHedgehog','dogHedgeSpark','dogSnake','dogSnakeFocus','dogSnakeChain','dogSnakePower','dogSnakeLegend','dogEndHedgeGlow'],
+ wind:['dogMutWhale','dogRelicWhaleFlute','dogDolphin','dogDuet','dogHurricane','dogHurricanePlus','dogPwrDolphin','dogLegendSea','dogRelicDolphin'],
+ rock:['dogMutHam','dogCat','dogCatFort','dogHamMeteor','dogHamPlus','dogPwrCat','dogLegendHam','dogRelicCat']
 };
 for(const [element,ids] of Object.entries(DOG_ELEMENT_ASSETS))for(const id of ids){
  const c=[...SKILLS,...POWERS,...LEGENDS,...UNIQUE_SKILLS,...RELICS].find(x=>x.id===id);
