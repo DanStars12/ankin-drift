@@ -16,7 +16,7 @@ window.__animalV1318={
    transform:g.getTransform().toString()};
   try{
    if(kind==='snake')drawDogLightningSnake(p,{x:32,y:86,x2:147,y2:72,life:.3},g,1);
-   else drawAnimal(kind,90,84,kind==='whale'?27:26,kind==='whale'?Math.PI/2:0,g,p);
+   else drawAnimal(kind==='whale'&&form==='normal'?'dolphin':kind,90,84,kind==='whale'?27:26,kind==='whale'?Math.PI/2:0,g,p);
    const result={alpha:g.globalAlpha,width:g.lineWidth,shadow:g.shadowBlur,
     transform:g.getTransform().toString()};
    const data=g.getImageData(0,0,c.width,c.height).data;let filled=0,rgb=0,checksum=0;
