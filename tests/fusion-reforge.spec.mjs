@@ -14,6 +14,7 @@ const inject=[
 " resonance:game.elementCombos.at(-1)?.resonanceRewards||[]};},",
 "skip(){skipElementFusion();return this.info();},",
 "next28(){state('playing');game.level=28;processTransitions();return this.info();},",
+"step(main,sub){chooseFusionMain(main);selectElementFusion(sub);return {...elementChoice};},",
 "fusion(main,sub,slot){chooseFusionMain(main);selectElementFusion(sub);selectFusionWeapon(slot);const selected={...elementChoice};",
 " confirmElementFusion();return{...this.info(),selected};},",
 "rebuild(){restorePlayerBuild();return this.info();},",
@@ -62,7 +63,7 @@ test('ice spike B fusion consumes fire but retains inherited burn and exactly tw
 });
 test('unowned B weapon is disabled during fusion weapon selection',async({page})=>{
  const errors=await setup(page);
- await page.evaluate(()=>{window.__fusionReforgeProbe.reset(12,['ice','fire']);chooseFusionMain('ice');selectElementFusion('fire');});
+ await page.evaluate(()=>{window.__fusionReforgeProbe.reset(12,['ice','fire']);window.__fusionReforgeProbe.step('ice','fire');});
  await expect(page.locator('[data-fusion-weapon="A"]')).toBeEnabled();
  await expect(page.locator('[data-fusion-weapon="B"]')).toBeDisabled();
  expect(errors).toEqual([]);
