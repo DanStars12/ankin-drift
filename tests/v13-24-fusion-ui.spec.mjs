@@ -106,10 +106,13 @@ test('PILOT ARCHIVE has independent collapsed clear history and more beginner aw
   await expect(page.locator('.v13-clear-legacy')).toHaveCount(1);
   await expect(page.locator('.v13-clear-legacy')).not.toHaveAttribute('open',/.+/);
   await expect(page.locator('.v13-ach-tier-group')).toHaveCount(4);
-  await expect(page.locator('.v13-ach-tier-group').first()).toHaveAttribute('open',/.*/);
+  await expect(page.locator('.v13-ach-tier-group').first()).not.toHaveAttribute('open',/.+/);
   await expect(page.locator('.v13-ach-tier-group').nth(1)).not.toHaveAttribute('open',/.+/);
   await expect(page.locator('.v13-ach-tier-group').first().locator('.v13-achievement')).toHaveCount(17);
-  await page.locator('.v13-clear-legacy summary').click();
+  await page.locator('.v13-ach-tier-group').first().locator('summary').click();
+  await expect(page.locator('.v13-ach-tier-group').first()).toHaveAttribute('open',/.*/);
+  await page.locator('#archiveJumpLegacy').click();
   await expect(page.locator('.v13-clear-legacy')).toHaveAttribute('open',/.*/);
+  await expect(page.locator('.v13-ach-tier-group').first()).not.toHaveAttribute('open',/.+/);
   expect(errors).toEqual([]);
 });
