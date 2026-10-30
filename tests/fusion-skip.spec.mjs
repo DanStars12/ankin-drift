@@ -14,10 +14,10 @@ const probe=[
  "  if(!c)throw Error('Missing elemental skill: '+element);",
  "  game.skills[c.id]=1;game.acquisitionLog.push(c.id);c.apply(player);",
  " }",
- " processTransitions();return window.__fusionProbe.inspect();",
+ " state('playing');game.pendingLevels=1;processTransitions();return window.__fusionProbe.inspect();",
  "},",
- "inspect(){return {mode,level:game.level,used:game.elementCombos.length,usable:ownedElementKeys(),pairs:availableElementPairs(),hasSelector:!!document.querySelector('.fusion-unlock'),pendingRewards:game.rewards.length};},",
- "reward(){game.rewards.push('minor');processTransitions();return window.__fusionProbe.inspect();}",
+ "inspect(){return {mode,kind:game.lastChoice,level:game.level,used:game.elementCombos.length,usable:ownedElementKeys(),pairs:availableElementPairs(),hasSelector:!!document.querySelector('.fusion-unlock'),pendingRewards:game.rewards.length};},",
+ "reward(){state('playing');game.rewards.push('minor');processTransitions();return window.__fusionProbe.inspect();}",
  "};"
 ].join('\n');
 async function prepare(page){
@@ -33,23 +33,28 @@ async function prepare(page){
 test('0 or 1 attribute at Lv12 skips fusion and allows ordinary boss rewards',async({page})=>{
  const errors=await prepare(page);
  const none=await page.evaluate(()=>window.__fusionProbe.reset(12,[]));
- expect(none.mode).toBe('playing');expect(none.pairs).toHaveLength(0);expect(none.hasSelector).toBe(false);
+ expect(none.mode).toBe('choice');expect(none.kind).toBe('normal');expect(none.pairs).toHaveLength(0);expect(none.hasSelector).toBe(false);
+ await expect(page.locator('#fusionFromLevel')).toBeDisabled();
  const single=await page.evaluate(()=>window.__fusionProbe.reset(12,['fire']));
- expect(single.mode).toBe('playing');expect(single.pairs).toHaveLength(0);
+ expect(single.mode).toBe('choice');expect(single.pairs).toHaveLength(0);
  const reward=await page.evaluate(()=>window.__fusionProbe.reward());
- expect(reward.mode).toBe('choice');
+ expect(reward.mode).toBe('choice');expect(reward.kind).toBe('minor');
+ await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
  await expect(page.locator('.fusion-unlock')).toHaveCount(0);
  expect(errors).toEqual([]);
 });
-test('Lv12 with two elements enters fusion; Lv28 skips with 1 unused until 2 exist',async({page})=>{
+test('Lv12 and Lv28 keep fusion in normal level-up until enough unused elements exist',async({page})=>{
  const errors=await prepare(page);
  const two=await page.evaluate(()=>window.__fusionProbe.reset(12,['fire','ice']));
- expect(two.mode).toBe('elementChoice');expect(two.pairs.length).toBeGreaterThan(0);
+ expect(two.mode).toBe('choice');expect(two.pairs.length).toBeGreaterThan(0);
+ await page.locator('#fusionFromLevel').click();
  await expect(page.locator('[data-element-main="fire"]')).toBeEnabled();
  const second=await page.evaluate(()=>window.__fusionProbe.reset(28,['fire','ice','thunder'],['fire','ice']));
- expect(second.mode).toBe('playing');expect(second.usable).toEqual(['thunder']);
+ expect(second.mode).toBe('choice');expect(second.usable).toEqual(['thunder']);
+ await expect(page.locator('#fusionFromLevel')).toBeDisabled();
  const later=await page.evaluate(()=>window.__fusionProbe.add(['rock']));
- expect(later.mode).toBe('elementChoice');expect(later.pairs).toHaveLength(2);
+ expect(later.mode).toBe('choice');expect(later.pairs).toHaveLength(2);
+ await page.locator('#fusionFromLevel').click();
  await expect(page.locator('[data-element-main="thunder"]')).toBeEnabled();
  await expect(page.locator('[data-element-main="rock"]')).toBeEnabled();
  expect(errors).toEqual([]);
@@ -57,12 +62,14 @@ test('Lv12 with two elements enters fusion; Lv28 skips with 1 unused until 2 exi
 test('fusion is level-gated and can be obtained after initial 0–1 attribute skip',async({page})=>{
  const errors=await prepare(page);
  const before=await page.evaluate(()=>window.__fusionProbe.reset(11,['fire','wind']));
- expect(before.mode).toBe('playing');expect(before.pairs).toHaveLength(0);
+ expect(before.mode).toBe('choice');expect(before.pairs).toHaveLength(0);
+ await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
  const later=await page.evaluate(()=>{
   window.__fusionProbe.reset(12,['fire']);
   return window.__fusionProbe.add(['wind']);
  });
- expect(later.mode).toBe('elementChoice');
+ expect(later.mode).toBe('choice');
+ await page.locator('#fusionFromLevel').click();
  expect(later.usable).toEqual(['fire','wind']);
  expect(errors).toEqual([]);
 });
