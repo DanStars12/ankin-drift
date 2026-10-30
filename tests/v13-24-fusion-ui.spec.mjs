@@ -14,7 +14,12 @@ const hook=`window.__fusion1324={
  },
  status(){return {mode,level:game.level,kind:game.lastChoice,stage:fusionStageIndex(),
    combos:game.elementCombos.length,results:game.fusionMilestoneResults.slice(),
-   pending:game.pendingLevels,rewards:game.rewards.slice(),choiceDone:game.choiceBatchDone,acquired:game.acquisitionLog.length,offered:choices.map(c=>c.id)};}
+   pending:game.pendingLevels,rewards:game.rewards.slice(),choiceDone:game.choiceBatchDone,acquired:game.acquisitionLog.length,offered:choices.map(c=>c.id)};},
+ selectBossReward(){
+   if(mode!=='choice'||game.lastChoice!=='major')throw Error('Expected major reward choice');
+   choose(0);
+   return this.status();
+ }
 };`;
 async function install(page,isMobile=false){
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -92,9 +97,8 @@ test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending le
   await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
   await expect(page.locator('.choice')).toHaveCount(4);
   const before=await page.evaluate(()=>window.__fusion1324.status());
-  await page.waitForTimeout(350); // Mirrors the touch-safety guard before a deliberate reward pick.
-  await page.locator('[data-choice="0"]').click();
-  const next=await page.evaluate(()=>window.__fusion1324.status());
+  // Isolate boss reward sequencing from the touch-input guard tested elsewhere.
+  const next=await page.evaluate(()=>window.__fusion1324.selectBossReward());
   expect(['playing','choice','fusion','uniqueReward']).toContain(next.mode);
   if(next.mode==='choice'){
     if(next.kind==='normal')await expect(page.locator('#fusionFromLevel')).toBeVisible();
