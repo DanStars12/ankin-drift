@@ -91,12 +91,20 @@ test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending le
   expect(state.pending).toBe(1);
   await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
   await expect(page.locator('.choice')).toHaveCount(4);
+  const before=await page.evaluate(()=>({acquired:game.acquisitionLog.length,rewards:game.rewards.length,skill:choices[0]?.id}));
+  await page.waitForTimeout(350); // Mirrors the touch-safety guard before a deliberate reward pick.
   await page.locator('[data-choice="0"]').click();
   const next=await page.evaluate(()=>window.__fusion1324.status());
   expect(['playing','choice','fusion','uniqueReward']).toContain(next.mode);
   if(next.mode==='choice'){
-    expect(next.kind).toBe('normal');
-    await expect(page.locator('#fusionFromLevel')).toBeVisible();
+    if(next.kind==='normal')await expect(page.locator('#fusionFromLevel')).toBeVisible();
+    else{
+      // Another queued boss reward may follow; it must not surface elemental fusion.
+      expect(['major','minor','relic','unique']).toContain(next.kind);
+      await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
+      const after=await page.evaluate(()=>({acquired:game.acquisitionLog.length,rewards:game.rewards.length}));
+      expect(after.acquired+Math.max(0,before.rewards-after.rewards)).toBeGreaterThan(before.acquired);
+    }
   }
   expect(errors).toEqual([]);
 });
