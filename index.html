@@ -1234,12 +1234,12 @@ async function v13ReadImport(ev){
  if(!f)return;
  try{if(f.size>1024*1024)throw Error('1MB以下のファイルを選択してください');const raw=await f.text();archivePreview=AnkinArchive.preview(raw);archiveImportRaw=raw}
  catch(e){archiveImportError='読み込み失敗：'+e.message}
- if(mode==='archive'){drawOverlay();const backup=U('.v13-backup');if(backup)backup.open=true}
+ if(mode==='archive'){drawOverlay();const backup=panel.querySelector('.v13-backup');if(backup)backup.open=true}
 }
 function v13Restore(kind){
  if(!archiveImportRaw)return;
  if(!confirm(kind==='replace'?'現在の記録を置き換えます。復元前にバックアップを保存しましたか？':'保存記録を安全に統合します。続行しますか？'))return;
- try{AnkinArchive.restore(archiveImportRaw,kind);saveWarning=AnkinArchive.status();archiveImportRaw=null;archivePreview=null;archiveImportError='復元が完了しました。';drawOverlay();const backup=U('.v13-backup');if(backup)backup.open=true}
+ try{AnkinArchive.restore(archiveImportRaw,kind);saveWarning=AnkinArchive.status();archiveImportRaw=null;archivePreview=null;archiveImportError='復元が完了しました。';drawOverlay();const backup=panel.querySelector('.v13-backup');if(backup)backup.open=true}
  catch(e){archiveImportError='復元失敗：'+e.message;drawOverlay()}
 }
 function v13OpenArchive(back='menu'){archiveBack=back;archiveImportRaw=null;archivePreview=null;archiveImportError='';state('archive')}
