@@ -942,7 +942,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 @media(max-width:510px){.fusion-weapon-grid,.fusion-confirm-grid{grid-template-columns:1fr;gap:7px}.fusion-weapon-grid .fusion-weapon{min-height:118px;padding:9px;gap:3px}.fusion-weapon-grid .fusion-weapon small{-webkit-line-clamp:2;line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}.fusion-choice-panel .fusion-unlock-stars{display:none}}
 .panel.archive-panel{width:min(920px,calc(100vw - 12px));padding:clamp(12px,2vw,23px);max-height:calc(100dvh - 12px);scrollbar-width:thin}
 .archive-intro{font-size:12px;line-height:1.6;color:#bed4ee;margin:4px auto 13px}
-.archive-intro a{color:#9bfbe4;text-decoration:underline}
+.archive-intro a{color:#9bfbe4;text-decoration:underline}.archive-jump{display:inline-block;margin-left:6px;background:#193c51;border:1px solid #62dfd1;border-radius:8px;color:#b4fff4;font-size:11px;padding:6px 10px;cursor:pointer}
 .archive-panel .v13-panel{margin:10px 0}
 .archive-panel .v13-ach-tier-group:not([open]){padding:4px 10px;margin:5px 0}
 .archive-panel .v13-ach-tier-group>summary{font-size:12px}
@@ -1155,7 +1155,7 @@ function v13History(){
     '<p class="personal-log-legacy">このクリアは旧バージョンの記録です。過去に取得していない戦闘統計から物語を捏造せず、保存された称号と記録をそのまま表示します。</p>')+trialLog+
    '</div></details>';
  };
- return '<details class="v13-panel v13-clear-legacy" id="clearLegacy"><summary><strong>✦ CLEAR LEGACY · '+r.clears.length+'回クリア</strong><span>タップして履歴を開く / 閉じる</span></summary><div class="v13-history">'+
+ return '<details class="v13-panel v13-clear-legacy" name="archive-main" id="clearLegacy"><summary><strong>✦ CLEAR LEGACY · '+r.clears.length+'回クリア</strong><span>タップして履歴を開く / 閉じる</span></summary><div class="v13-history">'+
  (list.map(card).join('')||'<div class="v13-note">まだクリア記録がありません。</div>')+
  '</div><small class="v13-mini">新しいクリアログは称号をタップすると戦闘スタイル・判定根拠・攻撃内訳・エンディング文章を確認できます。直近50件を表示、最大1000件まで保存。</small></details>';
 }
@@ -1198,7 +1198,7 @@ function v13ObserveRun(){
 }
 function v13AchievementList(){
  const items=AnkinArchive.progress(),tiers=[['bronze','🥉 銅枠 · BEGINNER'],['silver','🥈 銀枠 · ADVANCED'],['gold','🥇 金枠 · EXPERT'],['rainbow','🌈 虹枠 · LEGEND']];
- return tiers.map(([tier,label])=>'<details class="v13-ach-tier-group" '+(tier==='bronze'?'open':'')+'><summary class="v13-ach-tier" data-tier="'+tier+'">'+label+'　'+items.filter(a=>a.tier===tier&&a.unlocked).length+' / '+items.filter(a=>a.tier===tier).length+' 達成</summary><div class="v13-grid">'+
+ return tiers.map(([tier,label])=>'<details class="v13-ach-tier-group" name="archive-main"><summary class="v13-ach-tier" data-tier="'+tier+'">'+label+'　'+items.filter(a=>a.tier===tier&&a.unlocked).length+' / '+items.filter(a=>a.tier===tier).length+' 達成</summary><div class="v13-grid">'+
  items.filter(a=>a.tier===tier).map(a=>{
  const pct=Math.round(100*a.current/Math.max(1,a.target));
  return '<div class="v13-achievement '+(a.unlocked?'is-unlocked':'locked')+'" data-achievement-id="'+a.id+'" data-tier="'+tier+'">'+
@@ -1212,12 +1212,12 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.24 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<a href="#clearLegacy">クリア履歴へ移動</a></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.24 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
  '<section class="v13-panel"><h3>✦ ACHIEVEMENTS · 実績（枠色は難易度）</h3>'+v13AchievementList()+'<small class="v13-mini">銅 → 銀 → 金 → 虹。初クリアは特別な虹枠実績です。</small></section>'+v13History()+
- '<details class="v13-panel v13-backup"><summary>✦ BACKUP / RESTORE · セーブデータ管理</summary><div class="v13-note">サイトデータ削除に備えてJSONを保管してください。手動でバックアップ・復元できます。</div>'+
+ '<details class="v13-panel v13-backup" name="archive-main"><summary>✦ BACKUP / RESTORE · セーブデータ管理</summary><div class="v13-note">サイトデータ削除に備えてJSONを保管してください。手動でバックアップ・復元できます。</div>'+
  '<button type="button" class="secondary" id="v13Export">↓ 全セーブデータをJSONで保存</button>'+
  '<label class="v13-note">復元ファイル（JSON / 最大1MB）<input id="v13ImportFile" type="file" accept=".json,application/json"></label>'+
  (archivePreview?'<div class="v13-warning">読み込み候補：クリア '+archivePreview.clears+'件、プレイ '+archivePreview.runs+'件、実績 '+archivePreview.awards+'件。<b>まだ復元していません。</b></div><button type="button" class="secondary" id="v13Merge">既存データに安全に統合</button><button type="button" class="secondary" id="v13Replace">既存の記録を置き換えて復元（注意）</button>':'')+
@@ -2565,7 +2565,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));panel.querySelectorAll('[data-fusion-weapon]').forEach(el=>el.addEventListener('click',()=>selectFusionWeapon(el.dataset.fusionWeapon)));click('fusionBackMain',backElementMain);click('fusionBackSub',backFusionSub);click('fusionBackWeapon',()=>{if(elementChoice){elementChoice={main:elementChoice.main,sub:elementChoice.sub};drawOverlay()}});click('fusionConfirm',confirmElementFusion);click('fusionSkip',skipElementFusion);click('fusionFromLevel',enterElementChoice);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',continueAfterReward);click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
  U('ankinTrial')?.addEventListener('toggle',e=>{ankinTrialOpen=e.target.open;});
  panel.querySelectorAll('[data-v13-challenge]').forEach(el=>el.addEventListener('click',()=>{if(!record.read().clears.length)return;ankinTrialOpen=true;const id=el.dataset.v13Challenge;if(!CHALLENGE_RULES.some(c=>c.id===id))return;if(selectedChallenges.has(id))selectedChallenges.delete(id);else selectedChallenges.add(id);const selected=selectedChallenges.has(id);el.classList.toggle('active',selected);el.setAttribute('aria-pressed',String(selected));const counter=U('ankinTrial')?.querySelector('.trial-counter');if(counter)counter.textContent=selectedChallenges.size+' / '+CHALLENGE_RULES.length+' 選択中';}));
- click('v13ArchiveBack',()=>state(archiveBack));click('v13Export',v13Download);
+ click('v13ArchiveBack',()=>state(archiveBack));click('archiveJumpLegacy',()=>{const section=U('clearLegacy');if(section){section.open=true;section.scrollIntoView({block:'nearest',behavior:'smooth'})}});click('v13Export',v13Download);
  U('v13ImportFile')?.addEventListener('change',v13ReadImport);click('v13Merge',()=>v13Restore('merge'));click('v13Replace',()=>v13Restore('replace'));
  U('graphicsQuality')?.addEventListener('change',e=>{settings.quality=e.target.value;saveSettings();resize();fitFestival();renderBudget=0});
  U('fpsTarget')?.addEventListener('change',e=>{settings.fps=Number(e.target.value);saveSettings();renderBudget=0});
