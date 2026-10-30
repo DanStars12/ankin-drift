@@ -14,7 +14,7 @@ const hook=`window.__fusion1324={
  },
  status(){return {mode,level:game.level,kind:game.lastChoice,stage:fusionStageIndex(),
    combos:game.elementCombos.length,results:game.fusionMilestoneResults.slice(),
-   pending:game.pendingLevels,rewards:game.rewards.slice(),choiceDone:game.choiceBatchDone};}
+   pending:game.pendingLevels,rewards:game.rewards.slice(),choiceDone:game.choiceBatchDone,acquired:game.acquisitionLog.length,offered:choices.map(c=>c.id)};}
 };`;
 async function install(page,isMobile=false){
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -91,7 +91,7 @@ test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending le
   expect(state.pending).toBe(1);
   await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
   await expect(page.locator('.choice')).toHaveCount(4);
-  const before=await page.evaluate(()=>({acquired:game.acquisitionLog.length,rewards:game.rewards.length,skill:choices[0]?.id}));
+  const before=await page.evaluate(()=>window.__fusion1324.status());
   await page.waitForTimeout(350); // Mirrors the touch-safety guard before a deliberate reward pick.
   await page.locator('[data-choice="0"]').click();
   const next=await page.evaluate(()=>window.__fusion1324.status());
@@ -102,8 +102,8 @@ test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending le
       // Another queued boss reward may follow; it must not surface elemental fusion.
       expect(['major','minor','relic','unique']).toContain(next.kind);
       await expect(page.locator('#fusionFromLevel')).toHaveCount(0);
-      const after=await page.evaluate(()=>({acquired:game.acquisitionLog.length,rewards:game.rewards.length}));
-      expect(after.acquired+Math.max(0,before.rewards-after.rewards)).toBeGreaterThan(before.acquired);
+      const after=await page.evaluate(()=>window.__fusion1324.status());
+      expect(after.acquired+Math.max(0,before.rewards.length-after.rewards.length)).toBeGreaterThan(before.acquired);
     }
   }
   expect(errors).toEqual([]);
