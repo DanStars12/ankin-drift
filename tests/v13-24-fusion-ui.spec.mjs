@@ -16,7 +16,7 @@ const hook=`window.__fusion1324={
    combos:game.elementCombos.length,results:game.fusionMilestoneResults.slice(),
    pending:game.pendingLevels,rewards:game.rewards.slice(),choiceDone:game.choiceBatchDone};}
 };`;
-async function install(page){
+async function install(page,isMobile=false){
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.route('**/ankin-drift/',async route=>{
     const response=await route.fetch(),html=await response.text();
@@ -24,11 +24,12 @@ async function install(page){
     await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});
   });
   await page.goto('./');
+  if(isMobile)await page.locator('[data-control="mobile"]').click();
   return errors;
 }
 
-test('normal level-up offers a stored fusion ticket without auto-triggering',async ({page})=>{
-  const errors=await install(page);
+test('normal level-up offers a stored fusion ticket without auto-triggering',async ({page,isMobile})=>{
+  const errors=await install(page,isMobile);
   await page.evaluate(()=>window.__fusion1324.prepare(12,true));
   const state=await page.evaluate(()=>window.__fusion1324.status());
   expect(state.mode).toBe('choice');expect(state.kind).toBe('normal');
@@ -51,8 +52,8 @@ test('normal level-up offers a stored fusion ticket without auto-triggering',asy
   expect(errors).toEqual([]);
 });
 
-test('DOG fusion preview uses animal weapons; cancel retains ticket and confirm consumes one level choice',async ({page})=>{
-  const errors=await install(page);
+test('DOG fusion preview uses animal weapons; cancel retains ticket and confirm consumes one level choice',async ({page,isMobile})=>{
+  const errors=await install(page,isMobile);
   await page.evaluate(()=>window.__fusion1324.prepare(12,true));
   await page.locator('#fusionFromLevel').click();
   expect((await page.evaluate(()=>window.__fusion1324.status())).mode).toBe('elementChoice');
@@ -82,8 +83,8 @@ test('DOG fusion preview uses animal weapons; cancel retains ticket and confirm 
   expect(errors).toEqual([]);
 });
 
-test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending level remains',async ({page})=>{
-  const errors=await install(page);
+test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending level remains',async ({page,isMobile})=>{
+  const errors=await install(page,isMobile);
   await page.evaluate(()=>window.__fusion1324.prepare(12,true,'major'));
   const state=await page.evaluate(()=>window.__fusion1324.status());
   expect(state.mode).toBe('choice');expect(state.kind).toBe('major');
@@ -100,8 +101,8 @@ test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending le
   expect(errors).toEqual([]);
 });
 
-test('PILOT ARCHIVE has independent collapsed clear history and more beginner awards',async ({page})=>{
-  const errors=await install(page);
+test('PILOT ARCHIVE has independent collapsed clear history and more beginner awards',async ({page,isMobile})=>{
+  const errors=await install(page,isMobile);
   await page.locator('#openArchive').click();
   await expect(page.locator('.v13-clear-legacy')).toHaveCount(1);
   await expect(page.locator('.v13-clear-legacy')).not.toHaveAttribute('open',/.+/);
