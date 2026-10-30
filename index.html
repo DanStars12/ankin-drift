@@ -1427,19 +1427,21 @@ function confirmElementFusion(){
 function elementLabMarkup(){
  const used=fusedElementKeys(),ready=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[fusionStageIndex()],fused=game.elementCombos,outputPct=Math.round(Math.min(.34,fused.length*.17)*100);
  const stage=fusionStageIndex();
+ const machine=player.shipType==='dog'?'DOG型（アニマル武装）':SHIPS[player.shipType].jp;
  const cards=[...ELEMENT_FUSION_RECIPES,...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({...v,main:id.split('_')[0],sub:id.split('_')[1],slot:'B',icon:'✧'}))].map(r=>{
   const mainReady=ready.includes(r.main),subReady=ready.includes(r.sub);
   const done=game.elementCombos.some(x=>x.main===r.main&&x.sub===r.sub&&(x.weapon||'A')===(r.slot||'A'));
   const unavailable=(used.has(r.main)||used.has(r.sub));
   const color=FUSION_PALETTES[r.main][r.sub];
-  const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ 選択可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
-  return `<article class="lab-recipe ${done?'done':unavailable?'':'partial'}" style="--fusion-color:${color};${done?'border-color:'+color:''}"><div class="lab-recipe-head"><strong style="color:${color}">${r.icon} ${r.name}</strong><span>${status}</span></div>
+  const weapon=fusionWeaponDefinitions(r.main).find(w=>w.slot===(r.slot||'A'));
+  const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ LvUPで融合可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
+  return `<article class="lab-recipe ${done?'done':unavailable?'':'partial'}" style="--fusion-color:${color};${done?'border-color:'+color:''}"><div class="lab-recipe-head"><strong style="color:${color}">${r.icon} ${r.name}</strong><span>${status}</span></div><div class="fusion-lab-source">武装${r.slot||'A'}：${escHtml(weapon?.name||'未設定')} → ${escHtml(r.name)} · ${weapon?.owned?'✓ 所持済み':'◇ 未取得'}</div>
    <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性</span><span class="fusion-plus">＋</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性</span></div>
    <div class="recipe-effect">${r.desc}</div><small class="fusion-cost">${ELEMENTS[r.sub].name}属性の効果を失う代わりに、取得済みカードの蓄積を主属性の共鳴出力に変換します。</small></article>`;
  }).join('');
- return `<section class="lab-help"><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+34%）</b><div class="v13-note">融合1件につき全攻撃+17%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12とLv28に独立した融合機会があります。明示的な見送りは機会を消費し、素材不足による未実行とは区別します。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
+ return `<section class="lab-help"><b>✦ 現在の機体：${escHtml(machine)}</b><div class="v13-note">現在の機体の融合武装を表示。DOG型では動物スキルの名称・所持状況に連動します。</div><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+34%）</b><div class="v13-note">融合1件につき全攻撃+17%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12とLv28で融合権が解放されます。以降の通常レベルアップ画面から通常スキル1枚の代わりに選択できます。融合のプレビューから戻っても権利は消費されず、戦闘中やボス報酬から直接融合することはありません。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
  <div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${v.color}">${v.icon} ${v.name}：${used.has(k)?'融合に使用済み':ready.includes(k)?'取得済み・選択可能':'属性素材未取得'}</span>`).join('')}</div>
- <p class="fine">現在 Lv${game.level} ／ ${next?'次の融合機会：Lv'+next:'融合機会終了'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：選択画面をスキップ中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
+ <p class="fine">現在 Lv${game.level} ／ ${next?(game.level>=next?'融合権保留中（次の通常LvUPで使用）':'次の融合権：Lv'+next):'融合権使用済み'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：融合権を保持中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
 }
 function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;const info=bossInfo(variant);box.className='boss-alert show '+type;box.innerHTML=`<div class="alert-stripe">${type==='unique'?'⚠ CRITICAL ANOMALY':'⚠ HOSTILE SIGNATURE DETECTED'}</div><div class="alert-name">${variant==='theEnd'?ULTIMATE_NAME:(info?.en||'BOSS')}</div><div class="alert-sub">${variant==='theEnd'?'ULTIMATE BOSS · 3 MODULES':type==='unique'?'UNIQUE ENCOUNTER':type==='major'?'MAJOR BOSS INBOUND':'ELITE BOSS INBOUND'} · ${variant==='theEnd'?'PILOT LEVEL ADAPTIVE':(info?.jp||'')}</div>`;bossAlertUntil=performance.now()+3400;}
 
