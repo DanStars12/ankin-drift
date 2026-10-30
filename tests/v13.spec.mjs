@@ -8,7 +8,9 @@ test('v13 migrates old clear, exports JSON and restores without duplication',asy
  await page.goto('./');
  await expect(page).toHaveTitle(/ANKIN DRIFT v13\.[0-9]+/);
  await page.locator('#openArchive').click();
+ await page.locator('.v13-ach-tier-group > summary[data-tier="rainbow"]').click();
  await expect(page.getByText('初めての勝利')).toBeVisible();
+ await page.locator('.v13-backup > summary').click();
  const download=page.waitForEvent('download');
  await page.locator('#v13Export').click();
  expect((await download).suggestedFilename()).toMatch(/ankin-drift-save-\d{4}-\d\d-\d\d\.json/);
@@ -63,6 +65,7 @@ test('v13 optional trials produce GOLD legacy and achievements that survive relo
  expect(result.clears).toBe(2);
  await expect(page.locator('.v13-victory-badge')).toContainText('GOLD');
  await page.locator('#openArchive').click();
+ await page.locator('.v13-ach-tier-group > summary[data-tier="gold"]').click();
  await expect(page.getByText('試練の征服者')).toBeVisible();
  await expect(page.locator('.v13-achievement[data-achievement-id="evolution_master"]')).toContainText('究極の進化');
  await page.reload();await page.locator('#openArchive').click();
