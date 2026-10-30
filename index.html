@@ -1518,7 +1518,7 @@ function elementLabMarkup(){
   const unavailable=(used.has(r.main)||used.has(r.sub));
   const color=FUSION_PALETTES[r.main][r.sub];
   const weapon=fusionWeaponDefinitions(r.main).find(w=>w.slot===(r.slot||'A'));
-  const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ LvUPで融合可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
+  const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady&&!weapon?.owned?'対象武装が未取得':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ LvUPで融合可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
   return `<article class="lab-recipe ${done?'done':unavailable?'':'partial'}" style="--fusion-color:${color};${done?'border-color:'+color:''}"><div class="lab-recipe-head"><strong style="color:${color}">${r.icon} ${r.name}</strong><span>${status}</span></div><div class="fusion-lab-source">武装${r.slot||'A'}：${escHtml(weapon?.name||'未設定')} → ${escHtml(r.name)} · ${weapon?.owned?'✓ 所持済み':'◇ 未取得'}</div>
    <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性</span><span class="fusion-plus">＋</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性</span></div>
    <div class="recipe-effect">${r.desc}</div><small class="fusion-cost">${ELEMENTS[r.sub].name}属性の効果を失う代わりに、取得済みカードの蓄積を主属性の共鳴出力に変換します。</small></article>`;
