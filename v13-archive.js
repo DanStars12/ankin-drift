@@ -20,6 +20,18 @@ const DEFINITIONS=[
  ['hundred_kills','百機撃墜','1回のプレイで敵を100体撃破','bronze',100],
  ['survive_three','最初の3分','1回のプレイで3分間生存','bronze',180],
  ['survive_five','最初の5分','1回のプレイで5分間生存','bronze',300],
+ ['level_three','出撃準備完了','1回のプレイでLv3に到達','bronze',3],
+ ['level_five','小さな成長','1回のプレイでLv5に到達','bronze',5],
+ ['level_fifteen','育つ翼','1回のプレイでLv15に到達','bronze',15],
+ ['level_twenty','挑戦の中盤','1回のプレイでLv20に到達','bronze',20],
+ ['ten_kills','はじめの十機','1回のプレイで敵を10体撃破','bronze',10],
+ ['fifty_kills','五十機突破','1回のプレイで敵を50体撃破','bronze',50],
+ ['twohundred_kills','二百機の足跡','1回のプレイで敵を200体撃破','bronze',200],
+ ['survive_one','最初の1分','1回のプレイで1分間生存','bronze',60],
+ ['survive_two','二分の集中','1回のプレイで2分間生存','bronze',120],
+ ['survive_seven','七分の粘り','1回のプレイで7分間生存','bronze',420],
+ ['survive_ten','十分の戦い','1回のプレイで10分間生存','bronze',600],
+ ['two_clears','再び飛び立つ','累計2回クリア','bronze',2],
  ['three_clears','次なる挑戦者','累計3回クリア','silver',3],
  ['level_thirty','成長する翼','1回のプレイでLv30に到達','silver',30],
  ['veteran_level','熟練パイロット','1回のプレイでLv50に到達','silver',50],
@@ -27,6 +39,11 @@ const DEFINITIONS=[
  ['thousand_kills','千機を越えて','1回のプレイで敵を1000体撃破','silver',1000],
  ['survive_fifteen','長き戦い','1回のプレイで15分間生存','silver',900],
  ['challenge_clear','試練への第一歩','CHALLENGEモードをクリア','silver',1],
+ ['five_clears','確かな腕前','累計5回クリア','silver',5],
+ ['eight_clears','連戦の記録','累計8回クリア','silver',8],
+ ['level_forty','強化の探究者','1回のプレイでLv40に到達','silver',40],
+ ['sevenhundred_kills','七百機撃墜','1回のプレイで敵を700体撃破','silver',700],
+ ['survive_twelve','十二分の戦術','1回のプレイで12分間生存','silver',720],
  ['four_frames','四機の英雄','異なる4種類の機体でクリア','gold',4],
  ['five_frames','五機の英雄','5種類すべての機体でクリア','rainbow',5],
  ['dog_clear','わんこの新星','ドッグ型で初クリア','gold',1],
@@ -37,13 +54,18 @@ const DEFINITIONS=[
  ['dual_fusion','融合の極致','1プレイで属性融合を2回完成してクリア','gold',1],
  ['evolution_master','究極の進化','1プレイで進化合成を2件以上完成してクリア','gold',1],
  ['challenge_two','試練の征服者','追加制約を2つ適用してクリア','gold',1],
+ ['level_sixty','限界を越える成長','1回のプレイでLv60に到達','gold',60],
+ ['fifteen_clears','十五度の栄光','累計15回クリア','gold',15],
+ ['two_thousand_kills','二千機撃墜','1回のプレイで敵を2000体撃破','gold',2000],
+ ['survive_twentyfive','終盤を生き抜く','1回のプレイで25分間生存','gold',1500],
  ['first_clear','初めての勝利','初めて最終ボスを撃破','rainbow',1],
  ['fusion_scholar','属性の探究者','異なる属性融合を10種類使ってクリア','rainbow',10],
  ['endless_clear','終わりなき英雄','ENDLESSで最終ボスを再撃破','rainbow',1],
  ['challenge_three','ANKIN MASTER','追加制約を3つ適用してクリア','rainbow',1],
  ['thirty_clears','歴戦の英雄','累計30回クリア','rainbow',30],
  ['pilot_sense','パイロットセンス','全プレイ累計で1億ダメージを与える','rainbow',100000000],
- ['fifty_clears','伝説への航跡','累計50回クリア','rainbow',50]
+ ['fifty_clears','伝説への航跡','累計50回クリア','rainbow',50],
+ ['hundred_clears','百戦の伝説','累計100回クリア','rainbow',100]
 ];
 const definitionById=new Map(DEFINITIONS.map(d=>[d[0],d]));
 // Personal ending is optional: v12/v13 records remain valid without it.
@@ -154,10 +176,10 @@ function lifetimeDamage(p){return finite(p.legacyDamage+Object.values(p.damageBy
 function progressValue(id,p){
  switch(id){
  case 'new_pilot':return p.started?1:0;
- case 'rookie_level':case 'level_thirty':case 'veteran_level':return p.maxLevel;
- case 'hundred_kills':case 'five_hundred_kills':case 'thousand_kills':return p.maxKills;
- case 'survive_three':case 'survive_five':case 'survive_fifteen':case 'survive_twenty':return p.maxTime;
- case 'first_clear':case 'three_clears':case 'ten_clears':case 'twenty_clears':case 'thirty_clears':case 'fifty_clears':return p.totalClears;
+ case 'level_three':case 'level_five':case 'rookie_level':case 'level_fifteen':case 'level_twenty':case 'level_thirty':case 'level_forty':case 'veteran_level':case 'level_sixty':return p.maxLevel;
+ case 'ten_kills':case 'fifty_kills':case 'hundred_kills':case 'twohundred_kills':case 'five_hundred_kills':case 'sevenhundred_kills':case 'thousand_kills':case 'two_thousand_kills':return p.maxKills;
+ case 'survive_one':case 'survive_two':case 'survive_three':case 'survive_five':case 'survive_seven':case 'survive_ten':case 'survive_twelve':case 'survive_fifteen':case 'survive_twenty':case 'survive_twentyfive':return p.maxTime;
+ case 'first_clear':case 'two_clears':case 'three_clears':case 'five_clears':case 'eight_clears':case 'ten_clears':case 'fifteen_clears':case 'twenty_clears':case 'thirty_clears':case 'fifty_clears':case 'hundred_clears':return p.totalClears;
  case 'challenge_clear':return p.modesCleared.includes('challenge')?1:0;
  case 'four_frames':case 'five_frames':return p.shipsCleared.length;
   case 'dog_clear':return p.shipsCleared.includes('dog')?1:0;
