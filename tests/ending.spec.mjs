@@ -42,6 +42,7 @@ test('PERSONAL ENDING appears on victory and full reasons survive archive and re
  await expect(page.locator('.personal-ending')).toContainText(a.title);
  await expect(page.locator('.personal-ending')).toContainText('THE・END・OF・ANKIN');
  await page.locator('#openArchive').click();
+ await page.locator('#clearLegacy > summary').click();
  const log=page.locator('.personal-log').first();
  await expect(log.locator('summary')).toContainText(a.title);
  await log.locator('summary').click();
@@ -50,6 +51,7 @@ test('PERSONAL ENDING appears on victory and full reasons survive archive and re
  await expect(log).toContainText('近接ドリル');
  await expect(log).toContainText('THE・END・OF・ANKIN');
  await page.reload();await page.locator('#openArchive').click();
+ await page.locator('#clearLegacy > summary').click();
  const restored=page.locator('.personal-log').first();
  await expect(restored.locator('summary')).toContainText(a.title);
  await restored.locator('summary').click();
@@ -65,6 +67,7 @@ test('different fight styles generate distinct saved titles without altering old
  expect(first.title).not.toEqual(second.title);
  expect(second.title).toContain('無傷の伝説');
  await page.locator('#openArchive').click();
+ await page.locator('#clearLegacy > summary').click();
  const logs=page.locator('.personal-log');
  await expect(logs).toHaveCount(2);
  await expect(logs.nth(0)).toContainText(second.title);
@@ -83,6 +86,7 @@ test('v13.1 legacy clear remains readable with no invented combat lore',async({p
   profile:{started:true,totalClears:1},awards:{first_clear:'2026-10-25T00:00:00.000Z'}
  })));
  await page.goto('./');await page.locator('#openArchive').click();
+ await page.locator('#clearLegacy > summary').click();
  const log=page.locator('.personal-log').first();
  await expect(log.locator('summary')).toContainText('以前のクリア称号');
  await log.locator('summary').click();

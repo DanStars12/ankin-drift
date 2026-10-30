@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.23 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.24 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.23 | CODEX NAME SYNC</title>
+<title>ANKIN DRIFT v13.24 | UI FUSION CHOICE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -871,6 +871,90 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 @media(max-width:700px){.visual-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-ship-switch button{flex:1 1 28%}.visual-stage{padding:8px}.visual-stage-heading strong{font-size:15px}.visual-group-switch button{font-size:11px;padding:8px 6px}}
 @media(max-width:380px){.visual-choice-grid{gap:5px}.visual-ship-switch button{min-height:37px}.visual-choice{padding:8px 6px}.visual-stage-heading strong{font-size:13px}}
 
+
+/* v13.24 — compact full-viewport upgrade choices / archive and fusion readability */
+body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);max-width:none;overflow:hidden;padding:6px 7px;touch-action:auto}
+.panel.choice-panel{width:min(1060px,calc(100vw - 12px));height:min(760px,calc(100dvh - 12px));max-height:calc(100dvh - 12px);display:flex;flex-direction:column;overflow:hidden;padding:clamp(7px,1.4vh,16px) clamp(8px,2vw,20px);gap:0}
+.panel.choice-panel:before{z-index:1}
+.panel.choice-panel .eyebrow{font-size:10px;margin:0 0 3px;flex:none}
+.panel.choice-panel .logo.small{font-size:clamp(23px,4vh,40px);line-height:1.1;margin:0 0 3px;flex:none}
+.panel.choice-panel .subtitle{font-size:clamp(11px,1.8vh,14px);margin:0 0 4px;line-height:1.35;flex:none}
+.panel.choice-panel .desc{font-size:10px;line-height:1.35;margin:0 auto 3px!important;flex:none}
+.panel.choice-panel .batch-indicator{font-size:10px;margin:0 0 3px}
+.panel.choice-panel .choice-grid{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;align-content:stretch;gap:7px;margin:4px 0 6px}
+.panel.choice-panel .choice{height:100%;min-height:0;min-width:0;padding:7px 9px;text-align:left;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.panel.choice-panel .choice-head{display:flex;gap:3px;align-items:center;flex-wrap:wrap;min-height:19px}
+.panel.choice-panel .choice-icon{font-size:clamp(21px,3.5vh,30px);margin:2px 0 0}
+.panel.choice-panel .choice-name{font-size:12px;line-height:1.25;margin:0}
+.panel.choice-panel .choice-desc{font-size:10px;line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
+.panel.choice-panel .choice-attrs{max-height:42px;overflow:hidden;line-height:1.15}
+.panel.choice-panel .choice-attrs .attr{font-size:9px;margin:1px 2px 1px 0;padding:2px 4px}
+.panel.choice-panel .synergy-note{font-size:9px;line-height:1.25;padding:4px;margin:3px 0 0}
+.panel.choice-panel .synergy-note-head{margin-bottom:1px}
+.panel.choice-panel .synergy-effect-line{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.panel.choice-panel .evolve{font-size:9px;line-height:1.3;margin-top:2px;padding:4px 5px;max-height:92px;overflow:hidden}
+.panel.choice-panel .choice-pick{display:none!important}
+.panel.choice-panel>.actions{flex:none;gap:6px;margin:2px 0}
+.panel.choice-panel>.actions button{padding:7px 9px;min-height:36px;font-size:11px}
+.panel.choice-panel>.fine{flex:none;font-size:9px;line-height:1.35;margin:2px 0 0;max-height:27px;overflow:hidden}
+.fusion-level-ticket{flex:none;display:flex;justify-content:center;align-items:center;gap:8px;padding:5px 9px;margin:1px 0 4px;border-radius:8px;background:#42331e;border:1px solid #d6a35c;font-size:10px;line-height:1.3;color:#ffdd9a;flex-wrap:wrap}
+.fusion-level-ticket span{color:#e8def0}
+.panel.choice-panel .fusion-from-level{background:linear-gradient(110deg,#f6d48e,#ffedb5);border-color:#ffeda8;color:#2a1b13}
+.panel.choice-panel .fusion-from-level:disabled{background:#2a2c39;color:#aeb2c7;border-color:#636578}
+@media(max-height:610px) and (min-width:650px){.panel.choice-panel .choice-icon{font-size:19px}.panel.choice-panel .choice-attrs{max-height:25px}.panel.choice-panel .evolve{max-height:58px}.panel.choice-panel .synergy-note{max-height:60px;overflow:hidden}.panel.choice-panel>.fine{display:none}}
+@media(max-width:600px){
+ .panel.choice-panel{width:calc(100vw - 8px);height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);padding:6px 7px}
+ .panel.choice-panel .choice-grid,.panel.choice-panel .choice-grid.four-choice{display:grid;grid-template-columns:1fr;grid-auto-rows:minmax(0,1fr);gap:5px}
+ .panel.choice-panel .choice{display:grid;grid-template-columns:31px minmax(0,1fr);grid-auto-rows:min-content;align-content:center;column-gap:6px;row-gap:2px;padding:5px 7px}
+ .panel.choice-panel .choice-head{grid-column:1/-1;grid-row:1;min-height:15px}
+ .panel.choice-panel .choice-icon{grid-column:1;grid-row:2/4;font-size:24px;align-self:center;margin:0}
+ .panel.choice-panel .choice-name{grid-column:2;grid-row:2;font-size:11px}
+ .panel.choice-panel .choice-desc{grid-column:2;grid-row:3;-webkit-line-clamp:2;line-clamp:2;font-size:9px}
+ .panel.choice-panel .choice-attrs{grid-column:1/-1;grid-row:auto;max-height:24px}
+ .panel.choice-panel .evolve,.panel.choice-panel .synergy-note,.panel.choice-panel .target-banner{grid-column:1/-1;max-height:37px;overflow:hidden;margin:0;font-size:9px}
+ .panel.choice-panel .choice .synergy-partner-row{display:none}
+ .panel.choice-panel .choice .synergy-note-head{margin-bottom:1px}
+ .panel.choice-panel .choice .evolve .recipe-effect{display:none}
+ .panel.choice-panel .fusion-level-ticket{font-size:9px;padding:3px 5px}
+ .panel.choice-panel>.actions button{min-height:32px;padding:5px 7px;font-size:10px}
+ .panel.choice-panel>.fine{display:none}
+}
+@media(max-height:600px) and (max-width:600px){.panel.choice-panel .choice-icon{font-size:19px}.panel.choice-panel .choice-attrs{display:none}.panel.choice-panel .choice .synergy-note{max-height:23px}.panel.choice-panel .choice .evolve{max-height:24px}}
+.panel.fusion-choice-panel{width:min(800px,calc(100vw - 12px));max-height:calc(100dvh - 12px);overflow-y:auto;padding:clamp(10px,2vh,22px)}
+.fusion-choice-panel .fusion-unlock{padding:7px 9px;margin-bottom:6px}
+.fusion-choice-panel .fusion-choice-heading{margin:7px 0 10px;font-size:clamp(17px,2.4vw,22px)}
+.fusion-choice-summary{color:#ffe4bd;font-size:12px;line-height:1.6}
+.fusion-weapon-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:710px;margin:10px auto 16px;gap:11px}
+.fusion-weapon-grid .fusion-weapon{min-height:195px;height:auto;padding:14px;align-items:center;justify-content:flex-start;text-align:center;color:#f3efff;gap:7px;border-color:#a4b8e0}
+.fusion-weapon-grid .fusion-weapon strong{font-size:clamp(13px,2.2vw,18px);color:#fff}
+.fusion-weapon-grid .fusion-weapon small{font-size:11px;line-height:1.55}
+.fusion-weapon-label{font-size:10px;color:#9deedc;font-weight:900}
+.fusion-weapon-arrow{font-size:11px;color:#b8cae7}
+.fusion-result-name{font-size:clamp(14px,2.3vw,19px);color:#ffdda0}
+.fusion-confirm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;text-align:left;margin:12px 0}
+.fusion-confirm-grid section{border-radius:11px;border:1px solid #55718d;background:#13253e;padding:13px;line-height:1.6}
+.fusion-confirm-grid small{font-size:10px;font-weight:950}
+.fusion-confirm-grid h3{font-size:15px;line-height:1.35;margin:5px 0 8px}
+.fusion-confirm-grid p{font-size:12px;color:#d6e4f5;margin:6px 0}
+.fusion-confirm-gain{border-color:#53d8bb!important}.fusion-confirm-gain small{color:#9df8d8}
+.fusion-confirm-loss{border-color:#d28a80!important}.fusion-confirm-loss small{color:#ffbdac}
+.fusion-lab-source{font-size:10px;color:#bde6ff;margin:6px 0;line-height:1.55}
+@media(max-width:510px){.fusion-weapon-grid,.fusion-confirm-grid{grid-template-columns:1fr;gap:7px}.fusion-weapon-grid .fusion-weapon{min-height:118px;padding:9px;gap:3px}.fusion-weapon-grid .fusion-weapon small{-webkit-line-clamp:2;line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}.fusion-choice-panel .fusion-unlock-stars{display:none}}
+.panel.archive-panel{width:min(920px,calc(100vw - 12px));padding:clamp(12px,2vw,23px);max-height:calc(100dvh - 12px);scrollbar-width:thin}
+.archive-intro{font-size:12px;line-height:1.6;color:#bed4ee;margin:4px auto 13px}
+.archive-intro a{color:#9bfbe4;text-decoration:underline}.archive-jump{display:inline-block;margin-left:6px;background:#193c51;border:1px solid #62dfd1;border-radius:8px;color:#b4fff4;font-size:11px;padding:6px 10px;cursor:pointer}
+.archive-panel .v13-panel{margin:10px 0}
+.archive-panel .v13-ach-tier-group:not([open]){padding:4px 10px;margin:5px 0}
+.archive-panel .v13-ach-tier-group>summary{font-size:12px}
+.archive-panel .v13-clear-legacy>summary,.archive-panel .v13-backup>summary{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;color:#ffe0a1;font-size:14px;font-weight:900;padding:9px 5px;text-align:left}
+.archive-panel .v13-clear-legacy>summary span{font-size:10px;color:#bcd0e7;font-weight:750}
+.archive-panel .v13-clear-legacy[open]>summary{border-bottom:1px solid #46617f;margin-bottom:10px}
+.archive-panel .v13-history{max-height:min(50dvh,470px);overflow-y:auto;overscroll-behavior:contain;display:grid;gap:7px}
+.archive-panel .personal-log{max-width:100%;min-width:0}
+.archive-panel .personal-log-body{overflow-wrap:anywhere}
+.archive-panel .v13-backup:not([open]){padding-top:5px;padding-bottom:5px}
+@media(max-width:550px){.archive-panel .v13-clear-legacy>summary{display:block}.archive-panel .v13-clear-legacy>summary span{display:block;margin-top:5px}.archive-panel .v13-history{max-height:45dvh}}
+
 </style>
 <style>
 .choice-pick{display:none}
@@ -1071,9 +1155,9 @@ function v13History(){
     '<p class="personal-log-legacy">このクリアは旧バージョンの記録です。過去に取得していない戦闘統計から物語を捏造せず、保存された称号と記録をそのまま表示します。</p>')+trialLog+
    '</div></details>';
  };
- return '<section class="v13-panel"><h3>✦ CLEAR LEGACY · '+r.clears.length+'回クリア</h3><div class="v13-history">'+
+ return '<details class="v13-panel v13-clear-legacy" name="archive-main" id="clearLegacy"><summary><strong>✦ CLEAR LEGACY · '+r.clears.length+'回クリア</strong><span>タップして履歴を開く / 閉じる</span></summary><div class="v13-history">'+
  (list.map(card).join('')||'<div class="v13-note">まだクリア記録がありません。</div>')+
- '</div><small class="v13-mini">新しいクリアログは称号をタップすると戦闘スタイル・判定根拠・攻撃内訳・エンディング文章を確認できます。直近50件を表示、最大1000件まで保存。</small></section>';
+ '</div><small class="v13-mini">新しいクリアログは称号をタップすると戦闘スタイル・判定根拠・攻撃内訳・エンディング文章を確認できます。直近50件を表示、最大1000件まで保存。</small></details>';
 }
 
 const achievementQueue=[];let achievementCurrent=null,achievementExpires=0,achievementSyncClock=0;
@@ -1114,7 +1198,7 @@ function v13ObserveRun(){
 }
 function v13AchievementList(){
  const items=AnkinArchive.progress(),tiers=[['bronze','🥉 銅枠 · BEGINNER'],['silver','🥈 銀枠 · ADVANCED'],['gold','🥇 金枠 · EXPERT'],['rainbow','🌈 虹枠 · LEGEND']];
- return tiers.map(([tier,label])=>'<details class="v13-ach-tier-group" open><summary class="v13-ach-tier" data-tier="'+tier+'">'+label+'　'+items.filter(a=>a.tier===tier&&a.unlocked).length+' / '+items.filter(a=>a.tier===tier).length+' 達成</summary><div class="v13-grid">'+
+ return tiers.map(([tier,label])=>'<details class="v13-ach-tier-group" name="archive-main"><summary class="v13-ach-tier" data-tier="'+tier+'">'+label+'　'+items.filter(a=>a.tier===tier&&a.unlocked).length+' / '+items.filter(a=>a.tier===tier).length+' 達成</summary><div class="v13-grid">'+
  items.filter(a=>a.tier===tier).map(a=>{
  const pct=Math.round(100*a.current/Math.max(1,a.target));
  return '<div class="v13-achievement '+(a.unlocked?'is-unlocked':'locked')+'" data-achievement-id="'+a.id+'" data-tier="'+tier+'">'+
@@ -1128,17 +1212,17 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.8 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.24 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
  '<section class="v13-panel"><h3>✦ ACHIEVEMENTS · 実績（枠色は難易度）</h3>'+v13AchievementList()+'<small class="v13-mini">銅 → 銀 → 金 → 虹。初クリアは特別な虹枠実績です。</small></section>'+v13History()+
- '<section class="v13-panel"><h3>✦ BACKUP / RESTORE</h3><div class="v13-note">サイトデータ削除に備えてJSONを保管してください。手動でバックアップ・復元できます。</div>'+
+ '<details class="v13-panel v13-backup" name="archive-main"><summary>✦ BACKUP / RESTORE · セーブデータ管理</summary><div class="v13-note">サイトデータ削除に備えてJSONを保管してください。手動でバックアップ・復元できます。</div>'+
  '<button type="button" class="secondary" id="v13Export">↓ 全セーブデータをJSONで保存</button>'+
  '<label class="v13-note">復元ファイル（JSON / 最大1MB）<input id="v13ImportFile" type="file" accept=".json,application/json"></label>'+
  (archivePreview?'<div class="v13-warning">読み込み候補：クリア '+archivePreview.clears+'件、プレイ '+archivePreview.runs+'件、実績 '+archivePreview.awards+'件。<b>まだ復元していません。</b></div><button type="button" class="secondary" id="v13Merge">既存データに安全に統合</button><button type="button" class="secondary" id="v13Replace">既存の記録を置き換えて復元（注意）</button>':'')+
  (archiveImportError?'<div class="v13-warning">'+escHtml(archiveImportError)+'</div>':'')+
- '</section><button class="primary" id="v13ArchiveBack">← 戻る</button>';
+ '</details><button class="primary" id="v13ArchiveBack">← 戻る</button>';
 }
 function v13Download(){
  try{const raw=AnkinArchive.exported(),url=URL.createObjectURL(new Blob([raw],{type:'application/json'}));
@@ -1150,12 +1234,12 @@ async function v13ReadImport(ev){
  if(!f)return;
  try{if(f.size>1024*1024)throw Error('1MB以下のファイルを選択してください');const raw=await f.text();archivePreview=AnkinArchive.preview(raw);archiveImportRaw=raw}
  catch(e){archiveImportError='読み込み失敗：'+e.message}
- if(mode==='archive')drawOverlay();
+ if(mode==='archive'){drawOverlay();const backup=panel.querySelector('.v13-backup');if(backup)backup.open=true}
 }
 function v13Restore(kind){
  if(!archiveImportRaw)return;
  if(!confirm(kind==='replace'?'現在の記録を置き換えます。復元前にバックアップを保存しましたか？':'保存記録を安全に統合します。続行しますか？'))return;
- try{AnkinArchive.restore(archiveImportRaw,kind);saveWarning=AnkinArchive.status();archiveImportRaw=null;archivePreview=null;archiveImportError='復元が完了しました。';drawOverlay()}
+ try{AnkinArchive.restore(archiveImportRaw,kind);saveWarning=AnkinArchive.status();archiveImportRaw=null;archivePreview=null;archiveImportError='復元が完了しました。';drawOverlay();const backup=panel.querySelector('.v13-backup');if(backup)backup.open=true}
  catch(e){archiveImportError='復元失敗：'+e.message;drawOverlay()}
 }
 function v13OpenArchive(back='menu'){archiveBack=back;archiveImportRaw=null;archivePreview=null;archiveImportError='';state('archive')}
@@ -1212,7 +1296,8 @@ const FUSION_B_VARIANTS={
  rock_thunder:{name:'サンダー・メテオ',desc:'隕石命中時に短距離雷連鎖。',effect:'meteorArc'},
  rock_wind:{name:'サイクロン・メテオ',desc:'隕石の近傍に吸引力を持たせる。',effect:'meteorWind'}
 };
-function fusionWeaponDefinitions(main){return (FUSION_WEAPON_CHOICES[main]||[]).map(([slot,name,field])=>({slot,name,owned:!!player&&player[field]>0,field}));}
+const DOG_FUSION_SOURCE_IDS={fire:{A:'dogFox',B:'dogPawLava'},ice:{A:'dogRabbit',B:'dogHare'},thunder:{A:'dogHedgehog',B:'dogSnake'},wind:{A:'dogHurricane',B:'dogDolphin'},rock:{A:'dogCat',B:'dogHamMeteor'}};
+function fusionWeaponDefinitions(main){return (FUSION_WEAPON_CHOICES[main]||[]).map(([slot,name,field])=>{const dogId=DOG_FUSION_SOURCE_IDS[main]?.[slot],dogCard=player?.shipType==='dog'?skillById(dogId):null;return {slot,name:dogCard?.name||name,owned:!!player&&player[field]>0,field,sourceId:dogCard?.id||null};});}
 function fusionOutcome(main,sub,slot='A'){return slot==='B'?FUSION_B_VARIANTS[main+'_'+sub]||null:ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);}
 function fusionResultName(combo){return fusionOutcome(combo.main,combo.sub,combo.weapon||'A')?.name||combo.main+' × '+combo.sub;}
 function fusionStageIndex(){return Math.min(2,Math.max(0,game?.fusionMilestoneIndex??game?.elementCombos?.length??0));}
@@ -1265,9 +1350,10 @@ const FUSION_PALETTES={
 };
 function fusedColor(main){const combo=game?.elementCombos?.findLast(c=>c.main===main);return combo?FUSION_PALETTES[main]?.[combo.sub]||ELEMENTS[main].color:null}
 function enterElementChoice(){
- if(mode!=='playing'||pendingFusions.length||pendingFusion)return false;
+ // Fusion cannot interrupt combat, boss reward queues or any non-level choice.
+ if(mode!=='choice'||game?.lastChoice!=='normal'||fusionStageIndex()>=2)return false;
  const options=availableElementPairs();
- if(!options.length){pendingElementPairs=[];elementChoice=null;if(fusionStageIndex()===0&&game.level>=28){game.fusionMilestoneResults[0]='unavailable';game.fusionMilestoneIndex=1;return enterElementChoice();}return false;}
+ if(!options.length)return false;
  pendingElementPairs=options;elementChoice=null;
  flash=Math.max(flash,.55);shake=Math.max(shake,6);
  ring(player.x,player.y,155,'#ffffff');
@@ -1297,20 +1383,19 @@ function elementChoiceMarkup(){
  const stage=fusionStageIndex(),level=ELEMENT_FUSION_LEVELS[stage],
   main=elementChoice?.main,sub=elementChoice?.sub,weapon=elementChoice?.weapon;
  const banner=`<div class="fusion-unlock" role="status" aria-live="polite"><span class="fusion-unlock-stars">✦ ✧ ✦</span><p class="eyebrow">ELEMENTAL REFORGE · ${stage+1}/2</p><h2>属性融合 · 任意選択</h2><p class="fusion-unlock-level">Lv${level} · 実行済み ${game.elementCombos.length}回</p></div>`;
- const skip=`<div class="actions"><button type="button" id="fusionSkip" class="secondary">今回は融合を見送る（独立武装を保持）</button></div>`;
+ const skip=`<div class="actions"><button type="button" id="fusionSkip" class="secondary">← 通常スキルの選択に戻る（融合権は保持）</button></div>`;
  if(!main)return `${banner}<h3 class="fusion-choice-heading">1. 主属性を選択</h3><div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'main')).join('')}</div>${skip}`;
  if(!sub)return `${banner}<h3 class="fusion-choice-heading">2. 消費する副属性を選択</h3><p>主属性：${ELEMENTS[main].name}</p>
  <div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'sub',main)).join('')}</div>
  <div class="actions"><button type="button" id="fusionBackMain" class="secondary">← 主属性を選び直す</button></div>${skip}`;
- if(!weapon)return `${banner}<h3 class="fusion-choice-heading">3. 進化させる主属性武装を選択</h3><p>${ELEMENTS[main].name} × ${ELEMENTS[sub].name}</p>
- <div class="fusion-attribute-grid">${fusionWeaponDefinitions(main).map(w=>`<button type="button" class="fusion-attribute ${w.owned?'':'unavailable'}" data-fusion-weapon="${w.slot}" ${w.owned?'':'disabled'} aria-disabled="${!w.owned}"><strong>${w.name}</strong><small>${w.owned?escHtml(fusionOutcome(main,sub,w.slot)?.name||'進化可能'):'この武装を取得していません'}</small></button>`).join('')}</div>
+ if(!weapon)return `${banner}<h3 class="fusion-choice-heading">3. 進化させる主属性武装を選択</h3><p class="fusion-choice-summary">${ELEMENTS[main].icon} ${ELEMENTS[main].name} × ${ELEMENTS[sub].icon} ${ELEMENTS[sub].name} · ${player.shipType==='dog'?'DOG型アニマル':'搭乗機体'}武装</p>
+ <div class="fusion-weapon-grid">${fusionWeaponDefinitions(main).map(w=>{const out=fusionOutcome(main,sub,w.slot);return `<button type="button" class="fusion-attribute fusion-weapon ${w.owned?'':'unavailable'}" data-fusion-weapon="${w.slot}" ${w.owned?'':'disabled'} aria-disabled="${!w.owned}"><span class="fusion-weapon-label">対象 ${w.slot}</span><strong>${escHtml(w.name)}</strong><span class="fusion-weapon-arrow">↓ 融合後</span><b class="fusion-result-name">${escHtml(out?.name||'融合武装')}</b><small>${w.owned?escHtml(out?.desc||'主属性の性能を強化'):'未取得のため選択できません'}</small></button>`}).join('')}</div>
  <div class="actions"><button type="button" id="fusionBackSub" class="secondary">← 副属性を選び直す</button></div>${skip}`;
  const w=fusionWeaponDefinitions(main).find(x=>x.slot===weapon),out=fusionOutcome(main,sub,weapon);
  return `${banner}<h3 class="fusion-choice-heading">4. 融合内容を確認</h3>
- <p><strong>${escHtml(w?.name||'武装')}</strong> → <strong>${escHtml(out?.name||'進化')}</strong></p>
- <p>${escHtml(out?.desc||'')}</p><p class="fusion-farewell">注意：${ELEMENTS[sub].name}属性の独立武装・スキルは停止します。進化武装に継承された効果は維持されます。</p>
- <p class="fine">主属性共鳴スキル2種類を1段階ずつ自動付与します。</p>
- <div class="actions"><button type="button" class="primary" id="fusionConfirm">この内容で融合する</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
+ <div class="fusion-confirm-grid"><section class="fusion-confirm-gain"><small>✓ 主属性・強化される武装</small><h3>${escHtml(w?.name||'武装')} → ${escHtml(out?.name||'融合武装')}</h3><p>${escHtml(out?.desc||'')}</p><p>共鳴強化と与ダメージボーナスを獲得します。</p></section><section class="fusion-confirm-loss"><small>! 消費する副属性</small><h3>${ELEMENTS[sub].icon} ${ELEMENTS[sub].name}属性</h3><p>独立した${ELEMENTS[sub].name}属性の攻撃・効果は停止します。取得履歴は残り、共鳴強化の素材になります。</p><p>カード蓄積 ${fusionPreview(main,sub).material.count}枚</p></section></div>
+ <p class="fine">今回のレベルアップで得られる通常スキル1枚の代わりに融合します。LEGENDARY・POWER等のボス報酬は消費しません。</p>
+ <div class="actions"><button type="button" class="primary" id="fusionConfirm">✓ この内容で融合を確定</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
 }
 function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
@@ -1387,10 +1472,9 @@ function selectFusionWeapon(slot){
  elementChoice={...elementChoice,weapon:slot};drawOverlay();
 }
 function skipElementFusion(){
- if(mode!=='elementChoice'||fusionStageIndex()>=2)return;
- const idx=fusionStageIndex();game.fusionMilestoneResults[idx]='skipped';game.fusionMilestoneIndex=idx+1;
- pendingElementPairs=[];elementChoice=null;announce('✦ 今回の融合を見送りました。独立属性武装は維持されます。',3.3);
- state('playing');processTransitions();
+ if(mode!=='elementChoice')return;
+ // Returning from the preview neither consumes the level-up nor discards the ticket.
+ pendingElementPairs=[];elementChoice=null;state('choice');
 }
 function clearConsumedElementAttacks(sub){
  // Projectiles fired before the fusion must not carry a now-consumed conversion.
@@ -1407,14 +1491,14 @@ function clearConsumedElementAttacks(sub){
  if(sub==='thunder'&&player?.boltVisuals)player.boltVisuals.length=0;
 }
 function confirmElementFusion(){
- if(mode!=='elementChoice'||!elementChoice?.main||!elementChoice.sub||!elementChoice.weapon)return;
+ if(mode!=='elementChoice'||game.lastChoice!=='normal'||fusionStageIndex()>=2||!elementChoice?.main||!elementChoice.sub||!elementChoice.weapon)return;
  const {main,sub,weapon}=elementChoice;
  if(!fusionSubChoices(main).includes(sub)||!fusionWeaponDefinitions(main).some(w=>w.slot===weapon&&w.owned))return;
  const r=fusionOutcome(main,sub,weapon);if(!r)return;
  const resonance=elementInvestments(sub),idx=fusionStageIndex();
  game.sealedElements.push(sub);
  game.elementCombos.push({main,sub,weapon,resonance:resonance.points,cards:resonance.count,resonanceRewards:resonanceNames(main)});
- game.fusionMilestoneResults[idx]='fused';game.fusionMilestoneIndex=idx+1;
+ game.fusionMilestoneResults[idx]='fused';game.fusionMilestoneIndex=idx+1;game.choiceBatchDone++;
  pendingFusions=pendingFusions.filter(a=>!isSealedCard(skillById(a.power))&&!isSealedCard(skillById(a.legend)));
  pendingSynergy=pendingSynergy.filter(a=>a.need.every(id=>!isSealedCard(skillById(id))));
  restorePlayerBuild();clearConsumedElementAttacks(sub);reconcileTargets();elementChoice=null;pendingElementPairs=[];
@@ -1427,19 +1511,21 @@ function confirmElementFusion(){
 function elementLabMarkup(){
  const used=fusedElementKeys(),ready=ownedElementKeys(),next=ELEMENT_FUSION_LEVELS[fusionStageIndex()],fused=game.elementCombos,outputPct=Math.round(Math.min(.34,fused.length*.17)*100);
  const stage=fusionStageIndex();
+ const machine=player.shipType==='dog'?'DOG型（アニマル武装）':SHIPS[player.shipType].jp;
  const cards=[...ELEMENT_FUSION_RECIPES,...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({...v,main:id.split('_')[0],sub:id.split('_')[1],slot:'B',icon:'✧'}))].map(r=>{
   const mainReady=ready.includes(r.main),subReady=ready.includes(r.sub);
   const done=game.elementCombos.some(x=>x.main===r.main&&x.sub===r.sub&&(x.weapon||'A')===(r.slot||'A'));
   const unavailable=(used.has(r.main)||used.has(r.sub));
   const color=FUSION_PALETTES[r.main][r.sub];
-  const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ 選択可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
-  return `<article class="lab-recipe ${done?'done':unavailable?'':'partial'}" style="--fusion-color:${color};${done?'border-color:'+color:''}"><div class="lab-recipe-head"><strong style="color:${color}">${r.icon} ${r.name}</strong><span>${status}</span></div>
+  const weapon=fusionWeaponDefinitions(r.main).find(w=>w.slot===(r.slot||'A'));
+  const status=done?'✓ 融合完了':unavailable?'使用済み属性':mainReady&&subReady&&!weapon?.owned?'対象武装が未取得':mainReady&&subReady?(game.level>=(next||Infinity)?'✦ LvUPで融合可能':'✦ 属性素材は揃っています'):mainReady||subReady?'あと1属性':'属性素材が必要';
+  return `<article class="lab-recipe ${done?'done':unavailable?'':'partial'}" style="--fusion-color:${color};${done?'border-color:'+color:''}"><div class="lab-recipe-head"><strong style="color:${color}">${r.icon} ${r.name}</strong><span>${status}</span></div><div class="fusion-lab-source">武装${r.slot||'A'}：${escHtml(weapon?.name||'未設定')} → ${escHtml(r.name)} · ${weapon?.owned?'✓ 所持済み':'◇ 未取得'}</div>
    <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性</span><span class="fusion-plus">＋</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性</span></div>
    <div class="recipe-effect">${r.desc}</div><small class="fusion-cost">${ELEMENTS[r.sub].name}属性の効果を失う代わりに、取得済みカードの蓄積を主属性の共鳴出力に変換します。</small></article>`;
  }).join('');
- return `<section class="lab-help"><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+34%）</b><div class="v13-note">融合1件につき全攻撃+17%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12とLv28に独立した融合機会があります。明示的な見送りは機会を消費し、素材不足による未実行とは区別します。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
+ return `<section class="lab-help"><b>✦ 現在の機体：${escHtml(machine)}</b><div class="v13-note">現在の機体の融合武装を表示。DOG型では動物スキルの名称・所持状況に連動します。</div><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+34%）</b><div class="v13-note">融合1件につき全攻撃+17%。副属性の投資は主属性の追加効果にも変換されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12とLv28で融合権が解放されます。以降の通常レベルアップ画面から通常スキル1枚の代わりに選択できます。融合のプレビューから戻っても権利は消費されず、戦闘中やボス報酬から直接融合することはありません。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。POWER＋LEGENDARYの進化合成は別の強化です。</p>
  <div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${v.color}">${v.icon} ${v.name}：${used.has(k)?'融合に使用済み':ready.includes(k)?'取得済み・選択可能':'属性素材未取得'}</span>`).join('')}</div>
- <p class="fine">現在 Lv${game.level} ／ ${next?'次の融合機会：Lv'+next:'融合機会終了'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：選択画面をスキップ中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
+ <p class="fine">現在 Lv${game.level} ／ ${next?(game.level>=next?'融合権保留中（次の通常LvUPで使用）':'次の融合権：Lv'+next):'融合権使用済み'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：融合権を保持中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
 }
 function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;const info=bossInfo(variant);box.className='boss-alert show '+type;box.innerHTML=`<div class="alert-stripe">${type==='unique'?'⚠ CRITICAL ANOMALY':'⚠ HOSTILE SIGNATURE DETECTED'}</div><div class="alert-name">${variant==='theEnd'?ULTIMATE_NAME:(info?.en||'BOSS')}</div><div class="alert-sub">${variant==='theEnd'?'ULTIMATE BOSS · 3 MODULES':type==='unique'?'UNIQUE ENCOUNTER':type==='major'?'MAJOR BOSS INBOUND':'ELITE BOSS INBOUND'} · ${variant==='theEnd'?'PILOT LEVEL ADAPTIVE':(info?.jp||'')}</div>`;bossAlertUntil=performance.now()+3400;}
 
@@ -2141,7 +2227,7 @@ function evolutionMarkup(c){
    '<div class="recipe-effect">必要 '+materials.length+' 種類 · '+escHtml(a.desc)+'</div></div>';
  }).join('');
 }
-function synergyMarkup(c){return synergiesFor(c.id).filter(a=>!game.synergies[a.id]).sort((a,b)=>Number(owned(b.need.find(x=>x!==c.id)))-Number(owned(a.need.find(x=>x!==c.id)))).slice(0,3).map(a=>{const partner=a.need.find(x=>x!==c.id),ready=owned(partner);return `<div class="synergy-note ${ready?'combo-ready':''}"><div class="synergy-note-head"><b>${a.name}</b>${ready?'<span class="combo-ready-pill">✦ 今選ぶと完成！</span>':'<span>◇ シナジー候補</span>'}</div><div class="synergy-partner-row">相方：${skillPeekLink(partner)} <span class="${ready?'partner-owned':'partner-missing'}">${ready?'✓ 取得済み':'未取得'}</span></div><span class="synergy-effect-line">完成時の効果：${escHtml(a.desc)}</span></div>`}).join('')}
+function synergyMarkup(c){return synergiesFor(c.id).filter(a=>!game.synergies[a.id]).sort((a,b)=>Number(owned(b.need.find(x=>x!==c.id)))-Number(owned(a.need.find(x=>x!==c.id)))).slice(0,1).map(a=>{const partner=a.need.find(x=>x!==c.id),ready=owned(partner);return `<div class="synergy-note ${ready?'combo-ready':''}"><div class="synergy-note-head"><b>${a.name}</b>${ready?'<span class="combo-ready-pill">✦ 今選ぶと完成！</span>':'<span>◇ シナジー候補</span>'}</div><div class="synergy-partner-row">相方：${skillPeekLink(partner)} <span class="${ready?'partner-owned':'partner-missing'}">${ready?'✓ 取得済み':'未取得'}</span></div><span class="synergy-effect-line">完成時の効果：${escHtml(a.desc)}</span></div>`}).join('')}
 function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady(c),evoReady=choiceEvolutionReady(c),targets=choiceTargetMatches(c);return `<button class="choice ${c.rarity} ${ready?'synergy-ready-choice':''} ${evoReady?'evolution-ready-choice':''} ${targets.length?'target-matching':''}" data-choice="${i}"><div class="choice-head"><span class="choice-num">${i+1}</span><span class="rarity">${RARITY_NAMES[c.rarity]}</span>${evoReady?'<span class="evolution-ready-banner">◇ 進化合成可能！</span>':''}${ready?'<span class="synergy-ready-banner">✦ シナジー完成可能</span>':''}</div>${targets.length?`<span class="target-banner">✦ 目標進化の素材：${targets.map(t=>escHtml(t.name)).join(' / ')}</span>`:''}<span class="choice-icon">${c.icon}</span><div class="choice-name rarity-name ${c.rarity}">${c.name}${owned(c.id)?' <span class="stack-indicator">[強化]</span>':''}</div><div class="choice-attrs">${attrMarkup(c)}</div><div class="choice-desc">${c.desc}</div>${evolutionMarkup(c)}${!['legendary','power','unique'].includes(c.rarity)?synergyMarkup(c):''}<span class="choice-pick">✓ タップして取得</span></button>`}).join('')}
 function skillRow(c,n){const dormant=isSealedCard(c);return `<div class="owned-skill ${c.rarity} ${dormant?'rebirth-dormant':''}"><div class="owned-skill-top"><span class="rarity-name ${c.rarity}">${c.icon} ${c.name}</span>${n>1?'<b>×'+n+'</b>':''}${dormant?'<b class="rebirth-rest">✦ 属性効果喪失・共鳴素材として記録</b>':''}</div><div class="owned-tags">${attrMarkup(c)}</div><div class="skill-details">${c.desc}</div></div>`;}
 function listBuild(){const part=(obj,defs)=>Object.entries(obj).map(([id,n])=>{const c=defs.find(x=>x.id===id);return c?skillRow(c,n):''}).join('');return{skills:part(game.skills,SKILLS),powers:part(game.powers,POWERS),legends:part(game.legends,LEGENDS),uniques:part(game.uniques,UNIQUE_SKILLS),relics:part(game.relics,RELICS)}}
@@ -2248,7 +2334,7 @@ const VISUAL_CODEX_ROWS=[
  ['dogNineApex','mutation','dog','','白金色に輝く九尾の最終形態。','nineTailApex','dogMutNineTail'],
  ['dogHamApex','mutation','dog','','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
-// v13.23 — use canonical card/recipe data, not duplicated Japanese labels.
+// v13.24 — use canonical card/recipe data, not duplicated Japanese labels.
 // The getters resolve only when the gallery opens, after all game definitions
 // and DOG display-name overrides have been registered.
 const VISUAL_DOG_APEX_RECIPE_IDS=Object.freeze({
@@ -2443,18 +2529,18 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ALL_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.23 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ALL_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.24 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.23 · CODEX NAME SYNC</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.24 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
- html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12で1回目、Lv28で2回目が解放されます。異なる属性スキルを各1種類持てばレアリティ不問で融合可能。0〜1属性なら画面を出さずにスキップし、後から2属性揃えば選択できます。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
+ html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12とLv28で融合権が解放され、次の通常レベルアップ画面に保留されます。異なる2属性と対象武装が揃えば、通常スキルを1枚取る代わりに属性融合を選べます。必要な素材がなくても権利は消えず、選択画面で戻っても保持します。ボス・レリック報酬は別枠で、属性融合によって失いません。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
- const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。':major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
- html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3'}キーまたはカードで選択。<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div><div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div><div class="actions"><button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選 [R] 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑 [B]</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
+ const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';const fusionTickets=kind==='normal'?Math.max(0,[12,28].filter(n=>game.level>=n).length-fusionStageIndex()):0;const fusionAvailable=fusionTickets>0&&availableElementPairs().length>0;const fusionTicket=fusionTickets?`<div class="fusion-level-ticket" role="status"><strong>✦ 属性融合権 ${fusionTickets}回分 · 保留中</strong><span>${fusionAvailable?'通常スキル1回分の代わりに属性融合を選べます':'異なる2属性＋主属性武装を揃えると使用できます（権利は保持）'}</span></div>`:'';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。':major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
+ html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3'}キーまたはカードで選択。<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div>${fusionTicket}<div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div><div class="actions">${fusionTickets?`<button type="button" class="primary fusion-from-level" id="fusionFromLevel" ${fusionAvailable?'':'disabled'}>✦ 属性融合を選ぶ ${fusionAvailable?'（通常スキルの代わり）':'（素材不足）'}</button>`:''}<button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選 [R] 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑 [B]</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
  }else if(mode==='elementChoice'){
   html=elementChoiceMarkup();
   }else if(mode==='elementResult'){const echo=game.elementCombos.at(-1),r=fusionOutcome(echo.main,echo.sub,echo.weapon||'A'),main=ELEMENTS[echo.main],color=main.color;html=`<div class="rebirth-result fusion-celebration" style="--fusion-color:${color}"><p class="eyebrow">✦ ELEMENTAL REBIRTH COMPLETE ✦</p><div class="fusion-symbol">${main.icon}</div><h2 class="fusion-title" style="color:${color}">${main.name}属性へ特化成功！</h2><div class="fusion-awakened-name">${r.icon} ${r.name}</div><p class="desc">${r.desc}</p><p class="fusion-impact gain">✦ ${main.name}属性の攻撃性能が強化されました！</p><p class="fusion-cost">${ELEMENTS[echo.sub].name}属性を失いました。取得済みカード${echo.cards}枚の記録は保持し、共鳴出力${echo.resonance.toFixed(1)}を特化属性に反映しています。</p></div><button id="elementContinue" class="primary">▶ 強化された機体で戦闘へ</button>`;
@@ -2475,11 +2561,11 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  }else if(mode==='dead'||mode==='retired'){
  const retired=mode==='retired';const r=record.read(),duration=Math.floor(game.total);html=`<p class="eyebrow">${retired?'RUN TERMINATED · FINAL RECORD':'TRANSMISSION LOST · FINAL RECORD'} · ${game.gameMode==='challenge'?'CHALLENGE':'NORMAL'}</p><h2 class="logo small">${retired?'RUN ENDED':'GAME OVER'}</h2><div class="subtitle">${retired?'途中終了したプレイの記録':'最後まで戦った記録'} · ${SHIPS[player.shipType].jp}</div>${game.bestBroke?'<div class="newbest">✦ NEW PERSONAL BEST ✦</div>':''}<div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">FINAL LEVEL</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><div class="report-metrics"><div class="report-metric"><strong>${format(game.bossDamage)}</strong><small>ボスへのダメージ</small></div><div class="report-metric"><strong>${format(game.damage/Math.max(game.total,1)*60)}</strong><small>1分あたりのダメージ</small></div><div class="report-metric"><strong>${format(game.kills)}</strong><small>撃破数</small></div></div><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div><details><summary>通常スキル一覧（${buildSummary().cards.length}種類）</summary><div class="report-chips">${buildSummary().cards.map(n=>`<span>${escHtml(n)}</span>`).join('')}</div></details><div class="history"><b>戦績</b>：${format(game.kills)} KILLS<br>レリック ${Object.keys(game.relics).length} · シナジー ${Object.keys(game.synergies).length} · 進化 ${Object.keys(game.fusions).length} · UNIQUE ANKIN ${Object.keys(game.uniques).length}<br>自己ベスト：${fmtTime(r.time||0)} 生存 / LV ${format(r.level)} / DAMAGE ${format(r.damage)}</div></div><div class="actions"><button class="primary" id="restart">↻ リトライ</button><button class="secondary" id="inspect">◈ 今回のビルド</button><button class="secondary" id="title">タイトルへ</button></div><div class="fine">${saveWarning?"⚠ 保存失敗。バックアップを取得してください。":"今回の記録はこのブラウザに保存しました。"} · リトライで再挑戦できます</div>`;
  }
- panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('visual-lab',mode==='build'&&buildTab==='visual');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.innerHTML=html;
- panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));panel.querySelectorAll('[data-fusion-weapon]').forEach(el=>el.addEventListener('click',()=>selectFusionWeapon(el.dataset.fusionWeapon)));click('fusionBackMain',backElementMain);click('fusionBackSub',backFusionSub);click('fusionBackWeapon',()=>{if(elementChoice){elementChoice={main:elementChoice.main,sub:elementChoice.sub};drawOverlay()}});click('fusionConfirm',confirmElementFusion);click('fusionSkip',skipElementFusion);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',()=>{state('playing');processTransitions()});click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
+ panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('visual-lab',mode==='build'&&buildTab==='visual');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.classList.toggle('choice-panel',mode==='choice');panel.classList.toggle('fusion-choice-panel',mode==='elementChoice');panel.classList.toggle('archive-panel',mode==='archive');panel.innerHTML=html;
+ panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));panel.querySelectorAll('[data-fusion-weapon]').forEach(el=>el.addEventListener('click',()=>selectFusionWeapon(el.dataset.fusionWeapon)));click('fusionBackMain',backElementMain);click('fusionBackSub',backFusionSub);click('fusionBackWeapon',()=>{if(elementChoice){elementChoice={main:elementChoice.main,sub:elementChoice.sub};drawOverlay()}});click('fusionConfirm',confirmElementFusion);click('fusionSkip',skipElementFusion);click('fusionFromLevel',enterElementChoice);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',continueAfterReward);click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
  U('ankinTrial')?.addEventListener('toggle',e=>{ankinTrialOpen=e.target.open;});
  panel.querySelectorAll('[data-v13-challenge]').forEach(el=>el.addEventListener('click',()=>{if(!record.read().clears.length)return;ankinTrialOpen=true;const id=el.dataset.v13Challenge;if(!CHALLENGE_RULES.some(c=>c.id===id))return;if(selectedChallenges.has(id))selectedChallenges.delete(id);else selectedChallenges.add(id);const selected=selectedChallenges.has(id);el.classList.toggle('active',selected);el.setAttribute('aria-pressed',String(selected));const counter=U('ankinTrial')?.querySelector('.trial-counter');if(counter)counter.textContent=selectedChallenges.size+' / '+CHALLENGE_RULES.length+' 選択中';}));
- click('v13ArchiveBack',()=>state(archiveBack));click('v13Export',v13Download);
+ click('v13ArchiveBack',()=>state(archiveBack));click('archiveJumpLegacy',()=>{const section=U('clearLegacy');if(section){section.open=true;section.scrollIntoView({block:'nearest',behavior:'smooth'})}});click('v13Export',v13Download);
  U('v13ImportFile')?.addEventListener('change',v13ReadImport);click('v13Merge',()=>v13Restore('merge'));click('v13Replace',()=>v13Restore('replace'));
  U('graphicsQuality')?.addEventListener('change',e=>{settings.quality=e.target.value;saveSettings();resize();fitFestival();renderBudget=0});
  U('fpsTarget')?.addEventListener('change',e=>{settings.fps=Number(e.target.value);saveSettings();renderBudget=0});
@@ -3681,7 +3767,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
 function enterChoice(kind){if(mode!=='playing')return;game.lastChoice=kind;if(kind==='minor'||kind==='major')game.rerolls=Math.min(7,game.rerolls+1);choices=offerCards(kind);state('choice');if(kind==='normal')sfx('level');else sfx(kind==='unique'?'unique':'level')}
 function reroll(){if(mode!=='choice'||game.rerolls<1||choices.every(c=>c.isSupply))return;game.rerolls--;const previous=new Set(choices.map(c=>c.id));choices=offerCards(game.lastChoice,previous,true);choiceOpenedAt=performance.now();choiceTouchArms.clear();drawOverlay();tone(530,.1,'triangle',.04)}
 function beginNextFusion(){if(!pendingFusions.length)return false;pendingFusion=pendingFusions.shift();const fx=evolutionVisualProfile(pendingFusion.id),color=fx?.color||'#ffd88e';flash=.9;shake=24;burst(player.x,player.y,color,70,310);ring(player.x,player.y,450,color);ring(player.x,player.y,270,'#ffffff');pop(player.x,player.y-65,'EVOLUTION: '+pendingFusion.name,color);state('fusion');celebrateFusion([pendingFusion.power,pendingFusion.legend].some(id=>skillById(id)?.rarity==='unique'));return true}
-function continueAfterReward(){state('playing');if(beginNextFusion())return;if(pendingSynergy.length)notifySynergies();if(game.lastChoice==='normal'&&!game.autoBank&&game.pendingLevels>0){game.pendingLevels--;choices=offerCards('normal');state('choice');return}game.choiceBatchTotal=0;game.choiceBatchDone=0;processTransitions()}
+function continueAfterReward(){state('playing');if(beginNextFusion())return;if(pendingSynergy.length)notifySynergies();if(game.lastChoice==='normal'&&!game.autoBank&&game.pendingLevels>0&&!game.rewards.length){game.pendingLevels--;choices=offerCards('normal');state('choice');return}game.choiceBatchTotal=0;game.choiceBatchDone=0;processTransitions()}
 function choose(i){if(mode!=='choice'||!choices[i])return;const c=choices[i];if(!c.isSupply&&(!fitsShip(c)||isSealedCard(c)||rewardAlreadyTaken(c)||!skillHasRoom(c)||(c.available&&!c.available(player)))){choices=offerCards(game.lastChoice);drawOverlay();return;}if(c.isSupply){c.apply(player);state('playing');announce('✦ SUPPLY RECEIVED · '+c.name,2.8);sfx('pickupSpawn');continueAfterReward();return;}const wasNormal=game.lastChoice==='normal';c.apply(player);const bucket=c.rarity==='relic'?game.relics:c.rarity==='legendary'?game.legends:c.rarity==='power'?game.powers:c.rarity==='unique'?game.uniques:game.skills;bucket[c.id]=(bucket[c.id]||0)+1;game.acquisitionLog.push(c.id);activateUpgrades();reconcileTargets();if(wasNormal)game.choiceBatchDone++;state('playing');
  if(c.rarity==='relic'){sfx('relicEarned');confetti();announce('✦ RELIC ACQUIRED · '+c.name,4.5);}if(c.rarity==='unique'){lastUniqueCard=c;state('uniqueReward');celebrateUnique();return}if(beginNextFusion())return;tone(c.rarity==='legendary'?920:730,.2,'triangle',.065);continueAfterReward()}
 function dismissFusion(){if(mode!=='fusion')return;pendingFusion=null;continueAfterReward()}
@@ -3691,7 +3777,7 @@ function processTransitions(){if(mode!=='playing'||!game)return;
  settleExpLevels();
  if(pendingFusions.length&&!pendingFusion){if(beginNextFusion())return;}
  if(pendingSynergy.length&&!pendingFusion)notifySynergies();
- if(enterElementChoice())return;
+ // Fusion only from a normal level-up menu, not combat transitions.
  if(game.rewards.length){enterChoice(game.rewards.shift());return;}
  if(game.ultimatePending&&!boss){spawnUltimateBoss();return;}
  if(game.bossQueue.length&&!boss){const scheduled=game.bossQueue.shift();game.lastBossAt=scheduled.at;spawnBoss(scheduled.type,scheduled.variant);return;}
@@ -5533,7 +5619,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.23', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.24', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 

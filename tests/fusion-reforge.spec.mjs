@@ -3,7 +3,7 @@ const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobil
 const inject=[
 "window.__fusionReforgeProbe={",
 "reset(level=12,elements=['ice','fire']){",
-" selectedShip='shot';newRun();state('playing');game.level=level;game.rewards=[];game.pendingLevels=0;game.bossQueue=[];soundOn=false;",
+" selectedShip='shot';newRun();state('playing');game.level=level;game.rewards=[];game.pendingLevels=1;game.bossQueue=[];soundOn=false;",
 " const map={fire:'emberSeed',ice:'iceBall',thunder:'empPulse',wind:'windOrigin',rock:'stoneSeed',spike:'frostSpike',bolt:'lightningBolt'};",
 " for(const e of elements){const card=skillById(map[e]);if(!card)throw Error('Missing '+e);game.skills[card.id]=1;game.acquisitionLog.push(card.id);card.apply(player);}",
 " processTransitions();return this.info();",
@@ -13,7 +13,7 @@ const inject=[
 " burnt:player.elementMods?.spikeBurn||0,spikes:player.spikeCount,rocket:player.rocketCd,damage:player.spikeDamage,",
 " resonance:game.elementCombos.at(-1)?.resonanceRewards||[]};},",
 "skip(){skipElementFusion();return this.info();},",
-"next28(){state('playing');game.level=28;processTransitions();return this.info();},",
+"next28(){state('playing');game.level=28;game.pendingLevels=1;processTransitions();return this.info();},",
 "step(main,sub){chooseFusionMain(main);selectElementFusion(sub);return {...elementChoice};},",
 "fusion(main,sub,slot){chooseFusionMain(main);selectElementFusion(sub);selectFusionWeapon(slot);const selected={...elementChoice};",
 " confirmElementFusion();return{...this.info(),selected};},",
@@ -38,20 +38,28 @@ test('all 40 directed weapon fusion variants exist and produce finite stats',asy
  expect(result.stats.every(x=>Math.abs(x.bonus-.17)<.0001&&Number.isFinite(x.weaponValue)&&x.weaponValue>0)).toBe(true);
  expect(errors).toEqual([]);
 });
-test('explicit Lv12 skip never grants two later fusions',async({page})=>{
- const errors=await setup(page);const at12=await page.evaluate(()=>window.__fusionReforgeProbe.reset(12,['ice','fire','thunder','wind']));
- expect(at12.mode).toBe('elementChoice');expect(at12.stage).toBe(0);
- const skip=await page.evaluate(()=>window.__fusionReforgeProbe.skip());
- expect(skip.mode).toBe('playing');expect(skip.results[0]).toBe('skipped');expect(skip.stage).toBe(1);expect(skip.fused).toBe(0);
+test('Lv12 cancel retains ticket and two normal-level choices can complete separate fusions',async({page})=>{
+ const errors=await setup(page);
+ const at12=await page.evaluate(()=>window.__fusionReforgeProbe.reset(12,['ice','fire','thunder','wind']));
+ expect(at12.mode).toBe('choice');expect(at12.stage).toBe(0);
+ await page.locator('#fusionFromLevel').click();
+ const cancel=await page.evaluate(()=>window.__fusionReforgeProbe.skip());
+ expect(cancel.mode).toBe('choice');expect(cancel.results).toEqual([]);expect(cancel.stage).toBe(0);expect(cancel.fused).toBe(0);
+ await expect(page.locator('#fusionFromLevel')).toBeEnabled();
+ await page.locator('#fusionFromLevel').click();
+ const first=await page.evaluate(()=>window.__fusionReforgeProbe.fusion('ice','fire','A'));
+ expect(first.stage).toBe(1);expect(first.fused).toBe(1);expect(first.results).toEqual(['fused']);
  const next=await page.evaluate(()=>window.__fusionReforgeProbe.next28());
- expect(next.mode).toBe('elementChoice');expect(next.stage).toBe(1);
- const fused=await page.evaluate(()=>window.__fusionReforgeProbe.fusion('ice','fire','A'));
- expect(fused.stage).toBe(2);expect(fused.fused).toBe(1);expect(fused.results).toEqual(['skipped','fused']);
- expect(fused.bonus).toBeCloseTo(.17,4);expect(errors).toEqual([]);
+ expect(next.mode).toBe('choice');expect(next.stage).toBe(1);
+ await page.locator('#fusionFromLevel').click();
+ const second=await page.evaluate(()=>window.__fusionReforgeProbe.fusion('thunder','wind','A'));
+ expect(second.stage).toBe(2);expect(second.fused).toBe(2);expect(second.results).toEqual(['fused','fused']);
+ expect(second.bonus).toBeCloseTo(.34,4);expect(errors).toEqual([]);
 });
 test('ice spike B fusion consumes fire but retains inherited burn and exactly two resonance awards',async({page})=>{
  const errors=await setup(page);const before=await page.evaluate(()=>window.__fusionReforgeProbe.reset(12,['spike','fire']));
- expect(before.mode).toBe('elementChoice');
+ expect(before.mode).toBe('choice');
+ await page.locator('#fusionFromLevel').click();
  await expect(page.locator('[data-element-main="ice"]')).toBeEnabled();
  const after=await page.evaluate(()=>window.__fusionReforgeProbe.fusion('ice','fire','B'));
  expect(after.selected).toEqual({main:'ice',sub:'fire',weapon:'B'});expect(after.fused).toBe(1);
@@ -63,7 +71,9 @@ test('ice spike B fusion consumes fire but retains inherited burn and exactly tw
 });
 test('unowned B weapon is disabled during fusion weapon selection',async({page})=>{
  const errors=await setup(page);
- await page.evaluate(()=>{window.__fusionReforgeProbe.reset(12,['ice','fire']);window.__fusionReforgeProbe.step('ice','fire');});
+ await page.evaluate(()=>window.__fusionReforgeProbe.reset(12,['ice','fire']));
+ await page.locator('#fusionFromLevel').click();
+ await page.evaluate(()=>window.__fusionReforgeProbe.step('ice','fire'));
  await expect(page.locator('[data-fusion-weapon="A"]')).toBeEnabled();
  await expect(page.locator('[data-fusion-weapon="B"]')).toBeDisabled();
  expect(errors).toEqual([]);
