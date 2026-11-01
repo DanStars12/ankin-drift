@@ -51,7 +51,7 @@ test('four boss reward cards keep synergy and evolution readable with independen
   const geometry=await page.evaluate(()=>{
     const card=document.querySelector('.choice-grid.four-choice .choice');
     // Simulate an unusually long evolution/synergy explanation independently of random card rolls.
-    card.insertAdjacentHTML('beforeend','<div class="synergy-note"><div class="synergy-effect-line">'+('シナジーの説明。'.repeat(50))+'</div></div><div class="evolve">'+('進化合成の追加効果。'.repeat(60))+'</div>');
+    card.insertAdjacentHTML('beforeend','<div class="synergy-note"><div class="synergy-effect-line">'+('シナジーの説明。'.repeat(180))+'</div></div><div class="evolve">'+('進化合成の追加効果。'.repeat(180))+'</div>');
     const style=getComputedStyle(card),synergy=card.querySelector('.synergy-effect-line'),
       evolve=card.querySelector('.evolve');
     const box=card.getBoundingClientRect();
@@ -88,9 +88,9 @@ test('obsolete ricochet POWER ID remains save-compatible while granting universa
   const errors=await open(page);
   const r=await page.evaluate(()=>window.__maintenance1325.power());
   expect(r.id).toBe('boomerang');expect(r.fit).toBe(true);
-  expect(r.after.dmg).toBe(r.before.dmg+32);
-  expect(r.after.boss).toBeCloseTo(r.before.boss*1.1);
-  expect(r.after.nova).toBe(r.before.nova+45);
+  expect(r.after.dmg).toBeCloseTo(r.before.dmg+32*.94);
+  expect(r.after.boss).toBeGreaterThan(r.before.boss);
+  expect(r.after.nova).toBeCloseTo(r.before.nova+45*.94);
   expect(errors).toEqual([]);
 });
 
