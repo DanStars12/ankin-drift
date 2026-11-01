@@ -129,3 +129,24 @@ test('PILOT ARCHIVE has independent collapsed clear history and more beginner aw
   await expect(page.locator('.v13-ach-tier-group').first()).not.toHaveAttribute('open',/.+/);
   expect(errors).toEqual([]);
 });
+
+test('LAB search preserves native keyboard editing and focused controls ignore game hotkeys',async ({page,isMobile})=>{
+  const errors=await install(page,isMobile);
+  // The Space key should activate a focused menu button, not be swallowed by game controls.
+  await page.locator('#openTitleLab').focus();
+  await page.keyboard.press('Space');
+  const search=page.locator('#atlasSearch');
+  await expect(search).toBeVisible();
+  await search.focus();
+  await expect(search).toHaveCSS('outline-width','2px');
+  await page.keyboard.type('a');
+  await page.keyboard.press('Space');
+  await page.keyboard.type('b'); // KeyB must not dismiss BUILD LAB while typing.
+  await expect(search).toHaveValue('a b');
+  await page.keyboard.press('Home');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.type('c');
+  await expect(search).toHaveValue('ac b');
+  await expect(page.locator('.lab-panel')).toBeVisible();
+  expect(errors).toEqual([]);
+});
