@@ -925,7 +925,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 
 /* v13.25: Four-choice boss cards have independent readable details.
    Do not clip evolution or synergy at a fixed arbitrary height. */
-.panel.choice-panel .choice-grid.four-choice{overflow:hidden;min-height:0}
+.panel.choice-panel .choice-grid.four-choice{overflow:hidden;min-height:0;grid-auto-rows:minmax(0,1fr)}
 .panel.choice-panel .choice-grid.four-choice .choice{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;touch-action:pan-y;align-content:start}
 .panel.choice-panel .choice-grid.four-choice .evolve,
 .panel.choice-panel .choice-grid.four-choice .synergy-note,
@@ -2877,7 +2877,7 @@ const POWERS=[
  skill('critPower','power','🎯','アンキン・ロック','クリティカル確率 +20%、ダメージ +25。',p=>{p.crit+=.2;p.dmg+=25})
 ];
 POWERS.push(
- skill('boomerang','power','⚙️','ANKIN コア増幅','基本攻撃力+32、ボスへの威力+10%、NOVA威力+45。全機体で有効。',p=>{p.dmg+=32;p.bossBane=(p.bossBane||1)*1.1;p.novaDamage+=45}),
+ skill('boomerang','power','⚙️','ANKIN コア増幅','基本攻撃力約+30、ボスへの威力約+9%、NOVA威力約+42。全機体で有効。',p=>{p.dmg+=32;p.bossBane=(p.bossBane||1)*1.1;p.novaDamage+=45}),
  skill('capacitor','power','⚡','ライトニング・コンデンサー','独立電磁パルスの威力+120・範囲+35。基本武装へ雷撃を追加しない。',p=>{p.empRadius=Math.max(96,p.empRadius)+35;p.empDps+=120;p.chainDamage+=36}),
  skill('flameField','power','☄️','灼熱圧縮炉','独立した炎ミサイルとマグマを強化。主武装へ無条件に燃焼を与えない。',p=>{p.rocketCd=Math.max(1,p.rocketCd);p.missileBurnBonus=(p.missileBurnBonus||0)+.35;p.magmaDps+=50;p.thermal+=.35}),
  skill('gravityCore','power','🪐','ハイプレッシャー','風属性。旋回ブレード+2、ブレード威力+30%。サイクロンは発生しない。',p=>{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladePower=(p.bladePower||1)*1.3}),
