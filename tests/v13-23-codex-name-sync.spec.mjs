@@ -13,7 +13,7 @@ async function openLab(page){
  await page.goto('./');
  await page.locator('[data-ship="dog"]').click();
  await page.locator('#openTitleLab').click();
- await expect(page.locator('.lab-release-line')).toContainText('v13.29');
+ await expect(page.locator('.lab-release-line')).toContainText('v13.30');
  return errors;
 }
 
