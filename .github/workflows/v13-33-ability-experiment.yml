@@ -4,6 +4,10 @@ on:
   push:
     branches: [dev/v13-33-ability-ai]
 
+concurrency:
+  group: v13-33-ability-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -17,7 +21,7 @@ jobs:
       matrix:
         policy: [legacy, tactical]
     env:
-      ANKIN_AI_SEEDS: '3'
+      ANKIN_AI_SEEDS: '5'
       ANKIN_AI_POLICY: ${{ matrix.policy }}
       ANKIN_BALANCE_FULL: '1'
       ANKIN_AI_SECONDS: '14'
@@ -31,7 +35,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install chromium
-      - name: Run 5 ships x 3 seeds x full 30 minutes
+      - name: Run 5 ships x 5 seeds x full 30 minutes
         run: npm run balance:ai -- --project=desktop --grep="optional true 30-minute"
       - name: Upload A/B metrics
         if: always()
