@@ -1,0 +1,56 @@
+name: ANKIN BALANCE LAB (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: 'Repeated random seeds per ship (1-20)'
+        required: true
+        default: '5'
+        type: string
+      duration:
+        description: 'Simulated seconds per test (1-60)'
+        required: true
+        default: '10'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  balance:
+    name: Balance measurements (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390, mobile-320]
+    env:
+      ANKIN_BALANCE_SEEDS: ${{ inputs.seeds }}
+      ANKIN_BALANCE_DURATION: ${{ inputs.duration }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Validate test limits
+        run: |
+          node -e "const n=Number(process.env.ANKIN_BALANCE_SEEDS),d=Number(process.env.ANKIN_BALANCE_DURATION);if(!Number.isInteger(n)||n<1||n>20||!Number.isFinite(d)||d<1||d>60)process.exit(1)"
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Collect repeated balance data
+        run: npm run balance:lab -- --project=${{ matrix.project }}
+      - name: Upload JSON and CSV measurement reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ankin-balance-${{ matrix.project }}
+          path: |
+            artifacts/balance-lab/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 30
