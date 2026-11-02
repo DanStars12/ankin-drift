@@ -75,7 +75,7 @@ jobs:
           retention-days: 30
 
   audit:
-    name: v13.31 audit (${{ matrix.scenario }, ${{ matrix.project })
+    name: v13.31 audit (${{ matrix.scenario }}, ${{ matrix.project }})
     if: github.event_name == 'push' && github.ref == 'refs/heads/experiment/v13-31-balance-audit'
     runs-on: ubuntu-24.04
     timeout-minutes: 50
@@ -89,11 +89,11 @@ jobs:
           - { scenario: live-ai, project: mobile-320, seeds: '5', duration: '20' }
           - { scenario: full-30m, project: desktop, seeds: '1', duration: '30' }
     env:
-      ANKIN_BALANCE_SEEDS: ${{ matrix.seeds }
-      ANKIN_BALANCE_DURATION: ${{ matrix.duration }
-      ANKIN_AI_SEEDS: ${{ matrix.seeds }
-      ANKIN_AI_SECONDS: ${{ matrix.duration }
-      ANKIN_BALANCE_FULL: ${{ matrix.scenario == 'full-30m' && '1' || '0' }
+      ANKIN_BALANCE_SEEDS: ${{ matrix.seeds }}
+      ANKIN_BALANCE_DURATION: ${{ matrix.duration }}
+      ANKIN_AI_SEEDS: ${{ matrix.seeds }}
+      ANKIN_AI_SECONDS: ${{ matrix.duration }}
+      ANKIN_BALANCE_FULL: ${{ matrix.scenario == 'full-30m' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,10 +106,10 @@ jobs:
       - run: npx playwright install chromium
       - name: Fixed target DPS and pack data
         if: matrix.scenario == 'baseline'
-        run: npm run balance:lab -- --project=${{ matrix.project }
+        run: npm run balance:lab -- --project=${{ matrix.project }}
       - name: Live enemy attacks / ship pilot AI
         if: matrix.scenario == 'live-ai'
-        run: npm run balance:ai -- --project=${{ matrix.project }
+        run: npm run balance:ai -- --project=${{ matrix.project }}
       - name: Real full 30-minute simulations
         if: matrix.scenario == 'full-30m'
         run: npm run balance:ai -- --project=desktop --grep="optional true 30-minute"
@@ -117,7 +117,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: audit-${{ matrix.scenario }-${{ matrix.project }
+          name: audit-${{ matrix.scenario }}-${{ matrix.project }}
           path: |
             artifacts/balance-lab/
             test-results/
