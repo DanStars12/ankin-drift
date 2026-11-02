@@ -2,7 +2,7 @@
 export function decideAbilityUse(s) {
  const readyDash=s.dashLeft<=0 && s.dashTime<=0 && (s.ship==='drill' || s.iframes<.12);
  // Preemptive evasions must start before projectiles actually overlap the hitbox.
- const danger=s.imminent>0 || s.threats>0;
+ const danger=s.imminent>0 || (s.threats>0 && (s.ship==='drill' || s.ship==='laser' || s.ship==='dog' || s.hpRatio<.38));
  let dashReason=null,novaReason=null;
  if(readyDash) {
   if(danger)dashReason='emergency-evade';
