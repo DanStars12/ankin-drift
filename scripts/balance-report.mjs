@@ -34,11 +34,13 @@ export function summarizeRuns(runs){
     ?round(100*rows.filter(r=>r.won).length/rows.length):null,
    clearRate:rows.every(r=>r.fullRun===true)
     ?round(100*rows.filter(r=>r.cleared===true).length/rows.length):null,
+   winTimeMedian:rows.some(r=>Number.isFinite(r.timeToWin))
+    ?round(percentile(rows.filter(r=>Number.isFinite(r.timeToWin)).map(r=>r.timeToWin),.5)):null,
    survivalTimeMedian:rows.every(r=>Number.isFinite(r.survivalSeconds))
     ?round(percentile(rows.map(r=>r.survivalSeconds),.5)):null};
  }).sort((a,b)=>a.scenario.localeCompare(b.scenario)||a.build.localeCompare(b.build)||a.ship.localeCompare(b.ship));
 }
-const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions','mode','phaseMinutes','secondsPlanned','alive','won','cleared','fullRun','survivalSeconds','playerHp','maxHp','aiMoves','aiDodges','simulationTime','reachedFinalBoss','stopReason','clearCount'];
+const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions','mode','phaseMinutes','secondsPlanned','alive','won','cleared','fullRun','survivalSeconds','playerHp','maxHp','aiMoves','aiDodges','timeToWin','simulationTime','reachedFinalBoss','stopReason','clearCount'];
 function csvCell(value){
  const s=String(value??'');
  return /[",\n\r]/.test(s)?'"'+s.replaceAll('"','""')+'"':s;
