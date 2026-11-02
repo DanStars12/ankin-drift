@@ -9,10 +9,16 @@ on:
         default: '5'
         type: string
       duration:
-        description: 'Simulated seconds per test (1-60)'
+        description: 'Simulated seconds per short test (1-60)'
         required: true
         default: '10'
         type: string
+      mode:
+        description: 'Run v13.29 DPS, v13.30 live AI, or expensive 30-minute clear-rate simulation'
+        required: true
+        default: baseline
+        type: choice
+        options: [baseline, live-ai, full-30m]
 
 permissions:
   contents: read
@@ -21,14 +27,18 @@ jobs:
   balance:
     name: Balance measurements (${{ matrix.project }})
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 50
     strategy:
       fail-fast: false
       matrix:
         project: [desktop, mobile-390, mobile-320]
+    if: inputs.mode != 'full-30m' || matrix.project == 'desktop'
     env:
       ANKIN_BALANCE_SEEDS: ${{ inputs.seeds }}
       ANKIN_BALANCE_DURATION: ${{ inputs.duration }}
+      ANKIN_AI_SEEDS: ${{ inputs.seeds }}
+      ANKIN_AI_SECONDS: ${{ inputs.duration }}
+      ANKIN_BALANCE_FULL: ${{ inputs.mode == 'full-30m' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,8 +52,15 @@ jobs:
           node -e "const n=Number(process.env.ANKIN_BALANCE_SEEDS),d=Number(process.env.ANKIN_BALANCE_DURATION);if(!Number.isInteger(n)||n<1||n>20||!Number.isFinite(d)||d<1||d>60)process.exit(1)"
       - run: npm ci
       - run: npx playwright install chromium
-      - name: Collect repeated balance data
+      - name: Collect v13.29 fixed-target data
+        if: inputs.mode == 'baseline'
         run: npm run balance:lab -- --project=${{ matrix.project }}
+      - name: Collect v13.30 real enemy attack / pilot AI survival
+        if: inputs.mode == 'live-ai'
+        run: npm run balance:ai -- --project=${{ matrix.project }}
+      - name: Collect v13.30 true full-timeline AI outcomes (desktop only)
+        if: inputs.mode == 'full-30m'
+        run: npm run balance:ai -- --project=desktop --grep="optional true 30-minute"
       - name: Upload JSON and CSV measurement reports
         if: always()
         uses: actions/upload-artifact@v4
