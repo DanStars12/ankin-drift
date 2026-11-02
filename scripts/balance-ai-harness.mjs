@@ -90,6 +90,7 @@ function balanceAbilitySnapshot(priority,dist,threat){
  }
  const bossDist=boss&&!boss.dead?dst(p,boss):Infinity;
  return {ship:p.shipType,hpRatio:p.hp/Math.max(1,p.maxHp),energy:p.energy,
+  novaHeldSeconds:(balanceAbilityLog?.novaHeldFrames||0)/60,
   novaCooldown:p.novaCooldown,dashLeft:p.dashLeft,dashTime:p.dashTime,
   iframes:p.iframes,targetDist:dist,bossDist,novaRadius:p.novaRadius,
   laserReach:p.laserReach,drillOverdrive:p.drillOverdriveTime,
@@ -138,6 +139,10 @@ function balancePilotStep(frame,policy='tactical'){
   dashReason:p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null,
   novaReason:p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null
  }:decideAbilityUse(balanceAbilitySnapshot(priority,d,threat));
+ if(balanceAbilityLog){
+  if(p.energy>=100&&p.novaCooldown<=0)balanceAbilityLog.novaHeldFrames++;
+  else balanceAbilityLog.novaHeldFrames=0;
+ }
  if(balanceAbilityLog&&frame%60===0){
   if(p.dashLeft<=0)balanceAbilityLog.dashReadySeconds++;
   if(p.energy>=100&&p.novaCooldown<=0)balanceAbilityLog.novaReadySeconds++;
@@ -146,8 +151,8 @@ function balancePilotStep(frame,policy='tactical'){
   // Explicitly set inputs: dash() reads keyboard direction, not just p.dx/p.dy.
   if(legacy){if(!stop){p.dx=x;p.dy=y;}}
   else{
-   const v=balanceDashVector(decision.dashReason==='plasma-strike'?ux:x,
-    decision.dashReason==='plasma-strike'?uy:y,priority,decision.dashReason==='plasma-strike');
+   const v=p.shipType==='drill' ? {x:!stop?x:p.dx,y:!stop?y:p.dy} :
+   balanceDashVector(x,y,priority,false);
    balanceDashKeys(v.x,v.y);
   }
   const old=game.combatLog.dashCount;dash();
@@ -156,8 +161,10 @@ function balancePilotStep(frame,policy='tactical'){
  }
  if(decision.novaReason){
   const old=game.combatLog.novaCount;nova();
-  if(balanceAbilityLog&&game.combatLog.novaCount>old)
+  if(balanceAbilityLog&&game.combatLog.novaCount>old){
+   balanceAbilityLog.novaHeldFrames=0;
    balanceAbilityLog.novaReasons[decision.novaReason]=(balanceAbilityLog.novaReasons[decision.novaReason]||0)+1;
+  }
  }
  return {target:priority?.type||null,nearest:d,threats:threat.near,
   imminent:threat.imminent,move:!stop,dashReason:decision.dashReason,novaReason:decision.novaReason};
@@ -237,7 +244,7 @@ function balanceSandbox(fn){
  }
 }
 function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical'){
- balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,dashReasons:{},novaReasons:{}};
+ balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{}};
  Math.random=seededBalanceRandom(seed);
  selectedGameMode='normal';selectedShip=ship;newRun();mode='playing';
  const p=player;
