@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.28 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.29 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.28 | UI FUSION CHOICE</title>
+<title>ANKIN DRIFT v13.29 | UI FUSION CHOICE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -874,7 +874,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 
 /* Maintenance: keep LAB search/dropdown keyboard focus clearly visible. */
 .panel.lab-panel .atlas-controls input:focus-visible,.panel.lab-panel .atlas-controls select:focus-visible{outline:2px solid #8ef7de;outline-offset:2px;border-color:#8ef7de}
-/* v13.28 — compact full-viewport upgrade choices / archive and fusion readability */
+/* v13.29 — compact full-viewport upgrade choices / archive and fusion readability */
 body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);max-width:none;overflow:hidden;padding:6px 7px;touch-action:auto}
 .panel.choice-panel{width:min(1060px,calc(100vw - 12px));height:min(760px,calc(100dvh - 12px));max-height:calc(100dvh - 12px);display:flex;flex-direction:column;overflow:hidden;padding:clamp(7px,1.4vh,16px) clamp(8px,2vw,20px);gap:0}
 .panel.choice-panel:before{z-index:1}
@@ -923,7 +923,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 }
 @media(max-height:600px) and (max-width:600px){.panel.choice-panel .choice-icon{font-size:19px}.panel.choice-panel .choice-attrs{display:none}.panel.choice-panel .choice .synergy-note{max-height:23px}.panel.choice-panel .choice .evolve{max-height:24px}}
 
-/* v13.28: Four-choice boss cards have independent readable details.
+/* v13.29: Four-choice boss cards have independent readable details.
    Do not clip evolution or synergy at a fixed arbitrary height. */
 .panel.choice-panel .choice-grid.four-choice{overflow:hidden;min-height:0;grid-auto-rows:minmax(0,1fr)}
 .panel.choice-panel .choice-grid.four-choice .choice{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;touch-action:pan-y;align-content:start}
@@ -938,7 +938,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
  .panel.choice-panel .choice-grid.four-choice .choice .evolve .recipe-effect{display:block}
 }
 
-/* v13.28: Every 3/4-card reward has readable, independently scrollable details.
+/* v13.29: Every 3/4-card reward has readable, independently scrollable details.
    Keep the bottom actions visible; never silently crop synergy/evolution text. */
 .panel.choice-panel .choice-grid{grid-auto-rows:minmax(0,1fr);overflow:hidden}
 .panel.choice-panel .choice-grid .choice{
@@ -961,7 +961,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 
 
 
-/* v13.28: boss ultimate charge, telegraph, and explicit punishment window. */
+/* v13.29: boss ultimate charge, telegraph, and explicit punishment window. */
 .boss-special-wrap{margin-top:5px;min-width:0}
 .boss-special-caption{color:#ffd88d;text-align:center;font-size:10px;font-weight:850;letter-spacing:.04em;line-height:1.45}
 .boss-special-track{height:7px;border-radius:99px;overflow:hidden;border:1px solid #ce9e4d8a;background:#261c2e}
@@ -971,7 +971,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 .boss-special-wrap.recover .boss-special-track>span{background:#59d7bd}
 @keyframes bossSpecialWarn{to{filter:brightness(1.7)}}
 @media(max-width:520px){.boss-special-caption{font-size:9px}.boss-special-track{height:6px}}
-/* v13.28: the mobile reward summary must use natural document flow.
+/* v13.29: the mobile reward summary must use natural document flow.
    Previously grid-row:2/3 for the name collided with multiline ready banners. */
 .panel.choice-panel .choice-grid .choice-skill-head{display:contents}
 .panel.choice-panel .choice-grid .choice-name,
@@ -1364,7 +1364,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.28 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.29 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1694,7 +1694,7 @@ function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;con
 let selectedGameMode="normal";
 const ULTIMATE_NAME="THE・END・OF・ANKIN";
 function ultimateThreshold(runMode=game?.gameMode||selectedGameMode){return runMode==="challenge"?900:1800} function ultimateSecond(runMode=game?.gameMode||selectedGameMode){return runMode==="challenge"?1800:2700}
-function newRun(){player=initialP();applyShipPreset(player);game={gameMode:selectedGameMode,completed:false,endless:false,clearCount:0,ultimatePending:false,ultimateEncounterAt:0,ultimateParts:[],lastClearAt:0,nextUltimateAt:ultimateThreshold(selectedGameMode),lastUltimateQueuedAt:0,runOutcome:null,targetHistory:[],targetNameCache:{},ship:selectedShip,spawn:.78,nextBossAt:60,nextRaidAt:105,raid:null,raidsCleared:0,lastRaidEvent:null,nextVacuumAt:rand(85,135),lastVacuumAt:0,nextRelicAt:rand(125,205),vacuum:null,compactTimer:5,bossQueue:[],bossHistory:{minor:null,major:null,unique:null},lastBossAt:0,damage:0,kills:0,total:0,rerolls:3,skills:{},powers:{},legends:{},uniques:{},relics:{},fusions:{},synergies:{},elementCombos:[],sealedElements:[],fusionMilestoneIndex:0,fusionMilestoneResults:[],acquisitionLog:[],lastChoice:'',bestBroke:false,targets:[],damageStats:{},bossDamage:0,level:1,xp:0,need:expNeed(1),pendingLevels:0,storedLevels:0,autoBank:false,choiceBatchTotal:0,choiceBatchDone:0,rewards:[]};game.activeChallenges=record.read().clears.length?[...selectedChallenges]:[];game.runId='run-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);game.lastClear=null;game.lastUnlocked=[];game.finisherSource='';game.combatLog={dashCount:0,novaCount:0,hits:0,damageTaken:0};game.startedMarked=false;achievementSyncClock=0;if(game.activeChallenges.includes('fragile')){player.maxHp=Math.max(1,Math.round(player.maxHp*.75));player.hp=Math.min(player.hp,player.maxHp)}if(game.activeChallenges.includes('dashTax'))player.dashCd+=.65;enemies=[];enemyIndex.clear();enemyIndexReady=false;shots=[];hostile=[];pickups=[];hazards=[];zones=[];particles=[];floats=[];boss=null;pendingFusion=null;pendingFusions=[];elementChoice=null;pendingElementPairs=[];pendingElementChoice=false;bossAlertUntil=0;lastUniqueCard=null;pendingSynergy=[];synergyNotices=[];laserLinks=[];gusts=[];buildTab='inventory';atlasRarity='all';atlasAttr='all';atlasQuery='';enemyCodexFilter='all';runClock=0;hudClock=.2;lastHudBuildMarkup='';announceUntil=0;ui.announcement.classList.remove('show');renderSynergyNotices();shake=0;flash=0;keys.clear();clearTouch();nextMusicBeat=0;musicStep=0;celebrationParticles=[];celebrationRockets=[];celebrationEvents=[];celebrationLabel='';celebrationClock=0;spawnOpeningScouts();}
+function newRun(){balanceTelemetry=null;player=initialP();applyShipPreset(player);game={gameMode:selectedGameMode,completed:false,endless:false,clearCount:0,ultimatePending:false,ultimateEncounterAt:0,ultimateParts:[],lastClearAt:0,nextUltimateAt:ultimateThreshold(selectedGameMode),lastUltimateQueuedAt:0,runOutcome:null,targetHistory:[],targetNameCache:{},ship:selectedShip,spawn:.78,nextBossAt:60,nextRaidAt:105,raid:null,raidsCleared:0,lastRaidEvent:null,nextVacuumAt:rand(85,135),lastVacuumAt:0,nextRelicAt:rand(125,205),vacuum:null,compactTimer:5,bossQueue:[],bossHistory:{minor:null,major:null,unique:null},lastBossAt:0,damage:0,kills:0,total:0,rerolls:3,skills:{},powers:{},legends:{},uniques:{},relics:{},fusions:{},synergies:{},elementCombos:[],sealedElements:[],fusionMilestoneIndex:0,fusionMilestoneResults:[],acquisitionLog:[],lastChoice:'',bestBroke:false,targets:[],damageStats:{},bossDamage:0,level:1,xp:0,need:expNeed(1),pendingLevels:0,storedLevels:0,autoBank:false,choiceBatchTotal:0,choiceBatchDone:0,rewards:[]};game.activeChallenges=record.read().clears.length?[...selectedChallenges]:[];game.runId='run-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);game.lastClear=null;game.lastUnlocked=[];game.finisherSource='';game.combatLog={dashCount:0,novaCount:0,hits:0,damageTaken:0};game.startedMarked=false;achievementSyncClock=0;if(game.activeChallenges.includes('fragile')){player.maxHp=Math.max(1,Math.round(player.maxHp*.75));player.hp=Math.min(player.hp,player.maxHp)}if(game.activeChallenges.includes('dashTax'))player.dashCd+=.65;enemies=[];enemyIndex.clear();enemyIndexReady=false;shots=[];hostile=[];pickups=[];hazards=[];zones=[];particles=[];floats=[];boss=null;pendingFusion=null;pendingFusions=[];elementChoice=null;pendingElementPairs=[];pendingElementChoice=false;bossAlertUntil=0;lastUniqueCard=null;pendingSynergy=[];synergyNotices=[];laserLinks=[];gusts=[];buildTab='inventory';atlasRarity='all';atlasAttr='all';atlasQuery='';enemyCodexFilter='all';runClock=0;hudClock=.2;lastHudBuildMarkup='';announceUntil=0;ui.announcement.classList.remove('show');renderSynergyNotices();shake=0;flash=0;keys.clear();clearTouch();nextMusicBeat=0;musicStep=0;celebrationParticles=[];celebrationRockets=[];celebrationEvents=[];celebrationLabel='';celebrationClock=0;spawnOpeningScouts();}
 // Growth is deliberately super-quadratic while shard income grows only slowly over time.
 function expNeed(level){if(level<=35)return Math.round(34+18*level+2.7*Math.pow(level,2.08));const excess=level-35;return Math.round(34+18*35+2.7*Math.pow(35,2.08)+165*excess+2*Math.pow(excess,1.72))}
 function settleExpLevels(limit=192){if(!game||!player)return 0;let loops=0,healed=0;while(game.xp>=game.need&&loops<limit){game.xp-=game.need;game.level++;game.need=expNeed(game.level);if(game.autoBank)game.storedLevels++;else game.pendingLevels++;const heal=Math.min(player.maxHp-player.hp,Math.max(4,Math.min(18,Math.round(player.maxHp*.045))));if(heal>0){player.hp+=heal;healed+=heal}loops++}if(healed>0){pop(player.x,player.y-38,`LEVEL HEAL +${Math.ceil(healed)} HP`,'#8cffc8');sfx('level')}return loops}
@@ -2498,7 +2498,7 @@ const VISUAL_CODEX_ROWS=[
  ['dogNineApex','mutation','dog','','白金色に輝く九尾の最終形態。','nineTailApex','dogMutNineTail'],
  ['dogHamApex','mutation','dog','','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
-// v13.28 — use canonical card/recipe data, not duplicated Japanese labels.
+// v13.29 — use canonical card/recipe data, not duplicated Japanese labels.
 // The getters resolve only when the gallery opens, after all game definitions
 // and DOG display-name overrides have been registered.
 const VISUAL_DOG_APEX_RECIPE_IDS=Object.freeze({
@@ -2693,11 +2693,11 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.28 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.29 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.28 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.29 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -4081,7 +4081,7 @@ function spawnUltimateBoss(){
  const core={x:W*.5,y:Math.min(H*.32,Math.max(rad*2+65,220)),r:rad,type:'ultimate',variant:'theEnd',hp,maxHp:hp,
   spd:mobile?34:48,dmg:50+Math.min(79,Math.floor(lvl*.68)),xp:0,color:'#ffbc81',dead:false,hurt:0,phase:0,shoot:1.65,
   burn:0,burnDps:0,slow:0,frozen:0,rockHit:0,bladeHit:0,attacks:0,phaseNumber:1,phaseChanged:0,invulnFloor:.82*hp};
- setupBossSuper(core);boss=core;enemies.push(core);
+ setupBossSuper(core);trackBalanceBoss(core,'spawn');boss=core;enemies.push(core);
  const names=['左翼砲塔','中央動力核','右翼砲塔'];
  game.ultimateParts=names.map((name,i)=>{
   const moduleHP=Math.round(hp*(mobile?.145:.175));
@@ -4162,7 +4162,7 @@ function continueEndless(){
  game.spawn=.85;state('playing');announce('∞ ENDLESS MODE — 次のTHE・END・OF・ANKINは '+fmtTime(game.nextUltimateAt),4);
 }
 
-/* v13.28 — Boss ultimates use game time, not wall time.
+/* v13.29 — Boss ultimates use game time, not wall time.
    Normal volleys continue while charging; an announced fixed hazard is followed
    by an attack-and-movement-free recovery window. */
 const BOSS_SUPER_RULES={
@@ -4188,7 +4188,7 @@ function triggerBossSuper(e){
  const shape=bossSuperGeometry(e),power=e.type==='ultimate'?.65:e.type==='unique'?.72:.74;
  if(shape.kind==='blast')hazards.push({type:'blast',x:shape.x,y:shape.y,r:shape.r,warn:0,active:.44,damage:Math.max(12,e.dmg*power)});
  else for(const a of shape.angles)hazards.push({type:'beam',x:shape.x,y:shape.y,a,warn:0,active:.40,width:shape.width,damage:Math.max(12,e.dmg*power),tint:'#ffb478'});
- e.superCount++;e.superState='recover';e.superRecover=BOSS_SUPER_RULES[e.type].recover;
+ e.superCount++;trackBalanceBoss(e,'ultimate');e.superState='recover';e.superRecover=BOSS_SUPER_RULES[e.type].recover;trackBalanceBoss(e,'recovery');
  e.shoot=Math.max(e.shoot,.48);
  pop(e.x,e.y-e.r-34,'OVERHEAT — 攻撃チャンス！','#9bffe2');
  ring(e.x,e.y,e.r+36,'#75e7c0');
@@ -4200,7 +4200,7 @@ function tickBossSuper(e,dt){
  if(e.superState==='charge'){
   e.superCharge=Math.min(r.charge,e.superCharge+dt);
   if(e.superCharge>=r.charge){
-   e.superState='telegraph';e.superWarn=r.warn;
+   e.superState='telegraph';e.superWarn=r.warn;trackBalanceBoss(e,'telegraph');
    const lead=Math.min(40,Math.hypot(player.dx||0,player.dy||0)*28);
    e.superAimX=clamp(player.x+(player.dx||0)*lead,20,W-20);
    e.superAimY=clamp(player.y+(player.dy||0)*lead,20,H-20);
@@ -4230,7 +4230,7 @@ function spawnBoss(type='minor',variant=null){
  const midBossRelief=1-Math.min(.30,Math.max(0,(game.level-22)*.025));
  const early=.62+.38*(1-Math.exp(-mins/8)),radius=unique?71:major?55:38,hp=Math.round(info.hp*scale*early*(1+Math.min(.055,Math.max(0,mins-5)*.004))*midBossRelief*(game.activeChallenges?.includes('armored')?1.25:1));
  const e={x:W*.5,y:-radius-40,r:radius,type,variant,hp,maxHp:hp,spd:info.speed,dmg:(unique?58:major?36:27)+Math.round(mins*4+mins*mins*.5),xp:Math.round((unique?500:major?290:145)*(1+Math.min(1.5,mins*.055))),color:info.color,dead:false,hurt:0,phase:0,shoot:unique?1.7:1.8,burn:0,burnDps:0,slow:0,frozen:0,rockHit:0,bladeHit:0,attacks:0,teleport:0,charge:0};
- setupBossSuper(e);enemies.push(e);boss=e;game.raid=null;U('raidStatus').style.display='none';game.bossSpawned=true;showBossAlert(type,variant);sfx('bossAlert');
+ setupBossSuper(e);trackBalanceBoss(e,'spawn');enemies.push(e);boss=e;game.raid=null;U('raidStatus').style.display='none';game.bossSpawned=true;showBossAlert(type,variant);sfx('bossAlert');
 }
 
 function burst(x,y,color,n=9,vel=110){n=Math.max(1,Math.ceil(n*(settings.fx==='high'?1:settings.fx==='medium'?.6:settings.fx==='low'?.25:.12)));for(let i=0;i<n;i++){const a=rand(0,TAU),speed=rand(vel*.25,vel);particles.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:rand(1,3.5),color,life:rand(.2,.68),total:.7})}if(particles.length>(settings.fx==='high'?340:settings.fx==='medium'?200:settings.fx==='low'?85:55))particles.splice(0,particles.length-(settings.fx==='high'?340:settings.fx==='medium'?200:settings.fx==='low'?85:55))}
@@ -4308,16 +4308,76 @@ function compactPickups(){if(pickups.length<90)return;const buckets=new Map(),me
 function tickVacuum(dt){game.compactTimer-=dt;if(game.compactTimer<=0){game.compactTimer=5;compactPickups()}
  while(game.total>=game.nextVacuumAt){const stamp=game.nextVacuumAt;game.nextVacuumAt=stamp+rand(70,120);if(!game.vacuum&&(Math.random()<.38||stamp-game.lastVacuumAt>=300)){spawnVacuum();game.lastVacuumAt=stamp}}
  const core=game.vacuum;if(!core)return;core.pulse+=dt;const distance=dst(core,player);if(distance<Math.max(95,player.magnet*.8)&&distance>1){const speed=clamp(180+(105-distance)*2,140,620);core.x+=(player.x-core.x)/distance*speed*dt;core.y+=(player.y-core.y)/distance*speed*dt}if(distance<player.r+23)collectVacuum();}
+
+/* v13.29: optional in-memory instrumentation. Disabled during ordinary play.
+   The development-only Playwright harness activates this explicitly.
+   No persistence, network traffic, achievement or save-side effects. */
+let balanceTelemetry=null;
+function beginBalanceTelemetry({seed=0,scenario='unknown',build='base'}={}){
+ if(!game||!player)throw Error('Balance trace requires an active run');
+ balanceTelemetry={schema:'ankin-balance-v1',ship:player.shipType,seed:seed>>>0,scenario,build,
+  start:game.total,startDamage:game.damage,startBossDamage:game.bossDamage,startKills:game.kills,
+  startHits:game.combatLog?.hits||0,startDamageTaken:game.combatLog?.damageTaken||0,
+  buckets:Object.create(null),events:[],damageBySource:Object.create(null),killsByType:Object.create(null),
+  bossEvents:{spawn:0,telegraph:0,ultimate:0,recovery:0,earlyKills:0},recoveryDamage:0};
+ return balanceTelemetry.schema;
+}
+function balanceBucket(){
+ if(!balanceTelemetry||!game)return null;
+ const index=Math.floor(Math.max(0,game.total)/60),key=String(index);
+ return balanceTelemetry.buckets[key] ||= {minute:index,damage:0,bossDamage:0,kills:0,hits:0,damageTaken:0,sources:Object.create(null)};
+}
+function trackBalanceDamage(dealt,source,e){
+ if(!balanceTelemetry||dealt<=0)return;
+ const b=balanceBucket(),t=balanceTelemetry;
+ b.damage+=dealt;b.sources[source]=(b.sources[source]||0)+dealt;
+ t.damageBySource[source]=(t.damageBySource[source]||0)+dealt;
+ if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))b.bossDamage+=dealt;
+ if(hasBossSuper(e)&&e.superState==='recover')t.recoveryDamage+=dealt;
+}
+function trackBalanceKill(e){
+ if(!balanceTelemetry)return;
+ const b=balanceBucket(),t=balanceTelemetry;b.kills++;
+ t.killsByType[e.type]=(t.killsByType[e.type]||0)+1;
+ if(hasBossSuper(e)&&e.superCount===0)t.bossEvents.earlyKills++;
+}
+function trackBalanceHit(amount){
+ if(!balanceTelemetry)return;
+ const b=balanceBucket();b.hits++;b.damageTaken+=amount;
+}
+function trackBalanceBoss(e,event){
+ if(!balanceTelemetry)return;
+ if(Object.hasOwn(balanceTelemetry.bossEvents,event))balanceTelemetry.bossEvents[event]++;
+ if(balanceTelemetry.events.length<128)balanceTelemetry.events.push({at:Number(game.total.toFixed(3)),boss:e.type,variant:e.variant||'',event});
+}
+function balanceTelemetryReport(){
+ const t=balanceTelemetry;if(!t||!game||!player)return null;
+ const duration=Math.max(0,game.total-t.start),damage=game.damage-t.startDamage;
+ const buckets=Object.values(t.buckets).sort((a,b)=>a.minute-b.minute);
+ return {schema:t.schema,ship:t.ship,seed:t.seed,scenario:t.scenario,build:t.build,
+  duration:Number(duration.toFixed(4)),damage:Number(damage.toFixed(3)),
+  dps:duration>0?Number((damage/duration).toFixed(3)):0,
+  bossDamage:Number((game.bossDamage-t.startBossDamage).toFixed(3)),kills:game.kills-t.startKills,
+  hits:(game.combatLog?.hits||0)-t.startHits,
+  damageTaken:Number(((game.combatLog?.damageTaken||0)-t.startDamageTaken).toFixed(3)),
+  dashCount:game.combatLog?.dashCount||0,novaCount:game.combatLog?.novaCount||0,
+  level:game.level,skills:Object.keys(game.skills).length,evolutions:Object.keys(game.fusions).length,
+  synergies:Object.keys(game.synergies).length,elementFusions:game.elementCombos.length,
+  damageBySource:{...t.damageBySource},killsByType:{...t.killsByType},
+  bossEvents:{...t.bossEvents},recoveryDamage:Number(t.recoveryDamage.toFixed(3)),
+  buckets:buckets.map(b=>({...b,sources:{...b.sources}})),events:t.events.map(e=>({...e}))};
+}
+
 function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!Number.isFinite(damage))return;
  // Central bonus applies exactly once to every damage source, regardless of ship.
  damage*=1+Math.min(.84,Math.max(0,player?.fusionOutputBonus||0));if(player?.shipType==='dog'&&['dogEgg','blade','meteor','rock','missile','iceball','magma','pulseField','element','explosion'].includes(meta.source))damage*=player.dogAnimalBoost||1;
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(hasBossSuper(e)&&e.superState==='recover')damage*=1.13;
- if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
+ if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;trackBalanceDamage(dealt,source,e);if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
  if(player.elementMods?.voltBlast&&['element','pulseField'].includes(meta.source)&&e.hp>0&&Math.random()<.025)detonate(e.x,e.y,65,Math.max(50,player.chainDamage*.3),e,5);
  if(player.lifeSteal>0&&dealt>0)player.hp=Math.min(player.maxHp,player.hp+dealt*player.lifeSteal);if(e.hp>0)return;
- e.dead=true;game.kills++;if(e.type==='ultimate')game.finisherSource=source;
+ e.dead=true;game.kills++;trackBalanceKill(e);if(e.type==='ultimate')game.finisherSource=source;
  burst(e.x,e.y,e.color,e.type==='unique'?70:e.type==='major'?45:e.type==='minor'?30:(shots.length>110?4:7),e.type==='unique'?300:130);
  if(player.killBurst>0&&(meta.depth||0)<3&&e.type!=='unique')detonate(e.x,e.y,78+Math.min(65,player.killBurst*.18),player.killBurst/(meta.depth?2:1),e,(meta.depth||0)+1);
  if(wasBurn&&player.elementMods?.emberBlast)detonate(e.x,e.y,115,player.magmaDps*2,e,5);
@@ -4508,7 +4568,7 @@ function loseHP(amount,pressure=false){if(player.iframes>0||player.dashTime>0||(
  if(player.shield>0){const absorbed=Math.min(player.shield,blocked);player.shield-=absorbed;blocked-=absorbed}
  amount=direct+blocked;
  if(pressure){player.pressureRecovery=3.3;pop(player.x,player.y-31,'PHASE HIT','#ffd2fa')}
- if(game?.combatLog){game.combatLog.hits++;game.combatLog.damageTaken+=amount;}if(amount>0)player.hp=Math.max(0,player.hp-amount);if(player.elementMods?.iceArmor){ring(player.x,player.y,160,'#adf3ff');for(const foe of enemies)if(!foe.dead&&dst(foe,player)<155){damageEnemy(foe,Math.max(45,player.iceBurst*22),{special:true});chillEnemy(foe,2.4,.5)}}player.iframes=.65;shake=7;flash=.12;burst(player.x,player.y,'#ff7595',11,88);tone(170,.16,'sawtooth',.06);
+ if(game?.combatLog){game.combatLog.hits++;game.combatLog.damageTaken+=amount;}trackBalanceHit(amount);if(amount>0)player.hp=Math.max(0,player.hp-amount);if(player.elementMods?.iceArmor){ring(player.x,player.y,160,'#adf3ff');for(const foe of enemies)if(!foe.dead&&dst(foe,player)<155){damageEnemy(foe,Math.max(45,player.iceBurst*22),{special:true});chillEnemy(foe,2.4,.5)}}player.iframes=.65;shake=7;flash=.12;burst(player.x,player.y,'#ff7595',11,88);tone(170,.16,'sawtooth',.06);
  if(player.hp<=0){if(player.phoenix>0){player.phoenix--;player.reviveUsed++;player.hp=Math.round(player.maxHp*.6);player.shield=player.shieldMax;player.iframes=3.4;flash=.52;pop(player.x,player.y-55,'PHOENIX REBIRTH!','#ffc46e');nova(true)}else endRun()}}
 function pressureUnlocked(){return game&&(game.gameMode==='challenge'?game.total>=8*60:game.total>=15*60)}
 function hostileShot(x,y,angle,speed,damage,r,color,ttl=4,unblockable=false,pressure=false){if(hostile.length>=MAX_HOSTILE)return;const trialBulletSpeed=hasTrial('ballistic')?1.20:1;hostile.push({x,y,vx:Math.cos(angle)*speed*trialBulletSpeed,vy:Math.sin(angle)*speed*trialBulletSpeed,r,damage,ttl,color,unblockable:unblockable||pressure,pressure,warn:pressure?.42:0})}
@@ -5889,7 +5949,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.28', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.29', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 
