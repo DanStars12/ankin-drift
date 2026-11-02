@@ -34,6 +34,8 @@ assert(titleVersion, 'Browser title must include game version');
 assert(menuVersion, 'Title screen must include a game version');
 assert.equal(menuVersion, titleVersion, 'Title screen and browser title version mismatch');
 assert.equal(manifestVersionFromTitle(pageTitle), titleVersion, 'Browser title version parse error');
+const swRegistrationVersion = html.match(/serviceWorker\.register\(['\"]\.\/sw\.js\?v=([\d.]+)['\"]/i)?.[1];
+assert.equal(swRegistrationVersion, titleVersion, 'Service Worker registration query must match game version');
 
 function manifestVersionFromTitle(title) { return title.match(/\bV(\d+\.\d+(?:\.\d+)?)\b/i)?.[1]; }
 
