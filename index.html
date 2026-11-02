@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.26 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.27 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.26 | UI FUSION CHOICE</title>
+<title>ANKIN DRIFT v13.27 | UI FUSION CHOICE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -874,7 +874,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 
 /* Maintenance: keep LAB search/dropdown keyboard focus clearly visible. */
 .panel.lab-panel .atlas-controls input:focus-visible,.panel.lab-panel .atlas-controls select:focus-visible{outline:2px solid #8ef7de;outline-offset:2px;border-color:#8ef7de}
-/* v13.26 — compact full-viewport upgrade choices / archive and fusion readability */
+/* v13.27 — compact full-viewport upgrade choices / archive and fusion readability */
 body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);max-width:none;overflow:hidden;padding:6px 7px;touch-action:auto}
 .panel.choice-panel{width:min(1060px,calc(100vw - 12px));height:min(760px,calc(100dvh - 12px));max-height:calc(100dvh - 12px);display:flex;flex-direction:column;overflow:hidden;padding:clamp(7px,1.4vh,16px) clamp(8px,2vw,20px);gap:0}
 .panel.choice-panel:before{z-index:1}
@@ -923,7 +923,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 }
 @media(max-height:600px) and (max-width:600px){.panel.choice-panel .choice-icon{font-size:19px}.panel.choice-panel .choice-attrs{display:none}.panel.choice-panel .choice .synergy-note{max-height:23px}.panel.choice-panel .choice .evolve{max-height:24px}}
 
-/* v13.26: Four-choice boss cards have independent readable details.
+/* v13.27: Four-choice boss cards have independent readable details.
    Do not clip evolution or synergy at a fixed arbitrary height. */
 .panel.choice-panel .choice-grid.four-choice{overflow:hidden;min-height:0;grid-auto-rows:minmax(0,1fr)}
 .panel.choice-panel .choice-grid.four-choice .choice{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;touch-action:pan-y;align-content:start}
@@ -938,7 +938,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
  .panel.choice-panel .choice-grid.four-choice .choice .evolve .recipe-effect{display:block}
 }
 
-/* v13.26: Every 3/4-card reward has readable, independently scrollable details.
+/* v13.27: Every 3/4-card reward has readable, independently scrollable details.
    Keep the bottom actions visible; never silently crop synergy/evolution text. */
 .panel.choice-panel .choice-grid{grid-auto-rows:minmax(0,1fr);overflow:hidden}
 .panel.choice-panel .choice-grid .choice{
@@ -957,6 +957,71 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
  .panel.choice-panel .choice-grid .choice{align-content:start}
  .panel.choice-panel .choice-grid .choice .synergy-partner-row{display:flex}
  .panel.choice-panel .choice-grid .choice .evolve .recipe-effect{display:block}
+}
+
+
+/* v13.27: the mobile reward summary must use natural document flow.
+   Previously grid-row:2/3 for the name collided with multiline ready banners. */
+.panel.choice-panel .choice-grid .choice-skill-head{display:contents}
+.panel.choice-panel .choice-grid .choice-name,
+.panel.choice-panel .choice-grid .choice-desc,
+.panel.choice-panel .choice-grid .target-banner{min-width:0;overflow-wrap:anywhere;white-space:normal}
+@media(max-width:600px){
+ .panel.choice-panel .choice-grid .choice{
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+  gap:3px;min-width:0;min-height:0;padding:6px 8px;
+  overflow-x:hidden;overflow-y:auto;touch-action:pan-y;
+ }
+ .panel.choice-panel .choice-grid .choice-head{
+  display:flex;flex:0 0 auto;align-items:center;flex-wrap:wrap;
+  gap:3px 6px;min-height:0;width:100%;margin:0;line-height:1.2;
+ }
+ .panel.choice-panel .choice-grid .choice-head .choice-num{
+  padding:2px 6px;font-size:9px;flex:0 0 auto;
+ }
+ .panel.choice-panel .choice-grid .choice-head .rarity{
+  display:inline-block;flex:0 0 auto;margin:0;font-size:9px;
+ }
+ .panel.choice-panel .choice-grid .synergy-ready-banner,
+ .panel.choice-panel .choice-grid .evolution-ready-banner{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:0 1 auto;min-width:0;max-width:100%;width:auto;
+  margin:0;padding:2px 6px;border-radius:5px;
+  font-size:9px;line-height:1.35;letter-spacing:0;
+  white-space:normal;overflow-wrap:anywhere;box-shadow:none;
+  animation:none;
+ }
+ .panel.choice-panel .choice-grid .choice-skill-head{
+  display:flex;flex:0 0 auto;align-items:center;
+  gap:6px;min-width:0;width:100%;
+ }
+ .panel.choice-panel .choice-grid .choice-skill-head .choice-icon{
+  flex:0 0 auto;display:block;align-self:center;grid-row:auto;grid-column:auto;
+  font-size:18px;line-height:1.15;margin:0;
+ }
+ .panel.choice-panel .choice-grid .choice-skill-head .choice-name{
+  flex:1 1 auto;display:block;min-width:0;grid-row:auto;grid-column:auto;
+  margin:0;font-size:clamp(10px,2.9vw,12px);line-height:1.35;
+  overflow-wrap:anywhere;
+ }
+ .panel.choice-panel .choice-grid .choice-desc,
+ .panel.choice-panel .choice-grid .choice-attrs,
+ .panel.choice-panel .choice-grid .evolve,
+ .panel.choice-panel .choice-grid .synergy-note,
+ .panel.choice-panel .choice-grid .target-banner{
+  flex:0 0 auto;width:100%;grid-row:auto;grid-column:auto;
+  margin-top:1px;max-height:none;overflow:visible;
+ }
+ .panel.choice-panel .choice-grid .target-banner{padding:3px 5px;font-size:9px;line-height:1.3}
+ .panel.choice-panel .choice-grid .choice-desc{font-size:9px;line-height:1.35}
+ .panel.choice-panel .choice-grid .choice-attrs{display:block}
+}
+/* Keep a little more room for labels on especially small/short phones. */
+@media(max-width:360px), (max-height:560px) and (max-width:600px){
+ .panel.choice-panel .choice-grid .choice{padding:4px 6px;gap:2px}
+ .panel.choice-panel .choice-grid .synergy-ready-banner,
+ .panel.choice-panel .choice-grid .evolution-ready-banner{font-size:8px;padding:1px 4px}
+ .panel.choice-panel .choice-grid .choice-skill-head .choice-icon{font-size:16px}
 }
 
 /* Separate the scrollable celebration details from the always-visible Continue button. */
@@ -1288,7 +1353,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.26 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.27 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -2314,7 +2379,7 @@ function evolutionMarkup(c){
  }).join('');
 }
 function synergyMarkup(c){return synergiesFor(c.id).filter(a=>!game.synergies[a.id]).sort((a,b)=>Number(owned(b.need.find(x=>x!==c.id)))-Number(owned(a.need.find(x=>x!==c.id)))).slice(0,1).map(a=>{const partner=a.need.find(x=>x!==c.id),ready=owned(partner);return `<div class="synergy-note ${ready?'combo-ready':''}"><div class="synergy-note-head"><b>${a.name}</b>${ready?'<span class="combo-ready-pill">✦ 今選ぶと完成！</span>':'<span>◇ シナジー候補</span>'}</div><div class="synergy-partner-row">相方：${skillPeekLink(partner)} <span class="${ready?'partner-owned':'partner-missing'}">${ready?'✓ 取得済み':'未取得'}</span></div><span class="synergy-effect-line">完成時の効果：${escHtml(a.desc)}</span></div>`}).join('')}
-function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady(c),evoReady=choiceEvolutionReady(c),targets=choiceTargetMatches(c);return `<button class="choice ${c.rarity} ${ready?'synergy-ready-choice':''} ${evoReady?'evolution-ready-choice':''} ${targets.length?'target-matching':''}" data-choice="${i}"><div class="choice-head"><span class="choice-num">${i+1}</span><span class="rarity">${RARITY_NAMES[c.rarity]}</span>${evoReady?'<span class="evolution-ready-banner">◇ 進化合成可能！</span>':''}${ready?'<span class="synergy-ready-banner">✦ シナジー完成可能</span>':''}</div>${targets.length?`<span class="target-banner">✦ 目標進化の素材：${targets.map(t=>escHtml(t.name)).join(' / ')}</span>`:''}<span class="choice-icon">${c.icon}</span><div class="choice-name rarity-name ${c.rarity}">${c.name}${owned(c.id)?' <span class="stack-indicator">[強化]</span>':''}</div><div class="choice-attrs">${attrMarkup(c)}</div><div class="choice-desc">${c.desc}</div>${evolutionMarkup(c)}${!['legendary','power','unique'].includes(c.rarity)?synergyMarkup(c):''}<span class="choice-pick">✓ タップして取得</span></button>`}).join('')}
+function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady(c),evoReady=choiceEvolutionReady(c),targets=choiceTargetMatches(c);return `<button class="choice ${c.rarity} ${ready?'synergy-ready-choice':''} ${evoReady?'evolution-ready-choice':''} ${targets.length?'target-matching':''}" data-choice="${i}"><div class="choice-head"><span class="choice-num">${i+1}</span><span class="rarity">${RARITY_NAMES[c.rarity]}</span>${evoReady?'<span class="evolution-ready-banner">◇ 進化合成可能！</span>':''}${ready?'<span class="synergy-ready-banner">✦ シナジー完成可能</span>':''}</div>${targets.length?`<span class="target-banner">✦ 目標進化の素材：${targets.map(t=>escHtml(t.name)).join(' / ')}</span>`:''}<div class="choice-skill-head"><span class="choice-icon">${escHtml(c.icon)}</span><div class="choice-name rarity-name ${c.rarity}">${escHtml(c.name)}${owned(c.id)?' <span class="stack-indicator">[強化]</span>':''}</div></div><div class="choice-attrs">${attrMarkup(c)}</div><div class="choice-desc">${escHtml(c.desc)}</div>${evolutionMarkup(c)}${!['legendary','power','unique'].includes(c.rarity)?synergyMarkup(c):''}<span class="choice-pick">✓ タップして取得</span></button>`}).join('')}
 function skillRow(c,n){const dormant=isSealedCard(c);return `<div class="owned-skill ${c.rarity} ${dormant?'rebirth-dormant':''}"><div class="owned-skill-top"><span class="rarity-name ${c.rarity}">${c.icon} ${c.name}</span>${n>1?'<b>×'+n+'</b>':''}${dormant?'<b class="rebirth-rest">✦ 属性効果喪失・共鳴素材として記録</b>':''}</div><div class="owned-tags">${attrMarkup(c)}</div><div class="skill-details">${c.desc}</div></div>`;}
 function listBuild(){const part=(obj,defs)=>Object.entries(obj).map(([id,n])=>{const c=defs.find(x=>x.id===id);return c?skillRow(c,n):''}).join('');return{skills:part(game.skills,SKILLS),powers:part(game.powers,POWERS),legends:part(game.legends,LEGENDS),uniques:part(game.uniques,UNIQUE_SKILLS),relics:part(game.relics,RELICS)}}
 function inventoryMarkup(b){let html='';for(const [kind,title,body] of [['relic','✦ RELIC / WEAPON MOD',b.relics],['unique','✺ UNIQUE ANKIN',b.uniques],['legendary','★ LEGENDARY',b.legends],['power','◈ ANKIN POWER',b.powers]])html+=`<section class="lab-section ${kind}"><h3>${title}</h3><div class="inventory-grid">${body||'<div class="empty-inventory">まだ取得していません</div>'}</div></section>`;
@@ -2422,7 +2487,7 @@ const VISUAL_CODEX_ROWS=[
  ['dogNineApex','mutation','dog','','白金色に輝く九尾の最終形態。','nineTailApex','dogMutNineTail'],
  ['dogHamApex','mutation','dog','','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
-// v13.26 — use canonical card/recipe data, not duplicated Japanese labels.
+// v13.27 — use canonical card/recipe data, not duplicated Japanese labels.
 // The getters resolve only when the gallery opens, after all game definitions
 // and DOG display-name overrides have been registered.
 const VISUAL_DOG_APEX_RECIPE_IDS=Object.freeze({
@@ -2617,11 +2682,11 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.26 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.27 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.26 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.27 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -5708,7 +5773,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.26', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.27', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 
