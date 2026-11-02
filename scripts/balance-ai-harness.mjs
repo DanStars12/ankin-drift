@@ -275,7 +275,8 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
 }
 window.__ankinBalanceAI={
- runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical'}={}){
+ runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false}={}){
+  if(typeof initialNovaReady!=='boolean')throw Error('Invalid initialNovaReady');
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
   if(![0,10,20].includes(phase)||!['live-pack','live-boss'].includes(scenario))throw Error('Invalid combat scenario');
@@ -286,6 +287,7 @@ window.__ankinBalanceAI={
     spawnBoss('minor',phase>=20?'vortex':'guardian');
     boss.x=W*.67;boss.y=H*.33;
    }else balanceSpawnLiveRound(phase,0);
+   if(initialNovaReady)player.energy=100; // controlled test-only ability activation
    const start=game.total,steps=Math.ceil(seconds*60),dt=1/60;
    let aiMoves=0,aiDodges=0,lastDash=game.combatLog.dashCount,winAt=null;
    for(let i=0;i<steps&&game.runOutcome!=='dead';i++){
@@ -304,7 +306,7 @@ window.__ankinBalanceAI={
    const won=scenario==='live-boss'&&winAt!==null;
    const report=balanceTelemetryReport();
    return {...balanceResult(report,seconds,{won,cleared:false,terminal:game.runOutcome==='dead',phaseMinutes:phase,aiMoves,aiDodges}),
-    timeToWin:winAt===null?null:Number(winAt.toFixed(3))};
+    initialNovaReady,timeToWin:winAt===null?null:Number(winAt.toFixed(3))};
   });
  },
  // Long-run mode is deliberately separate from CI. This drives the actual 30:00
