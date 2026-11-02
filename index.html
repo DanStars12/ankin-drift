@@ -1139,7 +1139,7 @@ const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub
 let W=innerWidth,H=innerHeight,dpr=1,mode='menu',backMode='playing',last=0,t=0,shake=0,flash=0,stars=[],particles=[],floats=[],enemies=[],shots=[],hostile=[],pickups=[],hazards=[],zones=[],player=null,game=null,boss=null,choices=[],keys=new Set(),soundOn=true,audio=null;
 const MAX_ENEMIES=235,MAX_SHOTS=290,MAX_HOSTILE=440,MAX_PICKUPS=620;
 // Normal enemy movement is tuned independently from boss movement. Never exceed each cap.
-const ENEMY_SPEED={drone:{start:36,gain:2.1,cap:84},stinger:{start:58,gain:2.65,cap:118},brute:{start:18,gain:1.0,cap:42},shooter:{start:30,gain:1.55,cap:68},guard:{start:20,gain:1.1,cap:47},bomber:{start:34,gain:1.7,cap:76},support:{start:25,gain:1.08,cap:53},phantom:{start:47,gain:2.6,cap:105}};
+const ENEMY_SPEED={drone:{start:36,gain:2.1,cap:84},stinger:{start:58,gain:2.65,cap:118},brute:{start:18,gain:1.0,cap:42},shooter:{start:30,gain:1.55,cap:68},guard:{start:20,gain:1.1,cap:47},bomber:{start:34,gain:1.7,cap:76},support:{start:25,gain:1.08,cap:53},phantom:{start:40,gain:1.6,cap:83}};
 function enemySpeedAt(type,elapsedMinutes){const p=ENEMY_SPEED[type];return p?Math.min(p.cap,p.start+p.gain*Math.max(0,elapsedMinutes)):null}
 const ENEMY_CODEX=[
  {id:'drone',jp:'スカウト・ドローン',en:'SCOUT DRONE',kind:'normal',color:'#ff6382',shape:'circle',hp:42,desc:'序盤の主力となる赤い追跡機。時間とともに出現率が下がり、30分以降は少数になる。',behavior:'群れで接近 / 接触攻撃',unlock:'最初から'},
@@ -1149,7 +1149,7 @@ const ENEMY_CODEX=[
  {id:'guard',jp:'シールド・ガーディアン',en:'SHIELD GUARDIAN',kind:'normal',color:'#66dff5',shape:'shield',hp:132,desc:'前方の射撃ダメージを45%軽減し、レーザーの継続ダメージも30%軽減する鈍重な敵。側面や範囲攻撃が有効。',behavior:'前方ガード / 横と背後が弱点',unlock:'12:30以降、後半から徐々に増加'},
  {id:'bomber',jp:'ボム・クローラー',en:'BOMB CRAWLER',kind:'normal',color:'#ff7358',shape:'bomber',hp:69,desc:'プレイヤーを感知すると点滅しながら加速。爆発距離に入ると停止して自爆する。爆風は敵に影響せず岩壁を貫通するが、シールドで防げる。',behavior:'感知で加速・点滅 / 接近で停止後自爆 / シールド防御可',unlock:'15:00以降、徐々に増加'},
  {id:'support',jp:'ブースト・サポーター',en:'BOOST SUPPORTER',kind:'normal',color:'#b0f875',shape:'support',hp:90,desc:'周囲の雑魚敵の移動速度と射撃頻度を短時間強化。緑の波紋が目印。真っ先に倒すと安全。',behavior:'周囲を強化 / 攻撃はしない',unlock:'18:00以降、徐々に増加'},
- {id:'phantom',jp:'ファントム・ランナー',en:'PHANTOM RUNNER',kind:'normal',color:'#ff85d9',shape:'phantom',hp:56,desc:'稀に現れる高速突進型。線状予告の後に突進する。出現数は後半も少なめ。',behavior:'予告線 / 直線ダッシュ',unlock:'21:00以降、徐々に増加'},
+ {id:'phantom',jp:'パルス・インターセプター',en:'PULSE INTERCEPTOR',kind:'normal',color:'#ffb853',shape:'interceptor',hp:64,desc:'進路を予測して予告線の先へ射撃する迎撃機。左右へ回り込むことで射線から逃れられる。',behavior:'予測射撃 / 予告線 / 側面への回り込み',unlock:'16:00以降、後半に少数の迎撃部隊として出現'},
  {id:'relic',jp:'レリック・ワンダラー',en:'RELIC WANDERER',kind:'relic',color:'#ffbdff',shape:'relic',hp:260,desc:'まれに現れる虹色の非攻撃エネミー。倒すと機体専用レリックの報酬3択。',behavior:'攻撃しない / 専用レリック',speed:43},
  {id:'guardian',jp:'アンキン・ガーディアン',en:'ANKIN GUARDIAN',kind:'boss',tier:'minor',color:'#e181ff',shape:'star12',hp:760,desc:'最初の1:00に確定で現れる中ボス。以後はランダム候補。全周弾幕が特徴。',behavior:'中ボス / 放射弾 / ANKIN POWER',speed:65},
  {id:'raptor',jp:'ソニック・ラプター',en:'SONIC RAPTOR',kind:'boss',tier:'minor',color:'#fd88b9',shape:'raptor',hp:680,desc:'高速タイプの中ボス。短い予告線の後、プレイヤー方向へ連続攻撃を仕掛ける。',behavior:'中ボス / 高速追跡 / 予告付き射撃',speed:95},
@@ -2660,7 +2660,7 @@ function enemySpriteMarkup(e){
  shield:`<polygon points="48,14 76,30 76,66 48,82 20,66 20,30" fill="${e.color}"/><path d="M26 47Q48 18 70 47" fill="none" stroke="#e8ffff" stroke-width="7" stroke-linecap="round"/><circle cx="48" cy="50" r="9" fill="#164759"/>`,
  bomber:`<circle cx="48" cy="48" r="27" fill="${e.color}"/><path d="M48 23V73M23 48H73" stroke="#ffddd0" stroke-width="7"/><circle cx="48" cy="48" r="12" fill="#8e1f18"/>`,
  support:`<polygon points="48,10 58,30 80,16 66,38 88,48 66,58 80,80 58,66 48,86 38,66 16,80 30,58 8,48 30,38 16,16 38,30" fill="${e.color}"/><circle cx="48" cy="48" r="13" fill="#e9ffb7"/>`,
- phantom:`<path d="M48 10L82 68L48 52L14 68Z" fill="${e.color}" stroke="#ffe1f5" stroke-width="3"/><path d="M48 24L48 52" stroke="#5b1e60" stroke-width="7" stroke-linecap="round"/>`,
+ interceptor:`<polygon points="48,8 68,26 85,46 66,69 48,87 30,69 11,46 28,26" fill="${e.color}" stroke="#ffebc0" stroke-width="4"/><path d="M48 18V78 M20 46H76" stroke="#80421e" stroke-width="7"/><circle cx="48" cy="46" r="12" fill="#fff1b7"/>`,
  raptor:`<path d="M48 6L67 24L87 74L63 66L48 84L33 66L9 74L29 24Z" fill="${e.color}" stroke="#ffe0f2" stroke-width="3"/><path d="M48 16L59 39L48 61L37 39Z" fill="#713249"/><circle cx="48" cy="39" r="7" fill="#ffe7f3"/>`,
  hive:`<polygon points="48,8 81,25 81,70 48,88 15,70 15,25" fill="${e.color}"/><circle cx="48" cy="48" r="22" fill="#513577"/><circle cx="48" cy="48" r="10" fill="#ffe7ff"/>`,
  rail:`<rect x="16" y="15" width="64" height="67" rx="8" fill="${e.color}"/><rect x="41" y="3" width="14" height="90" fill="#ffe6e0"/><circle cx="48" cy="48" r="16" fill="#772d44"/>`,
@@ -3961,12 +3961,12 @@ const NORMAL_CONFIG={
  stinger:{r:10,hp:23,dmg:12,xp:12,color:'#ffb773'},brute:{r:21,hp:120,dmg:24,xp:24,color:'#b89bff'},
  shooter:{r:15,hp:73,dmg:17,xp:17,color:'#73bbff'},drone:{r:13,hp:42,dmg:15,xp:12,color:'#ff6382'},
  guard:{r:19,hp:132,dmg:21,xp:24,color:'#66dff5'},bomber:{r:13,hp:69,dmg:0,xp:17,color:'#ff7358'},
- support:{r:16,hp:90,dmg:0,xp:22,color:'#b0f875'},phantom:{r:11,hp:56,dmg:14,xp:19,color:'#ff85d9'}
+ support:{r:16,hp:90,dmg:0,xp:22,color:'#b0f875'},phantom:{r:12,hp:64,dmg:16,xp:21,color:'#ffb853'}
 };
  // v9.4 — Swarm-first ecology: small enemies dominate the opening; specialists enter slowly.
  // Boss fights keep their threat focused in early runs. This relief fades out by 25 minutes.
  const ENEMY_ORDER=['drone','stinger','brute','shooter','guard','bomber','support','phantom'];
- const ENEMY_INTRO={drone:0,stinger:.35,brute:3.5,shooter:8.5,guard:12.5,bomber:15,support:18,phantom:21};
+ const ENEMY_INTRO={drone:0,stinger:.35,brute:3.5,shooter:8.5,guard:12.5,bomber:15,support:18,phantom:16};
  const ENEMY_MIX=[
   {m:0,   w:[100, 0, 0, 0, 0, 0, 0, 0]},
   {m:1,   w:[ 95, 5, 0, 0, 0, 0, 0, 0]},
@@ -3977,11 +3977,11 @@ const NORMAL_CONFIG={
   {m:10,  w:[ 63,23,12, 2, 0, 0, 0, 0]},
   {m:12.5,w:[ 55,23,13, 9, 0, 0, 0, 0]},
   {m:15,  w:[ 46,23,15,12, 4, 0, 0, 0]},
-  {m:18,  w:[ 35,21,17,14, 8, 5, 0, 0]},
-  {m:21,  w:[ 27,20,18,13,10, 7, 5, 0]},
-  {m:25,  w:[ 13,17,20,21,14, 9, 5, 1]},
-  {m:30,  w:[  6,12,22,23,18,12, 6, 1]},
-  {m:45,  w:[  3, 8,23,28,19,13, 5, 1]}
+  {m:18, w:[ 35,21,17,14, 8, 5, 0, 3]},
+  {m:21, w:[ 27,20,18,13,10, 7, 5, 4]},
+  {m:25, w:[ 13,17,20,21,14, 9, 5, 5]},
+  {m:30, w:[  6,12,22,23,18,12, 6, 5]},
+  {m:45, w:[  3, 8,23,28,19,13, 5, 4]}
  ];
  const STRONG_NORMAL_TYPES=new Set(['brute','shooter','guard','bomber','support','phantom']);
  function bossFocusRelief(mins){
@@ -4994,7 +4994,25 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
     }
    }
   }
- if(e.type==='phantom'){e.dashCd-=dt;if(e.dashCd<=0&&e.dashWarn<=0&&e.dashTime<=0&&distance<390){e.dashWarn=.65;e.dashCd=rand(3.8,5.5);e.dashAngle=angle;}if(e.dashWarn>0){e.dashWarn-=dt;spd*=.15;if(e.dashWarn<=0)e.dashTime=.24;}if(e.dashTime>0){e.dashTime-=dt;e.x+=Math.cos(e.dashAngle)*Math.min(155,e.spd*1.52)*dt;e.y+=Math.sin(e.dashAngle)*Math.min(155,e.spd*1.52)*dt;spd*=.22;}}
+ if(e.type==='phantom'){
+  // Internal enemy key preserved for existing trials; the visible unit is PULSE INTERCEPTOR.
+  e.dashCd-=dt;
+  if(e.dashCd<=0&&e.dashWarn<=0&&distance<440){
+   const lead=clamp(distance*.19,32,88),facing=Math.atan2(p.dy||0,p.dx||0);
+   const aimX=clamp(p.x+Math.cos(facing)*lead,25,W-25),aimY=clamp(p.y+Math.sin(facing)*lead,25,H-25);
+   e.dashAngle=Math.atan2(aimY-e.y,aimX-e.x);
+   e.dashWarn=.80;e.dashCd=rand(4.1,5.6);
+  }
+  if(e.dashWarn>0){
+   e.dashWarn-=dt;spd*=.32;
+   if(e.dashWarn<=0){
+    for(const spread of [-.16,0,.16])hostileShot(e.x,e.y,e.dashAngle+spread,175+Math.min(75,minutes()*1.2),e.dmg*.60,5,'#ffc47d',3.4);
+    e.dashWarn=0;
+   }
+  }
+  // Flanking ranged combat instead of the former high-speed contact dash.
+  if(distance<250)spd=-spd*.32;
+ }
  if(e.buffTime>0){e.buffTime=Math.max(0,e.buffTime-dt);spd*=1.17;}
  if(e.type==='relic'){e.wanderClock-=dt;if(e.wanderClock<=0){e.wanderClock=rand(.75,1.75);e.wander+=rand(-1.7,1.7)}const towardX=W*.5-e.x,towardY=H*.5-e.y;if(e.x<50||e.x>W-50||e.y<50||e.y>H-50)e.wander=Math.atan2(towardY,towardX)+rand(-.4,.4);e.x=clamp(e.x+Math.cos(e.wander)*e.spd*(e.frozen>0?0:e.slow>0?.5:1)*dt,e.r,W-e.r);e.y=clamp(e.y+Math.sin(e.wander)*e.spd*(e.frozen>0?0:e.slow>0?.5:1)*dt,e.r,H-e.r);tickBurn(e,dt);continue;}
   if(e.type==='stinger')spd=Math.min(ENEMY_SPEED.stinger.cap,spd*(1+.15*Math.sin(e.phase*6)));
@@ -5319,7 +5337,7 @@ function enemyDraw(e){if(e.isoWarp)return;ctx.save();ctx.translate(e.x,e.y);ctx.
  else if(e.variant==='vortex'){ctx.strokeStyle=e.color;ctx.lineWidth=10;ctx.beginPath();ctx.arc(0,0,29,0,TAU);ctx.stroke();glow(0,0,17,'#53428c',7);ctx.strokeStyle='#efe0ff';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(0,0,31,15,0,0,TAU);ctx.stroke()}
  else if(e.variant==='mirror'){ctx.beginPath();ctx.moveTo(0,-37);ctx.lineTo(37,0);ctx.lineTo(0,37);ctx.lineTo(-37,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#376699';ctx.beginPath();ctx.moveTo(0,-29);ctx.lineTo(17,0);ctx.lineTo(0,29);ctx.lineTo(-17,0);ctx.closePath();ctx.fill()}
  else if(e.variant==='void'){ctx.beginPath();ctx.arc(0,0,34,0,TAU);ctx.fill();ctx.fillStyle='#11112a';ctx.beginPath();ctx.arc(11,-12,27,0,TAU);ctx.fill();glow(-5,5,9,'#fce7ff',12)}
- ctx.restore();}else if(typ==='guard'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.save();ctx.rotate(e.faceAngle-e.phase*.2);ctx.strokeStyle='#dfffff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,e.r+4,-.8,.8);ctx.stroke();ctx.restore()}else if(typ==='bomber'){ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.strokeStyle=e.blastWarn>0?'#ffdf70':'#ffd2a2';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-e.r*.65,0);ctx.lineTo(e.r*.65,0);ctx.moveTo(0,-e.r*.65);ctx.lineTo(0,e.r*.65);ctx.stroke()}else if(typ==='support'){ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8,r=e.r*(j%2?.7:1.2);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();glow(0,0,6,'#e6ff98',12)}else if(typ==='phantom'){ctx.beginPath();ctx.moveTo(0,-e.r-7);ctx.lineTo(e.r+7,e.r);ctx.lineTo(0,e.r*.1);ctx.lineTo(-e.r-7,e.r);ctx.closePath();ctx.fill()}else if(typ==='brute'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,7,'#534080',3)}else if(typ==='stinger'){ctx.beginPath();ctx.moveTo(0,-e.r-5);ctx.lineTo(e.r+4,e.r);ctx.lineTo(-e.r-4,e.r);ctx.closePath();ctx.fill()}else if(typ==='shooter'){ctx.fillRect(-e.r,-e.r,e.r*2,e.r*2);ctx.shadowBlur=0;glow(0,0,5,'#142f62',5)}else{ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.shadowBlur=0;glow(0,0,5,'#3e152e',6)}if(e.haruka){ctx.save();const f=clamp(e.haruka.elapsed/e.haruka.time,0,1);
+ ctx.restore();}else if(typ==='guard'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.save();ctx.rotate(e.faceAngle-e.phase*.2);ctx.strokeStyle='#dfffff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,e.r+4,-.8,.8);ctx.stroke();ctx.restore()}else if(typ==='bomber'){ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.strokeStyle=e.blastWarn>0?'#ffdf70':'#ffd2a2';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-e.r*.65,0);ctx.lineTo(e.r*.65,0);ctx.moveTo(0,-e.r*.65);ctx.lineTo(0,e.r*.65);ctx.stroke()}else if(typ==='support'){ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8,r=e.r*(j%2?.7:1.2);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();glow(0,0,6,'#e6ff98',12)}else if(typ==='phantom'){ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8,r=e.r*(j%2?.64:1.26);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.strokeStyle='#fff0c2';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#733814';ctx.fillRect(-e.r*.23,-e.r*.68,e.r*.46,e.r*1.36);glow(0,0,3.5,'#fff5c6',7)}else if(typ==='brute'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,7,'#534080',3)}else if(typ==='stinger'){ctx.beginPath();ctx.moveTo(0,-e.r-5);ctx.lineTo(e.r+4,e.r);ctx.lineTo(-e.r-4,e.r);ctx.closePath();ctx.fill()}else if(typ==='shooter'){ctx.fillRect(-e.r,-e.r,e.r*2,e.r*2);ctx.shadowBlur=0;glow(0,0,5,'#142f62',5)}else{ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.shadowBlur=0;glow(0,0,5,'#3e152e',6)}if(e.haruka){ctx.save();const f=clamp(e.haruka.elapsed/e.haruka.time,0,1);
   ctx.strokeStyle='#8affcf';ctx.lineWidth=2.5;ctx.globalAlpha=.43+.35*f;ctx.setLineDash([5,5]);ctx.beginPath();ctx.arc(0,0,e.r+5+Math.sin(t*4)*2,0,TAU);ctx.stroke();ctx.setLineDash([]);ctx.restore();}
 if(e.burn>0){ctx.save();ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:11;ctx.shadowColor='#ff7a32';ctx.strokeStyle='#ff9a45';ctx.lineWidth=e.type==='major'||e.type==='unique'?4:2.5;ctx.globalAlpha=.75+.18*Math.sin(t*13+e.phase*2);ctx.beginPath();ctx.arc(0,0,e.r*1.14,0,TAU);ctx.stroke();ctx.globalAlpha=1;const count=renderHeavyLoad||settings.fx==='low'?2:4;for(let i=0;i<count;i++){const angle=(i/count)*TAU+t*.4+e.phase*.13,r=e.r*.8;ctx.fillStyle=i%2?'#ffcc70':'#ff7539';ctx.beginPath();const x=Math.cos(angle)*r,y=Math.sin(angle)*r;ctx.ellipse(x,y-4-3*Math.sin(t*8+i),Math.max(2,e.r*.11),Math.max(5,e.r*.24),.1,0,TAU);ctx.fill()}ctx.restore()}
 if(e.slow>0&&!['minor','major','unique'].includes(e.type)){ctx.shadowBlur=6;ctx.strokeStyle=e.frozen>0?'#d5faff':'#7ccfff';ctx.lineWidth=e.frozen>0?2.6:1.5;ctx.globalAlpha=e.frozen>0?.94:.68;ctx.beginPath();ctx.arc(0,0,e.r*1.16,0,TAU);ctx.stroke();ctx.globalAlpha=1}ctx.restore();if((e.type==='brute'||e.type==='relic'||e.type==='ultimatePart')&&e.hp<e.maxHp){ctx.fillStyle='#25304b';ctx.fillRect(e.x-17,e.y-28,34,3);ctx.fillStyle='#b3a8fc';ctx.fillRect(e.x-17,e.y-28,34*clamp(e.hp/e.maxHp,0,1),3)}}
@@ -5590,7 +5608,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  }else for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
   if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
   glow(b.x,b.y,b.r,b.color,12);
- }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&(e.bomberAlert||e.blastWarn>0)){ctx.save();ctx.globalAlpha=.35+.55*(Math.sin(t*23)>0?1:0);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,86,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
+ }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&(e.bomberAlert||e.blastWarn>0)){ctx.save();ctx.globalAlpha=.35+.55*(Math.sin(t*23)>0?1:0);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,86,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ffbc60';ctx.globalAlpha=.55+.27*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
  if(player.orbit){if(player.shipType==='dog'){const n=player.dogDolphinDuet?Math.min(20,player.orbit*2):player.orbit;
   for(let i=0;i<n;i++){const pos=ringPosition(i,n,t,73,30,6,2.2);drawAnimal('dolphin',pos.x,pos.y,16,pos.a+Math.PI/2);}
  }else for(let i=0;i<player.orbit;i++){
