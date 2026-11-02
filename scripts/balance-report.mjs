@@ -27,6 +27,10 @@ export function summarizeRuns(runs){
    killsMean:round(rows.reduce((a,b)=>a+b.kills,0)/rows.length),
    damageTakenMean:round(rows.reduce((a,b)=>a+b.damageTaken,0)/rows.length),
    recoveryDamageMean:round(rows.reduce((a,b)=>a+b.recoveryDamage,0)/rows.length),
+   dashUsesMean:round(rows.reduce((a,b)=>a+(b.dashCount||0),0)/rows.length),
+   novaUsesMean:round(rows.reduce((a,b)=>a+(b.novaCount||0),0)/rows.length),
+   dashPerMinuteMean:round(rows.reduce((a,b)=>a+(b.dashCount||0)*60/b.duration,0)/rows.length),
+   novaPerMinuteMean:round(rows.reduce((a,b)=>a+(b.novaCount||0)*60/b.duration,0)/rows.length),
    // Short boss wins are not thirty-minute clears. Keep the two rates separate.
    survivalRate:rows.every(r=>typeof r.alive==='boolean')
     ?round(100*rows.filter(r=>r.alive).length/rows.length):null,
