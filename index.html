@@ -4643,6 +4643,9 @@ function magmaPatch(x,y,scale=1){
  if(player.lavaConstrain){
   const core=unifyMagma();
   if(core){
+   // Keep consolidated lava anchored to the latest valid spawn, rather than its first position.
+   // Preserve the existing stacks, damage scaling and lifetime.
+   core.x=x;core.y=y;
    core.stacks=Math.min(36,(core.stacks||1)+1);
    core.life=Math.max(core.life,4+Math.min(3,player.thermal));
    core.r=Math.min(185,Math.max(core.r,r)+Math.min(12,2+core.stacks*.6));
