@@ -55,6 +55,7 @@ const hook=`window.__combat1328={
   return {ship,build:built?'representative':'base',seconds,damage:Math.round(game.damage),dps:Math.round(game.damage/seconds),
    shots:shots.length,bySource:game.damageStats,playerX:Math.round(p.x),playerY:Math.round(p.y)};
  },
+ laserStarter(){selectedShip='laser';newRun();const initial=player.laserCount;player.laserCount=Math.max(player.laserCount,3);return {initial,representative:player.laserCount};},
  baseline(){
   return {ships:Object.keys(SHIPS),superRules:BOSS_SUPER_RULES};
  }
@@ -139,5 +140,12 @@ test('report actual ten-second single-target baseline and representative build D
  }
  expect(metrics).toHaveLength(10);
  console.log('ANKIN_V13_28_DPS_REPORT='+JSON.stringify({platform:isMobile?'mobile':'desktop',metrics}));
+ expect(errors).toEqual([]);
+});
+
+test('v13.32 laser starts with two emitters and upgrades to three without stacking an extra beam',async({page,isMobile})=>{
+ const errors=await launch(page,isMobile);
+ const result=await page.evaluate(()=>window.__combat1328.laserStarter());
+ expect(result).toEqual({initial:2,representative:3});
  expect(errors).toEqual([]);
 });
