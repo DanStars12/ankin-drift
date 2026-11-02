@@ -26,10 +26,19 @@ export function summarizeRuns(runs){
    dpsP90:round(percentile(dps,.9)),
    killsMean:round(rows.reduce((a,b)=>a+b.kills,0)/rows.length),
    damageTakenMean:round(rows.reduce((a,b)=>a+b.damageTaken,0)/rows.length),
-   recoveryDamageMean:round(rows.reduce((a,b)=>a+b.recoveryDamage,0)/rows.length)};
+   recoveryDamageMean:round(rows.reduce((a,b)=>a+b.recoveryDamage,0)/rows.length),
+   // Short boss wins are not thirty-minute clears. Keep the two rates separate.
+   survivalRate:rows.every(r=>typeof r.alive==='boolean')
+    ?round(100*rows.filter(r=>r.alive).length/rows.length):null,
+   encounterWinRate:rows.every(r=>typeof r.won==='boolean')
+    ?round(100*rows.filter(r=>r.won).length/rows.length):null,
+   clearRate:rows.every(r=>r.fullRun===true)
+    ?round(100*rows.filter(r=>r.cleared===true).length/rows.length):null,
+   survivalTimeMedian:rows.every(r=>Number.isFinite(r.survivalSeconds))
+    ?round(percentile(rows.map(r=>r.survivalSeconds),.5)):null};
  }).sort((a,b)=>a.scenario.localeCompare(b.scenario)||a.build.localeCompare(b.build)||a.ship.localeCompare(b.ship));
 }
-const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions'];
+const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions','mode','phaseMinutes','secondsPlanned','alive','won','cleared','fullRun','survivalSeconds','playerHp','maxHp','aiMoves','aiDodges','simulationTime','reachedFinalBoss','stopReason','clearCount'];
 function csvCell(value){
  const s=String(value??'');
  return /[",\n\r]/.test(s)?'"'+s.replaceAll('"','""')+'"':s;
