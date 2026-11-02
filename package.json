@@ -9,6 +9,7 @@
     "test:ending": "node --test tests/ending.test.mjs",
     "test:balance-report": "node --test tests/balance-report.test.mjs",
     "balance:lab": "playwright test tests/v13-29-balance-lab.spec.mjs",
+    "balance:ai": "playwright test tests/v13-30-balance-ai.spec.mjs",
     "check:pwa": "node scripts/check-pwa.mjs",
     "test:smoke": "playwright test",
     "test": "npm run check:syntax && npm run test:archive && npm run test:ending && npm run check:pwa && npm run test:smoke"
