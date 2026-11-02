@@ -1,6 +1,7 @@
 /* v13.30: developer-only AI runner, injected by Playwright, never loaded in the public app.
    Two modes: short real-combat encounters, optional full 30-minute scripted-upgrade run.
    Never persist test progress; restore global RNG and archive methods even on failure. */
+import {decideAbilityUse} from './balance-ability-tactics.mjs';
 export const BALANCE_AI_HARNESS = String.raw`
 const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog'];
 const BALANCE_AI_PROFILES={
@@ -11,7 +12,7 @@ const BALANCE_AI_PROFILES={
  dog:{range:205,strafe:.78,aggression:.92}
 };
 function balanceThreats(){
- const p=player;let x=0,y=0,weight=0,near=0;
+ const p=player;let x=0,y=0,weight=0,near=0,imminent=0;
  for(const b of hostile){
   if(b.warn>0)continue;
   const rx=p.x-b.x,ry=p.y-b.y,rvx=b.vx||0,rvy=b.vy||0;
@@ -21,7 +22,7 @@ function balanceThreats(){
   if(d>105)continue;
   const strength=(106-d)/106*2.3;
   x+=dx/Math.max(1,d)*strength;y+=dy/Math.max(1,d)*strength;weight+=strength;
-  if(d<48)near++;
+  if(d<48){near++;if(until<.30&&d<p.r+(b.r||7)+20)imminent++;}
  }
  for(const h of hazards){
   if(h.active<=0&&h.warn<=0)continue;
@@ -30,15 +31,76 @@ function balanceThreats(){
    const side=Math.sin(h.a)*(p.x-h.x)-Math.cos(h.a)*(p.y-h.y);
    const d=Math.abs(side),range=(h.width||13)+52;
    if(d<range){const strength=(range-d)/range*2.8,sgn=side>=0?1:-1;
-    x+=Math.sin(h.a)*sgn*strength;y-=Math.cos(h.a)*sgn*strength;weight+=strength;near++}
+    x+=Math.sin(h.a)*sgn*strength;y-=Math.cos(h.a)*sgn*strength;weight+=strength;near++;if(h.active>0&&d<(h.width||13)+p.r+16)imminent++;}
   }else{
    const dx=p.x-h.x,dy=p.y-h.y,d=Math.hypot(dx,dy),range=(h.r||60)+55;
-   if(d<range){const strength=(range-d)/range*3.2;x+=dx/Math.max(1,d)*strength;y+=dy/Math.max(1,d)*strength;weight+=strength;near++}
+   if(d<range){const strength=(range-d)/range*3.2;x+=dx/Math.max(1,d)*strength;y+=dy/Math.max(1,d)*strength;weight+=strength;near++;if(h.active>0&&d<(h.r||60)+p.r+15)imminent++;}
   }
  }
- return {x,y,weight,near};
+ return {x,y,weight,near,imminent};
 }
-function balancePilotStep(frame){
+// Evaluate dash landing locations rather than blindly reusing the last facing vector.
+function balanceDashVector(moveX,moveY,target,offensive=false){
+ const p=player,rad=offensive?.26:.20;
+ const speed=(p.shipType==='drill'?p.drillDashSpeed*(p.drillOverdriveTime>0?1.8:1):780)
+  *(p.thrusterEngine?1.75:1)*rad;
+ const dirs=[[1,0],[.707,.707],[0,1],[-.707,.707],[-1,0],[-.707,-.707],[0,-1],[.707,-.707]];
+ const mag=Math.hypot(moveX,moveY)||1;
+ let best=null,bestScore=-Infinity;
+ for(const [vx,vy] of dirs){
+  const rawX=p.x+vx*speed,rawY=p.y+vy*speed;
+  const nx=clamp(rawX,p.r+18,W-p.r-18),ny=clamp(rawY,p.r+18,H-p.r-18);
+  let score=-Math.hypot(rawX-nx,rawY-ny)*.07+(vx*moveX+vy*moveY)/mag*.35;
+  if(target){const prev=dst(p,target),after=Math.hypot(nx-target.x,ny-target.y);
+   score+=offensive?(prev-after)*.022:-Math.max(0,90-after)*.014;}
+  for(const b of hostile){
+   if(b.warn>0)continue;
+   const bx=b.x+(b.vx||0)*rad,by=b.y+(b.vy||0)*rad;
+   score-=Math.max(0,65-Math.hypot(nx-bx,ny-by))*.045;
+  }
+  for(const h of hazards){
+   if(h.active<=0&&h.warn<=0)continue;
+   const delta=h.type==='beam'?Math.abs(Math.sin(h.a)*(nx-h.x)-Math.cos(h.a)*(ny-h.y)):
+    Math.hypot(nx-h.x,ny-h.y);
+   const reach=h.type==='beam'?(h.width||13)+p.r+20:(h.r||60)+p.r+18;
+   if(h.type!=='voidring')score-=Math.max(0,reach-delta)*.05;
+  }
+  for(const e of enemies){if(e.dead)continue;
+   if(offensive&&e===target)continue;
+   score-=Math.max(0,(e.r||12)+p.r+24-Math.hypot(nx-e.x,ny-e.y))*.028;
+  }
+  if(score>bestScore){bestScore=score;best={x:vx,y:vy};}
+ }
+ return best||{x:moveX/mag||0,y:moveY/mag||-1};
+}
+function balanceDashKeys(x,y){
+ keys.clear();
+ if(x>.1)keys.add('KeyD');else if(x<-.1)keys.add('KeyA');
+ if(y>.1)keys.add('KeyS');else if(y<-.1)keys.add('KeyW');
+}
+let balanceAbilityLog=null;
+function balanceAbilitySnapshot(priority,dist,threat){
+ const p=player,live=enemies.filter(e=>!e.dead);
+ let inNova=0,near=0,forward=0;
+ for(const e of live){
+  const d=dst(p,e);
+  if(d<p.novaRadius+(e.r||0))inNova++;
+  if(d<300)near++;
+  if(d<540)forward++;
+ }
+ const bossDist=boss&&!boss.dead?dst(p,boss):Infinity;
+ return {ship:p.shipType,hpRatio:p.hp/Math.max(1,p.maxHp),energy:p.energy,
+  novaCooldown:p.novaCooldown,dashLeft:p.dashLeft,dashTime:p.dashTime,
+  iframes:p.iframes,targetDist:dist,bossDist,novaRadius:p.novaRadius,
+  laserReach:p.laserReach,drillOverdrive:p.drillOverdriveTime,
+  drillPlasmaRatio:p.drillPlasma/Math.max(.001,p.drillCap),
+  enemiesInNova:inNova,enemiesNear:near,enemiesForward:forward,
+  threats:threat.near,imminent:threat.imminent,
+  safeApproach:!!priority&&threat.imminent===0&&
+   p.x>75&&p.x<W-75&&p.y>75&&p.y<H-75};
+}
+
+function balancePilotStep(frame,policy='tactical'){
  const p=player,profile=BALANCE_AI_PROFILES[p.shipType],sec=game.total;
  keys.clear();
  const targets=enemies.filter(e=>!e.dead&&e.type!=='relic'),priority=boss&&!boss.dead
@@ -71,14 +133,32 @@ function balancePilotStep(frame){
   if(x>.18)keys.add('KeyD');else if(x<-.18)keys.add('KeyA');
   if(y>.18)keys.add('KeyS');else if(y<-.18)keys.add('KeyW');
  }
- // Defensive dash, and for the drill a proactive gap-closing strike.
- if(p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))){
-  // Dash in the computed safe direction, not back into an incoming projectile.
-  if(!stop){p.dx=x;p.dy=y;}
-  dash();
+ const legacy=policy==='legacy';
+ const decision=legacy?{
+  dashReason:p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null,
+  novaReason:p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null
+ }:decideAbilityUse(balanceAbilitySnapshot(priority,d,threat));
+ if(balanceAbilityLog&&frame%60===0){
+  if(p.dashLeft<=0)balanceAbilityLog.dashReadySeconds++;
+  if(p.energy>=100&&p.novaCooldown<=0)balanceAbilityLog.novaReadySeconds++;
  }
- if(p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38))nova();
- return {target:priority?.type||null,nearest:d,threats:threat.near,move:!stop};
+ if(decision.dashReason){
+  // Explicitly set inputs: dash() reads keyboard direction, not just p.dx/p.dy.
+  const v=legacy?{x:!stop?x:p.dx,y:!stop?y:p.dy}:
+   balanceDashVector(decision.dashReason==='plasma-strike'?ux:x,
+    decision.dashReason==='plasma-strike'?uy:y,priority,decision.dashReason==='plasma-strike');
+  balanceDashKeys(v.x,v.y);
+  const old=game.combatLog.dashCount;dash();
+  if(balanceAbilityLog&&game.combatLog.dashCount>old)
+   balanceAbilityLog.dashReasons[decision.dashReason]=(balanceAbilityLog.dashReasons[decision.dashReason]||0)+1;
+ }
+ if(decision.novaReason){
+  const old=game.combatLog.novaCount;nova();
+  if(balanceAbilityLog&&game.combatLog.novaCount>old)
+   balanceAbilityLog.novaReasons[decision.novaReason]=(balanceAbilityLog.novaReasons[decision.novaReason]||0)+1;
+ }
+ return {target:priority?.type||null,nearest:d,threats:threat.near,
+  imminent:threat.imminent,move:!stop,dashReason:decision.dashReason,novaReason:decision.novaReason};
 }
 function balanceApplyBuild(level){
  const p=player;p.dmg+=40;p.crit=Math.max(p.crit,.18);p.bossBane=Math.max(p.bossBane,1.2);
@@ -149,12 +229,13 @@ function balanceSandbox(fn){
  try{return fn();}finally{
   Math.random=random;
   for(const [obj,key,old] of methods)obj[key]=old;
-  keys.clear();balanceTelemetry=null;
+  keys.clear();balanceTelemetry=null;balanceAbilityLog=null;
   if(game)game.rewards=[];
   mode='menu';
  }
 }
-function balanceSetup(ship,seed,phaseMinutes,build,scenario){
+function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical'){
+ balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,dashReasons:{},novaReasons:{}};
  Math.random=seededBalanceRandom(seed);
  selectedGameMode='normal';selectedShip=ship;newRun();mode='playing';
  const p=player;
@@ -186,15 +267,21 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   won:!!won,cleared:!!cleared,terminal:!!terminal,
   playerHp:Number(player.hp.toFixed(2)),maxHp:player.maxHp,
   survivalSeconds:Number(duration.toFixed(3)),
-  aiMoves,aiDodges,bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
+  aiMoves,aiDodges,abilityPolicy:balanceAbilityLog?.policy||'tactical',
+  dashReadySeconds:balanceAbilityLog?.dashReadySeconds||0,
+  novaReadySeconds:balanceAbilityLog?.novaReadySeconds||0,
+  dashReasons:{...(balanceAbilityLog?.dashReasons||{})},
+  novaReasons:{...(balanceAbilityLog?.novaReasons||{})},
+  bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
 }
 window.__ankinBalanceAI={
- runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25}={}){
+ runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical'}={}){
+  if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
   if(![0,10,20].includes(phase)||!['live-pack','live-boss'].includes(scenario))throw Error('Invalid combat scenario');
   if(!['base','representative'].includes(build)||!Number.isFinite(seconds)||seconds<=0||seconds>120)throw Error('Invalid build/duration');
   return balanceSandbox(()=>{
-   balanceSetup(ship,seed,phase,build,scenario);
+   balanceSetup(ship,seed,phase,build,scenario,policy);
    if(scenario==='live-boss'){
     spawnBoss('minor',phase>=20?'vortex':'guardian');
     boss.x=W*.67;boss.y=H*.33;
@@ -202,7 +289,7 @@ window.__ankinBalanceAI={
    const start=game.total,steps=Math.ceil(seconds*60),dt=1/60;
    let aiMoves=0,aiDodges=0,lastDash=game.combatLog.dashCount,winAt=null;
    for(let i=0;i<steps&&game.runOutcome!=='dead';i++){
-    const a=balancePilotStep(i);if(a.move)aiMoves++;
+    const a=balancePilotStep(i,policy);if(a.move)aiMoves++;
     drive(dt);
     const delta=game.combatLog.dashCount-lastDash;if(delta>0)aiDodges+=delta;lastDash=game.combatLog.dashCount;
     if(scenario==='live-pack'&&i>0&&i%300===0)balanceSpawnLiveRound(phase,i/300);
@@ -222,12 +309,13 @@ window.__ankinBalanceAI={
  },
  // Long-run mode is deliberately separate from CI. This drives the actual 30:00
  // scheduler and normal reward menus. Never interpret short scenarios as clear rate.
- runFull({ship='shot',seed=1,seconds=1830,preview=false}={}){
+ runFull({ship='shot',seed=1,seconds=1830,preview=false,policy='tactical'}={}){
+  if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
   if(!Number.isFinite(seconds)||(preview?(seconds<20||seconds>120):(seconds<1800||seconds>2400)))
    throw Error('Full simulation must include 30:00; preview must last 20-120 seconds');
   return balanceSandbox(()=>{
-   balanceSetup(ship,seed,0,'normal-random-rewards','full-30m');
+   balanceSetup(ship,seed,0,'normal-random-rewards','full-30m',policy);
    game.total=0;runClock=0;game.nextBossAt=60;game.nextRaidAt=105;
    game.nextRelicAt=180;game.nextVacuumAt=110;game.nextUltimateAt=1800;
    game.ultimateEncounterAt=0;game.spawn=.78;game.autoBank=false;
@@ -255,7 +343,7 @@ window.__ankinBalanceAI={
    for(;step<steps&&!game.completed&&game.runOutcome!=='dead';step++){
     resolveMenus();
     if(unhandled||mode!=='playing')break;
-    const a=balancePilotStep(step);if(a.move)aiMoves++;
+    const a=balancePilotStep(step,policy);if(a.move)aiMoves++;
     drive(dt);
     const dd=game.combatLog.dashCount-lastDash;if(dd>0)aiDodges+=dd;lastDash=game.combatLog.dashCount;
     if(mode!=='playing')resolveMenus();
@@ -269,6 +357,7 @@ window.__ankinBalanceAI={
     clearCount:game.clearCount};
   });
  },
- inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES}}
+ decide(snapshot){return decideAbilityUse(snapshot)},
+ inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES,abilityPolicy:'tactical'}}
 };
-`;
+` + '\n' + decideAbilityUse.toString() + '\n';
