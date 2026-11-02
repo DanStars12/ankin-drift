@@ -126,6 +126,25 @@ test('v13.33 actual ready-NOVA uses real combat, checks tactical versus legacy c
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
  expect(errors).toEqual([]);
 });
+test('v13.33 laser starts with 106 HP and hybrid fallback preserves shot/drill baseline',async({page})=>{
+ const errors=await setup(page),initial=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const result=await page.evaluate(()=>{
+  const laser=window.__ankinBalanceAI.runEncounter({ship:'laser',seed:18,scenario:'live-pack',build:'base',seconds:2});
+  const out={laserHp:laser.maxHp,ships:[]};
+  for(const ship of ['shot','drill']){
+   const args={ship,seed:9,scenario:'live-pack',build:'representative',seconds:4};
+   const legacy=window.__ankinBalanceAI.runEncounter({...args,policy:'legacy'});
+   const hybrid=window.__ankinBalanceAI.runEncounter({...args,policy:'tactical'});
+   out.ships.push({ship,legacy:{damage:legacy.damage,dash:legacy.dashCount,nova:legacy.novaCount},
+    hybrid:{damage:hybrid.damage,dash:hybrid.dashCount,nova:hybrid.novaCount}});
+  }
+  return out;
+ });
+ expect(result.laserHp).toBe(106);
+ for(const r of result.ships)expect(r.hybrid).toEqual(r.legacy);
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(initial);
+ expect(errors).toEqual([]);
+});
 test('AI survival: time-specific harder packs, real enemy bullets and crash-safe sandbox restoration',async({page})=>{
  const errors=await setup(page);
  const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));
