@@ -7,6 +7,8 @@ import {summarizeRuns,runsToCsv,summaryToCsv} from '../scripts/balance-report.mj
 const ships=['shot','laser','charge','drill','dog'];
 const seconds=Number(process.env.ANKIN_AI_SECONDS||14),seeds=Number(process.env.ANKIN_AI_SEEDS||1);
 const policy=process.env.ANKIN_AI_POLICY||'tactical';
+const fusionPolicy=process.env.ANKIN_FUSION_POLICY||'always';
+if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid ANKIN_FUSION_POLICY');
 if(!['tactical','legacy'].includes(policy))throw Error('Invalid ANKIN_AI_POLICY');
 if(!Number.isFinite(seconds)||seconds<1||seconds>120||!Number.isInteger(seeds)||seeds<1||seeds>20)throw Error('Invalid ANKIN_AI_SECONDS or ANKIN_AI_SEEDS');
 
@@ -82,6 +84,44 @@ for(const scenario of ['live-pack','live-boss']){
   }
  });
 }
+test('consolidated magma relocates with new spawns; ordinary magma remains separate',async({page})=>{
+ const errors=await setup(page),prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const {constrained,normal}=await page.evaluate(()=>({
+  constrained:window.__ankinBalanceAI.probeMagma({constrained:true}),
+  normal:window.__ankinBalanceAI.probeMagma({constrained:false})
+ }));
+ expect(constrained.count).toBe(1);
+ expect(constrained.stacks).toBe(2);
+ expect(constrained.latest.x).toBeGreaterThan(constrained.original.x);
+ expect(constrained.latest.y).toBeGreaterThan(constrained.original.y);
+ expect(constrained.damage).toBeGreaterThan(0);
+ expect(normal.count).toBe(2);
+ expect(normal.original.x).toBeLessThan(normal.latest.x);
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
+ expect(errors).toEqual([]);
+});
+test('short full-run controls keep XP/ability/reward/fusion metrics separate from ordinary saves',async({page})=>{
+ test.setTimeout(120_000);
+ const errors=await setup(page),prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const out=await page.evaluate(()=>{
+  const full=window.__ankinBalanceAI.runFull({ship:'laser',seed:22,seconds:72,preview:true,fusionPolicy:'never'});
+  return full;
+ });
+ expect(out.preview).toBe(true);
+ expect(out.fusionPolicy).toBe('never');
+ expect(out.elementFusions).toBe(0);
+ expect(out.fusionAudit.accepted).toBe(0);
+ expect(out.fusionAudit.offers).toBeGreaterThanOrEqual(out.fusionAudit.declined);
+ expect(out.xpSeekSeconds).toBeGreaterThanOrEqual(0);
+ expect(out.pickedExp).toBeGreaterThanOrEqual(0);
+ expect(out.vacuumExp).toBeGreaterThanOrEqual(0);
+ expect(out.rewardAudit.choices).toBeGreaterThanOrEqual(out.rewardAudit.primary);
+ expect(out.rewardAudit.choices).toBeGreaterThanOrEqual(out.rewardAudit.survival);
+ expect(out.weaponState.laserCount).toBeGreaterThanOrEqual(2);
+ expect(Array.isArray(out.novaContexts)).toBe(true);
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
+ expect(errors).toEqual([]);
+});
 test('v13.33 tactical ability probes keep distant NOVAs charged and reject unsafe dash spam',async({page})=>{
  const errors=await setup(page);
  const cases=await page.evaluate(()=>{
@@ -190,7 +230,7 @@ test('optional true 30-minute run using real scheduler and automatic in-game car
  const prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
  const out=[];
  for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
-  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860,policy});
+  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860,policy,fusionPolicy});
   expect(row.fullRun).toBe(true);
   expect(row.simulationTime).toBeGreaterThan(0);
   expect(['dead','clear','time-limit'].some(x=>row.stopReason===x),JSON.stringify(row)).toBe(true);

@@ -31,6 +31,16 @@ export function summarizeRuns(runs){
    novaUsesMean:round(rows.reduce((a,b)=>a+(b.novaCount||0),0)/rows.length),
    dashPerMinuteMean:round(rows.reduce((a,b)=>a+(b.dashCount||0)*60/b.duration,0)/rows.length),
    novaPerMinuteMean:round(rows.reduce((a,b)=>a+(b.novaCount||0)*60/b.duration,0)/rows.length),
+   // Optional AI-only diagnostics; null means that this scenario did not measure them.
+   pickedExpMean:rows.every(r=>Number.isFinite(r.pickedExp))?round(rows.reduce((a,b)=>a+b.pickedExp,0)/rows.length):null,
+   vacuumExpMean:rows.every(r=>Number.isFinite(r.vacuumExp))?round(rows.reduce((a,b)=>a+b.vacuumExp,0)/rows.length):null,
+   xpOnFieldMean:rows.every(r=>Number.isFinite(r.xpOnField))?round(rows.reduce((a,b)=>a+b.xpOnField,0)/rows.length):null,
+   xpSeekSecondsMean:rows.every(r=>Number.isFinite(r.xpSeekSeconds))?round(rows.reduce((a,b)=>a+b.xpSeekSeconds,0)/rows.length):null,
+   primaryChoiceMean:rows.every(r=>r.rewardAudit)?round(rows.reduce((a,b)=>a+b.rewardAudit.primary,0)/rows.length):null,
+   survivalChoiceMean:rows.every(r=>r.rewardAudit)?round(rows.reduce((a,b)=>a+b.rewardAudit.survival,0)/rows.length):null,
+   fusionOfferMean:rows.every(r=>r.fusionAudit)?round(rows.reduce((a,b)=>a+b.fusionAudit.offers,0)/rows.length):null,
+   fusionAcceptedMean:rows.every(r=>r.fusionAudit)?round(rows.reduce((a,b)=>a+b.fusionAudit.accepted,0)/rows.length):null,
+   fusionDeclinedMean:rows.every(r=>r.fusionAudit)?round(rows.reduce((a,b)=>a+b.fusionAudit.declined,0)/rows.length):null,
    // Short boss wins are not thirty-minute clears. Keep the two rates separate.
    survivalRate:rows.every(r=>typeof r.alive==='boolean')
     ?round(100*rows.filter(r=>r.alive).length/rows.length):null,
@@ -44,7 +54,7 @@ export function summarizeRuns(runs){
     ?round(percentile(rows.map(r=>r.survivalSeconds),.5)):null};
  }).sort((a,b)=>a.scenario.localeCompare(b.scenario)||a.build.localeCompare(b.build)||a.ship.localeCompare(b.ship));
 }
-const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions','mode','phaseMinutes','secondsPlanned','alive','won','cleared','fullRun','survivalSeconds','playerHp','maxHp','aiMoves','aiDodges','abilityPolicy','dashReadySeconds','novaReadySeconds','dashReasons','novaReasons','timeToWin','simulationTime','reachedFinalBoss','stopReason','clearCount'];
+const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions','mode','phaseMinutes','secondsPlanned','alive','won','cleared','fullRun','survivalSeconds','playerHp','maxHp','aiMoves','aiDodges','abilityPolicy','dashReadySeconds','novaReadySeconds','dashReasons','novaReasons','novaContexts','xpSeekSeconds','xpSeekKinds','xpOnField','pickedExp','pickedOrbs','vacuumExp','vacuumOrbs','healingPickups','rewardAudit','fusionAudit','fusionPolicy','weaponState','timeToWin','simulationTime','reachedFinalBoss','stopReason','clearCount'];
 function csvCell(value){
  const s=value&&typeof value==='object'?JSON.stringify(value):String(value??'');
  return /[",\n\r]/.test(s)?'"'+s.replaceAll('"','""')+'"':s;

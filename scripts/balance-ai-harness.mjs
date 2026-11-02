@@ -101,7 +101,51 @@ function balanceAbilitySnapshot(priority,dist,threat){
    p.x>75&&p.x<W-75&&p.y>75&&p.y<H-75};
 }
 
-function balancePilotStep(frame,policy='tactical'){
+function balanceExpTarget(threat,policy){
+ // XP pursuit is exclusive to tactical full runs; preserve the control AI.
+ if(policy!=='tactical'||threat.near>0||threat.imminent>0||(boss&&!boss.dead)||game.total%9>=4)return null;
+ const p=player;
+ if(game.vacuum){
+  const d=dst(p,game.vacuum);
+  if(d>p.r+23&&d<Math.min(W,H)*.54)return {x:game.vacuum.x,y:game.vacuum.y,kind:'vacuum'};
+ }
+ let best=null,bestScore=0;
+ for(const item of pickups){
+  if(item.type!=='energy')continue;
+  const d=dst(p,item);
+  if(d<Math.max(35,p.magnet*.65)||d>290)continue;
+  const score=(Math.min(180,item.value)+Math.min(30,item.charge)*.3)/(75+d);
+  if(score>bestScore){best=item;bestScore=score;}
+ }
+ return best&&bestScore>=.085?{x:best.x,y:best.y,kind:'orb'}:null;
+}
+function balanceRewardTraits(card){
+ const tags=card?.tags||[],id=card?.id||'';
+ const primary={
+  shot:['射撃','弾丸','弾数','連射','貫通','反射','追尾'],
+  laser:['レーザー','照射','ビーム'],
+  charge:['チャージ','蓄積','分裂','溜め'],
+  drill:['ドリル','プラズマ','近接','突進'],
+  dog:['骨','ブーメラン','アニマル','肉球']
+ }[player.shipType]||[];
+ return {
+  primary:!card?.isSupply&&(card?.shipOnly===player.shipType||['damage','critical','critEpic'].includes(id)||tags.some(tag=>primary.includes(tag))),
+  survival:!!(card?.isSupply&&['supply_repair','supply_shield'].includes(id)||
+   tags.some(tag=>['防御','装甲','継戦','回復','吸収','シールド'].includes(tag))||
+   ['hp','armor','regen','repair','barrier','shieldEpic','expShield','eternalBody'].includes(id)),
+  experience:tags.includes('経験値')||['xp','pickup','bounty'].includes(id)
+ };
+}
+function balanceRecordReward(card,options){
+ if(!balanceAbilityLog||!card)return;
+ const a=balanceAbilityLog.rewardAudit,traits=balanceRewardTraits(card);
+ a.choices++;if(traits.primary)a.primary++;if(traits.survival)a.survival++;if(traits.experience)a.experience++;
+ if((options||[]).some(c=>c&&balanceRewardTraits(c).primary))a.primaryOffers++;
+ if((options||[]).some(c=>c&&balanceRewardTraits(c).survival))a.survivalOffers++;
+ if(a.history.length<256)a.history.push({at:Math.round(game.total),level:game.level,
+  id:card.id,rarity:card.rarity||'supply',primary:traits.primary,survival:traits.survival,experience:traits.experience});
+}
+function balancePilotStep(frame,policy='tactical',seekExp=false){
  const p=player,profile=BALANCE_AI_PROFILES[p.shipType],sec=game.total;
  keys.clear();
  const targets=enemies.filter(e=>!e.dead&&e.type!=='relic'),priority=boss&&!boss.dead
@@ -126,9 +170,24 @@ function balancePilotStep(frame,policy='tactical'){
   if(ed<90){const f=(90-ed)/90*1.1;x+=ex/Math.max(1,ed)*f;y+=ey/Math.max(1,ed)*f;}
  }
  x+=threat.x*1.7;y+=threat.y*1.7;
+ let xpIntent=null;
+ if(seekExp){
+  // Re-evaluate pickup candidates at 5 Hz, not every simulation frame.
+  if(frame%12===0)balanceAbilityLog.currentXpTarget=balanceExpTarget(threat,policy);
+  const xp=threat.near||threat.imminent||(boss&&!boss.dead)||game.total%9>=4?null:balanceAbilityLog.currentXpTarget;
+  if(xp){
+   const vx=xp.x-p.x,vy=xp.y-p.y,len=Math.max(1,Math.hypot(vx,vy));
+   x=x*.28+vx/len*1.55;y=y*.28+vy/len*1.55;
+   xpIntent=xp.kind;
+  }
+ }
  // Charge ships deliberately hold still to charge, then reposition to fire.
  if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
  const m=Math.hypot(x,y),stop=m<.14;
+ if(!stop&&xpIntent&&balanceAbilityLog){
+  balanceAbilityLog.xpSeekFrames++;
+  balanceAbilityLog.xpSeekKinds[xpIntent]=(balanceAbilityLog.xpSeekKinds[xpIntent]||0)+1;
+ }
  if(!stop){
   x/=m;y/=m;
   if(x>.18)keys.add('KeyD');else if(x<-.18)keys.add('KeyA');
@@ -163,6 +222,9 @@ function balancePilotStep(frame,policy='tactical'){
  if(decision.novaReason){
   const old=game.combatLog.novaCount;nova();
   if(balanceAbilityLog&&game.combatLog.novaCount>old){
+   const near=enemies.filter(e=>!e.dead&&dst(p,e)<(p.shipType==='laser'?p.laserReach:p.novaRadius)+(e.r||0)).length;
+   if(balanceAbilityLog.novaContexts.length<128)balanceAbilityLog.novaContexts.push({
+    at:Math.round(game.total),reason:decision.novaReason,near,bossDist:boss&&!boss.dead?Math.round(dst(p,boss)):null});
    balanceAbilityLog.novaHeldFrames=0;
    balanceAbilityLog.novaReasons[decision.novaReason]=(balanceAbilityLog.novaReasons[decision.novaReason]||0)+1;
   }
@@ -193,6 +255,10 @@ function balancePickReward(options){
   }else{
    if(c.shipOnly===player.shipType)score+=3.5;
    if(defense)score+=hpRatio<.45?6:hpRatio<.75?3.5:1.3;
+   const traits=balanceRewardTraits(c);
+   if(traits.primary)score+=2.3;
+   if(traits.survival&&hpRatio<.8)score+=hpRatio<.45?2.5:1.2;
+   if(traits.experience&&game.level<15&&player.magnet<240)score+=1.0;
    if(tags.includes('機動'))score+=player.shipType==='drill'?2.2:1.4;
    if(tags.includes('ノヴァ'))score+=1.2;
    const ready=synergiesFor(c.id).filter(a=>!game.synergies[a.id]&&a.need.filter(id=>id!==c.id).every(owned)).length;
@@ -210,19 +276,40 @@ function balancePickReward(options){
  scored.sort((a,b)=>b.score-a.score||a.index-b.index);
  return scored[0]?.c||null;
 }
-function balanceTryElementFusion(){
+function balanceTryElementFusion(fusionPolicy='always'){
  if(mode!=='choice'||game.lastChoice!=='normal')return false;
  const pairs=availableElementPairs();
  if(!pairs.length)return false;
+ const audit=balanceAbilityLog?.fusionAudit;
+ if(audit)audit.offers++;
  pairs.sort((a,b)=>elementInvestments(b.main).points-elementInvestments(a.main).points||
   elementInvestments(a.sub).points-elementInvestments(b.sub).points);
  const pair=pairs[0],weapon=fusionWeaponDefinitions(pair.main).find(w=>w.owned);
- if(!weapon||!enterElementChoice())return false;
- chooseFusionMain(pair.main);
- selectElementFusion(pair.sub);
- selectFusionWeapon(weapon.slot);
- confirmElementFusion();
- return mode==='elementResult';
+ const mainPoints=elementInvestments(pair.main).points,subPoints=elementInvestments(pair.sub).points;
+ let reason=null;
+ if(!weapon)reason='no-owned-weapon';
+ if(fusionPolicy==='never')reason='control-no-fusion';
+ if(fusionPolicy==='adaptive'&&(mainPoints<2||subPoints>mainPoints*.75))
+  reason='preserve-build-investment';
+ if(reason){
+  if(audit){audit.declined++;audit.reasons[reason]=(audit.reasons[reason]||0)+1;}
+  return false;
+ }
+ const before=game.elementCombos.length;
+ const ready=enterElementChoice();
+ if(ready){
+  chooseFusionMain(pair.main);
+  selectElementFusion(pair.sub);
+  selectFusionWeapon(weapon.slot);
+  confirmElementFusion();
+ }
+ const accepted=!!ready&&game.elementCombos.length>before&&mode==='elementResult';
+ if(audit){
+  if(accepted)audit.accepted++;else audit.failed++;
+  if(audit.history.length<32)audit.history.push({at:Math.round(game.total),main:pair.main,
+   sub:pair.sub,slot:weapon.slot,mainPoints,subPoints,accepted});
+ }
+ return accepted;
 }
 function balanceSandbox(fn){
  const random=Math.random,methods=[];
@@ -245,7 +332,9 @@ function balanceSandbox(fn){
  }
 }
 function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical'){
- balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{}};
+ balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
+  xpSeekFrames:0,xpSeekKinds:{},rewardAudit:{choices:0,primary:0,survival:0,experience:0,primaryOffers:0,survivalOffers:0,history:[]},
+  fusionAudit:{offers:0,accepted:0,declined:0,failed:0,reasons:{},history:[]}};
  Math.random=seededBalanceRandom(seed);
  selectedGameMode='normal';selectedShip=ship;newRun();mode='playing';
  const p=player;
@@ -282,9 +371,29 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   novaReadySeconds:balanceAbilityLog?.novaReadySeconds||0,
   dashReasons:{...(balanceAbilityLog?.dashReasons||{})},
   novaReasons:{...(balanceAbilityLog?.novaReasons||{})},
+  novaContexts:[...(balanceAbilityLog?.novaContexts||[])],
+  xpSeekSeconds:Number(((balanceAbilityLog?.xpSeekFrames||0)/60).toFixed(2)),
+  xpSeekKinds:{...(balanceAbilityLog?.xpSeekKinds||{})},
+  xpOnField:Number(pickups.filter(e=>e.type==='energy').reduce((sum,e)=>sum+e.value,0).toFixed(2)),
+  rewardAudit:balanceAbilityLog?.rewardAudit||null,
+  fusionAudit:balanceAbilityLog?.fusionAudit||null,
+  weaponState:{dmg:player.dmg,rate:player.rate,multishot:player.multishot,
+   laserCount:player.laserCount,chargeRate:player.chargeRate,drillDamage:player.drillDamage,
+   dogBones:player.dogBones,magnet:player.magnet,regen:player.regen,shieldMax:player.shieldMax},
   bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
 }
 window.__ankinBalanceAI={
+ probeMagma({constrained=true}={}){
+  return balanceSandbox(()=>{
+   balanceSetup('shot',1,0,'base','magma-position');
+   player.magmaLevel=1;player.magmaRadius=54;player.lavaConstrain=constrained?1:0;
+   magmaPatch(W*.3,H*.35);
+   const original={x:zones[0]?.x,y:zones[0]?.y};
+   magmaPatch(W*.68,H*.64);
+   return {original,latest:{x:zones.at(-1)?.x,y:zones.at(-1)?.y},
+    count:zones.length,stacks:zones[0]?.stacks||1,damage:zones[0]?.dps};
+  });
+ },
  runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false}={}){
   if(typeof initialNovaReady!=='boolean')throw Error('Invalid initialNovaReady');
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
@@ -321,8 +430,9 @@ window.__ankinBalanceAI={
  },
  // Long-run mode is deliberately separate from CI. This drives the actual 30:00
  // scheduler and normal reward menus. Never interpret short scenarios as clear rate.
- runFull({ship='shot',seed=1,seconds=1830,preview=false,policy='tactical'}={}){
+ runFull({ship='shot',seed=1,seconds=1830,preview=false,policy='tactical',fusionPolicy='always'}={}){
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
+  if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid fusion policy');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
   if(!Number.isFinite(seconds)||(preview?(seconds<20||seconds>120):(seconds<1800||seconds>2400)))
    throw Error('Full simulation must include 30:00; preview must last 20-120 seconds');
@@ -337,9 +447,10 @@ window.__ankinBalanceAI={
    function resolveMenus(){
     for(let n=0;n<20&&mode!=='playing'&&mode!=='dead'&&mode!=='victory';n++){
      if(mode==='choice'){
-      if(balanceTryElementFusion()){menuChoices++;continue;}
+      if(balanceTryElementFusion(fusionPolicy)){menuChoices++;continue;}
       const pick=balancePickReward(choices);
       if(!pick){unhandled='empty choice';break;}
+      balanceRecordReward(pick,choices);
       choose(choices.indexOf(pick));menuChoices++;
      }else if(mode==='uniqueReward'){
       continueAfterReward();menuSkips++;
@@ -355,7 +466,7 @@ window.__ankinBalanceAI={
    for(;step<steps&&!game.completed&&game.runOutcome!=='dead';step++){
     resolveMenus();
     if(unhandled||mode!=='playing')break;
-    const a=balancePilotStep(step,policy);if(a.move)aiMoves++;
+    const a=balancePilotStep(step,policy,true);if(a.move)aiMoves++;
     drive(dt);
     const dd=game.combatLog.dashCount-lastDash;if(dd>0)aiDodges+=dd;lastDash=game.combatLog.dashCount;
     if(mode!=='playing')resolveMenus();
@@ -364,7 +475,7 @@ window.__ankinBalanceAI={
    return {...balanceResult(t,seconds,{won:!!game.completed,cleared:game.clearCount>0,
     terminal:game.completed||game.runOutcome==='dead',phaseMinutes:0,aiMoves,aiDodges}),
     fullRun:!preview,preview:!!preview,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
-    menuChoices,menuSkips,elementFusions:game.elementCombos.length,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
+    menuChoices,menuSkips,elementFusions:game.elementCombos.length,fusionPolicy,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
       unhandled?'unhandled-menu:'+unhandled:step>=steps?(preview?'preview-end':'time-limit'):'unknown',
     clearCount:game.clearCount};
   });
