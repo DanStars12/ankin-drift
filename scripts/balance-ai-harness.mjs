@@ -170,6 +170,7 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   if(ed<90){const f=(90-ed)/90*1.1;x+=ex/Math.max(1,ed)*f;y+=ey/Math.max(1,ed)*f;}
  }
  x+=threat.x*1.7;y+=threat.y*1.7;
+ let xpIntent=null;
  if(seekExp){
   // Re-evaluate pickup candidates at 5 Hz, not every simulation frame.
   if(frame%12===0)balanceAbilityLog.currentXpTarget=balanceExpTarget(threat,policy);
@@ -177,12 +178,16 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   if(xp){
    const vx=xp.x-p.x,vy=xp.y-p.y,len=Math.max(1,Math.hypot(vx,vy));
    x=x*.28+vx/len*1.55;y=y*.28+vy/len*1.55;
-   if(balanceAbilityLog){balanceAbilityLog.xpSeekFrames++;balanceAbilityLog.xpSeekKinds[xp.kind]=(balanceAbilityLog.xpSeekKinds[xp.kind]||0)+1;}
+   xpIntent=xp.kind;
   }
  }
  // Charge ships deliberately hold still to charge, then reposition to fire.
  if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
  const m=Math.hypot(x,y),stop=m<.14;
+ if(!stop&&xpIntent&&balanceAbilityLog){
+  balanceAbilityLog.xpSeekFrames++;
+  balanceAbilityLog.xpSeekKinds[xpIntent]=(balanceAbilityLog.xpSeekKinds[xpIntent]||0)+1;
+ }
  if(!stop){
   x/=m;y/=m;
   if(x>.18)keys.add('KeyD');else if(x<-.18)keys.add('KeyA');
