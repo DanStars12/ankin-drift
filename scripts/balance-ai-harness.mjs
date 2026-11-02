@@ -1,7 +1,7 @@
 /* v13.30: developer-only AI runner, injected by Playwright, never loaded in the public app.
    Two modes: short real-combat encounters, optional full 30-minute scripted-upgrade run.
    Never persist test progress; restore global RNG and archive methods even on failure. */
-export const BALANCE_AI_HARNESS = String.raw\`
+export const BALANCE_AI_HARNESS = String.raw`
 const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog'];
 const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
@@ -175,4 +175,4 @@ window.__ankinBalanceAI={
  },
  inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES}};
 };
-\`;
+`;
