@@ -7,6 +7,8 @@ import {summarizeRuns,runsToCsv,summaryToCsv} from '../scripts/balance-report.mj
 const ships=['shot','laser','charge','drill','dog'];
 const seconds=Number(process.env.ANKIN_AI_SECONDS||14),seeds=Number(process.env.ANKIN_AI_SEEDS||1);
 const policy=process.env.ANKIN_AI_POLICY||'tactical';
+const fusionPolicy=process.env.ANKIN_FUSION_POLICY||'always';
+if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid ANKIN_FUSION_POLICY');
 if(!['tactical','legacy'].includes(policy))throw Error('Invalid ANKIN_AI_POLICY');
 if(!Number.isFinite(seconds)||seconds<1||seconds>120||!Number.isInteger(seeds)||seeds<1||seeds>20)throw Error('Invalid ANKIN_AI_SECONDS or ANKIN_AI_SEEDS');
 
@@ -228,7 +230,7 @@ test('optional true 30-minute run using real scheduler and automatic in-game car
  const prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
  const out=[];
  for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
-  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860,policy});
+  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860,policy,fusionPolicy});
   expect(row.fullRun).toBe(true);
   expect(row.simulationTime).toBeGreaterThan(0);
   expect(['dead','clear','time-limit'].some(x=>row.stopReason===x),JSON.stringify(row)).toBe(true);
