@@ -269,19 +269,40 @@ function balancePickReward(options){
  scored.sort((a,b)=>b.score-a.score||a.index-b.index);
  return scored[0]?.c||null;
 }
-function balanceTryElementFusion(){
+function balanceTryElementFusion(fusionPolicy='always'){
  if(mode!=='choice'||game.lastChoice!=='normal')return false;
  const pairs=availableElementPairs();
  if(!pairs.length)return false;
+ const audit=balanceAbilityLog?.fusionAudit;
+ if(audit)audit.offers++;
  pairs.sort((a,b)=>elementInvestments(b.main).points-elementInvestments(a.main).points||
   elementInvestments(a.sub).points-elementInvestments(b.sub).points);
  const pair=pairs[0],weapon=fusionWeaponDefinitions(pair.main).find(w=>w.owned);
- if(!weapon||!enterElementChoice())return false;
- chooseFusionMain(pair.main);
- selectElementFusion(pair.sub);
- selectFusionWeapon(weapon.slot);
- confirmElementFusion();
- return mode==='elementResult';
+ const mainPoints=elementInvestments(pair.main).points,subPoints=elementInvestments(pair.sub).points;
+ let reason=null;
+ if(!weapon)reason='no-owned-weapon';
+ if(fusionPolicy==='never')reason='control-no-fusion';
+ if(fusionPolicy==='adaptive'&&(mainPoints<2||subPoints>mainPoints*.75))
+  reason='preserve-build-investment';
+ if(reason){
+  if(audit){audit.declined++;audit.reasons[reason]=(audit.reasons[reason]||0)+1;}
+  return false;
+ }
+ const before=game.elementCombos.length;
+ const ready=enterElementChoice();
+ if(ready){
+  chooseFusionMain(pair.main);
+  selectElementFusion(pair.sub);
+  selectFusionWeapon(weapon.slot);
+  confirmElementFusion();
+ }
+ const accepted=!!ready&&game.elementCombos.length>before&&mode==='elementResult';
+ if(audit){
+  if(accepted)audit.accepted++;else audit.failed++;
+  if(audit.history.length<32)audit.history.push({at:Math.round(game.total),main:pair.main,
+   sub:pair.sub,slot:weapon.slot,mainPoints,subPoints,accepted});
+ }
+ return accepted;
 }
 function balanceSandbox(fn){
  const random=Math.random,methods=[];
@@ -355,6 +376,17 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
 }
 window.__ankinBalanceAI={
+ probeMagma({constrained=true}={}){
+  return balanceSandbox(()=>{
+   balanceSetup('shot',1,0,'base','magma-position');
+   player.magmaLevel=1;player.magmaRadius=54;player.lavaConstrain=constrained?1:0;
+   magmaPatch(W*.3,H*.35);
+   const original={x:zones[0]?.x,y:zones[0]?.y};
+   magmaPatch(W*.68,H*.64);
+   return {original,latest:{x:zones.at(-1)?.x,y:zones.at(-1)?.y},
+    count:zones.length,stacks:zones[0]?.stacks||1,damage:zones[0]?.dps};
+  });
+ },
  runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false}={}){
   if(typeof initialNovaReady!=='boolean')throw Error('Invalid initialNovaReady');
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
@@ -391,8 +423,9 @@ window.__ankinBalanceAI={
  },
  // Long-run mode is deliberately separate from CI. This drives the actual 30:00
  // scheduler and normal reward menus. Never interpret short scenarios as clear rate.
- runFull({ship='shot',seed=1,seconds=1830,preview=false,policy='tactical'}={}){
+ runFull({ship='shot',seed=1,seconds=1830,preview=false,policy='tactical',fusionPolicy='always'}={}){
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
+  if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid fusion policy');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
   if(!Number.isFinite(seconds)||(preview?(seconds<20||seconds>120):(seconds<1800||seconds>2400)))
    throw Error('Full simulation must include 30:00; preview must last 20-120 seconds');
@@ -407,9 +440,10 @@ window.__ankinBalanceAI={
    function resolveMenus(){
     for(let n=0;n<20&&mode!=='playing'&&mode!=='dead'&&mode!=='victory';n++){
      if(mode==='choice'){
-      if(balanceTryElementFusion()){menuChoices++;continue;}
+      if(balanceTryElementFusion(fusionPolicy)){menuChoices++;continue;}
       const pick=balancePickReward(choices);
       if(!pick){unhandled='empty choice';break;}
+      balanceRecordReward(pick,choices);
       choose(choices.indexOf(pick));menuChoices++;
      }else if(mode==='uniqueReward'){
       continueAfterReward();menuSkips++;
@@ -425,7 +459,7 @@ window.__ankinBalanceAI={
    for(;step<steps&&!game.completed&&game.runOutcome!=='dead';step++){
     resolveMenus();
     if(unhandled||mode!=='playing')break;
-    const a=balancePilotStep(step,policy);if(a.move)aiMoves++;
+    const a=balancePilotStep(step,policy,true);if(a.move)aiMoves++;
     drive(dt);
     const dd=game.combatLog.dashCount-lastDash;if(dd>0)aiDodges+=dd;lastDash=game.combatLog.dashCount;
     if(mode!=='playing')resolveMenus();
@@ -434,7 +468,7 @@ window.__ankinBalanceAI={
    return {...balanceResult(t,seconds,{won:!!game.completed,cleared:game.clearCount>0,
     terminal:game.completed||game.runOutcome==='dead',phaseMinutes:0,aiMoves,aiDodges}),
     fullRun:!preview,preview:!!preview,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
-    menuChoices,menuSkips,elementFusions:game.elementCombos.length,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
+    menuChoices,menuSkips,elementFusions:game.elementCombos.length,fusionPolicy,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
       unhandled?'unhandled-menu:'+unhandled:step>=steps?(preview?'preview-end':'time-limit'):'unknown',
     clearCount:game.clearCount};
   });
