@@ -74,6 +74,17 @@ window.__ankinBalanceLabTest={
  snapshot(){
   return balanceTelemetryReport();
  },
+ bossProbe(){
+  selectedShip='shot';newRun();mode='playing';game.nextBossAt=1e9;
+  beginBalanceTelemetry({seed:2,scenario:'boss-events',build:'base'});
+  spawnBoss('minor','guardian');const e=boss,r=BOSS_SUPER_RULES.minor;
+  tickBossSuper(e,r.wait+.01);
+  tickBossSuper(e,r.charge+.02);
+  tickBossSuper(e,r.warn+.02);
+  damageEnemy(e,100,{source:'shot'});
+  const report=balanceTelemetryReport();
+  balanceTelemetry=null;mode='menu';return report;
+ },
  virtualDamage({source='shot',amount=30,at=0}={}){
   selectedShip='shot';newRun();mode='playing';
   enemies=[];const e={type:'major',variant:'titan',hp:1000,maxHp:1000,r:35,x:W*.6,y:H*.5,
