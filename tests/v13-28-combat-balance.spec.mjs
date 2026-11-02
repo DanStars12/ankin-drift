@@ -11,6 +11,12 @@ const hook=`window.__combat1328={
  stationary(dt){const e=boss,before={x:e.x,y:e.y,attacks:e.attacks,shoot:e.shoot};drive(dt);return {before,after:{x:e.x,y:e.y,attacks:e.attacks,shoot:e.shoot},state:e.superState};},
  exposed(){const e=boss,before=game.damage;damageEnemy(e,100,{source:'shot'});return {damage:game.damage-before};},
  earlyKill(){selectedShip='shot';newRun();mode='playing';spawnBoss('minor','guardian');const e=boss;e.hp=1;damageEnemy(e,100,{source:'shot'});return {dead:e.dead,bossPresent:!!boss,reward:game.rewards.includes('minor'),specialCount:e.superCount};},
+ ultimate(){
+  selectedShip='shot';newRun();mode='playing';game.total=30*60;
+  game.nextBossAt=1e8;game.nextRaidAt=1e8;game.nextRelicAt=1e8;game.nextVacuumAt=1e8;game.spawn=1e8;
+  spawnUltimateBoss();player.iframes=1000;player.dmg=0;
+  return {state:boss.superState,wait:boss.superWait,gauge:bossSuperGauge(boss),type:boss.type,parts:game.ultimateParts.length};
+ },
  gauge(){hudUpdate();return {hidden:document.querySelector('#bossSpecialWrap').hidden,caption:document.querySelector('#bossSpecialCaption').textContent,width:document.querySelector('#bossSpecialFill').style.width};},
  interceptor(){
   selectedShip='shot';newRun();mode='playing';game.total=17*60;game.nextBossAt=1e8;game.nextRaidAt=1e8;game.nextRelicAt=1e8;game.nextVacuumAt=1e8;game.spawn=1e8;
@@ -88,14 +94,26 @@ test('all four boss tiers charge after delay, warn before a fixed ult, stop atta
   r=await page.evaluate(dt=>window.__combat1328.advance(dt),rules.recover+.1);
   expect(r.state).toBe('charge');expect(r.gauge.fill).toBe(0);
  }
+ const early=await page.evaluate(()=>window.__combat1328.earlyKill());
+ expect(early).toEqual({dead:true,bossPresent:false,reward:true,specialCount:0});
  expect(errors).toEqual([]);
 });
-test('ultimate boss also receives a readable and avoidable super gauge',async({page})=>{
- const errors=await launch(page);
- await page.evaluate(()=>{window.__combat1328.boss('minor','guardian');const e=window.__combat1328;return e;});
- const model=await page.evaluate(()=>window.__combat1328.baseline());
- expect(model.superRules.ultimate.warn).toBeGreaterThan(1);
- expect(model.superRules.ultimate.recover).toBeGreaterThan(2);
+test('the real three-module ultimate boss also charges, telegraphs and overheats',async({page,isMobile})=>{
+ const errors=await launch(page,isMobile);
+ const start=await page.evaluate(()=>window.__combat1328.ultimate());
+ expect(start).toMatchObject({state:'wait',type:'ultimate',parts:3});
+ const rules=await page.evaluate(()=>window.__combat1328.baseline().superRules.ultimate);
+ let r=await page.evaluate(dt=>window.__combat1328.advance(dt),rules.wait+.01);
+ expect(r.state).toBe('charge');
+ r=await page.evaluate(dt=>window.__combat1328.advance(dt),rules.charge+.05);
+ expect(r.state).toBe('telegraph');
+ const warn=await page.evaluate(()=>window.__combat1328.gauge());
+ expect(warn.hidden).toBe(false);expect(warn.caption).toContain('大技発動');
+ r=await page.evaluate(dt=>window.__combat1328.advance(dt),rules.warn+.05);
+ expect(r.state).toBe('recover');expect(r.count).toBe(1);
+ expect(r.hazards).toContain('blast');
+ const recovery=await page.evaluate(()=>window.__combat1328.gauge());
+ expect(recovery.caption).toContain('攻撃チャンス');
  expect(errors).toEqual([]);
 });
 test('old rare runner is now a visibly distinct flanking interceptor after minute 16 with telegraphed projectiles',async({page,isMobile})=>{
