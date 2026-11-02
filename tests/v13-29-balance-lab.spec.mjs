@@ -65,8 +65,7 @@ test('telemetry is opt-in and tracks timed damage and boss phases without creati
   const noTrace=window.__ankinBalanceLabTest.snapshot();
   const first=window.__ankinBalanceLabTest.virtualDamage({amount:34,source:'shot',at:0});
   const second=window.__ankinBalanceLabTest.virtualDamage({amount:25,source:'shot',at:65});
-  balanceTelemetry=null;
-  return {noTrace,first,second,after:balanceTelemetryReport()};
+  return {noTrace,first,second,after:window.__ankinBalanceLabTest.snapshot()};
  });
  expect(r.noTrace).toBeNull();expect(r.after).toBeNull();
  expect(r.first.damage).toBe(34);expect(r.first.buckets[0].minute).toBe(0);
