@@ -2366,15 +2366,15 @@ function choiceSynergyReady(c){return synergiesFor(c.id).some(a=>!game.synergies
 function choiceEvolutionReady(c){return fusionFor(c.id).some(r=>!game.fusions[r.id]&&fusionMaterials(r).filter(id=>id!==c.id).every(owned))}
 // All elemental choices already show the always-valid 属性融合素材 tag;
  // no level-up banner should repeat the same 'fusion available' message.
-function recipePartnerMarkup(id){const c=skillById(id);return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':'＋ 未所持'} ${skillPeekLink(id)} <small>${RARITY_NAMES[c?.rarity]||'スキル'}</small></span>`}
+function recipePartnerMarkup(id,offeredId=null){const c=skillById(id),selected=id===offeredId&&!owned(id);return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':selected?'✦ このカードを選択':'＋ 未所持'} ${skillPeekLink(id)} <small>${RARITY_NAMES[c?.rarity]||'スキル'}</small></span>`}
 function evolutionMarkup(c){
  const recipes=fusionFor(c.id);if(!recipes.length)return '';
  return recipes.map(a=>{
-  const materials=fusionMaterials(a),done=!!game.fusions[a.id],needed=materials.filter(id=>!owned(id));
+  const materials=fusionMaterials(a),done=!!game.fusions[a.id],needed=materials.filter(id=>id!==c.id&&!owned(id));
   const ready=needed.length===0;
   return '<div class="evolve '+(ready&&!done?'ready':'')+'"><div class="evo-title">'+
-   (done?'✓ 進化済み':ready?'✦ 進化可能スキル！':'◈ 進化合成の組み合わせ')+'：'+a.icon+' '+escHtml(a.name)+'</div>'+
-   '<div class="recipe-parts">'+materials.map(recipePartnerMarkup).join('<span class="fusion-plus">＋</span>')+'</div>'+
+   (done?'✓ 進化済み':ready?'✦ このカードで進化合成完成！':'◈ 進化合成の組み合わせ')+'：'+a.icon+' '+escHtml(a.name)+'</div>'+
+   '<div class="recipe-parts">'+materials.map(id=>recipePartnerMarkup(id,c.id)).join('<span class="fusion-plus">＋</span>')+'</div>'+
    '<div class="recipe-effect">必要 '+materials.length+' 種類 · '+escHtml(a.desc)+'</div></div>';
  }).join('');
 }
