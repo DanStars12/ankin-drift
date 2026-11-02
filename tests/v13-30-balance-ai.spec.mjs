@@ -119,12 +119,14 @@ test('optional true 30-minute run using real scheduler and automatic in-game car
  const errors=await setup(page);
  const prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
  const out=[];
- for(const ship of ships){
-  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull({ship:x,seed:1,seconds:1860}),ship);
+ for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
+  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860});
   expect(row.fullRun).toBe(true);
   expect(row.simulationTime).toBeGreaterThan(0);
   expect(['dead','clear','time-limit'].some(x=>row.stopReason===x),JSON.stringify(row)).toBe(true);
   expect(row.cleared).toBe(row.clearCount>0);
+  expect(row.elementFusions).toBeGreaterThanOrEqual(0);
+  expect(row.elementFusions).toBeLessThanOrEqual(2);
   if(row.cleared)expect(row.reachedFinalBoss).toBe(true);
   out.push(row);
  }
