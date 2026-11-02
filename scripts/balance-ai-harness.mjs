@@ -6,10 +6,10 @@ export const BALANCE_AI_HARNESS = String.raw`
 const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog'];
 const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
- laser:{range:175,strafe:0.92,aggression:1},
+ laser:{range:245,strafe:0.92,aggression:1},
  charge:{range:220,strafe:0.62,aggression:.8},
  drill:{range:58,strafe:.24,aggression:1.2},
- dog:{range:205,strafe:.78,aggression:.92}
+ dog:{range:230,strafe:.78,aggression:.92}
 };
 function balanceThreats(){
  const p=player;let x=0,y=0,weight=0,near=0,imminent=0;
@@ -151,7 +151,7 @@ function balancePilotStep(frame,policy='tactical'){
   // Explicitly set inputs: dash() reads keyboard direction, not just p.dx/p.dy.
   if(legacy){if(!stop){p.dx=x;p.dy=y;}}
   else{
-   const v=p.shipType==='drill' ? {x:!stop?x:p.dx,y:!stop?y:p.dy} :
+   const v=(p.shipType==='drill'||p.shipType==='dog') ? {x:!stop?x:p.dx,y:!stop?y:p.dy} :
    balanceDashVector(x,y,priority,false);
    balanceDashKeys(v.x,v.y);
   }
