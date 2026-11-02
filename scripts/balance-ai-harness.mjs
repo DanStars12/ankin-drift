@@ -156,7 +156,7 @@ window.__ankinBalanceAI={
     boss.x=W*.67;boss.y=H*.33;
    }else balanceSpawnLiveRound(phase,0);
    const start=game.total,steps=Math.ceil(seconds*60),dt=1/60;
-   let aiMoves=0,aiDodges=0,lastDash=game.combatLog.dashCount;
+   let aiMoves=0,aiDodges=0,lastDash=game.combatLog.dashCount,winAt=null;
    for(let i=0;i<steps&&game.runOutcome!=='dead';i++){
     const a=balancePilotStep(i);if(a.move)aiMoves++;
     drive(dt);
@@ -167,10 +167,13 @@ window.__ankinBalanceAI={
      if(c){const index=options.indexOf(c);choose(index);}
     }
     if(mode==='uniqueReward'||mode==='fusion'||mode==='elementResult')state('playing');
+    // Stop at the actual boss kill; idle time after victory must not dilute DPS.
+    if(scenario==='live-boss'&&!boss){winAt=game.total-start;break;}
    }
-   const won=scenario==='live-boss'&&!boss;
+   const won=scenario==='live-boss'&&winAt!==null;
    const report=balanceTelemetryReport();
-   return balanceResult(report,seconds,{won,cleared:false,terminal:game.runOutcome==='dead',phaseMinutes:phase,aiMoves,aiDodges});
+   return {...balanceResult(report,seconds,{won,cleared:false,terminal:game.runOutcome==='dead',phaseMinutes:phase,aiMoves,aiDodges}),
+    timeToWin:winAt===null?null:Number(winAt.toFixed(3))};
   });
  },
  // Long-run mode is deliberately separate from CI. This drives the actual 30:00
