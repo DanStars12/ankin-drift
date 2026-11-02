@@ -19,17 +19,21 @@ concurrency:
 
 jobs:
   full-mode:
-    name: Full AI ${{ matrix.minutes }}m / 5 ships / 3 seeds
+    name: Full AI ${{ matrix.minutes }}m / ${{ matrix.fusion }} fusion / 5 ships / ${{ matrix.seeds }} seeds
     runs-on: ubuntu-24.04
     timeout-minutes: 50
     strategy:
       fail-fast: false
       matrix:
-        minutes: ['15','30']
+        include:
+          - {minutes: '15', fusion: always, seeds: '3'}
+          - {minutes: '15', fusion: never, seeds: '1'}
+          - {minutes: '30', fusion: always, seeds: '3'}
+          - {minutes: '30', fusion: never, seeds: '1'}
     env:
-      ANKIN_AI_SEEDS: '3'
+      ANKIN_AI_SEEDS: ${{ matrix.seeds }}
       ANKIN_AI_POLICY: tactical
-      ANKIN_FUSION_POLICY: always
+      ANKIN_FUSION_POLICY: ${{ matrix.fusion }}
       ANKIN_BALANCE_FULL: ${{ matrix.minutes }}
       ANKIN_AI_SECONDS: '14'
     steps:
@@ -48,7 +52,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ai-acceptance-full-${{ matrix.minutes }}m
+          name: ai-acceptance-full-${{ matrix.minutes }}m-${{ matrix.fusion }}
           path: |
             artifacts/balance-lab/
             test-results/
