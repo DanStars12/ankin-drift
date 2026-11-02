@@ -27,12 +27,15 @@ test('drill reserves overdrive and expends plasma only on worthwhile approach',(
  assert.equal(decide({ship:'drill',bossDist:280}).novaReason,'boss-overdrive');
  assert.equal(decide({ship:'drill',bossDist:280,drillOverdrive:2}).novaReason,null);
  assert.equal(decide({ship:'drill',targetDist:125,drillPlasmaRatio:.6}).dashReason,'plasma-strike');
- assert.equal(decide({ship:'drill',targetDist:125,drillPlasmaRatio:.6,safeApproach:false}).dashReason,null);
+ assert.equal(decide({ship:'drill',targetDist:125,drillPlasmaRatio:.6,safeApproach:false}).dashReason,'plasma-strike');
+ assert.equal(decide({ship:'drill',targetDist:60,drillOverdrive:3}).dashReason,'plasma-strike');
 });
 test('dog radial nova is reserved for nearby targets',()=>{
  assert.equal(decide({ship:'dog',bossDist:900,enemiesNear:1}).novaReason,null);
  assert.equal(decide({ship:'dog',bossDist:220}).novaReason,'boss-bow-shock');
  assert.equal(decide({ship:'dog',enemiesNear:4}).novaReason,'radial-bow-shock');
+ assert.equal(decide({ship:'dog',enemiesNear:2}).novaReason,'radial-bow-shock');
+ assert.equal(decide({ship:'dog',enemiesNear:1,novaHeldSeconds:6}).novaReason,'held-bow-shock');
 });
 test('emergency dash protects when projectile imminent, but never while invulnerable/on cooldown',()=>{
  assert.equal(decide({imminent:1}).dashReason,'emergency-evade');
@@ -43,4 +46,14 @@ test('emergency dash protects when projectile imminent, but never while invulner
 test('NOVA must be charged and off cooldown, never force a special attack',()=>{
  assert.equal(decide({bossDist:100,energy:99}).novaReason,null);
  assert.equal(decide({bossDist:100,novaCooldown:3}).novaReason,null);
+});
+
+test('v13.33 recovery: avoid the severe drill DPS regression from holding its attack dash',()=>{
+ assert.equal(decide({ship:'drill',targetDist:80,drillPlasmaRatio:.45}).dashReason,'plasma-strike');
+ assert.equal(decide({ship:'drill',targetDist:60,drillOverdrive:3,iframes:.5}).dashReason,'plasma-strike');
+ assert.equal(decide({ship:'drill',targetDist:160,drillPlasmaRatio:.2}).dashReason,null);
+});
+test('v13.33 recovery: threats trigger preemptive dash instead of waiting until impact',()=>{
+ for(const ship of ['shot','laser','charge','dog'])
+  assert.equal(decide({ship,threats:1,imminent:0,hpRatio:1}).dashReason,'emergency-evade');
 });
