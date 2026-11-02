@@ -23,6 +23,10 @@ Remove-Item Env:ANKIN_BALANCE_DURATION
 
 `--project=mobile-390` または `--project=mobile-320` に切り替えて実行可能。
 
+## GitHub Actionsから自動収集
+
+GitHub → Actions → **ANKIN BALANCE LAB (manual)** → **Run workflow** を選び、シード数（1〜20）と計測秒数（1〜60秒）を指定します。PC、スマホ390px、320pxの3環境で同じ検証を自動実行し、完了後はワークフローの **Artifacts** からJSON/CSVを取得できます。毎回PRの必須検証でも1シード分を自動収集します。GitHub Actionsの実行枠を消費するため、定期実行は今のところ設定していません。
+
 ## 計測する内容
 
 - `boss`：高HPの静止した大型単体ターゲット（攻撃を返さない）への10秒DPS。
