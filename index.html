@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.25 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.26 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.25 | UI FUSION CHOICE</title>
+<title>ANKIN DRIFT v13.26 | UI FUSION CHOICE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -874,7 +874,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 
 /* Maintenance: keep LAB search/dropdown keyboard focus clearly visible. */
 .panel.lab-panel .atlas-controls input:focus-visible,.panel.lab-panel .atlas-controls select:focus-visible{outline:2px solid #8ef7de;outline-offset:2px;border-color:#8ef7de}
-/* v13.25 — compact full-viewport upgrade choices / archive and fusion readability */
+/* v13.26 — compact full-viewport upgrade choices / archive and fusion readability */
 body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);max-width:none;overflow:hidden;padding:6px 7px;touch-action:auto}
 .panel.choice-panel{width:min(1060px,calc(100vw - 12px));height:min(760px,calc(100dvh - 12px));max-height:calc(100dvh - 12px);display:flex;flex-direction:column;overflow:hidden;padding:clamp(7px,1.4vh,16px) clamp(8px,2vw,20px);gap:0}
 .panel.choice-panel:before{z-index:1}
@@ -923,7 +923,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 }
 @media(max-height:600px) and (max-width:600px){.panel.choice-panel .choice-icon{font-size:19px}.panel.choice-panel .choice-attrs{display:none}.panel.choice-panel .choice .synergy-note{max-height:23px}.panel.choice-panel .choice .evolve{max-height:24px}}
 
-/* v13.25: Four-choice boss cards have independent readable details.
+/* v13.26: Four-choice boss cards have independent readable details.
    Do not clip evolution or synergy at a fixed arbitrary height. */
 .panel.choice-panel .choice-grid.four-choice{overflow:hidden;min-height:0;grid-auto-rows:minmax(0,1fr)}
 .panel.choice-panel .choice-grid.four-choice .choice{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;touch-action:pan-y;align-content:start}
@@ -937,6 +937,65 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
  .panel.choice-panel .choice-grid.four-choice .choice .synergy-partner-row{display:flex}
  .panel.choice-panel .choice-grid.four-choice .choice .evolve .recipe-effect{display:block}
 }
+
+/* v13.26: Every 3/4-card reward has readable, independently scrollable details.
+   Keep the bottom actions visible; never silently crop synergy/evolution text. */
+.panel.choice-panel .choice-grid{grid-auto-rows:minmax(0,1fr);overflow:hidden}
+.panel.choice-panel .choice-grid .choice{
+ overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+ touch-action:pan-y;align-content:start;
+}
+.panel.choice-panel .choice-grid .choice-desc,
+.panel.choice-panel .choice-grid .synergy-effect-line{
+ display:block;-webkit-line-clamp:unset;line-clamp:unset;overflow:visible;
+}
+.panel.choice-panel .choice-grid .choice-attrs{display:block;max-height:none;overflow:visible}
+.panel.choice-panel .choice-grid .evolve,
+.panel.choice-panel .choice-grid .synergy-note,
+.panel.choice-panel .choice-grid .target-banner{max-height:none;overflow:visible}
+@media(max-width:600px){
+ .panel.choice-panel .choice-grid .choice{align-content:start}
+ .panel.choice-panel .choice-grid .choice .synergy-partner-row{display:flex}
+ .panel.choice-panel .choice-grid .choice .evolve .recipe-effect{display:block}
+}
+
+/* Separate the scrollable celebration details from the always-visible Continue button. */
+.panel.reward-reveal-panel{
+ display:flex;flex-direction:column;max-height:calc(100dvh - 12px);
+ width:min(710px,calc(100vw - 12px));padding:clamp(9px,2vh,24px);
+ overflow:hidden;
+}
+.panel.reward-reveal-panel .reward-reveal-body{
+ flex:0 1 auto;min-height:0;max-width:100%;overflow-y:auto;overflow-x:hidden;
+ overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#6991a8 #172540;
+ padding:2px 5px;touch-action:pan-y;
+}
+.panel.reward-reveal-panel .reward-reveal-actions{
+ flex:0 0 auto;width:100%;margin-top:8px;padding:10px 2px 2px;
+ border-top:1px solid #527a8c66;background:#101b32;
+}
+.panel.reward-reveal-panel .reward-reveal-actions .primary{
+ max-width:100%;min-height:40px;padding:8px 14px;
+}
+.panel.reward-reveal-panel .unique-reward-mark{font-size:clamp(32px,10vh,72px);line-height:1.15}
+.panel.reward-reveal-panel .unique-reward-title{font-size:clamp(27px,4.7vw,48px);margin:6px 0 10px}
+.panel.reward-reveal-panel .unique-reward-detail{
+ font-size:clamp(11px,1.5vh,13px);line-height:1.55;margin:7px auto;padding:9px 11px;
+ overflow-wrap:anywhere;white-space:normal;
+}
+.panel.reward-reveal-panel .subtitle{font-size:clamp(14px,2.5vh,21px);line-height:1.4;overflow-wrap:anywhere}
+.panel.reward-reveal-panel .desc{font-size:clamp(11px,1.55vh,13px);line-height:1.5;overflow-wrap:anywhere}
+.panel.reward-reveal-panel .evolution-complete{padding:11px 8px;margin:0}
+.panel.reward-reveal-panel .evolution-complete .fusion-symbol,
+.panel.reward-reveal-panel .rebirth-result .fusion-symbol{font-size:clamp(27px,8vh,53px)}
+.panel.reward-reveal-panel .rebirth-result{padding:clamp(8px,1.7vh,16px)}
+@media(max-height:550px){
+ .panel.reward-reveal-panel{padding:7px 9px}
+ .panel.reward-reveal-panel .eyebrow{font-size:9px;letter-spacing:.1em;margin-bottom:4px}
+ .panel.reward-reveal-panel .reward-reveal-actions{padding-top:6px;margin-top:4px}
+ .panel.reward-reveal-panel .unique-reward-title{margin:2px 0 4px}
+}
+
 .panel.fusion-choice-panel{width:min(800px,calc(100vw - 12px));max-height:calc(100dvh - 12px);overflow-y:auto;padding:clamp(10px,2vh,22px)}
 .fusion-choice-panel .fusion-unlock{padding:7px 9px;margin-bottom:6px}
 .fusion-choice-panel .fusion-choice-heading{margin:7px 0 10px;font-size:clamp(17px,2.4vw,22px)}
@@ -1229,7 +1288,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.25 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.26 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -2363,7 +2422,7 @@ const VISUAL_CODEX_ROWS=[
  ['dogNineApex','mutation','dog','','白金色に輝く九尾の最終形態。','nineTailApex','dogMutNineTail'],
  ['dogHamApex','mutation','dog','','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
-// v13.25 — use canonical card/recipe data, not duplicated Japanese labels.
+// v13.26 — use canonical card/recipe data, not duplicated Japanese labels.
 // The getters resolve only when the gallery opens, after all game definitions
 // and DOG display-name overrides have been registered.
 const VISUAL_DOG_APEX_RECIPE_IDS=Object.freeze({
@@ -2558,11 +2617,11 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.25 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.26 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.25 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.26 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -2572,11 +2631,11 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3'}キーまたはカードで選択。<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div>${fusionTicket}<div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div><div class="actions">${fusionTickets?`<button type="button" class="primary fusion-from-level" id="fusionFromLevel" ${fusionAvailable?'':'disabled'}>✦ 属性融合を選ぶ ${fusionAvailable?'（通常スキルの代わり）':'（素材不足）'}</button>`:''}<button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選 [R] 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑 [B]</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
  }else if(mode==='elementChoice'){
   html=elementChoiceMarkup();
-  }else if(mode==='elementResult'){const echo=game.elementCombos.at(-1),r=fusionOutcome(echo.main,echo.sub,echo.weapon||'A'),main=ELEMENTS[echo.main],color=main.color;html=`<div class="rebirth-result fusion-celebration" style="--fusion-color:${color}"><p class="eyebrow">✦ ELEMENTAL REBIRTH COMPLETE ✦</p><div class="fusion-symbol">${main.icon}</div><h2 class="fusion-title" style="color:${color}">${main.name}属性へ特化成功！</h2><div class="fusion-awakened-name">${r.icon} ${r.name}</div><p class="desc">${r.desc}</p><p class="fusion-impact gain">✦ ${main.name}属性の攻撃性能が強化されました！</p><p class="fusion-cost">${ELEMENTS[echo.sub].name}属性を失いました。取得済みカード${echo.cards}枚の記録は保持し、共鳴出力${echo.resonance.toFixed(1)}を特化属性に反映しています。</p></div><button id="elementContinue" class="primary">▶ 強化された機体で戦闘へ</button>`;
+  }else if(mode==='elementResult'){const echo=game.elementCombos.at(-1),r=fusionOutcome(echo.main,echo.sub,echo.weapon||'A'),main=ELEMENTS[echo.main],color=main.color;html=`<div class="reward-reveal-body" tabindex="0" role="region" aria-label="属性融合の獲得内容"><div class="rebirth-result fusion-celebration" style="--fusion-color:${color}"><p class="eyebrow">✦ ELEMENTAL REBIRTH COMPLETE ✦</p><div class="fusion-symbol">${main.icon}</div><h2 class="fusion-title" style="color:${color}">${main.name}属性へ特化成功！</h2><div class="fusion-awakened-name">${r.icon} ${r.name}</div><p class="desc">${r.desc}</p><p class="fusion-impact gain">✦ ${main.name}属性の攻撃性能が強化されました！</p><p class="fusion-cost">${ELEMENTS[echo.sub].name}属性を失いました。取得済みカード${echo.cards}枚の記録は保持し、共鳴出力${echo.resonance.toFixed(1)}を特化属性に反映しています。</p></div></div><div class="reward-reveal-actions"><button id="elementContinue" class="primary">▶ 強化された機体で戦闘へ</button></div>`;
  }else if(mode==='uniqueReward'){
- const c=lastUniqueCard;html=`<p class="eyebrow rainbow-text">★ UNIQUE BOSS REWARD · LIMIT BREAK ★</p><div class="unique-reward-mark">✹</div><h2 class="rainbow-text unique-reward-title">UNIQUE ANKIN</h2><p class="subtitle">${c?.icon||'🌈'} ${c?.name||'限界突破'} 獲得！</p><div class="unique-reward-detail">${c?.desc||'究極の機体強化を獲得。'}</div><p class="desc">限界突破の力を手に入れた。次なる進化を目指せ！</p><button class="primary" id="uniqueContinue">▶ 新たな力で続行</button>`;
+ const c=lastUniqueCard;html=`<div class="reward-reveal-body" tabindex="0" role="region" aria-label="UNIQUE報酬の獲得内容"><p class="eyebrow rainbow-text">★ UNIQUE BOSS REWARD · LIMIT BREAK ★</p><div class="unique-reward-mark">✹</div><h2 class="rainbow-text unique-reward-title">UNIQUE ANKIN</h2><p class="subtitle">${c?.icon||'🌈'} ${c?.name||'限界突破'} 獲得！</p><div class="unique-reward-detail">${c?.desc||'究極の機体強化を獲得。'}</div><p class="desc">限界突破の力を手に入れた。次なる進化を目指せ！</p></div><div class="reward-reveal-actions"><button class="primary" id="uniqueContinue">▶ 新たな力で続行</button></div>`;
  }else if(mode==='fusion'){
- const a=pendingFusion,fx=evolutionVisualProfile(a.id);html=`<div class="evolution-complete" style="--evo-accent:${fx.color}"><p class="eyebrow">POWER × LEGENDARY — EVOLUTION FUSION</p>${pendingFusions.length?`<p class="fusion-progress">さらに ${pendingFusions.length} 件の進化が待機中</p>`:''}<div class="fusion-symbol">${a.icon}</div><h2 class="fusion-title">EVOLUTION COMPLETE</h2><div class="subtitle">${a.name}</div><p class="desc">${coloredName(a.power)}　＋　${coloredName(a.legend)}<br>${a.desc}</p><div class="milestone" style="color:${fx.color}">✦ 機体カラーと攻撃紋様が進化しました！</div><small class="evolution-fx-label" style="color:${fx.color}">EVOLUTION MARK · ${fx.motif.toUpperCase()}</small></div><button class="primary" id="fusionNext">▶ 進化した機体で続行</button>`;
+ const a=pendingFusion,fx=evolutionVisualProfile(a.id);html=`<div class="reward-reveal-body" tabindex="0" role="region" aria-label="進化合成の獲得内容"><div class="evolution-complete" style="--evo-accent:${fx.color}"><p class="eyebrow">POWER × LEGENDARY — EVOLUTION FUSION</p>${pendingFusions.length?`<p class="fusion-progress">さらに ${pendingFusions.length} 件の進化が待機中</p>`:''}<div class="fusion-symbol">${a.icon}</div><h2 class="fusion-title">EVOLUTION COMPLETE</h2><div class="subtitle">${a.name}</div><p class="desc">${coloredName(a.power)}　＋　${coloredName(a.legend)}<br>${a.desc}</p><div class="milestone" style="color:${fx.color}">✦ 機体カラーと攻撃紋様が進化しました！</div><small class="evolution-fx-label" style="color:${fx.color}">EVOLUTION MARK · ${fx.motif.toUpperCase()}</small></div></div><div class="reward-reveal-actions"><button class="primary" id="fusionNext">▶ 進化した機体で続行</button></div>`;
  }else if(mode==='options'){
  html=`<p class="eyebrow">ANKIN DRIFT · CONFIGURATION</p><h2 class="logo small">OPTIONS</h2><p class="desc">画質・FPS・音量と演出を個別に調整できます。プレイの進行は一時停止中です。</p>${musicControls()}<div class="actions"><button class="primary" id="optionsBack">← ${optionsBack==='menu'?'タイトルへ戻る':'PAUSEDへ戻る'}</button></div>`;
  }else if(mode==='paused'){
@@ -2590,7 +2649,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  }else if(mode==='dead'||mode==='retired'){
  const retired=mode==='retired';const r=record.read(),duration=Math.floor(game.total);html=`<p class="eyebrow">${retired?'RUN TERMINATED · FINAL RECORD':'TRANSMISSION LOST · FINAL RECORD'} · ${game.gameMode==='challenge'?'CHALLENGE':'NORMAL'}</p><h2 class="logo small">${retired?'RUN ENDED':'GAME OVER'}</h2><div class="subtitle">${retired?'途中終了したプレイの記録':'最後まで戦った記録'} · ${SHIPS[player.shipType].jp}</div>${game.bestBroke?'<div class="newbest">✦ NEW PERSONAL BEST ✦</div>':''}<div class="results"><div><div class="result-num">${fmtTime(game.total)}</div><div class="result-label">SURVIVAL TIME</div></div><div><div class="result-num">${format(game.level)}</div><div class="result-label">FINAL LEVEL</div></div><div><div class="result-num">${format(game.damage)}</div><div class="result-label">TOTAL DAMAGE</div></div></div><div class="report-scroll"><div class="report-metrics"><div class="report-metric"><strong>${format(game.bossDamage)}</strong><small>ボスへのダメージ</small></div><div class="report-metric"><strong>${format(game.damage/Math.max(game.total,1)*60)}</strong><small>1分あたりのダメージ</small></div><div class="report-metric"><strong>${format(game.kills)}</strong><small>撃破数</small></div></div><h3>与ダメージ内訳</h3><div class="damage-breakdown">${resultBreakdown()}</div><h3>最終ビルド</h3><div class="report-chips">${buildSummary().specials.map(n=>`<span>✦ ${escHtml(n)}</span>`).join('')||'<span>特殊進化なし</span>'}</div><details><summary>通常スキル一覧（${buildSummary().cards.length}種類）</summary><div class="report-chips">${buildSummary().cards.map(n=>`<span>${escHtml(n)}</span>`).join('')}</div></details><div class="history"><b>戦績</b>：${format(game.kills)} KILLS<br>レリック ${Object.keys(game.relics).length} · シナジー ${Object.keys(game.synergies).length} · 進化 ${Object.keys(game.fusions).length} · UNIQUE ANKIN ${Object.keys(game.uniques).length}<br>自己ベスト：${fmtTime(r.time||0)} 生存 / LV ${format(r.level)} / DAMAGE ${format(r.damage)}</div></div><div class="actions"><button class="primary" id="restart">↻ リトライ</button><button class="secondary" id="inspect">◈ 今回のビルド</button><button class="secondary" id="title">タイトルへ</button></div><div class="fine">${saveWarning?"⚠ 保存失敗。バックアップを取得してください。":"今回の記録はこのブラウザに保存しました。"} · リトライで再挑戦できます</div>`;
  }
- panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('visual-lab',mode==='build'&&buildTab==='visual');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.classList.toggle('choice-panel',mode==='choice');panel.classList.toggle('fusion-choice-panel',mode==='elementChoice');panel.classList.toggle('archive-panel',mode==='archive');panel.innerHTML=html;
+ panel.classList.toggle('reward-reveal-panel',['uniqueReward','fusion','elementResult'].includes(mode));panel.classList.toggle('unique-reward-panel',mode==='uniqueReward');panel.classList.toggle('fusion-panel',mode==='fusion');panel.classList.toggle('lab-panel',mode==='build');panel.classList.toggle('visual-lab',mode==='build'&&buildTab==='visual');panel.classList.toggle('report-panel',mode==='dead'||mode==='retired'||mode==='victory');panel.classList.toggle('choice-panel',mode==='choice');panel.classList.toggle('fusion-choice-panel',mode==='elementChoice');panel.classList.toggle('archive-panel',mode==='archive');panel.innerHTML=html;
  panel.querySelectorAll('[data-control]').forEach(el=>el.addEventListener('click',()=>{controlMode=el.dataset.control;document.body.classList.toggle('pilot-mobile',controlMode==='mobile');clearTouch();resize();drawOverlay()}));panel.querySelectorAll('[data-game-mode]').forEach(el=>el.addEventListener('click',()=>{selectedGameMode=el.dataset.gameMode;drawOverlay()}));panel.querySelectorAll('[data-ship]').forEach(el=>el.addEventListener('click',()=>{selectedShip=el.dataset.ship;drawOverlay();tone(selectedShip==='laser'?760:selectedShip==='charge'?380:570,.1,'triangle',.04)}));panel.querySelectorAll('[data-element-main]').forEach(el=>el.addEventListener('click',()=>chooseFusionMain(el.dataset.elementMain)));panel.querySelectorAll('[data-element-sub]').forEach(el=>el.addEventListener('click',()=>selectElementFusion(el.dataset.elementSub)));panel.querySelectorAll('[data-fusion-weapon]').forEach(el=>el.addEventListener('click',()=>selectFusionWeapon(el.dataset.fusionWeapon)));click('fusionBackMain',backElementMain);click('fusionBackSub',backFusionSub);click('fusionBackWeapon',()=>{if(elementChoice){elementChoice={main:elementChoice.main,sub:elementChoice.sub};drawOverlay()}});click('fusionConfirm',confirmElementFusion);click('fusionSkip',skipElementFusion);click('fusionFromLevel',enterElementChoice);click('openArchive',()=>v13OpenArchive(mode));click('openTitleLab',openTitleLab);click('start',()=>{guideReturn='playing';boot()});click('openGuide',()=>{guideReturn='menu';state('guide')});click('guideContinue',()=>{markGuide();state(guideReturn)});click('openOptions',openOptions);click('optionsBack',()=>state(optionsBack));click('elementContinue',continueAfterReward);click('restart',boot);click('continueEndless',continueEndless);click('title',()=>state('menu'));click('resume',()=>state('playing'));click('quitRequest',()=>state('quitConfirm'));click('quitCancel',()=>state('paused'));click('quitYes',()=>endRun('retired'));click('back',()=>state(menuLabBackup?'menu':backMode));click('inspect',showBuild);click('sound',()=>{soundOn=!soundOn;if(soundOn)setupAudio();drawOverlay()});click('bgm',()=>{musicOn=!musicOn;nextMusicBeat=0;if(musicOn)setupAudio();drawOverlay()});for(const [id,key,display] of [['bgmVolume','bgm','bgmVolumeNum'],['sfxVolume','sfx','sfxVolumeNum']]){U(id)?.addEventListener('input',e=>{settings[key]=Number(e.target.value);U(display).textContent=settings[key]+'%';applyAudioLevels();saveSettings()})}U('fxQuality')?.addEventListener('change',e=>{settings.fx=e.target.value;saveSettings()});
  U('ankinTrial')?.addEventListener('toggle',e=>{ankinTrialOpen=e.target.open;});
  panel.querySelectorAll('[data-v13-challenge]').forEach(el=>el.addEventListener('click',()=>{if(!record.read().clears.length)return;ankinTrialOpen=true;const id=el.dataset.v13Challenge;if(!CHALLENGE_RULES.some(c=>c.id===id))return;if(selectedChallenges.has(id))selectedChallenges.delete(id);else selectedChallenges.add(id);const selected=selectedChallenges.has(id);el.classList.toggle('active',selected);el.setAttribute('aria-pressed',String(selected));const counter=U('ankinTrial')?.querySelector('.trial-counter');if(counter)counter.textContent=selectedChallenges.size+' / '+CHALLENGE_RULES.length+' 選択中';}));
@@ -5649,7 +5708,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.25', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.26', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 
