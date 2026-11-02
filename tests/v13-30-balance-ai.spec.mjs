@@ -6,6 +6,8 @@ import {summarizeRuns,runsToCsv,summaryToCsv} from '../scripts/balance-report.mj
 
 const ships=['shot','laser','charge','drill','dog'];
 const seconds=Number(process.env.ANKIN_AI_SECONDS||14),seeds=Number(process.env.ANKIN_AI_SEEDS||1);
+const policy=process.env.ANKIN_AI_POLICY||'tactical';
+if(!['tactical','legacy'].includes(policy))throw Error('Invalid ANKIN_AI_POLICY');
 if(!Number.isFinite(seconds)||seconds<1||seconds>120||!Number.isInteger(seeds)||seeds<1||seeds>20)throw Error('Invalid ANKIN_AI_SECONDS or ANKIN_AI_SEEDS');
 
 async function setup(page){
@@ -38,11 +40,16 @@ for(const scenario of ['live-pack','live-boss']){
   expect(profiles.ships).toEqual(ships);
   expect(new Set(Object.values(profiles.profiles).map(p=>p.range)).size).toBe(5);
   for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
-   const args={ship,seed,phase:10,scenario,build:'representative',seconds};
+   const args={ship,seed,phase:10,scenario,build:'representative',seconds,policy};
    const result=await page.evaluate(arg=>window.__ankinBalanceAI.runEncounter(arg),args);
    expect(result.schema).toBe('ankin-balance-v1');
    expect(result.ship).toBe(ship);
    expect(result.mode).toBe('ai');
+   expect(result.abilityPolicy).toBe(policy);
+   expect(result.dashReasons).toBeDefined();
+   expect(result.novaReasons).toBeDefined();
+   expect(result.dashReadySeconds).toBeGreaterThanOrEqual(0);
+   expect(result.novaReadySeconds).toBeGreaterThanOrEqual(0);
    expect(result.aiMoves).toBeGreaterThan(0);
    expect(result.secondsPlanned).toBe(seconds);
    expect(result.duration).toBeGreaterThan(0);
@@ -60,7 +67,7 @@ for(const scenario of ['live-pack','live-boss']){
    rows.push(result);
   }
   const replay=await page.evaluate(arg=>window.__ankinBalanceAI.runEncounter(arg),
-   {ship:'shot',seed:1,phase:10,scenario,build:'representative',seconds});
+   {ship:'shot',seed:1,phase:10,scenario,build:'representative',seconds,policy});
   expect(replay).toEqual(rows[0]);
   expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(storageBefore);
   expect(errors).toEqual([]);
@@ -75,6 +82,23 @@ for(const scenario of ['live-pack','live-boss']){
   }
  });
 }
+test('v13.33 tactical ability probes keep distant NOVAs charged and reject unsafe dash spam',async({page})=>{
+ const errors=await setup(page);
+ const cases=await page.evaluate(()=>{
+  const common={hpRatio:1,energy:100,novaCooldown:0,dashLeft:0,dashTime:0,iframes:0,
+   targetDist:400,bossDist:900,novaRadius:215,laserReach:730,drillOverdrive:0,
+   drillPlasmaRatio:.5,enemiesInNova:0,enemiesNear:0,enemiesForward:0,
+   threats:0,imminent:0,safeApproach:true};
+  return ['shot','laser','charge','drill','dog'].map(ship=>({ship,
+   far:window.__ankinBalanceAI.decide({...common,ship}),
+   near:window.__ankinBalanceAI.decide({...common,ship,bossDist:160}),
+   emergency:window.__ankinBalanceAI.decide({...common,ship,imminent:2})}));
+ });
+ expect(cases).toHaveLength(5);
+ for(const c of cases){expect(c.far.novaReason).toBeNull();expect(c.near.novaReason).toBeTruthy();
+  expect(c.emergency.dashReason).toBe('emergency-evade');}
+ expect(errors).toEqual([]);
+});
 test('AI survival: time-specific harder packs, real enemy bullets and crash-safe sandbox restoration',async({page})=>{
  const errors=await setup(page);
  const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));
@@ -120,7 +144,7 @@ test('optional true 30-minute run using real scheduler and automatic in-game car
  const prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
  const out=[];
  for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
-  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860});
+  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860,policy});
   expect(row.fullRun).toBe(true);
   expect(row.simulationTime).toBeGreaterThan(0);
   expect(['dead','clear','time-limit'].some(x=>row.stopReason===x),JSON.stringify(row)).toBe(true);
