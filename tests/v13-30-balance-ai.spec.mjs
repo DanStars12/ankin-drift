@@ -38,7 +38,7 @@ for(const scenario of ['live-pack','live-boss']){
   expect(profiles.ships).toEqual(ships);
   expect(new Set(Object.values(profiles.profiles).map(p=>p.range)).size).toBe(5);
   for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
-   const args={ship,seed,phase:scenario==='live-pack'?10:0,scenario,build:'representative',seconds};
+   const args={ship,seed,phase:10,scenario,build:'representative',seconds};
    const result=await page.evaluate(arg=>window.__ankinBalanceAI.runEncounter(arg),args);
    expect(result.schema).toBe('ankin-balance-v1');
    expect(result.ship).toBe(ship);
@@ -52,6 +52,7 @@ for(const scenario of ['live-pack','live-boss']){
    expect(result.playerHp).toBeGreaterThanOrEqual(0);
    expect(typeof result.alive).toBe('boolean');
    expect(typeof result.won).toBe('boolean');
+   if(result.won){expect(result.timeToWin).toBeGreaterThan(0);expect(result.timeToWin).toBeCloseTo(result.duration,2);}else expect(result.timeToWin).toBeNull();
    expect(result.cleared).toBe(false);
    expect(result.buckets.reduce((a,b)=>a+b.damage,0)).toBeCloseTo(result.damage,2);
    expect(result.hits).toBeGreaterThanOrEqual(0);
@@ -59,7 +60,7 @@ for(const scenario of ['live-pack','live-boss']){
    rows.push(result);
   }
   const replay=await page.evaluate(arg=>window.__ankinBalanceAI.runEncounter(arg),
-   {ship:'shot',seed:1,phase:scenario==='live-pack'?10:0,scenario,build:'representative',seconds});
+   {ship:'shot',seed:1,phase:10,scenario,build:'representative',seconds});
   expect(replay).toEqual(rows[0]);
   expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(storageBefore);
   expect(errors).toEqual([]);
