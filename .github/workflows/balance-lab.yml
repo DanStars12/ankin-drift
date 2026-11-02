@@ -19,6 +19,12 @@ on:
         default: tactical
         type: choice
         options: [tactical, legacy]
+      fusion_policy:
+        description: 'Full 30-minute fusion comparison: always / adaptive / never'
+        required: true
+        default: always
+        type: choice
+        options: [always, adaptive, never]
       mode:
         description: 'Run v13.29 DPS, v13.30 live AI, or expensive 30-minute clear-rate simulation'
         required: true
@@ -44,6 +50,7 @@ jobs:
       ANKIN_AI_SEEDS: ${{ inputs.seeds }}
       ANKIN_AI_SECONDS: ${{ inputs.duration }}
       ANKIN_AI_POLICY: ${{ inputs.policy }}
+      ANKIN_FUSION_POLICY: ${{ inputs.fusion_policy }}
       ANKIN_BALANCE_FULL: ${{ inputs.mode == 'full-30m' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
