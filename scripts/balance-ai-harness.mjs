@@ -173,6 +173,54 @@ window.__ankinBalanceAI={
    return balanceResult(report,seconds,{won,cleared:false,terminal:game.runOutcome==='dead',phaseMinutes:phase,aiMoves,aiDodges});
   });
  },
+ // Long-run mode is deliberately separate from CI. This drives the actual 30:00
+ // scheduler and normal reward menus. Never interpret short scenarios as clear rate.
+ runFull({ship='shot',seed=1,seconds=1830}={}){
+  if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
+  if(!Number.isFinite(seconds)||seconds<1800||seconds>2400)throw Error('A full run must include at least 30:00 and is capped at 40:00');
+  return balanceSandbox(()=>{
+   balanceSetup(ship,seed,0,'normal-random-rewards','full-30m');
+   game.total=0;runClock=0;game.nextBossAt=60;game.nextRaidAt=105;
+   game.nextRelicAt=180;game.nextVacuumAt=110;game.nextUltimateAt=1800;
+   game.ultimateEncounterAt=0;game.spawn=.78;game.autoBank=false;
+   let aiMoves=0,aiDodges=0,menuChoices=0,menuSkips=0;
+   let lastDash=0,step=0,unhandled=null;
+   const dt=1/60,steps=Math.ceil(seconds*60);
+   function resolveMenus(){
+    for(let n=0;n<20&&mode!=='playing'&&mode!=='dead'&&mode!=='victory';n++){
+     if(mode==='choice'){
+      const valid=choices.filter(c=>c&&(!c.isSupply||player.hp<player.maxHp*.80));
+      const pick=valid.length?valid[0]:choices[0];
+      if(!pick){unhandled='empty choice';break;}
+      choose(choices.indexOf(pick));menuChoices++;
+     }else if(mode==='uniqueReward'){
+      continueAfterReward();menuSkips++;
+     }else if(mode==='fusion'){
+      dismissFusion();menuSkips++;
+     }else if(mode==='elementResult'||mode==='elementConfirm'||mode==='elementChoice'){
+      // Element fusion is not automated in this initial full-run strategy.
+      pendingElementChoice=false;pendingElementPairs=[];elementChoice=null;
+      state('playing');menuSkips++;
+     }else{unhandled=mode;break;}
+    }
+   }
+   for(;step<steps&&!game.completed&&game.runOutcome!=='dead';step++){
+    resolveMenus();
+    if(unhandled||mode!=='playing')break;
+    const a=balancePilotStep(step);if(a.move)aiMoves++;
+    drive(dt);
+    const dd=game.combatLog.dashCount-lastDash;if(dd>0)aiDodges+=dd;lastDash=game.combatLog.dashCount;
+    if(mode!=='playing')resolveMenus();
+   }
+   const t=balanceTelemetryReport();
+   return {...balanceResult(t,seconds,{won:!!game.completed,cleared:game.clearCount>0,
+    terminal:game.completed||game.runOutcome==='dead',phaseMinutes:0,aiMoves,aiDodges}),
+    fullRun:true,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
+    menuChoices,menuSkips,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
+      unhandled?'unhandled-menu:'+unhandled:step>=steps?'time-limit':'unknown',
+    clearCount:game.clearCount};
+  });
+ },
  inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES}};
 };
 `;
