@@ -7,7 +7,7 @@ const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
  laser:{range:175,strafe:0.92,aggression:1},
  charge:{range:220,strafe:0.62,aggression:.8},
- drill:{range:38,strafe:.06,aggression:1.45},
+ drill:{range:58,strafe:.24,aggression:1.2},
  dog:{range:205,strafe:.78,aggression:.92}
 };
 function balanceThreats(){
@@ -64,8 +64,7 @@ function balancePilotStep(frame){
  }
  x+=threat.x*1.7;y+=threat.y*1.7;
  // Charge ships deliberately hold still to charge, then reposition to fire.
- const closeEnemies=targets.some(e=>d2(p,e)<150*150);
- if(p.shipType==='charge'&&threat.weight<.10&&!closeEnemies&&Math.floor(sec*10)%20<16){x=0;y=0;}
+ if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
  const m=Math.hypot(x,y),stop=m<.14;
  if(!stop){
   x/=m;y/=m;
@@ -73,15 +72,9 @@ function balancePilotStep(frame){
   if(y>.18)keys.add('KeyS');else if(y<-.18)keys.add('KeyW');
  }
  // Defensive dash, and for the drill a proactive gap-closing strike.
- const drillStrike=p.shipType==='drill'&&d>45&&d<165&&p.drillPlasma>p.drillCap*.30&&threat.weight<.65;
- if(p.dashLeft<=0&&(threat.near>0||drillStrike)){
-  if(drillStrike&&threat.near===0){
-   // Dash directly through the enemy instead of tangentially orbiting outside melee reach.
-   keys.clear();
-   if(ux>.18)keys.add('KeyD');else if(ux<-.18)keys.add('KeyA');
-   if(uy>.18)keys.add('KeyS');else if(uy<-.18)keys.add('KeyW');
-   p.dx=ux;p.dy=uy;
-  }else if(!stop){p.dx=x;p.dy=y;}
+ if(p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))){
+  // Dash in the computed safe direction, not back into an incoming projectile.
+  if(!stop){p.dx=x;p.dy=y;}
   dash();
  }
  if(p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38))nova();

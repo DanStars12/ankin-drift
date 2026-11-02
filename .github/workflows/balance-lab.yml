@@ -87,7 +87,7 @@ jobs:
           - { scenario: live-ai, project: desktop, seeds: '5', duration: '20' }
           - { scenario: live-ai, project: mobile-390, seeds: '5', duration: '20' }
           - { scenario: live-ai, project: mobile-320, seeds: '5', duration: '20' }
-          - { scenario: full-30m, project: desktop, seeds: '1', duration: '30' }
+          - { scenario: full-30m, project: desktop, seeds: '5', duration: '30' }
     env:
       ANKIN_BALANCE_SEEDS: ${{ matrix.seeds }}
       ANKIN_BALANCE_DURATION: ${{ matrix.duration }}
