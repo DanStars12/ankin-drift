@@ -36,19 +36,20 @@ window.__ankinBalanceLabTest={
     if(ship==='drill')p.drillDamage+=90;
     if(ship==='dog')p.dogBones=3;
    }
+   // Keep pack density constant, otherwise 12 total HPs cap the measured DPS.
+   let spawned=0;
+   function addPackEnemy(){
+    const i=spawned++,x=clamp(p.x+65+(i%4)*32,35,W-35),
+      y=clamp(p.y-75+Math.floor(i%12/4)*69,35,H-35);
+    const e=spawnEnemy(i%4===0?'brute':'drone',{x,y});
+    if(e){e.spd=0;e.dmg=0;e.shoot=1e9;e.hp=e.maxHp=i%4===0?450:140;}
+   }
    if(scenario==='boss'){
     const x=p.x+(ship==='drill'?60:175);
     enemies.push({x,y:p.y,r:38,type:'major',variant:'titan',hp:1e9,maxHp:1e9,
       spd:0,dmg:0,xp:0,color:'#ffdfad',dead:false,hurt:0,phase:0,shoot:1e9,
       burn:0,burnDps:0,slow:0,frozen:0,rockHit:0,bladeHit:0,attacks:0});
-   }else{
-    for(let i=0;i<12;i++){
-     const x=clamp(p.x+65+(i%4)*32,35,W-35);
-     const y=clamp(p.y-75+Math.floor(i/4)*69,35,H-35);
-     const e=spawnEnemy(i%4===0?'brute':'drone',{x,y});
-     if(e){e.spd=0;e.dmg=0;e.shoot=1e9;e.hp=e.maxHp=i%4===0?450:140;}
-    }
-   }
+   }else for(let i=0;i<12;i++)addPackEnemy();
    beginBalanceTelemetry({ship,seed,scenario,build});
    const dt=1/60,steps=Math.ceil(seconds*60);
    for(let i=0;i<steps;i++){
@@ -60,6 +61,10 @@ window.__ankinBalanceLabTest={
      if(e){keys.add(e.x>p.x?'KeyD':'KeyA');if(p.dashLeft<=0&&time>1)dash();}
     }
     drive(dt);
+    if(scenario==='pack'&&i%6===0){
+     enemies=enemies.filter(e=>!e.dead);
+     while(enemies.length<12&&spawned<300)addPackEnemy();
+    }
    }
    return balanceTelemetryReport();
   }finally{
