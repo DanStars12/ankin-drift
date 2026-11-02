@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.27 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.28 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.27 | UI FUSION CHOICE</title>
+<title>ANKIN DRIFT v13.28 | UI FUSION CHOICE</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -874,7 +874,7 @@ body.pilot-mobile #dashTouch{background-image:linear-gradient(145deg,#29567bf2,#
 
 /* Maintenance: keep LAB search/dropdown keyboard focus clearly visible. */
 .panel.lab-panel .atlas-controls input:focus-visible,.panel.lab-panel .atlas-controls select:focus-visible{outline:2px solid #8ef7de;outline-offset:2px;border-color:#8ef7de}
-/* v13.27 — compact full-viewport upgrade choices / archive and fusion readability */
+/* v13.28 — compact full-viewport upgrade choices / archive and fusion readability */
 body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);max-width:none;overflow:hidden;padding:6px 7px;touch-action:auto}
 .panel.choice-panel{width:min(1060px,calc(100vw - 12px));height:min(760px,calc(100dvh - 12px));max-height:calc(100dvh - 12px);display:flex;flex-direction:column;overflow:hidden;padding:clamp(7px,1.4vh,16px) clamp(8px,2vw,20px);gap:0}
 .panel.choice-panel:before{z-index:1}
@@ -923,7 +923,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 }
 @media(max-height:600px) and (max-width:600px){.panel.choice-panel .choice-icon{font-size:19px}.panel.choice-panel .choice-attrs{display:none}.panel.choice-panel .choice .synergy-note{max-height:23px}.panel.choice-panel .choice .evolve{max-height:24px}}
 
-/* v13.27: Four-choice boss cards have independent readable details.
+/* v13.28: Four-choice boss cards have independent readable details.
    Do not clip evolution or synergy at a fixed arbitrary height. */
 .panel.choice-panel .choice-grid.four-choice{overflow:hidden;min-height:0;grid-auto-rows:minmax(0,1fr)}
 .panel.choice-panel .choice-grid.four-choice .choice{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;touch-action:pan-y;align-content:start}
@@ -938,7 +938,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
  .panel.choice-panel .choice-grid.four-choice .choice .evolve .recipe-effect{display:block}
 }
 
-/* v13.27: Every 3/4-card reward has readable, independently scrollable details.
+/* v13.28: Every 3/4-card reward has readable, independently scrollable details.
    Keep the bottom actions visible; never silently crop synergy/evolution text. */
 .panel.choice-panel .choice-grid{grid-auto-rows:minmax(0,1fr);overflow:hidden}
 .panel.choice-panel .choice-grid .choice{
@@ -960,7 +960,18 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 }
 
 
-/* v13.27: the mobile reward summary must use natural document flow.
+
+/* v13.28: boss ultimate charge, telegraph, and explicit punishment window. */
+.boss-special-wrap{margin-top:5px;min-width:0}
+.boss-special-caption{color:#ffd88d;text-align:center;font-size:10px;font-weight:850;letter-spacing:.04em;line-height:1.45}
+.boss-special-track{height:7px;border-radius:99px;overflow:hidden;border:1px solid #ce9e4d8a;background:#261c2e}
+.boss-special-track>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#f6c55a,#ff695a);transition:width .08s linear}
+.boss-special-wrap.telegraph .boss-special-track>span{background:#ff5473;animation:bossSpecialWarn .35s linear infinite alternate}
+.boss-special-wrap.recover .boss-special-caption{color:#8bffde}
+.boss-special-wrap.recover .boss-special-track>span{background:#59d7bd}
+@keyframes bossSpecialWarn{to{filter:brightness(1.7)}}
+@media(max-width:520px){.boss-special-caption{font-size:9px}.boss-special-track{height:6px}}
+/* v13.28: the mobile reward summary must use natural document flow.
    Previously grid-row:2/3 for the name collided with multiline ready banners. */
 .panel.choice-panel .choice-grid .choice-skill-head{display:contents}
 .panel.choice-panel .choice-grid .choice-name,
@@ -1109,7 +1120,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
   <div class="hud-box"><div class="micro" id="waveType">SURVIVAL TIME</div><div class="hud-value" id="hudWave">00:00</div><div class="bar"><span id="waveFill"></span></div><div id="waveText" class="stat-detail">中ボスまで 01:00</div><div id="vacuumTimer" class="vacuum-timer">✦ EXP SWEEP · RANDOM EVENT</div></div>
   <div class="hud-right"><div class="hud-box hud-level"><div class="level-row"><span class="micro">PILOT LEVEL</span><span class="hud-value" id="hudLevel">LV 01</span></div><div class="bar xp"><span id="xpFill" style="width:0%"></span></div><div class="stat-detail level-text" id="xpText">0 / 35 EXP</div></div><div class="hud-box hud-score"><div class="micro">TOTAL DAMAGE / 合計ダメージ</div><div class="hud-value" id="damageTotal">0</div><div class="stat-detail"><span id="kills">0 KILLS</span></div></div><button class="tinybutton" id="upgradeButton" hidden title="保留した強化を選択 (L)">✦ 強化ストック</button><button class="tinybutton" id="buildButton" title="ビルドを見る (B)">◈ BUILD [B]</button><button class="tinybutton" id="optionsButton" title="オプション・設定">⚙</button><button class="tinybutton" id="pauseButton" title="一時停止 (P)">Ⅱ</button></div>
  </div>
- <div id="raidStatus" role="status" aria-live="off"></div><div class="boss-wrap" id="bossWrap"><div class="bossname" id="bossName">BOSS</div><div class="bar boss"><span id="bossFill"></span></div><div id="ultimateModules" class="ultimate-modules" hidden></div></div>
+ <div id="raidStatus" role="status" aria-live="off"></div><div class="boss-wrap" id="bossWrap"><div class="bossname" id="bossName">BOSS</div><div class="bar boss"><span id="bossFill"></span></div><div id="bossSpecialWrap" class="boss-special-wrap" hidden><div class="boss-special-caption" id="bossSpecialCaption">大技チャージ</div><div class="boss-special-track"><span id="bossSpecialFill"></span></div></div><div id="ultimateModules" class="ultimate-modules" hidden></div></div>
  <div class="hud-bottom"><div class="hud-box"><div class="micro">Hull integrity <span id="hpText" style="float:right;letter-spacing:0">100 / 100</span></div><div class="bar hp"><span id="hpFill"></span></div><div class="micro" style="margin-top:8px">Shield capacity <span id="shieldText" style="float:right;letter-spacing:0">0 / 0</span></div><div class="bar shield"><span id="shieldFill" style="width:0%"></span></div><div class="micro" style="margin-top:9px">Nova charge <span id="energyText" style="float:right;letter-spacing:0">0%</span></div><div class="bar nova"><span id="energyFill" style="width:0"></span></div><div class="stat-detail" id="dashText">DASH READY / SHIELD 0</div></div><div class="keys-help"><span class="kbd">WASD</span>移動　<span class="kbd">SPACE</span>ダッシュ<br><span class="kbd">E</span>ノヴァ　<span class="kbd">B</span>ビルド　<span class="kbd">P</span>停止</div></div>
  <div class="hud-build" id="hudBuild"></div>
 </div>
@@ -1127,7 +1138,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
 (()=>{'use strict';
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false}),overlay=document.getElementById('overlay'),panel=document.getElementById('panel'),hud=document.getElementById('hud');
 const U=id=>document.getElementById(id);
-const ui={wave:U('hudWave'),waveType:U('waveType'),waveFill:U('waveFill'),waveText:U('waveText'),damage:U('damageTotal'),kills:U('kills'),hpText:U('hpText'),hpFill:U('hpFill'),shieldText:U('shieldText'),shieldFill:U('shieldFill'),energyText:U('energyText'),energyFill:U('energyFill'),dashText:U('dashText'),bossWrap:U('bossWrap'),bossName:U('bossName'),bossFill:U('bossFill'),build:U('hudBuild'),level:U('hudLevel'),xpFill:U('xpFill'),xpText:U('xpText'),announcement:U('announcement')};
+const ui={wave:U('hudWave'),waveType:U('waveType'),waveFill:U('waveFill'),waveText:U('waveText'),damage:U('damageTotal'),kills:U('kills'),hpText:U('hpText'),hpFill:U('hpFill'),shieldText:U('shieldText'),shieldFill:U('shieldFill'),energyText:U('energyText'),energyFill:U('energyFill'),dashText:U('dashText'),bossWrap:U('bossWrap'),bossName:U('bossName'),bossFill:U('bossFill'),bossSpecialWrap:U('bossSpecialWrap'),bossSpecialFill:U('bossSpecialFill'),bossSpecialCaption:U('bossSpecialCaption'),build:U('hudBuild'),level:U('hudLevel'),xpFill:U('xpFill'),xpText:U('xpText'),announcement:U('announcement')};
 const TAU=Math.PI*2,RARITY_NAMES={common:'COMMON',uncommon:'UNCOMMON',rare:'RARE',epic:'EPIC',legendary:'LEGENDARY',power:'ANKIN POWER',unique:'UNIQUE ANKIN',relic:'RELIC',supply:'SUPPLY'};
 const RARITY_NAMES_JP={common:'コモン',uncommon:'アンコモン',rare:'レア',epic:'エピック',legendary:'レジェンダリー',power:'ANKIN POWER',unique:'ユニーク',relic:'レリック',supply:'補給'};
 const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.max(a,Math.min(n,b)),d2=(a,b)=>((a.x-b.x)**2+(a.y-b.y)**2),dst=(a,b)=>Math.sqrt(d2(a,b));
@@ -1139,7 +1150,7 @@ const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub
 let W=innerWidth,H=innerHeight,dpr=1,mode='menu',backMode='playing',last=0,t=0,shake=0,flash=0,stars=[],particles=[],floats=[],enemies=[],shots=[],hostile=[],pickups=[],hazards=[],zones=[],player=null,game=null,boss=null,choices=[],keys=new Set(),soundOn=true,audio=null;
 const MAX_ENEMIES=235,MAX_SHOTS=290,MAX_HOSTILE=440,MAX_PICKUPS=620;
 // Normal enemy movement is tuned independently from boss movement. Never exceed each cap.
-const ENEMY_SPEED={drone:{start:36,gain:2.1,cap:84},stinger:{start:58,gain:2.65,cap:118},brute:{start:18,gain:1.0,cap:42},shooter:{start:30,gain:1.55,cap:68},guard:{start:20,gain:1.1,cap:47},bomber:{start:34,gain:1.7,cap:76},support:{start:25,gain:1.08,cap:53},phantom:{start:47,gain:2.6,cap:105}};
+const ENEMY_SPEED={drone:{start:36,gain:2.1,cap:84},stinger:{start:58,gain:2.65,cap:118},brute:{start:18,gain:1.0,cap:42},shooter:{start:30,gain:1.55,cap:68},guard:{start:20,gain:1.1,cap:47},bomber:{start:34,gain:1.7,cap:76},support:{start:25,gain:1.08,cap:53},phantom:{start:40,gain:1.6,cap:83}};
 function enemySpeedAt(type,elapsedMinutes){const p=ENEMY_SPEED[type];return p?Math.min(p.cap,p.start+p.gain*Math.max(0,elapsedMinutes)):null}
 const ENEMY_CODEX=[
  {id:'drone',jp:'スカウト・ドローン',en:'SCOUT DRONE',kind:'normal',color:'#ff6382',shape:'circle',hp:42,desc:'序盤の主力となる赤い追跡機。時間とともに出現率が下がり、30分以降は少数になる。',behavior:'群れで接近 / 接触攻撃',unlock:'最初から'},
@@ -1149,7 +1160,7 @@ const ENEMY_CODEX=[
  {id:'guard',jp:'シールド・ガーディアン',en:'SHIELD GUARDIAN',kind:'normal',color:'#66dff5',shape:'shield',hp:132,desc:'前方の射撃ダメージを45%軽減し、レーザーの継続ダメージも30%軽減する鈍重な敵。側面や範囲攻撃が有効。',behavior:'前方ガード / 横と背後が弱点',unlock:'12:30以降、後半から徐々に増加'},
  {id:'bomber',jp:'ボム・クローラー',en:'BOMB CRAWLER',kind:'normal',color:'#ff7358',shape:'bomber',hp:69,desc:'プレイヤーを感知すると点滅しながら加速。爆発距離に入ると停止して自爆する。爆風は敵に影響せず岩壁を貫通するが、シールドで防げる。',behavior:'感知で加速・点滅 / 接近で停止後自爆 / シールド防御可',unlock:'15:00以降、徐々に増加'},
  {id:'support',jp:'ブースト・サポーター',en:'BOOST SUPPORTER',kind:'normal',color:'#b0f875',shape:'support',hp:90,desc:'周囲の雑魚敵の移動速度と射撃頻度を短時間強化。緑の波紋が目印。真っ先に倒すと安全。',behavior:'周囲を強化 / 攻撃はしない',unlock:'18:00以降、徐々に増加'},
- {id:'phantom',jp:'ファントム・ランナー',en:'PHANTOM RUNNER',kind:'normal',color:'#ff85d9',shape:'phantom',hp:56,desc:'稀に現れる高速突進型。線状予告の後に突進する。出現数は後半も少なめ。',behavior:'予告線 / 直線ダッシュ',unlock:'21:00以降、徐々に増加'},
+ {id:'phantom',jp:'パルス・インターセプター',en:'PULSE INTERCEPTOR',kind:'normal',color:'#ffb853',shape:'interceptor',hp:64,desc:'進路を予測して予告線の先へ射撃する迎撃機。左右へ回り込むことで射線から逃れられる。',behavior:'予測射撃 / 予告線 / 側面への回り込み',unlock:'16:00以降、後半に少数の迎撃部隊として出現'},
  {id:'relic',jp:'レリック・ワンダラー',en:'RELIC WANDERER',kind:'relic',color:'#ffbdff',shape:'relic',hp:260,desc:'まれに現れる虹色の非攻撃エネミー。倒すと機体専用レリックの報酬3択。',behavior:'攻撃しない / 専用レリック',speed:43},
  {id:'guardian',jp:'アンキン・ガーディアン',en:'ANKIN GUARDIAN',kind:'boss',tier:'minor',color:'#e181ff',shape:'star12',hp:760,desc:'最初の1:00に確定で現れる中ボス。以後はランダム候補。全周弾幕が特徴。',behavior:'中ボス / 放射弾 / ANKIN POWER',speed:65},
  {id:'raptor',jp:'ソニック・ラプター',en:'SONIC RAPTOR',kind:'boss',tier:'minor',color:'#fd88b9',shape:'raptor',hp:680,desc:'高速タイプの中ボス。短い予告線の後、プレイヤー方向へ連続攻撃を仕掛ける。',behavior:'中ボス / 高速追跡 / 予告付き射撃',speed:95},
@@ -1353,7 +1364,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.27 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.28 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -2487,7 +2498,7 @@ const VISUAL_CODEX_ROWS=[
  ['dogNineApex','mutation','dog','','白金色に輝く九尾の最終形態。','nineTailApex','dogMutNineTail'],
  ['dogHamApex','mutation','dog','','星装甲を持つ上位ハムスター。','armorHamApex','dogMutHam']
 ];
-// v13.27 — use canonical card/recipe data, not duplicated Japanese labels.
+// v13.28 — use canonical card/recipe data, not duplicated Japanese labels.
 // The getters resolve only when the gallery opens, after all game definitions
 // and DOG display-name overrides have been registered.
 const VISUAL_DOG_APEX_RECIPE_IDS=Object.freeze({
@@ -2660,7 +2671,7 @@ function enemySpriteMarkup(e){
  shield:`<polygon points="48,14 76,30 76,66 48,82 20,66 20,30" fill="${e.color}"/><path d="M26 47Q48 18 70 47" fill="none" stroke="#e8ffff" stroke-width="7" stroke-linecap="round"/><circle cx="48" cy="50" r="9" fill="#164759"/>`,
  bomber:`<circle cx="48" cy="48" r="27" fill="${e.color}"/><path d="M48 23V73M23 48H73" stroke="#ffddd0" stroke-width="7"/><circle cx="48" cy="48" r="12" fill="#8e1f18"/>`,
  support:`<polygon points="48,10 58,30 80,16 66,38 88,48 66,58 80,80 58,66 48,86 38,66 16,80 30,58 8,48 30,38 16,16 38,30" fill="${e.color}"/><circle cx="48" cy="48" r="13" fill="#e9ffb7"/>`,
- phantom:`<path d="M48 10L82 68L48 52L14 68Z" fill="${e.color}" stroke="#ffe1f5" stroke-width="3"/><path d="M48 24L48 52" stroke="#5b1e60" stroke-width="7" stroke-linecap="round"/>`,
+ interceptor:`<polygon points="48,8 68,26 85,46 66,69 48,87 30,69 11,46 28,26" fill="${e.color}" stroke="#ffebc0" stroke-width="4"/><path d="M48 18V78 M20 46H76" stroke="#80421e" stroke-width="7"/><circle cx="48" cy="46" r="12" fill="#fff1b7"/>`,
  raptor:`<path d="M48 6L67 24L87 74L63 66L48 84L33 66L9 74L29 24Z" fill="${e.color}" stroke="#ffe0f2" stroke-width="3"/><path d="M48 16L59 39L48 61L37 39Z" fill="#713249"/><circle cx="48" cy="39" r="7" fill="#ffe7f3"/>`,
  hive:`<polygon points="48,8 81,25 81,70 48,88 15,70 15,25" fill="${e.color}"/><circle cx="48" cy="48" r="22" fill="#513577"/><circle cx="48" cy="48" r="10" fill="#ffe7ff"/>`,
  rail:`<rect x="16" y="15" width="64" height="67" rx="8" fill="${e.color}"/><rect x="41" y="3" width="14" height="90" fill="#ffe6e0"/><circle cx="48" cy="48" r="16" fill="#772d44"/>`,
@@ -2682,11 +2693,11 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.27 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.28 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.27 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.28 · UI FUSION CHOICE</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -3961,12 +3972,12 @@ const NORMAL_CONFIG={
  stinger:{r:10,hp:23,dmg:12,xp:12,color:'#ffb773'},brute:{r:21,hp:120,dmg:24,xp:24,color:'#b89bff'},
  shooter:{r:15,hp:73,dmg:17,xp:17,color:'#73bbff'},drone:{r:13,hp:42,dmg:15,xp:12,color:'#ff6382'},
  guard:{r:19,hp:132,dmg:21,xp:24,color:'#66dff5'},bomber:{r:13,hp:69,dmg:0,xp:17,color:'#ff7358'},
- support:{r:16,hp:90,dmg:0,xp:22,color:'#b0f875'},phantom:{r:11,hp:56,dmg:14,xp:19,color:'#ff85d9'}
+ support:{r:16,hp:90,dmg:0,xp:22,color:'#b0f875'},phantom:{r:12,hp:64,dmg:16,xp:21,color:'#ffb853'}
 };
  // v9.4 — Swarm-first ecology: small enemies dominate the opening; specialists enter slowly.
  // Boss fights keep their threat focused in early runs. This relief fades out by 25 minutes.
  const ENEMY_ORDER=['drone','stinger','brute','shooter','guard','bomber','support','phantom'];
- const ENEMY_INTRO={drone:0,stinger:.35,brute:3.5,shooter:8.5,guard:12.5,bomber:15,support:18,phantom:21};
+ const ENEMY_INTRO={drone:0,stinger:.35,brute:3.5,shooter:8.5,guard:12.5,bomber:15,support:18,phantom:16};
  const ENEMY_MIX=[
   {m:0,   w:[100, 0, 0, 0, 0, 0, 0, 0]},
   {m:1,   w:[ 95, 5, 0, 0, 0, 0, 0, 0]},
@@ -3977,11 +3988,11 @@ const NORMAL_CONFIG={
   {m:10,  w:[ 63,23,12, 2, 0, 0, 0, 0]},
   {m:12.5,w:[ 55,23,13, 9, 0, 0, 0, 0]},
   {m:15,  w:[ 46,23,15,12, 4, 0, 0, 0]},
-  {m:18,  w:[ 35,21,17,14, 8, 5, 0, 0]},
-  {m:21,  w:[ 27,20,18,13,10, 7, 5, 0]},
-  {m:25,  w:[ 13,17,20,21,14, 9, 5, 1]},
-  {m:30,  w:[  6,12,22,23,18,12, 6, 1]},
-  {m:45,  w:[  3, 8,23,28,19,13, 5, 1]}
+  {m:18, w:[ 35,21,17,14, 8, 5, 0, 3]},
+  {m:21, w:[ 27,20,18,13,10, 7, 5, 4]},
+  {m:25, w:[ 13,17,20,21,14, 9, 5, 5]},
+  {m:30, w:[  6,12,22,23,18,12, 6, 5]},
+  {m:45, w:[  3, 8,23,28,19,13, 5, 4]}
  ];
  const STRONG_NORMAL_TYPES=new Set(['brute','shooter','guard','bomber','support','phantom']);
  function bossFocusRelief(mins){
@@ -4070,7 +4081,7 @@ function spawnUltimateBoss(){
  const core={x:W*.5,y:Math.min(H*.32,Math.max(rad*2+65,220)),r:rad,type:'ultimate',variant:'theEnd',hp,maxHp:hp,
   spd:mobile?34:48,dmg:50+Math.min(79,Math.floor(lvl*.68)),xp:0,color:'#ffbc81',dead:false,hurt:0,phase:0,shoot:1.65,
   burn:0,burnDps:0,slow:0,frozen:0,rockHit:0,bladeHit:0,attacks:0,phaseNumber:1,phaseChanged:0,invulnFloor:.82*hp};
- boss=core;enemies.push(core);
+ setupBossSuper(core);boss=core;enemies.push(core);
  const names=['左翼砲塔','中央動力核','右翼砲塔'];
  game.ultimateParts=names.map((name,i)=>{
   const moduleHP=Math.round(hp*(mobile?.145:.175));
@@ -4150,6 +4161,66 @@ function continueEndless(){
  game.bossQueue=[];game.ultimatePending=false;game.ultimateParts=[];game.raid=null;
  game.spawn=.85;state('playing');announce('∞ ENDLESS MODE — 次のTHE・END・OF・ANKINは '+fmtTime(game.nextUltimateAt),4);
 }
+
+/* v13.28 — Boss ultimates use game time, not wall time.
+   Normal volleys continue while charging; an announced fixed hazard is followed
+   by an attack-and-movement-free recovery window. */
+const BOSS_SUPER_RULES={
+ minor:{wait:3.6,charge:10.0,warn:1.35,recover:2.4},
+ major:{wait:4.2,charge:11.6,warn:1.45,recover:2.7},
+ unique:{wait:4.8,charge:13.0,warn:1.55,recover:3.0},
+ ultimate:{wait:5.4,charge:14.0,warn:1.65,recover:3.2}
+};
+const hasBossSuper=e=>!!e&&!!BOSS_SUPER_RULES[e.type];
+function setupBossSuper(e){
+ const r=BOSS_SUPER_RULES[e.type];if(!r)return;
+ e.superState='wait';e.superWait=r.wait;e.superCharge=0;e.superWarn=0;e.superRecover=0;
+ e.superAimX=0;e.superAimY=0;e.superCount=0;
+}
+function bossSuperGeometry(e){
+ const x=e.superAimX,y=e.superAimY;
+ if(e.type==='minor')return {kind:'blast',x,y,r:83};
+ if(e.type==='ultimate')return {kind:'blast',x,y,r:112};
+ return {kind:'beam',x,y,width:e.type==='unique'?13:14,angles:e.type==='unique'?[0,Math.PI/3,Math.PI*2/3]:[0,Math.PI/2]};
+}
+function triggerBossSuper(e){
+ if(!hasBossSuper(e)||e.dead)return;
+ const shape=bossSuperGeometry(e),power=e.type==='ultimate'?.65:e.type==='unique'?.72:.74;
+ if(shape.kind==='blast')hazards.push({type:'blast',x:shape.x,y:shape.y,r:shape.r,warn:0,active:.44,damage:Math.max(12,e.dmg*power)});
+ else for(const a of shape.angles)hazards.push({type:'beam',x:shape.x,y:shape.y,a,warn:0,active:.40,width:shape.width,damage:Math.max(12,e.dmg*power),tint:'#ffb478'});
+ e.superCount++;e.superState='recover';e.superRecover=BOSS_SUPER_RULES[e.type].recover;
+ e.shoot=Math.max(e.shoot,.48);
+ pop(e.x,e.y-e.r-34,'OVERHEAT — 攻撃チャンス！','#9bffe2');
+ ring(e.x,e.y,e.r+36,'#75e7c0');
+}
+function tickBossSuper(e,dt){
+ if(!hasBossSuper(e)||!e.superState)return;
+ const r=BOSS_SUPER_RULES[e.type];
+ if(e.superState==='wait'){e.superWait=Math.max(0,e.superWait-dt);if(e.superWait<=0)e.superState='charge';return;}
+ if(e.superState==='charge'){
+  e.superCharge=Math.min(r.charge,e.superCharge+dt);
+  if(e.superCharge>=r.charge){
+   e.superState='telegraph';e.superWarn=r.warn;
+   const lead=Math.min(40,Math.hypot(player.dx||0,player.dy||0)*28);
+   e.superAimX=clamp(player.x+(player.dx||0)*lead,20,W-20);
+   e.superAimY=clamp(player.y+(player.dy||0)*lead,20,H-20);
+   announce('⚠ BOSS ULTIMATE — 予告範囲から離れろ！',1.7);
+  }
+ }else if(e.superState==='telegraph'){
+  e.superWarn=Math.max(0,e.superWarn-dt);
+  if(e.superWarn<=0)triggerBossSuper(e);
+ }else if(e.superState==='recover'){
+  e.superRecover=Math.max(0,e.superRecover-dt);
+  if(e.superRecover<=0){e.superState='charge';e.superCharge=0;}
+ }
+}
+function bossSuperGauge(e){
+ if(!hasBossSuper(e)||!e.superState||e.superState==='wait')return null;
+ const r=BOSS_SUPER_RULES[e.type],state=e.superState;
+ return {state,fill:state==='charge'?clamp(e.superCharge/r.charge,0,1):state==='telegraph'?1:clamp(e.superRecover/r.recover,0,1),
+  label:state==='charge'?'大技チャージ '+Math.round(e.superCharge/r.charge*100)+'%':state==='telegraph'?'⚠ 大技発動！ 回避':'✦ オーバーヒート · 攻撃チャンス'};
+}
+
 function spawnBoss(type='minor',variant=null){
  if(boss&&!boss.dead)return;
  if(!variant)variant=game.lastBossAt===60?'guardian':pickBossVariant(type);
@@ -4159,7 +4230,7 @@ function spawnBoss(type='minor',variant=null){
  const midBossRelief=1-Math.min(.30,Math.max(0,(game.level-22)*.025));
  const early=.62+.38*(1-Math.exp(-mins/8)),radius=unique?71:major?55:38,hp=Math.round(info.hp*scale*early*(1+Math.min(.055,Math.max(0,mins-5)*.004))*midBossRelief*(game.activeChallenges?.includes('armored')?1.25:1));
  const e={x:W*.5,y:-radius-40,r:radius,type,variant,hp,maxHp:hp,spd:info.speed,dmg:(unique?58:major?36:27)+Math.round(mins*4+mins*mins*.5),xp:Math.round((unique?500:major?290:145)*(1+Math.min(1.5,mins*.055))),color:info.color,dead:false,hurt:0,phase:0,shoot:unique?1.7:1.8,burn:0,burnDps:0,slow:0,frozen:0,rockHit:0,bladeHit:0,attacks:0,teleport:0,charge:0};
- enemies.push(e);boss=e;game.raid=null;U('raidStatus').style.display='none';game.bossSpawned=true;showBossAlert(type,variant);sfx('bossAlert');
+ setupBossSuper(e);enemies.push(e);boss=e;game.raid=null;U('raidStatus').style.display='none';game.bossSpawned=true;showBossAlert(type,variant);sfx('bossAlert');
 }
 
 function burst(x,y,color,n=9,vel=110){n=Math.max(1,Math.ceil(n*(settings.fx==='high'?1:settings.fx==='medium'?.6:settings.fx==='low'?.25:.12)));for(let i=0;i<n;i++){const a=rand(0,TAU),speed=rand(vel*.25,vel);particles.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:rand(1,3.5),color,life:rand(.2,.68),total:.7})}if(particles.length>(settings.fx==='high'?340:settings.fx==='medium'?200:settings.fx==='low'?85:55))particles.splice(0,particles.length-(settings.fx==='high'?340:settings.fx==='medium'?200:settings.fx==='low'?85:55))}
@@ -4242,6 +4313,7 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
  damage*=1+Math.min(.84,Math.max(0,player?.fusionOutputBonus||0));if(player?.shipType==='dog'&&['dogEgg','blade','meteor','rock','missile','iceball','magma','pulseField','element','explosion'].includes(meta.source))damage*=player.dogAnimalBoost||1;
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
+ if(hasBossSuper(e)&&e.superState==='recover')damage*=1.13;
  if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
  if(player.elementMods?.voltBlast&&['element','pulseField'].includes(meta.source)&&e.hp>0&&Math.random()<.025)detonate(e.x,e.y,65,Math.max(50,player.chainDamage*.3),e,5);
  if(player.lifeSteal>0&&dealt>0)player.hp=Math.min(player.maxHp,player.hp+dealt*player.lifeSteal);if(e.hp>0)return;
@@ -4977,6 +5049,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
   if(warp.time<=0){e.x=warp.x;e.y=warp.y;e.isoWarp=null;e.isoSafe=.32;ring(e.x,e.y,32,'#bcb0ff');tickBurn(e,dt);continue;}
   else{tickBurn(e,dt);continue;}}
  e.isoSafe=Math.max(0,(e.isoSafe||0)-dt);
+ if(hasBossSuper(e))tickBossSuper(e,dt);
  if(e.type==='support'){e.supportCd-=dt;if(e.supportCd<=0){e.supportCd=3.8;for(const ally of circleCandidates(e.x,e.y,175)){if(ally===e||ally.dead||['minor','major','unique','relic','support'].includes(ally.type))continue;if(d2(ally,e)<175*175)ally.buffTime=Math.max(ally.buffTime||0,3.3)}ring(e.x,e.y,175,'#b0f875');}spd*=.67;}
  if(e.type==='guard')e.faceAngle=angle;
  if(e.type==='bomber'){
@@ -4994,16 +5067,36 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
     }
    }
   }
- if(e.type==='phantom'){e.dashCd-=dt;if(e.dashCd<=0&&e.dashWarn<=0&&e.dashTime<=0&&distance<390){e.dashWarn=.65;e.dashCd=rand(3.8,5.5);e.dashAngle=angle;}if(e.dashWarn>0){e.dashWarn-=dt;spd*=.15;if(e.dashWarn<=0)e.dashTime=.24;}if(e.dashTime>0){e.dashTime-=dt;e.x+=Math.cos(e.dashAngle)*Math.min(155,e.spd*1.52)*dt;e.y+=Math.sin(e.dashAngle)*Math.min(155,e.spd*1.52)*dt;spd*=.22;}}
+ if(e.type==='phantom'){
+  // Internal enemy key preserved for existing trials; the visible unit is PULSE INTERCEPTOR.
+  e.dashCd-=dt;
+  if(e.dashCd<=0&&e.dashWarn<=0&&distance<440){
+   const lead=clamp(distance*.19,32,88),facing=Math.atan2(p.dy||0,p.dx||0);
+   const aimX=clamp(p.x+Math.cos(facing)*lead,25,W-25),aimY=clamp(p.y+Math.sin(facing)*lead,25,H-25);
+   e.dashAngle=Math.atan2(aimY-e.y,aimX-e.x);
+   e.dashWarn=.80;e.dashCd=rand(4.1,5.6);
+  }
+  if(e.dashWarn>0){
+   e.dashWarn-=dt;spd*=.32;
+   if(e.dashWarn<=0){
+    for(const spread of [-.16,0,.16])hostileShot(e.x,e.y,e.dashAngle+spread,175+Math.min(75,minutes()*1.2),e.dmg*.60,5,'#ffc47d',3.4);
+    e.dashWarn=0;
+   }
+  }
+  // Flanking ranged combat instead of the former high-speed contact dash.
+  if(distance<250)spd=-spd*.32;
+ }
  if(e.buffTime>0){e.buffTime=Math.max(0,e.buffTime-dt);spd*=1.17;}
  if(e.type==='relic'){e.wanderClock-=dt;if(e.wanderClock<=0){e.wanderClock=rand(.75,1.75);e.wander+=rand(-1.7,1.7)}const towardX=W*.5-e.x,towardY=H*.5-e.y;if(e.x<50||e.x>W-50||e.y<50||e.y>H-50)e.wander=Math.atan2(towardY,towardX)+rand(-.4,.4);e.x=clamp(e.x+Math.cos(e.wander)*e.spd*(e.frozen>0?0:e.slow>0?.5:1)*dt,e.r,W-e.r);e.y=clamp(e.y+Math.sin(e.wander)*e.spd*(e.frozen>0?0:e.slow>0?.5:1)*dt,e.r,H-e.r);tickBurn(e,dt);continue;}
   if(e.type==='stinger')spd=Math.min(ENEMY_SPEED.stinger.cap,spd*(1+.15*Math.sin(e.phase*6)));
  if(e.type==='endMinion'){e.shoot-=dt;if(e.shoot<=0){e.shoot=2.7+Math.random()*.8;const aim=Math.atan2(p.y-e.y,p.x-e.x);hostileShot(e.x,e.y,aim,135,Math.min(28,e.dmg*.75),5,'#f7a2ff',3.6);}spd=distance<75?-spd*.24:spd*.86;}
  if(e.type==='shooter'){spd=distance<260?-spd*.48:spd*.75;e.shoot-=dt*(e.buffTime>0?1.35:1)*(1+.28*clamp((minutes()-18)/25,0,1))*(e.frozen>0?0:e.slow>0?Math.max(.25,1-p.iceAttackSlow*(['minor','major','unique','ultimate'].includes(e.type)?.5:1)):1);if(e.shoot<=0){e.shoot=Math.max(.87,3.5-minutes()*.079);{const pressure=pressureUnlocked()&&Math.random()<(controlMode==='mobile'?.19:.29)+.19*clamp((minutes()-20)/25,0,1);hostileShot(e.x,e.y,angle,(pressure?150:165)+minutes()*7.5,12+Math.round(minutes()*2.6),pressure?7:5,pressure?'#ffc0f4':'#89c2ff',4,false,pressure)}}}
- else if(['minor','major','unique','ultimate'].includes(e.type)){spd*=distance<(e.type==='unique'?220:165)?.17:.72;e.shoot-=dt*(e.frozen>0?0:e.slow>0?Math.max(.25,1-p.iceAttackSlow*(['minor','major','unique','ultimate'].includes(e.type)?.5:1)):1);if(e.shoot<=0&&e.type==='ultimate'){e.shoot=ultimatePhase(e)===3?(controlMode==='mobile'?1.19:1.05):ultimatePhase(e)===2?(controlMode==='mobile'?1.48:1.35):(controlMode==='mobile'?1.79:1.63);ultimateVolley(e);}
- else if(e.shoot<=0){const factor=e.type==='unique'?1:e.type==='major'?.83:1.02;e.shoot=Math.max(e.type==='unique'?1.2:.77,(e.type==='unique'?3.15:1.9)*factor-minutes()*.025);bossVolley(e)}}
+ else if(['minor','major','unique','ultimate'].includes(e.type)){spd*=distance<(e.type==='unique'?220:165)?.17:.72;
+  if(e.superState==='recover'){spd=0;e.shoot=Math.max(e.shoot,.30);}
+  else e.shoot-=dt*(e.frozen>0?0:e.slow>0?Math.max(.25,1-p.iceAttackSlow*(['minor','major','unique','ultimate'].includes(e.type)?.5:1)):1);if(e.superState!=='recover'&&e.shoot<=0&&e.type==='ultimate'){e.shoot=ultimatePhase(e)===3?(controlMode==='mobile'?1.19:1.05):ultimatePhase(e)===2?(controlMode==='mobile'?1.48:1.35):(controlMode==='mobile'?1.79:1.63);ultimateVolley(e);}
+ else if(e.superState!=='recover'&&e.shoot<=0){const factor=e.type==='unique'?1:e.type==='major'?.83:1.02;e.shoot=Math.max(e.type==='unique'?1.2:.77,(e.type==='unique'?3.15:1.9)*factor-minutes()*.025);bossVolley(e)}}
  if(e.type==='ultimate'){const currentPhase=ultimatePhase(e);if(currentPhase!==e.phaseNumber){e.phaseNumber=currentPhase;announce('⚠ THE END PHASE '+currentPhase+' — 攻撃パターン変化！',3);ring(e.x,e.y,210,'#ff9cb4');}}
- if(e.variant==='vortex'&&distance<300&&distance>60){const pull=22*dt;p.x+=(e.x-p.x)/distance*pull;p.y+=(e.y-p.y)/distance*pull;}
+ if(e.variant==='vortex'&&e.superState!=='recover'&&distance<300&&distance>60){const pull=22*dt;p.x+=(e.x-p.x)/distance*pull;p.y+=(e.y-p.y)/distance*pull;}
  e.x+=Math.cos(angle)*spd*dt;e.y+=Math.sin(angle)*spd*dt;
  // Hostile units ignore ENGAGE barriers, unlike the pilot and friendly fire.
  tickBurn(e,dt);
@@ -5063,6 +5156,9 @@ function hudUpdate(){if(!game||!player)return;
  hudText(ui.hpText,`${Math.ceil(p.hp)} / ${Math.ceil(p.maxHp)}`);hudWidth(ui.hpFill,`${100*clamp(p.hp/p.maxHp,0,1)}%`);hudText(ui.shieldText,`${Math.ceil(p.shield)} / ${Math.ceil(p.shieldMax)}`);hudWidth(ui.shieldFill,`${100*clamp(p.shield/Math.max(1,p.shieldMax),0,1)}%`);
  hudText(ui.energyText,`${Math.floor(p.energy)}% ${p.novaCooldown>0?'CD '+p.novaCooldown.toFixed(1)+'s':p.energy>=100?'READY!':''}`);hudWidth(ui.energyFill,`${p.energy}%`);hudText(ui.dashText,`DASH ${p.dashLeft>0?p.dashLeft.toFixed(1)+'s':'READY'}`);
  const bossDisplay=boss&&!boss.dead?'block':'none';if(ui.bossWrap.style.display!==bossDisplay)ui.bossWrap.style.display=bossDisplay;if(boss&&!boss.dead){const info=bossInfo(boss);ui.bossName.classList.toggle('rainbow-text',boss.type==='unique');hudText(ui.bossName,boss.type==='ultimate'?ULTIMATE_NAME+' · PHASE '+ultimatePhase(boss)+' · 部位残り '+ultimatePartsAlive():(boss.type==='unique'?'🌈 ':boss.type==='major'?'⚠ ':'✦ ')+(boss.variant==='theEnd'?ULTIMATE_NAME:(info?.en||'BOSS'))+' — '+(info?.jp||''));hudWidth(ui.bossFill,`${100*clamp(boss.hp/boss.maxHp,0,1)}%`)}
+  const superGauge=bossSuperGauge(boss);
+  ui.bossSpecialWrap.hidden=!superGauge;
+  if(superGauge){ui.bossSpecialWrap.className='boss-special-wrap '+superGauge.state;hudWidth(ui.bossSpecialFill,superGauge.fill*100+'%');hudText(ui.bossSpecialCaption,superGauge.label)}
  const moduleBar=U('ultimateModules');if(moduleBar){const display=boss&&!boss.dead&&boss.type==='ultimate';if(moduleBar.hidden!==!display)moduleBar.hidden=!display;if(display){const moduleHTML=(game.ultimateParts||[]).map((part,i)=>`<div class="ultimate-module ${part.dead?'broken':''}" title="${part.partName}：${part.dead?'破壊済み':Math.ceil(part.hp)+' / '+Math.ceil(part.maxHp)}"><span style="width:${Math.floor(100*clamp(part.hp/Math.max(1,part.maxHp),0,1))}%"></span></div>`).join('');if(moduleBar._previousMarkup!==moduleHTML){moduleBar.innerHTML=moduleHTML;moduleBar._previousMarkup=moduleHTML}}else if(moduleBar._previousMarkup){moduleBar._previousMarkup='';moduleBar.innerHTML=''}}
 
  const buildMarkup=`<b style="color:${SHIPS[p.shipType].color}">${SHIPS[p.shipType].jp}</b> · ${p.shipType==='laser'?`レーザー ${p.laserCount}本 · 幅${p.laserWidth.toFixed(1)} ${p.laserNovaTimer>0?'· OVERDRIVE!':''}`:p.shipType==='charge'?`チャージ ${Math.round(p.charge*100)}% ${p.charge>=.99?'· 貫通READY':''}`:p.shipType==='drill'?`プラズマ ${Math.floor(100*p.drillPlasma/Math.max(.001,p.drillCap))}% ${p.drillOverdriveTime>0?"· OVERDRIVE "+p.drillOverdriveTime.toFixed(1)+"s":""} · 近接ドリル ${Math.round(p.drillDamage)}`:`${p.bulletModes.map(kindLabel).join(' / ')}弾 · ${p.multishot}連射`} · 僚機 ${p.droneCount} · 岩壁 ${p.rockWalls} · 突風 ${p.windCount}<br>🌈 RELIC ${Object.keys(g.relics).length} · ◇ SYNERGY ${Object.keys(g.synergies).length} · ✦ EVOLVE ${Object.keys(g.fusions).length} · ★ LEGEND ${Object.keys(g.legends).length}<br><span style="color:${SHIPS[p.shipType].color}">${p.shipType==='charge'?'操作：停止でチャージ → 移動で発射':p.shipType==='drill'?'操作：移動で蓄積→高速ダッシュ突進 / NOVA中は完全無敵':p.shipType==='laser'?'攻撃：独立自動照準の貫通レーザー':'攻撃：敵へ自動追尾射撃'}</span>`;
@@ -5311,6 +5407,26 @@ function drawDrillAuger(p,active,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=v
   if(active){ctx.globalAlpha=.45+charge*.35;ctx.strokeStyle='#fff9e2';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-rad*.9,baseY);ctx.lineTo(-rad*.1,tip+4);ctx.moveTo(rad*.9,baseY);ctx.lineTo(rad*.1,tip+4);ctx.stroke();}
   ctx.restore();
 }
+
+function drawBossSuperWarning(e){
+ const gauge=bossSuperGauge(e);if(!gauge)return;
+ ctx.save();ctx.textAlign='center';ctx.shadowBlur=0;
+ const width=clamp(e.r*2.25,80,165),left=clamp(e.x-width/2,5,W-width-5);
+ const y=clamp(e.y-e.r-36,22,H-23),fill=gauge.fill;
+ ctx.fillStyle='#142237ee';ctx.fillRect(left,y,width,9);
+ ctx.strokeStyle='#edb971';ctx.lineWidth=1.5;ctx.strokeRect(left,y,width,9);
+ ctx.fillStyle=gauge.state==='recover'?'#5fe5c2':gauge.state==='telegraph'?'#ff557d':'#f5be60';
+ ctx.fillRect(left+1,y+1,Math.max(0,(width-2)*fill),7);
+ ctx.fillStyle='#ffffff';ctx.font='900 10px system-ui';
+ ctx.fillText(gauge.state==='recover'?'攻撃チャンス':gauge.state==='telegraph'?'大技発動！':'ULTIMATE',clamp(e.x,50,W-50),y-4);
+ ctx.restore();
+ if(e.superState!=='telegraph')return;
+ const shape=bossSuperGeometry(e);
+ ctx.save();ctx.strokeStyle='#ff7c78';ctx.globalAlpha=.58+.22*Math.sin(t*16);ctx.lineWidth=3;ctx.setLineDash([8,7]);
+ if(shape.kind==='blast'){ctx.beginPath();ctx.arc(shape.x,shape.y,shape.r,0,TAU);ctx.stroke();}
+ else for(const a of shape.angles){ctx.beginPath();ctx.moveTo(shape.x-Math.cos(a)*Math.max(W,H)*1.7,shape.y-Math.sin(a)*Math.max(W,H)*1.7);ctx.lineTo(shape.x+Math.cos(a)*Math.max(W,H)*1.7,shape.y+Math.sin(a)*Math.max(W,H)*1.7);ctx.stroke();}
+ ctx.setLineDash([]);ctx.restore();
+}
 function typColor(e){return e.type==='unique'&&e.variant==='ankin'?`hsl(${(t*85)%360} 98% 72%)`:e.color}
 function enemyDraw(e){if(e.isoWarp)return;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.phase*.2);ctx.shadowColor=e.color;ctx.shadowBlur=renderHeavyLoad&&!['unique','major','minor','ultimate','ultimatePart','relic'].includes(e.type)?0:settings.fx==='low'||settings.fx==='simple'?0:settings.fx==='medium'?8:e.type==='major'?28:15;ctx.fillStyle=e.hurt>0?'#fff':(e.slow>0&&!['minor','major','unique','relic'].includes(e.type)?(fusedColor('ice')||'#a5d9ed'):typColor(e));const typ=e.type;if(typ==='ultimate'){ctx.rotate(-e.phase*.20);ctx.shadowColor='#ffbc79';ctx.shadowBlur=28;ctx.beginPath();for(let i=0;i<16;i++){const a=i*TAU/16,r=e.r*(i%2?.90:1.17);i?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();ctx.fill();ctx.strokeStyle='#ffe9d6';ctx.lineWidth=4;ctx.stroke();ctx.fillStyle='#33172c';ctx.beginPath();ctx.arc(0,0,e.r*.64,0,TAU);ctx.fill();glow(0,0,e.r*.28,'#fff3c7',20);ctx.fillStyle='#ffffff';ctx.font='900 11px system-ui';ctx.textAlign='center';ctx.fillText('THE END',0,-e.r-14)}else if(typ==='endMinion'){ctx.beginPath();ctx.moveTo(0,-e.r*1.3);ctx.lineTo(e.r*1.10,e.r*.9);ctx.lineTo(0,e.r*.35);ctx.lineTo(-e.r*1.10,e.r*.9);ctx.closePath();ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#ffe5ff';ctx.stroke();glow(0,-e.r*.1,e.r*.28,'#ffd2ff',9)}else if(typ==='ultimatePart'){ctx.rotate(-e.phase*.2);ctx.beginPath();for(let i=0;i<6;i++){const a=i*TAU/6;const r=e.r*(i%2?.82:1.16);i?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();ctx.fill();ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.stroke();glow(0,0,e.r*.36,'#f9fcff',12)}else if(typ==='relic'){ctx.rotate(-e.phase*.4);const hue=(t*140)%360;ctx.shadowColor=`hsl(${hue} 100% 75%)`;ctx.shadowBlur=settings.fx==='low'||settings.fx==='simple'?0:25;ctx.strokeStyle=`hsl(${(hue+145)%360} 100% 85%)`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,e.r*1.35,0,TAU);ctx.stroke();const grad=ctx.createLinearGradient(-e.r,-e.r,e.r,e.r);for(let i=0;i<=5;i++)grad.addColorStop(i/5,`hsl(${(hue+i*69)%360} 100% 70%)`);ctx.fillStyle=grad;ctx.beginPath();for(let i=0;i<8;i++){const a=i*TAU/8,eR=e.r*(i%2?.52:1.22);i?ctx.lineTo(Math.cos(a)*eR,Math.sin(a)*eR):ctx.moveTo(Math.cos(a)*eR,Math.sin(a)*eR)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,8,'#ffffff',16)}else if(typ==='unique'&&e.variant==='ankin'){ctx.rotate(e.phase*.55);ctx.beginPath();for(let j=0;j<20;j++){const a=j*TAU/20,r=e.r*(j%2?.67:1.12);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,e.r*.48,`hsl(${((t*85)+100)%360} 100% 87%)`,27);ctx.strokeStyle=`hsl(${((t*85)+200)%360} 100% 78%)`;ctx.lineWidth=4;ctx.strokeRect(-e.r*.65,-e.r*.65,e.r*1.3,e.r*1.3)}else if((typ==='major'&&e.variant==='titan')||(typ==='minor'&&e.variant==='guardian')){let n=typ==='major'?16:12;ctx.beginPath();for(let j=0;j<n;j++){const a=j*TAU/n,r=e.r*(j%2?.73:1.12);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,e.r*.35,typ==='major'?'#fff0aa':'#f2bdff',18);ctx.lineWidth=3;ctx.strokeStyle='#2b2449';ctx.beginPath();ctx.arc(0,0,e.r*.64,0,TAU);ctx.stroke()}else if(typ==='minor'&&e.variant==='raptor'){ctx.beginPath();ctx.moveTo(0,-e.r*1.28);ctx.lineTo(e.r*.68,-e.r*.24);ctx.lineTo(e.r*1.16,e.r*.86);ctx.lineTo(e.r*.42,e.r*.56);ctx.lineTo(0,e.r*1.12);ctx.lineTo(-e.r*.42,e.r*.56);ctx.lineTo(-e.r*1.16,e.r*.86);ctx.lineTo(-e.r*.68,-e.r*.24);ctx.closePath();ctx.fill();ctx.strokeStyle='#fff3fb';ctx.lineWidth=3;ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#6d2945';ctx.beginPath();ctx.moveTo(0,-e.r*.55);ctx.lineTo(e.r*.34,-e.r*.02);ctx.lineTo(0,e.r*.46);ctx.lineTo(-e.r*.34,-e.r*.02);ctx.closePath();ctx.fill();glow(0,-e.r*.06,e.r*.18,'#ffe4f1',16)}else if(['minor','major','unique'].includes(typ)&&!['guardian','titan','ankin','raptor'].includes(e.variant)){
  ctx.shadowBlur=0;ctx.save();ctx.scale(e.r/34,e.r/34);ctx.lineWidth=3.5;ctx.strokeStyle='#fff9ef';
@@ -5319,7 +5435,7 @@ function enemyDraw(e){if(e.isoWarp)return;ctx.save();ctx.translate(e.x,e.y);ctx.
  else if(e.variant==='vortex'){ctx.strokeStyle=e.color;ctx.lineWidth=10;ctx.beginPath();ctx.arc(0,0,29,0,TAU);ctx.stroke();glow(0,0,17,'#53428c',7);ctx.strokeStyle='#efe0ff';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(0,0,31,15,0,0,TAU);ctx.stroke()}
  else if(e.variant==='mirror'){ctx.beginPath();ctx.moveTo(0,-37);ctx.lineTo(37,0);ctx.lineTo(0,37);ctx.lineTo(-37,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#376699';ctx.beginPath();ctx.moveTo(0,-29);ctx.lineTo(17,0);ctx.lineTo(0,29);ctx.lineTo(-17,0);ctx.closePath();ctx.fill()}
  else if(e.variant==='void'){ctx.beginPath();ctx.arc(0,0,34,0,TAU);ctx.fill();ctx.fillStyle='#11112a';ctx.beginPath();ctx.arc(11,-12,27,0,TAU);ctx.fill();glow(-5,5,9,'#fce7ff',12)}
- ctx.restore();}else if(typ==='guard'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.save();ctx.rotate(e.faceAngle-e.phase*.2);ctx.strokeStyle='#dfffff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,e.r+4,-.8,.8);ctx.stroke();ctx.restore()}else if(typ==='bomber'){ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.strokeStyle=e.blastWarn>0?'#ffdf70':'#ffd2a2';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-e.r*.65,0);ctx.lineTo(e.r*.65,0);ctx.moveTo(0,-e.r*.65);ctx.lineTo(0,e.r*.65);ctx.stroke()}else if(typ==='support'){ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8,r=e.r*(j%2?.7:1.2);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();glow(0,0,6,'#e6ff98',12)}else if(typ==='phantom'){ctx.beginPath();ctx.moveTo(0,-e.r-7);ctx.lineTo(e.r+7,e.r);ctx.lineTo(0,e.r*.1);ctx.lineTo(-e.r-7,e.r);ctx.closePath();ctx.fill()}else if(typ==='brute'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,7,'#534080',3)}else if(typ==='stinger'){ctx.beginPath();ctx.moveTo(0,-e.r-5);ctx.lineTo(e.r+4,e.r);ctx.lineTo(-e.r-4,e.r);ctx.closePath();ctx.fill()}else if(typ==='shooter'){ctx.fillRect(-e.r,-e.r,e.r*2,e.r*2);ctx.shadowBlur=0;glow(0,0,5,'#142f62',5)}else{ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.shadowBlur=0;glow(0,0,5,'#3e152e',6)}if(e.haruka){ctx.save();const f=clamp(e.haruka.elapsed/e.haruka.time,0,1);
+ ctx.restore();}else if(typ==='guard'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.save();ctx.rotate(e.faceAngle-e.phase*.2);ctx.strokeStyle='#dfffff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,e.r+4,-.8,.8);ctx.stroke();ctx.restore()}else if(typ==='bomber'){ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.strokeStyle=e.blastWarn>0?'#ffdf70':'#ffd2a2';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-e.r*.65,0);ctx.lineTo(e.r*.65,0);ctx.moveTo(0,-e.r*.65);ctx.lineTo(0,e.r*.65);ctx.stroke()}else if(typ==='support'){ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8,r=e.r*(j%2?.7:1.2);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();glow(0,0,6,'#e6ff98',12)}else if(typ==='phantom'){ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8,r=e.r*(j%2?.64:1.26);j?ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r):ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.strokeStyle='#fff0c2';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#733814';ctx.fillRect(-e.r*.23,-e.r*.68,e.r*.46,e.r*1.36);glow(0,0,3.5,'#fff5c6',7)}else if(typ==='brute'){ctx.beginPath();for(let j=0;j<6;j++){const a=j*TAU/6;j?ctx.lineTo(Math.cos(a)*e.r,Math.sin(a)*e.r):ctx.moveTo(Math.cos(a)*e.r,Math.sin(a)*e.r)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;glow(0,0,7,'#534080',3)}else if(typ==='stinger'){ctx.beginPath();ctx.moveTo(0,-e.r-5);ctx.lineTo(e.r+4,e.r);ctx.lineTo(-e.r-4,e.r);ctx.closePath();ctx.fill()}else if(typ==='shooter'){ctx.fillRect(-e.r,-e.r,e.r*2,e.r*2);ctx.shadowBlur=0;glow(0,0,5,'#142f62',5)}else{ctx.beginPath();ctx.arc(0,0,e.r,0,TAU);ctx.fill();ctx.shadowBlur=0;glow(0,0,5,'#3e152e',6)}if(e.haruka){ctx.save();const f=clamp(e.haruka.elapsed/e.haruka.time,0,1);
   ctx.strokeStyle='#8affcf';ctx.lineWidth=2.5;ctx.globalAlpha=.43+.35*f;ctx.setLineDash([5,5]);ctx.beginPath();ctx.arc(0,0,e.r+5+Math.sin(t*4)*2,0,TAU);ctx.stroke();ctx.setLineDash([]);ctx.restore();}
 if(e.burn>0){ctx.save();ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:11;ctx.shadowColor='#ff7a32';ctx.strokeStyle='#ff9a45';ctx.lineWidth=e.type==='major'||e.type==='unique'?4:2.5;ctx.globalAlpha=.75+.18*Math.sin(t*13+e.phase*2);ctx.beginPath();ctx.arc(0,0,e.r*1.14,0,TAU);ctx.stroke();ctx.globalAlpha=1;const count=renderHeavyLoad||settings.fx==='low'?2:4;for(let i=0;i<count;i++){const angle=(i/count)*TAU+t*.4+e.phase*.13,r=e.r*.8;ctx.fillStyle=i%2?'#ffcc70':'#ff7539';ctx.beginPath();const x=Math.cos(angle)*r,y=Math.sin(angle)*r;ctx.ellipse(x,y-4-3*Math.sin(t*8+i),Math.max(2,e.r*.11),Math.max(5,e.r*.24),.1,0,TAU);ctx.fill()}ctx.restore()}
 if(e.slow>0&&!['minor','major','unique'].includes(e.type)){ctx.shadowBlur=6;ctx.strokeStyle=e.frozen>0?'#d5faff':'#7ccfff';ctx.lineWidth=e.frozen>0?2.6:1.5;ctx.globalAlpha=e.frozen>0?.94:.68;ctx.beginPath();ctx.arc(0,0,e.r*1.16,0,TAU);ctx.stroke();ctx.globalAlpha=1}ctx.restore();if((e.type==='brute'||e.type==='relic'||e.type==='ultimatePart')&&e.hp<e.maxHp){ctx.fillStyle='#25304b';ctx.fillRect(e.x-17,e.y-28,34,3);ctx.fillStyle='#b3a8fc';ctx.fillRect(e.x-17,e.y-28,34*clamp(e.hp/e.maxHp,0,1),3)}}
@@ -5590,7 +5706,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  }else for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
   if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=renderHeavyLoad?0:12;ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
   glow(b.x,b.y,b.r,b.color,12);
- }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&(e.bomberAlert||e.blastWarn>0)){ctx.save();ctx.globalAlpha=.35+.55*(Math.sin(t*23)>0?1:0);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,86,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ff7fc9';ctx.globalAlpha=.45+.25*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);}
+ }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&(e.bomberAlert||e.blastWarn>0)){ctx.save();ctx.globalAlpha=.35+.55*(Math.sin(t*23)>0?1:0);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,86,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ffbc60';ctx.globalAlpha=.55+.27*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);if(e===boss)drawBossSuperWarning(e);}
  if(player.orbit){if(player.shipType==='dog'){const n=player.dogDolphinDuet?Math.min(20,player.orbit*2):player.orbit;
   for(let i=0;i<n;i++){const pos=ringPosition(i,n,t,73,30,6,2.2);drawAnimal('dolphin',pos.x,pos.y,16,pos.a+Math.PI/2);}
  }else for(let i=0;i<player.orbit;i++){
@@ -5773,7 +5889,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.27', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.28', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 
