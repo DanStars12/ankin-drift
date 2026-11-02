@@ -13,7 +13,9 @@ async function openLab(page){
  await page.goto('./');
  await page.locator('[data-ship="dog"]').click();
  await page.locator('#openTitleLab').click();
- await expect(page.locator('.lab-release-line')).toContainText('v13.30');
+ const currentVersion=(await page.title()).match(/v(\d+\.\d+)/i)?.[1];
+ expect(currentVersion).toBeTruthy();
+ await expect(page.locator('.lab-release-line')).toContainText('v'+currentVersion);
  return errors;
 }
 
