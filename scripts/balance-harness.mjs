@@ -75,7 +75,7 @@ window.__ankinBalanceLabTest={
    dead:false,hurt:0,color:'#ffffff',phase:0,attacks:0};
   beginBalanceTelemetry({seed:22,scenario:'instrumentation',build:'base'});
   game.total=at;damageEnemy(e,amount,{source});
-  return balanceTelemetryReport();
+  const report=balanceTelemetryReport();balanceTelemetry=null;mode='menu';return report;
  }
 };
 `;
