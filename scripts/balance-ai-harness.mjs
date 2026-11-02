@@ -171,7 +171,9 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
  }
  x+=threat.x*1.7;y+=threat.y*1.7;
  if(seekExp){
-  const xp=balanceExpTarget(threat,policy);
+  // Re-evaluate pickup candidates at 5 Hz, not every simulation frame.
+  if(frame%12===0)balanceAbilityLog.currentXpTarget=balanceExpTarget(threat,policy);
+  const xp=threat.near||threat.imminent||(boss&&!boss.dead)||game.total%9>=4?null:balanceAbilityLog.currentXpTarget;
   if(xp){
    const vx=xp.x-p.x,vy=xp.y-p.y,len=Math.max(1,Math.hypot(vx,vy));
    x=x*.28+vx/len*1.55;y=y*.28+vy/len*1.55;
