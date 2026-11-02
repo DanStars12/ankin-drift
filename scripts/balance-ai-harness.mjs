@@ -7,7 +7,7 @@ const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
  laser:{range:175,strafe:0.92,aggression:1},
  charge:{range:220,strafe:0.62,aggression:.8},
- drill:{range:58,strafe:.24,aggression:1.2},
+ drill:{range:38,strafe:.06,aggression:1.45},
  dog:{range:205,strafe:.78,aggression:.92}
 };
 function balanceThreats(){
@@ -64,7 +64,8 @@ function balancePilotStep(frame){
  }
  x+=threat.x*1.7;y+=threat.y*1.7;
  // Charge ships deliberately hold still to charge, then reposition to fire.
- if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
+ const closeEnemies=targets.some(e=>d2(p,e)<150*150);
+ if(p.shipType==='charge'&&threat.weight<.10&&!closeEnemies&&Math.floor(sec*10)%20<16){x=0;y=0;}
  const m=Math.hypot(x,y),stop=m<.14;
  if(!stop){
   x/=m;y/=m;
@@ -72,9 +73,15 @@ function balancePilotStep(frame){
   if(y>.18)keys.add('KeyS');else if(y<-.18)keys.add('KeyW');
  }
  // Defensive dash, and for the drill a proactive gap-closing strike.
- if(p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))){
-  // Dash in the computed safe direction, not back into an incoming projectile.
-  if(!stop){p.dx=x;p.dy=y;}
+ const drillStrike=p.shipType==='drill'&&d>45&&d<165&&p.drillPlasma>p.drillCap*.30&&threat.weight<.65;
+ if(p.dashLeft<=0&&(threat.near>0||drillStrike)){
+  if(drillStrike&&threat.near===0){
+   // Dash directly through the enemy instead of tangentially orbiting outside melee reach.
+   keys.clear();
+   if(ux>.18)keys.add('KeyD');else if(ux<-.18)keys.add('KeyA');
+   if(uy>.18)keys.add('KeyS');else if(uy<-.18)keys.add('KeyW');
+   p.dx=ux;p.dy=uy;
+  }else if(!stop){p.dx=x;p.dy=y;}
   dash();
  }
  if(p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38))nova();
@@ -89,6 +96,50 @@ function balanceApplyBuild(level){
  if(p.shipType==='charge')p.chargeRate=Math.max(p.chargeRate,level>1?1.4:1.08);
  if(p.shipType==='drill')p.drillDamage+=level>1?125:90;
  if(p.shipType==='dog')p.dogBones=Math.max(p.dogBones,level>1?4:3);
+}
+
+function balancePickReward(options){
+ const hpRatio=player.hp/Math.max(1,player.maxHp);
+ const rank={common:0,uncommon:1.2,rare:2.3,epic:3.5,power:4,legendary:4.5,unique:5,relic:4.5};
+ const scored=(options||[]).filter(Boolean).map((c,index)=>{
+  const tags=c.tags||[],defense=tags.some(x=>['防御','装甲','継戦','回復'].includes(x));
+  let score=(rank[c.rarity]||0)+Math.min(2,(game.skills[c.id]||0)*.22);
+  if(c.isSupply){
+   score=c.id==='supply_repair'?(hpRatio<.35?22:hpRatio<.65?8:-8):
+    c.id==='supply_shield'?(hpRatio<.55?11:1):hpRatio<.45?4:-5;
+  }else{
+   if(c.shipOnly===player.shipType)score+=3.5;
+   if(defense)score+=hpRatio<.45?6:hpRatio<.75?3.5:1.3;
+   if(tags.includes('機動'))score+=player.shipType==='drill'?2.2:1.4;
+   if(tags.includes('ノヴァ'))score+=1.2;
+   const ready=synergiesFor(c.id).filter(a=>!game.synergies[a.id]&&a.need.filter(id=>id!==c.id).every(owned)).length;
+   score+=ready*12;
+   const evo=fusionFor(c.id).filter(a=>!game.fusions[a.id]&&fusionMaterials(a).filter(id=>id!==c.id).every(owned)).length;
+   score+=evo*14;
+   const elem=elementFromCard(c),own=ownedElementKeys();
+   if(elem&&game.elementCombos.length<2){
+    if(own.includes(elem))score+=1.2;
+    else if(own.length===1)score+=2.4;
+   }
+  }
+  return {c,index,score};
+ });
+ scored.sort((a,b)=>b.score-a.score||a.index-b.index);
+ return scored[0]?.c||null;
+}
+function balanceTryElementFusion(){
+ if(mode!=='choice'||game.lastChoice!=='normal')return false;
+ const pairs=availableElementPairs();
+ if(!pairs.length)return false;
+ pairs.sort((a,b)=>elementInvestments(b.main).points-elementInvestments(a.main).points||
+  elementInvestments(a.sub).points-elementInvestments(b.sub).points);
+ const pair=pairs[0],weapon=fusionWeaponDefinitions(pair.main).find(w=>w.owned);
+ if(!weapon||!enterElementChoice())return false;
+ chooseFusionMain(pair.main);
+ selectElementFusion(pair.sub);
+ selectFusionWeapon(weapon.slot);
+ confirmElementFusion();
+ return mode==='elementResult';
 }
 function balanceSandbox(fn){
  const random=Math.random,methods=[];
@@ -193,18 +244,18 @@ window.__ankinBalanceAI={
    function resolveMenus(){
     for(let n=0;n<20&&mode!=='playing'&&mode!=='dead'&&mode!=='victory';n++){
      if(mode==='choice'){
-      const valid=choices.filter(c=>c&&(!c.isSupply||player.hp<player.maxHp*.80));
-      const pick=valid.length?valid[0]:choices[0];
+      if(balanceTryElementFusion()){menuChoices++;continue;}
+      const pick=balancePickReward(choices);
       if(!pick){unhandled='empty choice';break;}
       choose(choices.indexOf(pick));menuChoices++;
      }else if(mode==='uniqueReward'){
       continueAfterReward();menuSkips++;
      }else if(mode==='fusion'){
       dismissFusion();menuSkips++;
-     }else if(mode==='elementResult'||mode==='elementConfirm'||mode==='elementChoice'){
-      // Element fusion is not automated in this initial full-run strategy.
-      pendingElementChoice=false;pendingElementPairs=[];elementChoice=null;
-      state('playing');menuSkips++;
+     }else if(mode==='elementResult'){
+      continueAfterReward();menuSkips++;
+     }else if(mode==='elementConfirm'||mode==='elementChoice'){
+      skipElementFusion();menuSkips++;
      }else{unhandled=mode;break;}
     }
    }
@@ -220,7 +271,7 @@ window.__ankinBalanceAI={
    return {...balanceResult(t,seconds,{won:!!game.completed,cleared:game.clearCount>0,
     terminal:game.completed||game.runOutcome==='dead',phaseMinutes:0,aiMoves,aiDodges}),
     fullRun:!preview,preview:!!preview,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
-    menuChoices,menuSkips,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
+    menuChoices,menuSkips,elementFusions:game.elementCombos.length,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
       unhandled?'unhandled-menu:'+unhandled:step>=steps?(preview?'preview-end':'time-limit'):'unknown',
     clearCount:game.clearCount};
   });
