@@ -16,6 +16,19 @@ const hook=`window.__reward1327={
   for(const card of pool)if(card.id!==c.id&&fitsShip(card)&&choices.length<(kind==='normal'?3:4))choices.push(card);
   state('choice');
   return {mode,ready:choiceSynergyReady(c),count:choices.length};
+ },
+ evolution(){
+  selectedShip='shot';newRun();game.lastChoice='major';
+  const r=activeFusions().find(f=>fusionMaterials(f).length>=2&&fusionMaterials(f).every(id=>!!skillById(id)&&fitsShip(skillById(id))));
+  if(!r)throw Error('No compatible evolution recipe');
+  const ids=fusionMaterials(r),c=skillById(ids[0]);
+  for(const id of ids.slice(1)){
+    const k=skillById(id),bag=k.rarity==='power'?game.powers:k.rarity==='legendary'?game.legends:k.rarity==='unique'?game.uniques:k.rarity==='relic'?game.relics:game.skills;
+    bag[id]=1;
+  }
+  if(!choiceEvolutionReady(c))throw Error('Evolution should be ready when offered card is selected');
+  choices=[c,...POWERS.filter(x=>x.id!==c.id).slice(0,3)];
+  state('choice');return {ready:choiceEvolutionReady(c),mode,name:r.name};
  }
 };`;
 async function setup(page,isMobile){
@@ -96,5 +109,17 @@ test('choice detail tags and effects remain accessible rather than hidden on sho
  expect(g.desc).not.toBe('none');
  expect(g.visibleText).toBe(true);
  expect(g.scroll).toBe('auto');
+ expect(errors).toEqual([]);
+});
+
+test('evolution banner and recipe body consistently describe completing the fusion on selection',async({page,isMobile})=>{
+ const errors=await setup(page,isMobile);
+ await page.setViewportSize({width:320,height:568});
+ const v=await page.evaluate(()=>window.__reward1327.evolution());
+ expect(v.ready).toBe(true);expect(v.mode).toBe('choice');
+ const card=page.locator('.choice').first();
+ await expect(card.locator('.evolution-ready-banner')).toContainText('進化合成可能');
+ await expect(card.locator('.evo-title').first()).toContainText('このカードで進化合成完成');
+ await expect(card.locator('.recipe-parts')).toContainText('このカードを選択');
  expect(errors).toEqual([]);
 });
