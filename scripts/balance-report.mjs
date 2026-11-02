@@ -29,6 +29,27 @@ export function summarizeRuns(runs){
    recoveryDamageMean:round(rows.reduce((a,b)=>a+b.recoveryDamage,0)/rows.length),
    dashUsesMean:round(rows.reduce((a,b)=>a+(b.dashCount||0),0)/rows.length),
    novaUsesMean:round(rows.reduce((a,b)=>a+(b.novaCount||0),0)/rows.length),
+   // Distinguish actual ability use from aimless activations; logged contexts are bounded.
+   novaNoNearbyMean:rows.every(r=>Array.isArray(r.novaContexts))
+    ?round(rows.reduce((sum,r)=>sum+r.novaContexts.filter(c=>c.near===0).length,0)/rows.length):null,
+   novaReadySecondsMean:rows.every(r=>Number.isFinite(r.novaReadySeconds))
+    ?round(rows.reduce((sum,r)=>sum+r.novaReadySeconds,0)/rows.length):null,
+   dashReadySecondsMean:rows.every(r=>Number.isFinite(r.dashReadySeconds))
+    ?round(rows.reduce((sum,r)=>sum+r.dashReadySeconds,0)/rows.length):null,
+   novaReasonTotals:rows.every(r=>r.novaReasons)
+    ?Object.fromEntries([...new Set(rows.flatMap(r=>Object.keys(r.novaReasons)))].sort().map(k=>
+     [k,rows.reduce((sum,r)=>sum+(r.novaReasons[k]||0),0)])):null,
+   dashReasonTotals:rows.every(r=>r.dashReasons)
+    ?Object.fromEntries([...new Set(rows.flatMap(r=>Object.keys(r.dashReasons)))].sort().map(k=>
+     [k,rows.reduce((sum,r)=>sum+(r.dashReasons[k]||0),0)])):null,
+   rewardChoiceMean:rows.every(r=>r.rewardAudit)
+    ?round(rows.reduce((a,b)=>a+b.rewardAudit.choices,0)/rows.length):null,
+   primaryOfferMean:rows.every(r=>r.rewardAudit)
+    ?round(rows.reduce((a,b)=>a+b.rewardAudit.primaryOffers,0)/rows.length):null,
+   survivalOfferMean:rows.every(r=>r.rewardAudit)
+    ?round(rows.reduce((a,b)=>a+b.rewardAudit.survivalOffers,0)/rows.length):null,
+   fusionFailedMean:rows.every(r=>r.fusionAudit)
+    ?round(rows.reduce((a,b)=>a+b.fusionAudit.failed,0)/rows.length):null,
    dashPerMinuteMean:round(rows.reduce((a,b)=>a+(b.dashCount||0)*60/b.duration,0)/rows.length),
    novaPerMinuteMean:round(rows.reduce((a,b)=>a+(b.novaCount||0)*60/b.duration,0)/rows.length),
    // Optional AI-only diagnostics; null means that this scenario did not measure them.
