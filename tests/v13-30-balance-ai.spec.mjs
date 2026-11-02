@@ -99,6 +99,31 @@ test('v13.33 tactical ability probes keep distant NOVAs charged and reject unsaf
   expect(c.emergency.dashReason).toBe('emergency-evade');}
  expect(errors).toEqual([]);
 });
+test('v13.33 actual ready-NOVA uses real combat, checks tactical versus legacy consumption',async({page})=>{
+ const errors=await setup(page),prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const cases=await page.evaluate(()=>{
+  const out=[];
+  for(const ship of ['shot','laser','charge','drill','dog']){
+   const args={ship,seed:17,phase:10,scenario:'live-boss',build:'representative',
+    seconds:.35,initialNovaReady:true};
+   out.push({ship,
+    tactical:window.__ankinBalanceAI.runEncounter({...args,policy:'tactical'}),
+    legacy:window.__ankinBalanceAI.runEncounter({...args,policy:'legacy'})});
+  }
+  return out;
+ });
+ for(const {ship,tactical,legacy} of cases){
+  expect(tactical.ship).toBe(ship);expect(legacy.ship).toBe(ship);
+  expect(legacy.novaCount).toBeGreaterThanOrEqual(1); // the legacy condition: boss exists
+  expect(tactical.novaCount).toBeLessThanOrEqual(1);
+  expect(Object.values(tactical.novaReasons).reduce((a,b)=>a+b,0)).toBe(tactical.novaCount);
+  expect(Object.values(legacy.novaReasons).reduce((a,b)=>a+b,0)).toBe(legacy.novaCount);
+  expect(tactical.initialNovaReady).toBe(true);
+ }
+ expect(cases.some(c=>c.tactical.novaCount<c.legacy.novaCount)).toBe(true);
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
+ expect(errors).toEqual([]);
+});
 test('AI survival: time-specific harder packs, real enemy bullets and crash-safe sandbox restoration',async({page})=>{
  const errors=await setup(page);
  const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));
