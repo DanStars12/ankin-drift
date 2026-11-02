@@ -1,5 +1,5 @@
-/* ANKIN DRIFT v13.27 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-27-mobile-reward-layout';
+/* ANKIN DRIFT v13.28 mobile - offline app shell, scoped to this install */
+const CACHE_NAME = 'ankin-drift-mobile-v13-28-boss-super-interceptor';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js',
