@@ -36,7 +36,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install chromium
       - name: Run 5 ships x 5 seeds x full 30 minutes
-        run: npm run balance:ai -- --project=desktop --grep="optional true 30-minute"
+        run: npm run balance:ai -- --project=desktop --grep="optional real 30-minute"
       - name: Upload A/B metrics
         if: always()
         uses: actions/upload-artifact@v4
