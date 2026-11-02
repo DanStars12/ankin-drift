@@ -109,3 +109,48 @@ v13.30では機体別AIと実戦テストを追加しました。次期段階で
 - 30分テストは明示 opt-in のまま。実際の継続戦闘と画面遷移を実行し、環境変数 ANKIN_AI_SEEDS の1〜20シード×5機体で複数試行できる。
 - 全ての比較値はそのAI判断ルールでの結果。レベル/ビルド/乱数シードを揃えない長時間のDPS値を、人間プレイヤーの機体強弱の直接比較に用いない。
 - 初回の数値変更は、複数シード・短期/長期・PC/スマホ・既存セーブ回帰を比較してから判断する。
+
+## v13.33 — 個人アビリティを含む操作AI評価
+
+v13.32までのAIは、NOVA準備完了時にボスが存在するだけで発動していました。
+ショット型の範囲外ボスや、8方向拡散するDOG型で有効打にならないケースがありました。
+また、ダッシュを停止中に使うと、前フレームの機体向きが残る問題がありました。
+
+- **SHOT**: NOVAの効果半径内にボスがいるか、複数の雑魚が入るときに使用。
+- **LASER**: 照射可能なボスへの3.2秒オーバードライブ、複数目標、危険な敵弾の消去を優先。
+- **CHARGE**: 彗星弾が届くボス、敵集団、緊急敵弾除去を優先。
+- **DRILL**: ボス接近・群れ・防御が必要な場面で無敵を伴うオーバードライブを使用。効果中の再発動は避け、プラズマを溜めて安全に接近できる時はダッシュ攻撃。
+- **DOG**: BOW SHOCKの8方向弾が命中しやすい近距離ボス・包囲された集団を優先。
+- **共通**: 弾道と危険域を先読みしてダッシュ先を8方向から選択し、キー入力を確定してから発動。すでに無敵なら緊急回避ダッシュは温存。
+
+**戦闘数値、既存セーブ、実績は変更なし。** AIハーネスだけの改良であり、ゲーム本体のオートプレイ機能ではありません。
+
+### 旧AIとの再現可能なA/B比較
+
+GitHub Actions → ANKIN BALANCE LAB (manual) → Run workflow で
+`mode: live-ai` または `mode: full-30m` と
+`policy: tactical`（新）/ `policy: legacy`（旧）を選択します。
+同じシード数、期間、機体、ビルドを両方で実行して比較します。
+
+PowerShellで短期比較する例：
+
+```powershell
+$env:ANKIN_AI_SEEDS = "10"
+$env:ANKIN_AI_SECONDS = "30"
+$env:ANKIN_AI_POLICY = "legacy"
+npm.cmd run balance:ai -- --project=desktop
+$env:ANKIN_AI_POLICY = "tactical"
+npm.cmd run balance:ai -- --project=desktop
+Remove-Item Env:ANKIN_AI_SEEDS,Env:ANKIN_AI_SECONDS,Env:ANKIN_AI_POLICY
+```
+
+**注意**: 同じフォルダで再実行するとレポートを上書きするため、比較の前に旧結果のJSON/CSVを別名で保存してください。
+
+追加レポート: `abilityPolicy`, `dashReadySeconds`, `novaReadySeconds`,
+`dashReasons`, `novaReasons`。ダッシュ・NOVAの実発動数は従来の
+`dashCount` / `novaCount` と突合してください。
+これらは「AIの発動判断の内訳」であり、回避成功率やNOVAの純粋な与ダメージ増分を
+直接示す指標ではありません。死亡時刻・被弾数・DPS・クリア率と合わせて判断します。
+
+改良AIだけの成功率を比較し、公開版のショット型を即座に弱体化することや、
+ほかの機体の基本火力を一律に上げることはしません。
