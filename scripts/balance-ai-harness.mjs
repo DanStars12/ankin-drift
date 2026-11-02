@@ -193,12 +193,18 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   if(x>.18)keys.add('KeyD');else if(x<-.18)keys.add('KeyA');
   if(y>.18)keys.add('KeyS');else if(y<-.18)keys.add('KeyW');
  }
- const legacy=policy==='legacy'||(policy==='tactical'&&['shot','drill'].includes(p.shipType));
- // Conservative fallback: shot and drill kept better baseline outcomes in five-seed full runs.
- const decision=legacy?{
-  dashReason:p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null,
-  novaReason:p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null
- }:decideAbilityUse(balanceAbilitySnapshot(priority,d,threat));
+ // Keep baseline movement/dash for SHOT+DRILL (better historic survival), but
+ // SHOT's legacy NOVA trigger frequently fires with no targets in its actual radius.
+ // Treat ability policies separately so improving NOVA cannot regress dash direction.
+ const legacyDash=policy==='legacy'||(policy==='tactical'&&['shot','drill'].includes(p.shipType));
+ const legacyNova=policy==='legacy'||(policy==='tactical'&&p.shipType==='drill');
+ const tactical=(!legacyDash||!legacyNova)?decideAbilityUse(balanceAbilitySnapshot(priority,d,threat)):null;
+ const decision={
+  dashReason:legacyDash?(p.dashLeft<=0&&(threat.near>0||
+   (p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null):tactical.dashReason,
+  novaReason:legacyNova?(p.energy>=100&&p.novaCooldown<=0&&
+   (boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null):tactical.novaReason
+ };
  if(balanceAbilityLog){
   if(p.energy>=100&&p.novaCooldown<=0)balanceAbilityLog.novaHeldFrames++;
   else balanceAbilityLog.novaHeldFrames=0;
@@ -209,7 +215,7 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
  }
  if(decision.dashReason){
   // Explicitly set inputs: dash() reads keyboard direction, not just p.dx/p.dy.
-  if(legacy){if(!stop){p.dx=x;p.dy=y;}}
+  if(legacyDash){if(!stop){p.dx=x;p.dy=y;}}
   else{
    const v=(p.shipType==='drill'||p.shipType==='dog') ? {x:!stop?x:p.dx,y:!stop?y:p.dy} :
    balanceDashVector(x,y,priority,false);
