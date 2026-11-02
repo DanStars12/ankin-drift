@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   full-mode:
-    name: Full AI ${{ matrix.minutes }}m / 5 ships / 1 seed
+    name: Full AI ${{ matrix.minutes }}m / 5 ships / 3 seeds
     runs-on: ubuntu-24.04
     timeout-minutes: 50
     strategy:
@@ -27,7 +27,7 @@ jobs:
       matrix:
         minutes: ['15','30']
     env:
-      ANKIN_AI_SEEDS: '1'
+      ANKIN_AI_SEEDS: '3'
       ANKIN_AI_POLICY: tactical
       ANKIN_FUSION_POLICY: always
       ANKIN_BALANCE_FULL: ${{ matrix.minutes }}
