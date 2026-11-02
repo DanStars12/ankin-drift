@@ -313,6 +313,7 @@ function balanceTryElementFusion(fusionPolicy='always'){
 }
 function balanceSandbox(fn){
  const random=Math.random,methods=[];
+ const originalMode=selectedGameMode,originalShip=selectedShip;
  const guards=[
   [record,'write'],[AnkinArchive,'markStarted'],[AnkinArchive,'observeRun'],
   [AnkinArchive,'takeUnlocks']
@@ -327,25 +328,31 @@ function balanceSandbox(fn){
   Math.random=random;
   for(const [obj,key,old] of methods)obj[key]=old;
   keys.clear();balanceTelemetry=null;balanceAbilityLog=null;
+  selectedGameMode=originalMode;selectedShip=originalShip;
   if(game)game.rewards=[];
   mode='menu';
  }
 }
-function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical'){
+function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical',runMode='normal',fullTimeline=false){
  balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
   xpSeekFrames:0,xpSeekKinds:{},rewardAudit:{choices:0,primary:0,survival:0,experience:0,primaryOffers:0,survivalOffers:0,history:[]},
   fusionAudit:{offers:0,accepted:0,declined:0,failed:0,reasons:{},history:[]}};
  Math.random=seededBalanceRandom(seed);
- selectedGameMode='normal';selectedShip=ship;newRun();mode='playing';
+ selectedGameMode=runMode;selectedShip=ship;newRun();mode='playing';
  const p=player;
- game.total=phaseMinutes*60;runClock=game.total;
- game.nextBossAt=1e9;game.nextRaidAt=1e9;game.nextRelicAt=1e9;
- game.nextVacuumAt=1e9;game.nextUltimateAt=1e9;game.ultimateEncounterAt=1e9;
- game.spawn=1e9;game.bossQueue=[];game.autoBank=true;game.completed=false;
- enemies=[];boss=null;shots=[];hostile=[];pickups=[];hazards=[];zones=[];
- enemyIndex.clear();enemyIndexReady=false;
- p.x=W*.45;p.y=H*.52;
- if(build==='representative')balanceApplyBuild(1);
+ if(!fullTimeline){
+  // Encounter benchmarks intentionally disable the normal scheduler.
+  game.total=phaseMinutes*60;runClock=game.total;
+  game.nextBossAt=1e9;game.nextRaidAt=1e9;game.nextRelicAt=1e9;
+  game.nextVacuumAt=1e9;game.nextUltimateAt=1e9;game.ultimateEncounterAt=1e9;
+  game.spawn=1e9;game.bossQueue=[];game.autoBank=true;game.completed=false;
+  enemies=[];boss=null;shots=[];hostile=[];pickups=[];hazards=[];zones=[];
+  enemyIndex.clear();enemyIndexReady=false;
+  p.x=W*.45;p.y=H*.52;
+  if(build==='representative')balanceApplyBuild(1);
+ }
+ // For full-timeline runs leave ALL settings, timings, RNG, enemy waves,
+ // initial scouts and real challenge/normal skill progression as newRun() configured.
  // The AI takes real damage. No invincibility, silent healing, or collision bypass.
  beginBalanceTelemetry({seed,scenario,build});
 }
@@ -361,7 +368,7 @@ function balanceSpawnLiveRound(phase,round=0){
 }
 function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=false,phaseMinutes=0,aiMoves=0,aiDodges=0}={}){
  const duration=report?.duration||0;
- return {...report,mode:'ai',phaseMinutes,secondsPlanned,
+ return {...report,mode:'ai',gameMode:game.gameMode,phaseMinutes,secondsPlanned,
   alive:player.hp>0&&game.runOutcome!=='dead',
   won:!!won,cleared:!!cleared,terminal:!!terminal,
   playerHp:Number(player.hp.toFixed(2)),maxHp:player.maxHp,
@@ -428,22 +435,32 @@ window.__ankinBalanceAI={
     initialNovaReady,timeToWin:winAt===null?null:Number(winAt.toFixed(3))};
   });
  },
- // Long-run mode is deliberately separate from CI. This drives the actual 30:00
- // scheduler and normal reward menus. Never interpret short scenarios as clear rate.
- runFull({ship='shot',seed=1,seconds=1830,preview=false,policy='tactical',fusionPolicy='always'}={}){
+ // Full-timeline simulations use the actual 15m challenge OR 30m normal scheduler.
+ // Both are explicit opt-in; short encounters never count toward their clear rates.
+ runFull({ship='shot',seed=1,seconds,preview=false,policy='tactical',fusionPolicy='always',gameMode='normal'}={}){
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
   if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid fusion policy');
+  if(!['normal','challenge'].includes(gameMode))throw Error('Invalid game mode');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
-  if(!Number.isFinite(seconds)||(preview?(seconds<20||seconds>120):(seconds<1800||seconds>2400)))
-   throw Error('Full simulation must include 30:00; preview must last 20-120 seconds');
+  const bossAt=gameMode==='challenge'?900:1800;
+  const plannedSeconds=seconds===undefined?(preview?72:bossAt+60):seconds;
+  if(!Number.isFinite(plannedSeconds)||(preview?(plannedSeconds<20||plannedSeconds>120):
+   (plannedSeconds<bossAt||plannedSeconds>bossAt+600)))
+   throw Error('Full simulation must include its own 15:00/30:00 boss; preview must last 20-120 seconds');
   return balanceSandbox(()=>{
-   balanceSetup(ship,seed,0,'normal-random-rewards','full-30m',policy);
-   game.total=0;runClock=0;game.nextBossAt=60;game.nextRaidAt=105;
-   game.nextRelicAt=180;game.nextVacuumAt=110;game.nextUltimateAt=1800;
-   game.ultimateEncounterAt=0;game.spawn=.78;game.autoBank=false;
+   const scenario=gameMode==='challenge'?'full-15m':'full-30m';
+   balanceSetup(ship,seed,0,'normal-random-rewards',scenario,policy,gameMode,true);
+   const startSchedule={mode:game.gameMode,bossAt:ultimateThreshold(),
+    firstBossAt:game.nextBossAt,firstRaidAt:game.nextRaidAt,
+    firstRelicAt:game.nextRelicAt,firstVacuumAt:game.nextVacuumAt,
+    nextUltimateAt:game.nextUltimateAt,
+    nextBossAfterFirst:gameMode==='challenge'?135:150,
+    modeSpecificSecondBoss:scheduledBossType(gameMode==='challenge'?135:150,gameMode),
+    dogChickenAt:gameMode==='challenge'?480:900};
+   // Neither mode is allowed to bypass the real enemy/boss/EXP/reward scheduler.
    let aiMoves=0,aiDodges=0,menuChoices=0,menuSkips=0;
    let lastDash=0,step=0,unhandled=null;
-   const dt=1/60,steps=Math.ceil(seconds*60);
+   const dt=1/60,steps=Math.ceil(plannedSeconds*60);
    function resolveMenus(){
     for(let n=0;n<20&&mode!=='playing'&&mode!=='dead'&&mode!=='victory';n++){
      if(mode==='choice'){
@@ -472,9 +489,12 @@ window.__ankinBalanceAI={
     if(mode!=='playing')resolveMenus();
    }
    const t=balanceTelemetryReport();
-   return {...balanceResult(t,seconds,{won:!!game.completed,cleared:game.clearCount>0,
+   return {...balanceResult(t,plannedSeconds,{won:!!game.completed,cleared:game.clearCount>0,
     terminal:game.completed||game.runOutcome==='dead',phaseMinutes:0,aiMoves,aiDodges}),
-    fullRun:!preview,preview:!!preview,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
+    fullRun:!preview,preview:!!preview,simulationTime:Number(game.total.toFixed(2)),
+    finalBossAt:bossAt,finalBossSpawned:game.ultimateEncounterAt>0,
+    finalBossSpawnTime:game.ultimateEncounterAt>0?Number(game.ultimateEncounterAt.toFixed(2)):null,
+    reachedFinalBoss:game.ultimateEncounterAt>0,startSchedule,
     menuChoices,menuSkips,elementFusions:game.elementCombos.length,fusionPolicy,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
       unhandled?'unhandled-menu:'+unhandled:step>=steps?(preview?'preview-end':'time-limit'):'unknown',
     clearCount:game.clearCount};
