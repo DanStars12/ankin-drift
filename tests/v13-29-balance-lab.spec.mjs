@@ -56,6 +56,10 @@ for(const scenario of ['boss','pack']){
   expect(after).toBe(before);
   expect(errors).toEqual([]);
   expect(summarizeRuns(rows)).toHaveLength(10);
+  if(scenario==='pack'){
+   const built=rows.filter(r=>r.build==='representative');
+   expect(built.some(r=>r.kills>12),'pack test must keep supplying targets after initial 12').toBe(true);
+  }
   await exportReport(testInfo.project.name,scenario,rows);
  });
 }
