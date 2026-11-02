@@ -31,8 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [desktop, mobile-390, mobile-320]
-    if: inputs.mode != 'full-30m' || matrix.project == 'desktop'
+        project: ${{ fromJSON(inputs.mode == 'full-30m' && '["desktop"]' || '["desktop","mobile-390","mobile-320"]') }}
     env:
       ANKIN_BALANCE_SEEDS: ${{ inputs.seeds }}
       ANKIN_BALANCE_DURATION: ${{ inputs.duration }}
