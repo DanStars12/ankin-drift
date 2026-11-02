@@ -98,6 +98,20 @@ test('AI survival: full-run mode is only on explicit opt-in, and never counts sh
  expect(typeof r.won).toBe('boolean');
  expect(errors).toEqual([]);
 });
+test('real scheduler preview exercises enemies and automatic progression without claiming full clear rate',async({page})=>{
+ test.setTimeout(120_000);
+ const errors=await setup(page),saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const r=await page.evaluate(()=>window.__ankinBalanceAI.runFull({ship:'shot',seed:19,seconds:72,preview:true}));
+ expect(r.preview).toBe(true);expect(r.fullRun).toBe(false);
+ expect(r.simulationTime).toBeGreaterThan(0);
+ expect(r.simulationTime).toBeLessThanOrEqual(72.1);
+ expect(r.clearCount).toBe(0);
+ expect(r.reachedFinalBoss).toBe(false);
+ expect(r.stopReason.startsWith('unhandled-menu')).toBe(false);
+ expect(r.mode).toBe('ai');
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);
+ expect(errors).toEqual([]);
+});
 test('optional true 30-minute run using real scheduler and automatic in-game card choices',async({page},testInfo)=>{
  test.skip(process.env.ANKIN_BALANCE_FULL!=='1','Full 30-minute simulation only via explicitly selected manual workflow');
  test.setTimeout(900_000);
