@@ -144,10 +144,12 @@ function balancePilotStep(frame,policy='tactical'){
  }
  if(decision.dashReason){
   // Explicitly set inputs: dash() reads keyboard direction, not just p.dx/p.dy.
-  const v=legacy?{x:!stop?x:p.dx,y:!stop?y:p.dy}:
-   balanceDashVector(decision.dashReason==='plasma-strike'?ux:x,
+  if(legacy){if(!stop){p.dx=x;p.dy=y;}}
+  else{
+   const v=balanceDashVector(decision.dashReason==='plasma-strike'?ux:x,
     decision.dashReason==='plasma-strike'?uy:y,priority,decision.dashReason==='plasma-strike');
-  balanceDashKeys(v.x,v.y);
+   balanceDashKeys(v.x,v.y);
+  }
   const old=game.combatLog.dashCount;dash();
   if(balanceAbilityLog&&game.combatLog.dashCount>old)
    balanceAbilityLog.dashReasons[decision.dashReason]=(balanceAbilityLog.dashReasons[decision.dashReason]||0)+1;
