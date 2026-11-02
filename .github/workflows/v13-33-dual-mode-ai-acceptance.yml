@@ -1,0 +1,56 @@
+name: ANKIN v13.33 separate 15m and 30m AI acceptance
+
+on:
+  pull_request:
+    branches: [dev/v13-33-ability-ai]
+    paths:
+      - 'scripts/balance-ai-harness.mjs'
+      - 'scripts/balance-report.mjs'
+      - 'tests/v13-30-balance-ai.spec.mjs'
+      - '.github/workflows/v13-33-dual-mode-ai-acceptance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dual-mode-ai-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full-mode:
+    name: Full AI ${{ matrix.minutes }}m / 5 ships / 1 seed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        minutes: ['15','30']
+    env:
+      ANKIN_AI_SEEDS: '1'
+      ANKIN_AI_POLICY: tactical
+      ANKIN_FUSION_POLICY: always
+      ANKIN_BALANCE_FULL: ${{ matrix.minutes }}
+      ANKIN_AI_SECONDS: '14'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Verify ${{ matrix.minutes }}m real in-game progression, all 5 machines
+        run: npm run balance:ai -- --project=desktop --grep="optional real ${{ matrix.minutes }}-minute"
+      - name: Upload independent mode reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-acceptance-full-${{ matrix.minutes }}m
+          path: |
+            artifacts/balance-lab/
+            test-results/
+          retention-days: 14
+          if-no-files-found: warn
