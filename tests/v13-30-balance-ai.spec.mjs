@@ -8,6 +8,8 @@ const ships=['shot','laser','charge','drill','dog'];
 const seconds=Number(process.env.ANKIN_AI_SECONDS||14),seeds=Number(process.env.ANKIN_AI_SEEDS||1);
 const policy=process.env.ANKIN_AI_POLICY||'tactical';
 const fusionPolicy=process.env.ANKIN_FUSION_POLICY||'always';
+const fullMode=process.env.ANKIN_BALANCE_FULL||'0';
+if(!['0','1','15','30','both'].includes(fullMode))throw Error('Invalid ANKIN_BALANCE_FULL');
 if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid ANKIN_FUSION_POLICY');
 if(!['tactical','legacy'].includes(policy))throw Error('Invalid ANKIN_AI_POLICY');
 if(!Number.isFinite(seconds)||seconds<1||seconds>120||!Number.isInteger(seeds)||seeds<1||seeds>20)throw Error('Invalid ANKIN_AI_SECONDS or ANKIN_AI_SEEDS');
@@ -223,24 +225,85 @@ test('real scheduler preview exercises enemies and automatic progression without
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);
  expect(errors).toEqual([]);
 });
-test('optional true 30-minute run using real scheduler and automatic in-game card choices',async({page},testInfo)=>{
- test.skip(process.env.ANKIN_BALANCE_FULL!=='1','Full 30-minute simulation only via explicitly selected manual workflow');
- test.setTimeout(900_000);
- const errors=await setup(page);
- const prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
- const out=[];
- for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
-  const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),{ship,seed,seconds:1860,policy,fusionPolicy});
-  expect(row.fullRun).toBe(true);
-  expect(row.simulationTime).toBeGreaterThan(0);
-  expect(['dead','clear','time-limit'].some(x=>row.stopReason===x),JSON.stringify(row)).toBe(true);
-  expect(row.cleared).toBe(row.clearCount>0);
-  expect(row.elementFusions).toBeGreaterThanOrEqual(0);
-  expect(row.elementFusions).toBeLessThanOrEqual(2);
-  if(row.cleared)expect(row.reachedFinalBoss).toBe(true);
-  out.push(row);
+test('actual NORMAL and CHALLENGE timelines retain distinct bosses, schedules and rewards',async({page})=>{
+ test.setTimeout(120_000);
+ const errors=await setup(page),saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const rows=await page.evaluate(()=>['normal','challenge'].map(gameMode=>
+  window.__ankinBalanceAI.runFull({ship:'dog',gameMode,seed:31,seconds:72,preview:true,fusionPolicy:'never'})));
+ const [normal,challenge]=rows;
+ expect(normal.gameMode).toBe('normal');
+ expect(challenge.gameMode).toBe('challenge');
+ expect(normal.scenario).toBe('full-30m');
+ expect(challenge.scenario).toBe('full-15m');
+ expect(normal.finalBossAt).toBe(1800);
+ expect(challenge.finalBossAt).toBe(900);
+ expect(normal.startSchedule.nextUltimateAt).toBe(1800);
+ expect(challenge.startSchedule.nextUltimateAt).toBe(900);
+ expect(normal.startSchedule.firstBossAt).toBe(60);
+ expect(challenge.startSchedule.firstBossAt).toBe(60);
+ expect(normal.startSchedule.nextBossAfterFirst).toBe(150);
+ expect(challenge.startSchedule.nextBossAfterFirst).toBe(135);
+ expect(normal.startSchedule.dogChickenAt).toBe(900);
+ expect(challenge.startSchedule.dogChickenAt).toBe(480);
+ expect(normal.startSchedule.firstRaidAt).toBe(105);
+ expect(challenge.startSchedule.firstRaidAt).toBe(105);
+ for(const r of rows){
+  expect(r.simulationTime).toBeGreaterThan(0);
+  expect(r.startSchedule.firstRelicAt).toBeGreaterThanOrEqual(125);
+  expect(r.startSchedule.firstRelicAt).toBeLessThanOrEqual(205);
+  expect(r.preview).toBe(true);
+  expect(r.fullRun).toBe(false);
+  expect(r.finalBossSpawned).toBe(false);
+  expect(r.reachedFinalBoss).toBe(false);
+  expect(r.clearCount).toBe(0);
+  expect(r.rewardAudit.choices).toBeGreaterThanOrEqual(0);
+  expect(r.elementFusions).toBe(0);
+  expect(r.fusionPolicy).toBe('never');
  }
- expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
+ const invalid=await page.evaluate(()=>{
+  for(const args of [{gameMode:'challenge',seconds:600},{gameMode:'normal',seconds:960},
+   {gameMode:'unknown',preview:true,seconds:72}]){
+   try{window.__ankinBalanceAI.runFull(args);return false}catch{}
+  }
+  return true;
+ });
+ expect(invalid).toBe(true);
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);
  expect(errors).toEqual([]);
- await exportAI(testInfo.project.name,'full-30m',out);
 });
+for(const [gameMode,marker,planned] of [['challenge','15',960],['normal','30',1860]]){
+ test('optional real '+marker+'-minute '+gameMode+' run, 5 ships with live AI and no persistent saves',async({page},testInfo)=>{
+  test.skip(![marker,'both',...(marker==='30'?['1']:[])].includes(fullMode),
+   'Explicit full-'+marker+'m run required; mode results are never pooled');
+  test.setTimeout(1_200_000);
+  const errors=await setup(page);
+  const prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
+  const out=[];
+  for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
+   const row=await page.evaluate(x=>window.__ankinBalanceAI.runFull(x),
+    {ship,seed,gameMode,seconds:planned,policy,fusionPolicy});
+   expect(row.fullRun).toBe(true);
+   expect(row.preview).toBe(false);
+   expect(row.gameMode).toBe(gameMode);
+   expect(row.scenario).toBe('full-'+marker+'m');
+   expect(row.finalBossAt).toBe(marker==='15'?900:1800);
+   expect(row.startSchedule.nextUltimateAt).toBe(row.finalBossAt);
+   expect(row.startSchedule.firstBossAt).toBe(60);
+   expect(row.startSchedule.nextBossAfterFirst).toBe(marker==='15'?135:150);
+   expect(row.simulationTime).toBeGreaterThan(0);
+   expect(['dead','clear','time-limit'].includes(row.stopReason),JSON.stringify(row)).toBe(true);
+   expect(row.cleared).toBe(row.clearCount>0);
+   expect(row.elementFusions).toBeGreaterThanOrEqual(0);
+   expect(row.elementFusions).toBeLessThanOrEqual(2);
+   expect(row.fusionAudit.accepted).toBe(row.elementFusions);
+   expect(row.rewardAudit.choices).toBeGreaterThanOrEqual(row.rewardAudit.primary);
+   expect(row.xpOnField).toBeGreaterThanOrEqual(0);
+   if(row.cleared)expect(row.finalBossSpawned).toBe(true);
+   if(row.finalBossSpawned)expect(row.finalBossSpawnTime).toBeGreaterThanOrEqual(row.finalBossAt);
+   out.push(row);
+  }
+  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
+  expect(errors).toEqual([]);
+  await exportAI(testInfo.project.name,'full-'+marker+'m',out);
+ });
+}
