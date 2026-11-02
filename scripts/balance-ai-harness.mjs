@@ -222,6 +222,6 @@ window.__ankinBalanceAI={
     clearCount:game.clearCount};
   });
  },
- inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES}};
+ inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES}}
 };
 `;
