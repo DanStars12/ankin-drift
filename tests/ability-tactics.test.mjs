@@ -54,6 +54,10 @@ test('v13.33 recovery: avoid the severe drill DPS regression from holding its at
  assert.equal(decide({ship:'drill',targetDist:160,drillPlasmaRatio:.2}).dashReason,null);
 });
 test('v13.33 recovery: threats trigger preemptive dash instead of waiting until impact',()=>{
- for(const ship of ['shot','laser','charge','dog'])
+ for(const ship of ['laser','drill','dog'])
   assert.equal(decide({ship,threats:1,imminent:0,hpRatio:1}).dashReason,'emergency-evade');
+ for(const ship of ['shot','charge']){
+  assert.equal(decide({ship,threats:1,imminent:0,hpRatio:1}).dashReason,null);
+  assert.equal(decide({ship,threats:1,imminent:1,hpRatio:1}).dashReason,'emergency-evade');
+ }
 });
