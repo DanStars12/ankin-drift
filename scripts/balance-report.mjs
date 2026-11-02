@@ -42,7 +42,7 @@ export function summarizeRuns(runs){
 }
 const COLUMNS=['ship','scenario','build','seed','duration','damage','dps','bossDamage','kills','hits','damageTaken','dashCount','novaCount','recoveryDamage','level','skills','evolutions','synergies','elementFusions','mode','phaseMinutes','secondsPlanned','alive','won','cleared','fullRun','survivalSeconds','playerHp','maxHp','aiMoves','aiDodges','abilityPolicy','dashReadySeconds','novaReadySeconds','dashReasons','novaReasons','timeToWin','simulationTime','reachedFinalBoss','stopReason','clearCount'];
 function csvCell(value){
- const s=String(value??'');
+ const s=value&&typeof value==='object'?JSON.stringify(value):String(value??'');
  return /[",\n\r]/.test(s)?'"'+s.replaceAll('"','""')+'"':s;
 }
 export function runsToCsv(runs){
