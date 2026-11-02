@@ -77,3 +77,16 @@ test('telemetry is opt-in and tracks timed damage and boss phases without creati
  expect(r.first.damageBySource.shot).toBe(34);
  expect(errors).toEqual([]);
 });
+
+test('boss ultimate charge, telegraph and recovery are measurable without stored achievements',async({page})=>{
+ const errors=await start(page);
+ const before=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ const r=await page.evaluate(()=>window.__ankinBalanceLabTest.bossProbe());
+ expect(r.bossEvents).toMatchObject({spawn:1,telegraph:1,ultimate:1,recovery:1,earlyKills:0});
+ expect(r.events.map(e=>e.event)).toEqual(['spawn','telegraph','ultimate','recovery']);
+ expect(r.recoveryDamage).toBeCloseTo(113,2);
+ expect(r.damageBySource.shot).toBeCloseTo(113,2);
+ const after=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ expect(after).toBe(before);
+ expect(errors).toEqual([]);
+});
