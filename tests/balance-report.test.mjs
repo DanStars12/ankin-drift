@@ -15,7 +15,7 @@ test('grouping is stable and never mutates source rows',()=>{
  assert.equal(groups.length,1);assert.equal(groups[0].dpsMean,200);
  assert.equal(groups[0].dpsMedian,200);
  assert.equal(groups[0].dpsP10,120);assert.equal(groups[0].dpsP90,280);
- assert.equal(groups[0].killsMean,2);assert.equal(before,JSON.stringify(data));
+ assert.equal(groups[0].killsMean,2);assert.equal(groups[0].survivalRate,null);assert.equal(groups[0].clearRate,null);assert.equal(before,JSON.stringify(data));
  assert.throws(()=>summarizeRuns([{...data[0],schema:'wrong'}]),/schema/);
 });
 test('csv writing includes headers and escapes commas, quotes and newline strings',()=>{
