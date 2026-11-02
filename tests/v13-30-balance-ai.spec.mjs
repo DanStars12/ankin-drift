@@ -161,8 +161,9 @@ test('v13.33 actual ready-NOVA uses real combat, checks tactical versus legacy c
   expect(Object.values(tactical.novaReasons).reduce((a,b)=>a+b,0)).toBe(tactical.novaCount);
   expect(Object.values(legacy.novaReasons).reduce((a,b)=>a+b,0)).toBe(legacy.novaCount);
   expect(tactical.initialNovaReady).toBe(true);
+   if(ship==='shot')expect(tactical.novaReasons['legacy-nova']||0).toBe(0);
  }
- // The conservative hybrid intentionally shares the legacy NOVA trigger for shot/drill.
+ // SHOT uses target-gated tactical NOVA and baseline dash; DRILL retains its baseline abilities.
  // A 0.35s encounter must not assume that one policy necessarily fires fewer NOVAs.
  for(const c of cases)expect(c.tactical.novaCount).toBeLessThanOrEqual(c.legacy.novaCount);
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
