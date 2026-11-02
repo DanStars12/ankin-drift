@@ -134,7 +134,8 @@ function balancePilotStep(frame,policy='tactical'){
   if(x>.18)keys.add('KeyD');else if(x<-.18)keys.add('KeyA');
   if(y>.18)keys.add('KeyS');else if(y<-.18)keys.add('KeyW');
  }
- const legacy=policy==='legacy';
+ const legacy=policy==='legacy'||(policy==='tactical'&&['shot','drill'].includes(p.shipType));
+ // Conservative fallback: shot and drill kept better baseline outcomes in five-seed full runs.
  const decision=legacy?{
   dashReason:p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null,
   novaReason:p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null
