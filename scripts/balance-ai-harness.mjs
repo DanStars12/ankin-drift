@@ -175,9 +175,10 @@ window.__ankinBalanceAI={
  },
  // Long-run mode is deliberately separate from CI. This drives the actual 30:00
  // scheduler and normal reward menus. Never interpret short scenarios as clear rate.
- runFull({ship='shot',seed=1,seconds=1830}={}){
+ runFull({ship='shot',seed=1,seconds=1830,preview=false}={}){
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
-  if(!Number.isFinite(seconds)||seconds<1800||seconds>2400)throw Error('A full run must include at least 30:00 and is capped at 40:00');
+  if(!Number.isFinite(seconds)||(preview?(seconds<20||seconds>120):(seconds<1800||seconds>2400)))
+   throw Error('Full simulation must include 30:00; preview must last 20-120 seconds');
   return balanceSandbox(()=>{
    balanceSetup(ship,seed,0,'normal-random-rewards','full-30m');
    game.total=0;runClock=0;game.nextBossAt=60;game.nextRaidAt=105;
@@ -215,9 +216,9 @@ window.__ankinBalanceAI={
    const t=balanceTelemetryReport();
    return {...balanceResult(t,seconds,{won:!!game.completed,cleared:game.clearCount>0,
     terminal:game.completed||game.runOutcome==='dead',phaseMinutes:0,aiMoves,aiDodges}),
-    fullRun:true,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
+    fullRun:!preview,preview:!!preview,simulationTime:Number(game.total.toFixed(2)),reachedFinalBoss:game.total>=1800,
     menuChoices,menuSkips,stopReason:game.completed?'clear':game.runOutcome==='dead'?'dead':
-      unhandled?'unhandled-menu:'+unhandled:step>=steps?'time-limit':'unknown',
+      unhandled?'unhandled-menu:'+unhandled:step>=steps?(preview?'preview-end':'time-limit'):'unknown',
     clearCount:game.clearCount};
   });
  },
