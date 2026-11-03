@@ -161,12 +161,22 @@ test('v13.33 actual ready-NOVA uses real combat, checks tactical versus legacy c
   expect(Object.values(tactical.novaReasons).reduce((a,b)=>a+b,0)).toBe(tactical.novaCount);
   expect(Object.values(legacy.novaReasons).reduce((a,b)=>a+b,0)).toBe(legacy.novaCount);
   expect(tactical.initialNovaReady).toBe(true);
-   if(ship==='shot')expect(tactical.novaReasons['legacy-nova']||0).toBe(0);
  }
- // SHOT uses target-gated tactical NOVA and baseline dash; DRILL retains its baseline abilities.
+ // SHOT/DRILL retain baseline ability decisions while the NOVA audit is corrected.
  // A 0.35s encounter must not assume that one policy necessarily fires fewer NOVAs.
  for(const c of cases)expect(c.tactical.novaCount).toBeLessThanOrEqual(c.legacy.novaCount);
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(prior);
+ expect(errors).toEqual([]);
+});
+test('NOVA audit snapshots nearby enemies BEFORE its damage clears the field',async({page})=>{
+ const errors=await setup(page);
+ const out=await page.evaluate(()=>window.__ankinBalanceAI.runEncounter({
+  ship:'shot',seed:123,phase:10,scenario:'live-pack',build:'representative',
+  seconds:.35,initialNovaReady:true,policy:'legacy'
+ }));
+ expect(out.novaCount).toBeGreaterThanOrEqual(1);
+ expect(out.novaContexts[0].near).toBeGreaterThan(0);
+ expect(out.novaContexts[0].reason).toBe('legacy-nova');
  expect(errors).toEqual([]);
 });
 test('v13.33 laser starts with 106 HP and hybrid fallback preserves shot/drill baseline',async({page})=>{
