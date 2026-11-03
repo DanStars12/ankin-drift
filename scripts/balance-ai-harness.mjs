@@ -193,18 +193,14 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   if(x>.18)keys.add('KeyD');else if(x<-.18)keys.add('KeyA');
   if(y>.18)keys.add('KeyS');else if(y<-.18)keys.add('KeyW');
  }
- // Keep baseline movement/dash for SHOT+DRILL (better historic survival), but
- // SHOT's legacy NOVA trigger frequently fires with no targets in its actual radius.
- // Treat ability policies separately so improving NOVA cannot regress dash direction.
- const legacyDash=policy==='legacy'||(policy==='tactical'&&['shot','drill'].includes(p.shipType));
- const legacyNova=policy==='legacy'||(policy==='tactical'&&p.shipType==='drill');
- const tactical=(!legacyDash||!legacyNova)?decideAbilityUse(balanceAbilitySnapshot(priority,d,threat)):null;
- const decision={
-  dashReason:legacyDash?(p.dashLeft<=0&&(threat.near>0||
-   (p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null):tactical.dashReason,
-  novaReason:legacyNova?(p.energy>=100&&p.novaCooldown<=0&&
-   (boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null):tactical.novaReason
- };
+ // Separate seeded trials found that a SHOT NOVA radius-only rule harms
+ // 30m survival/DPS even when it helps 15m; preserve proven legacy SHOT/DRILL
+ // ability policy until an independently validated per-mode candidate exists.
+ const legacy=policy==='legacy'||(policy==='tactical'&&['shot','drill'].includes(p.shipType));
+ const decision=legacy?{
+  dashReason:p.dashLeft<=0&&(threat.near>0||(p.shipType==='drill'&&d<130&&d>35&&p.drillPlasma>p.drillCap*.30))?'legacy-dash':null,
+  novaReason:p.energy>=100&&p.novaCooldown<=0&&(boss||targets.length>=3||p.hp<p.maxHp*.38)?'legacy-nova':null
+ }:decideAbilityUse(balanceAbilitySnapshot(priority,d,threat));
  if(balanceAbilityLog){
   if(p.energy>=100&&p.novaCooldown<=0)balanceAbilityLog.novaHeldFrames++;
   else balanceAbilityLog.novaHeldFrames=0;
@@ -215,7 +211,7 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
  }
  if(decision.dashReason){
   // Explicitly set inputs: dash() reads keyboard direction, not just p.dx/p.dy.
-  if(legacyDash){if(!stop){p.dx=x;p.dy=y;}}
+  if(legacy){if(!stop){p.dx=x;p.dy=y;}}
   else{
    const v=(p.shipType==='drill'||p.shipType==='dog') ? {x:!stop?x:p.dx,y:!stop?y:p.dy} :
    balanceDashVector(x,y,priority,false);
@@ -226,11 +222,14 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
    balanceAbilityLog.dashReasons[decision.dashReason]=(balanceAbilityLog.dashReasons[decision.dashReason]||0)+1;
  }
  if(decision.novaReason){
+  // Snapshot BEFORE nova() changes enemies/HP/death. Post-hit inspection falsely
+  // labels successful screen-clearing NOVAs as "no targets nearby".
+  const near=enemies.filter(e=>!e.dead&&dst(p,e)<(p.shipType==='laser'?p.laserReach:p.novaRadius)+(e.r||0)).length;
+  const bossDistBefore=boss&&!boss.dead?Math.round(dst(p,boss)):null;
   const old=game.combatLog.novaCount;nova();
   if(balanceAbilityLog&&game.combatLog.novaCount>old){
-   const near=enemies.filter(e=>!e.dead&&dst(p,e)<(p.shipType==='laser'?p.laserReach:p.novaRadius)+(e.r||0)).length;
    if(balanceAbilityLog.novaContexts.length<128)balanceAbilityLog.novaContexts.push({
-    at:Math.round(game.total),reason:decision.novaReason,near,bossDist:boss&&!boss.dead?Math.round(dst(p,boss)):null});
+    at:Math.round(game.total),reason:decision.novaReason,near,bossDist:bossDistBefore});
    balanceAbilityLog.novaHeldFrames=0;
    balanceAbilityLog.novaReasons[decision.novaReason]=(balanceAbilityLog.novaReasons[decision.novaReason]||0)+1;
   }
