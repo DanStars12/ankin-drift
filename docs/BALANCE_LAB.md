@@ -225,3 +225,52 @@ GitHub Actions → **ANKIN BALANCE LAB (manual)** → Run workflow → mode: `fu
 融合の有無を比較するための独立変数であり、`never` で融合しないことは不具合ではありません。旧AIと新AIの操作判断を比較するときは融合方針を同一に揃えます。短時間テストだけではLv12/28の機会に必ず到達するわけではないため、融合作用の評価には30分ランを使用します。
 
 EXP追跡は `tactical` 方針の **full-30m / preview** のみ有効で、`legacy` と短期固定遭遇テストは変更しません。危険な敵弾やボスが近い場合はEXPより回避・攻撃を優先します。結果の優劣が確定するまでは通常公開版の戦闘数値を変更しません。
+
+
+## v13.33 — 15分CHALLENGEと30分NORMALを混同しないモード別AI評価
+
+15分は単なる30分ランの途中結果ではありません。実ゲームには以下の独立した設定があります。
+
+| 仕様 | NORMAL | CHALLENGE |
+|---|---|---|
+| 実際のゲームモード | `normal` | `challenge` |
+| THE・END・OF・ANKIN出現 | 1800秒 | 900秒 |
+| 次の通常ボス（初回60秒の次） | 150秒 | 135秒 |
+| 以降の通常ボス間隔 | 150秒 | 90秒 |
+| 通常敵の出現間隔係数 | ×1 | ×0.70 |
+| 最終ボス基礎HP（PC） | 292,000 | 204,000 |
+| DOGチック・タックのニワトリ進化 | 900秒 | 480秒 |
+| 後半敵速度・防御圧力 | NORMALの実処理 | CHALLENGEの実処理 |
+
+報酬抽選や属性融合を特別扱いせず、`newRun()` が各モードに設定した通常敵・ボス・経験値・報酬・抽選・レイド・真の最終ボス進行を使用します。旧フルランにあった強制的なNORMALモード初期化と初期ボス/レリック/EXP SWEEP時刻の上書きは取りやめています。15分と30分の結果は`full-15m`と`full-30m`の**別々のシナリオ**として出力します。クリア率・生存中央値・平均DPSを混ぜて集計しません。
+
+### 手動測定
+
+GitHub Actions → **ANKIN BALANCE LAB (manual)** → Run workflow:
+
+- `mode: full-15m`: CHALLENGE、5機体 × 指定シード数（開始時刻900秒までの進行、最終ボスへの追加60秒）
+- `mode: full-30m`: NORMAL、5機体 × 指定シード数（開始時刻1800秒までの進行、最終ボスへの追加60秒）
+- `policy: tactical` / `legacy` と `fusion_policy: always` / `adaptive` / `never` はそれぞれ固定し、同一シード同士で比較します。
+
+ローカル PowerShell:
+
+```powershell
+$env:ANKIN_AI_SEEDS = "1"
+$env:ANKIN_BALANCE_FULL = "15"
+npm.cmd run balance:ai -- --project=desktop --grep="optional real 15-minute"
+
+$env:ANKIN_BALANCE_FULL = "30"
+npm.cmd run balance:ai -- --project=desktop --grep="optional real 30-minute"
+Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
+```
+
+各行には`gameMode`, `finalBossAt`, `finalBossSpawned`, `finalBossSpawnTime`, `startSchedule`を記録。クリアできず`time-limit`になった試行は死亡ではなく「追加時間終了」と分類して、ボス残HP/生存状態とともに判断します。初期検証は各5機体×1シードの正常動作チェックとし、**1シードのクリア率はバランス確定根拠にしません。** この段階では元のプレイヤーのセーブ/実績を変更せず、mainへの統合も行いません。
+
+
+### NOVA有効性の測定順序と採用判断（2026-11-03）
+
+`novaContexts` 内の発動時近傍敵数は、必ず **`nova()` 呼び出し前**に採取します。旧実装では実際に敵を撃破したあとの近傍敵数を記録しており、特に広範囲のNOVAを「対象なし」と誤記録する危険がありました。その旧結果から無駄撃ち率を断定しないでください。現在の `novaNoNearbyMean` は開発用の近傍指標であり、ドリルの持続強化・DOGの射出型・チャージの遠距離弾などではヒット可否の直接判定ではありません。機体別の `damageBySource.nova`、敵撃破、ボス残HP、被弾、生存時間と併読します。
+
+3シードの対照実験で、ショット型の「ダッシュは旧AI・NOVAだけ射程判定へ変更」は15分ではクリア2/3→3/3でしたが、30分では1/3→0/3かつDPS低下が見られました。モードによる結果が矛盾したため **候補は不採用**、従来のショット/ドリルの能力判断を保持します。全モードで計測フックの誤記録だけを修正します。
+
+追加の受け入れテスト `ANKIN v13.33 separate 15m and 30m AI acceptance` では、独立した `full-15m` と `full-30m`、融合 `always` 3シード／非融合 `never` 1シードをそれぞれ5機体で実行し、JSON/CSVの成果物を別名で残します。テスト合格は正常なゲーム進行とデータ保護の確認であり、各機体の勝率バランスが適切であるとの保証ではありません。

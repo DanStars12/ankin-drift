@@ -20,17 +20,17 @@ on:
         type: choice
         options: [tactical, legacy]
       fusion_policy:
-        description: 'Full 30-minute fusion comparison: always / adaptive / never'
+        description: 'Full 15m/30m fusion comparison: always / adaptive / never'
         required: true
         default: always
         type: choice
         options: [always, adaptive, never]
       mode:
-        description: 'Run v13.29 DPS, v13.30 live AI, or expensive 30-minute clear-rate simulation'
+        description: 'DPS, short real combat, 15m CHALLENGE or 30m NORMAL full timeline'
         required: true
         default: baseline
         type: choice
-        options: [baseline, live-ai, full-30m]
+        options: [baseline, live-ai, full-15m, full-30m]
 
 permissions:
   contents: read
@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON(inputs.mode == 'full-30m' && '["desktop"]' || '["desktop","mobile-390","mobile-320"]') }}
+        project: ${{ fromJSON((inputs.mode == 'full-15m' || inputs.mode == 'full-30m') && '["desktop"]' || '["desktop","mobile-390","mobile-320"]') }}
     env:
       ANKIN_BALANCE_SEEDS: ${{ inputs.seeds }}
       ANKIN_BALANCE_DURATION: ${{ inputs.duration }}
@@ -51,7 +51,7 @@ jobs:
       ANKIN_AI_SECONDS: ${{ inputs.duration }}
       ANKIN_AI_POLICY: ${{ inputs.policy }}
       ANKIN_FUSION_POLICY: ${{ inputs.fusion_policy }}
-      ANKIN_BALANCE_FULL: ${{ inputs.mode == 'full-30m' && '1' || '0' }}
+      ANKIN_BALANCE_FULL: ${{ inputs.mode == 'full-15m' && '15' || inputs.mode == 'full-30m' && '30' || '0' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -71,14 +71,17 @@ jobs:
       - name: Collect v13.33 tactical/legacy ability AI and survival
         if: inputs.mode == 'live-ai'
         run: npm run balance:ai -- --project=${{ matrix.project }}
-      - name: Collect v13.30 true full-timeline AI outcomes (desktop only)
+      - name: Collect genuine CHALLENGE 15m AI outcomes (desktop only)
+        if: inputs.mode == 'full-15m'
+        run: npm run balance:ai -- --project=desktop --grep="optional real 15-minute"
+      - name: Collect genuine NORMAL 30m AI outcomes (desktop only)
         if: inputs.mode == 'full-30m'
-        run: npm run balance:ai -- --project=desktop --grep="optional true 30-minute"
+        run: npm run balance:ai -- --project=desktop --grep="optional real 30-minute"
       - name: Upload JSON and CSV measurement reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ankin-balance-${{ matrix.project }}
+          name: ankin-balance-${{ inputs.mode }}-${{ matrix.project }}
           path: |
             artifacts/balance-lab/
             test-results/
