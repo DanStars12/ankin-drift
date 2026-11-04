@@ -28,8 +28,8 @@ test('soundtrack controls save BGM/SE mute/levels without modifying legacy recor
  await page.locator('#openOptions').click();
  await page.locator('#bgm').click();
  await page.locator('#sound').click();
- await page.locator('#bgmVolume').fill('40');
- await page.locator('#sfxVolume').fill('25');
+ await page.locator('#bgmVolume').evaluate(el=>{el.value='40';el.dispatchEvent(new Event('input',{bubbles:true}))});
+ await page.locator('#sfxVolume').evaluate(el=>{el.value='25';el.dispatchEvent(new Event('input',{bubbles:true}))});
  const prefs=await page.evaluate(()=>JSON.parse(localStorage.getItem('ankin_drift_v71_settings')));
  expect(prefs).toMatchObject({bgm:40,sfx:25,bgmMuted:true,sfxMuted:true});
  await page.reload();await page.locator('#openOptions').click();
