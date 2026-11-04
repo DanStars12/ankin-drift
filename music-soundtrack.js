@@ -60,18 +60,28 @@
  function midiFrequency(n){return 440*Math.pow(2,(n-69)/12)}
  function create(context,musicOutput,onTrackStart){
   const gate=context.createGain();gate.gain.value=0;gate.connect(musicOutput);
-  let noiseBuffer=null,tracks=[],current=null,transitions=0,loops=0,scheduled=0;
+  let noiseBuffer=null,tracks=[],current=null,transitions=0,loops=0,scheduled=0,lateStepsSkipped=0,lastGateTarget=null;
   function note(midi,t,duration,wave,volume,bus,bend=0){
    if(midi===REST||midi==null||duration<=0)return;
    const osc=context.createOscillator(),env=context.createGain(),freq=midiFrequency(midi);
-   const end=t+Math.max(.055,duration);
+   const end=t+Math.max(.070,duration);
+   const attack=wave==='square'||wave==='sawtooth'?.014:.009,release=.016;
    osc.type=wave;osc.frequency.setValueAtTime(freq,t);
    if(bend)osc.frequency.exponentialRampToValueAtTime(Math.max(30,freq*Math.pow(2,bend/12)),end);
-   env.gain.setValueAtTime(.0001,t);
-   env.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),t+.008);
-   env.gain.exponentialRampToValueAtTime(.0001,end);
-   osc.connect(env);env.connect(bus);osc.start(t);osc.stop(end+.012);
-   osc.onended=()=>{osc.disconnect();env.disconnect()};
+   // Start and finish at EXACT silence. A non-zero final sample makes audible clicks
+   // at rapid sixteenth-note attacks (most obvious with the battle square lead).
+   env.gain.setValueAtTime(0,t);
+   env.gain.linearRampToValueAtTime(Math.max(.0002,volume),t+attack);
+   env.gain.exponentialRampToValueAtTime(.0002,end-release);
+   env.gain.linearRampToValueAtTime(0,end);
+   // Keep the chiptune timbre while removing the harsh ultrasonic edge.
+   const filter=(wave==='square'||wave==='sawtooth')?context.createBiquadFilter():null;
+   if(filter){
+    filter.type='lowpass';filter.frequency.value=wave==='square'?5400:4700;
+    filter.Q.value=.35;osc.connect(filter);filter.connect(env);
+   }else osc.connect(env);
+   env.connect(bus);osc.start(t);osc.stop(end+.003);
+   osc.onended=()=>{osc.disconnect();filter?.disconnect();env.disconnect()};
    scheduled++;
   }
   function noise(t,duration,volume,bus,highpass){
@@ -83,13 +93,22 @@
     let seed=0x12345678;
     for(let i=0;i<size;i++){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;data[i]=(seed/2147483648)*.50;}
    }
-   const src=context.createBufferSource(),filter=context.createBiquadFilter(),amp=context.createGain();
-   src.buffer=noiseBuffer;filter.type='highpass';filter.frequency.value=highpass;
-   amp.gain.setValueAtTime(Math.max(.0001,volume),t);
-   amp.gain.exponentialRampToValueAtTime(.0001,t+duration);
-   src.connect(filter);filter.connect(amp);amp.connect(bus);
-   src.start(t);src.stop(t+duration+.002);
-   src.onended=()=>{src.disconnect();filter.disconnect();amp.disconnect()};
+   const src=context.createBufferSource(),filter=context.createBiquadFilter(),
+    softener=context.createBiquadFilter(),amp=context.createGain();
+   src.buffer=noiseBuffer;
+   // Narrow the metallic hiss but retain a recognisable snare/hi-hat texture.
+   filter.type='highpass';filter.frequency.value=highpass>4000?2800:highpass;
+   softener.type='lowpass';softener.frequency.value=highpass>4000?6800:6200;
+   softener.Q.value=.4;
+   const length=Math.max(.035,duration),attack=Math.min(.008,length*.20),release=Math.min(.018,length*.28);
+   // White-noise buffers begin at a random non-zero sample: fading IN is essential.
+   amp.gain.setValueAtTime(0,t);
+   amp.gain.linearRampToValueAtTime(Math.max(.0002,volume),t+attack);
+   amp.gain.exponentialRampToValueAtTime(.0002,t+length-release);
+   amp.gain.linearRampToValueAtTime(0,t+length);
+   src.connect(filter);filter.connect(softener);softener.connect(amp);amp.connect(bus);
+   src.start(t);src.stop(t+length+.003);
+   src.onended=()=>{src.disconnect();filter.disconnect();softener.disconnect();amp.disconnect()};
   }
   function soundStep(v,t){
    const theme=THEMES[v.id],step=v.step%128,bar=Math.floor(step/16),unit=step%16,beat=60/theme.bpm/4;
@@ -122,7 +141,7 @@
      note(54,t,beat*.75,'triangle',.014,v.gain,-5);
     }
     if(unit%2===0||v.id==='boss'){
-     noise(t,.042,v.id==='boss'?.016:.009,v.gain,4900);
+     noise(t,.049,v.id==='boss'?.011:.006,v.gain,4900);
     }
     if(v.id==='boss'&&unit===14)note(root+36,t,beat*2,'square',.013,v.gain);
    }
@@ -130,28 +149,48 @@
    if(v.step===128){v.step=0;loops++} // silent seamless loop, no track-start callback
    v.next=t+beat;
   }
+  function trackGainAt(v,now){
+   if(v.fadeOutAt!==null){
+    return Math.max(0,v.fadeOutGain*(1-(now-v.fadeOutAt)/v.fadeOutDuration));
+   }
+   return Math.min(1,Math.max(0,(now-v.fadeInAt)/v.fadeInDuration));
+  }
+  function fadeOutTrack(v,now,duration){
+   const currentGain=trackGainAt(v,now);
+   v.gain.gain.cancelScheduledValues(now);
+   v.gain.gain.setValueAtTime(currentGain,now);
+   v.gain.gain.linearRampToValueAtTime(0,now+duration);
+   v.fadeOutAt=now;v.fadeOutGain=currentGain;v.fadeOutDuration=duration;
+   v.expire=now+duration+.08;
+  }
   function transition(id,now){
    const fade=1.05;
-   for(const v of tracks){
-    v.gain.gain.cancelScheduledValues(now);
-    v.gain.gain.setValueAtTime(v.gain.gain.value,now);
-    v.gain.gain.linearRampToValueAtTime(0,now+fade);
-    v.expire=now+fade+.08;
-   }
+   for(const v of tracks)fadeOutTrack(v,now,fade);
    const gain=context.createGain();gain.gain.setValueAtTime(0,now);
    gain.gain.linearRampToValueAtTime(1,now+fade);
    gain.connect(gate);
-   const v={id,gain,step:0,next:now+.045,expire:Infinity};
+   const v={id,gain,step:0,next:now+.045,expire:Infinity,
+    fadeInAt:now,fadeInDuration:fade,fadeOutAt:null,fadeOutGain:0,fadeOutDuration:0};
    tracks.push(v);current=id;transitions++;
    if(typeof onTrackStart==='function')onTrackStart({id,title:NAMES[id],transitions});
   }
   function tick({scene,enabled=true,paused=false,duck=1}={}){
    const now=context.currentTime;
    const target=enabled&&!paused?Math.max(0,Math.min(1,duck)):0;
-   gate.gain.setTargetAtTime(target,now,.09);
+   if(target!==lastGateTarget){
+    gate.gain.setTargetAtTime(target,now,.085);
+    lastGateTarget=target;
+   }
    if(!enabled){
-    for(const v of tracks)v.gain.disconnect();
-    tracks=[];current=null;
+    // Do not disconnect a sounding oscillator abruptly when music is muted.
+    if(current!==null){
+     for(const v of tracks)fadeOutTrack(v,now,.16);
+     current=null;
+    }
+    tracks=tracks.filter(v=>{
+     if(v.expire<=now){v.gain.disconnect();return false}
+     return true;
+    });
     return;
    }
    if(paused||context.state!=='running')return;
@@ -162,13 +201,21 @@
     return true;
    });
    for(const v of tracks){
-    if(v.next<now-.25)v.next=now+.025; // background/CPU stalls never queue an audio backlog
+    const beat=60/THEMES[v.id].bpm/4,earliest=now+.018;
+    // Never start a sound in the past. If a busy frame misses a beat, skip
+    // those steps rather than making the browser start mid-envelope with a pop.
+    if(v.next<earliest){
+     const skipped=Math.ceil((earliest-v.next)/beat);
+     const advanced=v.step+skipped;
+     loops+=Math.floor(advanced/128);v.step=advanced%128;
+     v.next+=skipped*beat;lateStepsSkipped+=skipped;
+    }
     let limit=0;
-    while(v.next<now+.14&&limit++<5)soundStep(v,v.next);
+    while(v.next<now+.17&&limit++<6)soundStep(v,v.next);
    }
   }
   function inspect(){
-   return {track:current,title:current?NAMES[current]:null,transitions,loops,scheduled,
+   return {track:current,title:current?NAMES[current]:null,transitions,loops,scheduled,lateStepsSkipped,
     activeTracks:tracks.length,contextState:context.state};
   }
   return {tick,inspect};
