@@ -1,8 +1,8 @@
 /* ANKIN DRIFT v13.33 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-33-ability-balance';
+const CACHE_NAME = 'ankin-drift-mobile-v13-33-soundtrack-v1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
-  './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js',
+  './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js',
   './icons/icon-192.png', './icons/icon-512.png',
   './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
 ];
