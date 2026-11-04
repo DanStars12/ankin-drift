@@ -37,6 +37,8 @@ jobs:
         run: npm run test:ending
       - name: Test balance summary statistics and export formatting
         run: npm run test:balance-report
+      - name: Verify v13.33 five-ship NOVA and dash decision rules
+        run: npm run test:ability-tactics
       - name: Write result summary
         if: always()
         env:
