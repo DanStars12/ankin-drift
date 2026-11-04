@@ -53,3 +53,44 @@ test('original music code is cached by PWA and playable offline',async({page,con
  await page.locator('#musicPreview').click();
  await expect.poll(()=>page.evaluate(()=>window.ankinMusicStatus().director?.track)).toBe('title');
 });
+
+
+test('battle audio skips overdue notes instead of click-producing mid-envelope starts',async({page})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('./');
+ await page.locator('#musicPreview').click(); // browser audio unlock first
+ const report=await page.evaluate(async()=>{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  const ctx=new AC();await ctx.resume();
+  const output=ctx.createGain();output.gain.value=0;output.connect(ctx.destination);
+  const recorded={starts:0,past:0},addCheck=node=>{
+   const start=node.start.bind(node);
+   node.start=at=>{
+    recorded.starts++;
+    // A sound beginning more than a single audio render quantum in the past
+    // starts halfway through the amplitude envelope and can make a crackle.
+    if(at<ctx.currentTime-.003)recorded.past++;
+    return start(at);
+   };
+   return node;
+  };
+  const oscillator=ctx.createOscillator.bind(ctx),bufferSource=ctx.createBufferSource.bind(ctx);
+  ctx.createOscillator=()=>addCheck(oscillator());
+  ctx.createBufferSource=()=>addCheck(bufferSource());
+  const engine=window.AnkinSoundtrack.create(ctx,output);
+  engine.tick({scene:'battle',enabled:true});
+  await new Promise(resolve=>setTimeout(resolve,650)); // mimic a stalled animation frame
+  engine.tick({scene:'battle',enabled:true});
+  engine.tick({scene:'boss',enabled:true});
+  engine.tick({scene:'battle',enabled:true});
+  engine.tick({scene:'battle',enabled:false});
+  const status=engine.inspect();
+  await ctx.close();
+  return {...recorded,...status};
+ });
+ expect(report.lateStepsSkipped).toBeGreaterThan(0);
+ expect(report.starts).toBeGreaterThan(10);
+ expect(report.past).toBe(0);
+ expect(report.transitions).toBe(3);
+ expect(errors).toEqual([]);
+});
