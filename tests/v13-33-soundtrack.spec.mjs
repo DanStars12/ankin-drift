@@ -65,43 +65,40 @@ test('original music code is cached by PWA and playable offline',async({page,con
 });
 
 
-test('battle audio skips overdue notes instead of click-producing mid-envelope starts',async({page})=>{
- const errors=[];page.on('pageerror',e=>errors.push(e.message));
+test('MP3 player crossfades scene changes without synthesizing obsolete notes',async({page})=>{
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto('./');
- await page.locator('#musicPreview').click(); // browser audio unlock first
- const report=await page.evaluate(async()=>{
+ await page.locator('#musicPreview').click();
+ const result=await page.evaluate(async()=>{
   const AC=window.AudioContext||window.webkitAudioContext;
   const ctx=new AC();await ctx.resume();
   const output=ctx.createGain();output.gain.value=0;output.connect(ctx.destination);
-  const recorded={starts:0,past:0},addCheck=node=>{
-   const start=node.start.bind(node);
-   node.start=at=>{
-    recorded.starts++;
-    // A sound beginning more than a single audio render quantum in the past
-    // starts halfway through the amplitude envelope and can make a crackle.
-    if(at<ctx.currentTime-.003)recorded.past++;
-    return start(at);
-   };
-   return node;
-  };
-  const oscillator=ctx.createOscillator.bind(ctx),bufferSource=ctx.createBufferSource.bind(ctx);
-  ctx.createOscillator=()=>addCheck(oscillator());
-  ctx.createBufferSource=()=>addCheck(bufferSource());
+  const observed={oscillators:0,buffers:0,media:0};
+  const makeOscillator=ctx.createOscillator.bind(ctx);
+  const makeBuffer=ctx.createBufferSource.bind(ctx);
+  const makeMedia=ctx.createMediaElementSource.bind(ctx);
+  ctx.createOscillator=()=>{observed.oscillators++;return makeOscillator();};
+  ctx.createBufferSource=()=>{observed.buffers++;return makeBuffer();};
+  ctx.createMediaElementSource=element=>{observed.media++;return makeMedia(element);};
   const engine=window.AnkinSoundtrack.create(ctx,output);
   engine.tick({scene:'battle',enabled:true});
-  await new Promise(resolve=>setTimeout(resolve,650)); // mimic a stalled animation frame
+  engine.tick({scene:'trinity',enabled:true});
   engine.tick({scene:'battle',enabled:true});
-  engine.tick({scene:'boss',enabled:true});
-  engine.tick({scene:'battle',enabled:true});
+  const active=engine.inspect();
   engine.tick({scene:'battle',enabled:false});
-  const status=engine.inspect();
+  await new Promise(resolve=>setTimeout(resolve,350));
+  engine.tick({enabled:false});
+  const stopped=engine.inspect();
   await ctx.close();
-  return {...recorded,...status};
+  return {observed,active,stopped};
  });
- expect(report.lateStepsSkipped).toBeGreaterThan(0);
- expect(report.starts).toBeGreaterThan(10);
- expect(report.past).toBe(0);
- expect(report.transitions).toBe(3);
+ expect(result.observed.oscillators).toBe(0);
+ expect(result.observed.buffers).toBe(0);
+ expect(result.observed.media).toBe(3);
+ expect(result.active.transitions).toBe(3);
+ expect(result.active.track).toBe('battle');
+ expect(result.stopped.track).toBeNull();
+ expect(result.stopped.activeTracks).toBe(0);
  expect(errors).toEqual([]);
 });
 
