@@ -40,7 +40,7 @@ test('soundtrack controls save BGM/SE mute/levels without modifying legacy recor
  expect(await page.evaluate(()=>Object.fromEntries(Object.entries(localStorage).filter(([k])=>k!=='ankin_drift_v71_settings')))).toEqual(saved);
  expect(errors).toEqual([]);
 });
-test('original music code is cached by PWA and playable offline',async({page,context})=>{
+test('five MP3 songs are cached by PWA and playable offline',async({page,context})=>{
  await page.goto('./');
  await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
  const paths=await page.evaluate(async()=>{
@@ -135,6 +135,7 @@ test('music notification is small, gradient colored and near health HUD',async({
  if(isMobile)await page.locator('#start').tap();else await page.locator('#start').click();
  if(isMobile)await page.locator('#guideContinue').tap();else await page.locator('#guideContinue').click();
  await expect.poll(()=>page.evaluate(()=>window.ankinMusicStatus().director?.track)).toBe('battle');
+ await expect(page.locator('#bgmTrackToast')).toContainText('16-Battle Beat');
  const pos=await page.evaluate(()=>{
   const label=document.querySelector('#bgmTrackToast').getBoundingClientRect();
   const hp=document.querySelector('#hpFill').closest('.hud-box').getBoundingClientRect();
