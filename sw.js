@@ -36,7 +36,7 @@ self.addEventListener('fetch', event => {
       }
       const slice = blob.slice(start, end + 1);
       return new Response(slice, {status: 206, headers: {
-        'Content-Type': cached.headers.get('Content-Type') || 'audio/mpeg',
+        'Content-Type': 'audio/mpeg',
         'Accept-Ranges': 'bytes', 'Content-Range': 'bytes ' + start + '-' + end + '/' + size,
         'Content-Length': String(slice.size)
       }});
