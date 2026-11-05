@@ -1,8 +1,10 @@
 /* ANKIN DRIFT v13.33 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-33-soundtrack-declick-v2';
+const CACHE_NAME = 'ankin-drift-mobile-v13-33-five-mp3-v1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js',
+  './audio/neon-horizon.mp3', './audio/16-battle-beat.mp3', './audio/trinity.mp3',
+  './audio/overdrive-nemesis.mp3', './audio/the-last-horizon.mp3',
   './icons/icon-192.png', './icons/icon-512.png',
   './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
 ];
@@ -18,6 +20,29 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   if (!url.pathname.startsWith(new URL(self.registration.scope).pathname)) return;
+  // Media elements request byte ranges (206). Return correctly ranged bytes from
+  // the precached whole MP3, including when the device is fully offline.
+  if (url.pathname.endsWith('.mp3') && req.headers.has('range')) {
+    event.respondWith((async () => {
+      const cached = await caches.match(new Request(url.href));
+      if (!cached) return fetch(req);
+      const blob = await cached.blob(), size = blob.size;
+      const match = /^bytes=(\d*)-(\d*)$/.exec(req.headers.get('range') || '');
+      if (!match || (!match[1] && !match[2])) return cached;
+      const start = match[1] ? Number(match[1]) : Math.max(0, size - Number(match[2]));
+      const end = match[1] && match[2] ? Math.min(size - 1, Number(match[2])) : size - 1;
+      if (start >= size || end < start || !Number.isSafeInteger(start) || !Number.isSafeInteger(end)) {
+        return new Response(null, {status: 416, headers:{'Content-Range': 'bytes */' + size}});
+      }
+      const slice = blob.slice(start, end + 1);
+      return new Response(slice, {status: 206, headers: {
+        'Content-Type': 'audio/mpeg',
+        'Accept-Ranges': 'bytes', 'Content-Range': 'bytes ' + start + '-' + end + '/' + size,
+        'Content-Length': String(slice.size)
+      }});
+    })());
+    return;
+  }
   if (req.mode === 'navigate') {
     event.respondWith(fetch(req, {cache:'no-store'}).then(response => {
       if (response.ok) { const copy = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy)).catch(()=>{}); }

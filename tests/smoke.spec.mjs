@@ -3,7 +3,12 @@ import { test, expect } from '@playwright/test';
 function watchFailures(page) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  page.on('requestfailed', request => errors.push(`${request.method()} ${request.url()}: ${request.failure()?.errorText}`));
+  page.on('requestfailed', request => {
+    const reason=request.failure()?.errorText||'';
+    // Switching MP3 tracks intentionally cancels an obsolete, still-streaming response.
+    if (request.url().endsWith('.mp3') && reason==='net::ERR_ABORTED') return;
+    errors.push(`${request.method()} ${request.url()}: ${reason}`);
+  });
   page.on('response', response => {
     if (response.status() >= 400) errors.push(`HTTP ${response.status()} ${response.url()}`);
   });
