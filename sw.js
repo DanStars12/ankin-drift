@@ -1,8 +1,10 @@
 /* ANKIN DRIFT v13.33 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-33-soundtrack-declick-v2';
+const CACHE_NAME = 'ankin-drift-mobile-v13-33-five-mp3-v1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js',
+  './audio/neon-horizon.mp3', './audio/16-battle-beat.mp3', './audio/trinity.mp3',
+  './audio/overdrive-nemesis.mp3', './audio/the-last-horizon.mp3',
   './icons/icon-192.png', './icons/icon-512.png',
   './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
 ];
