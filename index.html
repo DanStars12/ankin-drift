@@ -1113,14 +1113,18 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-align:center;margin-top:4px;padding:5px 8px;border-radius:7px;background:rgba(77,126,153,.19);color:#b4dfef;font-size:11px;font-weight:700;letter-spacing:.02em;pointer-events:auto}
 </style>
 <style>
-#bgmTrackToast{position:fixed;top:clamp(120px,17vh,170px);left:50%;transform:translate(-50%,-9px);
- max-width:min(88vw,390px);width:max-content;box-sizing:border-box;padding:10px 17px;z-index:15;
- color:#f0f9ff;background:#0b1c36e8;border:1px solid #6ea7cf99;border-radius:10px;
- box-shadow:0 8px 30px #0009,0 0 20px #71b5ff33;text-align:center;
- font:800 clamp(11px,2.7vw,14px)/1.5 system-ui,sans-serif;letter-spacing:.04em;
- opacity:0;visibility:hidden;transition:opacity .32s ease,transform .32s ease,visibility .32s;pointer-events:none}
-#bgmTrackToast.shown{opacity:1;visibility:visible;transform:translate(-50%,0)}
-@media(max-width:550px){#bgmTrackToast{top:clamp(126px,19vh,176px);font-size:11px;padding:8px 12px}}
+#bgmTrackToast{
+ position:fixed;left:14px;bottom:150px;z-index:15;pointer-events:none;
+ max-width:min(76vw,290px);overflow-wrap:anywhere;
+ padding:0;margin:0;border:0;border-radius:0;box-shadow:none;text-align:left;
+ background:linear-gradient(106deg,#fff 3%,#74fff0 45%,#b8a0ff 95%);
+ -webkit-background-clip:text;background-clip:text;color:transparent;
+ font:750 clamp(10px,2.4vw,12px)/1.4 system-ui,sans-serif;letter-spacing:.025em;
+ opacity:0;visibility:hidden;transform:translateY(5px);
+ transition:opacity .58s ease,transform .58s ease,visibility .58s;
+}
+#bgmTrackToast.shown{opacity:.88;visibility:visible;transform:translateY(0)}
+@media(max-width:550px){#bgmTrackToast{font-size:10px;max-width:55vw}}
 @media(prefers-reduced-motion:reduce){#bgmTrackToast{transition:none}}
 </style>
 </head>
@@ -1243,10 +1247,9 @@ if(typeof ResizeObserver!=='undefined'){
 }
 
 function applyAudioLevels(){if(musicBus)musicBus.gain.value=.28*settings.bgm/100;if(sfxBus)sfxBus.gain.value=.58*settings.sfx/100}
-let musicOn=!settings.bgmMuted,masterBus=null,musicBus=null,sfxBus=null,limiter=null,nextMusicBeat=0,musicStep=0;
+let musicOn=!settings.bgmMuted,masterBus=null,musicBus=null,sfxBus=null,limiter=null;
 soundOn=!settings.sfxMuted;
 let soundtrackUnlocked=false,soundtrackDirector=null,musicToastUntil=0;
-const MUSIC_SCALE=[0,3,5,7,10,12,15,17,19,22],MUSIC_ROOT=110;
 function setupAudio(){if(!audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;audio=new AC();limiter=audio.createDynamicsCompressor();limiter.threshold.value=-16;limiter.knee.value=9;limiter.ratio.value=8;limiter.attack.value=.005;limiter.release.value=.19;masterBus=audio.createGain();masterBus.gain.value=.73;musicBus=audio.createGain();musicBus.gain.value=.28;sfxBus=audio.createGain();sfxBus.gain.value=.58;musicBus.connect(masterBus);sfxBus.connect(masterBus);masterBus.connect(limiter);limiter.connect(audio.destination);applyAudioLevels()}if(audio.state==='suspended')audio.resume().catch(()=>{});return true}
 function synth(f,len=.1,type='triangle',vol=.06,at=null,channel='fx',endF=null){if(channel==='music'?!musicOn:!soundOn)return;if(!setupAudio())return;try{const n=Math.max(audio.currentTime,at??audio.currentTime),o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(40,f),n);o.frequency.exponentialRampToValueAtTime(Math.max(40,endF??f*.75),n+len);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(Math.max(.0001,vol),n+.008);g.gain.exponentialRampToValueAtTime(.0001,n+len);o.connect(g);g.connect(channel==='music'?musicBus:sfxBus);o.start(n);o.stop(n+len+.012)}catch{}}
 function tone(f=400,len=.06,type='sine',vol=.035){synth(f,len,type,vol)}
@@ -1267,19 +1270,42 @@ function sfx(kind){if(!soundOn)return;const n=audio?.currentTime||0;switch(kind)
   case 'firework':noiseBurst(.24,.085);synth(230,.35,'sine',.11,n,'fx',60);break;
  case 'victory':{noiseBurst(.46,.15);for(let i=0;i<7;i++)synth([392,494,587,784,988,1175,1568][i],.38,'triangle',.095,n+i*.12,'fx',[523,659,784,988,1175,1568,1975][i]);synth(196,1.15,'sine',.10,n+.76,'fx',392);break;}
  }}
+function musicSceneForBossType(type){
+ if(type==='ultimate')return 'last';
+ if(type==='major')return 'major';
+ if(type==='minor'||type==='unique')return 'trinity';
+ return 'battle';
+}
 function currentMusicScene(){
  if(mode==='menu'||mode==='archive'||mode==='victory'||mode==='dead'||mode==='retired'||
   (mode==='options'&&optionsBack==='menu')||
   (mode==='guide'&&guideReturn==='menu')||
   (mode==='build'&&!!menuLabBackup))return 'title';
- if(boss&&!boss.dead)return 'boss';
+ if(boss&&!boss.dead)return musicSceneForBossType(boss.type);
  return 'battle';
 }
+function positionMusicToast(){
+ const el=U('bgmTrackToast');if(!el)return;
+ const hp=U('hpFill')?.closest('.hud-box');
+ if(hud.style.display!=='none'&&hp){
+  const rect=hp.getBoundingClientRect();
+  if(rect.width>0&&rect.height>0){
+   el.style.left=Math.round(rect.left)+'px';
+   el.style.bottom=Math.round(Math.max(9,innerHeight-rect.top+8))+'px';
+   return;
+  }
+ }
+ el.style.left=(controlMode==='mobile'?Math.round(Math.max(8,(innerWidth-Math.min(innerWidth,460))/2+8)):14)+'px';
+ el.style.bottom=controlMode==='mobile'?'145px':'160px';
+}
+addEventListener('resize',positionMusicToast);
 function bgmToast(theme){
  const el=U('bgmTrackToast');if(!el)return;
  el.textContent='♪「'+theme.title+'」';
- el.classList.add('shown');musicToastUntil=performance.now()+3700;
+ positionMusicToast();
+ el.classList.add('shown');musicToastUntil=performance.now()+3200;
 }
+window.ankinMusicSceneForBossType=musicSceneForBossType;
 function unlockSoundtrack(){
  soundtrackUnlocked=true;
  if(setupAudio())playMusic(); // only invoked by an actual user click/tap (or explicit start)
@@ -1291,7 +1317,7 @@ function playMusic(){
  }
  if(!soundtrackUnlocked||!window.AnkinSoundtrack)return;
  if(!audio&&!setupAudio())return;
- if(audio.state!=='running')return;
+ // Start HTMLAudioElement.play() inside the click/tap gesture even while AudioContext.resume() is settling.
  if(!soundtrackDirector)soundtrackDirector=AnkinSoundtrack.create(audio,musicBus,bgmToast);
  const isTitle=currentMusicScene()==='title';
  const paused=document.hidden||['paused','quitConfirm','victory','dead','retired'].includes(mode)||
@@ -2040,7 +2066,7 @@ function bindSafeChoice(el){
 }
 function state(s){if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay()}
 function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.laserCount=2;p.dmg=35;p.hp=106;p.maxHp=106;p.spd=245;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}if(p.shipType==='dog'){p.hp=118;p.maxHp=118;p.spd=238;p.dmg=39;p.rate=1.12;p.novaRadius=175;p.novaDamage=160;p.shotSpeed=375;p.r=15;p.limitShot=12;p.limitOrbit=10;p.dogBones=1;p.dogBoneSize=1;p.dogBoneRange=245;}}
-function boot(){unlockSoundtrack();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');if(!first)sfx('level')}
+function boot(){soundtrackUnlocked=true;setupAudio();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');playMusic();if(!first)sfx('level')}
 const GUIDE_KEY='ankin_drift_release_guide_seen';let guideReturn='playing';function guideSeen(){try{return localStorage.getItem(GUIDE_KEY)==='1'}catch{return false}}function markGuide(){try{localStorage.setItem(GUIDE_KEY,'1')}catch{}}
 function click(id,fn){U(id)?.addEventListener('click',fn)}
 function attrMarkup(c,interactive=true){return (c.tags||['汎用']).map(a=>{const cls=a==='属性：炎'?'attr-fire':a==='属性：氷'?'attr-ice':a==='属性：風'?'attr-wind':a==='属性：岩'?'attr-rock':a==='属性：雷'?'attr-thunder':a==='属性融合素材'?'attr-element-material':a==='進化合成素材'?'attr-element-ready':'';return `<span class="attr ${cls} ${interactive?'attr-info':''}" ${interactive?`data-attr-peek="${escHtml(a)}" tabindex="0" role="button" aria-label="${escHtml(a)}の特性と数値を確認"`:''}>${escHtml(a)}${interactive?'<b aria-hidden="true"> ⓘ</b>':''}</span>`}).join('')}
