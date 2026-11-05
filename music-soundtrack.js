@@ -51,7 +51,6 @@
    const element=new Audio(TRACKS[id].url);
    element.preload='auto';
    element.loop=true;
-   element.crossOrigin='anonymous';
    const source=context.createMediaElementSource(element),gain=context.createGain();
    gain.gain.setValueAtTime(0,now);
    source.connect(gain);gain.connect(gate);
