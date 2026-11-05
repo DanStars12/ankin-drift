@@ -50,6 +50,15 @@ test('original music code is cached by PWA and playable offline',async({page,con
  expect(paths).toContain('/ankin-drift/music-soundtrack.js');
  for(const src of ['neon-horizon.mp3','16-battle-beat.mp3','trinity.mp3','overdrive-nemesis.mp3','the-last-horizon.mp3'])expect(paths).toContain('/ankin-drift/audio/'+src);
  await context.setOffline(true);await page.reload();
+ const range=await page.evaluate(async()=>{
+  const response=await fetch('./audio/16-battle-beat.mp3',{headers:{Range:'bytes=0-1023'}});
+  return {status:response.status,contentRange:response.headers.get('content-range'),
+   type:response.headers.get('content-type'),size:(await response.arrayBuffer()).byteLength};
+ });
+ expect(range.status).toBe(206);
+ expect(range.contentRange).toMatch(/^bytes 0-1023\/\d+$/);
+ expect(range.type).toMatch(/audio\/mpeg/);
+ expect(range.size).toBe(1024);
  await expect(page.locator('#musicPreview')).toBeVisible();
  await page.locator('#musicPreview').click();
  await expect.poll(()=>page.evaluate(()=>window.ankinMusicStatus().director?.track)).toBe('title');
