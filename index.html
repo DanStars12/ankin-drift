@@ -1279,7 +1279,7 @@ function musicSceneForBossType(type){
 function currentMusicScene(){
  if(mode==='menu'||mode==='archive'||mode==='victory'||mode==='dead'||mode==='retired'||
   (mode==='options'&&optionsBack==='menu')||
-  (mode==='guide'&&guideReturn==='menu')||
+  mode==='guide'||
   (mode==='build'&&!!menuLabBackup))return 'title';
  if(boss&&!boss.dead)return musicSceneForBossType(boss.type);
  return 'battle';
