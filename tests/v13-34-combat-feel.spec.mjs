@@ -20,6 +20,7 @@ window.__ankinSoloQA={
    outside:segmentPointDistanceSq(0,0,20,0,10,12),
    speeds:[ordinaryShotSpeed(0),ordinaryShotSpeed(20),ordinaryShotSpeed(30),ordinaryShotSpeed(60)],
    pressure:ordinaryShotSpeed(30,true),
+   crowd:[ordinaryShooterInterval(30,10),ordinaryShooterInterval(30,50)],
    skills:['dashGraze','dashPulse','dashFlow'].map(id=>{const c=SKILLS.find(c=>c.id===id);return {id,rarity:c?.rarity,stackable:c?.stackable}})};
  },
  bullet(offset,velocity=0,dt=1/60){
@@ -67,6 +68,8 @@ test('five solo ships share a smaller core and ordinary enemy shots have late-wa
  expect(result.outside).toBe(144);
  expect(result.speeds).toEqual([155,259,311,320]);
  expect(result.pressure).toBe(298);
+ expect(result.crowd[1]).toBeGreaterThan(result.crowd[0]);
+ expect(result.crowd[0]).toBeCloseTo(1.13);
  expect(result.skills.map(x=>x.id)).toEqual(['dashGraze','dashPulse','dashFlow']);
  for(const skill of result.skills)expect(skill.rarity).toBeTruthy();
  expect(errors).toEqual([]);
