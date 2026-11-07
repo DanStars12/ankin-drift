@@ -45,6 +45,7 @@ window.__ankinSoloQA={
    {x:p.x+40,y:p.y,vx:0,vy:0,r:4,damage:10,ttl:2,color:'#ffffff',unblockable:true}];
   dash();
   const result={dashTime:p.dashTime,flowTime:p.dashFlowTimer,cleared:hostile[0].ttl,phaseIntact:hostile[1].ttl,dashCount:game.combatLog.dashCount};
+  drive(1/60);result.remaining=hostile.length;result.phasePreserved=hostile[0]?.unblockable;
   mode='menu';return result;
  }
 };
@@ -96,6 +97,8 @@ test('graze rewards a skillful near miss once, and dash pulse does not remove PH
  expect(out.graze.second.energy).toBe(out.graze.first.energy);
  expect(out.dash.cleared).toBe(0);
  expect(out.dash.phaseIntact).toBe(2);
+ expect(out.dash.remaining).toBe(1);
+ expect(out.dash.phasePreserved).toBe(true);
  expect(out.dash.flowTime).toBe(1.2);
  expect(out.dash.dashTime).toBeGreaterThan(0);
  expect(out.dash.dashCount).toBe(1);
