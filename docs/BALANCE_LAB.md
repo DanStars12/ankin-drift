@@ -274,3 +274,18 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 3シードの対照実験で、ショット型の「ダッシュは旧AI・NOVAだけ射程判定へ変更」は15分ではクリア2/3→3/3でしたが、30分では1/3→0/3かつDPS低下が見られました。モードによる結果が矛盾したため **候補は不採用**、従来のショット/ドリルの能力判断を保持します。全モードで計測フックの誤記録だけを修正します。
 
 追加の受け入れテスト `ANKIN v13.33 separate 15m and 30m AI acceptance` では、独立した `full-15m` と `full-30m`、融合 `always` 3シード／非融合 `never` 1シードをそれぞれ5機体で実行し、JSON/CSVの成果物を別名で残します。テスト合格は正常なゲーム進行とデータ保護の確認であり、各機体の勝率バランスが適切であるとの保証ではありません。
+
+
+## v13.35 — DOUBLE TIME validation (development branch)
+
+- Branch: `feature/solo-double-time-20261109`, baseline main: `a9bea8e4f7fbc50031dc9e57e87a89f5263aaca9` (v13.34).
+- LEVEL 3 optional trial; ordinary 1x damage/HP/weapon statistics are unchanged. CO-OP is excluded.
+- `doubleTime` is selected and snapshotted through the existing ANKIN TRIAL menu. A clear uses the existing rank/achievement rules and preserves the new ID through the schema-v2 sanitizer. No incompatible save migration.
+- Scheduler stays at 1/60s. 2x admits twice the game time and uses at most 16 fixed steps per RAF (1x remains 8). The bounded backlog is .64 game seconds at 2x (.32 at 1x). Excess stall time is diagnosed and never credited as survival without `drive` calls. Modes and run changes discard paused backlog and reset the RAF origin.
+- Audio, visual particles, UI touch guard and notification durations stay on real time; enemy warnings/hazards, attacks, cooldowns, physics and encounter scheduling use `drive` game time.
+- Added `npm run test:clock`: 15–144 Hz, pause/choice freeze, stalled backlog, 15/30-minute **clock-only** drift checks. These are not real 30-minute AI runs.
+- Browser suite: real frame loop/cooldowns for 5 ships; swept high-speed bullets plus BALLISTIC; boss/raid/ultimate boundaries; 5 ships × 2 live conditions × 3 seeds comparing equal simulated time at 1x/2x; trial UI, clear/rank/achievement reload at desktop/390/320.
+- Performance job now measures the PR base and candidate sequentially on the same runner. Candidate adds ordinary and late-game 2x/BALLISTIC loads; artifacts include effective speed, pending/discarded game time, frame/sim/draw percentiles and heap.
+- Local validation: syntax/PWA and Node tests pass. Chromium launch is blocked by Unix socket policy (`socket() failed: Operation not permitted`). Headless-shell download also fails (invalid/truncated archive). Browser, AI, FPS and render comparisons therefore require Actions; no local browser pass or performance improvement is claimed.
+- Pending release gates: Actions on the latest PR head, same-runner performance review, actual 2x fusion/reward and long-run validation, real-device input/audio. Until sufficient evidence exists, keep this branch unmerged. Public deployment is not confirmed.
+- Next priorities: inspect actual benchmark results and frame/simulation split; expand 2x full-timeline/fusion validation; only then consider machine balance changes with 10+ seeds, and later dash/counter build experiments.

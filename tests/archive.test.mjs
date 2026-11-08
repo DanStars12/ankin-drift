@@ -184,3 +184,18 @@ test('v13.19 new milestones backfill from existing safe profile and preserve old
  const merged=harness();merged.api.start();merged.api.restore(backup,'merge');
  assert.equal(merged.api.progress().find(x=>x.id==='level_thirty').unlocked,true);
 });
+
+test('DOUBLE TIME and all twelve trials survive write, reload and backup import',()=>{
+ const trials=['fragile','onslaught','armored','swift','vicious','ironclad','ballistic','famine','novaTax','dashTax','repairTax','doubleTime'];
+ const h=harness();h.api.start();const r=h.api.read();
+ r.clears=[clear('double-time',{challenges:[...trials,'unrecognized'],rank:'ANKIN MASTER'})];
+ assert.equal(h.api.write(r),true);
+ const reloaded=harness(Object.fromEntries(h.memory));reloaded.api.start();
+ assert.equal(asText(reloaded.api.read().clears[0].challenges),asText(trials));
+ const imported=harness();imported.api.start();
+ const preview=imported.api.preview(h.api.exported());
+ assert.ok(preview);
+ imported.api.restore(h.api.exported(),'merge');
+ assert.equal(asText(imported.api.read().clears[0].challenges),asText(trials));
+ assert.equal(asText(reloaded.api.read().clears[0].rank),asText('ANKIN MASTER'));
+});

@@ -69,3 +69,10 @@ Before-and-after numbers from GitHub-hosted runners are indicative only. Always 
 - Visuals cap at 3 active seals (1 when heavy-load), with a rotating reveal of previously earned evolution seals and up to 8 attack glyphs (disabled at high pressure). Gameplay hitboxes stay untouched.
 - The mobile DASH and NOVA controls use the existing threat-opacity convention when enemies/projectiles pass beneath the controls. The buttons remain interactable; detection uses actual on-screen rects, not world-only bottom bands.
 - Validate at 320px and 390px, especially controls while projectiles approach from the right. Compare gameplay balance before and after on identical seeded encounters.
+
+
+## v13.35 DOUBLE TIME timing diagnostics
+
+Reports now expose `timing.requestedSpeed`, `effectiveSpeed` (simulated game seconds / sampled real seconds), `pendingGameSeconds`, `discardedGameSeconds` and `fixedStep`. A 2x request does not guarantee a slow device can keep up: heavy stalls slow combat rather than advance timers without collisions. The history remains bounded to 480 frames. New runs reset timing history. FPS caps and adaptive render resolution do not change requested simulation speed.
+
+PR benchmarks run the base revision and candidate sequentially on the same runner and attach both reports. Compare the common 1x scenarios, then inspect the additional 2x + BALLISTIC cases separately. Synthetic stress and headless emulation are not real-device or long-session certification.

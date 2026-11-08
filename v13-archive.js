@@ -100,7 +100,7 @@ function stripClear(v,i){
   level:finite(o.level,1e7),damage:finite(o.damage),date:safeDate(o.date),endless:!!o.endless,
   ship:SHIPS.includes(o.ship)?o.ship:null,title:text(o.title,90),
   subtitle:text(o.subtitle,160),rank:text(o.rank,32),
-  challenges:unique(o.challenges,['fragile','onslaught','armored','swift','vicious','ironclad','ballistic','famine','novaTax','dashTax','repairTax']).slice(0,11),
+  challenges:unique(o.challenges,['fragile','onslaught','armored','swift','vicious','ironclad','ballistic','famine','novaTax','dashTax','repairTax','doubleTime']).slice(0,12),
   fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,2),
   evolutionIds:array(o.evolutionIds).map(x=>text(x,70)).slice(0,30),
   finalSource:text(o.finalSource,40),ending:stripEnding(o.ending),
