@@ -4,12 +4,12 @@ import { test, expect } from '@playwright/test';
 // Performance numbers are diagnostic, not a merge gate: runner CPU load varies.
 // Scenario setup is executed only by Playwright; no gameplay shortcuts are shipped.
 const scenarios = [
-  { name: 'double-time', total:480, enemies:40, hostile:50, raid:false, doubleTime:true },
-  { name: 'double-time-stress', total:3600, enemies:220, hostile:300, raid:true, doubleTime:true, durationMs:7000 },
   { name: 'normal', total: 480, enemies: 40, hostile: 50, raid: false },
   { name: 'dual-raid', total: 1080, enemies: 105, hostile: 110, raid: true },
   { name: 'triple-raid', total: 2220, enemies: 150, hostile: 160, raid: true },
   { name: 'late-game-stress', total: 3600, enemies: 220, hostile: 300, raid: true, pickups: 500, durationMs: 7000 },
+  { name: 'double-time', total:480, enemies:40, hostile:50, raid:false, doubleTime:true },
+  { name: 'double-time-stress', total:3600, enemies:220, hostile:300, raid:true, doubleTime:true, durationMs:7000 },
 ];
 
 test('repeatable combat load profiles', async ({ page, isMobile }, testInfo) => {

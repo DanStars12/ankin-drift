@@ -159,6 +159,17 @@ test('full timeline 1x/2x parity: real 15m and 30m schedules, rewards and fusion
   }
   expect(pair[1]).toEqual(pair[0]);rows.push({gameMode,ship,pair});
  }
+ for(const gameMode of ['normal','challenge']){
+  const modeRows=rows.filter(r=>r.gameMode===gameMode).map(r=>r.pair[1]);
+  expect(modeRows.some(r=>r.reachedFinalBoss&&r.clearCount>0)).toBe(true);
+  expect(modeRows.some(r=>r.elementFusions===2)).toBe(true);
+  for(const r of modeRows.filter(r=>r.reachedFinalBoss)){
+   expect(r.finalBossSpawnTime).toBeGreaterThanOrEqual(r.finalBossAt);
+   expect(r.finalBossSpawnTime).toBeLessThan(r.finalBossAt+.05);
+  }
+ }
+ console.log('DOUBLE_TIME_FULL_SUMMARY='+JSON.stringify(rows.map(r=>({gameMode:r.gameMode,ship:r.ship,
+  seconds:r.pair[1].simulationTime,result:r.pair[1].stopReason,fusions:r.pair[1].elementFusions,boss:r.pair[1].reachedFinalBoss}))));
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(before);
  await testInfo.attach('full-timeline-1x-2x.json',{body:JSON.stringify(rows,null,2),contentType:'application/json'});
  expect(errors).toEqual([]);
