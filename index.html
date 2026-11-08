@@ -5940,7 +5940,7 @@ let perfFrames=0,perfSecond=0,perfFPS=60;
 const PERF_RING_SIZE=480;
 const perfRing={frame:new Float32Array(PERF_RING_SIZE),sim:new Float32Array(PERF_RING_SIZE),draw:new Float32Array(PERF_RING_SIZE),gameTime:new Float32Array(PERF_RING_SIZE),head:0,count:0};
 function recordPerfSample(frameMs,simMs,drawMs,gameSeconds=0){
- if(mode!=='playing'||document.hidden||frameMs<1||frameMs>500)return;
+ if(mode!=='playing'||document.hidden||!Number.isFinite(frameMs)||frameMs<1)return;
  const i=perfRing.head;perfRing.frame[i]=frameMs;perfRing.sim[i]=simMs;perfRing.draw[i]=drawMs;perfRing.gameTime[i]=gameSeconds;
  perfRing.head=(i+1)%PERF_RING_SIZE;perfRing.count=Math.min(PERF_RING_SIZE,perfRing.count+1);
 }

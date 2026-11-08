@@ -1,6 +1,11 @@
 import {test,expect} from '@playwright/test';
 import {BALANCE_HARNESS_ANCHOR,BALANCE_HARNESS} from '../scripts/balance-harness.mjs';
 import {BALANCE_AI_HARNESS} from '../scripts/balance-ai-harness.mjs';
+// This suite routes real AI ticks through the shipped frame scheduler. The
+// standard lab remains unchanged, so old balance baselines are still comparable.
+const CLOCKED_AI_HARNESS=BALANCE_AI_HARNESS.replaceAll('drive(dt);','advanceSimulation(dt/simulationSpeed());')
+ .replace("selectedGameMode=runMode;selectedShip=ship;newRun();mode='playing';",
+ "selectedGameMode=runMode;selectedShip=ship;newRun();mode='playing';t=0;game.activeChallenges=window.__qaClockSpeed===2?['doubleTime']:[];");
 const PROBE=String.raw`
 window.__doubleTimeQA={
  reset(ship='shot',trials=['doubleTime']){
@@ -55,6 +60,18 @@ window.__doubleTimeQA={
     enemies:enemies.length,bullets:hostile.length,outcome:game.runOutcome};
   });
  },
+ fusionLifecycle(){
+  this.reset();game.autoBank=false;game.level=12;game.pendingLevels=1;soundOn=false;
+  for(const id of ['iceBall','emberSeed']){const card=skillById(id);game.skills[id]=1;game.acquisitionLog.push(id);card.apply(player);}
+  processTransitions();const before=game.total;const modes=[mode];
+  advanceSimulation(20);enterElementChoice();modes.push(mode);advanceSimulation(20);
+  chooseFusionMain('ice');selectElementFusion('fire');selectFusionWeapon('A');confirmElementFusion();
+  modes.push(mode);advanceSimulation(20);
+  const frozen=game.total===before,combos=game.elementCombos.map(c=>({main:c.main,sub:c.sub,weapon:c.weapon}));
+  continueAfterReward();advanceSimulation(1/60);
+  const out={modes,frozen,combos,advanced:game.total-before,speed:simulationSpeed(),mode,bonus:player.fusionOutputBonus};
+  mode='menu';return out;
+ },
  win(){game.ultimateEncounterAt=1800;game.lastClearAt=0;recordVictory();return game.lastClear;},
  selected(){return [...game.activeChallenges]}
 };
@@ -65,7 +82,7 @@ async function setup(page,{manual=false}={}){
  await page.route('**/ankin-drift/',async route=>{
   const response=await route.fetch(),html=await response.text();
   expect(html).toContain(BALANCE_HARNESS_ANCHOR);
-  await route.fulfill({response,body:html.replace(BALANCE_HARNESS_ANCHOR,BALANCE_HARNESS+'\n'+BALANCE_AI_HARNESS+'\n'+PROBE+'\n'+BALANCE_HARNESS_ANCHOR)});
+  await route.fulfill({response,body:html.replace(BALANCE_HARNESS_ANCHOR,BALANCE_HARNESS+'\n'+CLOCKED_AI_HARNESS+'\n'+PROBE+'\n'+BALANCE_HARNESS_ANCHOR)});
  });
  await page.goto('./');return errors;
 }
@@ -113,5 +130,36 @@ test('trial selection combines and locks at launch; clear rank, achievements and
  const saved=await page.evaluate(()=>AnkinArchive.read());
  expect(saved.clears.some(c=>c.challenges.includes('doubleTime')&&c.rank==='GOLD')).toBe(true);
  expect(await page.evaluate(()=>!!AnkinArchive.current().awards.challenge_two)).toBe(true);
+ expect(errors).toEqual([]);
+});
+
+
+test('2x attribute fusion and reward menus freeze combat and resume at the selected speed',async({page})=>{
+ const errors=await setup(page,{manual:true});
+ const out=await page.evaluate(()=>window.__doubleTimeQA.fusionLifecycle());
+ expect(out.modes).toEqual(['choice','elementChoice','elementResult']);expect(out.frozen).toBe(true);
+ expect(out.combos).toEqual([{main:'ice',sub:'fire',weapon:'A'}]);expect(out.bonus).toBeGreaterThan(0);
+ expect(out.advanced).toBeCloseTo(2/60,6);expect(out.speed).toBe(2);expect(out.mode).toBe('playing');
+ expect(errors).toEqual([]);
+});
+
+test('full timeline 1x/2x parity: real 15m and 30m schedules, rewards and fusion AI',async({page},testInfo)=>{
+ test.skip(process.env.ANKIN_DOUBLE_TIME_LONG!=='1','Expensive full-timeline suite runs in the separate DOUBLE TIME validation workflow.');
+ test.setTimeout(900000);const errors=await setup(page,{manual:true}),rows=[];
+ const before=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ for(const gameMode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog']){
+  const pair=[];
+  for(const speed of [1,2]){
+   const row=await page.evaluate(({gameMode,ship,speed})=>{
+    window.__qaClockSpeed=speed;
+    return window.__ankinBalanceAI.runFull({ship,gameMode,seed:17,fusionPolicy:'always'});
+   },{gameMode,ship,speed});pair.push(row);
+   expect(row.stopReason.startsWith('unhandled-menu')).toBe(false);
+   expect(row.stopReason).not.toBe('unknown');expect(row.simulationTime).toBeGreaterThan(0);
+  }
+  expect(pair[1]).toEqual(pair[0]);rows.push({gameMode,ship,pair});
+ }
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(before);
+ await testInfo.attach('full-timeline-1x-2x.json',{body:JSON.stringify(rows,null,2),contentType:'application/json'});
  expect(errors).toEqual([]);
 });

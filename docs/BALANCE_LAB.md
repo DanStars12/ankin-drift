@@ -289,3 +289,12 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 - Local validation: syntax/PWA and Node tests pass. Chromium launch is blocked by Unix socket policy (`socket() failed: Operation not permitted`). Headless-shell download also fails (invalid/truncated archive). Browser, AI, FPS and render comparisons therefore require Actions; no local browser pass or performance improvement is claimed.
 - Pending release gates: Actions on the latest PR head, same-runner performance review, actual 2x fusion/reward and long-run validation, real-device input/audio. Until sufficient evidence exists, keep this branch unmerged. Public deployment is not confirmed.
 - Next priorities: inspect actual benchmark results and frame/simulation split; expand 2x full-timeline/fusion validation; only then consider machine balance changes with 10+ seeds, and later dash/counter build experiments.
+
+
+### PR #62 follow-up validation
+
+- First head `caefafd1cc1daeca0ce77851767156e5a67cba5d`: Node and PWA Actions passed; initial PC/mobile performance jobs passed. 2x synthetic stress reached effective speed 2.000 without discarded time (desktop frame P95 33.4ms, mobile-390 16.8ms). These are CI diagnostics, not device guarantees.
+- Initial mobile 1x late-stress P95 changed from 16.8ms to 33.3ms while sim/draw costs remained near baseline (.8→.9ms / 2.2→2.2ms). This is unresolved timing variance, not a claimed improvement. Re-measure with three repetitions before a merge decision.
+- Improved comparison method: use the **same candidate test harness** against both source revisions, reset pilot/clock/render state per workload, and repeat each revision three times. Skip unsupported 2x cases in the baseline. No production base source is modified.
+- New explicit full-timeline workflow runs 15/30-minute scheduled AI simulations for all five ships at 1x and 2x, comparing reports including deaths, actual rewards and fusion decisions. Early AI deaths remain deaths and do not prove a clear or final-boss reach. Rendering-free simulation does not certify sustained real-time FPS.
+- Added real 2x fusion menu freeze/resume test. Long visible stalls now remain in timing diagnostics rather than being excluded from effective-speed samples.
