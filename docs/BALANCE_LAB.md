@@ -274,3 +274,40 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 3シードの対照実験で、ショット型の「ダッシュは旧AI・NOVAだけ射程判定へ変更」は15分ではクリア2/3→3/3でしたが、30分では1/3→0/3かつDPS低下が見られました。モードによる結果が矛盾したため **候補は不採用**、従来のショット/ドリルの能力判断を保持します。全モードで計測フックの誤記録だけを修正します。
 
 追加の受け入れテスト `ANKIN v13.33 separate 15m and 30m AI acceptance` では、独立した `full-15m` と `full-30m`、融合 `always` 3シード／非融合 `never` 1シードをそれぞれ5機体で実行し、JSON/CSVの成果物を別名で残します。テスト合格は正常なゲーム進行とデータ保護の確認であり、各機体の勝率バランスが適切であるとの保証ではありません。
+
+
+## v13.35 — DOUBLE TIME validation (development branch)
+
+- Branch: `feature/solo-double-time-20261109`, baseline main: `a9bea8e4f7fbc50031dc9e57e87a89f5263aaca9` (v13.34).
+- LEVEL 3 optional trial; ordinary 1x damage/HP/weapon statistics are unchanged. CO-OP is excluded.
+- `doubleTime` is selected and snapshotted through the existing ANKIN TRIAL menu. A clear uses the existing rank/achievement rules and preserves the new ID through the schema-v2 sanitizer. No incompatible save migration.
+- Scheduler stays at 1/60s. 2x admits twice the game time and uses at most 16 fixed steps per RAF (1x remains 8). The bounded backlog is .64 game seconds at 2x (.32 at 1x). Excess stall time is diagnosed and never credited as survival without `drive` calls. Modes and run changes discard paused backlog and reset the RAF origin.
+- Audio, visual particles, UI touch guard and notification durations stay on real time; enemy warnings/hazards, attacks, cooldowns, physics and encounter scheduling use `drive` game time.
+- Added `npm run test:clock`: 15–144 Hz, pause/choice freeze, stalled backlog, 15/30-minute **clock-only** drift checks. These are not real 30-minute AI runs.
+- Browser suite: real frame loop/cooldowns for 5 ships; swept high-speed bullets plus BALLISTIC; boss/raid/ultimate boundaries; 5 ships × 2 live conditions × 3 seeds comparing equal simulated time at 1x/2x; trial UI, clear/rank/achievement reload at desktop/390/320.
+- Performance job now measures the PR base and candidate sequentially on the same runner. Candidate adds ordinary and late-game 2x/BALLISTIC loads; artifacts include effective speed, pending/discarded game time, frame/sim/draw percentiles and heap.
+- Local validation: syntax/PWA and Node tests pass. Chromium launch is blocked by Unix socket policy (`socket() failed: Operation not permitted`). Headless-shell download also fails (invalid/truncated archive). Browser, AI, FPS and render comparisons therefore require Actions; no local browser pass or performance improvement is claimed.
+- Release gate: inspect Actions and repeated performance evidence on the latest PR head immediately before merge. Fusion/reward and full-timeline evidence is recorded below; real-device input/audio and sustained rendered wall-clock sessions remain unverified. Public deployment is not confirmed.
+- Next priorities: inspect actual benchmark results and frame/simulation split; expand 2x full-timeline/fusion validation; only then consider machine balance changes with 10+ seeds, and later dash/counter build experiments.
+
+
+### PR #62 follow-up validation
+
+- First head `caefafd1cc1daeca0ce77851767156e5a67cba5d`: Node and PWA Actions passed; initial PC/mobile performance jobs passed. 2x synthetic stress reached effective speed 2.000 without discarded time (desktop frame P95 33.4ms, mobile-390 16.8ms). These are CI diagnostics, not device guarantees.
+- Initial mobile 1x late-stress P95 changed from 16.8ms to 33.3ms while sim/draw costs remained near baseline (.8→.9ms / 2.2→2.2ms). This is unresolved timing variance, not a claimed improvement. Re-measure with three repetitions before a merge decision.
+- Improved comparison method: use the **same candidate test harness** against both source revisions, reset pilot/clock/render state per workload, and repeat each revision three times. Skip unsupported 2x cases in the baseline. No production base source is modified.
+- New explicit full-timeline workflow runs 15/30-minute scheduled AI simulations for all five ships at 1x and 2x, comparing reports including deaths, actual rewards and fusion decisions. Early AI deaths remain deaths and do not prove a clear or final-boss reach. Rendering-free simulation does not certify sustained real-time FPS.
+- Added real 2x fusion menu freeze/resume test. Long visible stalls now remain in timing diagnostics rather than being excluded from effective-speed samples.
+
+
+### Validated behavior at `3fd2d14` (PR #62)
+
+- Full-timeline workflow [42531387049](https://github.com/DanStars12/ankin-drift/actions/runs/42531387049) passed in 2.7 minutes of CI execution. Five ships × NORMAL/CHALLENGE × 1x/2x, seed 17: each paired report is identical, including damage, HP, death/clear, rewards and fusion outcomes. All ten conditions acquired two fusions. This is one seeded correctness comparison, **not** a statistically reliable balance ranking.
+- NORMAL: SHOT died at 1281.67 game seconds, LASER 1172.27, DOG 543.22; CHARGE cleared at 1818.68, DRILL 1820.53. Both reached the final boss at 1800.02.
+- CHALLENGE: SHOT died at 843.82, CHARGE 842.58; LASER cleared at 923.60, DRILL 943.60, DOG 908.32. Final boss spawn was 900.02. No invulnerability or silent healing was added to these real-AI runs.
+- Performance workflow [42531387034](https://github.com/DanStars12/ankin-drift/actions/runs/42531387034), three sequential base/candidate repeats per surface: common 1x late-stress frame P95 desktop base [33.3,16.8,16.8]ms → candidate [16.8,16.8,16.8]ms; mobile-390 [33.4,33.4,33.4]ms → [33.4,33.4,33.4]ms. No major regression is established. Do not describe these variable CI samples as a device FPS improvement.
+- 2x + BALLISTIC stress: desktop frame P95 16.8ms in all repeats; mobile-390 33.4ms in all repeats. Effective speed 1.998 in every repeat; discarded game time 0. Median simulation P95 desktop 1.6ms, mobile 3.1ms. Real devices and prolonged rendered sessions remain unverified.
+- Validation workflow [42531387007](https://github.com/DanStars12/ankin-drift/actions/runs/42531387007): desktop, 390px, 320px, syntax/PWA and aggregate PR validation all passed; re-run and inspect the final PR head before merging. Desktop 139 passed / 4 intentionally skipped; 320px 140 passed / 3 intentionally skipped (platform-specific and separate opt-in long tests, never failing tests hidden as skips).
+- Final test refinement: run common 1x benchmark cases before the candidate-only 2x cases, so warm-up order also matches; require at least one actual final-boss clear and a two-fusion run in each mode in the full-timeline gate. Re-run all workflows on the final head.
+- Next investigation: initial single-seed 14s live-boss baseline showed DRILL 47.94 DPS versus SHOT 578.88; full-run results above show this cannot justify simply buffing DRILL. Its AI strafes tangentially at desired range while its real contact drill follows movement heading. Measure target-facing/contact time and compare an approach/withdrawal policy over 10+ seeds before any gameplay balance adjustment. CHARGE pack survival and DOG NORMAL growth also need more seeds and reward/AI analysis.
+- Remaining limits: no real Windows/Android/iOS input/audio check, no sustained 15/30-minute **rendered wall-clock** session, no broad 10–20-seed balance conclusions, no public-site confirmation. These are not reported as passes.

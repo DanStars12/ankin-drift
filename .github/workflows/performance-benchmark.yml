@@ -31,8 +31,22 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install chromium
+      - name: Check out comparison baseline
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: comparison-base
+          persist-credentials: false
+      - name: Profile baseline on the same runner
+        if: github.event_name == 'pull_request'
+        working-directory: comparison-base
+        run: |
+          cp ../tests/performance.spec.mjs tests/performance.spec.mjs
+          npm ci
+          ANKIN_PERF_BASELINE=1 npx playwright test tests/performance.spec.mjs --project=${{ matrix.project }} --repeat-each=3
       - name: Profile normal, dual and triple raid
-        run: npx playwright test tests/performance.spec.mjs --project=${{ matrix.project }}
+        run: npx playwright test tests/performance.spec.mjs --project=${{ matrix.project }} --repeat-each=3
       - name: Upload per-scenario JSON and browser report
         if: always()
         uses: actions/upload-artifact@v4
@@ -41,5 +55,6 @@ jobs:
           path: |
             playwright-report/
             test-results/
+            comparison-base/test-results/
           if-no-files-found: warn
           retention-days: 14
