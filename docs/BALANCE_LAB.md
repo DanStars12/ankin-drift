@@ -311,3 +311,23 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 - Final test refinement: run common 1x benchmark cases before the candidate-only 2x cases, so warm-up order also matches; require at least one actual final-boss clear and a two-fusion run in each mode in the full-timeline gate. Re-run all workflows on the final head.
 - Next investigation: initial single-seed 14s live-boss baseline showed DRILL 47.94 DPS versus SHOT 578.88; full-run results above show this cannot justify simply buffing DRILL. Its AI strafes tangentially at desired range while its real contact drill follows movement heading. Measure target-facing/contact time and compare an approach/withdrawal policy over 10+ seeds before any gameplay balance adjustment. CHARGE pack survival and DOG NORMAL growth also need more seeds and reward/AI analysis.
 - Remaining limits: no real Windows/Android/iOS input/audio check, no sustained 15/30-minute **rendered wall-clock** session, no broad 10–20-seed balance conclusions, no public-site confirmation. These are not reported as passes.
+
+
+## DRILL AI observation follow-up (LEVEL 1, developer tools only)
+
+- Branch: `feature/solo-drill-ai-diagnostics-20261109`. No shipped gameplay/AI input policy is changed, and no CO-OP source is touched.
+- Add `drillDiagnostics` to AI JSON/CSV: time with a selected target, radial-reach time, geometric forward-capsule overlap time, actual movement time, post-step dash time, steps producing any DRILL-source damage, and mean angular error to the target.
+- Forward overlap is a geometric opportunity after each step, **not** an actual hit or an assertion that walls, invulnerability or attack cooldowns allowed damage. Damage-step time may include rush/secondary DRILL-source damage and is not a count of contact hits. Ratios never imply a survival or clear probability.
+- Pure geometry uses the actual 12px capsule start, 32+reach endpoint and 11+width*.53 radius from `updateDrill`. It observes direction and position without consuming RNG, selecting inputs or changing player/enemy state. The observer is only inside Playwright's injected developer harness; the public page never imports the helper.
+- `runEncounter({diagnostics:false})` disables observation for a paired control. A browser regression compares all combat/reward reports (apart from the diagnostic field) with observation on/off for ten seeded 30-second DRILL boss encounters. This separates instrumentation effects from tactical changes.
+- Node tests verify forward vs sideways targets at the same distance, out-of-range/behind/no-target cases and non-mutation. Pending: latest browser Actions, measured angle/contact distribution and same-seed report equality. No DPS or AI improvement is claimed yet.
+- Next: use the 10-seed diagnostic results to design an explicit experimental approach/withdrawal policy, then compare DPS **and** survival before changing the default controller or ship balance.
+
+
+### v13.35 integration record
+
+- PR #62 merged by squash into main: `1756a618eccf0af6722b9f0eb3da21e7e8febb62`. Tested feature head: `3628924c100010872200da1a418d8824417228d3`.
+- Latest pre-merge validation [42532147965](https://github.com/DanStars12/ankin-drift/actions/runs/42532147965), repeated performance [42532147854](https://github.com/DanStars12/ankin-drift/actions/runs/42532147854), strengthened full-timeline gate [42531908120](https://github.com/DanStars12/ankin-drift/actions/runs/42531908120): all jobs PASS, rechecked with unchanged main immediately before merge. Cancelled runs were superseded by these successful runs; they were not counted as passes.
+- Final common-first performance runs: 1x late-stress frame P95 [33.4,33.4,33.4]ms for both base/candidate on both surfaces. Candidate 2x stress effective speed [1.998,1.998,1.998], discarded time 0; frame P95 33.4ms on both surfaces in that runner allocation. These final values illustrate why earlier CI FPS samples must not be generalized.
+- Source separation confirmed: all 14 changed paths are normal-mode application, save/PWA, tests/workflows or developer documents. No CO-OP branch, Worker or deployment was changed. Public HTML and post-merge Actions are checked separately; no real-device test is inferred.
+- The separate DRILL observation cycle above starts from this merged main. Node tests: 50 PASS; live 10-seed on/off measurement pending Actions.

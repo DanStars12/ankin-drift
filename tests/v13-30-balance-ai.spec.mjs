@@ -318,3 +318,21 @@ for(const [gameMode,marker,planned] of [['challenge','15',960],['normal','30',18
   await exportAI(testInfo.project.name,'full-'+marker+'m',out);
  });
 }
+
+
+test('DRILL diagnosis: ten seeds preserve combat while measuring heading and contact opportunities',async({page},testInfo)=>{
+ test.setTimeout(180000);const errors=await setup(page),rows=[];
+ for(let seed=1;seed<=10;seed++){
+  const pair=await page.evaluate(seed=>[false,true].map(diagnostics=>window.__ankinBalanceAI.runEncounter({ship:'drill',seed,phase:10,scenario:'live-boss',build:'representative',seconds:30,diagnostics})),seed);
+  expect({...pair[1],drillDiagnostics:null}).toEqual(pair[0]);
+  const d=pair[1].drillDiagnostics;
+  expect(d.targetSeconds).toBeGreaterThan(0);expect(d.meanAimErrorDegrees).toBeGreaterThanOrEqual(0);
+  expect(d.meanAimErrorDegrees).toBeLessThanOrEqual(180);
+  expect(d.forwardOverlapPercent).toBeGreaterThanOrEqual(0);expect(d.forwardOverlapPercent).toBeLessThanOrEqual(100);
+  expect(d.inReachSeconds).toBeLessThanOrEqual(d.targetSeconds+.001);
+  expect(d.damageStepSeconds).toBeLessThanOrEqual(d.targetSeconds+.001);rows.push(pair[1]);
+ }
+ console.log('DRILL_DIAGNOSTICS='+JSON.stringify(rows.map(r=>({seed:r.seed,dps:r.dps,alive:r.alive,won:r.won,...r.drillDiagnostics}))));
+ await testInfo.attach('drill-diagnostics-10-seeds.json',{body:JSON.stringify(rows,null,2),contentType:'application/json'});
+ expect(errors).toEqual([]);
+});
