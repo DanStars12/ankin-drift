@@ -331,3 +331,23 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 - Final common-first performance runs: 1x late-stress frame P95 [33.4,33.4,33.4]ms for both base/candidate on both surfaces. Candidate 2x stress effective speed [1.998,1.998,1.998], discarded time 0; frame P95 33.4ms on both surfaces in that runner allocation. These final values illustrate why earlier CI FPS samples must not be generalized.
 - Source separation confirmed: all 14 changed paths are normal-mode application, save/PWA, tests/workflows or developer documents. No CO-OP branch, Worker or deployment was changed. Public HTML and post-merge Actions are checked separately; no real-device test is inferred.
 - The separate DRILL observation cycle above starts from this merged main. Node tests: 50 PASS; live 10-seed on/off measurement pending Actions.
+
+
+### DRILL diagnostic evidence — PR #63
+
+- First tested head: `60c96811eab40b80f8db782ee6d93bdb5a3d8a8d`. Validation [42532648274](https://github.com/DanStars12/ankin-drift/actions/runs/42532648274) and performance [42532648218](https://github.com/DanStars12/ankin-drift/actions/runs/42532648218): all jobs PASS. Public v13.35 post-merge validation [42532569675](https://github.com/DanStars12/ankin-drift/actions/runs/42532569675) also PASS.
+- Desktop: 140 browser tests passed / 4 intentional skips. Ten DRILL 30s boss encounters, diagnostics on/off: every paired report is identical except `drillDiagnostics`. Pure geometry and other Node tests: 50 PASS.
+- In this fixed phase-10 guardian encounter, desktop observed mean DPS 59.8268 (seed range 53.465–65.845), mean heading error 103.53°, radial reach 8.350/30s (27.83%), forward-capsule overlap 5.067/30s (16.89%), and DRILL-damage steps .450/30s (1.5%). Every run survived; none killed the boss in 30s. These are encounter results, not full-run clear rates.
+- The identical geometric trajectory across these ten seeds is itself a limit: seeds vary damage/critical results here, not a broad range of enemy movement patterns. Test more boss types, phases and initial positions before generalizing. Post-step overlap is not the exact pre-movement attack check, and neither overlap nor angular error alone proves the cause of low DPS.
+- Hypothesis for next work: current distance/strafe controller often points away from the target while DRILL contact follows movement direction. Compare an approach/withdrawal policy to the unchanged controller with identical builds/seeds. Record contact vs rush damage, actual safe attack time, taken damage, boss clear time and ordinary-pack survival; do not buff the ship based on this short sample.
+- Public verification: canonical `https://danstars12.github.io/ankin-drift/` and cache-busted URL returned `v13.35 | DOUBLE TIME` and the new trial rule; Pages workflow 42532569400 succeeded. This verifies deployed HTML availability, not a real-device playthrough. All unverified real-device/rendered-long-session limits above still apply.
+- Final documentation commit is revalidated before integration. No new input policy or gameplay balance change is included in this cycle.
+
+
+The three test surfaces remain separate cohorts (all ten on/off pairs passed on each). Their camera/world layout and encounter placement differ; do not pool or interpret these numbers as hardware-dependent weapon strength.
+
+| Surface | Browser passed / intentional skipped | Mean DPS | Mean aim error | Forward overlap |
+| --- | --- | --- | --- | --- |
+| Desktop | 140 / 4 | 59.8268 | 103.53° | 16.89% |
+| Mobile 390 | 141 / 3 | 179.0163 | 111.54° | 18.83% |
+| Mobile 320 | 141 / 3 | 90.8211 | 104.07° | 14.83% |
