@@ -8,13 +8,13 @@
     "test:clock": "node --test tests/simulation-clock.test.mjs",
     "test:archive": "node --test tests/archive.test.mjs",
     "test:ending": "node --test tests/ending.test.mjs",
-    "test:balance-report": "node --test tests/balance-report.test.mjs",
+    "test:balance-report": "node --test tests/balance-report.test.mjs tests/drill-observation.test.mjs",
     "test:ability-tactics": "node --test tests/ability-tactics.test.mjs",
     "balance:lab": "playwright test tests/v13-29-balance-lab.spec.mjs",
     "balance:ai": "playwright test tests/v13-30-balance-ai.spec.mjs",
     "check:pwa": "node scripts/check-pwa.mjs",
     "test:smoke": "playwright test",
-    "test": "npm run check:syntax && npm run test:clock && npm run test:archive && npm run test:ending && npm run test:ability-tactics && npm run check:pwa && npm run test:smoke"
+    "test": "npm run check:syntax && npm run test:clock && npm run test:archive && npm run test:ending && npm run test:balance-report && npm run test:ability-tactics && npm run check:pwa && npm run test:smoke"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

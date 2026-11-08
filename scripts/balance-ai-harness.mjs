@@ -1,6 +1,7 @@
 /* v13.30: developer-only AI runner, injected by Playwright, never loaded in the public app.
    Two modes: short real-combat encounters, optional full 30-minute scripted-upgrade run.
    Never persist test progress; restore global RNG and archive methods even on failure. */
+import {drillContactGeometry} from './balance-drill-observation.mjs';
 import {decideAbilityUse} from './balance-ability-tactics.mjs';
 export const BALANCE_AI_HARNESS = String.raw`
 const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog'];
@@ -234,8 +235,27 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
    balanceAbilityLog.novaReasons[decision.novaReason]=(balanceAbilityLog.novaReasons[decision.novaReason]||0)+1;
   }
  }
- return {target:priority?.type||null,nearest:d,threats:threat.near,
+ return {targetEntity:priority,drillDamageBefore:game.damageStats.drill||0,fromX:p.x,fromY:p.y,
+  target:priority?.type||null,nearest:d,threats:threat.near,
   imminent:threat.imminent,move:!stop,dashReason:decision.dashReason,novaReason:decision.novaReason};
+}
+function balanceObserveDrill(dt,action){
+ const log=balanceAbilityLog?.drillDiagnostics;
+ if(!log||player.shipType!=='drill'||!action.targetEntity)return;
+ const geometry=drillContactGeometry(player,action.targetEntity);
+ log.targetSeconds+=dt;log.angleDegreeSeconds+=geometry.aimErrorDegrees*dt;
+ if(geometry.withinRadialReach)log.inReachSeconds+=dt;
+ if(geometry.forwardCapsuleOverlap)log.forwardOverlapSeconds+=dt;
+ if(Math.hypot(player.x-action.fromX,player.y-action.fromY)>.01)log.movingSeconds+=dt;
+ if(player.dashTime>0)log.dashSeconds+=dt;
+ if((game.damageStats.drill||0)>action.drillDamageBefore)log.damageStepSeconds+=dt;
+}
+function balanceDrillReport(){
+ const d=balanceAbilityLog?.drillDiagnostics;
+ if(player.shipType!=='drill'||!d)return null;
+ const out=Object.fromEntries(Object.entries(d).filter(([k])=>k!=='angleDegreeSeconds').map(([k,v])=>[k,Number(v.toFixed(3))]));
+ return {...out,meanAimErrorDegrees:d.targetSeconds?Number((d.angleDegreeSeconds/d.targetSeconds).toFixed(2)):null,
+  forwardOverlapPercent:d.targetSeconds?Number((d.forwardOverlapSeconds/d.targetSeconds*100).toFixed(2)):null};
 }
 function balanceApplyBuild(level){
  const p=player;p.dmg+=40;p.crit=Math.max(p.crit,.18);p.bossBane=Math.max(p.bossBane,1.2);
@@ -339,7 +359,7 @@ function balanceSandbox(fn){
  }
 }
 function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical',runMode='normal',fullTimeline=false){
- balanceAbilityLog={policy,dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
+ balanceAbilityLog={policy,drillDiagnostics:{targetSeconds:0,angleDegreeSeconds:0,inReachSeconds:0,forwardOverlapSeconds:0,movingSeconds:0,dashSeconds:0,damageStepSeconds:0},dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
   xpSeekFrames:0,xpSeekKinds:{},rewardAudit:{choices:0,primary:0,survival:0,experience:0,primaryOffers:0,survivalOffers:0,history:[]},
   fusionAudit:{offers:0,accepted:0,declined:0,failed:0,reasons:{},history:[]}};
  Math.random=seededBalanceRandom(seed);
@@ -384,6 +404,7 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   dashReasons:{...(balanceAbilityLog?.dashReasons||{})},
   novaReasons:{...(balanceAbilityLog?.novaReasons||{})},
   novaContexts:[...(balanceAbilityLog?.novaContexts||[])],
+  drillDiagnostics:balanceDrillReport(),
   xpSeekSeconds:Number(((balanceAbilityLog?.xpSeekFrames||0)/60).toFixed(2)),
   xpSeekKinds:{...(balanceAbilityLog?.xpSeekKinds||{})},
   xpOnField:Number(pickups.filter(e=>e.type==='energy').reduce((sum,e)=>sum+e.value,0).toFixed(2)),
@@ -406,7 +427,8 @@ window.__ankinBalanceAI={
     count:zones.length,stacks:zones[0]?.stacks||1,damage:zones[0]?.dps};
   });
  },
- runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false}={}){
+ runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false,diagnostics=true}={}){
+  if(typeof diagnostics!=='boolean')throw Error('Invalid diagnostics flag');
   if(typeof initialNovaReady!=='boolean')throw Error('Invalid initialNovaReady');
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
   if(!BALANCE_AI_SHIPS.includes(ship)||!Number.isInteger(seed)||seed<0||seed>4294967295)throw Error('Invalid ship/seed');
@@ -414,6 +436,7 @@ window.__ankinBalanceAI={
   if(!['base','representative'].includes(build)||!Number.isFinite(seconds)||seconds<=0||seconds>120)throw Error('Invalid build/duration');
   return balanceSandbox(()=>{
    balanceSetup(ship,seed,phase,build,scenario,policy);
+   if(!diagnostics)balanceAbilityLog.drillDiagnostics=null;
    if(scenario==='live-boss'){
     spawnBoss('minor',phase>=20?'vortex':'guardian');
     boss.x=W*.67;boss.y=H*.33;
@@ -423,7 +446,7 @@ window.__ankinBalanceAI={
    let aiMoves=0,aiDodges=0,lastDash=game.combatLog.dashCount,winAt=null;
    for(let i=0;i<steps&&game.runOutcome!=='dead';i++){
     const a=balancePilotStep(i,policy);if(a.move)aiMoves++;
-    drive(dt);
+    drive(dt);balanceObserveDrill(dt,a);
     const delta=game.combatLog.dashCount-lastDash;if(delta>0)aiDodges+=delta;lastDash=game.combatLog.dashCount;
     if(scenario==='live-pack'&&i>0&&i%300===0)balanceSpawnLiveRound(phase,i/300);
     if(mode==='choice'){ // Process real boss reward without saving or UI-only interruptions.
@@ -489,7 +512,7 @@ window.__ankinBalanceAI={
     resolveMenus();
     if(unhandled||mode!=='playing')break;
     const a=balancePilotStep(step,policy,true);if(a.move)aiMoves++;
-    drive(dt);
+    drive(dt);balanceObserveDrill(dt,a);
     const dd=game.combatLog.dashCount-lastDash;if(dd>0)aiDodges+=dd;lastDash=game.combatLog.dashCount;
     if(mode!=='playing')resolveMenus();
    }
@@ -508,4 +531,4 @@ window.__ankinBalanceAI={
  decide(snapshot){return decideAbilityUse(snapshot)},
  inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES,abilityPolicy:'tactical'}}
 };
-` + '\n' + decideAbilityUse.toString() + '\n';
+` + '\n' + decideAbilityUse.toString() + '\n' + drillContactGeometry.toString() + '\n';

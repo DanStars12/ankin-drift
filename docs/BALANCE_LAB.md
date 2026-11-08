@@ -282,7 +282,7 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 - LEVEL 3 optional trial; ordinary 1x damage/HP/weapon statistics are unchanged. CO-OP is excluded.
 - `doubleTime` is selected and snapshotted through the existing ANKIN TRIAL menu. A clear uses the existing rank/achievement rules and preserves the new ID through the schema-v2 sanitizer. No incompatible save migration.
 - Scheduler stays at 1/60s. 2x admits twice the game time and uses at most 16 fixed steps per RAF (1x remains 8). The bounded backlog is .64 game seconds at 2x (.32 at 1x). Excess stall time is diagnosed and never credited as survival without `drive` calls. Modes and run changes discard paused backlog and reset the RAF origin.
-- Audio, visual particles, UI touch guard and notification durations stay on real time; enemy warnings/hazards, attacks, cooldowns, physics and encounter scheduling use `drive` game time.
+- Audio, visual particles, menu touch guards and achievement/music/boss alert banners stay on real time. Combat announcements and synergy toasts retain their existing `runClock` durations (therefore shorter in real time at 2x, frozen in menus). Enemy warnings/hazards, attacks, cooldowns, physics and encounter scheduling use `drive` game time. This distinction must not be described as every UI timer using real time.
 - Added `npm run test:clock`: 15–144 Hz, pause/choice freeze, stalled backlog, 15/30-minute **clock-only** drift checks. These are not real 30-minute AI runs.
 - Browser suite: real frame loop/cooldowns for 5 ships; swept high-speed bullets plus BALLISTIC; boss/raid/ultimate boundaries; 5 ships × 2 live conditions × 3 seeds comparing equal simulated time at 1x/2x; trial UI, clear/rank/achievement reload at desktop/390/320.
 - Performance job now measures the PR base and candidate sequentially on the same runner. Candidate adds ordinary and late-game 2x/BALLISTIC loads; artifacts include effective speed, pending/discarded game time, frame/sim/draw percentiles and heap.
@@ -311,3 +311,43 @@ Remove-Item Env:ANKIN_BALANCE_FULL,Env:ANKIN_AI_SEEDS
 - Final test refinement: run common 1x benchmark cases before the candidate-only 2x cases, so warm-up order also matches; require at least one actual final-boss clear and a two-fusion run in each mode in the full-timeline gate. Re-run all workflows on the final head.
 - Next investigation: initial single-seed 14s live-boss baseline showed DRILL 47.94 DPS versus SHOT 578.88; full-run results above show this cannot justify simply buffing DRILL. Its AI strafes tangentially at desired range while its real contact drill follows movement heading. Measure target-facing/contact time and compare an approach/withdrawal policy over 10+ seeds before any gameplay balance adjustment. CHARGE pack survival and DOG NORMAL growth also need more seeds and reward/AI analysis.
 - Remaining limits: no real Windows/Android/iOS input/audio check, no sustained 15/30-minute **rendered wall-clock** session, no broad 10–20-seed balance conclusions, no public-site confirmation. These are not reported as passes.
+
+
+## DRILL AI observation follow-up (LEVEL 1, developer tools only)
+
+- Branch: `feature/solo-drill-ai-diagnostics-20261109`. No shipped gameplay/AI input policy is changed, and no CO-OP source is touched.
+- Add `drillDiagnostics` to AI JSON/CSV: time with a selected target, radial-reach time, geometric forward-capsule overlap time, actual movement time, post-step dash time, steps producing any DRILL-source damage, and mean angular error to the target.
+- Forward overlap is a geometric opportunity after each step, **not** an actual hit or an assertion that walls, invulnerability or attack cooldowns allowed damage. Damage-step time may include rush/secondary DRILL-source damage and is not a count of contact hits. Ratios never imply a survival or clear probability.
+- Pure geometry uses the actual 12px capsule start, 32+reach endpoint and 11+width*.53 radius from `updateDrill`. It observes direction and position without consuming RNG, selecting inputs or changing player/enemy state. The observer is only inside Playwright's injected developer harness; the public page never imports the helper.
+- `runEncounter({diagnostics:false})` disables observation for a paired control. A browser regression compares all combat/reward reports (apart from the diagnostic field) with observation on/off for ten seeded 30-second DRILL boss encounters. This separates instrumentation effects from tactical changes.
+- Node tests verify forward vs sideways targets at the same distance, out-of-range/behind/no-target cases and non-mutation. Pending: latest browser Actions, measured angle/contact distribution and same-seed report equality. No DPS or AI improvement is claimed yet.
+- Next: use the 10-seed diagnostic results to design an explicit experimental approach/withdrawal policy, then compare DPS **and** survival before changing the default controller or ship balance.
+
+
+### v13.35 integration record
+
+- PR #62 merged by squash into main: `1756a618eccf0af6722b9f0eb3da21e7e8febb62`. Tested feature head: `3628924c100010872200da1a418d8824417228d3`.
+- Latest pre-merge validation [42532147965](https://github.com/DanStars12/ankin-drift/actions/runs/42532147965), repeated performance [42532147854](https://github.com/DanStars12/ankin-drift/actions/runs/42532147854), strengthened full-timeline gate [42531908120](https://github.com/DanStars12/ankin-drift/actions/runs/42531908120): all jobs PASS, rechecked with unchanged main immediately before merge. Cancelled runs were superseded by these successful runs; they were not counted as passes.
+- Final common-first performance runs: 1x late-stress frame P95 [33.4,33.4,33.4]ms for both base/candidate on both surfaces. Candidate 2x stress effective speed [1.998,1.998,1.998], discarded time 0; frame P95 33.4ms on both surfaces in that runner allocation. These final values illustrate why earlier CI FPS samples must not be generalized.
+- Source separation confirmed: all 14 changed paths are normal-mode application, save/PWA, tests/workflows or developer documents. No CO-OP branch, Worker or deployment was changed. Public HTML and post-merge Actions are checked separately; no real-device test is inferred.
+- The separate DRILL observation cycle above starts from this merged main. Node tests: 50 PASS; live 10-seed on/off measurement pending Actions.
+
+
+### DRILL diagnostic evidence — PR #63
+
+- First tested head: `60c96811eab40b80f8db782ee6d93bdb5a3d8a8d`. Validation [42532648274](https://github.com/DanStars12/ankin-drift/actions/runs/42532648274) and performance [42532648218](https://github.com/DanStars12/ankin-drift/actions/runs/42532648218): all jobs PASS. Public v13.35 post-merge validation [42532569675](https://github.com/DanStars12/ankin-drift/actions/runs/42532569675) also PASS.
+- Desktop: 140 browser tests passed / 4 intentional skips. Ten DRILL 30s boss encounters, diagnostics on/off: every paired report is identical except `drillDiagnostics`. Pure geometry and other Node tests: 50 PASS.
+- In this fixed phase-10 guardian encounter, desktop observed mean DPS 59.8268 (seed range 53.465–65.845), mean heading error 103.53°, radial reach 8.350/30s (27.83%), forward-capsule overlap 5.067/30s (16.89%), and DRILL-damage steps .450/30s (1.5%). Every run survived; none killed the boss in 30s. These are encounter results, not full-run clear rates.
+- The identical geometric trajectory across these ten seeds is itself a limit: seeds vary damage/critical results here, not a broad range of enemy movement patterns. Test more boss types, phases and initial positions before generalizing. Post-step overlap is not the exact pre-movement attack check, and neither overlap nor angular error alone proves the cause of low DPS.
+- Hypothesis for next work: current distance/strafe controller often points away from the target while DRILL contact follows movement direction. Compare an approach/withdrawal policy to the unchanged controller with identical builds/seeds. Record contact vs rush damage, actual safe attack time, taken damage, boss clear time and ordinary-pack survival; do not buff the ship based on this short sample.
+- Public verification: canonical `https://danstars12.github.io/ankin-drift/` and cache-busted URL returned `v13.35 | DOUBLE TIME` and the new trial rule; Pages workflow 42532569400 succeeded. This verifies deployed HTML availability, not a real-device playthrough. All unverified real-device/rendered-long-session limits above still apply.
+- Final documentation commit is revalidated before integration. No new input policy or gameplay balance change is included in this cycle.
+
+
+The three test surfaces remain separate cohorts (all ten on/off pairs passed on each). Their camera/world layout and encounter placement differ; do not pool or interpret these numbers as hardware-dependent weapon strength.
+
+| Surface | Browser passed / intentional skipped | Mean DPS | Mean aim error | Forward overlap |
+| --- | --- | --- | --- | --- |
+| Desktop | 140 / 4 | 59.8268 | 103.53° | 16.89% |
+| Mobile 390 | 141 / 3 | 179.0163 | 111.54° | 18.83% |
+| Mobile 320 | 141 / 3 | 90.8211 | 104.07° | 14.83% |
