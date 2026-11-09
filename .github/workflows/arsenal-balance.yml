@@ -50,7 +50,7 @@ jobs:
         ship: [shot, laser, charge, drill, dog]
     env:
       ANKIN_ARSENAL_FULL: '1'
-      ANKIN_ARSENAL_FULL_SEEDS: '10'
+      ANKIN_ARSENAL_FULL_SEEDS: '20'
       ANKIN_ARSENAL_MODE: ${{ matrix.mode }}
       ANKIN_ARSENAL_SHIP: ${{ matrix.ship }}
     steps:

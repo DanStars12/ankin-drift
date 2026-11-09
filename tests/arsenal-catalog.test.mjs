@@ -59,3 +59,8 @@ test('core build choices remain available beside one-off stat cards, including d
  assert.equal(h.eval('offerCandidatePool(cards,options)').length,2,'unclaimed new rewards must not be replaced by supplies');
  h.ctx.cards=[];assert.equal(h.eval('offerCandidatePool(cards,options)').length,0);
 });
+test('legacy movement upgrades preserve a stronger DRILL cooldown and retain their other benefit',()=>{
+ const h=catalogHarness(),p=h.eval('initialP()');p.dashCd=.52;const before=p.spd;
+ for(const id of ['dash','superDash']){h.ctx.catalog.find(c=>c.id===id).apply(p);assert.equal(p.dashCd,.52,id);}
+ assert.ok(p.spd>before,'the movement-speed bonus still applies');
+});

@@ -3007,7 +3007,7 @@ const SKILLS=[
  skill('pickup','common','🧲','回収レーダー','アイテム吸引範囲 +65。',p=>p.magnet+=65),
  skill('refit','common','🔧','応急修理','HPを65回復。',p=>p.hp=Math.min(p.maxHp,p.hp+65),{available:p=>p.hp<p.maxHp-12}),
  skill('battery','common','🔋','電池最適化','NOVAゲージ獲得倍率 +10%（実効上限1.55倍）。',p=>p.novaGain+=.10),
- skill('dash','common','💨','機動フレーム','ダッシュ再使用 -0.22秒。',p=>p.dashCd=Math.max(.85,p.dashCd-.22)),
+ skill('dash','common','💨','機動フレーム','ダッシュ再使用 -0.22秒。',p=>p.dashCd=Math.min(p.dashCd,Math.max(.85,p.dashCd-.22))),
  skill('dashGraze','uncommon','✨','ニアミス回路','敵弾をコアのすぐ外で回避するとNOVA+1.6、ダッシュ再使用待機-0.18秒（0.55秒ごと）。',p=>p.dashGraze=1,{stackable:false}),
  skill('dashPulse','rare','🛡️','ブレイクステップ','ダッシュ開始時、近くの通常敵弾を最大5発消去。PHASE弾は対象外。',p=>p.dashPulse=1,{stackable:false}),
  skill('dashFlow','rare','➤','スリップストリーム','ダッシュ後1.2秒間、通常移動速度+16%。',p=>p.dashFlow=1,{stackable:false}),
@@ -3033,7 +3033,7 @@ const SKILLS=[
  skill('burstKill','epic','☄️','連鎖爆発','敵を倒すと周囲に誘爆ダメージ。',p=>p.killBurst+=25),
  skill('critEpic','epic','🔴','ウィークポイントチェック','クリティカル倍率 +0.8、確率 +12%。',p=>{p.critMult+=.8;p.crit+=.12}),
  skill('novaEpic','epic','🪐','超新星炉','NOVA基礎威力 +95、ゲージ獲得倍率 +14%（上限あり）。',p=>{p.novaDamage+=95;p.novaGain+=.14;if(p.shipType==='drill')p.drillNovaBonusTime=Math.min(2,(p.drillNovaBonusTime||0)+.28)}),
- skill('superDash','epic','🪽','次元テレポート','移動速度 +50、ダッシュ間隔 -0.5秒。',p=>{p.spd+=50;p.dashCd=Math.max(.7,p.dashCd-.5)})
+ skill('superDash','epic','🪽','次元テレポート','移動速度 +50、ダッシュ間隔 -0.5秒。',p=>{p.spd+=50;p.dashCd=Math.min(p.dashCd,Math.max(.7,p.dashCd-.5))})
 ];
 SKILLS.push(
  skill('xp','common','💎','学習システム','獲得EXP +16%。',p=>p.xpBonus+=.16),
