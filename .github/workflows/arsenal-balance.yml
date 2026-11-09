@@ -38,3 +38,44 @@ jobs:
             artifacts/arsenal/
             test-results/
           retention-days: 14
+  progression:
+    name: Arsenal base/candidate 15m and 30m progression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      ANKIN_ARSENAL_FULL: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: comparison-base
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Measure baseline progression with identical harness
+        if: github.event_name == 'pull_request'
+        working-directory: comparison-base
+        run: |
+          cp ../tests/v13-36-arsenal.spec.mjs tests/v13-36-arsenal.spec.mjs
+          npm ci
+          npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
+      - name: Measure candidate progression
+        run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arsenal-full-progression
+          path: |
+            artifacts/arsenal/
+            comparison-base/artifacts/arsenal/
+            test-results/
+            comparison-base/test-results/
+          retention-days: 14

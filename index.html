@@ -3875,7 +3875,6 @@ for(const def of AnkinArsenal.cards){
 // Bound repeated ordinary defense/offense spikes; existing acquired stacks still rebuild.
 for(const [id,maxStacks] of Object.entries({life:3,critEpic:3,superDash:3})){
  const c=SKILLS.find(c=>c.id===id);c.maxStacks=maxStacks;
- c.desc=c.desc.replace(/。$/,'')+'。最大'+maxStacks+'回。';
  c.tags=[...(c.tags||[]),'最大'+maxStacks+'回'];
 }
 SKILLS.find(c=>c.id==='expShield').stackable=false;

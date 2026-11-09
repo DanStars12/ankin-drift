@@ -594,7 +594,7 @@ const cards = [
   "id": "arsPowerRecovery",
   "rarity": "power",
   "name": "予備シールド炉",
-  "desc": "シールド+28、再充填+1.2/秒。",
+  "desc": "シールド+36、再充填+3.5/秒。",
   "tags": [
    "防御",
    "再生"
@@ -603,21 +603,21 @@ const cards = [
    [
     "shieldMax",
     "add",
-    28,
+    36,
     null,
     null
    ],
    [
     "shield",
     "add",
-    28,
+    36,
     null,
     null
    ],
    [
     "shieldRecharge",
     "add",
-    1.2,
+    3.5,
     null,
     null
    ]
@@ -627,7 +627,7 @@ const cards = [
   "id": "arsPowerMobility",
   "rarity": "power",
   "name": "巡航ブースター",
-  "desc": "移動速度+18、ダッシュ再使用-0.16秒。",
+  "desc": "移動速度+26、ダッシュ再使用-0.26秒、最大HP+20。",
   "tags": [
    "機動",
    "回避"
@@ -636,15 +636,29 @@ const cards = [
    [
     "spd",
     "add",
-    18,
+    26,
     null,
     null
    ],
    [
     "dashCd",
     "add",
-    -0.16,
+    -0.26,
     0.7,
+    null
+   ],
+   [
+    "maxHp",
+    "add",
+    20,
+    null,
+    null
+   ],
+   [
+    "hp",
+    "add",
+    20,
+    null,
     null
    ]
   ]
@@ -653,7 +667,7 @@ const cards = [
   "id": "arsPowerShotPrecision",
   "rarity": "power",
   "name": "精密射撃管",
-  "desc": "基本威力+12、会心率+5%。",
+  "desc": "基本威力+22、会心率+10%、弾速+70。",
   "tags": [
    "射撃",
    "会心"
@@ -662,16 +676,23 @@ const cards = [
    [
     "dmg",
     "add",
-    12,
+    22,
     null,
     null
    ],
    [
     "crit",
     "add",
-    0.05,
+    0.1,
     0,
     0.969
+   ],
+   [
+    "shotSpeed",
+    "add",
+    70,
+    null,
+    null
    ]
   ],
   "shipOnly": "shot"
@@ -680,7 +701,7 @@ const cards = [
   "id": "arsPowerShotSalvo",
   "rarity": "power",
   "name": "サルヴォ給弾機",
-  "desc": "弾数+1、射撃間隔-5%。",
+  "desc": "弾数+2、射撃間隔-4%。",
   "tags": [
    "射撃",
    "弾数",
@@ -690,14 +711,14 @@ const cards = [
    [
     "multishot",
     "add",
-    1,
+    2,
     0,
     "limitShot"
    ],
    [
     "rate",
     "mul",
-    0.95,
+    0.96,
     "limitRate",
     null
    ]
@@ -708,11 +729,18 @@ const cards = [
   "id": "arsPowerLaserSweep",
   "rarity": "power",
   "name": "走査プリズム",
-  "desc": "レーザー線幅+1.2、射程+65。",
+  "desc": "レーザー+1本、線幅+1.2、射程+65。",
   "tags": [
    "レーザー"
   ],
   "effects": [
+   [
+    "laserCount",
+    "add",
+    1,
+    0,
+    "laserLimit"
+   ],
    [
     "laserWidth",
     "add",
@@ -734,7 +762,7 @@ const cards = [
   "id": "arsPowerLaserSustain",
   "rarity": "power",
   "name": "持続照射炉",
-  "desc": "レーザー威力補正+0.18、シールド+20。",
+  "desc": "レーザー威力補正+0.42、シールド+28。",
   "tags": [
    "レーザー",
    "防御"
@@ -743,21 +771,21 @@ const cards = [
    [
     "laserScale",
     "add",
-    0.18,
+    0.42,
     null,
     null
    ],
    [
     "shieldMax",
     "add",
-    20,
+    28,
     null,
     null
    ],
    [
     "shield",
     "add",
-    20,
+    28,
     null,
     null
    ]
@@ -768,7 +796,7 @@ const cards = [
   "id": "arsPowerChargeQuick",
   "rarity": "power",
   "name": "急速蓄電器",
-  "desc": "チャージ速度補正+0.18、移動速度+12。",
+  "desc": "チャージ速度補正+0.4、移動速度+16、シールド+24。",
   "tags": [
    "チャージ",
    "機動"
@@ -777,143 +805,14 @@ const cards = [
    [
     "chargeRate",
     "add",
-    0.18,
+    0.4,
     null,
     null
    ],
    [
     "spd",
     "add",
-    12,
-    null,
-    null
-   ]
-  ],
-  "shipOnly": "charge"
- },
- {
-  "id": "arsPowerChargeBore",
-  "rarity": "power",
-  "name": "螺旋彗星核",
-  "desc": "チャージ威力補正+0.16、貫通+2。",
-  "tags": [
-   "チャージ",
-   "貫通"
-  ],
-  "effects": [
-   [
-    "chargeScale",
-    "add",
-    0.16,
-    null,
-    null
-   ],
-   [
-    "chargePenetration",
-    "add",
-    2,
-    null,
-    null
-   ]
-  ],
-  "shipOnly": "charge"
- },
- {
-  "id": "arsPowerDrillTorque",
-  "rarity": "power",
-  "name": "トルク伝達軸",
-  "desc": "接触威力+16、突進威力+20。",
-  "tags": [
-   "ドリル",
-   "近接",
-   "突進"
-  ],
-  "effects": [
-   [
-    "drillContact",
-    "add",
     16,
-    null,
-    null
-   ],
-   [
-    "drillDamage",
-    "add",
-    20,
-    null,
-    null
-   ]
-  ],
-  "shipOnly": "drill"
- },
- {
-  "id": "arsPowerDrillReserve",
-  "rarity": "power",
-  "name": "予備プラズマ槽",
-  "desc": "プラズマ容量+0.1、蓄積速度+0.05。",
-  "tags": [
-   "ドリル",
-   "ドリル蓄積"
-  ],
-  "effects": [
-   [
-    "drillCap",
-    "add",
-    0.1,
-    null,
-    null
-   ],
-   [
-    "drillGain",
-    "add",
-    0.05,
-    null,
-    null
-   ]
-  ],
-  "shipOnly": "drill"
- },
- {
-  "id": "arsPowerDogReturn",
-  "rarity": "power",
-  "name": "ほねっこ・おかえり便",
-  "desc": "骨の帰還威力補正+0.22、射程+30。",
-  "tags": [
-   "骨ブーメラン"
-  ],
-  "effects": [
-   [
-    "dogBoneReturn",
-    "add",
-    0.22,
-    null,
-    null
-   ],
-   [
-    "dogBoneRange",
-    "add",
-    30,
-    0,
-    480
-   ]
-  ],
-  "shipOnly": "dog"
- },
- {
-  "id": "arsPowerDogNest",
-  "rarity": "power",
-  "name": "ぴよぴよ・あんしん巣箱",
-  "desc": "卵の威力+18、シールド+24。",
-  "tags": [
-   "アニマル",
-   "ヒヨコ",
-   "防御"
-  ],
-  "effects": [
-   [
-    "dogEggDamage",
-    "add",
-    18,
     null,
     null
    ],
@@ -928,6 +827,163 @@ const cards = [
     "shield",
     "add",
     24,
+    null,
+    null
+   ]
+  ],
+  "shipOnly": "charge"
+ },
+ {
+  "id": "arsPowerChargeBore",
+  "rarity": "power",
+  "name": "螺旋彗星核",
+  "desc": "チャージ威力補正+0.36、貫通+4。",
+  "tags": [
+   "チャージ",
+   "貫通"
+  ],
+  "effects": [
+   [
+    "chargeScale",
+    "add",
+    0.36,
+    null,
+    null
+   ],
+   [
+    "chargePenetration",
+    "add",
+    4,
+    null,
+    null
+   ]
+  ],
+  "shipOnly": "charge"
+ },
+ {
+  "id": "arsPowerDrillTorque",
+  "rarity": "power",
+  "name": "トルク伝達軸",
+  "desc": "接触威力+24、突進威力+40。",
+  "tags": [
+   "ドリル",
+   "近接",
+   "突進"
+  ],
+  "effects": [
+   [
+    "drillContact",
+    "add",
+    24,
+    null,
+    null
+   ],
+   [
+    "drillDamage",
+    "add",
+    40,
+    null,
+    null
+   ]
+  ],
+  "shipOnly": "drill"
+ },
+ {
+  "id": "arsPowerDrillReserve",
+  "rarity": "power",
+  "name": "予備プラズマ槽",
+  "desc": "プラズマ減衰-0.1、蓄積速度+0.07、攻撃幅+4。",
+  "tags": [
+   "ドリル",
+   "ドリル蓄積"
+  ],
+  "effects": [
+   [
+    "drillDecay",
+    "add",
+    -0.1,
+    0.1,
+    null
+   ],
+   [
+    "drillGain",
+    "add",
+    0.07,
+    null,
+    null
+   ],
+   [
+    "drillWidth",
+    "add",
+    4,
+    null,
+    null
+   ]
+  ],
+  "shipOnly": "drill"
+ },
+ {
+  "id": "arsPowerDogReturn",
+  "rarity": "power",
+  "name": "ほねっこ・おかえり便",
+  "desc": "骨の帰還威力補正+0.35、射程+40、速度+20。",
+  "tags": [
+   "骨ブーメラン"
+  ],
+  "effects": [
+   [
+    "dogBoneReturn",
+    "add",
+    0.35,
+    null,
+    null
+   ],
+   [
+    "dogBoneRange",
+    "add",
+    40,
+    0,
+    480
+   ],
+   [
+    "dogBoneSpeed",
+    "add",
+    20,
+    null,
+    null
+   ]
+  ],
+  "shipOnly": "dog"
+ },
+ {
+  "id": "arsPowerDogNest",
+  "rarity": "power",
+  "name": "ぴよぴよ・あんしん巣箱",
+  "desc": "卵の威力+32、シールド+35。",
+  "tags": [
+   "アニマル",
+   "ヒヨコ",
+   "防御"
+  ],
+  "effects": [
+   [
+    "dogEggDamage",
+    "add",
+    32,
+    null,
+    null
+   ],
+   [
+    "shieldMax",
+    "add",
+    35,
+    null,
+    null
+   ],
+   [
+    "shield",
+    "add",
+    35,
     null,
     null
    ]
@@ -939,7 +995,7 @@ const cards = [
   "id": "arsLegendBulwark",
   "rarity": "legendary",
   "name": "不沈の隔壁",
-  "desc": "最大HP+65、シールド+45、HP回復+1/秒。",
+  "desc": "最大HP+90、シールド+80、HP回復+2.4/秒。",
   "tags": [
    "装甲",
    "防御",
@@ -949,35 +1005,35 @@ const cards = [
    [
     "maxHp",
     "add",
-    65,
+    90,
     null,
     null
    ],
    [
     "hp",
     "add",
-    65,
+    90,
     null,
     null
    ],
    [
     "shieldMax",
     "add",
-    45,
+    80,
     null,
     null
    ],
    [
     "shield",
     "add",
-    45,
+    80,
     null,
     null
    ],
    [
     "regen",
     "add",
-    1,
+    2.4,
     null,
     null
    ]
@@ -987,7 +1043,7 @@ const cards = [
   "id": "arsLegendNova",
   "rarity": "legendary",
   "name": "星雲の心臓",
-  "desc": "NOVA基礎威力+140、ゲージ獲得倍率+0.08。",
+  "desc": "NOVA基礎威力+200、獲得倍率+0.12、再使用-0.5秒。",
   "tags": [
    "ノヴァ",
    "火力"
@@ -996,16 +1052,23 @@ const cards = [
    [
     "novaDamage",
     "add",
-    140,
+    200,
     null,
     null
    ],
    [
     "novaGain",
     "add",
-    0.08,
+    0.12,
     0,
     1.55
+   ],
+   [
+    "novaReuseDelay",
+    "add",
+    -0.5,
+    10.5,
+    null
    ]
   ]
  },
@@ -1013,7 +1076,7 @@ const cards = [
   "id": "arsLegendShotHunter",
   "rarity": "legendary",
   "name": "星穿ちの照準",
-  "desc": "基本威力+38、会心率+10%、会心倍率+0.25。",
+  "desc": "基本威力+65、会心率+12%、会心倍率+0.35。",
   "tags": [
    "射撃",
    "会心"
@@ -1022,21 +1085,21 @@ const cards = [
    [
     "dmg",
     "add",
-    38,
+    65,
     null,
     null
    ],
    [
     "crit",
     "add",
-    0.1,
+    0.12,
     0,
     0.969
    ],
    [
     "critMult",
     "add",
-    0.25,
+    0.35,
     null,
     null
    ]
@@ -1047,7 +1110,7 @@ const cards = [
   "id": "arsLegendShotEscort",
   "rarity": "legendary",
   "name": "銀翼の護送隊",
-  "desc": "僚機+2、僚機連射補正+0.18、シールド+35。",
+  "desc": "僚機+3、僚機連射補正+0.3、シールド+50。",
   "tags": [
    "僚機",
    "防御"
@@ -1056,28 +1119,28 @@ const cards = [
    [
     "droneCount",
     "add",
-    2,
+    3,
     0,
     "limitDrones"
    ],
    [
     "droneBoost",
     "add",
-    0.18,
+    0.3,
     null,
     null
    ],
    [
     "shieldMax",
     "add",
-    35,
+    50,
     null,
     null
    ],
    [
     "shield",
     "add",
-    35,
+    50,
     null,
     null
    ]
@@ -1088,7 +1151,7 @@ const cards = [
   "id": "arsLegendLaserLighthouse",
   "rarity": "legendary",
   "name": "天頂の灯台",
-  "desc": "レーザー+1本、射程+100、線幅+1。",
+  "desc": "レーザー+2本、射程+100、線幅+1.5。",
   "tags": [
    "レーザー"
   ],
@@ -1096,7 +1159,7 @@ const cards = [
    [
     "laserCount",
     "add",
-    1,
+    2,
     0,
     "laserLimit"
    ],
@@ -1110,7 +1173,7 @@ const cards = [
    [
     "laserWidth",
     "add",
-    1,
+    1.5,
     null,
     null
    ]
@@ -1121,7 +1184,7 @@ const cards = [
   "id": "arsLegendLaserCitadel",
   "rarity": "legendary",
   "name": "光の城塞",
-  "desc": "レーザー威力補正+0.32、シールド+60。",
+  "desc": "レーザー威力補正+0.65、シールド+85。",
   "tags": [
    "レーザー",
    "防御"
@@ -1130,21 +1193,21 @@ const cards = [
    [
     "laserScale",
     "add",
-    0.32,
+    0.65,
     null,
     null
    ],
    [
     "shieldMax",
     "add",
-    60,
+    85,
     null,
     null
    ],
    [
     "shield",
     "add",
-    60,
+    85,
     null,
     null
    ]
@@ -1155,7 +1218,7 @@ const cards = [
   "id": "arsLegendChargeHorizon",
   "rarity": "legendary",
   "name": "地平を割る彗星",
-  "desc": "チャージ威力補正+0.35、半径補正+8、貫通+3。",
+  "desc": "チャージ威力補正+0.65、半径補正+8、命中爆発+1。",
   "tags": [
    "チャージ",
    "貫通"
@@ -1164,7 +1227,7 @@ const cards = [
    [
     "chargeScale",
     "add",
-    0.35,
+    0.65,
     null,
     null
    ],
@@ -1176,9 +1239,9 @@ const cards = [
     null
    ],
    [
-    "chargePenetration",
+    "chargeBlast",
     "add",
-    3,
+    1,
     null,
     null
    ]
@@ -1189,7 +1252,7 @@ const cards = [
   "id": "arsLegendChargeShelter",
   "rarity": "legendary",
   "name": "星屑の避難所",
-  "desc": "チャージ速度補正+0.24、最大HP+55、回復+0.8/秒。",
+  "desc": "チャージ速度補正+0.42、最大HP+70、回復+2/秒。",
   "tags": [
    "チャージ",
    "装甲",
@@ -1199,28 +1262,28 @@ const cards = [
    [
     "chargeRate",
     "add",
-    0.24,
+    0.42,
     null,
     null
    ],
    [
     "maxHp",
     "add",
-    55,
+    70,
     null,
     null
    ],
    [
     "hp",
     "add",
-    55,
+    70,
     null,
     null
    ],
    [
     "regen",
     "add",
-    0.8,
+    2,
     null,
     null
    ]
@@ -1231,7 +1294,7 @@ const cards = [
   "id": "arsLegendDrillChampion",
   "rarity": "legendary",
   "name": "穿孔の覇者",
-  "desc": "接触威力+30、突進威力+50、リーチ+12。",
+  "desc": "接触威力+50、突進威力+105、リーチ+22。",
   "tags": [
    "ドリル",
    "近接",
@@ -1241,21 +1304,21 @@ const cards = [
    [
     "drillContact",
     "add",
-    30,
+    50,
     null,
     null
    ],
    [
     "drillDamage",
     "add",
-    50,
+    105,
     null,
     null
    ],
    [
     "drillReach",
     "add",
-    12,
+    22,
     null,
     null
    ]
@@ -1266,7 +1329,7 @@ const cards = [
   "id": "arsLegendDrillKeeper",
   "rarity": "legendary",
   "name": "鋼輪の守護者",
-  "desc": "プラズマ蓄積速度+0.1、シールド+70。",
+  "desc": "プラズマ蓄積速度+0.14、シールド+100、再充填+2/秒。",
   "tags": [
    "ドリル",
    "ドリル蓄積",
@@ -1276,21 +1339,28 @@ const cards = [
    [
     "drillGain",
     "add",
-    0.1,
+    0.14,
     null,
     null
    ],
    [
     "shieldMax",
     "add",
-    70,
+    100,
     null,
     null
    ],
    [
     "shield",
     "add",
-    70,
+    100,
+    null,
+    null
+   ],
+   [
+    "shieldRecharge",
+    "add",
+    2,
     null,
     null
    ]
@@ -1301,22 +1371,29 @@ const cards = [
   "id": "arsLegendDogPromise",
   "rarity": "legendary",
   "name": "ほねっこ・やくそく",
-  "desc": "骨の威力補正+0.25、帰還威力補正+0.35。",
+  "desc": "骨+1本、骨の威力補正+0.35、帰還威力補正+0.4。",
   "tags": [
    "骨ブーメラン"
   ],
   "effects": [
    [
+    "dogBones",
+    "add",
+    1,
+    0,
+    8
+   ],
+   [
     "dogBonePower",
     "add",
-    0.25,
+    0.35,
     null,
     null
    ],
    [
     "dogBoneReturn",
     "add",
-    0.35,
+    0.4,
     null,
     null
    ]
@@ -1327,7 +1404,7 @@ const cards = [
   "id": "arsLegendDogParade",
   "rarity": "legendary",
   "name": "ぴよぴよ・おまつり行進",
-  "desc": "卵の威力+35、発射間隔-12%、最大HP+40。",
+  "desc": "卵の威力+65、発射間隔-18%、最大HP+55。",
   "tags": [
    "アニマル",
    "ヒヨコ",
@@ -1337,28 +1414,28 @@ const cards = [
    [
     "dogEggDamage",
     "add",
-    35,
+    65,
     null,
     null
    ],
    [
     "dogEggRate",
     "mul",
-    0.88,
+    0.82,
     0.58,
     null
    ],
    [
     "maxHp",
     "add",
-    40,
+    55,
     null,
     null
    ],
    [
     "hp",
     "add",
-    40,
+    55,
     null,
     null
    ]
@@ -1370,7 +1447,7 @@ const cards = [
   "id": "arsRelicShotConverge",
   "rarity": "relic",
   "name": "収束バレル",
-  "desc": "基本威力×1.14、弾速+80、射撃間隔+5%。",
+  "desc": "基本威力×1.22、弾速+80、射撃間隔+5%。",
   "tags": [
    "射撃",
    "射撃性能",
@@ -1380,7 +1457,7 @@ const cards = [
    [
     "dmg",
     "mul",
-    1.14,
+    1.22,
     null,
     null
    ],
@@ -1405,7 +1482,7 @@ const cards = [
   "id": "arsRelicShotBreach",
   "rarity": "relic",
   "name": "突破装填器",
-  "desc": "貫通+2、会心率+6%、射撃間隔+6%。",
+  "desc": "貫通+3、会心率+10%、射撃間隔+5%。",
   "tags": [
    "射撃",
    "貫通",
@@ -1415,21 +1492,21 @@ const cards = [
    [
     "pierce",
     "add",
-    2,
+    3,
     null,
     null
    ],
    [
     "crit",
     "add",
-    0.06,
+    0.1,
     0,
     0.969
    ],
    [
     "rate",
     "mul",
-    1.06,
+    1.05,
     null,
     null
    ]
@@ -1467,7 +1544,7 @@ const cards = [
   "id": "arsRelicLaserRibbon",
   "rarity": "relic",
   "name": "帯状プリズム",
-  "desc": "レーザー線幅+3、威力補正-0.08。",
+  "desc": "レーザー線幅+6、威力補正-0.06。",
   "tags": [
    "レーザー"
   ],
@@ -1475,14 +1552,14 @@ const cards = [
    [
     "laserWidth",
     "add",
-    3,
+    6,
     null,
     null
    ],
    [
     "laserScale",
     "add",
-    -0.08,
+    -0.06,
     0.2,
     null
    ]
@@ -1493,7 +1570,7 @@ const cards = [
   "id": "arsRelicChargeHeavy",
   "rarity": "relic",
   "name": "重質彗星殻",
-  "desc": "チャージ威力×1.25、チャージ速度-8%。",
+  "desc": "チャージ威力×1.4、チャージ速度-10%。",
   "tags": [
    "チャージ",
    "火力"
@@ -1502,14 +1579,14 @@ const cards = [
    [
     "chargeScale",
     "mul",
-    1.25,
+    1.4,
     null,
     null
    ],
    [
     "chargeRate",
     "mul",
-    0.92,
+    0.9,
     null,
     null
    ]
@@ -1520,7 +1597,7 @@ const cards = [
   "id": "arsRelicChargeEscape",
   "rarity": "relic",
   "name": "離脱コンデンサー",
-  "desc": "チャージ速度補正+0.2、移動速度+16、威力補正-0.06。",
+  "desc": "チャージ速度補正+0.3、移動速度+18、威力補正-0.06。",
   "tags": [
    "チャージ",
    "機動"
@@ -1529,14 +1606,14 @@ const cards = [
    [
     "chargeRate",
     "add",
-    0.2,
+    0.3,
     null,
     null
    ],
    [
     "spd",
     "add",
-    16,
+    18,
     null,
     null
    ],
@@ -1623,7 +1700,7 @@ const cards = [
   "id": "arsRelicDogLong",
   "rarity": "relic",
   "name": "ほねっこ・とおくまで",
-  "desc": "骨の射程+70、帰還威力補正+0.18、速度-8%。",
+  "desc": "骨の射程+80、帰還威力補正+0.45、速度-6%。",
   "tags": [
    "骨ブーメラン"
   ],
@@ -1631,21 +1708,21 @@ const cards = [
    [
     "dogBoneRange",
     "add",
-    70,
+    80,
     0,
     480
    ],
    [
     "dogBoneReturn",
     "add",
-    0.18,
+    0.45,
     null,
     null
    ],
    [
     "dogBoneSpeed",
     "mul",
-    0.92,
+    0.94,
     null,
     null
    ]
@@ -1656,7 +1733,7 @@ const cards = [
   "id": "arsRelicDogRapidEgg",
   "rarity": "relic",
   "name": "ぴよぴよ・はやおき時計",
-  "desc": "卵の発射間隔-18%、威力-8%。",
+  "desc": "卵の発射間隔-28%、威力-8%。",
   "tags": [
    "アニマル",
    "ヒヨコ",
@@ -1666,7 +1743,7 @@ const cards = [
    [
     "dogEggRate",
     "mul",
-    0.82,
+    0.72,
     0.58,
     null
    ],
@@ -1685,7 +1762,7 @@ const cards = [
   "id": "arsUniqueShot",
   "rarity": "unique",
   "name": "星火の一斉射撃",
-  "desc": "弾数+2、基本威力+22、会心率+8%。",
+  "desc": "弾数+3、基本威力+70、会心率+12%。",
   "tags": [
    "射撃",
    "弾数",
@@ -1695,21 +1772,21 @@ const cards = [
    [
     "multishot",
     "add",
-    2,
+    3,
     0,
     "limitShot"
    ],
    [
     "dmg",
     "add",
-    22,
+    70,
     null,
     null
    ],
    [
     "crit",
     "add",
-    0.08,
+    0.12,
     0,
     0.969
    ]
@@ -1720,7 +1797,7 @@ const cards = [
   "id": "arsUniqueLaser",
   "rarity": "unique",
   "name": "極光の連続照射",
-  "desc": "レーザー+1本、威力補正+0.35、線幅+2。",
+  "desc": "レーザー+2本、威力補正+0.75、線幅+3。",
   "tags": [
    "レーザー",
    "火力"
@@ -1729,21 +1806,21 @@ const cards = [
    [
     "laserCount",
     "add",
-    1,
+    2,
     0,
     "laserLimit"
    ],
    [
     "laserScale",
     "add",
-    0.35,
+    0.75,
     null,
     null
    ],
    [
     "laserWidth",
     "add",
-    2,
+    3,
     null,
     null
    ]
@@ -1754,7 +1831,7 @@ const cards = [
   "id": "arsUniqueCharge",
   "rarity": "unique",
   "name": "流星の再点火",
-  "desc": "チャージ速度補正+0.25、威力補正+0.4、貫通+2。",
+  "desc": "チャージ速度補正+0.55、威力補正+0.85、貫通+4。",
   "tags": [
    "チャージ",
    "貫通"
@@ -1763,21 +1840,21 @@ const cards = [
    [
     "chargeRate",
     "add",
-    0.25,
+    0.55,
     null,
     null
    ],
    [
     "chargeScale",
     "add",
-    0.4,
+    0.85,
     null,
     null
    ],
    [
     "chargePenetration",
     "add",
-    2,
+    4,
     null,
     null
    ]
@@ -1788,7 +1865,7 @@ const cards = [
   "id": "arsUniqueDrill",
   "rarity": "unique",
   "name": "鋼星の回転核",
-  "desc": "プラズマ容量+0.2、蓄積速度+0.12、突進威力+55。",
+  "desc": "プラズマ蓄積速度+0.14、突進威力+120、リーチ+30。",
   "tags": [
    "ドリル",
    "ドリル蓄積",
@@ -1796,23 +1873,23 @@ const cards = [
   ],
   "effects": [
    [
-    "drillCap",
-    "add",
-    0.2,
-    null,
-    null
-   ],
-   [
     "drillGain",
     "add",
-    0.12,
+    0.14,
     null,
     null
    ],
    [
     "drillDamage",
     "add",
-    55,
+    120,
+    null,
+    null
+   ],
+   [
+    "drillReach",
+    "add",
+    30,
     null,
     null
    ]
@@ -1823,7 +1900,7 @@ const cards = [
   "id": "arsUniqueDog",
   "rarity": "unique",
   "name": "ほねっこ・きらきら大冒険",
-  "desc": "骨+1本、骨の威力補正+0.25、帰還威力補正+0.3。",
+  "desc": "骨+2本、骨の威力補正+0.55、帰還威力補正+0.65。",
   "tags": [
    "骨ブーメラン"
   ],
@@ -1831,21 +1908,21 @@ const cards = [
    [
     "dogBones",
     "add",
-    1,
+    2,
     0,
     8
    ],
    [
     "dogBonePower",
     "add",
-    0.25,
+    0.55,
     null,
     null
    ],
    [
     "dogBoneReturn",
     "add",
-    0.3,
+    0.65,
     null,
     null
    ]
@@ -1917,7 +1994,8 @@ function available(p,id){const c=byId.get(id);return !!c&&(!c.requires||p[c.requ
  let after=op==='mul'?before*v:before+v;
  if(lo!==null&&lo!==undefined)after=Math.max(bound(lo),after);
  if(hi!==null&&hi!==undefined)after=Math.min(bound(hi),after);
- return Math.abs(after-before)>1e-8;
+ const lowerIsBetter=['rate','dogEggRate','dashCd','drillDecay','novaReuseDelay'].includes(stat);
+ return lowerIsBetter?after<before-1e-8:after>before+1e-8;
 });}
 root.AnkinArsenal=Object.freeze({cards:Object.freeze(cards),descriptions:Object.freeze(descriptions),removeTags:Object.freeze(removeTags),apply,available});
 })(globalThis);

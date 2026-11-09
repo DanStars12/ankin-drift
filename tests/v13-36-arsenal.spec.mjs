@@ -46,7 +46,10 @@ async function setup(page){
  await page.addInitScript(()=>{window.requestAnimationFrame=()=>0;});
  await page.route('**/ankin-drift/',async route=>{
   const response=await route.fetch(),html=await response.text();expect(html).toContain(BALANCE_HARNESS_ANCHOR);
-  const ai=BALANCE_AI_HARNESS.replace('if(initialNovaReady)player.energy=100;', 'arsenalBudget();if(initialNovaReady)player.energy=100;');
+  const ai=BALANCE_AI_HARNESS.replace('if(initialNovaReady)player.energy=100;', 'arsenalBudget();if(initialNovaReady)player.energy=100;')
+   .replaceAll('drive(dt);','advanceSimulation(dt);')
+   .replace("selectedGameMode=runMode;selectedShip=ship;newRun();mode='playing';",
+    "selectedGameMode=runMode;selectedShip=ship;newRun();mode='playing';t=0;");
   await route.fulfill({response,body:html.replace(BALANCE_HARNESS_ANCHOR,BALANCE_HARNESS+'\n'+ai+'\n'+BUDGET+'\n'+PROBE+'\n'+BALANCE_HARNESS_ANCHOR)});
  });await page.goto('./');return errors;
 }
@@ -100,4 +103,18 @@ test('arsenal standard balance: ten seeds x early/mid/late x five ships x two re
  }
  await mkdir('artifacts/arsenal',{recursive:true});await writeFile('artifacts/arsenal/'+testInfo.project.name+'-standard.json',JSON.stringify({rows,summary},null,2));
  console.log('ARSENAL_BALANCE='+JSON.stringify(summary));expect(rows).toHaveLength(300);expect(errors).toEqual([]);
+});
+
+test('arsenal full progression: three seeds, both real modes, actual random rewards',async({page},testInfo)=>{
+ test.skip(process.env.ANKIN_ARSENAL_FULL!=='1','Full base/candidate comparison runs in the dedicated progression job.');
+ test.setTimeout(1100000);const errors=await setup(page),rows=[];
+ const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
+ for(const gameMode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog'])for(const seed of [17,18,19]){
+  const r=await page.evaluate(args=>window.__ankinBalanceAI.runFull({...args,fusionPolicy:'always'}),{ship,gameMode,seed});
+  expect(r.stopReason.startsWith('unhandled-menu')).toBe(false);expect(Number.isFinite(r.dps)).toBe(true);rows.push(r);
+ }
+ const summary=rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,fusions:r.elementFusions,choices:r.menuChoices,clear:r.clearCount,boss:r.reachedFinalBoss}));
+ console.log('ARSENAL_PROGRESSION='+JSON.stringify(summary));
+ await mkdir('artifacts/arsenal',{recursive:true});await writeFile('artifacts/arsenal/'+testInfo.project.name+'-progression.json',JSON.stringify({rows,summary},null,2));
+ expect(rows).toHaveLength(30);expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);expect(errors).toEqual([]);
 });
