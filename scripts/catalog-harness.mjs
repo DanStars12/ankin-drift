@@ -21,5 +21,5 @@ export function catalogHarness(html=readFileSync(new URL('../index.html',import.
  runInContext(source.slice(start,end),ctx);
  for(const id of ['DRILL_RANGED_ONLY','fitsShip','rewardAlreadyTaken','SKILL_CAP_CHECKS','skillHasRoom','selectable','isSealedCard','offerCandidatePool'])runInContext(declaration(id),ctx);
  runInContext('globalThis.catalog=ALL_SKILL_DEFS();globalThis.normal=SKILLS;globalThis.recipes=FUSIONS;globalThis.initial=initialP;globalThis.eligible=selectable;',ctx);
- return {ctx,eval:code=>runInContext(code,ctx)};
+ return {ctx,declaration,eval:code=>runInContext(code,ctx)};
 }

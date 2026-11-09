@@ -5,14 +5,14 @@ const cards=[
 {"id":"tacShotNear","shipOnly":"shot","rarity":"uncommon","name":"インファイト照準","desc":"150以内の敵への主砲威力+5%。","tags":["射撃","近接","一度限り"],"params":{"shotNear":0.05},"stats":[]},
 {"id":"tacShotSlip","shipOnly":"shot","rarity":"rare","name":"スライド給弾","desc":"ダッシュ終了後1秒、主砲の弾速+15%。","tags":["射撃","ダッシュ反撃","一度限り"],"params":{"shotSlip":1},"stats":[]},
 {"id":"tacShotPierce","shipOnly":"shot","rarity":"rare","name":"ブリーチ装填","desc":"ダッシュ終了後1.2秒以内の1斉射は貫通+1。","tags":["射撃","貫通","ダッシュ反撃","一度限り"],"params":{"shotPierce":1},"stats":[]},
-{"id":"tacShotFocus","shipOnly":"shot","rarity":"power","name":"一点収束照準","desc":"基本威力+16。同じ敵への連続命中で主砲威力が最大12%上昇。","tags":["射撃","集中射撃","一度限り"],"params":{"shotFocus":1},"stats":[["dmg","add",16,null,null]]},
+{"id":"tacShotFocus","shipOnly":"shot","rarity":"power","name":"一点収束照準","desc":"基本威力+16。0.8秒以内に同じ敵へ連続命中すると、主砲威力が最大12%上昇。","tags":["射撃","集中射撃","一度限り"],"params":{"shotFocus":1},"stats":[["dmg","add",16,null,null]]},
 {"id":"tacShotStrafe","shipOnly":"shot","rarity":"power","name":"横滑り射撃管","desc":"移動中の主砲威力+14%、弾速+60。","tags":["射撃","機動","一度限り"],"params":{"shotStrafe":0.14},"stats":[["shotSpeed","add",60,null,null]]},
 {"id":"tacShotRearm","shipOnly":"shot","rarity":"power","name":"反撃弾倉","desc":"射撃間隔-6%。ダッシュ終了後1.2秒以内の1斉射は威力+30%。","tags":["射撃","ダッシュ反撃","一度限り"],"params":{"shotRearm":0.3},"stats":[["rate","mul",0.94,"limitRate",null]]},
-{"id":"tacShotLane","shipOnly":"shot","rarity":"legendary","name":"星路の貫通弾倉","desc":"基本威力+45、弾数+1。ダッシュ後の1斉射は貫通+2。","tags":["射撃","弾数","ダッシュ反撃","一度限り"],"params":{"shotLane":1},"stats":[["dmg","add",45,null,null],["multishot","add",1,null,"limitShot"]]},
+{"id":"tacShotLane","shipOnly":"shot","rarity":"legendary","name":"星路の貫通弾倉","desc":"基本威力+45、弾数+1。ダッシュ終了後1.2秒内の1斉射は貫通+2。","tags":["射撃","弾数","ダッシュ反撃","一度限り"],"params":{"shotLane":1},"stats":[["dmg","add",45,null,null],["multishot","add",1,null,"limitShot"]]},
 {"id":"tacShotOpener","shipOnly":"shot","rarity":"legendary","name":"ファーストライト","desc":"会心率+10%、会心倍率+0.3。HP75%以上の敵への主砲威力+25%。","tags":["射撃","会心","一度限り"],"params":{"shotOpener":0.25},"stats":[["crit","add",0.1,null,0.969],["critMult","add",0.3,null,null]]},
 {"id":"tacShotLongLens","shipOnly":"shot","rarity":"relic","name":"遠射の照準器","desc":"260以上離れた敵への主砲威力+30%、150以内では-10%。","tags":["射撃","位置取り","レリック","一度限り"],"params":{"shotLong":1},"stats":[]},
-{"id":"tacShotNeedle","shipOnly":"shot","rarity":"relic","name":"反撃の針薬莢","desc":"主砲威力-8%。ダッシュ後の1斉射は威力+35%、貫通+3。","tags":["射撃","貫通","ダッシュ反撃","レリック","一度限り"],"params":{"shotNeedle":1},"stats":[]},
-{"id":"tacShotStar","shipOnly":"shot","rarity":"unique","name":"星渡りの反撃","desc":"基本威力+120、弾数+2。ダッシュ後の1斉射は威力+60%、貫通+2。","tags":["射撃","弾数","ダッシュ反撃","一度限り"],"params":{"shotStar":0.6},"stats":[["dmg","add",120,null,null],["multishot","add",2,null,"limitShot"]]},
+{"id":"tacShotNeedle","shipOnly":"shot","rarity":"relic","name":"反撃の針薬莢","desc":"主砲威力-8%。ダッシュ終了後1.2秒内の1斉射は威力+35%、貫通+3。","tags":["射撃","貫通","ダッシュ反撃","レリック","一度限り"],"params":{"shotNeedle":1},"stats":[]},
+{"id":"tacShotStar","shipOnly":"shot","rarity":"unique","name":"星渡りの反撃","desc":"基本威力+120、弾数+2。ダッシュ終了後1.2秒内の1斉射は威力+60%、貫通+2。","tags":["射撃","弾数","ダッシュ反撃","一度限り"],"params":{"shotStar":0.6},"stats":[["dmg","add",120,null,null],["multishot","add",2,null,"limitShot"]]},
 {"id":"tacLaserLock","shipOnly":"laser","rarity":"uncommon","name":"照準のしおり","desc":"主照準を0.8秒維持すると、その敵へのレーザー威力+7%。","tags":["レーザー","照準維持","一度限り"],"params":{"laserLock":0.07},"stats":[]},
 {"id":"tacLaserGlide","shipOnly":"laser","rarity":"uncommon","name":"滑走レンズ","desc":"移動中のレーザー威力+5%。","tags":["レーザー","機動","一度限り"],"params":{"laserGlide":0.05},"stats":[]},
 {"id":"tacLaserSwitch","shipOnly":"laser","rarity":"rare","name":"再照準プリズム","desc":"主照準の切替後0.45秒、レーザー威力+8%。","tags":["レーザー","照準切替","一度限り"],"params":{"laserSwitch":0.08},"stats":[]},
@@ -28,12 +28,12 @@ const cards=[
 {"id":"tacChargeBank","shipOnly":"charge","rarity":"uncommon","name":"安全蓄電器","desc":"ダッシュ中は蓄えたチャージを保持する。","tags":["チャージ","チャージ保持","回避","一度限り"],"params":{"chargeBank":1},"stats":[]},
 {"id":"tacChargeMid","shipOnly":"charge","rarity":"uncommon","name":"中間解放リング","desc":"40〜85%チャージで放つ彗星は貫通+1。","tags":["チャージ","中間解放","貫通","一度限り"],"params":{"chargeMid":1},"stats":[]},
 {"id":"tacChargeStride","shipOnly":"charge","rarity":"rare","name":"解放スラスター","desc":"最大チャージ解放後1秒、移動速度+8%。","tags":["チャージ","機動","一度限り"],"params":{"chargeStride":1},"stats":[]},
-{"id":"tacChargeCover","shipOnly":"charge","rarity":"rare","name":"蓄電姿勢","desc":"静止して50%以上チャージ中、被ダメージ-5%。","tags":["チャージ","防御","一度限り"],"params":{"chargeCover":0.05},"stats":[]},
+{"id":"tacChargeCover","shipOnly":"charge","rarity":"rare","name":"蓄電姿勢","desc":"静止して50%以上チャージ中、被ダメージ-5%（蓄電軽減は合計22%まで）。","tags":["チャージ","防御","一度限り"],"params":{"chargeCover":0.05},"stats":[]},
 {"id":"tacChargeMobile","shipOnly":"charge","rarity":"power","name":"歩行蓄電炉","desc":"移動蓄電18%、チャージ速度補正+0.2。","tags":["チャージ","移動蓄電","一度限り"],"params":{"chargeMobile":0.18},"stats":[["chargeRate","add",0.2,null,null]]},
 {"id":"tacChargeVent","shipOnly":"charge","rarity":"power","name":"解放回生器","desc":"最大HP+35。最大チャージ解放でダッシュ待機-0.3秒。1.5秒ごと。","tags":["チャージ","回避","一度限り"],"params":{"chargeVent":1},"stats":[["maxHp","add",35,null,null],["hp","add",35,null,null]]},
 {"id":"tacChargeMidPower","shipOnly":"charge","rarity":"power","name":"臨界手前の彗星","desc":"チャージ貫通+2。40〜85%チャージの彗星威力+22%。","tags":["チャージ","中間解放","貫通","一度限り"],"params":{"chargeMidPower":0.22},"stats":[["chargePenetration","add",2,null,null]]},
 {"id":"tacChargeAfterglow","shipOnly":"charge","rarity":"legendary","name":"彗星の離脱光","desc":"チャージ威力補正+0.65。最大解放後1.5秒、移動速度+15%。","tags":["チャージ","機動","一度限り"],"params":{"chargeAfterglow":1},"stats":[["chargeScale","add",0.65,null,null]]},
-{"id":"tacChargeBastion","shipOnly":"charge","rarity":"legendary","name":"静星の蓄電殻","desc":"最大HP+70。静止して50%以上チャージ中、被ダメージ-18%。","tags":["チャージ","防御","一度限り"],"params":{"chargeBastion":0.18},"stats":[["maxHp","add",70,null,null],["hp","add",70,null,null]]},
+{"id":"tacChargeBastion","shipOnly":"charge","rarity":"legendary","name":"静星の蓄電殻","desc":"最大HP+70。静止して50%以上チャージ中、被ダメージ-18%（蓄電軽減は合計22%まで）。","tags":["チャージ","防御","一度限り"],"params":{"chargeBastion":0.18},"stats":[["maxHp","add",70,null,null],["hp","add",70,null,null]]},
 {"id":"tacChargeFeather","shipOnly":"charge","rarity":"relic","name":"軽星の核","desc":"40〜85%チャージの彗星威力+35%、最大チャージでは-12%。","tags":["チャージ","中間解放","レリック","一度限り"],"params":{"chargeFeather":1},"stats":[]},
 {"id":"tacChargeAnchor","shipOnly":"charge","rarity":"relic","name":"重星の核","desc":"最大チャージの彗星威力+40%、10%未満では-18%。","tags":["チャージ","チャージ保持","レリック","一度限り"],"params":{"chargeAnchor":1},"stats":[]},
 {"id":"tacChargeMemory","shipOnly":"charge","rarity":"unique","name":"彗星の記憶炉","desc":"チャージ速度補正+0.6、威力補正+0.9、貫通+3。ダッシュで蓄電保持、終了後1.2秒は最大解放威力+60%。","tags":["チャージ","チャージ保持","ダッシュ反撃","一度限り"],"params":{"chargeBank":1,"chargeMemory":1},"stats":[["chargeRate","add",0.6,null,null],["chargeScale","add",0.9,null,null],["chargePenetration","add",3,null,null]]},
@@ -74,7 +74,7 @@ function apply(p,id){const c=byId.get(id);if(!c)throw Error('Unknown tactical sk
 function lockDelay(f){return f.laserPolaris?.5:f.evolvedLaser?.6:.8;}
 function tick(p,dt,moving){const f=flags(p);if(!f)return;const s=state(p);s.clock+=dt;s.moving=!!moving;
  if(s.laserTarget&&!s.laserTarget.dead)s.laserAge+=dt;else{s.laserAge=0;}
- if(p.shipType==='laser'&&(f.laserLock||f.laserTrack||f.laserCycle||f.laserBrace||f.laserPolaris)&&s.laserAge>=lockDelay(f)&&!s.lockCue){s.lockCue=true;cue(s,'照準維持');}
+ if(p.shipType==='laser'&&(f.laserLock||f.laserTrack||f.laserCycle||f.laserBrace||f.laserPolaris)&&s.laserAge>=lockDelay(f)&&!s.lockCue){s.lockCue=true;count(s,'laserLock');cue(s,'照準維持');}
  if(f.laserCycle&&p.dashLeft>0&&s.laserAge>=1&&s.clock>=s.laserCycleAt){p.dashLeft=Math.max(0,p.dashLeft-.08);s.laserCycleAt=s.clock+4;count(s,'laserCycle');}
  if(s.dashing&&p.dashTime<=0){s.dashing=false;s.afterDashAt=s.clock;s.volleyUntil=s.clock+(f.evolvedShot?1.7:1.2);
   if(p.shipType==='drill'&&s.spent>0){const rate=Math.max(f.drillReserve||0,f.drillRelease||0,f.drillFlywheel?.18:0);if(rate){p.drillPlasma=Math.min(p.drillCap,p.drillPlasma+s.spent*rate);count(s,'plasmaReturn');cue(s,'プラズマ回収');}s.spent=0;}
@@ -111,7 +111,7 @@ function damageMultiplier(p,e,meta={},giveEnergy=null){const f=flags(p);if(!f||m
  if(p.shipType==='shot'&&meta.tacticalPrimary){const d=Math.hypot(p.x-e.x,p.y-e.y);if(d>=260)bonus+=(f.shotFar||0)+(f.shotLong?.3:0);if(d<=150)bonus+=(f.shotNear||0)-(f.shotLong?.1:0);if(f.shotNeedle)bonus-=.08;if(s.moving)bonus+=f.shotStrafe||0;if(e.hp>=e.maxHp*.75)bonus+=f.shotOpener||0;
   if(f.shotFocus){s.focusHits=s.focusEnemy===e&&s.clock-s.focusAt<=.8?Math.min(6,s.focusHits+1):1;s.focusEnemy=e;s.focusAt=s.clock;bonus+=s.focusHits*.02;}
  }
- if(p.shipType==='laser'&&meta.source==='laser'){const d=Math.hypot(p.x-e.x,p.y-e.y),locked=s.laserTarget===e&&s.laserAge>=lockDelay(f);if(locked)bonus+=(f.laserLock||0)+(f.laserTrack||0)+(f.laserPolaris||0);if(s.moving)bonus+=f.laserGlide||0;if(d<=180)bonus+=(f.laserClose||0)-(f.laserLong?.12:0);if(d>=300&&f.laserLong)bonus+=.3;if(s.clock<=s.switchUntil)bonus+=(f.laserSwitch||0)+(f.laserPulse?.4:0);if(f.laserPulse&&s.laserTarget===e&&s.laserAge>=1.2)bonus-=.1;if(s.clock-s.afterDashAt<1.5)bonus+=f.laserWake||0;if(e.hp<=e.maxHp*.4)bonus+=f.laserFinish||0;}
+ if(p.shipType==='laser'&&meta.source==='laser'){const d=Math.hypot(p.x-e.x,p.y-e.y),locked=s.laserTarget===e&&s.laserAge>=lockDelay(f);if(locked){bonus+=(f.laserLock||0)+(f.laserTrack||0)+(f.laserPolaris||0);if(f.laserLock||f.laserTrack||f.laserPolaris)count(s,'laserLockedHit');}if(s.moving)bonus+=f.laserGlide||0;if(d<=180)bonus+=(f.laserClose||0)-(f.laserLong?.12:0);if(d>=300&&f.laserLong)bonus+=.3;if(s.clock<=s.switchUntil)bonus+=(f.laserSwitch||0)+(f.laserPulse?.4:0);if(f.laserPulse&&s.laserTarget===e&&s.laserAge>=1.2)bonus-=.1;if(s.clock-s.afterDashAt<1.5)bonus+=f.laserWake||0;if(e.hp<=e.maxHp*.4)bonus+=f.laserFinish||0;}
  if(p.shipType==='drill'&&meta.source==='drill'){
   if(meta.tacticalRush){if(s.markEnemy===e&&s.clock<=s.markUntil)bonus+=(f.drillMark||0)+(f.drillTag||0)+(f.drillHunter||0);bonus+=(f.drillRunner?.35:0)-(f.drillBrawler?.1:0);}
   else if(meta.tacticalContact){if(s.clock-s.afterDashAt<1.2)bonus+=(f.drillFinish||0)+(f.drillFlywheel?.35:0);bonus+=(f.drillBrawler?.35:0)-(f.drillRunner?.1:0);}
@@ -132,16 +132,16 @@ function eggMultiplier(p){const f=flags(p);return f?.dogPiyo&&state(p).clock-sta
 function pollCue(p){if(!flags(p))return null;const s=state(p),v=s.cue;s.cue=null;return v;}
 function metrics(p){return p.tacticState?{...p.tacticState.counters}:{};}
 const tagGuides={
- 'ダッシュ反撃':{name:'ダッシュ反撃',desc:'ダッシュを終えてからの攻撃に短い強化窓を作る、機体固有の連携です。',details:['ショットの装填は終了後1.2秒以内の主砲1斉射だけ。進化後は1.7秒。','後方弾・補助弾・NOVAは主砲の反撃装填を消費しません。条件付き威力は合計1.8倍まで。','タグだけでは効果は得られません。各カードに書かれた時間と対象を確認してください。']},
- '照準維持':{name:'主照準の維持',desc:'最初の照射器が同じ敵を追い続けると成立する、位置取り向けの強化です。',details:['通常は0.8秒。光学城の進化後は0.6秒、ポラリス所持時は0.5秒。','遮蔽や標的変更で蓄積を失います。維持威力は主照準の敵だけが対象です。','複数ビームの全標的を同時に維持するタグではありません。']},
- '照準切替':{name:'主照準の切替',desc:'すでに照準していた敵から別の敵へ切り替えることで、短い強化を得ます。',details:['切替後の強化は0.45秒。最初に敵を捕捉しただけでは発動しません。','転光プリズムは切替に強く、同じ主照準を1.2秒維持すると威力が下がります。','このタグで敵の射程や属性が変わることはありません。']},
- 'チャージ保持':{name:'チャージ保持',desc:'蓄電したままダッシュで危険を離れ、次の停止や解放につなげる機構です。',details:['保持中のダッシュでは追加の蓄電をしません。','ダッシュ終了後、動き続ければ解放し、停止すれば蓄電を再開します。','NOVAや追撃彗星を強化するタグではありません。']},
- '移動蓄電':{name:'移動中の蓄電',desc:'移動中も蓄電を進め、停止チャージと組み合わせて解放位置を選べます。',details:['歩行蓄電炉は通常の18%の速度で蓄電します。','既存のモーション・キャパシターの25%とは加算せず、高い方を使います。','タグ自体では追加の蓄電は発生しません。']},
- '中間解放':{name:'中間チャージの解放',desc:'40〜85%の蓄電で解放する主彗星を強化し、待ち時間と射線を選び分けます。',details:['40%と85%を含みます。最大解放や連射する小弾は対象外です。','条件付き威力は複数取得でも最大1.8倍。NOVA・追撃には乗りません。','カードのタグだけで貫通や威力が追加されることはありません。']},
- '接触標識':{name:'接触標識',desc:'最後に接触攻撃を命中させた1体を記憶し、その敵への突進を強化します。',details:['標識は通常1.2秒、刻星の再突入へ進化後は2秒です。','別の敵へ接触すると標識が移ります。画面内の全敵を強化する効果ではありません。','タグ自体には追加ダメージはありません。']},
- 'プラズマ回収':{name:'消費プラズマの回収',desc:'通常のプラズマ突進が終わると、実際に消費した量の一部を戻します。',details:['4%・12%・18%は加算せず、最も高い回収率を使います。','NOVAのオーバードライブ中には消費量がないため回収しません。','タグで上限容量が増えたり、待機中に無限回収したりすることはありません。']},
- '捕球':{name:'骨の捕球連携',desc:'帰還した通常骨を自機で受け取り、移動・卵・仲間の連携へつなぎます。',details:['同時に多数の骨を受けても0.7秒に1回だけ発動。NOVAの骨は対象外です。','仲間の威力強化は1.5秒、進化後2.2秒。同系の威力強化は最も高い値を使います。','帰還補給はダッシュ終了後1.2秒以内。2.5秒ごと、最大シールドの10%（上限12、進化後16）を補給します。','このタグだけでは回復や仲間追加は行いません。']},
- '帰還軌道':{name:'帰還する骨の軌道',desc:'往路と帰路の違いを使い、自機の位置や回収時機で命中経路を選ぶ強化です。',details:['ダッシュで呼び戻せるのは飛行中の通常骨だけです。','帰還時のNOVA獲得は0.8秒に1回まで。帰還威力の追加分で重複獲得しません。','タグを付けた弾を追加生成したり、NOVAからNOVAを無限回収したりする効果ではありません。']}
+ 'ダッシュ反撃':{name:'ダッシュ反撃',desc:'ダッシュを終えてからの攻撃に短い強化窓を作る、機体固有の連携です。',details:['ショットの装填は終了後1.2秒以内の主砲1斉射だけ。進化後は1.7秒。','後方弾・補助弾・NOVAは反撃装填を消費しません。条件付き威力は合計1.8倍まで。','追加貫通は合計+3まで。星路の逆襲へ進化後は+4まで。','ダッシュ反撃タグの各カードは、主砲・彗星・接触攻撃・帰還骨をそれぞれ強化します。']},
+ '照準維持':{name:'主照準の維持',desc:'最初の照射器が同じ敵を追い続けると成立する、位置取り向けの強化です。',details:['通常は0.8秒。光学城の進化後は0.6秒、ポラリス所持時は0.5秒。','遮蔽や標的変更で蓄積を失います。維持威力は主照準の敵だけが対象です。','照準維持タグの強化対象は、最初の照射器が照準している敵です。']},
+ '照準切替':{name:'主照準の切替',desc:'すでに照準していた敵から別の敵へ切り替えることで、短い強化を得ます。',details:['切替後の強化は0.45秒。最初に敵を捕捉しただけでは発動しません。','転光プリズムは切替に強く、同じ主照準を1.2秒維持すると威力が下がります。','照準切替タグは、敵を倒した後に別の敵を捉えた場合にも発動します。']},
+ 'チャージ保持':{name:'チャージ保持',desc:'蓄電したままダッシュで危険を離れ、次の停止や解放につなげる機構です。',details:['保持中のダッシュでは追加の蓄電をしません。','ダッシュ終了後、動き続ければ解放し、停止すれば蓄電を再開します。','チャージ保持タグは通常の蓄電が対象。NOVA・追撃彗星は保持できません。']},
+ '移動蓄電':{name:'移動中の蓄電',desc:'移動中も蓄電を進め、停止チャージと組み合わせて解放位置を選べます。',details:['歩行蓄電炉は通常の18%の速度で蓄電します。','既存のモーション・キャパシターの25%とは加算せず、高い方を使います。','移動蓄電タグの蓄電速度は、停止時のチャージ速度を基準にします。']},
+ '中間解放':{name:'中間チャージの解放',desc:'40〜85%の蓄電で解放する主彗星を強化し、待ち時間と射線を選び分けます。',details:['40%と85%を含みます。最大解放や連射する小弾は対象外です。','条件付き威力は複数取得でも最大1.8倍。NOVA・追撃には乗りません。','中間解放タグは、最大解放を待たずに射線へ弾を通す連携に向いています。']},
+ '接触標識':{name:'接触標識',desc:'最後に接触攻撃を命中させた1体を記憶し、その敵への突進を強化します。',details:['標識は通常1.2秒、刻星の再突入へ進化後は2秒です。','別の敵へ接触すると標識が移ります。画面内の全敵を強化する効果ではありません。','接触標識タグは、接触した敵への再突入に向いています。']},
+ 'プラズマ回収':{name:'消費プラズマの回収',desc:'通常のプラズマ突進が終わると、実際に消費した量の一部を戻します。',details:['4%・12%・18%は加算せず、最も高い回収率を使います。','NOVAのオーバードライブ中には消費量がないため回収しません。','プラズマ回収タグは突進終了時に作用し、回収量はプラズマ上限までです。']},
+ '捕球':{name:'骨の捕球連携',desc:'帰還した通常骨を自機で受け取り、移動・卵・仲間の連携へつなぎます。',details:['同時に多数の骨を受けても0.7秒に1回だけ発動。NOVAの骨は対象外です。','仲間の威力強化は1.5秒、進化後2.2秒。同系の威力強化は最も高い値を使います。','帰還補給はダッシュ終了後1.2秒以内。2.5秒ごと、最大シールドの10%（上限12、進化後16）を補給します。','捕球タグの効果は通常骨を受け取った直後に発動します。']},
+ '帰還軌道':{name:'帰還する骨の軌道',desc:'往路と帰路の違いを使い、自機の位置や回収時機で命中経路を選ぶ強化です。',details:['ダッシュで呼び戻せるのは飛行中の通常骨だけです。','帰還時のNOVA獲得は0.8秒に1回まで。帰還威力の追加分で重複獲得しません。','帰還軌道タグの威力補正は、現在の骨の往路・帰路に応じて判定します。']}
 };
 function tagDetails(tag){const x=tagGuides[tag];return x?{...x,details:[...x.details]}:null;}
 function evolve(p,ship){p.tacticFlags={...(flags(p)||{}),['evolved'+ship[0].toUpperCase()+ship.slice(1)]:1};}
