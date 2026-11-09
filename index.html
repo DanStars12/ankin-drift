@@ -1858,13 +1858,16 @@ function spawnIsoArrival(raid,type=null){
  return e;
 }
 // DANs Time ENGAGE: opaque-to-friendly geometry, transparent to hostile projectiles.
-function activeEngageWalls(){const r=game?.raid;return r&&hasRaidEffect(r,'engage')?(r.engageWalls||[]):[]}
+const EMPTY_ENGAGE_WALLS=Object.freeze([]);
+function activeEngageWalls(){const r=game?.raid;return r&&hasRaidEffect(r,'engage')?(r.engageWalls||EMPTY_ENGAGE_WALLS):EMPTY_ENGAGE_WALLS}
 function engageBlockedPoint(x,y,pad=0){return activeEngageWalls().some(w=>x>=w.x-pad&&x<=w.x+w.w+pad&&y>=w.y-pad&&y<=w.y+w.h+pad)}
 // Segment vs padded AABB, earliest contact fraction or null. Handles dashes crossing walls at high speed.
 function engageImpact(x0,y0,x1,y1,pad=0){let first=null;for(const w of activeEngageWalls()){
  const loX=w.x-pad,hiX=w.x+w.w+pad,loY=w.y-pad,hiY=w.y+w.h+pad,dx=x1-x0,dy=y1-y0;
  let near=0,far=1,invalid=false;
- for(const [p,q] of [[-dx,x0-loX],[dx,hiX-x0],[-dy,y0-loY],[dy,hiY-y0]]){
+ for(let axis=0;axis<4;axis++){
+  const p=axis===0?-dx:axis===1?dx:axis===2?-dy:dy;
+  const q=axis===0?x0-loX:axis===1?hiX-x0:axis===2?y0-loY:hiY-y0;
   if(Math.abs(p)<1e-9){if(q<0){invalid=true;break}continue}
   const a=q/p;if(p<0){if(a>far){invalid=true;break}near=Math.max(near,a)}else{if(a<near){invalid=true;break}far=Math.min(far,a)}
  }
@@ -4381,13 +4384,27 @@ function pop(x,y,s,color='#ffffff'){floats.push({x,y,s,color,life:1.2});if(float
 // Reusable spatial index: refreshed during combat, shared by lasers, drones, blades and projectiles.
 const SPATIAL_CELL=112;let enemyIndex=new Map(),enemyMaxRadius=24,enemyIndexReady=false;
 let spatialMaintenanceClock=0,enemyIndexDirtyDuringForces=false;
-function refreshEnemyIndex(){for(const bucket of enemyIndex.values())bucket.length=0;enemyMaxRadius=0;for(const e of enemies){if(e.dead)continue;enemyMaxRadius=Math.max(enemyMaxRadius,e.r);const x=Math.floor(e.x/SPATIAL_CELL),y=Math.floor(e.y/SPATIAL_CELL),k=x+','+y;let b=enemyIndex.get(k);if(!b){b=[];enemyIndex.set(k,b)}b.push(e)}enemyIndexReady=true}
+// Numeric columns avoid allocating and hashing coordinate strings on every query.
+function refreshEnemyIndex(){
+ for(const column of enemyIndex.values())for(const bucket of column.values())bucket.length=0;
+ enemyMaxRadius=0;
+ for(const e of enemies){if(e.dead)continue;enemyMaxRadius=Math.max(enemyMaxRadius,e.r);
+  const x=Math.floor(e.x/SPATIAL_CELL),y=Math.floor(e.y/SPATIAL_CELL);
+  let column=enemyIndex.get(x);if(!column){column=new Map();enemyIndex.set(x,column)}
+  let bucket=column.get(y);if(!bucket){bucket=[];column.set(y,bucket)}bucket.push(e);
+ }enemyIndexReady=true;
+}
+function trimEnemyIndex(){for(const [x,column] of enemyIndex){for(const [y,bucket] of column)if(!bucket.length)column.delete(y);if(!column.size)enemyIndex.delete(x)}}
 function circleCandidates(x,y,r){if(!enemyIndexReady)return enemies;const result=[],rad=r+enemyMaxRadius;
  const x0=Math.floor((x-rad)/SPATIAL_CELL),x1=Math.floor((x+rad)/SPATIAL_CELL),y0=Math.floor((y-rad)/SPATIAL_CELL),y1=Math.floor((y+rad)/SPATIAL_CELL);
- for(let cx=x0;cx<=x1;cx++)for(let cy=y0;cy<=y1;cy++){const group=enemyIndex.get(cx+','+cy);if(group)result.push(...group)}return result}
+ for(let cx=x0;cx<=x1;cx++){const column=enemyIndex.get(cx);if(!column)continue;
+  for(let cy=y0;cy<=y1;cy++){const group=column.get(cy);if(group)result.push(...group)}}return result;
+}
 function segmentCandidates(x1,y1,x2,y2,r){if(!enemyIndexReady)return enemies;const result=[],pad=r+enemyMaxRadius;
  const ax=Math.floor((Math.min(x1,x2)-pad)/SPATIAL_CELL),bx=Math.floor((Math.max(x1,x2)+pad)/SPATIAL_CELL),ay=Math.floor((Math.min(y1,y2)-pad)/SPATIAL_CELL),by=Math.floor((Math.max(y1,y2)+pad)/SPATIAL_CELL);
- for(let cx=ax;cx<=bx;cx++)for(let cy=ay;cy<=by;cy++){const group=enemyIndex.get(cx+','+cy);if(group)result.push(...group)}return result}
+ for(let cx=ax;cx<=bx;cx++){const column=enemyIndex.get(cx);if(!column)continue;
+  for(let cy=ay;cy<=by;cy++){const group=column.get(cy);if(group)result.push(...group)}}return result;
+}
 function isVisibleAutoTarget(e){return e&&!e.dead&&e.x>=10&&e.x<=W-10&&e.y>=10&&e.y<=H-10&&!e.isoWarp&&(e.isoSafe||0)<=0;}
 function visibleTarget(x,y,except=null,radius=Infinity){return nearTarget(x,y,except,radius,true)}
 function nearTarget(x,y,except=null,radius=Infinity,visibleOnly=false){
@@ -4395,10 +4412,14 @@ function nearTarget(x,y,except=null,radius=Infinity,visibleOnly=false){
  const gx=Math.floor(x/SPATIAL_CELL),gy=Math.floor(y/SPATIAL_CELL),maxRing=Number.isFinite(radius)?Math.ceil(radius/SPATIAL_CELL)+1:Math.ceil((Math.hypot(W,H)+180)/SPATIAL_CELL)+2;
  let best=null,bestSq=radius*radius;
  for(let ring=0;ring<=maxRing;ring++){
-  for(let dx=-ring;dx<=ring;dx++)for(let dy=-ring;dy<=ring;dy++){
-   if(ring&&Math.max(Math.abs(dx),Math.abs(dy))!==ring)continue;
-   const list=enemyIndex.get((gx+dx)+','+(gy+dy));if(!list)continue;
+  for(let dx=-ring;dx<=ring;dx++){
+   const column=enemyIndex.get(gx+dx);if(!column)continue;
+   // Visit the same perimeter cells, in the same order, without scanning interiors.
+   const stride=(dx===-ring||dx===ring)?1:2*ring;
+   for(let dy=-ring;dy<=ring;dy+=stride){
+   const list=column.get(gy+dy);if(!list)continue;
    for(const e of list){if(e.dead||e===except||(visibleOnly&&!isVisibleAutoTarget(e)))continue;const q=(e.x-x)**2+(e.y-y)**2;if(q<bestSq){best=e;bestSq=q}}
+   }
   }
   // Every unseen cell is at least ring * cellSize away on one axis.
   if(best&&bestSq<=ring*ring*SPATIAL_CELL*SPATIAL_CELL)break;
@@ -5175,7 +5196,7 @@ function tickEchoShots(p,dt){
  p.relicEchoQueue=p.relicEchoQueue.filter(echo=>!echo.fired);
 }
 function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
- spatialMaintenanceClock+=dt;if(spatialMaintenanceClock>=10){spatialMaintenanceClock=0;for(const [k,bucket] of enemyIndex){if(!bucket.length)enemyIndex.delete(k)}}scheduleBosses();updateRaid(dt);scheduleRelic();tickVacuum(dt);
+ spatialMaintenanceClock+=dt;if(spatialMaintenanceClock>=10){spatialMaintenanceClock=0;trimEnemyIndex()}scheduleBosses();updateRaid(dt);scheduleRelic();tickVacuum(dt);
  p.iframes=Math.max(0,p.iframes-dt);p.novaCooldown=Math.max(0,(p.novaCooldown||0)-dt);p.drillOverdriveTime=Math.max(0,(p.drillOverdriveTime||0)-dt);p.dashLeft=Math.max(0,p.dashLeft-dt);p.dashGaugeFade=p.dashLeft>0||p.dashTime>0?1:Math.max(0,(p.dashGaugeFade||0)-dt*2.4);p.hitTime+=dt;
  p.pressureRecovery=Math.max(0,(p.pressureRecovery||0)-dt);
  p.grazeLock=Math.max(0,(p.grazeLock||0)-dt);p.dashFlowTimer=Math.max(0,(p.dashFlowTimer||0)-dt);
@@ -5252,7 +5273,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  const cax=Math.floor((Math.min(bx,b.x)-pad)/SPATIAL_CELL),cbx=Math.floor((Math.max(bx,b.x)+pad)/SPATIAL_CELL);
  const cay=Math.floor((Math.min(by,b.y)-pad)/SPATIAL_CELL),cby=Math.floor((Math.max(by,b.y)+pad)/SPATIAL_CELL);
  bulletCells:for(let cx=cax;cx<=cbx;cx++)for(let cy=cay;cy<=cby;cy++){
- const cell=enemyIndex.get(cx+','+cy);if(!cell)continue;
+ const cell=enemyIndex.get(cx)?.get(cy);if(!cell)continue;
  for(const e of cell){if(b.ttl<=0)break bulletCells;if(e.dead||e.isoWarp||(e.isoSafe||0)>0||b.hit.has(e))continue;
  const hitFrac=travelSq>0?clamp(((e.x-bx)*travelX+(e.y-by)*travelY)/travelSq,0,1):0;
  const hitX=bx+travelX*hitFrac,hitY=by+travelY*hitFrac;
