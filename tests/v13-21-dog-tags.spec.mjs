@@ -9,11 +9,11 @@ async function launch(page){
  });
  await page.goto('./');await page.locator('#openTitleLab').click();return errors;
 }
-test('all 75 DOG-only cards have cute unique names and unchanged ID-based skills',async({page})=>{
+test('all 84 DOG-only cards have cute unique names and unchanged ID-based skills',async({page})=>{
  const errors=await launch(page),cards=await page.evaluate(()=>window.__dogGuide1321.dogCards());
- expect(cards).toHaveLength(75);
- expect(new Set(cards.map(c=>c.id)).size).toBe(75);
- expect(new Set(cards.map(c=>c.name)).size).toBe(75);
+ expect(cards).toHaveLength(84);
+ expect(new Set(cards.map(c=>c.id)).size).toBe(84);
+ expect(new Set(cards.map(c=>c.name)).size).toBe(84);
  expect(cards.every(c=>c.name.length>2&&c.hasTag)).toBe(true);
  const byId=Object.fromEntries(cards.map(c=>[c.id,c.name]));
  expect(byId.dogFox).toContain('こんこん');

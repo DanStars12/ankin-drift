@@ -1,0 +1,40 @@
+name: ANKIN arsenal balance
+on:
+  pull_request:
+    paths: ['index.html', 'skill-arsenal.js', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arsenal-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  standard:
+    name: Arsenal 10-seed combat (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390]
+    env:
+      ANKIN_ARSENAL_STANDARD: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=${{ matrix.project }} --grep='arsenal standard balance'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arsenal-${{ matrix.project }}
+          path: |
+            artifacts/arsenal/
+            test-results/
+          retention-days: 14

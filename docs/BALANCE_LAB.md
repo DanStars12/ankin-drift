@@ -351,3 +351,16 @@ The three test surfaces remain separate cohorts (all ten on/off pairs passed on 
 | Desktop | 140 / 4 | 59.8268 | 103.53° | 16.89% |
 | Mobile 390 | 141 / 3 | 179.0163 | 111.54° | 18.83% |
 | Mobile 320 | 141 / 3 | 90.8211 | 104.07° | 14.83% |
+
+## v13.36 — ARSENAL EXPANSION (candidate)
+
+- Baseline: main `8dde4c0ee67bfe7a5d822ae98865630d6cf8673c`, v13.35. Branch `feature/solo-arsenal-expansion-20261109`. LEVEL 2/3 normal-mode catalog update; no CO-OP changes.
+- Add 59 once-per-run skills: 20 normal (9 COMMON / 9 UNCOMMON / 2 RARE), 12 POWER, 12 LEGENDARY, 5 UNIQUE and 10 machine-specific relics. Catalog grows 335 → 394; DOG-specific definitions 75 → 84. Add five machine-specific POWER+LEGENDARY evolutions without changing elemental fusion tickets/recipes.
+- Normal cards use small, final stat gains; no additional emitters/projectiles, revives, lifesteal or global damage multipliers. New cards declare final deltas directly (unlike the legacy catalog's rarity-gain attenuation) so their concise numerical descriptions match application and reconstruction. Relics have explicit specialization costs. Existing per-weapon projectile caps remain intact.
+- Ordinary `life`, `critEpic`, `superDash` now stop offering at three acquisitions; `expShield` becomes once-per-run. Existing acquired stacks are not deleted or truncated on reconstruction. Stable IDs, archive schema, achievements and previous clear records remain unchanged.
+- Revise 40 existing descriptions, retaining effects/conditions while removing commentary or invented effects. Examples: thermal no longer promises an explosion-radius increase, rain no longer implies magma creation, reaper states its real 30-kill heal cadence. Correct non-gameplay secondary tags while preserving actual attribute/fusion permissions. Existing and new one-off cards show a clear acquisition-limit tag.
+- New external `skill-arsenal.js` is part of the offline shell; app/manifest/SW are v13.36. It contains data and bounded stat application, no new per-frame combat loops or timers.
+- Local checks: 60 Node tests, syntax and HTML/PWA pass. Catalog tests execute the actual shipped declarations through a VM, rather than a duplicate catalog. Chromium launch is still blocked by Unix socket policy; browser passes are not claimed locally.
+- Browser acceptance: all 59 cards acquired through real choice logic, duplicate exclusion, 2x fixed-step combat and rebuild parity; five recipe activations; all machine/reward pools; searchable atlas at desktop/390/320; ordinary 3-seed paired combat. Dedicated standard job: 5 ships × early/mid/late × pack/boss × 10 seeds, reference/new equal-card-budget loadouts (300 paired trials per surface). This is a controlled conservative-budget comparison, not a proof that every random full run is balanced.
+- Merge gates: latest PR Actions, standard budget results, 15m/30m real-timeline 1x/2x regression, same-runner before/after performance, save/offline and UI tests. Pending results must remain pending, never be counted as passes.
+- Remaining work after this cycle: use the recorded distributions to tune any outliers, then evaluate late-game offer diversity and individual relic specialization in more builds. Do not normalize five ships to identical DPS or infer hardware power from different camera layouts.
