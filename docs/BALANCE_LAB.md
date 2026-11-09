@@ -376,3 +376,5 @@ The three test surfaces remain separate cohorts (all ten on/off pairs passed on 
 - Acquisition-limit information stays in tags; avoid duplicating the limit as an extra sentence in each skill description. Empty-effect filtering considers beneficial deltas, not drawbacks alone.
 
 - Arsenal-specific battle/progression probes route AI ticks through the shipped fixed-step scheduler and reset the shared combat clock per trial, matching actual frame progression. They do not freeze the shared animation/combat clock like legacy `drive`-only DPS probes. Re-measure the final candidate under this corrected harness; early diagnostic ratios are not its final acceptance numbers.
+
+- New-card floor/ceiling regression: shared dash reductions now preserve an existing .52s DRILL cooldown rather than raising it to .7s; count bonuses preserve already-over-cap legacy values. Availability and application share the same bounded calculation. Two direct regression tests cover these cases (62 Node tests total).

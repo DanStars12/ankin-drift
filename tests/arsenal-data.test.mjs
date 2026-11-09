@@ -34,3 +34,14 @@ test('caps and prerequisites block empty or unavailable upgrades, including egg-
 test('relics specify a real drawback rather than an uncapped free damage emitter',()=>{
  for(const c of api.cards.filter(c=>c.rarity==='relic'))assert.ok(c.effects.some(([k,op,v])=>op==='mul'?v<1||k==='rate'&&v>1:v<0),c.id);
 });
+
+
+test('shared cooldown floors never worsen DRILL cooldown already below the shared floor',()=>{
+ const p=pilot();p.dashCd=.52;
+ for(const id of ['arsGyro','arsCoolant','arsPowerMobility']){api.apply(p,id);assert.equal(p.dashCd,.52);}
+});
+test('new count upgrades never delete legacy counts already above their declared ceiling',()=>{
+ const p=pilot();p.multishot=40;p.limitShot=32;p.dogBones=10;
+ api.apply(p,'arsUniqueShot');assert.equal(p.multishot,40);
+ api.apply(p,'arsUniqueDog');assert.equal(p.dogBones,10);
+});

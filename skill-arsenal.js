@@ -1975,27 +1975,28 @@ const descriptions = {
 const removeTags = {"thermal": ["爆発"], "rain": ["マグマ床"], "freeze": ["スロウ"], "iceBallFocus": ["スロウ"]};
 for(const c of cards){if(c.id==='arsOptics')c.excludeShips=['laser'];if(['arsNovaLens','arsLegendNova'].includes(c.id))c.excludeShips=['drill'];c.stackable=false;c.tags=[...new Set([...c.tags,'一度限り',...(c.rarity==='relic'?['レリック']:[])])];for(const e of c.effects)Object.freeze(e);Object.freeze(c.effects);Object.freeze(c.tags);Object.freeze(c);}
 const byId=new Map(cards.map(c=>[c.id,c]));
+function effectValue(p,e){
+ const [stat,operation,value,minimum,maximum]=e;
+ const current=Number.isFinite(p[stat])?p[stat]:(operation==='mul'||stat==='droneBoost'?1:0);
+ const raw=operation==='mul'?current*value:current+value,bound=v=>typeof v==='string'?p[v]:v;
+ let next=raw;
+ // A floor/ceiling must not reverse an upgrade when an earlier card already
+ // exceeded it (notably DRILL's .52s dash versus shared cards' .7s floor).
+ if(minimum!==null&&minimum!==undefined)next=raw<current?Math.min(current,Math.max(bound(minimum),next)):Math.max(bound(minimum),next);
+ if(maximum!==null&&maximum!==undefined)next=raw>current?Math.max(current,Math.min(bound(maximum),next)):Math.min(bound(maximum),next);
+ if(!Number.isFinite(next))throw Error('Invalid arsenal stat '+stat);
+ return {current,next};
+}
 function apply(p,id){
  const c=byId.get(id);if(!c)throw Error('Unknown arsenal card '+id);
- for(const [stat,operation,value,minimum,maximum] of c.effects){
-  const current=Number.isFinite(p[stat])?p[stat]:(operation==='mul'||stat==='droneBoost'?1:0);
-  let next=operation==='mul'?current*value:current+value;
-  const bound=v=>typeof v==='string'?p[v]:v;
-  if(minimum!==null&&minimum!==undefined)next=Math.max(bound(minimum),next);
-  if(maximum!==null&&maximum!==undefined)next=Math.min(bound(maximum),next);
-  if(!Number.isFinite(next))throw Error('Invalid arsenal stat '+stat);
-  p[stat]=next;
- }
+ for(const e of c.effects)p[e[0]]=effectValue(p,e).next;
  p.hp=Math.min(p.hp,p.maxHp);p.shield=Math.min(p.shield,p.shieldMax);
  return p;
 }
-function available(p,id){const c=byId.get(id);return !!c&&(!c.requires||p[c.requires]>0)&&c.effects.some(([stat,op,v,lo,hi])=>{
- const before=p[stat]??(stat==='droneBoost'?1:0),bound=x=>typeof x==='string'?p[x]:x;
- let after=op==='mul'?before*v:before+v;
- if(lo!==null&&lo!==undefined)after=Math.max(bound(lo),after);
- if(hi!==null&&hi!==undefined)after=Math.min(bound(hi),after);
+function available(p,id){const c=byId.get(id);return !!c&&(!c.requires||p[c.requires]>0)&&c.effects.some(e=>{
+ const {current,next}=effectValue(p,e),stat=e[0];
  const lowerIsBetter=['rate','dogEggRate','dashCd','drillDecay','novaReuseDelay'].includes(stat);
- return lowerIsBetter?after<before-1e-8:after>before+1e-8;
+ return lowerIsBetter?next<current-1e-8:next>current+1e-8;
 });}
 root.AnkinArsenal=Object.freeze({cards:Object.freeze(cards),descriptions:Object.freeze(descriptions),removeTags:Object.freeze(removeTags),apply,available});
 })(globalThis);
