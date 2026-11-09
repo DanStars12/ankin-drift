@@ -2881,7 +2881,7 @@ skillPeekPanel.addEventListener('click',ev=>{
  const tag=ev.target.closest('[data-attr-peek]');if(tag){ev.preventDefault();ev.stopPropagation();if(peekSkillId)peekHistory.push(peekSkillId);showAttrPeek(tag.dataset.attrPeek,skillPeekAnchor||tag,true);skillPeekPanel.scrollTop=0;return}
 });
 skillPeekPanel.addEventListener('keydown',ev=>{if((ev.key==='Enter'||ev.key===' ')&&ev.target.closest('[data-attr-peek]')){ev.preventDefault();const tag=ev.target.closest('[data-attr-peek]');if(peekSkillId)peekHistory.push(peekSkillId);showAttrPeek(tag.dataset.attrPeek,skillPeekAnchor||tag,true)}});
-panel.addEventListener('pointerover',ev=>{const trigger=peekTarget(ev.target);if(!trigger||ev.pointerType!=='mouse'||skillPeekPinned||trigger===skillPeekAnchor)return;peekHistory=[];openAnyPeek(trigger,false)});
+panel.addEventListener('pointerover',ev=>{const trigger=peekTarget(ev.target);if(!trigger||ev.pointerType!=='mouse'||controlMode==='mobile'||!matchMedia('(hover:hover) and (pointer:fine)').matches||skillPeekPinned||trigger===skillPeekAnchor)return;peekHistory=[];openAnyPeek(trigger,false)});
 panel.addEventListener('pointerout',ev=>{const trigger=peekTarget(ev.target);if(!trigger||ev.pointerType!=='mouse'||skillPeekPinned||trigger.contains(ev.relatedTarget))return;closeSkillPeek(true)});
 panel.addEventListener('focusin',ev=>{const trigger=peekTarget(ev.target);if(trigger)openAnyPeek(trigger,controlMode==='mobile')});
 panel.addEventListener('focusout',ev=>{const trigger=peekTarget(ev.target);if(trigger&&!skillPeekPinned)closeSkillPeek(true)});

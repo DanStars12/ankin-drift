@@ -88,6 +88,33 @@ test('DOG fusion preview uses animal weapons; cancel retains ticket and confirm 
   expect(errors).toEqual([]);
 });
 
+test('touch controls ignore mouse hover; tag taps and the fusion action remain reachable',async ({page,isMobile})=>{
+ const errors=await install(page,isMobile);
+ if(!isMobile)await page.locator('[data-control="mobile"]').click();
+ await page.evaluate(()=>window.__fusion1324.prepare(12,true));
+ const tag=page.locator('#panel [data-attr-peek]').first();
+ await tag.hover();
+ await expect(page.locator('#skillPeekPanel')).toBeHidden();
+ if(isMobile)await tag.tap();else await tag.click();
+ await expect(page.locator('#skillPeekPanel')).toBeVisible();
+ await page.locator('#skillPeekPanel .peek-close').click();
+ await expect(page.locator('#skillPeekPanel')).toBeHidden();
+ await page.locator('#fusionFromLevel').click();
+ expect((await page.evaluate(()=>window.__fusion1324.status())).mode).toBe('elementChoice');
+ expect(errors).toEqual([]);
+});
+
+test('desktop pointer hover still opens and dismisses tag details',async ({page,isMobile})=>{
+ test.skip(isMobile,'Hover interaction belongs to desktop pointer controls.');
+ const errors=await install(page,false);
+ await page.evaluate(()=>window.__fusion1324.prepare(12,true));
+ await page.locator('#panel [data-attr-peek]').first().hover();
+ await expect(page.locator('#skillPeekPanel')).toBeVisible();
+ await page.mouse.move(0,0);
+ await expect(page.locator('#skillPeekPanel')).toBeHidden();
+ expect(errors).toEqual([]);
+});
+
 test('boss POWER/LEGENDARY choice cannot be intercepted by fusion and pending level remains',async ({page,isMobile})=>{
   const errors=await install(page,isMobile);
   await page.evaluate(()=>window.__fusion1324.prepare(12,true,'major'));

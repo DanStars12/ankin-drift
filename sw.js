@@ -1,5 +1,5 @@
 /* ANKIN DRIFT v13.36 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v13-36-arsenal-v1';
+const CACHE_NAME = 'ankin-drift-mobile-v13-36-arsenal-v2';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js', './skill-arsenal.js',
