@@ -1,4 +1,4 @@
-/* ANKIN DRIFT v13.36 mobile - offline app shell, scoped to this install */
+/* ANKIN DRIFT v13.37 mobile - offline app shell, scoped to this install */
 const CACHE_NAME = 'ankin-drift-mobile-v13-37-tactics-v1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [

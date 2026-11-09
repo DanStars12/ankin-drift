@@ -24,7 +24,7 @@ const cards=[
 {"id":"tacLaserBrace","shipOnly":"laser","rarity":"legendary","name":"巡航光学城","desc":"シールド+70。移動しながら照準維持すると再充填速度+50%。","tags":["レーザー","照準維持","防御","一度限り"],"params":{"laserBrace":0.5},"stats":[["shieldMax","add",70,null,null],["shield","add",70,null,null]]},
 {"id":"tacLaserLongLens","shipOnly":"laser","rarity":"relic","name":"遠光の分光器","desc":"300以上離れた敵への照射威力+30%、180以内では-12%。","tags":["レーザー","位置取り","レリック","一度限り"],"params":{"laserLong":1},"stats":[]},
 {"id":"tacLaserPulse","shipOnly":"laser","rarity":"relic","name":"転光プリズム","desc":"標的切替後0.45秒は照射威力+40%。同じ標的を1.2秒照射すると-10%。","tags":["レーザー","照準切替","レリック","一度限り"],"params":{"laserPulse":1},"stats":[]},
-{"id":"tacLaserPolaris","shipOnly":"laser","rarity":"unique","name":"ポラリスの追従光","desc":"レーザー+2本、威力補正+0.9。照準維持が0.5秒で成立し、同じ敵への威力+45%。","tags":["レーザー","照準維持","一度限り"],"params":{"laserPolaris":0.45},"stats":[["laserCount","add",2,null,"laserLimit"],["laserScale","add",0.9,null,null]]},
+{"id":"tacLaserPolaris","shipOnly":"laser","rarity":"unique","name":"ポラリスの追従光","desc":"レーザー+3本、威力補正+1.1、線幅+1.5。主照準維持0.5秒で威力+45%。","tags":["レーザー","照準維持","一度限り"],"params":{"laserPolaris":0.45},"stats":[["laserCount","add",3,null,"laserLimit"],["laserScale","add",1.1,null,null],["laserWidth","add",1.5,null,null]]},
 {"id":"tacChargeBank","shipOnly":"charge","rarity":"uncommon","name":"安全蓄電器","desc":"ダッシュ中は蓄えたチャージを保持する。","tags":["チャージ","チャージ保持","回避","一度限り"],"params":{"chargeBank":1},"stats":[]},
 {"id":"tacChargeMid","shipOnly":"charge","rarity":"uncommon","name":"中間解放リング","desc":"40〜85%チャージで放つ彗星は貫通+1。","tags":["チャージ","中間解放","貫通","一度限り"],"params":{"chargeMid":1},"stats":[]},
 {"id":"tacChargeStride","shipOnly":"charge","rarity":"rare","name":"解放スラスター","desc":"最大チャージ解放後1秒、移動速度+8%。","tags":["チャージ","機動","一度限り"],"params":{"chargeStride":1},"stats":[]},
@@ -36,7 +36,7 @@ const cards=[
 {"id":"tacChargeBastion","shipOnly":"charge","rarity":"legendary","name":"静星の蓄電殻","desc":"最大HP+70。静止して50%以上チャージ中、被ダメージ-18%。","tags":["チャージ","防御","一度限り"],"params":{"chargeBastion":0.18},"stats":[["maxHp","add",70,null,null],["hp","add",70,null,null]]},
 {"id":"tacChargeFeather","shipOnly":"charge","rarity":"relic","name":"軽星の核","desc":"40〜85%チャージの彗星威力+35%、最大チャージでは-12%。","tags":["チャージ","中間解放","レリック","一度限り"],"params":{"chargeFeather":1},"stats":[]},
 {"id":"tacChargeAnchor","shipOnly":"charge","rarity":"relic","name":"重星の核","desc":"最大チャージの彗星威力+40%、10%未満では-18%。","tags":["チャージ","チャージ保持","レリック","一度限り"],"params":{"chargeAnchor":1},"stats":[]},
-{"id":"tacChargeMemory","shipOnly":"charge","rarity":"unique","name":"彗星の記憶炉","desc":"チャージ速度補正+0.6、威力補正+0.9。ダッシュで蓄電を保持し、終了後1.2秒は最大解放威力+60%。","tags":["チャージ","チャージ保持","ダッシュ反撃","一度限り"],"params":{"chargeBank":1,"chargeMemory":1},"stats":[["chargeRate","add",0.6,null,null],["chargeScale","add",0.9,null,null]]},
+{"id":"tacChargeMemory","shipOnly":"charge","rarity":"unique","name":"彗星の記憶炉","desc":"チャージ速度補正+0.6、威力補正+0.9、貫通+3。ダッシュで蓄電保持、終了後1.2秒は最大解放威力+60%。","tags":["チャージ","チャージ保持","ダッシュ反撃","一度限り"],"params":{"chargeBank":1,"chargeMemory":1},"stats":[["chargeRate","add",0.6,null,null],["chargeScale","add",0.9,null,null],["chargePenetration","add",3,null,null]]},
 {"id":"tacDrillExit","shipOnly":"drill","rarity":"uncommon","name":"離脱ローター","desc":"ダッシュ終了後0.8秒、移動速度+8%。","tags":["ドリル","機動","一度限り"],"params":{"drillExit":1},"stats":[]},
 {"id":"tacDrillMark","shipOnly":"drill","rarity":"uncommon","name":"接触マーカー","desc":"最後に接触した敵を1.2秒標識し、その敵への突進威力+6%。","tags":["ドリル","接触標識","突進","一度限り"],"params":{"drillMark":0.06},"stats":[]},
 {"id":"tacDrillReserve","shipOnly":"drill","rarity":"rare","name":"回収プラズマ管","desc":"通常のプラズマ突進終了時、消費量の4%を回収。","tags":["ドリル","プラズマ回収","一度限り"],"params":{"drillReserve":0.04},"stats":[]},
@@ -48,7 +48,7 @@ const cards=[
 {"id":"tacDrillHunter","shipOnly":"drill","rarity":"legendary","name":"刻星の回転槍","desc":"リーチ+30、突進威力+75。標識した敵への突進威力+35%。","tags":["ドリル","接触標識","突進","一度限り"],"params":{"drillHunter":0.35},"stats":[["drillReach","add",30,null,null],["drillDamage","add",75,null,null]]},
 {"id":"tacDrillBrawler","shipOnly":"drill","rarity":"relic","name":"接近戦の軸受","desc":"接触威力+35%、突進威力-10%。","tags":["ドリル","近接","レリック","一度限り"],"params":{"drillBrawler":1},"stats":[]},
 {"id":"tacDrillRunner","shipOnly":"drill","rarity":"relic","name":"通過戦の軸受","desc":"突進威力+35%、接触威力-10%。","tags":["ドリル","突進","レリック","一度限り"],"params":{"drillRunner":1},"stats":[]},
-{"id":"tacDrillFlywheel","shipOnly":"drill","rarity":"unique","name":"不滅の循環軸","desc":"突進威力+220、蓄積速度+0.12。消費量の18%を回収し、離脱後の接触威力+35%。","tags":["ドリル","プラズマ回収","近接","一度限り"],"params":{"drillFlywheel":1},"stats":[["drillDamage","add",220,null,null],["drillGain","add",0.12,null,null]]},
+{"id":"tacDrillFlywheel","shipOnly":"drill","rarity":"unique","name":"不滅の循環軸","desc":"突進威力+220、蓄積速度+0.12、リーチ+25。消費量の18%を回収し、離脱後の接触威力+35%。","tags":["ドリル","プラズマ回収","近接","一度限り"],"params":{"drillFlywheel":1},"stats":[["drillDamage","add",220,null,null],["drillGain","add",0.12,null,null],["drillReach","add",25,null,null]]},
 {"id":"tacDogRecall","shipOnly":"dog","rarity":"uncommon","name":"ほねっこ・よびもどし","desc":"ダッシュで飛行中の通常骨を帰還させる。","tags":["骨ブーメラン","捕球","回避","一度限り"],"params":{"dogRecall":1},"stats":[]},
 {"id":"tacDogCatch","shipOnly":"dog","rarity":"uncommon","name":"ほねっこ・キャッチラン","desc":"通常骨の捕球後0.8秒、移動速度+6%。0.7秒ごと。","tags":["骨ブーメラン","捕球","機動","一度限り"],"params":{"dogCatch":1},"stats":[]},
 {"id":"tacDogPiyo","shipOnly":"dog","rarity":"rare","name":"ぴよぴよ・捕球サイン","desc":"通常骨の捕球後1秒、卵の発射間隔-10%。","tags":["アニマル","ヒヨコ","捕球","一度限り"],"params":{"dogPiyo":1},"stats":[],"requires":"chicks"},
@@ -60,7 +60,7 @@ const cards=[
 {"id":"tacDogLeader","shipOnly":"dog","rarity":"legendary","name":"みんなの・捕球応援団","desc":"仲間威力補正+0.3。通常骨の捕球後1.5秒、仲間威力+35%。","tags":["アニマル","捕球","一度限り"],"params":{"dogLeader":0.35},"stats":[["dogAnimalBoost","add",0.3,null,null]],"requires":"animal"},
 {"id":"tacDogReturnDock","shipOnly":"dog","rarity":"relic","name":"ほねっこ・帰り道のしるし","desc":"通常骨の帰還威力+35%、往路威力-10%。","tags":["骨ブーメラン","帰還軌道","レリック","一度限り"],"params":{"dogReturnDock":1},"stats":[]},
 {"id":"tacDogForward","shipOnly":"dog","rarity":"relic","name":"ほねっこ・出発のしるし","desc":"通常骨の往路威力+30%、帰還威力-15%。","tags":["骨ブーメラン","帰還軌道","レリック","一度限り"],"params":{"dogForward":1},"stats":[]},
-{"id":"tacDogOrbit","shipOnly":"dog","rarity":"unique","name":"ほねっこ・みんなの帰る場所","desc":"骨+2本、威力/帰還補正+0.65。ダッシュで回収し、捕球後1.5秒は仲間威力+40%。","tags":["骨ブーメラン","捕球","アニマル","一度限り"],"params":{"dogRecall":1,"dogOrbit":0.4},"stats":[["dogBones","add",2,null,8],["dogBonePower","add",0.65,null,null],["dogBoneReturn","add",0.65,null,null]]}
+{"id":"tacDogOrbit","shipOnly":"dog","rarity":"unique","name":"ほねっこ・みんなの帰る場所","desc":"骨+3本、威力補正+0.85、帰還補正+0.75。ダッシュで回収し、捕球後1.5秒は仲間威力+40%。","tags":["骨ブーメラン","捕球","アニマル","一度限り"],"params":{"dogRecall":1,"dogOrbit":0.4},"stats":[["dogBones","add",3,null,8],["dogBonePower","add",0.85,null,null],["dogBoneReturn","add",0.75,null,null]]}
 ];
 const byId=new Map(cards.map(c=>[c.id,c]));
 const animalSources=new Set(['dogEgg','blade','meteor','rock','missile','iceball','magma','pulseField','element','explosion']);
@@ -74,7 +74,7 @@ function apply(p,id){const c=byId.get(id);if(!c)throw Error('Unknown tactical sk
 function lockDelay(f){return f.laserPolaris?.5:f.evolvedLaser?.6:.8;}
 function tick(p,dt,moving){const f=flags(p);if(!f)return;const s=state(p);s.clock+=dt;s.moving=!!moving;
  if(s.laserTarget&&!s.laserTarget.dead)s.laserAge+=dt;else{s.laserAge=0;}
- if(p.shipType==='laser'&&s.laserAge>=lockDelay(f)&&!s.lockCue){s.lockCue=true;cue(s,'照準維持');}
+ if(p.shipType==='laser'&&(f.laserLock||f.laserTrack||f.laserCycle||f.laserBrace||f.laserPolaris)&&s.laserAge>=lockDelay(f)&&!s.lockCue){s.lockCue=true;cue(s,'照準維持');}
  if(f.laserCycle&&p.dashLeft>0&&s.laserAge>=1&&s.clock>=s.laserCycleAt){p.dashLeft=Math.max(0,p.dashLeft-.08);s.laserCycleAt=s.clock+4;count(s,'laserCycle');}
  if(s.dashing&&p.dashTime<=0){s.dashing=false;s.afterDashAt=s.clock;s.volleyUntil=s.clock+(f.evolvedShot?1.7:1.2);
   if(p.shipType==='drill'&&s.spent>0){const rate=Math.max(f.drillReserve||0,f.drillRelease||0,f.drillFlywheel?.18:0);if(rate){p.drillPlasma=Math.min(p.drillCap,p.drillPlasma+s.spent*rate);count(s,'plasmaReturn');cue(s,'プラズマ回収');}s.spent=0;}

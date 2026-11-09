@@ -2,8 +2,10 @@
    Two modes: short real-combat encounters, optional full 30-minute scripted-upgrade run.
    Never persist test progress; restore global RNG and archive methods even on failure. */
 import {drillContactGeometry} from './balance-drill-observation.mjs';
+import {normalRewardValue} from './balance-reward-value.mjs';
 import {decideAbilityUse} from './balance-ability-tactics.mjs';
 export const BALANCE_AI_HARNESS = String.raw`
+const normalRewardValue=${normalRewardValue.toString()};
 const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog'];
 const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
@@ -272,20 +274,22 @@ function balancePickReward(options){
  const hpRatio=player.hp/Math.max(1,player.maxHp);
  const rank={common:0,uncommon:1.2,rare:2.3,epic:3.5,power:4,legendary:4.5,unique:5,relic:4.5};
  const scored=(options||[]).filter(Boolean).map((c,index)=>{
+  const normal=!c.isSupply&&['common','uncommon','rare','epic'].includes(c.rarity);
   const tags=c.tags||[],defense=tags.some(x=>['防御','装甲','継戦','回復'].includes(x));
-  let score=(rank[c.rarity]||0)+Math.min(2,(game.skills[c.id]||0)*.22);
+  let score=normal?(rank[c.rarity]||0)*.15:(rank[c.rarity]||0)+Math.min(2,(game.skills[c.id]||0)*.22);
+  if(normal){const preview=structuredClone(player);c.apply(preview);score+=normalRewardValue(player,preview);}
   if(c.isSupply){
    score=c.id==='supply_repair'?(hpRatio<.35?22:hpRatio<.65?8:-8):
     c.id==='supply_shield'?(hpRatio<.55?11:1):hpRatio<.45?4:-5;
   }else{
-   if(c.shipOnly===player.shipType)score+=3.5;
-   if(defense)score+=hpRatio<.45?6:hpRatio<.75?3.5:1.3;
+   if(c.shipOnly===player.shipType)score+=normal?.2:3.5;
+   if(defense&&!normal)score+=hpRatio<.45?6:hpRatio<.75?3.5:1.3;
    const traits=balanceRewardTraits(c);
-   if(traits.primary)score+=2.3;
-   if(traits.survival&&hpRatio<.8)score+=hpRatio<.45?2.5:1.2;
+   if(traits.primary&&!normal)score+=2.3;
+   if(!normal&&traits.survival&&hpRatio<.8)score+=hpRatio<.45?2.5:1.2;
    if(traits.experience&&game.level<15&&player.magnet<240)score+=1.0;
-   if(tags.includes('機動'))score+=player.shipType==='drill'?2.2:1.4;
-   if(tags.includes('ノヴァ'))score+=1.2;
+   if(!normal&&tags.includes('機動'))score+=player.shipType==='drill'?2.2:1.4;
+   if(!normal&&tags.includes('ノヴァ'))score+=1.2;
    const ready=synergiesFor(c.id).filter(a=>!game.synergies[a.id]&&a.need.filter(id=>id!==c.id).every(owned)).length;
    score+=ready*12;
    const evo=fusionFor(c.id).filter(a=>!game.fusions[a.id]&&fusionMaterials(a).filter(id=>id!==c.id).every(owned)).length;

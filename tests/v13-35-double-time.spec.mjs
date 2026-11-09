@@ -145,19 +145,20 @@ test('2x attribute fusion and reward menus freeze combat and resume at the selec
 
 test('full timeline 1x/2x parity: real 15m and 30m schedules, rewards and fusion AI',async({page},testInfo)=>{
  test.skip(process.env.ANKIN_DOUBLE_TIME_LONG!=='1','Expensive full-timeline suite runs in the separate DOUBLE TIME validation workflow.');
- test.setTimeout(900000);const errors=await setup(page,{manual:true}),rows=[];
+ test.setTimeout(1800000);const errors=await setup(page,{manual:true}),rows=[];
  const before=await page.evaluate(()=>JSON.stringify({...localStorage}));
- for(const gameMode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog']){
+ // Three consecutive, predeclared seeds; retain boss-clear and double-fusion gates.
+ for(const seed of [17,18,19])for(const gameMode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog']){
   const pair=[];
   for(const speed of [1,2]){
-   const row=await page.evaluate(({gameMode,ship,speed})=>{
+   const row=await page.evaluate(({gameMode,ship,speed,seed})=>{
     window.__qaClockSpeed=speed;
-    return window.__ankinBalanceAI.runFull({ship,gameMode,seed:17,fusionPolicy:'always'});
-   },{gameMode,ship,speed});pair.push(row);
+    return window.__ankinBalanceAI.runFull({ship,gameMode,seed,fusionPolicy:'always'});
+   },{gameMode,ship,speed,seed});pair.push(row);
    expect(row.stopReason.startsWith('unhandled-menu')).toBe(false);
    expect(row.stopReason).not.toBe('unknown');expect(row.simulationTime).toBeGreaterThan(0);
   }
-  expect(pair[1]).toEqual(pair[0]);rows.push({gameMode,ship,pair});
+  expect(pair[1]).toEqual(pair[0]);rows.push({gameMode,ship,seed,pair});
  }
  for(const gameMode of ['normal','challenge']){
   const modeRows=rows.filter(r=>r.gameMode===gameMode).map(r=>r.pair[1]);
@@ -168,7 +169,7 @@ test('full timeline 1x/2x parity: real 15m and 30m schedules, rewards and fusion
    expect(r.finalBossSpawnTime).toBeLessThan(r.finalBossAt+.05);
   }
  }
- console.log('DOUBLE_TIME_FULL_SUMMARY='+JSON.stringify(rows.map(r=>({gameMode:r.gameMode,ship:r.ship,
+ console.log('DOUBLE_TIME_FULL_SUMMARY='+JSON.stringify(rows.map(r=>({gameMode:r.gameMode,ship:r.ship,seed:r.seed,
   seconds:r.pair[1].simulationTime,result:r.pair[1].stopReason,fusions:r.pair[1].elementFusions,boss:r.pair[1].reachedFinalBoss}))));
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(before);
  await testInfo.attach('full-timeline-1x-2x.json',{body:JSON.stringify(rows,null,2),contentType:'application/json'});
