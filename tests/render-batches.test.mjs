@@ -9,9 +9,9 @@ test('grid keeps all line positions and both crossing layers while reducing subm
   assert.equal(b.paths,2);assert.equal(b.strokes,2);assert.ok(a.strokes>b.strokes);
  }
 });
-test('clipped hatching keeps every endpoint including negative and fractional wall bounds',()=>{
+test('ENGAGE retains individual strokes and all endpoints after incompatible batching was rejected',()=>{
  for(const wall of [{x:100,y:80,w:280,h:130},{x:-50.2,y:-18.7,w:250.1,h:340.6},{x:3820,y:2120,w:300,h:110}]){
   const a=recorder(),b=recorder();legacyHatching(a,wall);h.hatching(b,wall);
-  assert.deepEqual(b.segments,a.segments);assert.equal(b.strokes,1);assert.equal(b.paths,1);assert.ok(a.strokes>1);
+  assert.deepEqual(b.segments,a.segments);assert.equal(b.strokes,a.strokes);assert.equal(b.paths,a.paths);assert.ok(a.strokes>1);
  }
 });

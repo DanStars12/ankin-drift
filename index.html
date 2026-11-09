@@ -5694,9 +5694,6 @@ function drawBackdropGrid(g,width,height,time){
  g.beginPath();for(let x=off-61;x<width;x+=61){g.moveTo(x,0);g.lineTo(x,height)}g.stroke();
  g.beginPath();for(let y=off-61;y<height;y+=61){g.moveTo(0,y);g.lineTo(width,y)}g.stroke();
 }
-function drawEngageHatching(g,wall){
- g.beginPath();for(let x=wall.x-wall.h;x<wall.x+wall.w+wall.h;x+=15){g.moveTo(x,wall.y);g.lineTo(x+wall.h,wall.y+wall.h)}g.stroke();
-}
 // Persistent evolution crests. At most three lightweight Canvas paths per frame,
 // cyclically revealing every completed evolution in long runs.
 function drawEvolutionCrests(){
@@ -5908,7 +5905,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   ctx.fillStyle='#37172c';ctx.strokeStyle='#ff9bbb';ctx.lineWidth=3;ctx.shadowColor='#ff8dc1';ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:13;
   ctx.fillRect(wall.x,wall.y,wall.w,wall.h);ctx.strokeRect(wall.x,wall.y,wall.w,wall.h);ctx.shadowBlur=0;
   ctx.beginPath();ctx.rect(wall.x,wall.y,wall.w,wall.h);ctx.clip();ctx.strokeStyle='#78f1ed';ctx.lineWidth=2;ctx.globalAlpha=.45*fade;
-  drawEngageHatching(ctx,wall);
+  for(let x=wall.x-wall.h;x<wall.x+wall.w+wall.h;x+=15){ctx.beginPath();ctx.moveTo(x,wall.y);ctx.lineTo(x+wall.h,wall.y+wall.h);ctx.stroke()}
   ctx.restore();ctx.save();ctx.fillStyle='#ffffff';ctx.font='bold 9px system-ui';ctx.textAlign='center';ctx.fillText('ENGAGE',wall.x+wall.w/2,wall.y+wall.h/2+3);ctx.restore();
  }
  for(const h of hazards){ctx.save();if(h.type==='beam'){ctx.translate(h.x,h.y);ctx.rotate(h.a);ctx.strokeStyle=h.tint||(h.warn>0?'#ff819d':'#fff3c0');ctx.globalAlpha=h.warn>0?.48:.85;ctx.lineWidth=h.warn>0?2:h.width*2;ctx.shadowColor='#ffb1a1';ctx.shadowBlur=renderHeavyLoad?0:h.warn>0?4:26;ctx.beginPath();ctx.moveTo(-Math.max(W,H)*2,0);ctx.lineTo(Math.max(W,H)*2,0);ctx.stroke()}
