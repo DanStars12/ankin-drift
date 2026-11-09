@@ -31,6 +31,8 @@ jobs:
       - name: Check JavaScript syntax
         id: check
         run: npm run check:syntax
+      - name: Verify arsenal catalog, one-off limits and normal-skill bounds
+        run: npm run test:arsenal
       - name: Verify fixed-step 1x and 2x clocks
         run: npm run test:clock
       - name: Verify v13 archive migration, backup and corruption safety
@@ -89,7 +91,7 @@ jobs:
       - run: npx playwright install chromium
       - name: Test game and offline startup
         id: check
-        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs tests/ending.spec.mjs tests/fusion-skip.spec.mjs tests/elemental-reforge.spec.mjs tests/reforge-weapons.spec.mjs tests/fusion-reforge.spec.mjs tests/reforge-stress.spec.mjs tests/v13-3.spec.mjs tests/v13-4.spec.mjs tests/dog-beta.spec.mjs tests/dog-evolution-reforge.spec.mjs tests/visual-codex.spec.mjs tests/v13-18-animal-visual.spec.mjs tests/v13-19-codex-ui.spec.mjs tests/v13-20-codex-element.spec.mjs tests/v13-21-dog-tags.spec.mjs tests/v13-22-user-rename.spec.mjs tests/v13-23-codex-name-sync.spec.mjs tests/v13-24-fusion-ui.spec.mjs tests/v13-25-maintenance.spec.mjs tests/v13-26-reward-ui.spec.mjs tests/v13-27-mobile-choice-layout.spec.mjs tests/v13-28-combat-balance.spec.mjs tests/v13-29-balance-lab.spec.mjs tests/v13-30-balance-ai.spec.mjs tests/v13-33-soundtrack.spec.mjs tests/v13-34-combat-feel.spec.mjs tests/v13-35-double-time.spec.mjs --project=${{ matrix.project }}
+        run: npm run test:smoke -- tests/smoke.spec.mjs tests/v13.spec.mjs tests/achievement.spec.mjs tests/ending.spec.mjs tests/fusion-skip.spec.mjs tests/elemental-reforge.spec.mjs tests/reforge-weapons.spec.mjs tests/fusion-reforge.spec.mjs tests/reforge-stress.spec.mjs tests/v13-3.spec.mjs tests/v13-4.spec.mjs tests/dog-beta.spec.mjs tests/dog-evolution-reforge.spec.mjs tests/visual-codex.spec.mjs tests/v13-18-animal-visual.spec.mjs tests/v13-19-codex-ui.spec.mjs tests/v13-20-codex-element.spec.mjs tests/v13-21-dog-tags.spec.mjs tests/v13-22-user-rename.spec.mjs tests/v13-23-codex-name-sync.spec.mjs tests/v13-24-fusion-ui.spec.mjs tests/v13-25-maintenance.spec.mjs tests/v13-26-reward-ui.spec.mjs tests/v13-27-mobile-choice-layout.spec.mjs tests/v13-28-combat-balance.spec.mjs tests/v13-29-balance-lab.spec.mjs tests/v13-30-balance-ai.spec.mjs tests/v13-33-soundtrack.spec.mjs tests/v13-34-combat-feel.spec.mjs tests/v13-35-double-time.spec.mjs tests/v13-36-arsenal.spec.mjs --project=${{ matrix.project }}
       - name: Write result summary
         if: always()
         env:

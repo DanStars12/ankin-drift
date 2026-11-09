@@ -1,0 +1,43 @@
+name: ANKIN arsenal progression diagnosis
+on:
+  pull_request:
+    paths: ['index.html', 'skill-arsenal.js', 'scripts/arsenal-ablation.mjs', '.github/workflows/arsenal-ablation.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arsenal-diagnosis-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  ablation:
+    name: Progression diagnostic (${{ matrix.variant }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [legacy-normal, legacy-upper, legacy-control]
+    env:
+      ANKIN_ARSENAL_FULL: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Create disposable diagnostic fixture
+        run: node scripts/arsenal-ablation.mjs ${{ matrix.variant }}
+      - name: Measure unchanged AI against diagnostic fixture
+        run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arsenal-diagnosis-${{ matrix.variant }}
+          path: |
+            artifacts/arsenal/
+            test-results/
+          retention-days: 14
