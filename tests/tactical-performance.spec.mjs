@@ -12,14 +12,14 @@ const flags={
 };
 const hook=workload+String.raw`
 window.__tacticalPerfSetup=({ship,flags})=>{
- selectedShip=ship;const out=window.__ankinPerfTestScenario({total:3600,count:220,bullets:300,withRaid:true,doubleTime:true});
+ selectedShip=ship;const out=window.__ankinPerfTestScenario({total:3600,count:220,bullets:300,withRaid:true,doubleTime:true,engage:true});
  player.tacticFlags={...flags};player.iframes=1e8;player.dmg=80;player.multishot=6;player.laserCount=6;player.chargeRate=2;
  player.dogBones=6;player.dogChicks=3;player.orbit=3;player.shieldMax=player.shield=100;player.shieldRecharge=5;
  for(const e of enemies)e.hp=e.maxHp=1e8;
  return out;
 };
 `;
-test('tactical active hooks: five ships, 2x ballistic triple-raid stress with equal native weapon budgets',async({page},testInfo)=>{
+test('tactical active hooks: five ships, 2x ballistic ENGAGE triple-raid stress with equal native weapon budgets',async({page},testInfo)=>{
  test.setTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();
  const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
@@ -28,7 +28,7 @@ test('tactical active hooks: five ships, 2x ballistic triple-raid stress with eq
  for(const ship of Object.keys(flags)){
  const config=await page.evaluate(args=>window.__tacticalPerfSetup(args),{ship,flags:flags[ship]});
  for(let i=0;i<8;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
- const report=await page.evaluate(()=>window.ankinPerformanceReport());expect(report.frame.samples).toBeGreaterThan(15);
+ expect(config.initialWalls).toBeGreaterThan(0);const report=await page.evaluate(()=>window.ankinPerformanceReport());expect(report.raid.effects).toContain('engage');expect(report.frame.samples).toBeGreaterThan(15);
  expect(report.timing.requestedSpeed).toBe(2);expect(report.timing.discardedGameSeconds).toBe(0);
  results.push({ship,config,report});expect(errors).toEqual([]);
  }
