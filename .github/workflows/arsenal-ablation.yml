@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [no-limits, legacy-pools, legacy-control]
+        variant: [legacy-normal, legacy-upper, limit-normal]
     env:
       ANKIN_ARSENAL_FULL: '1'
     steps:
