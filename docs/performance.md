@@ -90,3 +90,36 @@ Local median candidate/base ratios: index rebuild0.933, circle query0.630, segme
 Macro validation uses both 1x and 2x scenarios on the current base (which already supports DOUBLE TIME), three repeats per revision on the same runner, desktop and mobile390. Add explicit ENGAGE+HARUKANIUM+ISO stress with220 enemies/300 hostile bullets, and enable actual native walls for the five-ship active-tactics stress. Assert walls exist rather than assuming a random raid selected ENGAGE. Also run standard browser, swept collision, 1x/2x, save, catalog and paired400 full-timeline AI regressions. Target: identical gameplay results and improved simulation processing without hiding costs by reducing actors or changing render/game speed.
 
 Local Node geometry/search and fixed-clock tests pass; browser startup was attempted but Chromium fails with `socket() failed: Operation not permitted` / ptrace restriction. Use real Chromium in GitHub CI for frame measurements. CI/headless phone emulation is not a real smartphone performance guarantee. Final CI and integration state are recorded in the PR; do not treat this initial local kernel result as a release or whole-game speedup.
+
+### Release verification: PR #70
+
+Implementation head: `485ab40614181ddc2fbe7230fb243d80d44d0e58`. [PR #70](https://github.com/DanStars12/ankin-drift/pull/70) records implementation and complete comparison. The release remains v13.37; service-worker cache is `ankin-drift-mobile-v13-37-combat-cache-v3`.
+
+Browser performance [run 42705951997](https://github.com/DanStars12/ankin-drift/actions/runs/42705951997): three repeats per revision, same runner per desktop/mobile390 project. Median simulation P95 in milliseconds:
+
+| Scenario | Desktop base → candidate | Mobile390 base → candidate |
+| --- | ---: | ---: |
+| Normal | 0.6 → 0.6 | 0.4 → 0.4 |
+| Dual raid | 2.3 → 1.8 | 1.6 → 1.4 |
+| Triple raid | 3.3 → 2.6 | 2.9 → 1.8 |
+| Late game, 220 enemies / 300 bullets / 500 XP | 2.2 → 2.1 | 1.9 → 1.7 |
+| DOUBLE TIME | 0.6 → 0.4 | 0.5 → 0.5 |
+| DOUBLE TIME ENGAGE | 2.3 → 2.5 | 1.6 → 1.2 |
+| DOUBLE TIME late game | 2.0 → 2.3 | 1.4 → 1.1 |
+
+Desktop DOUBLE TIME ENGAGE (+0.2ms) and late game (+0.3ms) do not show improvement; repeat ranges overlap. P95 frame times are substantially unchanged (ordinary16.7–16.8ms; macro raid33.3–33.4ms). Do not claim a general FPS increase. Rendering costs and runner scheduling remain separate limitations.
+
+Active five-ship tactics, actual ENGAGE/HARUKANIUM/ISO walls, BALLISTIC and2x: median simulation P50 desktop SHOT4.4→3.8, LASER4.9→4.4, CHARGE3.6→2.7, DRILL2.8→2.3, DOG4.0→3.7ms. Mobile390:0.7→0.7,1.1→0.8,0.7→0.6,0.7→0.6,0.9→0.7ms. Desktop DOG P95 is7.8→8.6ms with overlapping repeat ranges, so the change is not an across-the-board tail improvement. Effective simulation speeds remain~1.996/1.997x, discarded game time0, and reported JS heap medians9.5→9.5MB. These short samples cannot prove long-session memory behavior.
+
+Both CI kernel runs pass4,800 differential outputs and all timed checksums. Candidate/base median ratios: refresh0.951–0.952, circle0.596–0.609, segment0.708–0.712, visible target0.566–0.579, no-visible-target0.023, wall clipping0.969–0.978. Kernel ratios are not whole-frame or FPS ratios.
+
+Quality evidence on implementation head:
+- Node85 tests PASS; JavaScript syntax and HTML/PWA PASS.
+- Desktop,390px and320px each151 browser tests PASS,10 existing platform/opt-in skips. Initial validation42705951918 and final metadata-edit validation are linked in the PR.
+- [Balance42705951972](https://github.com/DanStars12/ankin-drift/actions/runs/42705951972):400 full progression runs,200 old/new seed pairs exactly identical for result, simulated duration, rewards, fusions, clear and boss arrival. NORMAL36/100 and CHALLENGE59/100 on both revisions. SHOT/LASER/CHARGE/DRILL/DOG clears respectively17/1/6/11/1 and18/6/14/5/16. No balance or AI change.
+- [DOUBLE TIME42705951632](https://github.com/DanStars12/ankin-drift/actions/runs/42705951632):30 exact1x/2x pairs,60 runs; native15m/30m schedules, final boss, rewards, double fusion and unchanged localStorage.
+- [Progression diagnostic42705951670](https://github.com/DanStars12/ankin-drift/actions/runs/42705951670) PASS.
+
+Limits: real phones, physical input latency, real-time30m rendering, GPU/browser diversity and long-session memory retention remain unverified. Headless viewport emulation is not phone hardware. Next priority: real-device drawing profiles and long-session frame/memory traces, then optimize the measured bottleneck without reducing enemies, bullets or danger visibility. The previously recorded conditional-skill availability cases remain a separate task.
+
+Integration: PR #70 squash merge `6ecbe8de7510249ed1bbce2290c6ca929d240fc7`, with final implementation-head validation [42707307956](https://github.com/DanStars12/ankin-drift/actions/runs/42707307956) PASS. Performance evidence above is from the identical production files of implementation head485ab406. The documentation follow-up is `docs/solo-perf-verification-20261110`; it changes only this record.
