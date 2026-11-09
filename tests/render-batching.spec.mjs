@@ -41,6 +41,8 @@ test('render submission cost: alternating real Canvas draws with synchronous rea
    for(let frame=0;frame<60;frame++){
     g.fillStyle='#152440';g.fillRect(0,0,1280,800);d.grid(g,1280,800,frame/60);
     for(const wall of walls){g.save();g.beginPath();g.rect(wall.x,wall.y,wall.w,wall.h);g.clip();g.strokeStyle='#78f1ed';g.lineWidth=2;g.globalAlpha=.45;d.hatch(g,wall);g.restore()}
+    // Flush each frame so a deferred renderer cannot discard overwritten frames.
+    g.getImageData(640,400,1,1);
    }
    // Flush deferred Canvas work; this is a paint-kernel diagnostic, not game FPS.
    const pixel=g.getImageData(0,0,1280,800).data;let checksum=0;for(let p=0;p<pixel.length;p+=4)checksum+=pixel[p];
