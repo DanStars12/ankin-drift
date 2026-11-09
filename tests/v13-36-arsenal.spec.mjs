@@ -32,6 +32,11 @@ window.__arsenalQA={
 // Controlled, equal-card-budget normal loadouts, using actual shipped card applications.
 const BUDGET=String.raw`
 function arsenalBudget(){
+ if(window.__arsenalUniqueBudget){
+  const reference={shot:'limitBreak',laser:'lUniqueLimit',charge:'cUniqueLimit',drill:'dUnique',dog:'dogUniquePack'};
+  const id=window.__arsenalUniqueBudget==='new'?'arsUnique'+player.shipType[0].toUpperCase()+player.shipType.slice(1):reference[player.shipType];
+  const c=skillById(id);c.apply(player);game.uniques[c.id]=1;game.acquisitionLog.push(c.id);return;
+ }
  const api=typeof AnkinArsenal==='undefined'?null:AnkinArsenal;
  const definitions=api?.cards.filter(c=>['common','uncommon','rare','epic'].includes(c.rarity))||[];
  const eligible=definitions.map(d=>skillById(d.id)).filter(c=>c&&fitsShip(c)&&(!c.available||c.available(player)));
@@ -106,6 +111,22 @@ test('arsenal standard balance: ten seeds x early/mid/late x five ships x two re
  console.log('ARSENAL_BALANCE='+JSON.stringify(summary));expect(rows).toHaveLength(300);expect(errors).toEqual([]);
 });
 
+test('arsenal unique peer budgets: five machines, early/mid combat and ten seeds',async({page},testInfo)=>{
+ test.skip(process.env.ANKIN_ARSENAL_STANDARD!=='1','Runs in the dedicated arsenal balance job.');
+ test.setTimeout(600000);const errors=await setup(page),rows=[];
+ for(const phase of [0,10])for(const ship of ['shot','laser','charge','drill','dog'])for(const scenario of ['live-pack','live-boss'])for(let seed=1;seed<=10;seed++){
+  const pair=[];for(const budget of ['reference','new'])pair.push(await page.evaluate(({phase,ship,seed,scenario,budget})=>{
+   window.__arsenalUniqueBudget=budget;return window.__ankinBalanceAI.runEncounter({phase,ship,seed,scenario,seconds:20});
+  },{phase,ship,seed,scenario,budget}));rows.push({phase,ship,seed,scenario,pair});
+ }
+ const summary=[];
+ for(const phase of [0,10])for(const ship of ['shot','laser','charge','drill','dog'])for(const scenario of ['live-pack','live-boss']){
+  const group=rows.filter(r=>r.phase===phase&&r.ship===ship&&r.scenario===scenario),avg=(i,k)=>group.reduce((s,r)=>s+Number(r.pair[i][k]),0)/group.length;
+  summary.push({phase,ship,scenario,referenceDps:avg(0,'dps'),newDps:avg(1,'dps'),referenceAlive:avg(0,'alive'),newAlive:avg(1,'alive'),referenceDamageTaken:avg(0,'damageTaken'),newDamageTaken:avg(1,'damageTaken')});
+ }
+ await mkdir('artifacts/arsenal',{recursive:true});await writeFile('artifacts/arsenal/'+testInfo.project.name+'-unique-peers.json',JSON.stringify({rows,summary},null,2));
+ console.log('ARSENAL_UNIQUE_PEERS='+JSON.stringify(summary));expect(rows).toHaveLength(200);expect(errors).toEqual([]);
+});
 test('arsenal full progression: paired seeds, both real modes, actual random rewards',async({page},testInfo)=>{
  test.skip(process.env.ANKIN_ARSENAL_FULL!=='1','Full base/candidate comparison runs in the dedicated progression job.');
  const seedCount=Number(process.env.ANKIN_ARSENAL_FULL_SEEDS||3);
@@ -113,14 +134,16 @@ test('arsenal full progression: paired seeds, both real modes, actual random rew
  const seeds=Array.from({length:seedCount},(_,i)=>17+i);
  const modes=process.env.ANKIN_ARSENAL_MODE?[process.env.ANKIN_ARSENAL_MODE]:['normal','challenge'];
  expect(modes.every(m=>['normal','challenge'].includes(m))).toBe(true);
+ const ships=process.env.ANKIN_ARSENAL_SHIP?[process.env.ANKIN_ARSENAL_SHIP]:['shot','laser','charge','drill','dog'];
+ expect(ships.every(s=>['shot','laser','charge','drill','dog'].includes(s))).toBe(true);
  test.setTimeout(2100000);const errors=await setup(page),rows=[];
  const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
- for(const gameMode of modes)for(const ship of ['shot','laser','charge','drill','dog'])for(const seed of seeds){
+ for(const gameMode of modes)for(const ship of ships)for(const seed of seeds){
   const r=await page.evaluate(args=>window.__ankinBalanceAI.runFull({...args,fusionPolicy:'always'}),{ship,gameMode,seed});
   expect(r.stopReason.startsWith('unhandled-menu')).toBe(false);expect(Number.isFinite(r.dps)).toBe(true);rows.push(r);
  }
  const summary=rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,fusions:r.elementFusions,choices:r.menuChoices,clear:r.clearCount,boss:r.reachedFinalBoss}));
  console.log('ARSENAL_PROGRESSION='+JSON.stringify(summary));
  await mkdir('artifacts/arsenal',{recursive:true});await writeFile('artifacts/arsenal/'+testInfo.project.name+'-progression.json',JSON.stringify({rows,summary},null,2));
- expect(rows).toHaveLength(modes.length*5*seedCount);expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);expect(errors).toEqual([]);
+ expect(rows).toHaveLength(modes.length*ships.length*seedCount);expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);expect(errors).toEqual([]);
 });
