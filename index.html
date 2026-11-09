@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.36 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v13.37 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.36 | ARSENAL EXPANSION</title>
+<title>ANKIN DRIFT v13.37 | TACTICAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1150,6 +1150,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
 <script src="./v13-archive.js"></script>
 <script src="./v13-ending.js"></script>
 <script src="./skill-arsenal.js"></script>
+<script src="./skill-tactics.js"></script>
 <script src="./music-soundtrack.js"></script>
 <script>
 (()=>{'use strict';
@@ -1437,7 +1438,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.36 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v13.37 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1622,14 +1623,14 @@ function elementChoiceMarkup(){
  <p class="fine">今回のレベルアップで得られる通常スキル1枚の代わりに融合します。LEGENDARY・POWER等のボス報酬は消費しません。</p>
  <div class="actions"><button type="button" class="primary" id="fusionConfirm">✓ この内容で融合を確定</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
 }
-function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0}}
+function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
  for(const id of game.acquisitionLog){const c=skillById(id);if(c&&owned(id)&&!isSealedCard(c))c.apply(next)}
  // Recalculate passive bonuses without triggering presentations or double-applying the original selection.
  for(const a of activeSynergies())if(game.synergies[a.id])applyBalancedUpgrade(next,a.apply,'synergy');
  for(const a of activeFusions())if(game.fusions[a.id]&&[a.power,a.legend,...(a.required||[])].every(owned)){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
  for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
- Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0});player=next;
+ Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0,tacticState:current.tacticState});player=next;
 }
 // Auto-resonance is derived from a committed fusion; no additional acquisition or repeated stack in game.skills.
 function applyAutoFusionResonance(p,combo){
@@ -2440,6 +2441,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  '専用：チャージ型':['チャージ型限定','COMET RAIDERだけが入手できるレリック・専用スキルです。',['ショット型・レーザー型では選択できません。']],
  '専用：ショット型':['ショット型限定','PULSE STRIKERだけが入手できるレリック・専用スキルです。',['レーザー型・チャージ型では選択できません。']]
  };
+ const tactical=AnkinTactics.tagDetails(tag);if(tactical)return expandedTagDetails(tag,tactical);
  if(known[tag])return expandedTagDetails(tag,known[tag]);
  if(extra[tag]){const [name,desc,details]=extra[tag];return expandedTagDetails(tag,{name,desc,details})}
  return expandedTagDetails(tag,{name:tag,details:[]});}
@@ -2768,11 +2770,11 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.36 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.37 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.36 · ARSENAL EXPANSION</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button><button id="musicPreview" class="secondary" type="button">♪ タイトルBGMを再生</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V13.37 · TACTICAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button><button id="musicPreview" class="secondary" type="button">♪ タイトルBGMを再生</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -3872,6 +3874,14 @@ for(const def of AnkinArsenal.cards){
  if(def.shipOnly==='dog')DOG_CUTE_SKILL_NAMES[def.id]=def.name;
  if(!def.shipOnly)DOG_SHARED.add(def.id);
 }
+// v13.37: tactical effects are isolated from the legacy rarity attenuation.
+for(const def of AnkinTactics.cards){
+ const c=skill(def.id,def.rarity,({shot:'🎯',laser:'🔮',charge:'☄️',drill:'⚙️',dog:'🐾'})[def.shipOnly],def.name,def.desc,()=>{},
+  {stackable:false,shipOnly:def.shipOnly,tags:[...def.tags],arsenal:true,tactical:true,
+   apply:p=>AnkinTactics.apply(p,def.id),available:p=>AnkinTactics.available(p,def.id)});
+ ARSENAL_POOLS[def.rarity].push(c);
+ if(def.shipOnly==='dog')DOG_CUTE_SKILL_NAMES[def.id]=def.name;
+}
 // Bound repeated ordinary defense/offense spikes; existing acquired stacks still rebuild.
 for(const [id,maxStacks] of Object.entries({life:3,critEpic:3,superDash:3})){
  const c=SKILLS.find(c=>c.id===id);c.maxStacks=maxStacks;
@@ -3889,6 +3899,15 @@ FUSIONS.push(...ARSENAL_FUSIONS);
 for(const recipe of ARSENAL_FUSIONS)for(const id of [recipe.power,recipe.legend]){
  const c=ALL_SKILL_DEFS().find(c=>c.id===id);c.tags.push('進化合成素材');
 }
+const TACTICAL_FUSIONS=[
+ {id:"tacEvoShot",shipOnly:"shot",power:"tacShotRearm",legend:"tacShotLane",name:"星路の逆襲",desc:"ダッシュ反撃の有効時間+0.5秒、貫通+1。",icon:"🎯",apply:p=>AnkinTactics.evolve(p,"shot")},
+ {id:"tacEvoLaser",shipOnly:"laser",power:"tacLaserTrack",legend:"tacLaserBrace",name:"航路の光学城",desc:"主照準維持0.6秒、維持移動中の再充填+75%。",icon:"🔮",apply:p=>AnkinTactics.evolve(p,"laser")},
+ {id:"tacEvoCharge",shipOnly:"charge",power:"tacChargeVent",legend:"tacChargeAfterglow",name:"彗星の再巡航",desc:"最大解放の回生間隔1秒、離脱速度+20%。",icon:"☄️",apply:p=>AnkinTactics.evolve(p,"charge")},
+ {id:"tacEvoDrill",shipOnly:"drill",power:"tacDrillTag",legend:"tacDrillHunter",name:"刻星の再突入",desc:"標識時間2秒、ダッシュ後0.8秒の被ダメージ-8%。",icon:"⚙️",apply:p=>AnkinTactics.evolve(p,"drill")},
+ {id:"tacEvoDog",shipOnly:"dog",power:"tacDogFlock",legend:"tacDogWelcome",name:"ほねっこ・みんなのおかえり",desc:"捕球連携2.2秒、帰還補給の間隔2秒・上限16。",icon:"🐾",apply:p=>AnkinTactics.evolve(p,"dog")}
+];
+FUSIONS.push(...TACTICAL_FUSIONS);
+for(const r of TACTICAL_FUSIONS)for(const id of [r.power,r.legend])skillById(id).tags.push('進化合成素材');
 for(const c of ALL_SKILL_DEFS()){
  if(AnkinArsenal.descriptions[c.id])c.desc=AnkinArsenal.descriptions[c.id];
  const remove=AnkinArsenal.removeTags[c.id]||[];
@@ -4501,7 +4520,7 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
  if(e.type==='ultimate'&&ultimatePartsAlive()>0){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-e.invulnFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(hasBossSuper(e)&&e.superState==='recover')damage*=1.13;
- if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;trackBalanceDamage(dealt,source,e);if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
+ if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}if(player.tacticFlags&&damage>0)damage*=AnkinTactics.damageMultiplier(player,e,meta,gainNovaEnergy);const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;trackBalanceDamage(dealt,source,e);if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
  if(player.elementMods?.voltBlast&&['element','pulseField'].includes(meta.source)&&e.hp>0&&Math.random()<.025)detonate(e.x,e.y,65,Math.max(50,player.chainDamage*.3),e,5);
  if(player.lifeSteal>0&&dealt>0)player.hp=Math.min(player.maxHp,player.hp+dealt*player.lifeSteal);if(e.hp>0)return;
  e.dead=true;game.kills++;trackBalanceKill(e);if(e.type==='ultimate')game.finisherSource=source;
@@ -4550,7 +4569,7 @@ function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source
    damage:damage*(1+Math.min(20,units-1)*.48),pierce:0,kind:'rocket',source:'rocket',
    ttl:6,hit:new Set(),napalm:true,missileCount:units,seekTimer:0});
   return;
- } if(source==='echo'&&shots.length>currentShotBudget()*.82)return;const base=Math.atan2(target.y-y,target.x-x),width=n>7?.18:.15,volley=source==='primary'&&player.shipType==='shot'?Math.min(n,12):n;const balancedDamage=source==='primary'&&player.shipType==='shot'?damage*(1+Math.min(.45,Math.max(0,n-volley)*.035)):damage;for(let i=0;i<volley;i++){if(shots.length>=currentShotBudget())break;const a=base+(i-(volley-1)/2)*width;shots.push(addPlayerShot({x:x+Math.cos(a)*11,y:y+Math.sin(a)*11,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:source==='rocket'?7:4.5,damage:balancedDamage,pierce:player.pierce,kind:source==='rocket'?'rocket':player.bulletKind,ttl:source==='rocket'?2.4:1.9,hit:new Set(),source}))}if(source==='primary'&&runClock-(player.lastShotSfxAt??-99)>.11){player.lastShotSfxAt=runClock;tone(580,.025,'triangle',.012)}}
+ } if(source==='echo'&&shots.length>currentShotBudget()*.82)return;const tactical=source==='primary'&&player.shipType==='shot'&&shots.length<currentShotBudget()?AnkinTactics.shotVolley(player):null;const base=Math.atan2(target.y-y,target.x-x),width=n>7?.18:.15,volley=source==='primary'&&player.shipType==='shot'?Math.min(n,12):n;const balancedDamage=source==='primary'&&player.shipType==='shot'?damage*(1+Math.min(.45,Math.max(0,n-volley)*.035)):damage;for(let i=0;i<volley;i++){if(shots.length>=currentShotBudget())break;const a=base+(i-(volley-1)/2)*width;shots.push(addPlayerShot({x:x+Math.cos(a)*11,y:y+Math.sin(a)*11,vx:Math.cos(a)*speed*(tactical?.speed||1),vy:Math.sin(a)*speed*(tactical?.speed||1),r:source==='rocket'?7:4.5,damage:balancedDamage*(tactical?.damage||1),tacticalVolleyFactor:tactical?.damage||1,pierce:player.pierce+(tactical?.pierce||0),kind:source==='rocket'?'rocket':player.bulletKind,ttl:source==='rocket'?2.4:1.9,hit:new Set(),source}))}if(source==='primary'&&runClock-(player.lastShotSfxAt??-99)>.11){player.lastShotSfxAt=runClock;tone(580,.025,'triangle',.012)}}
 
 function fireDogBones(isNova=false){
  const p=player;if(!p||p.shipType!=='dog')return;
@@ -4577,7 +4596,7 @@ function tickDogChicks(dt){
  if(p.dogChicks<=0)return;
  p.dogChickTimer-=dt;if(p.dogChickTimer>0)return;
  if(shots.length>=currentShotBudget()-12){p.dogChickTimer=.2;return;}
- p.dogChickTimer=Math.max(.57,p.dogEggRate*(p.dogChickenEvolved?.68:1));
+ p.dogChickTimer=Math.max(.57,p.dogEggRate*(p.dogChickenEvolved?.68:1)*AnkinTactics.eggMultiplier(p));
  const target=visibleTarget(p.x,p.y),n=Math.min(10,p.dogChicks);
  if(!target)return;
  for(let i=0;i<n&&shots.length<currentShotBudget();i++){
@@ -4623,17 +4642,17 @@ function updateLaser(dt){const p=player;p.laserNovaTimer=Math.max(0,p.laserNovaT
   p.laserTargetsCache.length=Math.min(p.laserTargetsCache.length,Math.max(24,Math.min(64,p.laserCount*2+6)));
  }
  p.laserVisualMode=beamElementMode(p);
- const targets=p.laserTargetsCache;const count=Math.min(p.laserLimit,p.laserCount+(p.laserNovaTimer>0?2:0)),width=(Math.min(p.laserWidth,8)+Math.max(0,p.laserWidth-8)*.34)*(p.laserNovaTimer>0?1.2:1),balance=laserBalance(p,count);if(!targets.length)return;const targeted=new Set();
- for(let i=0;i<count;i++){const a=-Math.PI/2+TAU*i/count,ox=p.x+Math.cos(a)*14,oy=p.y+Math.sin(a)*14;let trg=null,dd=Infinity;for(const e of targets){if(e.dead||!isVisibleAutoTarget(e)||targeted.has(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}if(!trg){for(const e of targets){if(e.dead||!isVisibleAutoTarget(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}}if(!trg)continue;targeted.add(trg);let lx=trg.x,ly=trg.y;const collision=engageImpact(ox,oy,lx,ly,Math.min(5,width*.2));if(collision!==null){const t=Math.max(0,collision-.006);lx=ox+(lx-ox)*t;ly=oy+(ly-oy)*t}if(Math.hypot(lx-ox,ly-oy)>2)laserLinks.push({x:ox,y:oy,x2:lx,y2:ly,width,nova:p.laserNovaTimer>0})}
+ const targets=p.laserTargetsCache;const count=Math.min(p.laserLimit,p.laserCount+(p.laserNovaTimer>0?2:0)),width=(Math.min(p.laserWidth,8)+Math.max(0,p.laserWidth-8)*.34)*(p.laserNovaTimer>0?1.2:1),balance=laserBalance(p,count);if(!targets.length){AnkinTactics.laserTarget(p,null);return;}const targeted=new Set();
+ for(let i=0;i<count;i++){const a=-Math.PI/2+TAU*i/count,ox=p.x+Math.cos(a)*14,oy=p.y+Math.sin(a)*14;let trg=null,dd=Infinity;for(const e of targets){if(e.dead||!isVisibleAutoTarget(e)||targeted.has(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}if(!trg){for(const e of targets){if(e.dead||!isVisibleAutoTarget(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}}if(!trg)continue;targeted.add(trg);let lx=trg.x,ly=trg.y;const collision=engageImpact(ox,oy,lx,ly,Math.min(5,width*.2));if(collision!==null){const t=Math.max(0,collision-.006);lx=ox+(lx-ox)*t;ly=oy+(ly-oy)*t}if(i===0)AnkinTactics.laserTarget(p,collision===null?trg:null);if(Math.hypot(lx-ox,ly-oy)>2)laserLinks.push({x:ox,y:oy,x2:lx,y2:ly,width,nova:p.laserNovaTimer>0})}
  p.laserTick-=dt;if(p.laserTick>0)return;const tick=.09,beamMode=p.laserVisualMode;p.laserTick+=tick;for(const l of laserLinks){const vx=l.x2-l.x,vy=l.y2-l.y,den=vx*vx+vy*vy;if(den<1)continue;for(const e of segmentCandidates(l.x,l.y,l.x2,l.y2,l.width*.52)){if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;const along=((e.x-l.x)*vx+(e.y-l.y)*vy)/den;if(along<0||along>1.05)continue;const cx=l.x+vx*clamp(along,0,1),cy=l.y+vy*clamp(along,0,1);if((e.x-cx)**2+(e.y-cy)**2>(e.r+l.width*.52)**2)continue;let damage=(p.dmg*.87+p.laserBonus)*balance.effectiveScale*balance.emitterScale*balance.movementScale*tick*(p.laserNovaTimer>0?1.30+Math.min(.65,effectiveNovaDamage(p)/1100):1);if(Math.random()<Math.min(.95,p.crit))damage*=p.critMult;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damage*=p.bossBane;if(e.type==='guard')damage*=.70;if(p.relicLaserHunter&&e.hp<e.maxHp*.5)damage*=1.6;damageEnemy(e,damage,{special:true,source:'laser'});if(e.dead)continue;applyBasicElement(e,beamMode,damage,.85);if(p.relicLaserPulse&&Math.random()<.10)detonate(e.x,e.y,72,damage*.8,e,5);if(p.relicLaserFork&&Math.random()<.16){const other=visibleTarget(e.x,e.y,e,195);if(other){let sideDmg=damage*.55;if(p.relicLaserHunter&&other.hp<other.maxHp*.5)sideDmg*=1.6;
  damageEnemy(other,sideDmg,{special:true,source:'laser'});if(!other.dead)applyBasicElement(other,beamMode,sideDmg,.85)
  particles.push({x:e.x,y:e.y,x2:other.x,y2:other.y,life:.22,total:.22,lightning:true,color:'#e3c5ff'})}}if(p.explosion>0&&Math.random()<p.explosion*.12)detonate(e.x,e.y,58+p.thermal*13,Math.max(8,damage*3),e,5);}}
 }
 // Comet: standing still banks charge. The first movement frame fires the stored charge.
-function updateCharge(dt,m){const p=player;if(m<.02&&p.dashTime<=0){p.charge=Math.min(1,p.charge+dt*p.chargeRate);p.chargeStationary=true;p.shotTimer=Math.max(p.shotTimer,.08);return;}if(p.chargeStationary&&p.charge>.09){fireComet(p.charge);p.charge=0;p.shotTimer=Math.max(p.rate,.38)}p.chargeStationary=false;if(p.relicChargeMomentum)p.charge=Math.min(1,p.charge+dt*p.chargeRate*.25);p.shotTimer-=dt;if(p.shotTimer<=0){fireComet(.06);p.shotTimer=Math.max(p.limitRate,p.rate)}}
-function fireComet(amount=0,asNova=false){const p=player,q=clamp(amount,0,1),target=visibleTarget(p.x,p.y),dir=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);const count=asNova?Math.min(4,2+Math.floor(p.chargeNovaSpread*.5)):q>.4?Math.min(4,1+Math.floor((p.multishot-1)/2)):1,chargeStats=chargeBalance(p),chargeElement=asNova?null:nextBasicElement(p);
+function updateCharge(dt,m){const p=player;if(AnkinTactics.holdsCharge(p)&&p.charge>.09){p.chargeStationary=true;return;}if(m<.02&&p.dashTime<=0){p.charge=Math.min(1,p.charge+dt*p.chargeRate);p.chargeStationary=true;p.shotTimer=Math.max(p.shotTimer,.08);return;}if(p.chargeStationary&&p.charge>.09){fireComet(p.charge);p.charge=0;p.shotTimer=Math.max(p.rate,.38)}p.chargeStationary=false;const mobileCharge=AnkinTactics.mobileCharge(p);if(mobileCharge)p.charge=Math.min(1,p.charge+dt*p.chargeRate*mobileCharge);p.shotTimer-=dt;if(p.shotTimer<=0){fireComet(.06);p.shotTimer=Math.max(p.limitRate,p.rate)}}
+function fireComet(amount=0,asNova=false){const p=player,q=clamp(amount,0,1),target=visibleTarget(p.x,p.y),dir=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);const count=asNova?Math.min(4,2+Math.floor(p.chargeNovaSpread*.5)):q>.4?Math.min(4,1+Math.floor((p.multishot-1)/2)):1,chargeStats=chargeBalance(p),chargeElement=asNova?null:nextBasicElement(p),tactical=shots.length<currentShotBudget()?AnkinTactics.chargeFire(p,q,asNova):null;
  for(let i=0;i<count&&shots.length<currentShotBudget();i++){const a=dir+(i-(count-1)/2)*(asNova?.24:.13),speed=(asNova?790:p.shotSpeed*(1+.85*q)),r=(asNova?18:5+18*q+chargeStats.bonusSize*q),power=(asNova?effectiveNovaDamage(p)*.84:p.dmg*(1+4.0*q*q)*chargeStats.effectiveScale)*(i===0||asNova?1:.52),pierce=asNova?Math.min(12,8+p.pierce):q>=.995?5+p.pierce+chargeStats.bonusPierce:p.pierce;
- shots.push({x:p.x+Math.cos(a)*13,y:p.y+Math.sin(a)*13,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r,damage:power,pierce,kind:asNova?'novaCharge':'comet',elementMode:chargeElement,ttl:asNova?3.1:2.1,hit:new Set(),source:'charge',chargeFull:q>=.995||asNova});
+ shots.push({x:p.x+Math.cos(a)*13,y:p.y+Math.sin(a)*13,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r,damage:power*(tactical?.damage||1),pierce:pierce+(tactical?.pierce||0),kind:asNova?'novaCharge':'comet',elementMode:chargeElement,ttl:asNova?3.1:2.1,hit:new Set(),source:'charge',chargeFull:q>=.995||asNova});
  }if(!asNova&&q>=.995&&p.relicChargeEcho){p.relicEchoQueue.push({time:.18,dir,power:p.dmg*(1+4.0*q*q)*chargeStats.effectiveScale*.62})}if(q>.1||asNova){burst(p.x,p.y,asNova?'#fff0c1':'#ffba78',asNova?30:Math.round(7+q*19),asNova?200:90+q*140);ring(p.x,p.y,asNova?300:40+q*90,'#ffbf81');if(!asNova)tone(330-q*155,.13,'triangle',.025)}}
 function chargeNova(){const p=player;sfx('novaCharge');flash=.18;shake=0;for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],p)<Math.max(280,p.novaRadius))hostile.splice(i,1);fireComet(1,true);p.charge=0;p.chargeStationary=false;announce('COMET NOVA · METEOR SALVO',3.1);shake=0;}
 // PLASMA DRILL: no primary projectiles. Movement charges the rotor; dash sweeps a melee capsule.
@@ -4651,7 +4670,7 @@ function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player;
    if((e.x-hx)**2+(e.y-hy)**2>(e.r+radius)**2||engageBarrierBlocks(sx,sy,e.x,e.y))continue;
    e.drillTouchUntil=runClock+.27;let amount=p.drillContact+p.dmg*.34;
    if(Math.random()<p.crit)amount*=p.critMult;
-   damageEnemy(e,amount,{special:true,source:'drill'});
+   damageEnemy(e,amount,{special:true,source:'drill',tacticalContact:true});AnkinTactics.onContact(p,e);
    if(!e.dead)applyBasicElement(e,drillMode,amount+(drillMode==='plasma'?p.drillHeat*14:0),.7);
   }
  }
@@ -4665,7 +4684,7 @@ function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player;
   const boss=['minor','major','unique','ultimate','ultimatePart'].includes(e.type);
   let power=(p.drillDamage+p.dmg*1.35)*(0.47+p.drillRushPower*.93)*(1+p.drillNozzle*.13)*(boss?p.bossBane:1);
   if(Math.random()<Math.min(.85,p.crit))power*=p.critMult;
-  damageEnemy(e,power,{special:true,source:'drill'});
+  damageEnemy(e,power,{special:true,source:'drill',tacticalRush:true});
   if(!e.dead)applyBasicElement(e,drillMode,power*(drillMode==='plasma'?1+p.drillHeat*.3:1),.85);
   if(p.explosion>0&&Math.random()<p.explosion*.42)detonate(cx,cy,55,Math.min(power*.45,120+p.dmg),e,5);
   if(drillMode==='cryo'&&p.drillSlow>0&&!e.dead)applySlow(e,1.2+p.drillSlow*.3);
@@ -4675,7 +4694,7 @@ function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player;
  }
  if(p.drillRushActive<=0&&p.drillDashCount&&p.drillNovaPulse>0){p.drillNovaPulseTick=(p.drillNovaPulseTick||0)+dt;if(p.drillNovaPulseTick>.23){p.drillNovaPulseTick=0;ring(p.x,p.y,63,'#ff86bd');for(const e of circleCandidates(p.x,p.y,60)){if(!e.dead&&d2(e,p)<(e.r+58)**2)damageEnemy(e,p.drillNovaPulse*32,{special:true,source:'drill'})}}}
 }
-function dash(){if(!player||player.dashLeft>0)return;if(controlMode==='mobile')validateTouchCapture();let x=controlMode==='mobile'?touchMove.x:0,y=controlMode==='mobile'?touchMove.y:0;if(keys.has('KeyW')||keys.has('ArrowUp'))y--;if(keys.has('KeyS')||keys.has('ArrowDown'))y++;if(keys.has('KeyA')||keys.has('ArrowLeft'))x--;if(keys.has('KeyD')||keys.has('ArrowRight'))x++;const mag=Math.hypot(x,y);if(mag){player.dx=x/mag;player.dy=y/mag}if(player.shipType==='drill'){
+function dash(){if(!player||player.dashLeft>0)return;AnkinTactics.onDash(player,shots);if(controlMode==='mobile')validateTouchCapture();let x=controlMode==='mobile'?touchMove.x:0,y=controlMode==='mobile'?touchMove.y:0;if(keys.has('KeyW')||keys.has('ArrowUp'))y--;if(keys.has('KeyS')||keys.has('ArrowDown'))y++;if(keys.has('KeyA')||keys.has('ArrowLeft'))x--;if(keys.has('KeyD')||keys.has('ArrowRight'))x++;const mag=Math.hypot(x,y);if(mag){player.dx=x/mag;player.dy=y/mag}if(player.shipType==='drill'){
   const plasma=player.drillPlasma/Math.max(.001,player.drillCap);
   player.drillRushPower=plasma>=.22?Math.min(1,plasma):0;
   player.drillRushActive=player.drillRushPower?.24*(player.thrusterEngine?1.65:1):0;
@@ -4691,7 +4710,7 @@ function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaC
   ring(player.x,player.y,88,'#86fff0');burst(player.x,player.y,'#85fff0',24,130);
   announce('PLASMA NOVA · OVERDRIVE '+player.drillOverdriveTime.toFixed(1)+'s / SPEED UP / PLASMA MAX',3);return;
  }if(player.shipType==='laser'){sfx('novaLaser');player.laserNovaTimer=3.2+Math.min(.65,player.voidHalo*.09);burst(player.x,player.y,'#bca5ff',45,230);ring(player.x,player.y,Math.min(450,player.novaRadius),'#a88cff');flash=.12;shake=0;hostile=hostile.filter(b=>dst(b,player)>Math.max(190,player.novaRadius));announce('PRISM NOVA · LASER OVERDRIVE',3.3);shake=0;return;}if(player.shipType==='charge'){chargeNova();return;}sfx('novaShot');flash=.12;shake=0;let hit=0;for(const e of enemies.slice()){if(e.dead)continue;if(dst(e,player)<player.novaRadius+e.r){damageEnemy(e,effectiveNovaDamage(player),{special:true,source:'nova'});hit++}}for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],player)<player.novaRadius)hostile.splice(i,1);burst(player.x,player.y,'#bd9bff',46,260);ring(player.x,player.y,player.novaRadius,'#c4a8ff');pop(player.x,player.y-32,`NOVA · ${hit} HIT`,'#d5c5ff');if(player.voidHalo>0)zones.push({x:player.x,y:player.y,r:Math.min(320,player.novaRadius*.6),life:Math.min(3.3,2+player.voidHalo*.12),ttl:0,dps:(effectiveNovaDamage(player)*.16+Math.min(6,player.voidHalo)*13)});shake=0;}
-function loseHP(amount,pressure=false){if(player.iframes>0||player.dashTime>0||(player.shipType==='drill'&&player.drillOverdriveTime>0)||mode!=='playing')return;player.hitTime=0;
+function loseHP(amount,pressure=false){if(player.iframes>0||player.dashTime>0||(player.shipType==='drill'&&player.drillOverdriveTime>0)||mode!=='playing')return;amount*=AnkinTactics.incomingMultiplier(player);player.hitTime=0;
  // High-level PHASE bolts partially bypass shields, but still respect dash/NOVA invulnerability.
  const direct=pressure?amount*.42:0;let blocked=amount-direct;
  if(player.shield>0){const absorbed=Math.min(player.shield,blocked);player.shield-=absorbed;blocked-=absorbed}
@@ -5115,7 +5134,7 @@ function explodeGigaNapalm(b,target,dmg){
 }
 function projectileHit(b,e){let dmg=b.damage;if(Math.random()<Math.min(.97,player.crit)){dmg*=player.critMult;if(Math.random()<.08)pop(e.x,e.y-14,'CRIT!','#ffe296')}
  if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))dmg*=player.bossBane;
- damageEnemy(e,dmg,{projectileAngle:Math.atan2(b.vy,b.vx),source:b.novaBone?'nova':b.kind==='bone'?'bone':b.kind==='dogEgg'?'dogEgg':b.kind==='iceball'?'iceball':b.kind==='meteor'?'meteor':b.source==='drone'?'drone':b.source==='rocket'?'missile':b.kind==='novaCharge'?'nova':b.kind==='comet'?'charge':player.shipType==='charge'?'charge':'shot'});
+ damageEnemy(e,dmg,{tacticalPrimary:player.shipType==='shot'&&b.source==='primary',tacticalVolleyFactor:b.tacticalVolleyFactor||1,tacticalReturning:b.kind==='bone'&&b.returning,projectileAngle:Math.atan2(b.vy,b.vx),source:b.novaBone?'nova':b.kind==='bone'?'bone':b.kind==='dogEgg'?'dogEgg':b.kind==='iceball'?'iceball':b.kind==='meteor'?'meteor':b.source==='drone'?'drone':b.source==='rocket'?'missile':b.kind==='novaCharge'?'nova':b.kind==='comet'?'charge':player.shipType==='charge'?'charge':'shot'});
   if(player.shipType==='charge'&&b.chargeFull&&b.source!=='fragment'&&!b.fragmented){if(player.relicChargeShatter)fireFragment(b,e);if(player.relicChargeNova){detonate(e.x,e.y,160,Math.max(12,dmg*.62),e,5);ring(e.x,e.y,158,'#ffd5a0')}b.fragmented=true}
   if(player.shipType==='shot'&&e.dead&&player.relicBurst&&['primary','rear','side','echo'].includes(b.source)&&!b.splitDepth){const others=nearestThreeVisible(e.x,e.y,e,240);for(const other of others){if(shots.length>=currentShotBudget())break;const a=Math.atan2(other.y-e.y,other.x-e.x);shots.push(addPlayerShot({x:e.x,y:e.y,vx:Math.cos(a)*player.shotSpeed*.9,vy:Math.sin(a)*player.shotSpeed*.9,r:3.5,damage:Math.max(7,dmg*.32),pierce:0,kind:player.bulletKind,ttl:1.45,hit:new Set([e]),source:'burst',splitDepth:1}))}}
   const primaryAttack=(['primary','charge'].includes(b.source)||player.shipType==='dog'&&b.kind==='bone')&&b.kind!=='novaCharge'&&!b.novaBone;
@@ -5159,12 +5178,13 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  const defenseLate=pressureUnlocked(),hpRegen=defenseLate&&p.regen>7?Math.min(16,7+Math.sqrt(p.regen-7)*1.65):p.regen;
  p.hp=Math.min(p.maxHp,p.hp+hpRegen*(p.pressureRecovery>0?.30:1)*(hasTrial('repairTax')?.65:1)*dt);
  const shieldRegen=defenseLate&&p.shieldRecharge>16?Math.min(34,16+Math.sqrt(p.shieldRecharge-16)*2.2):p.shieldRecharge;
- if(p.hitTime>5&&p.shield<p.shieldMax)p.shield=Math.min(p.shieldMax,p.shield+shieldRegen*(hasTrial('repairTax')?.65:1)*dt);
+ if(p.hitTime>5&&p.shield<p.shieldMax)p.shield=Math.min(p.shieldMax,p.shield+shieldRegen*AnkinTactics.shieldMultiplier(p)*(hasTrial('repairTax')?.65:1)*dt);
  if(g.spawn<=0&&!((boss&&boss.type==='ultimate')||g.ultimatePending)){const mins=minutes(),limit=enemyPopulationLimit(mins),focus=bossFocusRelief(mins),bossLimit=Math.round(limit*(1-.32*focus)),batch=Math.min(game.raid?Math.max(1,Math.ceil(enemyGroupSize(mins)*.65)):enemyGroupSize(mins),Math.max(0,(focus?bossLimit:limit)-enemies.length));if(batch>0)spawnNormalPack(mins,batch);g.spawn=enemySpawnInterval(mins)*(g.gameMode==='challenge'?.70:1)*(g.activeChallenges?.includes('onslaught')?.78:1)*rand(.88,1.12);}refreshEnemyIndex();
  if(controlMode==='mobile')validateTouchCapture();let x=controlMode==='mobile'?touchMove.x:0,y=controlMode==='mobile'?touchMove.y:0;if(keys.has('KeyW')||keys.has('ArrowUp'))y--;if(keys.has('KeyS')||keys.has('ArrowDown'))y++;if(keys.has('KeyA')||keys.has('ArrowLeft'))x--;if(keys.has('KeyD')||keys.has('ArrowRight'))x++;
- const rawM=Math.hypot(x,y),m=Math.min(1,rawM);if(rawM>1){x/=rawM;y/=rawM}if(m>.02){p.dx=x/Math.max(m,.001);p.dy=y/Math.max(m,.001)}const oldDrillX=p.x,oldDrillY=p.y,dashWasActive=p.dashTime>0;const mobileMotion=controlMode==='mobile'?1/.69:1;const drillNovaSpeed=p.shipType==='drill'&&p.drillOverdriveTime>0?1.8:1;/* keep the same on-screen touch response despite the wider camera */if(p.dashTime>0){p.dashTime-=dt;p.x+=p.dx*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;p.y+=p.dy*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;if(Math.random()<.5)burst(p.x,p.y,'#80fff6',1,40)}else{const flow=p.dashFlowTimer>0?1.16:1;p.x+=x*p.spd*drillNovaSpeed*mobileMotion*flow*dt;p.y+=y*p.spd*drillNovaSpeed*mobileMotion*flow*dt}{const blocked=engageClampMotion(oldDrillX,oldDrillY,p.x,p.y,p.r+2);
+ const rawM=Math.hypot(x,y),m=Math.min(1,rawM);if(rawM>1){x/=rawM;y/=rawM}if(m>.02){p.dx=x/Math.max(m,.001);p.dy=y/Math.max(m,.001)}const oldDrillX=p.x,oldDrillY=p.y,dashWasActive=p.dashTime>0;const mobileMotion=controlMode==='mobile'?1/.69:1;const drillNovaSpeed=p.shipType==='drill'&&p.drillOverdriveTime>0?1.8:1;/* keep the same on-screen touch response despite the wider camera */if(p.dashTime>0){p.dashTime-=dt;p.x+=p.dx*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;p.y+=p.dy*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;if(Math.random()<.5)burst(p.x,p.y,'#80fff6',1,40)}else{const flow=(p.dashFlowTimer>0?1.16:1)*AnkinTactics.speedMultiplier(p);p.x+=x*p.spd*drillNovaSpeed*mobileMotion*flow*dt;p.y+=y*p.spd*drillNovaSpeed*mobileMotion*flow*dt}{const blocked=engageClampMotion(oldDrillX,oldDrillY,p.x,p.y,p.r+2);
  if(blocked.blocked){const targetX=p.x,targetY=p.y;const tryX=engageClampMotion(oldDrillX,oldDrillY,targetX,oldDrillY,p.r+2);const tryY=engageClampMotion(tryX.x,oldDrillY,tryX.x,targetY,p.r+2);p.x=tryY.x;p.y=tryY.y;if(dashWasActive){p.dashTime=0;p.drillRushActive=0;}}
  }p.x=clamp(p.x,p.r+13,W-p.r-13);p.y=clamp(p.y,p.r+13,H-p.r-13);
+ if(p.tacticFlags){AnkinTactics.tick(p,dt,m>.19&&Math.hypot(p.x-oldDrillX,p.y-oldDrillY)>dt*20);const cue=AnkinTactics.pollCue(p);if(cue)pop(p.x,p.y-29,cue,SHIPS[p.shipType].color);}
  tickEchoShots(p,dt);
   if(p.shipType==='laser'){p.laserIdleTime=m>.19?Math.max(0,(p.laserIdleTime||0)-dt*2.3):Math.min(4,(p.laserIdleTime||0)+dt);updateLaser(dt)}else if(p.shipType==='charge'){updateCharge(dt,m)}else if(p.shipType==='drill'){updateDrill(dt,m,oldDrillX,oldDrillY,dashWasActive)}else{p.shotTimer-=dt;if(p.shotTimer<=0){shoot();p.shotTimer=efficientShotRate(p)}}
  tickDogChicks(dt);
@@ -5217,7 +5237,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
   if(!b.returning&&b.flight>=b.range/Math.max(20,Math.hypot(b.vx,b.vy))){b.returning=true;b.hit.clear();}
   if(b.returning){
    const dx=p.x-b.x,dy=p.y-b.y,d=Math.hypot(dx,dy);
-   if(d<Math.max(17,p.r+5)){b.ttl=0;continue;}
+   if(d<Math.max(17,p.r+5)){AnkinTactics.onCatch(p,b);b.ttl=0;continue;}
    const sp=b.homeSpeed||420;b.vx=dx/Math.max(1,d)*sp;b.vy=dy/Math.max(1,d)*sp;
   }
  }
@@ -5232,7 +5252,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  for(const e of cell){if(b.ttl<=0)break bulletCells;if(e.dead||e.isoWarp||(e.isoSafe||0)>0||b.hit.has(e))continue;
  const hitFrac=travelSq>0?clamp(((e.x-bx)*travelX+(e.y-by)*travelY)/travelSq,0,1):0;
  const hitX=bx+travelX*hitFrac,hitY=by+travelY*hitFrac;
- if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.kind==='bone'&&b.returning)damageEnemy(e,b.damage*Math.max(0,player.dogBoneReturn-1),{special:true,source:b.novaBone?'nova':'bone'});if(b.pierce>0)b.pierce--;else b.ttl=0;}}
+ if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.kind==='bone'&&b.returning)damageEnemy(e,b.damage*Math.max(0,player.dogBoneReturn-1),{special:true,tacticalReturning:true,tacticalExtra:true,source:b.novaBone?'nova':'bone'});if(b.pierce>0)b.pierce--;else b.ttl=0;}}
  }}shots=shots.filter(b=>b.ttl>0);
  // A large gunner swarm retains enemy density but reduces total concurrent bullets.
  const activeShooters=enemies.reduce((count,e)=>count+(!e.dead&&e.type==='shooter'?1:0),0);
@@ -6015,7 +6035,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.36.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.37.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
@@ -6105,7 +6125,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.36', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.37', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 

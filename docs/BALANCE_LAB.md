@@ -458,3 +458,38 @@ Both revisions use the same controller, twenty seeds17–36, all five ships and 
 - [PR #65](https://github.com/DanStars12/ankin-drift/pull/65), tested head `7bcc1d6df28d6473e7dd9d2aed7dccd6b605ec2b`, squash `f2d03060fc3c3f58185b1ca17cbbf14cd1ec0bf5`: suppress hover previews for touch controls/coarse non-hover inputs; retain intentional tap/click, keyboard details and ordinary desktop hover. Bump the normal offline shell to `ankin-drift-mobile-v13-36-arsenal-v2`. No combat values or saves changed.
 - Add deterministic regressions for hover suppression, actual tag tap/close and reachable fusion action, plus desktop hover open/dismiss. No force clicks and no skip of the original failing case. Desktop/mobile390/mobile320 each146 browser tests PASS (7 deliberate platform/opt-in skips per surface).
 - Latest validation [42643448902](https://github.com/DanStars12/ankin-drift/actions/runs/42643448902), comparison [42643448701](https://github.com/DanStars12/ankin-drift/actions/runs/42643448701), performance [42643448473](https://github.com/DanStars12/ankin-drift/actions/runs/42643448473), full clock [42643448658](https://github.com/DanStars12/ankin-drift/actions/runs/42643448658), diagnosis [42643448442](https://github.com/DanStars12/ankin-drift/actions/runs/42643448442): all PASS. All20 cohorts/400 progression summaries exactly match the previously integrated gameplay candidate, including all seeds and ending/choice/fusion fields. Main/head were rechecked before this LEVEL1 repair merged.
+
+
+## v13.37 TACTICAL ARSENAL — 開発中 (2026-11-10 JST)
+
+開始main: `73bd3906992fe34b3e3ce7aced56f3bb05099ee7` (v13.36)。専用ブランチ: `feature/solo-tactical-skills-20261110`。PR・統合コミットは未確定。通常ソロのみ。CO-OP、通信、Workers、セーブ形式は変更しない。
+
+### 狙いと追加範囲
+
+前回59種と同等規模の60種＋進化5種。各機体12種 (通常4、POWER3、LEGENDARY2、RELIC2、UNIQUE1)、全て一度限り。全454種、DOG専用96種。既存IDとログ形式は維持する。
+
+|機体|判断を変える仕組み|主な進化|
+|---|---|---|
+|ショット|遠近の射線選択、ダッシュ終了後の1斉射だけ反撃装填|反撃窓1.7秒・貫通追加|
+|レーザー|主照準維持と標的切替、照射しながらの移動|維持成立0.6秒・移動再充填|
+|チャージ|蓄電を保持した回避、40〜85%の中間解放|最大解放から再巡航|
+|ドリル|最後に接触した1体への再突入、消費プラズマ回収|標識2秒・短時間離脱装甲|
+|DOG|既存骨の呼び戻し、捕球直後の仲間連携|連携窓2.2秒・帰還補給|
+
+通常20種は常時ステータスの増加なし。小さな条件付き効果を基本とする。威力の条件補正は同系合計最大1.8倍 (ショットは発射時と命中時の積を含む)、軽減22%まで。回収は最大率のみ・実消費量に限定し、NOVAの無料突進・NOVA骨を回収源にしない。追加の発射器や毎フレームの敵探索は導入しない。レリック10種は実際の威力低下を持つ。
+
+カード説明は効果・条件・時間を中心に短く記載。新規10タグにガイドを追加。戦闘状態は再計算時にも引き継ぎ、プレビューで実機のフラグを変更しない。シミュレーション時間だけで連携窓・再使用間隔を進める。
+
+### 現時点の検証
+
+ローカル: Node 73件PASS、JS構文・HTML/PWA PASS (キャッシュ17件)。新規8テストは全60種の機体制限・重複防止、通常枠の非永続強化、上限、照準遷移、最大/中間チャージ、回収量、NOVA除外、捕球/回収の間隔、プレビュー独立を検証。
+
+ブラウザはローカルOSのソケット/ptrace制限で起動不可。VMによる代替戦闘数値を採用しない。GitHub CIで実ブラウザ検証を行う。完了・公開済みとは扱わない。
+
+追加ブラウザ試験: 全60種の実choose経路・2倍速戦闘・再構築一致、進化5種、ネイティブ操作、1x/2x/ポーズ、320/390pxの図鑑検索。
+
+比較計画: 旧/新の通常4枚予算 (機体専用2＋共通2と新規専用4)、DOGヒヨコは両条件同数。5機体×序中終盤×2戦況×10シード=300ペア/画面。UNIQUEは前回専用と新規専用の同枚数、200ペア/画面。AI方針は固定し、発動カウンタを取得する。既存のmain/候補20シード×両モード×5機体=400長時間シミュレーションも継続する。
+
+性能: 既存の同条件3反復比較に加え、ネイティブ武装数を揃えた5機体・2倍速/高速弾・220敵/300弾/複合レイドを3反復比較する。新規のパッシブ増分は付けずフラグだけ有効にしてフック負荷を比較。ブラウザCIは実スマホ端末ではない。バランスと性能の数値・ばらつきを確認するまでマージしない。
+
+未解決: 全実ブラウザ結果、長時間比較、性能差の判定。前回からのDRILLのAI角度とDOG終盤ボスは、専用スキルを追加しただけでは解決と見なさない。

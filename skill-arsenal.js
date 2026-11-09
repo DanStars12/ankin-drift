@@ -2017,8 +2017,10 @@ function effectValue(p,e){
  return {current,next};
 }
 function apply(p,id){
- const c=byId.get(id);if(!c)throw Error('Unknown arsenal card '+id);
- for(const e of c.effects)p[e[0]]=effectValue(p,e).next;
+ const c=byId.get(id);if(!c)throw Error('Unknown arsenal card '+id);return applyEffects(p,c.effects);
+}
+function applyEffects(p,effects){
+ for(const e of effects)p[e[0]]=effectValue(p,e).next;
  p.hp=Math.min(p.hp,p.maxHp);p.shield=Math.min(p.shield,p.shieldMax);
  return p;
 }
@@ -2027,5 +2029,5 @@ function available(p,id){const c=byId.get(id);return !!c&&(!c.requires||p[c.requ
  const lowerIsBetter=['rate','dogEggRate','dashCd','drillDecay','novaReuseDelay'].includes(stat);
  return lowerIsBetter?next<current-1e-8:next>current+1e-8;
 });}
-root.AnkinArsenal=Object.freeze({cards:Object.freeze(cards),descriptions:Object.freeze(descriptions),removeTags:Object.freeze(removeTags),apply,available});
+root.AnkinArsenal=Object.freeze({cards:Object.freeze(cards),descriptions:Object.freeze(descriptions),removeTags:Object.freeze(removeTags),apply,applyEffects,available});
 })(globalThis);
