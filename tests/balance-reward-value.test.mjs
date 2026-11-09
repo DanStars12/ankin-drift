@@ -12,3 +12,11 @@ test('each frame values native offensive growth and conditional normal utility',
  }
  assert(value(p,{...p,tacticFlags:{chargeBank:1}})>0);
 });
+
+
+test('real normal applications give finite estimates without mutating live pilot or game',async()=>{
+ const {catalogHarness}=await import('../scripts/catalog-harness.mjs');const h=catalogHarness();const game=JSON.stringify(h.ctx.game);
+ for(const c of h.ctx.normal){h.ctx.selectedShip=c.shipOnly||'shot';const live=h.eval('initialP()'),before=JSON.stringify(live),preview=structuredClone(live);c.apply(preview);assert(Number.isFinite(value(live,preview)),c.id);assert.equal(JSON.stringify(live),before,c.id);}
+ assert.equal(JSON.stringify(h.ctx.game),game);
+ assert(value(p,{...p,lifeSteal:.018})>0);assert(value(p,{...p,chainDamage:13})<10);
+});

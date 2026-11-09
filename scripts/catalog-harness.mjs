@@ -15,7 +15,7 @@ export function catalogHarness(html=readFileSync(new URL('../index.html',import.
  const ctx=createContext({W:1280,H:800,selectedShip:'shot',player:null,game:{skills:{},powers:{},legends:{},uniques:{},relics:{},acquisitionLog:[],elementCombos:[],sealedElements:[]}});
  runInContext(readFileSync(new URL('../skill-arsenal.js',import.meta.url),'utf8'),ctx);
  runInContext(readFileSync(new URL('../skill-tactics.js',import.meta.url),'utf8'),ctx);
- for(const id of ['SHIPS','ELEMENTS','initialP','ALL_SKILL_DEFS','elementFromCard','skillById'])runInContext(declaration(id),ctx);
+ for(const id of ['SHIPS','ELEMENTS','initialP','ALL_SKILL_DEFS','elementFromCard','skillById','NOVA_REUSE_MIN'])runInContext(declaration(id),ctx);
  const start=source.indexOf('const UPGRADE_GAIN_SCALE='),end=source.indexOf('const DRILL_RANGED_ONLY=');
  if(start<0||end<start)throw Error('Catalog boundaries changed');
  runInContext(source.slice(start,end),ctx);
