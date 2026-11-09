@@ -551,4 +551,19 @@ PR [#67](https://github.com/DanStars12/ankin-drift/pull/67) を Squash Merge。m
 
 基点 `fabf48e`、ブランチ `fix/solo-charge-rebuild-state-20261110`。ビルド再計算でcharge=0.7は残る一方、chargeStationaryが初期値falseへ戻ることを実コードで再現。従来のチャージでも、新しい蓄電保持カードでも、再構築後の移動で解放されず次の停止まで持ち越される。保持スナップショットにこの真偽値を追加し、再構築後へ復元する。セーブ形式・威力・蓄電速度は変更しない。
 
-回帰3件: 通常蓄電の再構築後解放、保持カード＋ダッシュ終了後の1回だけの解放、非蓄電状態を勝手に蓄電扱いにしない。修正前は前2件が失敗、修正後は3件PASS。実ブラウザにも再構築→移動→主彗星1発/蓄電0の確認を追加。Node計81件とPWAを再確認し、オフラインキャッシュを `ankin-drift-mobile-v13-37-tactics-v2` に更新する。CIと比較結果はPRで確認後に記録する。
+回帰3件: 通常蓄電の再構築後解放、保持カード＋ダッシュ終了後の1回だけの解放、非蓄電状態を勝手に蓄電扱いにしない。修正前は前2件が失敗、修正後は3件PASS。実ブラウザにも再構築→移動→主彗星1発/蓄電0の確認を追加。Node計81件とPWAを再確認し、オフラインキャッシュを `ankin-drift-mobile-v13-37-tactics-v2` に更新する。CIと比較結果は以下の「チャージ状態修正の統合完了」欄に記録した。
+
+### チャージ状態修正の統合完了・公開確認
+
+PR [#68](https://github.com/DanStars12/ankin-drift/pull/68) を Squash Merge。main `89686f14967bbf4499e4e88bde2f5e1fdb446b1c`、テスト済みhead `f5ea357897b148ebbdadd0545c4a01af8175522a`。取得後に両者のアプリ差分がないことを確認。Node81件、PC/390/320px、時計、性能、診断、実報酬400走が全PASS。最終検証 [42697466461](https://github.com/DanStars12/ankin-drift/actions/runs/42697466461)、バランス [42696949626](https://github.com/DanStars12/ankin-drift/actions/runs/42696949626)、時計 [42696949906](https://github.com/DanStars12/ankin-drift/actions/runs/42696949906)、性能 [42696949292](https://github.com/DanStars12/ankin-drift/actions/runs/42696949292)、診断 [42696949291](https://github.com/DanStars12/ankin-drift/actions/runs/42696949291)。PR説明更新前の検証は置き換えでキャンセルされており、古い実行の取消を新しい実行の成功と混同しない。
+
+CHARGEのNORMALクリア6→6/20 (平均1084.6645秒で一致)、CHALLENGE14→14/20 (平均865.452→865.680秒)。他4機体は全20シード×両モードのサマリーが旧/候補で完全一致。修正の目的は正しい解放操作の復元であり、クリア率向上を主張しない。最終性能3反復のP95はPC66.6〜66.7ms/390px33.4msで両版同水準、実効速度PC1.996/390px1.997、破棄0。PWAはv13-37-tactics-v2。
+
+公開確認 (2026-11-10 JST): Chromeで通常公開URLのv13.37タイトル、新DOG UNIQUE「ほねっこ・みんなの帰る場所」の検索・数値・タグ、NORMAL SHOTの出撃・自動射撃/撃破・DASH待機表示を実際のUIから確認。公開図鑑は444種、全定義454種から既存の共鳴10種を除く従来ルールによる差。定義欠落ではない。PR67のmain検証 [42696520824](https://github.com/DanStars12/ankin-drift/actions/runs/42696520824) とPages公開 [42696518990](https://github.com/DanStars12/ankin-drift/actions/runs/42696518990) もPASS。公開環境での全機体の30分完走、実スマホ端末の操作/性能、端末別の入力遅延・メモリは未検証。CIの仮想スマホ結果と区別する。
+
+### 次の優先課題・再開手順
+
+1. P2: 上位スキルで完全に効果が重なった後、追加効果のない通常候補を外す。`AnkinTactics.available` が現在trueを返す再現条件を確認済み: Memory取得後のBank、Orbit取得後のRecall、Afterglow取得後のStride、Release取得後のReserve、Needle取得後のPierce、ヒヨコあり/卵間隔0.57秒でのPiyo。既存取得の削除や記録書換えは行わず、新しい候補の有効性だけを判定する。貫通上限や回収率は戦闘側と同じ計算を使い、進化で上限が変わる場合も検証する。この候補整理は本セッションでは未実装。
+2. NORMALのCHARGE/DOG、両モードのLASERを独立した追加シードで観測する。旧/候補に同一AIを使い、機体別の差、素材/スキル選択履歴、連携発動、基礎火力との交換を評価する。単一指標で機体を一律強化しない。
+3. DRILLは既存の向き/接触角度診断を使い、接触→標識→再突入を活かせる操作AIを改善する。DOGは仲間数と捕球経路別に連携の実効値を比較する。公開の機体基本性能はその検証後に判断する。
+4. 次回はGitHubの最新mainとPR/CIを確認して再開する。基点v13.37、PR67/68統合済み。CO-OP・Workers・通信を変更せず、セーブと既存IDを維持する。公開スマホ実機の未検証は完了扱いにしない。
