@@ -1,7 +1,7 @@
 name: ANKIN arsenal balance
 on:
   pull_request:
-    paths: ['index.html', 'skill-arsenal.js', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
+    paths: ['index.html', 'skill-arsenal.js', 'skill-tactics.js', 'scripts/balance-ai-harness.mjs', 'scripts/balance-reward-value.mjs', 'tests/v13-37-tactics.spec.mjs', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,12 +30,14 @@ jobs:
       - run: npm ci
       - run: npx playwright install chromium
       - run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=${{ matrix.project }} --grep='arsenal standard balance|arsenal unique peer'
+      - run: npx playwright test tests/v13-37-tactics.spec.mjs --project=${{ matrix.project }} --grep='tactical standard balance|tactical unique peer|tactical upper-tier'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: arsenal-${{ matrix.project }}
           path: |
             artifacts/arsenal/
+            artifacts/tactics/
             test-results/
           retention-days: 14
   progression:
@@ -74,6 +76,8 @@ jobs:
         working-directory: comparison-base
         run: |
           cp ../tests/v13-36-arsenal.spec.mjs tests/v13-36-arsenal.spec.mjs
+          cp ../scripts/balance-ai-harness.mjs scripts/balance-ai-harness.mjs
+          cp ../scripts/balance-reward-value.mjs scripts/balance-reward-value.mjs
           npm ci
           npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
       - name: Measure candidate progression

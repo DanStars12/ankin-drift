@@ -16,6 +16,14 @@ if(['no-limits','legacy-control'].includes(variant)){
 if(['legacy-pools','legacy-control','legacy-normal','legacy-upper'].includes(variant)){
  const condition=variant==='legacy-normal'?"kind!=='normal'||!c.arsenal":variant==='legacy-upper'?"kind==='normal'||!c.arsenal":'!c.arsenal';
  replaceOnce('const eligible=selectable(source).filter(', 'const eligible=selectable(source).filter(c=>'+condition+').filter(');
+ // Relic spawning must use the same catalog as the diagnostic reward menu.
+ // Otherwise excluded new relics can keep spawning empty legacy-only offers.
+ if(variant!=='legacy-normal'){
+  replaceOnce('RELICS.filter(c=>c.shipOnly===player.shipType&&!game.relics[c.id])',
+   'RELICS.filter(c=>!c.arsenal&&c.shipOnly===player.shipType&&!game.relics[c.id])');
+  replaceOnce('RELICS.some(c=>c.shipOnly===player.shipType&&!game.relics[c.id])',
+   'RELICS.some(c=>!c.arsenal&&c.shipOnly===player.shipType&&!game.relics[c.id])');
+ }
 }
 if(variant==='limit-normal')replaceOnce('const possible=pool.filter(c=>!used.has(c.id));',
  "const possible=pool.filter(c=>!used.has(c.id)&&(kind!=='normal'||!c.arsenal||!options.some(o=>o.arsenal)||!pool.some(o=>!o.arsenal&&!used.has(o.id))));");

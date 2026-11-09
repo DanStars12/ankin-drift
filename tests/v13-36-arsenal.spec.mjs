@@ -8,7 +8,7 @@ window.__arsenalQA={
   game.autoBank=true;game.spawn=game.nextBossAt=game.nextRaidAt=game.nextRelicAt=game.nextVacuumAt=1e9;
   enemies=[];hostile=[];hazards=[];boss=null;player.iframes=1e6;},
  grant(c){if(c.shipOnly==='dog'&&AnkinArsenal.cards.find(d=>d.id===c.id)?.requires==='dogChicks'&&!player.dogChicks)this.grant(skillById('dogChick'));
-  game.lastChoice='normal';choices=[c];mode='choice';choose(0);},
+  game.lastChoice='normal';choices=[c];mode='choice';choose(0);for(let n=0;n<20&&mode!=='playing';n++){if(mode==='fusion')dismissFusion();else if(mode==='uniqueReward'||mode==='elementResult')continueAfterReward();else throw Error('Unhandled grant menu '+mode);}},
  all(){const out=[];for(const def of AnkinArsenal.cards){this.reset(def.shipOnly||'shot');
   const c=skillById(def.id);this.grant(c);
   const duplicate=selectable([c]).length;
@@ -140,7 +140,7 @@ test('arsenal full progression: paired seeds, both real modes, actual random rew
  const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
  for(const gameMode of modes)for(const ship of ships)for(const seed of seeds){
   const r=await page.evaluate(args=>window.__ankinBalanceAI.runFull({...args,fusionPolicy:'always'}),{ship,gameMode,seed});
-  expect(r.stopReason.startsWith('unhandled-menu')).toBe(false);expect(Number.isFinite(r.dps)).toBe(true);rows.push(r);
+  expect(r.stopReason.startsWith('unhandled-menu'),JSON.stringify({ship,gameMode,seed,stop:r.stopReason,time:r.simulationTime})).toBe(false);expect(Number.isFinite(r.dps)).toBe(true);rows.push(r);
  }
  const summary=rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,fusions:r.elementFusions,choices:r.menuChoices,clear:r.clearCount,boss:r.reachedFinalBoss}));
  console.log('ARSENAL_PROGRESSION='+JSON.stringify(summary));

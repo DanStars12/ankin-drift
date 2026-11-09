@@ -5,11 +5,11 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "check:syntax": "node scripts/check-syntax.mjs",
-    "test:arsenal": "node --test tests/arsenal-data.test.mjs tests/arsenal-catalog.test.mjs",
+    "test:arsenal": "node --test tests/arsenal-data.test.mjs tests/arsenal-catalog.test.mjs tests/tactical-skills.test.mjs",
     "test:clock": "node --test tests/simulation-clock.test.mjs",
     "test:archive": "node --test tests/archive.test.mjs",
     "test:ending": "node --test tests/ending.test.mjs",
-    "test:balance-report": "node --test tests/balance-report.test.mjs tests/drill-observation.test.mjs",
+    "test:balance-report": "node --test tests/balance-report.test.mjs tests/drill-observation.test.mjs tests/balance-reward-value.test.mjs",
     "test:ability-tactics": "node --test tests/ability-tactics.test.mjs",
     "balance:lab": "playwright test tests/v13-29-balance-lab.spec.mjs",
     "balance:ai": "playwright test tests/v13-30-balance-ai.spec.mjs",
