@@ -33,7 +33,7 @@ const cards = [
   "id": "arsPlating",
   "rarity": "common",
   "name": "予備外板",
-  "desc": "最大HP+12、シールド+4。",
+  "desc": "最大HP+18、シールド+4。",
   "tags": [
    "装甲",
    "防御"
@@ -42,14 +42,14 @@ const cards = [
    [
     "maxHp",
     "add",
-    12,
+    18,
     null,
     null
    ],
    [
     "hp",
     "add",
-    12,
+    18,
     null,
     null
    ],
@@ -224,7 +224,7 @@ const cards = [
   "id": "arsShieldSeal",
   "rarity": "uncommon",
   "name": "絶縁シール",
-  "desc": "シールド+10、再充填+0.35/秒。",
+  "desc": "シールド+12、再充填+2/秒。",
   "tags": [
    "防御",
    "再生"
@@ -233,21 +233,21 @@ const cards = [
    [
     "shieldMax",
     "add",
-    10,
+    12,
     null,
     null
    ],
    [
     "shield",
     "add",
-    10,
+    12,
     null,
     null
    ],
    [
     "shieldRecharge",
     "add",
-    0.35,
+    2,
     null,
     null
    ]
@@ -257,7 +257,7 @@ const cards = [
   "id": "arsNovaLens",
   "rarity": "rare",
   "name": "NOVA整流レンズ",
-  "desc": "NOVA基礎威力+25、範囲+10。",
+  "desc": "NOVA基礎威力+50、範囲+18。",
   "tags": [
    "ノヴァ",
    "火力"
@@ -266,14 +266,14 @@ const cards = [
    [
     "novaDamage",
     "add",
-    25,
+    50,
     null,
     null
    ],
    [
     "novaRadius",
     "add",
-    10,
+    18,
     null,
     null
    ]
@@ -363,23 +363,31 @@ const cards = [
   "id": "arsLaserCoating",
   "rarity": "common",
   "name": "薄膜コーティング",
-  "desc": "レーザー威力補正+0.04、射程+15。",
+  "desc": "レーザー威力補正+0.06、シールド+6。",
   "tags": [
    "レーザー",
-   "火力"
+   "火力",
+   "防御"
   ],
   "effects": [
    [
     "laserScale",
     "add",
-    0.04,
+    0.06,
     null,
     null
    ],
    [
-    "laserReach",
+    "shieldMax",
     "add",
-    15,
+    6,
+    null,
+    null
+   ],
+   [
+    "shield",
+    "add",
+    6,
     null,
     null
    ]

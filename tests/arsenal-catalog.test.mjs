@@ -42,3 +42,20 @@ test('description corrections remove invented effects while preserving attribute
  assert.ok(!by('rain').tags.includes('マグマ床'));assert.ok(by('rain').tags.includes('属性：炎'));
  assert.ok(!by('freeze').tags.includes('スロウ'));assert.ok(by('freeze').tags.includes('属性：氷'));
 });
+test('new support choices trade strengths with legacy peers instead of being strictly inferior',()=>{
+ const h=catalogHarness();
+ const delta=id=>{const p=h.eval('initialP()'),before={...p};h.ctx.catalog.find(c=>c.id===id).apply(p);return Object.fromEntries(Object.entries(p).filter(([k,v])=>typeof v==='number'&&Number.isFinite(v)).map(([k,v])=>[k,v-before[k]]));};
+ const hull=delta('arsPlating'),armor=delta('armor');assert.ok(hull.maxHp>armor.maxHp);assert.ok(hull.shieldMax<armor.shieldMax);
+ const shield=delta('arsShieldSeal'),barrier=delta('barrier');assert.ok(shield.shieldMax<barrier.shieldMax);assert.ok(shield.shieldRecharge>barrier.shieldRecharge);
+ const nova=delta('arsNovaLens'),radius=delta('radius');assert.ok(nova.novaDamage>radius.novaDamage);assert.ok(nova.novaRadius<radius.novaRadius);
+ const laser=delta('arsLaserCoating'),cooling=delta('lCooling');assert.ok(laser.laserScale<cooling.laserScale);assert.ok(laser.shieldMax>cooling.shieldMax);
+});
+test('core build choices remain available beside one-off stat cards, including depleted reward pools',()=>{
+ const h=catalogHarness();h.ctx.cards=[{id:'coreA'},{id:'newA',arsenal:true},{id:'coreB'},{id:'newB',arsenal:true}];
+ h.ctx.options=[];assert.equal(h.eval('offerCandidatePool(cards,options)').length,4);
+ h.ctx.options=[{id:'newC',arsenal:true}];
+ assert.deepEqual(Array.from(h.eval('offerCandidatePool(cards,options)'),c=>c.id),['coreA','coreB']);
+ h.ctx.cards=h.ctx.cards.filter(c=>c.arsenal);
+ assert.equal(h.eval('offerCandidatePool(cards,options)').length,2,'unclaimed new rewards must not be replaced by supplies');
+ h.ctx.cards=[];assert.equal(h.eval('offerCandidatePool(cards,options)').length,0);
+});

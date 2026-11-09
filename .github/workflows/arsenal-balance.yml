@@ -44,6 +44,7 @@ jobs:
     timeout-minutes: 45
     env:
       ANKIN_ARSENAL_FULL: '1'
+      ANKIN_ARSENAL_FULL_SEEDS: '10'
     steps:
       - uses: actions/checkout@v4
         with:

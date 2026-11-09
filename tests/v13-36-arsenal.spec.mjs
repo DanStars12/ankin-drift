@@ -26,7 +26,7 @@ window.__arsenalQA={
   mode='menu';return {active,same:before===JSON.stringify(game.fusions),name:recipe.name};},
  catalog(){return ALL_SKILL_DEFS().map(c=>({id:c.id,name:c.name,desc:c.desc,tags:c.tags,ship:c.shipOnly,rarity:c.rarity,arsenal:!!c.arsenal}));},
  offer(ship,kind){this.reset(ship);game.level=30;game.total=700;
-  const out=offerCards(kind).map(c=>({id:c.id,supply:!!c.isSupply,tags:c.tags,rarity:c.rarity}));mode='menu';return out;}
+  const out=offerCards(kind).map(c=>({id:c.id,supply:!!c.isSupply,tags:c.tags,rarity:c.rarity,arsenal:!!c.arsenal}));mode='menu';return out;}
 };
 `;
 // Controlled, equal-card-budget normal loadouts, using actual shipped card applications.
@@ -66,6 +66,7 @@ test('five new evolutions activate once, and all reward pools keep complete tagg
    const offer=await page.evaluate(({ship,kind})=>window.__arsenalQA.offer(ship,kind),{ship,kind});
    expect(offer).toHaveLength(['minor','major'].includes(kind)?4:3);
    expect(offer.every(c=>!c.supply&&c.tags.length>0)).toBe(true);expect(new Set(offer.map(c=>c.id)).size).toBe(offer.length);
+   expect(offer.filter(c=>c.arsenal).length).toBeLessThanOrEqual(1);
   }
  }
  expect(errors).toEqual([]);
@@ -105,16 +106,19 @@ test('arsenal standard balance: ten seeds x early/mid/late x five ships x two re
  console.log('ARSENAL_BALANCE='+JSON.stringify(summary));expect(rows).toHaveLength(300);expect(errors).toEqual([]);
 });
 
-test('arsenal full progression: three seeds, both real modes, actual random rewards',async({page},testInfo)=>{
+test('arsenal full progression: paired seeds, both real modes, actual random rewards',async({page},testInfo)=>{
  test.skip(process.env.ANKIN_ARSENAL_FULL!=='1','Full base/candidate comparison runs in the dedicated progression job.');
- test.setTimeout(1100000);const errors=await setup(page),rows=[];
+ const seedCount=Number(process.env.ANKIN_ARSENAL_FULL_SEEDS||3);
+ expect(Number.isInteger(seedCount)&&seedCount>=3&&seedCount<=20).toBe(true);
+ const seeds=Array.from({length:seedCount},(_,i)=>17+i);
+ test.setTimeout(2100000);const errors=await setup(page),rows=[];
  const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
- for(const gameMode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog'])for(const seed of [17,18,19]){
+ for(const gameMode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog'])for(const seed of seeds){
   const r=await page.evaluate(args=>window.__ankinBalanceAI.runFull({...args,fusionPolicy:'always'}),{ship,gameMode,seed});
   expect(r.stopReason.startsWith('unhandled-menu')).toBe(false);expect(Number.isFinite(r.dps)).toBe(true);rows.push(r);
  }
  const summary=rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,fusions:r.elementFusions,choices:r.menuChoices,clear:r.clearCount,boss:r.reachedFinalBoss}));
  console.log('ARSENAL_PROGRESSION='+JSON.stringify(summary));
  await mkdir('artifacts/arsenal',{recursive:true});await writeFile('artifacts/arsenal/'+testInfo.project.name+'-progression.json',JSON.stringify({rows,summary},null,2));
- expect(rows).toHaveLength(30);expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);expect(errors).toEqual([]);
+ expect(rows).toHaveLength(10*seedCount);expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);expect(errors).toEqual([]);
 });

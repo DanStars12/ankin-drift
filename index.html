@@ -3997,6 +3997,13 @@ function preferredElementNames(){
   if(!owned(id))continue;const def=skillById(id);if(def)for(const name of offeredElements(def))focus.add(name);
  }return focus;
 }
+// Keep core build choices beside the new one-off stat specializations. Once the
+// core pool is exhausted, remaining one-offs still fill every available slot.
+function offerCandidatePool(cards,options){
+ if(!options.some(c=>c.arsenal))return cards;
+ const core=cards.filter(c=>!c.arsenal);
+ return core.length?core:cards;
+}
 function offerCards(kind,avoidIds=new Set(),isReroll=false){
  const source=kind==='major'?LEGENDS:kind==='minor'?POWERS:kind==='unique'?UNIQUE_SKILLS:kind==='relic'?RELICS:SKILLS;
  const eligible=selectable(source).filter(c=>kind!=='relic'||!game.relics[c.id]);
@@ -4005,7 +4012,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
  const options=[],used=new Set(),focus=preferredElementNames();
  const targetDefs=targetDefinitions().filter(t=>game.targets.includes(t.key)&&!targetStatus(t).done&&!targetStatus(t).sealed);
  for(let i=0;i<desired;i++){
-  const possible=pool.filter(c=>!used.has(c.id));if(!possible.length)break;let c;
+  const possible=offerCandidatePool(pool.filter(c=>!used.has(c.id)),options);if(!possible.length)break;let c;
   const targetMatches=possible.filter(c=>targetDefs.some(t=>!owned(c.id)&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id))));
   const elementMatches=possible.filter(c=>offeredElements(c).some(tag=>focus.has(tag)));
   // Rerolls improve control of an existing elemental build, but never force a specific card.
