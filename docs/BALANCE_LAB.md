@@ -411,3 +411,50 @@ The three test surfaces remain separate cohorts (all ten on/off pairs passed on 
 - Desktop UNIQUE peer encounters show the intended weapon-specialist boss advantage (early ratios1.01–1.83; mid ratios1.08–2.23 against the existing machine UNIQUE) with different pack outcomes (early.90–1.08, mid1.13–1.61). These are controlled 20s kits, not comparisons against the best universal UNIQUE or completed 30-minute builds. Counts/limits and secondary unlocks differ. All ordinary-card budgets remain unchanged. Mobile and desktop are separate camera/layout cohorts.
 - Audit also finds a pre-existing shared-upgrade defect: `superDash` could increase an already-.52s DRILL cooldown to.7s; `dash` used a similar higher floor during direct application/reconstruction. Preserve the stronger existing cooldown while retaining the normal speed gain. This is a monotonic quality fix, not a new reduction below the machine's existing floor. Add an actual-catalog regression (65 Node tests total).
 - Final long comparison uses twenty seeds (17–36), five ships and both actual schedules: 200 runs per revision /400 total, with unchanged AI on both sides. Ordinary encounters remain300 pairs per surface; UNIQUE peers200 per surface. Do not merge before reviewing these results, latest Actions and same-runner performance. Final integration and measured results will be recorded after the feature merge in a documentation-only PR so source acceptance is not altered by reporting edits.
+
+## v13.36 integration record
+
+- Feature PR: [#64](https://github.com/DanStars12/ankin-drift/pull/64); squash commit `38e6698c56dcf3e8047d37416578cd889c7fd9b6`. Baseline main `8dde4c0ee67bfe7a5d822ae98865630d6cf8673c` (v13.35); tested feature head `f67b0a0480d8b1e5f02773ba98f17e1749134e03` (tree identical to `5b373f5`). Final version: v13.36 ARSENAL EXPANSION. LEVEL 2/3, normal mode only. No CO-OP/Workers/network changes.
+- GitHub Actions/Webhooks incident was resolved at 2026-11-09 20:50 JST. An empty branch commit resumed missing checks; no source/CI requirement was bypassed. Latest final validation [42640589741](https://github.com/DanStars12/ankin-drift/actions/runs/42640589741), 400-run comparison [42638924128](https://github.com/DanStars12/ankin-drift/actions/runs/42638924128), fixed-step full timeline [42638924458](https://github.com/DanStars12/ankin-drift/actions/runs/42638924458), repeated performance [42638924108](https://github.com/DanStars12/ankin-drift/actions/runs/42638924108), diagnostic fixtures [42638924168](https://github.com/DanStars12/ankin-drift/actions/runs/42638924168): all PASS, rechecked against the unchanged head/main immediately before integration. Superseded cancelled validation runs are not counted as passes.
+- Delivered: 59 once-per-run cards (20 ordinary, 12 POWER, 12 LEGENDARY, 5 UNIQUE, 10 relics), five machine evolutions, 40 legacy description corrections, meaningful tags and bounded offer composition. Catalog335→394, DOG75→84. Legacy acquisition stacks/IDs/archive schema remain intact. Existing dash reductions now preserve a stronger already-reduced cooldown.
+
+### Actual progression comparison
+
+Both revisions use the same controller, twenty seeds17–36, all five ships and both real schedules: 200 runs per revision /400 total. These are rendering-free game-time simulations, including early deaths/time limits, not 400 successful clears or physical-device playtests.
+
+| Mode | Ship | Base clears /20 | Candidate clears /20 | Base mean end time (s) | Candidate mean end time (s) |
+| --- | --- | --- | --- | --- | --- |
+| normal | shot | 6 | 10 | 1354.7 | 1560.8 |
+| normal | laser | 2 | 2 | 1023.2 | 934.5 |
+| normal | charge | 6 | 6 | 1306.6 | 1301.6 |
+| normal | drill | 4 | 1 | 1157.4 | 1110.0 |
+| normal | dog | 1 | 0 | 744.6 | 698.0 |
+| challenge | shot | 15 | 15 | 897.3 | 858.4 |
+| challenge | laser | 11 | 12 | 803.5 | 807.8 |
+| challenge | charge | 12 | 11 | 801.5 | 803.6 |
+| challenge | drill | 7 | 6 | 894.5 | 761.5 |
+| challenge | dog | 11 | 7 | 749.7 | 785.0 |
+
+- NORMAL:19/100→19/100 clears; mean end time1117.3→1121.0s. CHALLENGE:56/100→51/100;829.3→803.3s. NORMAL has16 discordant losses and16 gains; CHALLENGE30 losses and25 gains. Exploratory exact paired tests give p=1.000 and .590; absence of a detected difference is **not** proof of equivalence or a bound on human clear rates.
+- Adoption judgment combines stable overall NORMAL progression, modest ordinary-card stat budgets, actual upper-tier peer comparisons, preserved limits/records, all regressions and repeated performance. The initial broad collapse was corrected before integration. Do not claim every ship is equally strong or every changed seed improves.
+- Residual signals remain visible: DRILL NORMAL4/20→1/20 (mean1157.4→1110.0s), DOG CHALLENGE11/20→7/20 despite longer mean survival749.7→785.0s, and DRILL CHALLENGE mean894.5→761.5s. Twenty samples per machine and the tag-based build chooser/known DRILL heading issue limit causal conclusions. These are priority follow-ups, not reasons for an unmeasured global ship buff.
+
+### Functional and performance evidence
+
+- 65 Node tests plus syntax/PWA; PC/390/320 browser regressions; all59 real acquisitions, once-only exclusion, finite 2x combat and reconstruction; all five evolutions, reward menus, atlas search and viewport bounds; archive compatibility/offline startup. Ordinary controlled combat300 pairs/surface and UNIQUE peers200 pairs/surface keep camera cohorts separate. Full 1x/2x reports match for all five ships and both modes, with actual final-boss clears and two-fusion coverage. Assertions were retained.
+- On each of desktop and mobile390, same-runner base/candidate three repeats: common late-stress frame P95[33.4,33.4,33.4]ms in both revisions. Candidate 2x-stress effective speed[1.998,1.998,1.998], discarded time0; frame P95 desktop[33.4,33.4,33.4]ms, mobile[33.4,33.3,33.4]ms. This is a short rendered benchmark; it is not a universal device-FPS guarantee or a rendered30-minute memory soak.
+- Public verification: canonical https://danstars12.github.io/ankin-drift/ HTML, skill-arsenal.js, sw.js and manifest.webmanifest all byte-match merged UI-repair commit f2d03060fc3c3f58185b1ca17cbbf14cd1ec0bf5 after successful Pages deployment42644787919. Public version13.36 and offline cache arsenal-v2 are present. This verifies deployed content, not a physical-device playthrough.
+- Still unverified: real Windows/Android/iOS input/audio, physical mobile performance and rendered15/30-minute continuous sessions. The local Chromium socket restriction persists. A temporary Node/DOM-stub experiment matched only8/20 known browser summaries and was rejected as release evidence; it is not imported by the product or accepted test suite.
+
+### Next cycle
+
+1. Compare DRILL approach/withdrawal policies against the unchanged strafe controller using multiple bosses, phases and matched builds; use forward-overlap/heading diagnostics and actual damage/survival. Separate AI weakness from ship output before tuning the ship.
+2. Inspect DOG late-boss damage versus mixed-animal/bone-focused reward histories, and improve the experimental reward evaluator to account for actual stat budgets, defensive needs and relic costs. Compare the same evaluator on base/candidate; do not change only the candidate controller to manufacture favorable clears.
+3. Monitor individual once-only pick rates, evolution completion and late-game stock depletion with larger independent seed batches; retain NORMAL baseline difficulty and all save records. No additional gameplay changes are bundled with this release-record PR.
+
+### Post-merge touch-hover repair
+
+- Original main validation [42641525510](https://github.com/DanStars12/ankin-drift/actions/runs/42641525510) failed one mobile320 DOG fusion click. It was not reclassified as a pass or hidden by retries. Trace and screenshot showed the TAG GUIDE sheet intercepting the fusion button before any intended tag tap: a mouse left by menu interaction hovered a tag when the touch-control menu appeared.
+- [PR #65](https://github.com/DanStars12/ankin-drift/pull/65), tested head `7bcc1d6df28d6473e7dd9d2aed7dccd6b605ec2b`, squash `f2d03060fc3c3f58185b1ca17cbbf14cd1ec0bf5`: suppress hover previews for touch controls/coarse non-hover inputs; retain intentional tap/click, keyboard details and ordinary desktop hover. Bump the normal offline shell to `ankin-drift-mobile-v13-36-arsenal-v2`. No combat values or saves changed.
+- Add deterministic regressions for hover suppression, actual tag tap/close and reachable fusion action, plus desktop hover open/dismiss. No force clicks and no skip of the original failing case. Desktop/mobile390/mobile320 each146 browser tests PASS (7 deliberate platform/opt-in skips per surface).
+- Latest validation [42643448902](https://github.com/DanStars12/ankin-drift/actions/runs/42643448902), comparison [42643448701](https://github.com/DanStars12/ankin-drift/actions/runs/42643448701), performance [42643448473](https://github.com/DanStars12/ankin-drift/actions/runs/42643448473), full clock [42643448658](https://github.com/DanStars12/ankin-drift/actions/runs/42643448658), diagnosis [42643448442](https://github.com/DanStars12/ankin-drift/actions/runs/42643448442): all PASS. All20 cohorts/400 progression summaries exactly match the previously integrated gameplay candidate, including all seeds and ending/choice/fusion fields. Main/head were rechecked before this LEVEL1 repair merged.
