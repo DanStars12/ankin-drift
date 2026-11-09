@@ -460,9 +460,9 @@ Both revisions use the same controller, twenty seeds17–36, all five ships and 
 - Latest validation [42643448902](https://github.com/DanStars12/ankin-drift/actions/runs/42643448902), comparison [42643448701](https://github.com/DanStars12/ankin-drift/actions/runs/42643448701), performance [42643448473](https://github.com/DanStars12/ankin-drift/actions/runs/42643448473), full clock [42643448658](https://github.com/DanStars12/ankin-drift/actions/runs/42643448658), diagnosis [42643448442](https://github.com/DanStars12/ankin-drift/actions/runs/42643448442): all PASS. All20 cohorts/400 progression summaries exactly match the previously integrated gameplay candidate, including all seeds and ending/choice/fusion fields. Main/head were rechecked before this LEVEL1 repair merged.
 
 
-## v13.37 TACTICAL ARSENAL — 開発中 (2026-11-10 JST)
+## v13.37 TACTICAL ARSENAL — 統合済み (2026-11-10 JST)
 
-開始main: `73bd3906992fe34b3e3ce7aced56f3bb05099ee7` (v13.36)。専用ブランチ: `feature/solo-tactical-skills-20261110`。PR [#67](https://github.com/DanStars12/ankin-drift/pull/67)、統合コミットは未確定。通常ソロのみ。CO-OP、通信、Workers、セーブ形式は変更しない。
+開始main: `73bd3906992fe34b3e3ce7aced56f3bb05099ee7` (v13.36)。専用ブランチ: `feature/solo-tactical-skills-20261110`。PR [#67](https://github.com/DanStars12/ankin-drift/pull/67)、統合コミット `fabf48ebc776640b01fced383734f5b6e6c3882d`。通常ソロのみ。CO-OP、通信、Workers、セーブ形式は変更しない。
 
 ### 狙いと追加範囲
 
@@ -538,3 +538,17 @@ CI初回診断: legacy-upper / legacy-control の「empty choice」は、診断�
 全CIが緑になった後のソースレビューで、条件付き威力を最終ボスのHP保護適用後に増幅している順序問題を発見。実際のdamageEnemyを用いた再現で、保護下限999に対して998.94まで削れてしまった。条件補正後にもモジュール存命中の下限を適用して修正。与ダメージ計測も下限までの実ダメージに一致する。新規単体回帰を追加、Node計78件。実ブラウザでも全モジュールが存命のまま下限を超えないことを追加検証する。
 
 レーザーの実ネイティブ照準維持・ダメージ適用も追加確認し、連携成立/維持命中カウンタを記録する。カード・タグの説明には貫通上限(+3、進化後+4)、蓄電軽減上限22%、反撃の時間窓を明示し、定型の不要な注意文を整理する。最終修正のCI結果を確認するまで統合しない。
+
+### v13.37 統合完了
+
+PR [#67](https://github.com/DanStars12/ankin-drift/pull/67) を Squash Merge。mainコミット `fabf48ebc776640b01fced383734f5b6e6c3882d`。テスト済みhead `7430595a895626769c5c769a5284636e13751cdc` とmainのアプリ差分なしを取得後に確認した。最終検証 [42695158976](https://github.com/DanStars12/ankin-drift/actions/runs/42695158976)、バランス [42694016769](https://github.com/DanStars12/ankin-drift/actions/runs/42694016769)、2倍速 [42694017136](https://github.com/DanStars12/ankin-drift/actions/runs/42694017136)、性能 [42694017367](https://github.com/DanStars12/ankin-drift/actions/runs/42694017367)、診断 [42694016778](https://github.com/DanStars12/ankin-drift/actions/runs/42694016778) 全PASS。
+
+最終Node78件、3画面は各151PASS/10件の明示的なplatform/opt-in skip。最終修正後の全400走サマリーは直前headと全シード・終了時間・クリア/融合/選択履歴が一致し、NORMAL34→36/100・CHALLENGE56→59/100を維持。1x/2xは5機体×両モード×3シードの30ペア/60長時間走で結果が完全一致、両モードのクリア/二重属性融合も確認。
+
+最終性能は同じランナー上で旧→候補を各3反復。5機体アクティブフック/2倍速/高速弾/220敵/300弾/複合レイドで、390pxのフレームP95は双方16.7〜16.8ms、PCは双方概ね66.7ms。実効速度1.996、破棄0。390pxのシミュレーションP95は旧0.5〜1.3ms/候補0.6〜1.5ms、PCは旧5.0〜9.1ms/候補3.8〜9.4ms。レーザーなどで処理時間の小さな増加はあるが、同条件のフレーム/実効速度の重大な悪化なし。前回反復とFPS絶対値が異なるため、CIの絶対FPSを実機性能と同一視しない。実スマホ端末、公開URLの実プレイは未確認。
+
+### 次サイクル: チャージ再構築の状態保持 (LEVEL 1)
+
+基点 `fabf48e`、ブランチ `fix/solo-charge-rebuild-state-20261110`。ビルド再計算でcharge=0.7は残る一方、chargeStationaryが初期値falseへ戻ることを実コードで再現。従来のチャージでも、新しい蓄電保持カードでも、再構築後の移動で解放されず次の停止まで持ち越される。保持スナップショットにこの真偽値を追加し、再構築後へ復元する。セーブ形式・威力・蓄電速度は変更しない。
+
+回帰3件: 通常蓄電の再構築後解放、保持カード＋ダッシュ終了後の1回だけの解放、非蓄電状態を勝手に蓄電扱いにしない。修正前は前2件が失敗、修正後は3件PASS。実ブラウザにも再構築→移動→主彗星1発/蓄電0の確認を追加。Node計81件とPWAを再確認し、オフラインキャッシュを `ankin-drift-mobile-v13-37-tactics-v2` に更新する。CIと比較結果はPRで確認後に記録する。
