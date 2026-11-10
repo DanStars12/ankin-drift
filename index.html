@@ -1502,18 +1502,18 @@ const FUSION_WEAPON_CHOICES={
 };
 const FUSION_B_VARIANTS={
  fire_ice:{name:'クライオ・カルデラ',desc:'マグマ床が氷の減速領域を生み、燃焼とスロウを重ねる。',effect:'magmaSlow'},
- fire_thunder:{name:'ヴォルテック・カルデラ',desc:'マグマ床から制限付きの短距離雷撃を放つ。',effect:'magmaArc'},
+ fire_thunder:{name:'ヴォルテック・カルデラ',desc:'マグマ床から短距離の雷撃を放つ。',effect:'magmaArc'},
  fire_wind:{name:'ストーム・マグマ',desc:'マグマ出現後に小さなマグマへ一度だけ分裂する。',effect:'magmaWind'},
  fire_rock:{name:'ヴォルカニック・リッジ',desc:'マグマ床が岩の衝撃波を伴い、ボスにも追加威力。',effect:'magmaRock'},
  ice_fire:{name:'フロストバーン・スパイク',desc:'氷柱が燃焼を付与し、命中時に小爆発。確定スロウを維持。',effect:'spikeBurn'},
- ice_thunder:{name:'サンダーフロスト・ピラー',desc:'氷柱命中位置から短距離の雷連鎖。再発動を制限。',effect:'spikeArc'},
+ ice_thunder:{name:'サンダーフロスト・ピラー',desc:'氷柱の命中から短距離の雷撃が連鎖する。',effect:'spikeArc'},
  ice_wind:{name:'ブリザード・ランス',desc:'氷柱の判定幅とスロウ範囲を拡大。',effect:'spikeBlizzard'},
  ice_rock:{name:'ダイヤモンド・ピラー',desc:'重装敵やボスに氷柱の大ダメージ。',effect:'spikeDiamond'},
  thunder_fire:{name:'フレア・スネーク',desc:'蛇状雷撃の命中した敵に燃焼を付与。',effect:'boltBurn'},
  thunder_ice:{name:'サンダーフロスト・サーペント',desc:'蛇状雷撃にスロウを付与。',effect:'boltSlow'},
  thunder_wind:{name:'テンペスト・サーペント',desc:'雷撃の伝播距離と連鎖経路を延長。',effect:'boltWind'},
  thunder_rock:{name:'ガイア・サンダーボルト',desc:'重装敵・ボスへの雷撃威力を増大。',effect:'boltRock'},
- wind_fire:{name:'バーニングブレード',desc:'ブレードが赤色化。命中時に燃焼と再発動制限付きの爆発。',effect:'bladeBurn'},
+ wind_fire:{name:'バーニングブレード',desc:'ブレードが炎色に変わり、燃焼と小爆発を与える。',effect:'bladeBurn'},
  wind_ice:{name:'フロストエッジ',desc:'ブレードが氷晶化し、命中時にスロウ。',effect:'bladeFrost'},
  wind_thunder:{name:'スパーク・ブレード',desc:'ブレード命中時に短距離の雷連鎖。',effect:'bladeArc'},
  wind_rock:{name:'グラビティ・ブレード',desc:'ブレードに押し返し衝撃を追加。',effect:'bladeRock'},
@@ -3966,6 +3966,8 @@ function syncEvolutionVisuals(p){
   for(const [main,slots]of Object.entries(families))for(const[slot,pattern]of Object.entries(slots))if(pattern.test(code)){const key=main+slot;(p.weaponColors[key]??=[]).push(color);elemental=true;}
   if(!elemental||/bullet|plasma|cryo|chain|laser|charge|drill|dogBone|p\.dmg|p\.rate/.test(code))p.weaponColors.primary.push(color);
  }
+ const mutationColors=[['fireA',p.dogNineTailMorph,p.dogNineTailAscended,'#eab04f','#d48b57'],['iceB',p.dogMoon,p.dogMoonAscended,'#c6b8ee','#fff7df'],['thunderB',p.dogViper,p.dogViperAscended,'#e8b954','#fff0c2'],['windA',p.dogWhale,p.dogWhaleAscended,'#16677f','#315a99'],['rockB',p.dogArmorHam,p.dogArmorHamAscended,'#9d7947','#c0a162']];
+ for(const[key,base,apex,c1,c2]of mutationColors){if(base)(p.weaponColors[key]??=[]).push(c1);if(apex)(p.weaponColors[key]??=[]).push(c2);}
  for(const key of Object.keys(p.weaponColors))p.weaponColors[key]=[...new Set(p.weaponColors[key])];
  const latest=active.at(-1);p.evolutionTint=latest?.color||null;p.evolutionMotif=latest?.motif||'';
 }
