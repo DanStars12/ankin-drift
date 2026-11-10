@@ -1489,7 +1489,7 @@ const CROSS_VARIANTS={
  ice:[['fire','フレア・スノーボール','氷弾の命中で周囲の敵に燃焼を付与する。','🔥',{iceballBurn:1}],['thunder','スパーク・スノーボール','氷弾の命中から短距離雷撃が連鎖する。','⚡',{iceballArc:1}],['wind','ゲイル・スノーボール','氷弾の命中で周囲の敵を押し出す。','🌪️',{iceballWind:1}],['rock','クリスタル・スノーボール','岩色の氷弾が重い衝撃を与える。ボスへの衝撃が増す。','💎',{iceballRock:1}]],
  thunder:[['fire','フレア・パルス','電磁パルス内の敵に燃焼を付与する。','🔥',{pulseBurn:1}],['ice','フロスト・パルス','電磁パルス内の敵を減速させる。','❄️',{pulseFrost:1}],['wind','ゲイル・パルス','電磁パルス内の敵を外側へ押し出す。','🌪️',{pulseWind:1}],['rock','ガイア・パルス','電磁パルスに重い衝撃を加える。ボスへの衝撃が増す。','🪨',{pulseRock:1}]],
  wind:[['fire','ブレイズ・サイクロン','炎色のサイクロンが敵を押し返し、燃焼を付与する。','🔥',{cycloneFlare:1}],['ice','フロスト・サイクロン','氷色のサイクロンが敵を押し返し、減速させる。','❄️',{cycloneFrost:1}],['thunder','スパーク・サイクロン','サイクロンの命中から短距離雷撃が連鎖する。','⚡',{cycloneArc:1}],['rock','グラナイト・サイクロン','岩色のサイクロンが重い衝撃を与える。','🪨',{galeOrbit:1}]],
- rock:[['fire','フレア・ウォール','岩壁の接触で周囲の敵に燃焼を付与する。','🔥',{wallFlare:1}],['ice','フロスト・ウォール','氷色の岩壁が接触した敵を減速させる。','❄️',{wallFrost:1}],['thunder','スパーク・ウォール','岩壁の接触から短距離雷撃が連鎖する。','⚡',{wallArc:1}],['wind','ゲイル・ウォール','緑色の岩壁が高速で旋回し、敵を押し返す。','🌪️',{orbitFort:1}]]
+ rock:[['fire','フレア・ウォール','岩壁の接触で炎の衝撃波と燃焼を与える。','🔥',{meteorWall:1}],['ice','フロスト・ウォール','氷色の岩壁が接触した敵を減速させる。','❄️',{wallFrost:1}],['thunder','スパーク・ウォール','岩壁の接触で衝撃波と短距離雷撃を放つ。','⚡',{gaiaShock:1}],['wind','ゲイル・ウォール','緑色の岩壁が高速で旋回し、敵を押し返す。','🌪️',{orbitFort:1}]]
 };
 const ELEMENT_FUSION_RECIPES=Object.entries(CROSS_VARIANTS).flatMap(([main,list])=>list.map(([sub,name,desc,icon,mod])=>({id:`${main}_${sub}`,main,sub,name,desc,icon,mod})));
 // Direction and weapon slot are explicit; the original 20 CROSS_VARIANTS remain slot A.
@@ -4923,7 +4923,7 @@ function tickGusts(dt){
     e.x+=nx*step;e.y+=ny*step;
     enemyIndexDirtyDuringForces=true;
    }
-   damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(g.bonus||1),{special:true,source:'element'});
+   damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(g.bonus||1)*(player.elementMods?.cycloneArc?1.9:1),{special:true,source:'element'});
     fusionImpact('wind',g.x,g.y,g.r,player.windDps*.4,e);
     if(player.cycloneBurn)setBurn(e,Math.max(14,player.windDps*.4),1.7);
     if(player.cycloneSlow)applySlow(e,1.2);
@@ -5161,10 +5161,10 @@ function fusionImpact(main,x,y,r,damage,target=null){
  for(const e of target?[target]:circleCandidates(x,y,r+26)){
   if(e.dead||e.isoWarp||(e.isoSafe||0)>0||(!target&&(e.x-x)**2+(e.y-y)**2>(r+e.r)**2)||(e[key]??-1)>runClock)continue;
   e[key]=runClock+.65;
-  if(combo.sub==='fire')setBurn(e,Math.max(12,damage*.3),1.7);
+  if(combo.sub==='fire')setBurn(e,Math.max(12,main==='wind'?damage:damage*.3),1.7);
   else if(combo.sub==='ice')applySlow(e,1.4);
   else if(combo.sub==='thunder'&&arcBudget.count<2){arcBudget.count++;applyChain(e,Math.min(110,Math.max(12,damage*.22)));}
-  else if(combo.sub==='wind')fusionPush(e,x,y,main==='fire'?18:9);
+  else if(combo.sub==='wind'&&main!=='rock')fusionPush(e,x,y,main==='fire'?18:9);
   else if(combo.sub==='rock')damageEnemy(e,damage*(['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?.18:.1),{special:true,source:main==='fire'?'missile':main==='ice'?'iceball':main==='thunder'?'pulseField':main==='wind'?'element':'rock'});
  }
 }
@@ -6015,7 +6015,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   // Large batched paths must not cast a whole-screen shadow texture.
   // Pressure warnings below still retain their dedicated outline.
   ctx.shadowBlur=0;
-  for(const [color,path] of groups){ctx.fillStyle=color;ctx.fill(path);ctx.strokeStyle='#f5fbff';ctx.lineWidth=1.15;ctx.stroke(path)}ctx.fillStyle='#fff';ctx.fill(cores);
+  for(const [color,path] of groups){ctx.fillStyle=color;ctx.fill(path);ctx.strokeStyle='#f5fbff';ctx.lineWidth=1.15;ctx.stroke(path)}if(groups.size){ctx.fillStyle='#fff';ctx.fill(cores);}
   // Keep special warning rings on top of the colored projectiles.
   for(const b of hostile){if(!b.pressure||b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
    ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=neonBlur(12);ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();
