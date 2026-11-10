@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {renderBatchSources,legacyGrid,legacyHatching} from '../scripts/render-batch-harness.mjs';
 const sources=renderBatchSources();
-test('batched backdrop and ENGAGE retain pixel coverage across mobile, desktop and resolution changes',async({page})=>{
+test('native backdrop and ENGAGE match reference pixels across mobile, desktop and resolution changes',async({page})=>{
  test.setTimeout(60000);
  await page.goto('./');
  const results=await page.evaluate(({sources,grid,hatch})=>{
@@ -30,7 +30,7 @@ test('batched backdrop and ENGAGE retain pixel coverage across mobile, desktop a
  expect(results).toHaveLength(36);for(const row of results)expect(row.differing,JSON.stringify(row)).toBe(0);
 });
 
-test('render submission cost: alternating real Canvas draws with synchronous readback',async({page},testInfo)=>{
+test('native rendering baseline: alternating reference and shipped Canvas draws with per-frame readback',async({page},testInfo)=>{
  test.setTimeout(120000);await page.goto('./');
  const result=await page.evaluate(({sources,grid,hatch})=>{
   const draws=[{grid:Function('return ('+grid+')')(),hatch:Function('return ('+hatch+')')()},

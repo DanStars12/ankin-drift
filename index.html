@@ -5688,18 +5688,6 @@ function enemyDraw(e){if(e.isoWarp)return;ctx.save();ctx.translate(e.x,e.y);ctx.
 if(e.burn>0){ctx.save();ctx.shadowBlur=renderHeavyLoad||settings.fx==='low'?0:11;ctx.shadowColor='#ff7a32';ctx.strokeStyle='#ff9a45';ctx.lineWidth=e.type==='major'||e.type==='unique'?4:2.5;ctx.globalAlpha=.75+.18*Math.sin(t*13+e.phase*2);ctx.beginPath();ctx.arc(0,0,e.r*1.14,0,TAU);ctx.stroke();ctx.globalAlpha=1;const count=renderHeavyLoad||settings.fx==='low'?2:4;for(let i=0;i<count;i++){const angle=(i/count)*TAU+t*.4+e.phase*.13,r=e.r*.8;ctx.fillStyle=i%2?'#ffcc70':'#ff7539';ctx.beginPath();const x=Math.cos(angle)*r,y=Math.sin(angle)*r;ctx.ellipse(x,y-4-3*Math.sin(t*8+i),Math.max(2,e.r*.11),Math.max(5,e.r*.24),.1,0,TAU);ctx.fill()}ctx.restore()}
 if(e.slow>0&&!['minor','major','unique'].includes(e.type)){ctx.shadowBlur=6;ctx.strokeStyle=e.frozen>0?'#d5faff':'#7ccfff';ctx.lineWidth=e.frozen>0?2.6:1.5;ctx.globalAlpha=e.frozen>0?.94:.68;ctx.beginPath();ctx.arc(0,0,e.r*1.16,0,TAU);ctx.stroke();ctx.globalAlpha=1}ctx.restore();if((e.type==='brute'||e.type==='relic'||e.type==='ultimatePart')&&e.hp<e.maxHp){ctx.fillStyle='#25304b';ctx.fillRect(e.x-17,e.y-28,34,3);ctx.fillStyle='#b3a8fc';ctx.fillRect(e.x-17,e.y-28,34*clamp(e.hp/e.maxHp,0,1),3)}}
 let renderHeavyLoad=false, cachedBgGradient=null, cachedBgW=0, cachedBgH=0;
-// Separate parallel groups retain alpha at grid intersections without one stroke per line.
-function drawBackdropGrid(g,width,height,time,pixelScale){
- g.strokeStyle='#5b9cb418';g.lineWidth=1;const off=(time*11)%61;
- // Fractional transforms/endpoints use the original per-line rasterization.
- if(!Number.isInteger(pixelScale)||!Number.isInteger(width)||!Number.isInteger(height)){
-  for(let x=off-61;x<width;x+=61){g.beginPath();g.moveTo(x,0);g.lineTo(x,height);g.stroke()}
-  for(let y=off-61;y<height;y+=61){g.beginPath();g.moveTo(0,y);g.lineTo(width,y);g.stroke()}
-  return;
- }
- g.beginPath();for(let x=off-61;x<width;x+=61){g.moveTo(x,0);g.lineTo(x,height)}g.stroke();
- g.beginPath();for(let y=off-61;y<height;y+=61){g.moveTo(0,y);g.lineTo(width,y)}g.stroke();
-}
 // Persistent evolution crests. At most three lightweight Canvas paths per frame,
 // cyclically revealing every completed evolution in long runs.
 function drawEvolutionCrests(){
@@ -5859,7 +5847,7 @@ function drawTeslaEmitter(p,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visual
 }
 
 function render(){const renderPressure=shots.length+hostile.length+enemies.length*2+particles.length+zones.length*4+gusts.length*5;
- renderHeavyLoad=mode==='playing'&&(settings.fx==='simple'||renderPressure>(controlMode==='mobile'?310:490)||(game?.raid?.effects?.length>=2&&renderPressure>(controlMode==='mobile'?190:360)));ctx.save();if(!cachedBgGradient||cachedBgW!==W||cachedBgH!==H){cachedBgW=W;cachedBgH=H;cachedBgGradient=ctx.createRadialGradient(W*.46,H*.40,24,W*.5,H*.52,Math.max(W,H)*.8);cachedBgGradient.addColorStop(0,'#152440');cachedBgGradient.addColorStop(.6,'#0a1428');cachedBgGradient.addColorStop(1,'#050a15')}ctx.fillStyle=cachedBgGradient;ctx.fillRect(0,0,W,H);drawBackdropGrid(ctx,W,H,t,dpr*adaptiveRenderScale*(controlMode==='mobile'?.69:1));for(let si=0;si<stars.length;si++){if(renderHeavyLoad&&si%2)continue;const s=stars[si];ctx.fillStyle=`rgba(199,230,255,${.24+.33*Math.sin(t*s.z+s.v)**2})`;ctx.fillRect(s.x,s.y,s.r,s.r)}ctx.translate(rand(-shake,shake),rand(-shake,shake));if(mode!=='menu'&&player){
+ renderHeavyLoad=mode==='playing'&&(settings.fx==='simple'||renderPressure>(controlMode==='mobile'?310:490)||(game?.raid?.effects?.length>=2&&renderPressure>(controlMode==='mobile'?190:360)));ctx.save();if(!cachedBgGradient||cachedBgW!==W||cachedBgH!==H){cachedBgW=W;cachedBgH=H;cachedBgGradient=ctx.createRadialGradient(W*.46,H*.40,24,W*.5,H*.52,Math.max(W,H)*.8);cachedBgGradient.addColorStop(0,'#152440');cachedBgGradient.addColorStop(.6,'#0a1428');cachedBgGradient.addColorStop(1,'#050a15')}ctx.fillStyle=cachedBgGradient;ctx.fillRect(0,0,W,H);ctx.strokeStyle='#5b9cb418';ctx.lineWidth=1;const off=(t*11)%61;for(let x=off-61;x<W;x+=61){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=off-61;y<H;y+=61){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}for(let si=0;si<stars.length;si++){if(renderHeavyLoad&&si%2)continue;const s=stars[si];ctx.fillStyle=`rgba(199,230,255,${.24+.33*Math.sin(t*s.z+s.v)**2})`;ctx.fillRect(s.x,s.y,s.r,s.r)}ctx.translate(rand(-shake,shake),rand(-shake,shake));if(mode!=='menu'&&player){
  // Warning telegraphs are drawn on the topmost gameplay layer (after magma, gusts, projectiles and particles).
  // Magma is an organic, irregular burning puddle, not a targeting circle.
  for(const z of zones){if(z.x+z.r<0||z.x-z.r>W||z.y+z.r<0||z.y-z.r>H)continue;ctx.save();ctx.translate(z.x,z.y);const fade=Math.min(.78,z.life*.25);ctx.globalAlpha=fade;

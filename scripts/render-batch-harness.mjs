@@ -5,13 +5,13 @@ export function renderBatchSources(){
  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
  const source=html.match(/<script>\s*\(\(\)\s*=>\s*\{([\s\S]*?)<\/script>/)[0].replace(/^<script>/,'').replace(/<\/script>$/,'');
  const body=parse(source,{ecmaVersion:'latest'}).body[0].expression.callee.body.body;
- const result=Object.fromEntries(['drawBackdropGrid'].map(name=>{
-  const node=body.find(n=>n.type==='FunctionDeclaration'&&n.id.name===name);
-  if(!node)throw Error('Missing shipped renderer '+name);
-  return [name,source.slice(node.start,node.end)];
- }));
  const render=body.find(n=>n.type==='FunctionDeclaration'&&n.id.name==='render');
- const hatch=source.slice(render.start,render.end).match(/for\(let x=wall\.x-wall\.h;[^\n]+g?stroke\(\)\}/);
+ const drawing=source.slice(render.start,render.end);
+ const gridStart=drawing.indexOf("ctx.strokeStyle='#5b9cb418'");
+ const gridEnd=drawing.indexOf('for(let si=0;',gridStart);
+ if(gridStart<0||gridEnd<0)throw Error('Missing native backdrop grid');
+ const result={drawBackdropGrid:'function drawBackdropGrid(g,W,H,t){'+drawing.slice(gridStart,gridEnd).replaceAll('ctx.','g.')+'}'};
+ const hatch=source.slice(render.start,render.end).match(/for\(let x=wall\.x-wall\.h;[^\n]+ctx\.stroke\(\)\}/);
  if(!hatch)throw Error('Missing native ENGAGE hatching');
  result.drawEngageHatching='function drawEngageHatching(g,wall){'+hatch[0].replaceAll('ctx.','g.')+'}';
  return result;
