@@ -29,6 +29,7 @@ for(const fused of [false,true])test((fused?'fusion gradients and split magma':'
  await page.goto('./');const results=[];
  for(const ship of Object.keys(flags)){
  const config=await page.evaluate(args=>window.__tacticalPerfSetup(args),{ship,flags:flags[ship],fused});
+ await expect(page.locator('#overlay')).toBeHidden();await expect(page.locator('#hud')).toBeVisible();
  for(let i=0;i<8;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
  expect(config.initialWalls).toBeGreaterThan(0);const report=await page.evaluate(()=>window.ankinPerformanceReport());expect(report.raid.effects).toContain('engage');expect(report.frame.samples).toBeGreaterThan(15);
  expect(report.timing.requestedSpeed).toBe(2);expect(report.timing.discardedGameSeconds).toBe(0);
