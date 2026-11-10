@@ -15,6 +15,10 @@ window.__renderTraceSetup=({ship,engage,doubleTime})=>{
  }
  return config;
 };
+window.__renderTraceResetMeasurements=()=>{
+ perfRing.head=0;perfRing.count=0;actualDraws=0;lastFpsSample=0;actualFps=0;
+ discardedSimulationSeconds=0;stalledFrameCount=0;
+};
 `;
 test('CDP rendering diagnosis: paired untraced and traced native combat',async({page,browser,isMobile},testInfo)=>{
  test.skip(process.env.ANKIN_RENDER_TRACE!=='1','Opt-in Chromium profiling, separate from ordinary performance measurements.');
@@ -34,9 +38,10 @@ test('CDP rendering diagnosis: paired untraced and traced native combat',async({
  try{
   for(const scenario of scenarios)for(let repeat=0;repeat<2;repeat++){
    await page.evaluate(x=>window.__renderTraceSetup(x),scenario);await page.waitForTimeout(1000);
+   const untracedStart=await page.evaluate(()=>window.ankinPerformanceReport());await page.evaluate(()=>window.__renderTraceResetMeasurements());
    await page.waitForTimeout(4000);const untraced=await page.evaluate(()=>window.ankinPerformanceReport());
    const config=await page.evaluate(x=>window.__renderTraceSetup(x),scenario);if(scenario.engage)expect(config.initialWalls).toBeGreaterThan(0);
-   await page.waitForTimeout(1000);const before=await page.evaluate(()=>window.ankinPerformanceReport());
+   await page.waitForTimeout(1000);const before=await page.evaluate(()=>window.ankinPerformanceReport());await page.evaluate(()=>window.__renderTraceResetMeasurements());
    const events=[];const collect=({value})=>{for(const event of value)events.push(event)};session.on('Tracing.dataCollected',collect);
    const complete=new Promise(resolve=>session.once('Tracing.tracingComplete',resolve));
    await session.send('Tracing.start',{transferMode:'ReportEvents',traceConfig:{recordMode:'recordUntilFull',traceBufferSizeInKb:32768,
@@ -49,7 +54,7 @@ test('CDP rendering diagnosis: paired untraced and traced native combat',async({
    writeFileSync(dir+'/'+name+'.cpuprofile.gz',gzipSync(JSON.stringify(profile)));
    expect(completion.dataLossOccurred).toBe(false);expect(events.length).toBeGreaterThan(0);expect(profile.samples.length).toBeGreaterThan(0);
    expect(traced.mode).toBe('playing');expect(traced.frame.samples).toBeGreaterThan(15);expect(traced.timing.requestedSpeed).toBe(scenario.doubleTime?2:1);
-   const row={scenario:scenario.name,repeat,config,untraced,before,traced,cpu:summarizeCpu(profile),trace:summarizeTrace(events)};
+   const row={scenario:scenario.name,repeat,config,untracedStart,untraced,before,traced,cpu:summarizeCpu(profile),trace:summarizeTrace(events)};
    writeFileSync(dir+'/'+name+'.summary.json',JSON.stringify(row,null,2));results.push(row);
    console.log('RENDER_TRACE_SUMMARY='+JSON.stringify({scenario:row.scenario,repeat,untraced:untraced.frame,traced:traced.frame,draw:traced.drawing,sim:traced.simulation,
     cpu:row.cpu,threads:row.trace.threads.slice(0,8),counters:traced.counters,gpu}));
