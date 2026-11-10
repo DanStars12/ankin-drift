@@ -35,6 +35,8 @@ jobs:
         run: npm run test:arsenal
       - name: Verify fixed-step 1x and 2x clocks
         run: npm run test:clock
+      - name: Verify trace aggregation and CPU sample accounting
+        run: npm run test:trace-summary
       - name: Verify v13 archive migration, backup and corruption safety
         run: npm run test:archive
       - name: Test Personal Ending combinations and determinism
