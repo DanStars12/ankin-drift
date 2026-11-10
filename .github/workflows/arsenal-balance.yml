@@ -1,0 +1,95 @@
+name: ANKIN arsenal balance
+on:
+  pull_request:
+    paths: ['index.html', 'skill-arsenal.js', 'skill-tactics.js', 'scripts/balance-ai-harness.mjs', 'scripts/balance-reward-value.mjs', 'tests/v13-37-tactics.spec.mjs', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arsenal-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  standard:
+    name: Arsenal 10-seed combat (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390]
+    env:
+      ANKIN_ARSENAL_STANDARD: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=${{ matrix.project }} --grep='arsenal standard balance|arsenal unique peer'
+      - run: npx playwright test tests/v13-37-tactics.spec.mjs --project=${{ matrix.project }} --grep='tactical standard balance|tactical unique peer|tactical upper-tier'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arsenal-${{ matrix.project }}
+          path: |
+            artifacts/arsenal/
+            artifacts/tactics/
+            test-results/
+          retention-days: 14
+  progression:
+    name: Arsenal progression (${{ matrix.revision }}, ${{ matrix.mode }}, ${{ matrix.ship }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        revision: [baseline, candidate]
+        mode: [normal, challenge]
+        ship: [shot, laser, charge, drill, dog]
+    env:
+      ANKIN_ARSENAL_FULL: '1'
+      ANKIN_ARSENAL_FULL_SEEDS: '20'
+      ANKIN_ARSENAL_MODE: ${{ matrix.mode }}
+      ANKIN_ARSENAL_SHIP: ${{ matrix.ship }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        if: matrix.revision == 'baseline'
+        with:
+          ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          path: comparison-base
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Measure baseline progression with identical harness
+        if: matrix.revision == 'baseline'
+        working-directory: comparison-base
+        run: |
+          cp ../tests/v13-36-arsenal.spec.mjs tests/v13-36-arsenal.spec.mjs
+          cp ../scripts/balance-ai-harness.mjs scripts/balance-ai-harness.mjs
+          cp ../scripts/balance-reward-value.mjs scripts/balance-reward-value.mjs
+          npm ci
+          npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
+      - name: Measure candidate progression
+        if: matrix.revision == 'candidate'
+        run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arsenal-full-${{ matrix.revision }}-${{ matrix.mode }}-${{ matrix.ship }}
+          path: |
+            artifacts/arsenal/
+            comparison-base/artifacts/arsenal/
+            test-results/
+            comparison-base/test-results/
+          retention-days: 14
