@@ -46,3 +46,5 @@ B側20通りの既存武装固有効果を保持し、マグマ＋風は発生1.
 ローカル追加11テスト合格。ブラウザ回帰は40融合×5機体×1/2倍＝400ケース、5機体本体の画素一致、連続命中の白点滅防止、通常/DOGの描画を追加。ローカルChromiumは起動時socket/ptrace制限で停止するため実行結果はCIで確認する。PR・最新ヘッドのCI・比較負荷・戦闘結果は統合前に追記する。実スマホ・実GPU・手操作の快適性は未検証。
 
 Review found a misplaced `else` in the wind slot branch: slotA fire/thunder/rock inherited unintended blade growth. Restored the direct A/B branch and added an eight-case slot-growth regression. This is a correctness fix, not an intentional buff/nerf; the new final head must repeat the comparison.
+
+Latest code validation and integration hold: [PR #74](https://github.com/DanStars12/ankin-drift/pull/74), tested code591b60c. All five workflows pass, with105 Node tests and156 browser tests per project. Twelve new directed/render regressions include the wind A/B growth fix. Final performance and400-run balance results, remaining entry-frame regression and next steps are recorded in `docs/performance.md` under PR #74 integration decision. Feature implementation is on the development branch; it is not merged or certified on the public site. No final version bump or merge commit is claimed.
