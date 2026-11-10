@@ -7,6 +7,7 @@ const hook=workload+String.raw`
 window.__renderTraceSetup=({ship,engage,doubleTime})=>{
  selectedShip=ship;
  const config=window.__ankinPerfTestScenario({total:engage?3600:480,count:engage?220:40,bullets:engage?300:50,withRaid:engage,engage,doubleTime});
+ overloadClock=0;recoveryClock=0;renderBudget=0;frame.lastDraw=0;
  player.iframes=1e8;
  for(const e of enemies)e.hp=e.maxHp=1e8;
  if(ship==='dog'){
@@ -22,7 +23,7 @@ window.__renderTraceResetMeasurements=()=>{
 `;
 test('CDP rendering diagnosis: paired untraced and traced native combat',async({page,browser,isMobile},testInfo)=>{
  test.skip(process.env.ANKIN_RENDER_TRACE!=='1','Opt-in Chromium profiling, separate from ordinary performance measurements.');
- test.setTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ test.setTimeout(240000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/ankin-drift/',async route=>{const r=await route.fetch(),html=await r.text();
   const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
   expect(html).toContain(anchor);await route.fulfill({response:r,body:html.replace(anchor,hook+anchor)});
@@ -34,9 +35,12 @@ test('CDP rendering diagnosis: paired untraced and traced native combat',async({
  const version=await root.send('Browser.getVersion');await root.detach();
  const session=await page.context().newCDPSession(page);await session.send('Profiler.enable');await session.send('Profiler.setSamplingInterval',{interval:1000});
  const dir='artifacts/render-traces/'+testInfo.project.name;mkdirSync(dir,{recursive:true});const results=[];
- const scenarios=[{name:'normal',ship:'shot',engage:false,doubleTime:false},{name:'engage-2x',ship:'shot',engage:true,doubleTime:true},{name:'dog-2x',ship:'dog',engage:true,doubleTime:true}];
+ const baseScenarios=[{name:'normal',ship:'shot',engage:false,doubleTime:false},{name:'engage-2x',ship:'shot',engage:true,doubleTime:true},{name:'dog-2x',ship:'dog',engage:true,doubleTime:true}];
+ const scenarios=baseScenarios.flatMap(s=>[{...s,noHudBlur:false},{...s,name:s.name+'-no-hud-blur',noHudBlur:true}]);
  try{
-  for(const scenario of scenarios)for(let repeat=0;repeat<2;repeat++){
+  for(let repeat=0;repeat<2;repeat++)for(const scenario of repeat%2?[...scenarios].reverse():scenarios){
+   const style=scenario.noHudBlur?await page.addStyleTag({content:'#hud .hud-box{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'}):null;
+   const hudFilter=await page.locator('.hud-box').first().evaluate(el=>getComputedStyle(el).backdropFilter);
    await page.evaluate(x=>window.__renderTraceSetup(x),scenario);await page.waitForTimeout(1000);
    const untracedStart=await page.evaluate(()=>window.ankinPerformanceReport());await page.evaluate(()=>window.__renderTraceResetMeasurements());
    await page.waitForTimeout(4000);const untraced=await page.evaluate(()=>window.ankinPerformanceReport());
@@ -54,10 +58,11 @@ test('CDP rendering diagnosis: paired untraced and traced native combat',async({
    writeFileSync(dir+'/'+name+'.cpuprofile.gz',gzipSync(JSON.stringify(profile)));
    expect(completion.dataLossOccurred).toBe(false);expect(events.length).toBeGreaterThan(0);expect(profile.samples.length).toBeGreaterThan(0);
    expect(traced.mode).toBe('playing');expect(traced.frame.samples).toBeGreaterThan(15);expect(traced.timing.requestedSpeed).toBe(scenario.doubleTime?2:1);
-   const row={scenario:scenario.name,repeat,config,untracedStart,untraced,before,traced,cpu:summarizeCpu(profile),trace:summarizeTrace(events)};
+   const row={scenario:scenario.name,repeat,config,hudFilter,untracedStart,untraced,before,traced,cpu:summarizeCpu(profile),trace:summarizeTrace(events)};
    writeFileSync(dir+'/'+name+'.summary.json',JSON.stringify(row,null,2));results.push(row);
    console.log('RENDER_TRACE_SUMMARY='+JSON.stringify({scenario:row.scenario,repeat,untraced:untraced.frame,traced:traced.frame,draw:traced.drawing,sim:traced.simulation,
-    cpu:row.cpu,threads:row.trace.threads.slice(0,8),counters:traced.counters,gpu}));
+    cpu:row.cpu,threads:row.trace.threads.slice(0,8),counters:traced.counters,hudFilter,gpu}));
+   if(style)await style.evaluate(el=>el.remove());
   }
  }finally{await session.detach()}
  expect(errors).toEqual([]);

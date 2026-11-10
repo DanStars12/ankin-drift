@@ -11,9 +11,14 @@ test('trace summaries separate threads and retain explicit omitted phase counts'
  assert.equal(out.eventCount,5);assert.equal(out.phases.B,1);assert.equal(out.threads[0].coveredMs,10);assert.equal(out.threads[0].name,'Renderer');
  assert.equal(out.threads[0].top.reduce((s,x)=>s+x.inclusiveMs,0),13);assert.equal(out.threads[1].coveredMs,5);assert.match(out.warning,/not CPU/);
 });
-test('CPU self estimates use sample durations, distinguish idle and retain source lines',()=>{
- const out=summarizeCpu({nodes:[{id:1,callFrame:{functionName:'render',url:'http://localhost/game',lineNumber:10}},{id:2,callFrame:{functionName:'(idle)',lineNumber:-1}}],samples:[1,2,1],timeDeltas:[1000,8000,3000]});
- assert.equal(out.sampledMs,12);assert.equal(out.top[0].selfMs,4);assert.equal(out.top[0].line,11);assert.equal(out.states[0].selfMs,8);assert.equal(out.top[0].samples,2);
+test('CPU estimates use forward chronological intervals, report the first gap and separate idle',()=>{
+ const out=summarizeCpu({startTime:0,endTime:12000,nodes:[{id:1,callFrame:{functionName:'render',url:'http://localhost/game',lineNumber:10}},{id:2,callFrame:{functionName:'(idle)',lineNumber:-1}}],samples:[1,2,1],timeDeltas:[1000,8000,3000]});
+ assert.equal(out.sampledMs,11);assert.equal(out.top[0].selfMs,8);assert.equal(out.top[0].line,11);assert.equal(out.states[0].selfMs,3);assert.equal(out.top[0].samples,2);assert.equal(out.unattributedStartMs,1);
+});
+test('out-of-order V8 timestamps are reconstructed and sorted without inflating duration',()=>{
+ const out=summarizeCpu({startTime:0,endTime:12000,nodes:[{id:1,callFrame:{functionName:'render'}},{id:2,callFrame:{functionName:'(idle)'}}],samples:[1,2,1],timeDeltas:[1000,7000,-4000]});
+ assert.equal(out.negativeDeltas,1);assert.equal(out.reorderedSamples,2);assert.equal(out.top[0].selfMs,7);assert.equal(out.states[0].selfMs,4);
+ assert.equal(out.sampledMs+out.unattributedStartMs,out.profileWindowMs);
 });
 test('malformed CPU samples and non-array traces are rejected rather than misreported',()=>{
  assert.throws(()=>summarizeCpu({nodes:[],samples:[1],timeDeltas:[]}));assert.throws(()=>summarizeCpu({nodes:[],samples:[1],timeDeltas:[1]}));

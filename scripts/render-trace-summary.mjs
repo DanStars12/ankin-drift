@@ -25,15 +25,28 @@ export function summarizeTrace(events){
 export function summarizeCpu(profile){
  const {nodes,samples,timeDeltas}=profile;
  if(!Array.isArray(nodes)||!Array.isArray(samples)||!Array.isArray(timeDeltas)||samples.length!==timeDeltas.length)throw Error('Invalid CPU profile');
- const byId=new Map(nodes.map(n=>[n.id,n.callFrame])),rows=new Map();let sampledMs=0;
- for(let i=0;i<samples.length;i++){
-  const frame=byId.get(samples[i]),delta=timeDeltas[i];if(!frame||!Number.isFinite(delta)||delta<0)throw Error('Invalid CPU sample');
+ const {startTime,endTime}=profile;
+ if(!Number.isFinite(startTime)||!Number.isFinite(endTime)||endTime<startTime)throw Error('Invalid CPU profile bounds');
+ const byId=new Map(nodes.map(n=>[n.id,n.callFrame])),rows=new Map();let timestamp=startTime,negativeDeltas=0;
+ // V8 can deliver out-of-order samples. Reconstruct timestamps before sorting,
+ // as Chrome DevTools does; clamping or taking absolute deltas inflates time.
+ const ordered=samples.map((id,index)=>{
+  const delta=timeDeltas[index];if(!byId.get(id)||!Number.isFinite(delta))throw Error('Invalid CPU sample');
+  if(delta<0)negativeDeltas++;timestamp+=delta;
+  if(timestamp<startTime||timestamp>endTime)throw Error('CPU timestamp outside profile bounds');
+  return{id,index,timestamp};
+ }).sort((a,b)=>a.timestamp-b.timestamp||a.index-b.index);
+ let sampledMs=0;
+ for(let i=0;i<ordered.length;i++){
+  const sample=ordered[i],frame=byId.get(sample.id),next=ordered[i+1]?.timestamp??endTime;
+  const duration=(next-sample.timestamp)/1000;
   const key=JSON.stringify([frame.functionName,frame.url,frame.lineNumber]);let row=rows.get(key);
   if(!row){row={name:frame.functionName||'(anonymous)',url:frame.url||'',line:(frame.lineNumber??-1)+1,selfMs:0,samples:0};rows.set(key,row)}
-  row.selfMs+=delta/1000;row.samples++;sampledMs+=delta/1000;
+  row.selfMs+=duration;row.samples++;sampledMs+=duration;
  }
  const states=['(idle)','(program)','(garbage collector)','(root)'];
- return {samples:samples.length,sampledMs,warning:'Sample-weighted estimates, not exact function timings; idle/program are not GPU attribution.',
+ return {samples:samples.length,sampledMs,profileWindowMs:(endTime-startTime)/1000,unattributedStartMs:((ordered[0]?.timestamp??endTime)-startTime)/1000,
+  negativeDeltas,reorderedSamples:ordered.filter((s,i)=>s.index!==i).length,warning:'Sample-weighted estimates, not exact function timings; idle/program are not GPU attribution.',
   states:[...rows.values()].filter(r=>states.includes(r.name)).sort((a,b)=>b.selfMs-a.selfMs),
   top:[...rows.values()].filter(r=>!states.includes(r.name)).sort((a,b)=>b.selfMs-a.selfMs).slice(0,20)};
 }
