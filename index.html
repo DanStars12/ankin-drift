@@ -5153,7 +5153,8 @@ function fusionPush(e,x,y,step){
  const px=e.x-player.x,py=e.y-player.y,pd=Math.hypot(px,py);
  if(pd>.01&&px*dx+py*dy<0){dx=px/pd;dy=py/pd;}
  const nx=clamp(e.x+dx*step,e.r,W-e.r),ny=clamp(e.y+dy*step,e.r,H-e.r);
- if(engageBlockedPoint(nx,ny,e.r))return;
+ // Edge clamping can remove the safe component of a diagonal push.
+ if((nx-player.x)**2+(ny-player.y)**2+1e-8<px*px+py*py||engageBlockedPoint(nx,ny,e.r))return;
  e.x=nx;e.y=ny;enemyIndexDirtyDuringForces=true;
 }
 function fusionImpact(main,x,y,r,damage,target=null){
@@ -5174,15 +5175,21 @@ function fusionImpact(main,x,y,r,damage,target=null){
 function splitWindMagma(z,dt){
  if(z.type!=='magma'||!player.elementMods?.magmaWind||z.splitDepth||z.windSplitDone||z.life<=0)return;
  z.splitAge=(z.splitAge||0)+dt;if(z.splitAge<1.2||zones.length>=48)return;
- const r=z.r*.52,angle=(z.x*.031+z.y*.017)%TAU,children=[];
- for(let i=0;i<2&&zones.length+children.length<48;i++){
-  const a=angle+i*Math.PI,x=clamp(z.x+Math.cos(a)*z.r*.8,r,W-r),y=clamp(z.y+Math.sin(a)*z.r*.8,r,H-r);
-  if(engageBlockedPoint(x,y,Math.min(30,r)))continue;
-  children.push({x,y,r,life:Math.min(2,z.life),ttl:.25,dps:z.dps*.4,type:'magma',tint:z.tint,splitDepth:1,windSplitDone:true,visualPaths:null});
+ const originalR=z.r,r=originalR*.7,angle=(z.x*.031+z.y*.017)%TAU;
+ let positions=null;
+ for(let i=0;i<4;i++){
+  const a=angle+i*Math.PI/4,dx=Math.cos(a)*originalR*.75,dy=Math.sin(a)*originalR*.75;
+  const ax=clamp(z.x+dx,r,W-r),ay=clamp(z.y+dy,r,H-r),bx=clamp(z.x-dx,r,W-r),by=clamp(z.y-dy,r,H-r);
+  // Edge clamping must not overlap daughters and double their local damage.
+  if((ax-bx)**2+(ay-by)**2+1e-8<4*r*r||engageBlockedPoint(ax,ay,r)||engageBlockedPoint(bx,by,r))continue;
+  positions={ax,ay,bx,by};break;
  }
- // Only successful children consume the parent's budget; never recursively split.
- z.windSplitDone=true;if(!children.length)return;
- z.windSplitScale=1-.175*children.length;z.dps*=z.windSplitScale;zones.push(...children);
+ if(!positions)return;
+ const {ax,ay,bx,by}=positions;
+ // The parent becomes one daughter, rather than retaining a third full-size field.
+ // Two 70%-radius patches retain 98% of the area and the original DPS / lifetime.
+ z.x=ax;z.y=ay;z.r=r;z.windSplitDone=true;z.visualPaths=null;z.visualRadius=r;
+ zones.push({x:bx,y:by,r,life:z.life,ttl:.25,dps:z.dps,type:'magma',tint:z.tint,splitDepth:1,windSplitDone:true,visualPaths:null});
 }
 function tickCrossFusion(dt){} // Legacy call site retained; all effects are weapon-bound.
 
