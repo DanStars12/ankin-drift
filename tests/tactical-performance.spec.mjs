@@ -20,9 +20,10 @@ window.__tacticalPerfSetup=({ship,flags,fused=false})=>{
  for(const e of enemies)e.hp=e.maxHp=1e8;
  return out;
 };
+window.__tacticalPerfResetMeasurements=()=>{perfRing.head=0;perfRing.count=0;actualDraws=0;lastFpsSample=0;actualFps=0;};
 `;
 for(const fused of [false,true])test((fused?'fusion gradients and split magma':'tactical active hooks')+': five ships, 2x ballistic ENGAGE triple-raid stress with equal native weapon budgets',async({page},testInfo)=>{
- test.setTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ test.setTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();
  const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
  expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+anchor)});});
@@ -30,10 +31,14 @@ for(const fused of [false,true])test((fused?'fusion gradients and split magma':'
  for(const ship of Object.keys(flags)){
  const config=await page.evaluate(args=>window.__tacticalPerfSetup(args),{ship,flags:flags[ship],fused});
  await expect(page.locator('#overlay')).toBeHidden();await expect(page.locator('#hud')).toBeVisible();
+ // Retain the entry transition separately; do not mix its fading shadows with steady combat.
+ for(let i=0;i<6;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
+ const transition=await page.evaluate(()=>window.ankinPerformanceReport());
+ await page.evaluate(()=>window.__tacticalPerfResetMeasurements());
  for(let i=0;i<8;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
  expect(config.initialWalls).toBeGreaterThan(0);const report=await page.evaluate(()=>window.ankinPerformanceReport());expect(report.raid.effects).toContain('engage');expect(report.frame.samples).toBeGreaterThan(15);
  expect(report.timing.requestedSpeed).toBe(2);expect(report.timing.discardedGameSeconds).toBe(0);
- results.push({ship,config,report});expect(errors).toEqual([]);
+ results.push({ship,config,transition,report});expect(errors).toEqual([]);
  }
  await testInfo.attach(fused?'fusion-active-performance.json':'tactical-active-performance.json',{body:JSON.stringify(results,null,2),contentType:'application/json'});
  console.log((fused?'FUSION_ACTIVE_PERFORMANCE=':'TACTICAL_ACTIVE_PERFORMANCE=')+JSON.stringify(results));
