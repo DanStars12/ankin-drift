@@ -1678,6 +1678,8 @@ function applyElementFusionStats(p,combo){
  }
  if(main==='wind'){
   if(slot==='A'){p.windCount=Math.min(7,p.windCount+2);p.windRadius+=36;p.windStrength+=120+echo*12;p.windDps+=60+echo*16;p.windTimer=.2;}
+  if(slot==='A'&&sub==='fire')p.cycloneBurn=1;
+  if(slot==='A'&&sub==='ice')p.cycloneSlow=1;
   else{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladeReach=(p.bladeReach||19)+16;p.bladePower=(p.bladePower||1)*(1.65+echo*.025);}
 
 
@@ -4923,7 +4925,7 @@ function tickGusts(dt){
     e.x+=nx*step;e.y+=ny*step;
     enemyIndexDirtyDuringForces=true;
    }
-   damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(g.bonus||1)*(player.elementMods?.cycloneArc?1.9:1),{special:true,source:'element'});
+   damageEnemy(e,(player.windDps*.13+player.dmg*.014)*(g.bonus||1)*(player.elementMods?.cycloneArc?2.15:1),{special:true,source:'element'});
     fusionImpact('wind',g.x,g.y,g.r,player.windDps*.4,e);
     if(player.cycloneBurn)setBurn(e,Math.max(14,player.windDps*.4),1.7);
     if(player.cycloneSlow)applySlow(e,1.2);
@@ -5156,6 +5158,7 @@ function fusionPush(e,x,y,step){
 }
 function fusionImpact(main,x,y,r,damage,target=null){
  const combo=game.elementCombos?.find(c=>c.main===main&&(c.weapon||'A')==='A');if(!combo)return;
+ if(main==='wind'&&((combo.sub==='fire'&&player.cycloneBurn)||(combo.sub==='ice'&&player.cycloneSlow)))return;
  const key='fusionHit_'+main,arcKey='fusionArcs_'+main,window=Math.floor(runClock/.13);
  if(player[arcKey]?.window!==window)player[arcKey]={window,count:0};const arcBudget=player[arcKey];
  for(const e of target?[target]:circleCandidates(x,y,r+26)){

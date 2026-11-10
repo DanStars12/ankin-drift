@@ -1,6 +1,0 @@
-node_modules/
-playwright-report/
-test-results/
-artifacts/balance-lab/
-artifacts/hotpaths/
-artifacts/render-traces/
