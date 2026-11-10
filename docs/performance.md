@@ -123,3 +123,18 @@ Quality evidence on implementation head:
 Limits: real phones, physical input latency, real-time30m rendering, GPU/browser diversity and long-session memory retention remain unverified. Headless viewport emulation is not phone hardware. Next priority: real-device drawing profiles and long-session frame/memory traces, then optimize the measured bottleneck without reducing enemies, bullets or danger visibility. The previously recorded conditional-skill availability cases remain a separate task.
 
 Integration: PR #70 squash merge `6ecbe8de7510249ed1bbce2290c6ca929d240fc7`, with final implementation-head validation [42707307956](https://github.com/DanStars12/ankin-drift/actions/runs/42707307956) PASS. Performance evidence above is from the identical production files of implementation head485ab406. The documentation follow-up is `docs/solo-perf-verification-20261110`; it changes only this record.
+
+## v13.37 rendering audit and pixel regression protection (2026-11-10 JST)
+
+Base `bd543afdb391c56139648d34e884d47c5cfaa371`; branch `perf/solo-render-batching-20261110`; [PR #72](https://github.com/DanStars12/ankin-drift/pull/72). No production rendering, cache, gameplay, save or CO-OP change is adopted. The final scope is development-only rendering tests and measurement infrastructure.
+
+Rejected experiments:
+- ENGAGE diagonal stroke batching on b9ecc180: strict comparison found14,821 differing channels, maximum25/255, at320×740 scale0.69.
+- Backdrop grid batching on1b64afcf:5,536 channels differed by at most2/255 at logical565.217×1223.188, scale1.1316.
+- Integer-scale-only grid batching on63b1812e:33,306 channels differed by at most1/255 at1280×800 scale2, time0.123. Even this restricted version did not retain exact rasterization.
+
+Canvas command counts dropped37→2 for the1280×800 grid and176→4 for four experimental ENGAGE walls. However, final restricted-grid paint timings improved only about1% (desktop diagnostic median61.1→60.4ms per60 sampled frames, five alternating repeats after warmup). This is not whole-game FPS evidence. The small gain does not justify changing pixel coverage; restore index.html and sw.js byte-for-byte to the base. Do not weaken the pixel assertion or adopt the rejected paths later without new evidence.
+
+Two Node regressions extract the actual shipped grid and wall loops and compare their endpoints and stroke counts with independent previous-renderer references, including negative/fractional coordinates and320px,390px logical mobile, desktop and4K sizes. Browser tests compare every pixel channel in36 grid/hatch scenes at six viewport/resolution configurations and three animation times, including clipped walls and fading opacity. Exact equality is required. The second browser test records native-reference timing baselines with60 frames per sample, per-frame synchronous readback, two warmup rounds, five alternating samples and equal final checksums. Identical production algorithms are now compared; fluctuations are measurement noise, not an optimization claim.
+
+87 local Node tests, syntax and HTML/PWA pass. The latest final-head browser/performance checks must pass before merging the QA additions. Earlier candidate validation/performance failures and cancelled superseded runs remain in PR history. The existing same-runner macro/five-ship performance profiles continue to run unchanged. Next: use rendering traces to locate a larger bottleneck before changing drawing algorithms; preserve these coverage tests as a quality gate. Real devices, physical input latency, real-time30m drawing and long-session memory trends remain unverified. Local Chromium is blocked by socket/ptrace restrictions; actual browser checks run in GitHub CI.
