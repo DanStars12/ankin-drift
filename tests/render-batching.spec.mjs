@@ -13,7 +13,7 @@ test('batched backdrop and ENGAGE retain pixel coverage across mobile, desktop a
     const canvases=[document.createElement('canvas'),document.createElement('canvas')];
     const images=canvases.map((c,i)=>{c.width=Math.round(width*scale);c.height=Math.round(height*scale);const g=c.getContext('2d');
      g.scale(scale,scale);g.fillStyle='#152440';g.fillRect(0,0,width,height);
-     if(kind==='grid')(i?candidateGrid:baseGrid)(g,width,height,time);
+     if(kind==='grid')(i?candidateGrid:baseGrid)(g,width,height,time,scale);
      else for(const wall of [{x:120.3,y:80.7,w:320.2,h:180.4},{x:-40,y:height-100,w:250,h:340}]){
       g.save();g.globalAlpha=.45*(time===0?1:.37);g.strokeStyle='#78f1ed';g.lineWidth=2;
       g.beginPath();g.rect(wall.x,wall.y,wall.w,wall.h);g.clip();(i?candidateHatch:baseHatch)(g,wall);g.restore();
@@ -39,7 +39,7 @@ test('render submission cost: alternating real Canvas draws with synchronous rea
   const walls=[{x:80,y:130,w:280,h:160},{x:700,y:80,w:350,h:200},{x:200,y:500,w:330,h:180},{x:900,y:510,w:220,h:190}];
   function run(i){const g=contexts[i],d=draws[i],start=performance.now();
    for(let frame=0;frame<60;frame++){
-    g.fillStyle='#152440';g.fillRect(0,0,1280,800);d.grid(g,1280,800,frame/60);
+    g.fillStyle='#152440';g.fillRect(0,0,1280,800);d.grid(g,1280,800,frame/60,1);
     for(const wall of walls){g.save();g.beginPath();g.rect(wall.x,wall.y,wall.w,wall.h);g.clip();g.strokeStyle='#78f1ed';g.lineWidth=2;g.globalAlpha=.45;d.hatch(g,wall);g.restore()}
     // Flush each frame so a deferred renderer cannot discard overwritten frames.
     g.getImageData(640,400,1,1);
