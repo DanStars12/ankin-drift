@@ -181,10 +181,10 @@ test('v12 elemental fusion keeps cards and gusts never pull enemies toward the p
   expect(r.echo.stored).toBe(2);
   expect(r.echo.sealed).toContain('ice');
   expect(r.echo.combos).toBe(1);
-  expect(r.echo.color).toBe('#50bfff');
-  expect(r.echo.magmaColor).toBe('#50bfff');
-  expect(r.wind.color).toBe('#ff5968');
-  expect(r.wind.tint).toBe('#ff5968');
+  expect(r.echo.color).toBe('#8cdeff');
+  expect(r.echo.magmaColor).toBeNull();
+  expect(r.wind.color).toBe('#ff9558');
+  expect(r.wind.tint).toBe('#ff9558');
   expect(r.wind.stored).toBe(1);
   expect(r.wind.gusts).toBeLessThanOrEqual(4);
   expect(r.wind.maximumRadius).toBeLessThanOrEqual(165);

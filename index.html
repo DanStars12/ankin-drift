@@ -3960,7 +3960,7 @@ function syncEvolutionVisuals(p){
  const recipes=[...FUSIONS.filter(f=>game?.fusions?.[f.id]),...SYNERGIES.filter(f=>game?.synergies?.[f.id])].filter(f=>[f.power,f.legend,...(f.required||[]),...(f.need||[])].filter(Boolean).every(id=>!isSealedCard(skillById(id))));
  const active=recipes.map(f=>evolutionVisualProfile(f.id)).filter(Boolean);
  p.evolutionStyles=active;p.weaponColors={primary:[]};
- const families={fire:{A:/rocket|missile|napalm|flameMissiles/i,B:/magma|lava/i},ice:{A:/iceBall/i,B:/spike/i},thunder:{A:/emp/i,B:/bolt/i},wind:{A:/windCount|windRadius|windStrength|windDps|windPeriod|cyclone|dogWhale/i,B:/orbit|blade/i},rock:{A:/rockWall|rockDamage|rockSize|rockCooldown/i,B:/meteor/i}};
+ const families={fire:{A:/rocket|missile|napalm|flameMissiles|dogFox|dogNineTail/i,B:/magma|lava|dogPaw/i},ice:{A:/iceBall|dogRabbit|dogSnow/i,B:/spike|dogHare|dogMoon/i},thunder:{A:/emp|dogHedgehog/i,B:/bolt|dogSnake|dogViper/i},wind:{A:/windCount|windRadius|windStrength|windDps|windPeriod|cyclone|dogWhale/i,B:/orbit|blade|dogDolphin/i},rock:{A:/rockWall|rockDamage|rockSize|rockCooldown|dogCat/i,B:/meteor|dogHamster|dogArmorHam|dogHamMeteor/i}};
  for(const recipe of recipes){
   const color=evolutionVisualProfile(recipe.id).color,code=String(recipe.apply);let elemental=false;
   for(const [main,slots]of Object.entries(families))for(const[slot,pattern]of Object.entries(slots))if(pattern.test(code)){const key=main+slot;(p.weaponColors[key]??=[]).push(color);elemental=true;}
@@ -4978,6 +4978,7 @@ function tickReforgeWeapons(dt){
     damageEnemy(e,g.damage*(boss?(mods.spikeDiamond?1.5:1):1),{special:true,source:'frostSpike'});
     if(!e.dead){applySlow(e,boss?1.2:2);
      if(mods.spikeBurn){setBurn(e,Math.max(18,g.damage*.4),1.8);if((g.blastHits||0)<3){g.blastHits=(g.blastHits||0)+1;detonate(e.x,e.y,43,g.damage*.22,e,5);}}
+     if(mods.spikeBlizzard)fusionPush(e,point.x,point.y,6);
      if(mods.spikeArc&&(g.arcHits||0)<3){g.arcHits=(g.arcHits||0)+1;applyChain(e,Math.min(140,g.damage*.34));}
     }
    }
@@ -5167,15 +5168,16 @@ function fusionImpact(main,x,y,r,damage,target=null){
 }
 function splitWindMagma(z,dt){
  if(z.type!=='magma'||!player.elementMods?.magmaWind||z.splitDepth||z.windSplitDone||z.life<=0)return;
- z.splitAge=(z.splitAge||0)+dt;if(z.splitAge<1.2)return;
- z.windSplitDone=true;const r=z.r*.52,angle=(z.x*.031+z.y*.017)%TAU;
- // The parent and two children share the damage budget; children never split or consolidate.
- const dps=z.dps*.4;z.dps*=.65;z.windSplitScale=.65;
- for(let i=0;i<2&&zones.length<48;i++){
+ z.splitAge=(z.splitAge||0)+dt;if(z.splitAge<1.2||zones.length>=48)return;
+ const r=z.r*.52,angle=(z.x*.031+z.y*.017)%TAU,children=[];
+ for(let i=0;i<2&&zones.length+children.length<48;i++){
   const a=angle+i*Math.PI,x=clamp(z.x+Math.cos(a)*z.r*.8,r,W-r),y=clamp(z.y+Math.sin(a)*z.r*.8,r,H-r);
   if(engageBlockedPoint(x,y,Math.min(30,r)))continue;
-  zones.push({x,y,r,life:Math.min(2,z.life),ttl:.25,dps,type:'magma',tint:z.tint,splitDepth:1,windSplitDone:true,visualPaths:null});
+  children.push({x,y,r,life:Math.min(2,z.life),ttl:.25,dps:z.dps*.4,type:'magma',tint:z.tint,splitDepth:1,windSplitDone:true,visualPaths:null});
  }
+ // Only successful children consume the parent's budget; never recursively split.
+ z.windSplitDone=true;if(!children.length)return;
+ z.windSplitScale=1-.175*children.length;z.dps*=z.windSplitScale;zones.push(...children);
 }
 function tickCrossFusion(dt){} // Legacy call site retained; all effects are weapon-bound.
 
