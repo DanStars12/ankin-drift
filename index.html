@@ -1678,11 +1678,9 @@ function applyElementFusionStats(p,combo){
  }
  if(main==='wind'){
   if(slot==='A'){p.windCount=Math.min(7,p.windCount+2);p.windRadius+=36;p.windStrength+=120+echo*12;p.windDps+=60+echo*16;p.windTimer=.2;}
+  else{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladeReach=(p.bladeReach||19)+16;p.bladePower=(p.bladePower||1)*(1.65+echo*.025);}
   if(slot==='A'&&sub==='fire')p.cycloneBurn=1;
   if(slot==='A'&&sub==='ice')p.cycloneSlow=1;
-  else{p.orbit=Math.min(p.limitOrbit,p.orbit+2);p.bladeReach=(p.bladeReach||19)+16;p.bladePower=(p.bladePower||1)*(1.65+echo*.025);}
-
-
   if(slot==='B'&&sub==='fire')p.bladeFireBurn=1;
   if(slot==='B'&&sub==='ice')p.bladeIceSlow=1;
  }
