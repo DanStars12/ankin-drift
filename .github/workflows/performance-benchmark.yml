@@ -65,3 +65,36 @@ jobs:
             comparison-base/test-results/
           if-no-files-found: warn
           retention-days: 14
+
+  render-traces:
+    name: Render trace (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390]
+    env:
+      ANKIN_RENDER_TRACE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Diagnose CPU samples, renderer and raster threads in isolated combat
+        run: npx playwright test tests/render-trace.spec.mjs --project=${{ matrix.project }}
+      - name: Retain raw traces, CPU profiles and paired summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: render-trace-${{ matrix.project }}
+          path: |
+            artifacts/render-traces/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14

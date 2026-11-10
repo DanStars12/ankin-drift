@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+test.use({trace:process.env.ANKIN_PERF_DEBUG_TRACE==='1'?'retain-on-failure':'off'});
 import {readFileSync} from 'node:fs';
 // Use the same reproducible workload as the ordinary before/after benchmark.
 const source=readFileSync(new URL('./performance.spec.mjs',import.meta.url),'utf8');
