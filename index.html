@@ -4451,7 +4451,7 @@ function applyChain(e,amt,sourceX=e.x,sourceY=e.y){let from=e;const visited=new 
  particles.push({x:from.x,y:from.y,x2:next.x,y2:next.y,life:.22,total:.22,lightning:true,color:game.fusions.thunderGod?'#fff9b5':'#afa7ff'});damageEnemy(next,Math.max(8,amt)*(1-i*.12),{special:true,source:'element'});visited.add(next);from=next;
  }}
 
-function detonate(x,y,r,damage,except=null,depth=0){ring(x,y,r,'#ffb173');burst(x,y,'#ffc380',10,140);if(depth>5)return;for(const e of circleCandidates(x,y,r)){if(e.dead||e===except)continue;if((e.x-x)**2+(e.y-y)**2<(r+e.r)**2)damageEnemy(e,damage,{special:true,source:'explosion',depth:depth+1})}}
+function detonate(x,y,r,damage,except=null,depth=0,color=null){ring(x,y,r,color||'#ffb173');burst(x,y,color||'#ffc380',10,140);if(depth>5)return;for(const e of circleCandidates(x,y,r)){if(e.dead||e===except)continue;if((e.x-x)**2+(e.y-y)**2<(r+e.r)**2)damageEnemy(e,damage,{special:true,source:'explosion',depth:depth+1})}}
 function orb(x,y,xp,energy=7,heal=false){if(pickups.length>=MAX_PICKUPS){let best=null,dd=180*180;for(const k of pickups){if(k.type==='heal'!==heal)continue;const d=(k.x-x)**2+(k.y-y)**2;if(d<dd){best=k;dd=d}}if(best){best.value+=(heal?22:xp);best.charge+=energy;best.r=Math.min(15,best.r+.2);return;}if(!heal){addExp(xp);gainNovaEnergy(energy);}return;}
  pickups.push({x,y,r:heal?9:6,type:heal?'heal':'energy',value:heal?22:xp,charge:energy,phase:rand(0,TAU),life:Infinity});}
 // Three-minute EXP magnet: bonus object stays in the field until touched.
@@ -5195,7 +5195,7 @@ function explodeGigaNapalm(b,target,dmg){
  const units=Math.min(36,b.missileCount||1),radius=Math.min(240,125+units*4);
  const blast=(player.napalmBlast||1)*Math.max(20,dmg*.34);
  const burn=Math.max(20,dmg*(.13+units*.03)*(1+(player.missileBurnBonus||0)));
- ring(b.x,b.y,radius,'#ffb577');burst(b.x,b.y,'#ff9347',20,125);
+ const color=fusedColor('fire','A');ring(b.x,b.y,radius,color||'#ffb577');burst(b.x,b.y,color||'#ff9347',20,125);
  for(const e of circleCandidates(b.x,b.y,radius+28)){
   if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;
   if(d2(e,b)>(radius+e.r)*(radius+e.r))continue;
@@ -5215,7 +5215,7 @@ function projectileHit(b,e){let dmg=b.damage;if(Math.random()<Math.min(.97,playe
  if(b.kind==='iceball'){if(!e.dead)chillEnemy(e,1.5,Math.min(.78,player.iceBallChance));fusionImpact('ice',b.x,b.y,48,dmg);}if(b.kind==='meteor'&&!e.dead){const mods=player.elementMods||{};if(mods.meteorBurn)setBurn(e,Math.max(22,dmg*.25),2.1);if(mods.meteorSlow)applySlow(e,2);if(mods.meteorArc&&(e.meteorArcUntil||0)<=runClock){e.meteorArcUntil=runClock+.9;applyChain(e,dmg*.3+22);}if(mods.meteorWind)fusionPush(e,b.x,b.y,14);}
  if(b.kind==='rocket'){
   if(b.napalm)explodeGigaNapalm(b,e,dmg);
-  else detonate(b.x,b.y,95+Math.min(70,player.thermal*20),dmg*.8,e,5);
+  else detonate(b.x,b.y,95+Math.min(70,player.thermal*20),dmg*.8,e,5,fusedColor('fire','A'));
   fusionImpact('fire',b.x,b.y,b.napalm?Math.min(240,125+Math.min(36,b.missileCount||1)*4):95+Math.min(70,player.thermal*20),dmg);
  }if(b.kind==='comet'&&player.chargeBlast)detonate(b.x,b.y,40+player.chargeBlast*18+b.r*1.4,dmg*(.13+player.chargeBlast*.075),e,5);if(b.kind==='novaCharge')detonate(b.x,b.y,90+b.r*2,dmg*.35,e,5);
  if(b.source==='drone'&&player.droneThunder)applyChain(e,dmg*.6+player.droneThunder*12);
@@ -5523,12 +5523,13 @@ function drawAnimal(kind,x,y,r=14,angle=0,drawCtx=ctx,visualPlayer=player,visual
   hedgehog:['#c49aff','#8555c3']};
  const [outline,body]=dogAnimalPalette(kind,p)||colors[kind];
  const family=visualFamily||({fox:['fire','A'],rabbit:['ice','A'],cat:['rock','A'],ham:['rock','B'],dolphin:['wind','B'],whale:['wind','A'],hedgehog:['thunder','A'],chick:['primary','A'],chicken:['primary','A']})[kind];
- const paint=family?weaponPaint(ctx,family[0],family[1],-1,-1,1,1,body,p):body;
+ let paint;
  const low=renderHeavyLoad||settings.fx==='simple'||settings.fx==='low';
  const nine=kind==='fox'&&!!p?.dogNineTailMorph,armored=kind==='ham'&&!!p?.dogArmorHam;
  ctx.save();ctx.translate(x,y);
  ctx.rotate(kind==='dolphin'||kind==='whale'?angle-Math.PI/2:angle);
  ctx.scale(r,r);ctx.lineJoin='round';ctx.lineCap='round';
+ paint=family?weaponPaint(ctx,family[0],family[1],-1,-1,1,1,body,p):body;
  // A luminous miniature iceball is the snow rabbit's fluffy icy tail.
  if(kind==='rabbit'){
   ctx.save();ctx.globalAlpha=.96;ctx.shadowColor='#8ee9ff';ctx.shadowBlur=neonBlur(5);
@@ -6002,24 +6003,24 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
   for(const l of laserLinks){ctx.save();const glowWidth=l.width*3.5,lc=weaponElementPalette('laser',player.laserVisualMode);ctx.strokeStyle=l.nova?'#ebd3ff':lc.accent;ctx.lineWidth=glowWidth;ctx.globalAlpha=l.nova?.2:.16;ctx.shadowBlur=neonBlur(18);ctx.shadowColor=lc.accent;ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=l.width;ctx.shadowBlur=neonBlur(13);ctx.strokeStyle=weaponPaint(ctx,'primary','A',l.x,l.y,l.x2,l.y2,l.nova?'#ffedff':lc.body);ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.lineWidth=Math.max(.8,l.width*.24);ctx.strokeStyle=lc.core;ctx.shadowBlur=neonBlur(4);ctx.stroke();ctx.restore()}
  // Batch hostile bullets by color under heavy load: one Canvas fill per color
  // rather than a shadow/filter/path submission for every bullet.
- if(renderHeavyLoad||settings.fx==='low'){
-  const groups=new Map();
+ if((renderHeavyLoad&&renderLoadState.glow<.08)||settings.fx==='low'){
+  const groups=new Map(),cores=new Path2D();
   for(const b of hostile){
    if(b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
    let path=groups.get(b.color);if(!path){path=new Path2D();groups.set(b.color,path)}
-   path.moveTo(b.x+b.r,b.y);path.arc(b.x,b.y,b.r,0,TAU);
+   path.moveTo(b.x+b.r,b.y);path.arc(b.x,b.y,b.r,0,TAU);const coreR=Math.max(1.15,b.r*.25);cores.moveTo(b.x+coreR,b.y);cores.arc(b.x,b.y,coreR,0,TAU);
   }
   // Large batched paths must not cast a whole-screen shadow texture.
   // Pressure warnings below still retain their dedicated outline.
   ctx.shadowBlur=0;
-  for(const [color,path] of groups){ctx.fillStyle=color;ctx.fill(path);ctx.strokeStyle='#f2f7ff';ctx.lineWidth=1.25;ctx.stroke(path)}
+  for(const [color,path] of groups){ctx.fillStyle=color;ctx.fill(path);ctx.strokeStyle='#f5fbff';ctx.lineWidth=1.15;ctx.stroke(path)}ctx.fillStyle='#fff';ctx.fill(cores);
   // Keep special warning rings on top of the colored projectiles.
   for(const b of hostile){if(!b.pressure||b.x< -24||b.x>W+24||b.y< -24||b.y>H+24)continue;
    ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=neonBlur(12);ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();
   }
  }else for(const b of hostile)if(b.x>=-24&&b.x<=W+24&&b.y>=-24&&b.y<=H+24){
   if(b.pressure){ctx.save();ctx.strokeStyle='#ffefff';ctx.lineWidth=2;ctx.shadowColor='#ff8be2';ctx.shadowBlur=neonBlur(12);ctx.beginPath();ctx.arc(b.x,b.y,b.r+(b.warn>0?10+Math.sin(t*18)*3:4),0,TAU);ctx.stroke();ctx.restore();}
-  glow(b.x,b.y,b.r,b.color,12);ctx.save();ctx.strokeStyle='#f5fbff';ctx.lineWidth=1.15;ctx.beginPath();ctx.arc(b.x,b.y,b.r+.45,0,TAU);ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(b.x,b.y,Math.max(1.15,b.r*.25),0,TAU);ctx.fill();ctx.restore();
+  glow(b.x,b.y,b.r,b.color,12);ctx.save();ctx.strokeStyle='#f5fbff';ctx.lineWidth=1.15;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(b.x,b.y,Math.max(1.15,b.r*.25),0,TAU);ctx.fill();ctx.restore();
  }for(const e of enemies){if(e.x+e.r<-24||e.x-e.r>W+24||e.y+e.r<-24||e.y-e.r>H+24)continue;if(e.type==='bomber'&&(e.bomberAlert||e.blastWarn>0)){ctx.save();ctx.globalAlpha=.35+.55*(Math.sin(t*23)>0?1:0);ctx.strokeStyle='#ff9953';ctx.lineWidth=2.8;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(e.x,e.y,86,0,TAU);ctx.stroke();ctx.restore();}if(e.type==='phantom'&&e.dashWarn>0){ctx.save();ctx.strokeStyle='#ffbc60';ctx.globalAlpha=.55+.27*Math.sin(t*17);ctx.lineWidth=2.5;ctx.setLineDash([11,9]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.dashAngle)*220,e.y+Math.sin(e.dashAngle)*220);ctx.stroke();ctx.restore();}if(e.type==='support'&&e.supportCd>2.7){ctx.save();ctx.strokeStyle='#a4fa82';ctx.globalAlpha=.2;ctx.lineWidth=2;ctx.beginPath();ctx.arc(e.x,e.y,155,0,TAU);ctx.stroke();ctx.restore();}enemyDraw(e);if(e===boss)drawBossSuperWarning(e);}
  if(player.orbit){if(player.shipType==='dog'){const n=player.dogDolphinDuet?Math.min(20,player.orbit*2):player.orbit;
   for(let i=0;i<n;i++){const pos=ringPosition(i,n,t,73,30,6,2.2);drawAnimal('dolphin',pos.x,pos.y,16,pos.a+Math.PI/2);}
@@ -6046,7 +6047,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  const frac=clamp(player.drillPlasma/Math.max(.001,player.drillCap),0,1),gx=player.x-26,gy=player.y+52;
   ctx.save();ctx.globalAlpha=.92;ctx.fillStyle='#071a27bb';ctx.fillRect(gx-1,gy-1,54,9);ctx.fillStyle=frac>=.90?'#fff3dd':'#ff5fa8';ctx.shadowColor='#ff489e';ctx.shadowBlur=neonBlur(settings.fx==='low'||settings.fx==='simple'?0:9);ctx.fillRect(gx,gy,52*frac,6);ctx.shadowBlur=0;ctx.font='800 9px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffdceb';ctx.fillText(frac>=.90?'DRILL READY':'PLASMA '+Math.floor(frac*100)+'%',player.x,gy-6);
   ctx.restore();}
- if(game?.elementCombos?.length){ctx.save();ctx.translate(player.x,player.y);ctx.rotate(t*.48);ctx.globalAlpha=renderHeavyLoad?.58:.86;ctx.lineWidth=2.8;ctx.shadowBlur=neonBlur(7);
+ if(game?.elementCombos?.length){ctx.save();ctx.translate(player.x,player.y);ctx.rotate(t*.48);ctx.globalAlpha=.58+.28*renderLoadState.glow;ctx.lineWidth=2.8;ctx.shadowBlur=neonBlur(7);
  for(let i=0;i<game.elementCombos.length;i++){const combo=game.elementCombos[i],color=FUSION_PALETTES[combo.main][combo.sub];ctx.strokeStyle=color;ctx.shadowColor=color;ctx.beginPath();ctx.arc(0,0,28+i*9,t*.4+i,t*.4+i+Math.PI*1.28);ctx.stroke()}ctx.restore()}
  if(player.fusionList.length)drawEvolutionCrests();
  if(player.shipType==='charge'){const r=27;ctx.save();ctx.strokeStyle='#673a3670';ctx.lineWidth=5;ctx.beginPath();ctx.arc(player.x,player.y,r,0,TAU);ctx.stroke();ctx.strokeStyle=player.charge>=.999?'#fff4a4':'#ffac71';ctx.shadowBlur=player.charge>=.999?17:9;ctx.shadowColor='#ffbd77';ctx.lineWidth=4;ctx.beginPath();ctx.arc(player.x,player.y,r,-Math.PI/2,-Math.PI/2+TAU*clamp(player.charge,0,1));ctx.stroke();ctx.restore();if(player.charge>=.99)glow(player.x,player.y,4,'#fff4b0',13)}if(player.shield>0){ctx.strokeStyle='#72ffccaa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x,player.y,22+Math.sin(t*3)*1.5,0,TAU);ctx.stroke()}if(player.energy>=100){ctx.setLineDash([5,7]);ctx.strokeStyle='#be98ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x,player.y,29,0,TAU);ctx.stroke();ctx.setLineDash([])}
