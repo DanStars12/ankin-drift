@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+test.use({trace:process.env.ANKIN_PERF_DEBUG_TRACE==='1'?'retain-on-failure':'off'});
 import {renderBatchSources,legacyGrid,legacyHatching} from '../scripts/render-batch-harness.mjs';
 const sources=renderBatchSources();
 test('native backdrop and ENGAGE match reference pixels across mobile, desktop and resolution changes',async({page})=>{

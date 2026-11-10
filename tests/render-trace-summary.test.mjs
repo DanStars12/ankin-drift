@@ -21,6 +21,7 @@ test('out-of-order V8 timestamps are reconstructed and sorted without inflating 
  assert.equal(out.sampledMs+out.unattributedStartMs,out.profileWindowMs);
 });
 test('malformed CPU samples and non-array traces are rejected rather than misreported',()=>{
- assert.throws(()=>summarizeCpu({nodes:[],samples:[1],timeDeltas:[]}));assert.throws(()=>summarizeCpu({nodes:[],samples:[1],timeDeltas:[1]}));
- assert.throws(()=>summarizeCpu({nodes:[{id:1,callFrame:{}}],samples:[1],timeDeltas:[-1]}));assert.throws(()=>summarizeTrace(null));
+ assert.throws(()=>summarizeCpu({nodes:[],samples:[1],timeDeltas:[]}));assert.throws(()=>summarizeCpu({startTime:0,endTime:2,nodes:[],samples:[1],timeDeltas:[1]}),/Invalid CPU sample/);
+ assert.throws(()=>summarizeCpu({startTime:0,endTime:2,nodes:[{id:1,callFrame:{}}],samples:[1],timeDeltas:[-1]}),/outside profile bounds/);
+ assert.throws(()=>summarizeCpu({startTime:0,endTime:2,nodes:[{id:1,callFrame:{}}],samples:[1],timeDeltas:[Infinity]}),/Invalid CPU sample/);assert.throws(()=>summarizeTrace(null));
 });
