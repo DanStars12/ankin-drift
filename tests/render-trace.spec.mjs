@@ -3,6 +3,8 @@ import {readFileSync,mkdirSync,writeFileSync}from'node:fs';import{gzipSync}from'
 import{summarizeTrace,summarizeCpu}from'../scripts/render-trace-summary.mjs';
 const source=readFileSync(new URL('./performance.spec.mjs',import.meta.url),'utf8');
 const workload=JSON.parse(source.match(/^const TEST_HOOK = ("[^\n]+");/)[1]);
+// A background Playwright screencast would contaminate both native baseline and CDP capture.
+test.use({trace:'off'});
 const hook=workload+String.raw`
 window.__renderTraceSetup=({ship,engage,doubleTime})=>{
  selectedShip=ship;
@@ -36,7 +38,7 @@ test('CDP rendering diagnosis: paired untraced and traced native combat',async({
  const session=await page.context().newCDPSession(page);await session.send('Profiler.enable');await session.send('Profiler.setSamplingInterval',{interval:1000});
  const dir='artifacts/render-traces/'+testInfo.project.name;mkdirSync(dir,{recursive:true});const results=[];
  const baseScenarios=[{name:'normal',ship:'shot',engage:false,doubleTime:false},{name:'engage-2x',ship:'shot',engage:true,doubleTime:true},{name:'dog-2x',ship:'dog',engage:true,doubleTime:true}];
- const scenarios=baseScenarios.flatMap(s=>[{...s,noHudBlur:false},{...s,name:s.name+'-no-hud-blur',noHudBlur:true}]);
+ const scenarios=process.env.ANKIN_HUD_ABLATION==='1'?baseScenarios.flatMap(s=>[{...s,noHudBlur:false},{...s,name:s.name+'-no-hud-blur',noHudBlur:true}]):baseScenarios;
  try{
   for(let repeat=0;repeat<2;repeat++)for(const scenario of repeat%2?[...scenarios].reverse():scenarios){
    const style=scenario.noHudBlur?await page.addStyleTag({content:'#hud .hud-box{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'}):null;
@@ -68,4 +70,30 @@ test('CDP rendering diagnosis: paired untraced and traced native combat',async({
  expect(errors).toEqual([]);
  writeFileSync(dir+'/environment.json',JSON.stringify({version,gpu,project:testInfo.project.name,warning:'Headless CI is not device certification. Trace wall time is not CPU time. Sampling and tracing add overhead.'},null,2));
  await testInfo.attach('render-trace-summary.json',{body:JSON.stringify(results,null,2),contentType:'application/json'});
+});
+
+test('paired recorder overhead: native combat with Playwright screencast on and off',async({page,context,isMobile},testInfo)=>{
+ test.skip(process.env.ANKIN_RENDER_TRACE!=='1','Separate opt-in diagnostic.');test.setTimeout(150000);
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/ankin-drift/',async route=>{const r=await route.fetch(),html=await r.text();
+  const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
+  expect(html).toContain(anchor);await route.fulfill({response:r,body:html.replace(anchor,hook+anchor)});
+ });
+ await page.goto('./');await page.locator('[data-control="'+(isMobile?'mobile':'desktop')+'"]').click();
+ await page.locator('#start').click();await page.locator('#guideContinue').click();
+ const scenarios=[{name:'normal',ship:'shot',engage:false,doubleTime:false},{name:'engage-2x',ship:'shot',engage:true,doubleTime:true},{name:'dog-2x',ship:'dog',engage:true,doubleTime:true}];
+ const rows=[];
+ for(let repeat=0;repeat<2;repeat++)for(const scenario of scenarios)for(const recording of repeat%2?[false,true]:[true,false]){
+  if(recording)await context.tracing.start({screenshots:true,snapshots:true,sources:true});
+  try{
+   const config=await page.evaluate(x=>window.__renderTraceSetup(x),scenario);await page.waitForTimeout(1000);
+   const before=await page.evaluate(()=>window.ankinPerformanceReport());await page.evaluate(()=>window.__renderTraceResetMeasurements());
+   await page.waitForTimeout(4000);const report=await page.evaluate(()=>window.ankinPerformanceReport());
+   expect(report.mode).toBe('playing');expect(report.frame.samples).toBeGreaterThan(15);expect(errors).toEqual([]);
+   rows.push({scenario:scenario.name,repeat,recording,config,before,report});
+  }finally{if(recording)await context.tracing.stop()}
+ }
+ const dir='artifacts/render-traces/'+testInfo.project.name;mkdirSync(dir,{recursive:true});
+ writeFileSync(dir+'/recorder-overhead.json',JSON.stringify(rows,null,2));
+ console.log('RECORDER_OVERHEAD_SUMMARY='+JSON.stringify(rows));
 });
