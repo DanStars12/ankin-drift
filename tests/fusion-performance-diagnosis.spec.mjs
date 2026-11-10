@@ -11,20 +11,23 @@ window.__fusionDiagSetup=variant=>{
  if(variant==='noSplit')splitWindMagma=()=>{};
  if(variant==='noGradient')weaponPaint=(g,main,slot,x1,y1,x2,y2,base)=>fusedColor(main,slot)||base;
  if(variant==='noImpact')fusionImpact=()=>{};
+ if(variant==='directSlow')fusionImpact=(main,x,y,r,damage,target=null)=>{if(main==='thunder'&&target){target.slow=Math.max(target.slow,1.4);return;}fusionDiagNative.impact(main,x,y,r,damage,target);};
+ if(variant==='noSlowDecor')enemyDraw=e=>{const slow=e.slow;try{e.slow=0;fusionDiagNative.enemy(e);}finally{e.slow=slow;}};
  if(variant==='noGlow')neonBlur=()=>0;
  if(variant==='noBurn')enemyDraw=e=>{const burn=e.burn;try{e.burn=0;fusionDiagNative.enemy(e);}finally{e.burn=burn;}};
  return cfg;
 };
-window.__fusionDiagSnapshot=()=>({zones:zones.length,children:zones.filter(z=>z.splitDepth).length,burning:enemies.filter(e=>e.burn>0).length,slow:enemies.filter(e=>e.slow>0).length,enemies:enemies.length,shots:shots.length});
+window.__fusionDiagSnapshot=()=>({zones:zones.length,children:zones.filter(z=>z.splitDepth).length,burning:enemies.filter(e=>e.burn>0).length,slow:enemies.filter(e=>e.slow>0).length,enemies:enemies.length,shots:shots.length,heavy:renderHeavyLoad,glow:renderLoadState.glow});
 `;
 test('fusion stress ablation: isolate simulation, gradient, glow and burning costs',async({page},info)=>{
  test.skip(process.env.ANKIN_FUSION_DIAG!=='1','Dedicated diagnostic only.');test.setTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/ankin-drift/',async route=>{const r=await route.fetch(),html=await r.text(),anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";expect(html).toContain(anchor);await route.fulfill({response:r,body:html.replace(anchor,hook+'\n'+anchor)});});
- await page.goto('./');const variants=['full','noSplit','noGradient','noImpact','noGlow','noBurn'],rows=[];
+ await page.goto('./');const variants=['full','noSplit','noGradient','noImpact','noGlow','noBurn','noSlowDecor','directSlow','noHudBlur'],rows=[];
  for(let repeat=0;repeat<2;repeat++)for(const variant of repeat?[...variants].reverse():variants){
   await page.evaluate(v=>window.__fusionDiagSetup(v),variant);await expect(page.locator('#overlay')).toBeHidden();await expect(page.locator('#hud')).toBeVisible();
+  const style=variant==='noHudBlur'?await page.addStyleTag({content:'#hud .hud-box{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'}):null;
   for(let i=0;i<8;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
-  const row=await page.evaluate(()=>({report:window.ankinPerformanceReport(),counts:window.__fusionDiagSnapshot()}));expect(row.report.frame.samples).toBeGreaterThan(15);expect(errors).toEqual([]);rows.push({variant,repeat,...row});
+  const row=await page.evaluate(()=>({report:window.ankinPerformanceReport(),counts:window.__fusionDiagSnapshot()}));expect(row.report.frame.samples).toBeGreaterThan(15);expect(errors).toEqual([]);rows.push({variant,repeat,...row});if(style)await style.evaluate(el=>el.remove());
  }
  await info.attach('fusion-ablation.json',{body:JSON.stringify(rows,null,2),contentType:'application/json'});console.log('FUSION_ABLATION='+JSON.stringify(rows));
 });
