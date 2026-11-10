@@ -12,27 +12,34 @@ const flags={
  dog:{dogRecall:1,dogCatch:1,dogPiyo:1,dogHome:.06,dogFlock:.18,dogRetrieve:1,dogPounce:.25,dogWelcome:1,dogLeader:.35,dogReturnDock:1,dogForward:1,dogOrbit:.4,evolvedDog:1}
 };
 const hook=workload+String.raw`
-window.__tacticalPerfSetup=({ship,flags})=>{
+window.__tacticalPerfSetup=({ship,flags,fused=false})=>{
  selectedShip=ship;const out=window.__ankinPerfTestScenario({total:3600,count:220,bullets:300,withRaid:true,doubleTime:true,engage:true});
  player.tacticFlags={...flags};player.iframes=1e8;player.dmg=80;player.multishot=6;player.laserCount=6;player.chargeRate=2;
  player.dogBones=6;player.dogChicks=3;player.orbit=3;player.shieldMax=player.shield=100;player.shieldRecharge=5;
+ if(fused){game.elementCombos=[{main:'fire',sub:'wind',weapon:'B',resonance:3},{main:'thunder',sub:'ice',weapon:'A',resonance:3}];game.sealedElements=['wind','ice'];player.magmaLevel=1;player.magmaDps=120;player.magmaRadius=80;player.rocketCd=3;player.empRadius=80;player.empDps=120;player.rockWalls=3;player.meteorCount=1;player.boltCount=1;player.windCount=0;player.orbit=0;player.iceBallCount=0;player.spikeCount=0;for(const combo of game.elementCombos)applyElementFusionStats(player,combo);game.fusions={magmaEvo:1,napalmRigEvo:1};syncEvolutionVisuals(player);}
  for(const e of enemies)e.hp=e.maxHp=1e8;
  return out;
 };
+window.__tacticalPerfResetMeasurements=()=>{perfRing.head=0;perfRing.count=0;actualDraws=0;lastFpsSample=0;actualFps=0;};
 `;
-test('tactical active hooks: five ships, 2x ballistic ENGAGE triple-raid stress with equal native weapon budgets',async({page},testInfo)=>{
- test.setTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+for(const fused of [false,true])test((fused?'fusion gradients and split magma':'tactical active hooks')+': five ships, 2x ballistic ENGAGE triple-raid stress with equal native weapon budgets',async({page},testInfo)=>{
+ test.setTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();
  const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
  expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+anchor)});});
  await page.goto('./');const results=[];
  for(const ship of Object.keys(flags)){
- const config=await page.evaluate(args=>window.__tacticalPerfSetup(args),{ship,flags:flags[ship]});
+ const config=await page.evaluate(args=>window.__tacticalPerfSetup(args),{ship,flags:flags[ship],fused});
+ await expect(page.locator('#overlay')).toBeHidden();await expect(page.locator('#hud')).toBeVisible();
+ // Retain the entry transition separately; do not mix its fading shadows with steady combat.
+ for(let i=0;i<6;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
+ const transition=await page.evaluate(()=>window.ankinPerformanceReport());
+ await page.evaluate(()=>window.__tacticalPerfResetMeasurements());
  for(let i=0;i<8;i++){await page.keyboard.press('Space');await page.waitForTimeout(500);}
  expect(config.initialWalls).toBeGreaterThan(0);const report=await page.evaluate(()=>window.ankinPerformanceReport());expect(report.raid.effects).toContain('engage');expect(report.frame.samples).toBeGreaterThan(15);
  expect(report.timing.requestedSpeed).toBe(2);expect(report.timing.discardedGameSeconds).toBe(0);
- results.push({ship,config,report});expect(errors).toEqual([]);
+ results.push({ship,config,transition,report});expect(errors).toEqual([]);
  }
- await testInfo.attach('tactical-active-performance.json',{body:JSON.stringify(results,null,2),contentType:'application/json'});
- console.log('TACTICAL_ACTIVE_PERFORMANCE='+JSON.stringify(results));
+ await testInfo.attach(fused?'fusion-active-performance.json':'tactical-active-performance.json',{body:JSON.stringify(results,null,2),contentType:'application/json'});
+ console.log((fused?'FUSION_ACTIVE_PERFORMANCE=':'TACTICAL_ACTIVE_PERFORMANCE=')+JSON.stringify(results));
 });

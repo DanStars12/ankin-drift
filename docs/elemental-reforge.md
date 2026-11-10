@@ -32,3 +32,19 @@
 - 5機体×4ビルド×序中終盤の単体ボスDPS・クリア率を固定乱数で統計比較し、融合倍率と独立属性を調整。
 - 40種の進化を多人数テストで触り心地・発見しやすさ・画面占有率の観点から比較。
 - `DRIFT CHRONICLE` の航路分岐用に属性武装・イベント依存条件のデータ定義を整理。
+
+## 2026-11-11 — 方向付き継承と武装カラー（開発中）
+
+基点 `9cf889dd1b27e2d4b5be70f907332df5d776526d`、ブランチ `fix/solo-directed-fusion-visuals-20261111`。通常モードのみ。既存の40レシピID、A/B指定、Lv12/28、共鳴、+17%補正、セーブ形式を維持する。
+
+A側の20通りは選択武装の命中へ素材の性質を継承する。炎素材は燃焼、氷素材は減速、雷素材は短距離連鎖（武装ごと0.13秒窓で最大2回、同一対象0.65秒間隔）、風素材は外向きの押し出し、岩素材は小さな接触衝撃（通常10%、ボス18%）とする。ミサイルは爆風全域、氷弾は命中周囲、EMPはフィールド内、サイクロンと岩壁は接触時に適用する。独立した竜巻・周期パルス・被弾反撃は生成しない。風の押し出しはボス・WARP・壁を保護し、敵を自機へ押し込まない。
+
+B側20通りの既存武装固有効果を保持し、マグマ＋風は発生1.2秒後に2個へ一度だけ分裂する。親そのものが一方の子へ変わり、元の親を残して3領域にはしない。2個とも半径70%、DPSと残り寿命を維持し、合計面積・面積加重火力は元の98%。追加の子は再分裂・統合・統合型の自動拡大の対象外。統合型の核も分裂済みなら再分裂しない。全領域48個を超えず、壁で分裂できない場合は親を保持する。隕石＋風は吸引から外向き押し出しへ変更した。
+
+色は素材属性を継承し、融合指定スロットの武装だけへ適用する。炎ミサイル＋風は緑、風サイクロン／ブレード＋炎は炎色。同時進化・スキル合成は対象武装のグラデーションへ複数色を保持する。色リストのみをビルド再構築時に計算し、位置を持つCanvasGradientを描画間で使い回さない。5機体の本体色は変更しない。DOGの狐・肉球・兎・氷柱兎・ハリネズミ・蛇・イルカ・鯨・猫・ハムスターにも対応する。
+
+ローカル追加11テスト合格。ブラウザ回帰は40融合×5機体×1/2倍＝400ケース、5機体本体の画素一致、連続命中の白点滅防止、通常/DOGの描画を追加。ローカルChromiumは起動時socket/ptrace制限で停止するため実行結果はCIで確認する。PR・最新ヘッドのCI・比較負荷・戦闘結果は統合前に追記する。実スマホ・実GPU・手操作の快適性は未検証。
+
+Review found a misplaced `else` in the wind slot branch: slotA fire/thunder/rock inherited unintended blade growth. Restored the direct A/B branch and added an eight-case slot-growth regression. This is a correctness fix, not an intentional buff/nerf; the new final head must repeat the comparison.
+
+Latest code validation and integration hold: [PR #74](https://github.com/DanStars12/ankin-drift/pull/74), tested code591b60c. All five workflows pass, with105 Node tests and156 browser tests per project. Twelve new directed/render regressions include the wind A/B growth fix. Final performance and400-run balance results, remaining entry-frame regression and next steps are recorded in `docs/performance.md` under PR #74 integration decision. Feature implementation is on the development branch; it is not merged or certified on the public site. No final version bump or merge commit is claimed.
