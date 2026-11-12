@@ -96,7 +96,8 @@ test('MP3 player crossfades scene changes without synthesizing obsolete notes',a
  expect(result.observed.buffers).toBe(0);
  expect(result.observed.media).toBe(3);
  expect(result.active.transitions).toBe(3);
- expect(result.active.track).toBe('battle');
+ expect(result.active.group).toBe('battle');
+ expect(['battle','phantom','fractal','pixel','ion']).toContain(result.active.track);
  expect(result.stopped.track).toBeNull();
  expect(result.stopped.activeTracks).toBe(0);
  expect(errors).toEqual([]);
