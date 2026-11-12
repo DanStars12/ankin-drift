@@ -5653,12 +5653,16 @@ function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
  ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
+function dogBoneEvolutionPaint(g,r,pal,p){
+ const colors=[...new Set((p?.evolutionStyles||[]).map(s=>s.color))];if(!colors.length)return null;
+ const stops=[pal.accent,...colors,pal.body],paint=g.createLinearGradient(-r,-r,r,r);stops.forEach((c,i)=>paint.addColorStop(i/(stops.length-1),c));return paint;
+}
 function drawDogBone(b,drawCtx=ctx,visualPlayer=player){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
- const r=b.r,pal=weaponElementPalette('dog',b.elementMode,visualPlayer?.evolutionTint);
- ctx.shadowColor=b.novaBone&&!b.elementMode?'#ffb2e7':pal.accent;ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
- ctx.strokeStyle=b.novaBone&&!b.elementMode?'#fff6fc':pal.accent;ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
- ctx.fillStyle=b.novaBone&&!b.elementMode?'#ffe3fa':pal.body;
+ const r=b.r,pal=weaponElementPalette('dog',b.elementMode),paint=dogBoneEvolutionPaint(ctx,r,pal,visualPlayer),plainNova=b.novaBone&&!b.elementMode&&!paint;
+ ctx.shadowColor=plainNova?'#ffb2e7':pal.accent;ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
+ ctx.strokeStyle=plainNova?'#fff6fc':paint||pal.accent;ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
+ ctx.fillStyle=plainNova?'#ffe3fa':paint||pal.body;
  for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
  ctx.restore();
 }
