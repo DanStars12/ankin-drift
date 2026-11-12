@@ -2,10 +2,12 @@
   "name": "ankin-drift-checks",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "check:syntax": "node scripts/check-syntax.mjs",
-    "test:arsenal": "node --test tests/arsenal-data.test.mjs tests/arsenal-catalog.test.mjs tests/tactical-skills.test.mjs tests/charge-state.test.mjs tests/nova-meteor.test.mjs",
+    "test:arsenal": "node --test tests/arsenal-data.test.mjs tests/arsenal-catalog.test.mjs tests/tactical-skills.test.mjs tests/charge-state.test.mjs tests/nova-meteor.test.mjs tests/soundtrack-shuffle.test.mjs",
     "test:clock": "node --test tests/simulation-clock.test.mjs tests/combat-kernels.test.mjs tests/render-batches.test.mjs",
     "test:trace-summary": "node --test tests/render-trace-summary.test.mjs tests/performance-fixture.test.mjs",
     "test:archive": "node --test tests/archive.test.mjs",
