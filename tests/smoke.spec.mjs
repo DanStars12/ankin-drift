@@ -15,6 +15,71 @@ function watchFailures(page) {
   return errors;
 }
 
+test('desktop title fits widescreen while mobile retains portrait layout', async ({ page, isMobile }, testInfo) => {
+  const errors=watchFailures(page);
+  await page.goto('./');
+  await page.locator('[data-control="' + (isMobile ? 'mobile' : 'desktop') + '"]').click();
+  const viewports=isMobile
+    ? [{width:390,height:844},{width:320,height:740}]
+    : [{width:1920,height:1080},{width:1366,height:768},{width:1280,height:720},{width:1024,height:768},{width:800,height:600}];
+  for(const viewport of viewports){
+    await page.setViewportSize(viewport);
+    const info=await page.evaluate(() => {
+      const panel=document.querySelector('#panel');
+      const layout=document.querySelector('.menu-landscape-layout');
+      const intro=document.querySelector('.menu-intro');
+      const arsenal=document.querySelector('.menu-arsenal');
+      const start=document.querySelector('#start');
+      const cards=[...document.querySelectorAll('.ship-card')];
+      const rect=el=>{const r=el.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+      return {
+        layout:getComputedStyle(layout).display,
+        panel:rect(panel),intro:rect(intro),arsenal:rect(arsenal),start:rect(start),
+        panelScroll:panel.scrollHeight-panel.clientHeight,
+        introScroll:intro.scrollHeight-intro.clientHeight,
+        arsenalScroll:arsenal.scrollHeight-arsenal.clientHeight,
+        cards:cards.map(c=>({rect:rect(c),scroll:c.scrollHeight-c.clientHeight})),
+        modeButtons:document.querySelectorAll('[data-control]').length,
+        gameButtons:document.querySelectorAll('[data-game-mode]').length
+      };
+    });
+    expect(info.cards).toHaveLength(5);
+    expect(info.modeButtons).toBe(2);
+    expect(info.gameButtons).toBe(2);
+    const wide=!isMobile && viewport.width>=980 && viewport.height>=540;
+    if(wide){
+      expect(info.layout,'desktop should use two columns at '+viewport.width).toBe('grid');
+      expect(info.intro.right,'intro overlaps frame selector').toBeLessThan(info.arsenal.left);
+      expect(info.panelScroll,'title panel itself must not require scrolling at '+viewport.width).toBeLessThanOrEqual(3);
+      expect(info.introScroll,'desktop settings should fit without scrolling at '+viewport.width).toBeLessThanOrEqual(3);
+      expect(info.arsenalScroll,'desktop ship/action area should fit without scrolling at '+viewport.width).toBeLessThanOrEqual(3);
+      for(const [index,card] of info.cards.entries()){
+        expect(card.rect.left,'ship '+index+' outside screen').toBeGreaterThanOrEqual(0);
+        expect(card.rect.right,'ship '+index+' outside screen').toBeLessThanOrEqual(viewport.width+1);
+        expect(card.rect.top,'ship '+index+' outside screen').toBeGreaterThanOrEqual(info.arsenal.top-1);
+        expect(card.rect.bottom,'ship '+index+' outside screen').toBeLessThanOrEqual(info.start.top);
+        expect(card.scroll,'ship '+index+' requires its own scrolling at '+viewport.width).toBeLessThanOrEqual(3);
+      }
+      expect(info.start.bottom,'start button below panel').toBeLessThanOrEqual(info.panel.bottom+1);
+    }else{
+      expect(info.layout,'portrait/narrow mode must keep vertical layout').toBe('block');
+    }
+    if(viewport.width===1366 || (isMobile&&viewport.width===390)){
+      await page.screenshot({path:testInfo.outputPath('title-'+viewport.width+'.png')});
+    }
+  }
+  await page.locator('#ankinTrial summary').click();
+  await expect(page.locator('#ankinTrial')).toHaveAttribute('open','');
+  await page.locator('#ankinTrial summary').click();
+  await page.locator('[data-game-mode="challenge"]').click();
+  await expect(page.locator('[data-game-mode="challenge"]')).toHaveAttribute('aria-pressed','true');
+  await page.locator('[data-game-mode="normal"]').click();
+  await page.locator('[data-ship="dog"]').click();
+  await expect(page.locator('[data-ship="dog"]')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#start')).toContainText('ドッグ型');
+  expect(errors).toEqual([]);
+});
+
 test('game starts, simulation advances, pauses and resumes', async ({ page, isMobile }, testInfo) => {
   const errors = watchFailures(page);
   await page.goto('./');
