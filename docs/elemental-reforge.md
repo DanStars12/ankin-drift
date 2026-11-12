@@ -32,3 +32,15 @@
 - 5機体×4ビルド×序中終盤の単体ボスDPS・クリア率を固定乱数で統計比較し、融合倍率と独立属性を調整。
 - 40種の進化を多人数テストで触り心地・発見しやすさ・画面占有率の観点から比較。
 - `DRIFT CHRONICLE` の航路分岐用に属性武装・イベント依存条件のデータ定義を整理。
+
+## NOVA / rolling meteor expansion — 2026-11-12 JST (development)
+
+Base main `9cf889dd1b27e2d4b5be70f907332df5d776526d`; branch `feature/solo-nova-meteor-20261112`. Separate from held PR74 (neon/fusion entry-frame regression); no CO-OP changes. DOG evolution/synthesis colors are now permitted by the user. Current normal-mode DOG tint behavior is retained; no new permission to recolor the other four hulls is inferred.
+
+Eleven cards: five ship-only POWER NOVA cores (+75 raw NOVA damage, -0.4s reuse with existing floor), charge NOVA count/size rares (two stacks), drill NOVA dash-distance rare (12%, two stacks) and bullet-contact interception rare (one-off), rolling/hamster meteor reflection rare (one edge bounce) and triple-meteor POWER (half radius, three simultaneous projectiles, unchanged per-projectile damage). Meteor choices require an owned meteor, respect the native shot cap, keep their half radius during travel growth, and restore from normal acquisition history. Corner contact counts as one reflection; subsequent edge contact expires the projectile. Reflection permits the next leg to hit a previous enemy again.
+
+Each core + existing LEGENDARY `void` gives a unique ship-only evolution: ノヴァ・フルパワーショット / クルーエル・レーザー / スプラッシュチャージャー / ギガドリル装備 / ごちそうたくさん！. NOVA strength derives from bounded effective NOVA damage and NOVA radius. SHOT conversion lasts3–6s, keeps primary volley/ricochet settings and uses NOVA damage; LASER gains emitters, duration and swept bullet cancellation; CHARGE uses increased NOVA-only salvo/radius and up to five physical edge bounces; DRILL gains1.8–3.5x geometry, NOVA-only damage and longer overdrive; DOG gains10–18 elemental NOVA bones with increased radius/range and swept bullet cancellation. Existing charge NOVA also gains count/size from ordinary NOVA improvements; normal charge shots are unaffected.
+
+NOVA projectile identity is explicit. ENGAGE cannot purge, clip, delete or block their damage; new walls keep NOVA zones. The player hull still collides with ENGAGE normally. NOVA damage and NOVA child explosions use source `nova`, without ordinary attack, charge, bone, crit or tactical multipliers. DOG NOVA copies the equipped elemental conversion modes, with inherited effects based on NOVA damage. Enemy core-phase protection remains in the central pipeline. Laser/DOG evolution and drill interception test swept hostile trajectories, including pressure/unblockable projectiles; warning hazards are not silently removed.
+
+Local syntax, catalog and added native-kernel tests run; local Chromium was retried and fails with socket()/ptrace permission restrictions. Browser, 60 paired live encounters, save/rebuild, full regressions and before/after performance are required in CI before integration. No main merge, public deployment or real-device verification is claimed. Final PR/head/results to follow.
