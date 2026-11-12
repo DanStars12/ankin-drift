@@ -44,10 +44,11 @@ jobs:
         run: |
           cp ../tests/performance.spec.mjs tests/performance.spec.mjs
           cp ../tests/tactical-performance.spec.mjs tests/tactical-performance.spec.mjs
+          cp ../tests/nova-performance.spec.mjs tests/nova-performance.spec.mjs
           npm ci
-          ANKIN_PERF_BASELINE=1 npx playwright test tests/performance.spec.mjs tests/tactical-performance.spec.mjs --project=${{ matrix.project }} --repeat-each=3
+          ANKIN_PERF_BASELINE=1 npx playwright test tests/performance.spec.mjs tests/tactical-performance.spec.mjs tests/nova-performance.spec.mjs --project=${{ matrix.project }} --repeat-each=3
       - name: Profile normal, dual and triple raid
-        run: npx playwright test tests/performance.spec.mjs tests/tactical-performance.spec.mjs --project=${{ matrix.project }} --repeat-each=3
+        run: npx playwright test tests/performance.spec.mjs tests/tactical-performance.spec.mjs tests/nova-performance.spec.mjs --project=${{ matrix.project }} --repeat-each=3
       - name: Compare shipped search and geometry kernels
         if: github.event_name == 'pull_request'
         run: node scripts/benchmark-hotpaths.mjs comparison-base/index.html
