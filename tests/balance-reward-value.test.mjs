@@ -1,3 +1,4 @@
+import {catalogHarness} from '../scripts/catalog-harness.mjs';
 import{test}from'node:test';import assert from'node:assert/strict';import{normalRewardValue as value}from'../scripts/balance-reward-value.mjs';
 const p={shipType:'shot',dmg:32,rate:.46,multishot:1,crit:0,critMult:1.8,hp:100,maxHp:100,spd:226,dashCd:2.8};
 test('normal reward estimate values actual gain above ship label, and capped no-op at zero',()=>{
@@ -20,3 +21,5 @@ test('real normal applications give finite estimates without mutating live pilot
  assert.equal(JSON.stringify(h.ctx.game),game);
  assert(value(p,{...p,lifeSteal:.018})>0);assert(value(p,{...p,chainDamage:13})<10);
 });
+
+test('NOVA-only normal choices receive bounded conditional utility and capped repeats add no value',()=>{const h=catalogHarness();for(const [ship,id]of [['charge','novaChargeSalvo'],['charge','novaChargeSize'],['drill','novaDrillDash'],['drill','novaDrillClear'],['shot','meteorArenaBounce']]){h.ctx.player=h.eval('initialP()');h.ctx.player.shipType=ship;h.ctx.player.meteorCount=1;const c=h.ctx.catalog.find(c=>c.id===id),before=structuredClone(h.ctx.player);c.apply(h.ctx.player);const score=value(before,h.ctx.player);assert.ok(score>0&&score<2,id);for(let i=0;i<10;i++)c.apply(h.ctx.player);const capped=structuredClone(h.ctx.player);c.apply(h.ctx.player);assert.equal(value(capped,h.ctx.player),0,id);}});

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v13.37 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v14.0 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v13.37 | TACTICAL ARSENAL</title>
+<title>ANKIN DRIFT v14.0 | NOVA EVOLUTION</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1195,7 +1195,7 @@ const BOSS_POOLS={minor:['guardian','raptor','hive'],major:['titan','rail','vort
 function pickBossVariant(type){const pool=BOSS_POOLS[type],last=game.bossHistory?.[type];const options=pool.filter(v=>v!==last);const id=options[Math.floor(Math.random()*options.length)];game.bossHistory[type]=id;return id;}
 const bossInfo=e=>ENEMY_CODEX.find(b=>b.id===(typeof e==='string'?e:e?.variant))||null;
 
-const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hitR:6.5,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,novaReuseDelay:13.6,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],drillModes:[],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,spikeCount:0,spikeDamage:48,spikeArea:0,spikePeriod:3.2,spikeTimer:.9,spikeGroups:[],spikeVisuals:[],boltCount:0,boltDamage:68,boltJumps:2,boltReach:150,boltPeriod:2.8,boltTimer:1.2,boltVisuals:[],empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,dashGraze:0,dashPulse:0,dashFlow:0,dashFlowTimer:0,grazeLock:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99,dogBones:1,dogBoneSize:1,dogBoneRange:270,dogBoneSpeed:380,dogBonePower:1,dogBoneReturn:1,dogChicks:0,dogChickTimer:0,dogChickenEvolved:false,dogEggDamage:35,dogEggRate:2.4,dogEggSpeed:125,dogFox:0,dogDolphinDuet:0,dogHamster:0,dogAnimalBoost:1});
+const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hitR:6.5,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,novaReuseDelay:13.6,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],drillModes:[],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,spikeCount:0,spikeDamage:48,spikeArea:0,spikePeriod:3.2,spikeTimer:.9,spikeGroups:[],spikeVisuals:[],boltCount:0,boltDamage:68,boltJumps:2,boltReach:150,boltPeriod:2.8,boltTimer:1.2,boltVisuals:[],empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,meteorArenaBounce:0,meteorTriple:0,novaEvolution:null,novaShotTime:0,novaChargeSalvo:0,novaChargeSize:0,novaDrillDash:0,novaDrillClear:0,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,dashGraze:0,dashPulse:0,dashFlow:0,dashFlowTimer:0,grazeLock:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99,dogBones:1,dogBoneSize:1,dogBoneRange:270,dogBoneSpeed:380,dogBonePower:1,dogBoneReturn:1,dogChicks:0,dogChickTimer:0,dogChickenEvolved:false,dogEggDamage:35,dogEggRate:2.4,dogEggSpeed:125,dogFox:0,dogDolphinDuet:0,dogHamster:0,dogAnimalBoost:1});
 let adaptiveRenderScale=1;
 let overloadClock=0,recoveryClock=0,lastAdaptiveTime=0;
 function applyCanvasResolution(){
@@ -1438,7 +1438,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v13.37 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v14.0 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -1623,14 +1623,14 @@ function elementChoiceMarkup(){
  <p class="fine">今回のレベルアップで得られる通常スキル1枚の代わりに融合します。LEGENDARY・POWER等のボス報酬は消費しません。</p>
  <div class="actions"><button type="button" class="primary" id="fusionConfirm">✓ この内容で融合を確定</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
 }
-function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,chargeStationary:!!p.chargeStationary,laserNovaTimer:p.laserNovaTimer,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState}}
+function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,chargeStationary:!!p.chargeStationary,laserNovaTimer:p.laserNovaTimer,novaShotTime:p.novaShotTime,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
  for(const id of game.acquisitionLog){const c=skillById(id);if(c&&owned(id)&&!isSealedCard(c))c.apply(next)}
  // Recalculate passive bonuses without triggering presentations or double-applying the original selection.
  for(const a of activeSynergies())if(game.synergies[a.id])applyBalancedUpgrade(next,a.apply,'synergy');
  for(const a of activeFusions())if(game.fusions[a.id]&&[a.power,a.legend,...(a.required||[])].every(owned)){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
  for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
- Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,chargeStationary:!!current.chargeStationary,laserNovaTimer:current.laserNovaTimer,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0,tacticState:current.tacticState});player=next;
+ Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,chargeStationary:!!current.chargeStationary,laserNovaTimer:current.laserNovaTimer,novaShotTime:current.novaShotTime,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0,tacticState:current.tacticState});player=next;
 }
 // Auto-resonance is derived from a committed fusion; no additional acquisition or repeated stack in game.skills.
 function applyAutoFusionResonance(p,combo){
@@ -1885,9 +1885,9 @@ function spawnEngageWalls(r){if(!r||!hasRaidEffect(r,'engage'))return;
   r.engageWalls.push({x,y,w,h,ttl:controlMode==='mobile'?10.8:9.2});i++;
  }
  if(r.engageWalls.length){
-  shots=shots.filter(b=>!engageBlockedPoint(b.x,b.y,b.r||3));
+  shots=shots.filter(b=>isNovaAttack(b)||!engageBlockedPoint(b.x,b.y,b.r||3));
   gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(g.r||8,22)));
-  zones=zones.filter(z=>!engageBlockedPoint(z.x,z.y,Math.min(z.r||8,24)));
+  zones=zones.filter(z=>z.type==='nova'||!engageBlockedPoint(z.x,z.y,Math.min(z.r||8,24)));
   announce('DANs Time ENGAGE — 障害壁出現！ 自機と味方攻撃を遮断、敵弾は通過！',2.4);}
 }
 function startRaid(){
@@ -2773,11 +2773,11 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v13.37 · スキル名を共通データと同期</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v14.0 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<p class="eyebrow">V13.37 · TACTICAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button><button id="musicPreview" class="secondary" type="button">♪ タイトルBGMを再生</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
+ const r=record.read();html=`<p class="eyebrow">V14.0 · NOVA EVOLUTION</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}<div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button><button id="musicPreview" class="secondary" type="button">♪ タイトルBGMを再生</button></div><div class="fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
@@ -3885,6 +3885,32 @@ for(const def of AnkinTactics.cards){
  ARSENAL_POOLS[def.rarity].push(c);
  if(def.shipOnly==='dog')DOG_CUTE_SKILL_NAMES[def.id]=def.name;
 }
+// NOVA evolutions and rolling-meteor choices; no new permanent save fields.
+const NOVA_CORE_NAMES={shot:'星弾変換炉',laser:'残酷光学炉',charge:'反響彗星炉',drill:'巨鋼駆動炉',dog:'ごちそうの器'};
+for(const [ship,name] of Object.entries(NOVA_CORE_NAMES)){
+ const id='novaCore'+ship[0].toUpperCase()+ship.slice(1);
+ const c=skill(id,'power',ship==='dog'?'🦴':'🌟',name,'NOVA威力+75、再使用待機-0.4秒。',p=>{p.novaDamage+=75;p.novaReuseDelay=Math.max(NOVA_REUSE_MIN,p.novaReuseDelay-.4)},
+ {shipOnly:ship,stackable:false,tags:[({shot:'ショット',laser:'レーザー',charge:'チャージ',drill:'ドリル',dog:'骨ブーメラン'})[ship],'ノヴァ','進化合成素材','一度限り']});
+ POWERS.push(c);if(ship==='dog')DOG_CUTE_SKILL_NAMES[id]=name;
+}
+SKILLS.push(
+ skill('meteorArenaBounce','rare','☄️','ローリング・バウンド','メテオが画面端で1回反射する。',p=>p.meteorArenaBounce=1,{element:'rock',stackable:false,available:p=>p.meteorCount>0,tags:['属性：岩','隕石','反射','一度限り']}),
+ skill('novaChargeSalvo','rare','☄️','ノヴァ・彗星連射','チャージ型NOVAの彗星+1個。最大2回。',p=>p.novaChargeSalvo=Math.min(2,p.novaChargeSalvo+1),{shipOnly:'charge',maxStacks:2,tags:['チャージ','ノヴァ','最大2回']}),
+ skill('novaChargeSize','rare','🌠','ノヴァ・彗星拡張','チャージ型NOVAの彗星半径+3。最大2回。',p=>p.novaChargeSize=Math.min(6,p.novaChargeSize+3),{shipOnly:'charge',maxStacks:2,tags:['チャージ','ノヴァ','最大2回']}),
+ skill('novaDrillDash','rare','⚙️','ノヴァ・ロングスラスト','NOVA中のドリルダッシュ距離+12%。最大2回。',p=>p.novaDrillDash=Math.min(2,p.novaDrillDash+1),{shipOnly:'drill',maxStacks:2,tags:['ドリル','ノヴァ','ダッシュ','最大2回']}),
+ skill('novaDrillClear','rare','🛡️','ノヴァ・迎撃ドリル','NOVA中、ドリルに接触した敵弾を消す。',p=>p.novaDrillClear=1,{shipOnly:'drill',stackable:false,tags:['ドリル','ノヴァ','弾消し','一度限り']})
+);
+POWERS.push(skill('meteorTriple','power','☄️','トリプル・メテオ','メテオの半径が半分になり、3個ずつ発射する。',p=>p.meteorTriple=1,{element:'rock',stackable:false,available:p=>p.meteorCount>0,tags:['属性：岩','隕石','弾数','一度限り']}));
+for(const id of ['meteorArenaBounce','meteorTriple'])DOG_SHARED.add(id);
+Object.assign(DOG_CUTE_SKILL_NAMES,{meteorArenaBounce:'ハムスター・バウンド',meteorTriple:'みつごのハムスター'});
+const NOVA_EVOLUTIONS=[
+ ['shot','ノヴァ・フルパワーショット','NOVA後、巨大な高速NOVA弾を連射する。反射・弾数を引き継ぐ。'],
+ ['laser','クルーエル・レーザー','NOVA中のレーザー本数が増え、照射に触れた敵弾を消す。'],
+ ['charge','スプラッシュチャージャー','NOVA彗星が巨大化し、強化量に応じて画面端で最大5回反射する。'],
+ ['drill','ギガドリル装備','NOVA中のドリルが巨大化し、威力と持続時間が上昇する。'],
+ ['dog','ごちそうたくさん！','NOVAの骨が敵弾を消す。強化量に応じて個数・サイズ・射程が上昇する。']
+].map(([ship,name,desc])=>({id:'novaEvo'+ship[0].toUpperCase()+ship.slice(1),shipOnly:ship,power:'novaCore'+ship[0].toUpperCase()+ship.slice(1),legend:'void',name,desc,icon:ship==='dog'?'🦴':'🌟',apply:p=>{p.novaEvolution=ship}}));
+FUSIONS.push(...NOVA_EVOLUTIONS);
 // Bound repeated ordinary defense/offense spikes; existing acquired stacks still rebuild.
 for(const [id,maxStacks] of Object.entries({life:3,critEpic:3,superDash:3})){
  const c=SKILLS.find(c=>c.id===id);c.maxStacks=maxStacks;
@@ -4103,10 +4129,11 @@ function spawnRelicEnemy(){if(!game||game.relicAlive||RELICS.filter(c=>c.shipOnl
 }
 function scheduleRelic(){if(game.ultimatePending||boss?.type==='ultimate')return;if(game.total<game.nextRelicAt)return;game.nextRelicAt=game.total+rand(190,285);if(game.relicAlive)return;spawnRelicEnemy()}
 function addPlayerShot(b){if(player.shipType!=='shot'||!['primary','side','rear','echo','burst'].includes(b.source))return b;
+ if(player.novaShotTime>0){const k=novaStrength(player),sp=Math.max(1,Math.hypot(b.vx,b.vy)),speed=Math.max(sp*1.8,1100+k*350);b.vx=b.vx/sp*speed;b.vy=b.vy/sp*speed;b.r=9+k*7;b.damage=effectiveNovaDamage(player)*.55;b.nova=true;b.tacticalVolleyFactor=1;}
  b.bounces=Math.max(b.bounces||0,player.relicRicochet||0);
  b.relicHoming=!!player.relicHoming;
  b.relicGrowth=!!player.relicGrow;
- b.growthLimit=b.source==='burst'?6.6:8.1;
+ b.growthLimit=b.nova?b.r*1.25:b.source==='burst'?6.6:8.1;
  return b;
 }
 function fireFragment(b,e,n=5){const base=Math.atan2(b.vy,b.vx),count=n;for(let i=0;i<count&&shots.length<currentShotBudget();i++){const a=base+(i-(count-1)/2)*.48,sp=Math.hypot(b.vx,b.vy)*(.85+Math.random()*.35);shots.push({x:e.x+Math.cos(a)*(e.r+8),y:e.y+Math.sin(a)*(e.r+8),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:Math.max(4,b.r*.36),damage:b.damage*.33,pierce:1,kind:'comet',ttl:1.35,hit:new Set([e]),source:'fragment',chargeFull:true})}burst(e.x,e.y,'#fff0b7',24,210);ring(e.x,e.y,85,'#ffc886')}
@@ -4442,7 +4469,7 @@ function applyChain(e,amt,sourceX=e.x,sourceY=e.y){let from=e;const visited=new 
  particles.push({x:from.x,y:from.y,x2:next.x,y2:next.y,life:.22,total:.22,lightning:true,color:game.fusions.thunderGod?'#fff9b5':'#afa7ff'});damageEnemy(next,Math.max(8,amt)*(1-i*.12),{special:true,source:'element'});visited.add(next);from=next;
  }}
 
-function detonate(x,y,r,damage,except=null,depth=0){ring(x,y,r,'#ffb173');burst(x,y,'#ffc380',10,140);if(depth>5)return;for(const e of circleCandidates(x,y,r)){if(e.dead||e===except)continue;if((e.x-x)**2+(e.y-y)**2<(r+e.r)**2)damageEnemy(e,damage,{special:true,source:'explosion',depth:depth+1})}}
+function detonate(x,y,r,damage,except=null,depth=0,source='explosion'){ring(x,y,r,'#ffb173');burst(x,y,'#ffc380',10,140);if(depth>5)return;for(const e of circleCandidates(x,y,r)){if(e.dead||e===except)continue;if((e.x-x)**2+(e.y-y)**2<(r+e.r)**2)damageEnemy(e,damage,{special:true,source,depth:depth+1})}}
 function orb(x,y,xp,energy=7,heal=false){if(pickups.length>=MAX_PICKUPS){let best=null,dd=180*180;for(const k of pickups){if(k.type==='heal'!==heal)continue;const d=(k.x-x)**2+(k.y-y)**2;if(d<dd){best=k;dd=d}}if(best){best.value+=(heal?22:xp);best.charge+=energy;best.r=Math.min(15,best.r+.2);return;}if(!heal){addExp(xp);gainNovaEnergy(energy);}return;}
  pickups.push({x,y,r:heal?9:6,type:heal?'heal':'energy',value:heal?22:xp,charge:energy,phase:rand(0,TAU),life:Infinity});}
 // Three-minute EXP magnet: bonus object stays in the field until touched.
@@ -4460,6 +4487,81 @@ function effectiveNovaDamage(p=player){
  // Dramatic diminishing returns for stacked LEGENDARY, UNIQUE and evolution NOVA upgrades.
  const raw=Math.max(0,p?.novaDamage||0);
  return Math.min(720,raw<=180?raw:180+Math.pow(raw-180,.76)*1.6);
+}
+function isNovaAttack(b){return !!(b.nova||b.novaBone||b.kind==='novaCharge'||b.source==='nova');}
+function reserveNovaShots(count){
+ const needed=Math.max(0,shots.length+Math.min(currentShotBudget(),Math.max(0,Math.floor(count)))-currentShotBudget());if(!needed)return;
+ let left=needed;shots=shots.filter(b=>{if(left&&!isNovaAttack(b)){left--;return false;}return true;});if(left)shots.splice(0,left);
+}
+function novaStrength(p=player){return clamp((effectiveNovaDamage(p)-80)/640+Math.max(0,p.novaRadius-175)/1800,0,1);}
+function novaDrillGeometry(p=player){const scale=p.drillOverdriveTime>0&&p.novaEvolution==='drill'?1.8+novaStrength(p)*1.7:1;return {reach:(32+p.drillReach)*scale,radius:(11+p.drillWidth*.53)*scale,scale};}
+function reflectArenaProjectile(b){
+ const r=Math.min(Math.max(1,b.r||1),W*.49,H*.49),hitX=b.x<r||b.x>W-r,hitY=b.y<r||b.y>H-r;
+ if(!hitX&&!hitY)return false;
+ if((b.arenaBounces||0)<=0){b.ttl=0;return true;}
+ if(hitX)b.vx=b.x<r?Math.abs(b.vx):-Math.abs(b.vx);if(hitY)b.vy=b.y<r?Math.abs(b.vy):-Math.abs(b.vy);
+ b.x=clamp(b.x,r,W-r);b.y=clamp(b.y,r,H-r);b.arenaBounces--;b.hit?.clear();return true;
+}
+function sweptSegmentsDistanceSq(ax,ay,bx,by,cx,cy,dx,dy){
+ const ux=bx-ax,uy=by-ay,vx=dx-cx,vy=dy-cy,den=ux*vy-uy*vx;
+ if(Math.abs(den)>1e-9){const t=((cx-ax)*vy-(cy-ay)*vx)/den,u=((cx-ax)*uy-(cy-ay)*ux)/den;if(t>=0&&t<=1&&u>=0&&u<=1)return 0;}
+ return Math.min(segmentPointDistanceSq(ax,ay,bx,by,cx,cy),segmentPointDistanceSq(ax,ay,bx,by,dx,dy),segmentPointDistanceSq(cx,cy,dx,dy,ax,ay),segmentPointDistanceSq(cx,cy,dx,dy,bx,by));
+}
+function novaGuardSegments(p=player){
+ const out=[];
+ if(p.shipType==='laser'&&p.laserNovaTimer>0&&p.novaEvolution==='laser')for(const l of laserLinks)out.push({x:l.x,y:l.y,x2:l.x2,y2:l.y2,r:l.width*.52});
+ if(p.shipType==='dog'&&p.novaEvolution==='dog')for(const b of shots)if(b.novaBone&&b.ttl>0)out.push({x:b.novaPrevX??b.x,y:b.novaPrevY??b.y,x2:b.x,y2:b.y,r:b.r});
+ if(p.shipType==='drill'&&p.drillOverdriveTime>0&&p.novaDrillClear){const g=novaDrillGeometry(p);out.push({x:p.x+p.dx*12,y:p.y+p.dy*12,x2:p.x+p.dx*g.reach,y2:p.y+p.dy*g.reach,r:g.radius});}
+ // Keep conservative bounds and index exact guard capsules into a small spatial grid.
+ // Indexing never replaces the swept intersection test; it only skips remote paths.
+ if(out.length){
+  let left=Infinity,right=-Infinity,top=Infinity,bottom=-Infinity;
+  const cols=6,rows=5,cellW=W/cols,cellH=H/rows;
+  const spatial=out.length<=30&&cellW>0&&cellH>0?{cols,rows,cellW,cellH,bins:new Uint32Array(cols*rows)}:null;
+  for(let i=0;i<out.length;i++){
+   const seg=out[i],rad=seg.r||0;
+   seg.minX=Math.min(seg.x,seg.x2)-rad;seg.maxX=Math.max(seg.x,seg.x2)+rad;
+   seg.minY=Math.min(seg.y,seg.y2)-rad;seg.maxY=Math.max(seg.y,seg.y2)+rad;
+   left=Math.min(left,seg.minX);right=Math.max(right,seg.maxX);
+   top=Math.min(top,seg.minY);bottom=Math.max(bottom,seg.maxY);
+   if(spatial){
+    const x0=clamp(Math.floor(seg.minX/cellW),0,cols-1),x1=clamp(Math.floor(seg.maxX/cellW),0,cols-1);
+    const y0=clamp(Math.floor(seg.minY/cellH),0,rows-1),y1=clamp(Math.floor(seg.maxY/cellH),0,rows-1);
+    for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)spatial.bins[y*cols+x]|=1<<i;
+   }
+  }
+  out.bounds={left,right,top,bottom};if(spatial)out.spatial=spatial;
+ }
+ return out;
+}
+function novaIntercepts(guards,fromX,fromY,b){
+ const minX=Math.min(fromX,b.x)-b.r,maxX=Math.max(fromX,b.x)+b.r;
+ const minY=Math.min(fromY,b.y)-b.r,maxY=Math.max(fromY,b.y)+b.r;
+ const bounds=guards.bounds;
+ if(bounds&&(maxX<bounds.left||minX>bounds.right||maxY<bounds.top||minY>bounds.bottom))return false;
+ const spatial=guards.spatial;
+ if(spatial){
+  const x0=clamp(Math.floor(minX/spatial.cellW),0,spatial.cols-1),x1=clamp(Math.floor(maxX/spatial.cellW),0,spatial.cols-1);
+  const y0=clamp(Math.floor(minY/spatial.cellH),0,spatial.rows-1),y1=clamp(Math.floor(maxY/spatial.cellH),0,spatial.rows-1);
+  let mask=0;for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)mask|=spatial.bins[y*spatial.cols+x];
+  while(mask){
+   const bit=mask&-mask,i=31-Math.clz32(bit),g=guards[i];mask^=bit;
+   if(maxX<g.minX||minX>g.maxX||maxY<g.minY||minY>g.maxY)continue;
+   const r=g.r+b.r;if(sweptSegmentsDistanceSq(g.x,g.y,g.x2,g.y2,fromX,fromY,b.x,b.y)<=r*r)return true;
+  }
+  return false;
+ }
+ for(const g of guards){
+  const r=g.r+b.r;
+  if(maxX<(g.minX??Math.min(g.x,g.x2)-g.r)||minX>(g.maxX??Math.max(g.x,g.x2)+g.r)||maxY<(g.minY??Math.min(g.y,g.y2)-g.r)||minY>(g.maxY??Math.max(g.y,g.y2)+g.r))continue;
+  if(sweptSegmentsDistanceSq(g.x,g.y,g.x2,g.y2,fromX,fromY,b.x,b.y)<=r*r)return true;
+ }
+ return false;
+}
+function novaElementImpact(e,mode,damage){
+ if(e.dead||!mode)return;if(mode==='plasma')setBurn(e,Math.max(10,damage*.26),2.1);
+ else if(mode==='cryo')applySlow(e,['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?1.2:2);
+ else if(mode==='arc'&&(e.novaArcUntil||0)<=runClock){e.novaArcUntil=runClock+.6;let best=null,dd=155*155;for(const other of circleCandidates(e.x,e.y,155)){if(other===e||other.dead)continue;const q=d2(other,e);if(q<dd){best=other;dd=q;}}if(best){damageEnemy(best,damage*.42,{special:true,source:'nova'});particles.push({x:e.x,y:e.y,x2:best.x,y2:best.y,life:.22,total:.22,lightning:true,color:'#c6a0ff'});}}
 }
 function currentShotBudget(){return controlMode==='mobile'?170:245}
 function efficientShotRate(p=player){return Math.max(.095,p.rate)*(1+Math.max(0,shots.length/currentShotBudget()-.65)*.8)}
@@ -4542,7 +4644,7 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
  if(coreFloor!==null){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-coreFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(hasBossSuper(e)&&e.superState==='recover')damage*=1.13;
- if(!meta.dot&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}if(player.tacticFlags&&damage>0)damage*=AnkinTactics.damageMultiplier(player,e,meta,gainNovaEnergy);
+ if(!meta.dot&&meta.source!=='nova'&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}if(meta.source!=='nova'&&player.tacticFlags&&damage>0)damage*=AnkinTactics.damageMultiplier(player,e,meta,gainNovaEnergy);
  // Final-boss module protection also bounds conditional damage bonuses.
  if(coreFloor!==null)damage=Math.min(damage,Math.max(0,e.hp-coreFloor));
  const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;trackBalanceDamage(dealt,source,e);if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
@@ -4594,19 +4696,19 @@ function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source
    damage:damage*(1+Math.min(20,units-1)*.48),pierce:0,kind:'rocket',source:'rocket',
    ttl:6,hit:new Set(),napalm:true,missileCount:units,seekTimer:0});
   return;
- } if(source==='echo'&&shots.length>currentShotBudget()*.82)return;const tactical=source==='primary'&&player.shipType==='shot'&&shots.length<currentShotBudget()?AnkinTactics.shotVolley(player):null;const base=Math.atan2(target.y-y,target.x-x),width=n>7?.18:.15,volley=source==='primary'&&player.shipType==='shot'?Math.min(n,12):n;const balancedDamage=source==='primary'&&player.shipType==='shot'?damage*(1+Math.min(.45,Math.max(0,n-volley)*.035)):damage;for(let i=0;i<volley;i++){if(shots.length>=currentShotBudget())break;const a=base+(i-(volley-1)/2)*width;shots.push(addPlayerShot({x:x+Math.cos(a)*11,y:y+Math.sin(a)*11,vx:Math.cos(a)*speed*(tactical?.speed||1),vy:Math.sin(a)*speed*(tactical?.speed||1),r:source==='rocket'?7:4.5,damage:balancedDamage*(tactical?.damage||1),tacticalVolleyFactor:tactical?.damage||1,pierce:player.pierce+(tactical?.pierce||0),kind:source==='rocket'?'rocket':player.bulletKind,ttl:source==='rocket'?2.4:1.9,hit:new Set(),source}))}if(source==='primary'&&runClock-(player.lastShotSfxAt??-99)>.11){player.lastShotSfxAt=runClock;tone(580,.025,'triangle',.012)}}
+ } if(source==='echo'&&shots.length>currentShotBudget()*.82)return;const tactical=source==='primary'&&player.shipType==='shot'&&player.novaShotTime<=0&&shots.length<currentShotBudget()?AnkinTactics.shotVolley(player):null;const base=Math.atan2(target.y-y,target.x-x),width=n>7?.18:.15,volley=source==='primary'&&player.shipType==='shot'?Math.min(n,12):n;const balancedDamage=source==='primary'&&player.shipType==='shot'?damage*(1+Math.min(.45,Math.max(0,n-volley)*.035)):damage;for(let i=0;i<volley;i++){if(shots.length>=currentShotBudget())break;const a=base+(i-(volley-1)/2)*width;shots.push(addPlayerShot({x:x+Math.cos(a)*11,y:y+Math.sin(a)*11,vx:Math.cos(a)*speed*(tactical?.speed||1),vy:Math.sin(a)*speed*(tactical?.speed||1),r:source==='rocket'?7:4.5,damage:balancedDamage*(tactical?.damage||1),tacticalVolleyFactor:tactical?.damage||1,pierce:player.pierce+(tactical?.pierce||0),kind:source==='rocket'?'rocket':player.bulletKind,ttl:source==='rocket'?2.4:1.9,hit:new Set(),source}))}if(source==='primary'&&runClock-(player.lastShotSfxAt??-99)>.11){player.lastShotSfxAt=runClock;tone(580,.025,'triangle',.012)}}
 
 function fireDogBones(isNova=false){
  const p=player;if(!p||p.shipType!=='dog')return;
- const n=isNova?8:Math.min(8,p.dogBones),speed=isNova?350:p.dogBoneSpeed;
+ const k=novaStrength(p),evolved=isNova&&p.novaEvolution==='dog';const n=isNova?(evolved?10+Math.floor(k*2):8):Math.min(8,p.dogBones),speed=isNova?350:p.dogBoneSpeed;
  const target=visibleTarget(p.x,p.y);
  const heading=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
- const boneElement=isNova?null:nextBasicElement(p);
+ const boneElement=isNova?null:nextBasicElement(p);if(isNova)reserveNovaShots(n);
  for(let i=0;i<n&&shots.length<currentShotBudget();i++){
-  const ang=isNova?i*TAU/8:heading+(i-(n-1)/2)*.22,rad=isNova?6.5:Math.min(20,7*p.dogBoneSize);
+  const ang=isNova?(i<8?i*TAU/8:heading+(i-8-(n-9)/2)*.13):heading+(i-(n-1)/2)*.22,rad=isNova?(evolved?9+k*9:6.5):Math.min(20,7*p.dogBoneSize);
   shots.push({x:p.x+Math.cos(ang)*16,y:p.y+Math.sin(ang)*16,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,r:rad,
-    damage:isNova?effectiveNovaDamage(p)*.82:p.dmg*p.dogBonePower,pierce:999,kind:'bone',elementMode:boneElement,source:isNova?'nova':'shot',
-    ttl:Math.min(7.5,Math.max(4.8,(isNova?300:p.dogBoneRange)/speed*3)),returning:false,flight:0,range:isNova?300:p.dogBoneRange,
+    damage:isNova?effectiveNovaDamage(p)*.82:p.dmg*p.dogBonePower,pierce:999,kind:'bone',elementMode:isNova?nextBasicElement(p):boneElement,source:isNova?'nova':'shot',
+    ttl:Math.min(7.5,Math.max(4.8,(isNova?(evolved?360+k*260:300):p.dogBoneRange)/speed*3)),returning:false,flight:0,range:isNova?(evolved?360+k*260:300):p.dogBoneRange,
     homeSpeed:Math.max(380,speed*1.2),spinAngle:ang+Math.PI/2,spinRate:isNova?2.4:2.0,hit:new Set(),novaBone:isNova});
  }
  if(!isNova&&n&&runClock-(p.lastShotSfxAt??-99)>.15){p.lastShotSfxAt=runClock;tone(455,.05,'triangle',.018)}
@@ -4667,49 +4769,51 @@ function updateLaser(dt){const p=player;p.laserNovaTimer=Math.max(0,p.laserNovaT
   p.laserTargetsCache.length=Math.min(p.laserTargetsCache.length,Math.max(24,Math.min(64,p.laserCount*2+6)));
  }
  p.laserVisualMode=beamElementMode(p);
- const targets=p.laserTargetsCache;const count=Math.min(p.laserLimit,p.laserCount+(p.laserNovaTimer>0?2:0)),width=(Math.min(p.laserWidth,8)+Math.max(0,p.laserWidth-8)*.34)*(p.laserNovaTimer>0?1.2:1),balance=laserBalance(p,count);if(!targets.length){AnkinTactics.laserTarget(p,null);return;}const targeted=new Set();
- for(let i=0;i<count;i++){const a=-Math.PI/2+TAU*i/count,ox=p.x+Math.cos(a)*14,oy=p.y+Math.sin(a)*14;let trg=null,dd=Infinity;for(const e of targets){if(e.dead||!isVisibleAutoTarget(e)||targeted.has(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}if(!trg){for(const e of targets){if(e.dead||!isVisibleAutoTarget(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}}if(!trg)continue;targeted.add(trg);let lx=trg.x,ly=trg.y;const collision=engageImpact(ox,oy,lx,ly,Math.min(5,width*.2));if(collision!==null){const t=Math.max(0,collision-.006);lx=ox+(lx-ox)*t;ly=oy+(ly-oy)*t}if(i===0)AnkinTactics.laserTarget(p,collision===null?trg:null);if(Math.hypot(lx-ox,ly-oy)>2)laserLinks.push({x:ox,y:oy,x2:lx,y2:ly,width,nova:p.laserNovaTimer>0})}
- p.laserTick-=dt;if(p.laserTick>0)return;const tick=.09,beamMode=p.laserVisualMode;p.laserTick+=tick;for(const l of laserLinks){const vx=l.x2-l.x,vy=l.y2-l.y,den=vx*vx+vy*vy;if(den<1)continue;for(const e of segmentCandidates(l.x,l.y,l.x2,l.y2,l.width*.52)){if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;const along=((e.x-l.x)*vx+(e.y-l.y)*vy)/den;if(along<0||along>1.05)continue;const cx=l.x+vx*clamp(along,0,1),cy=l.y+vy*clamp(along,0,1);if((e.x-cx)**2+(e.y-cy)**2>(e.r+l.width*.52)**2)continue;let damage=(p.dmg*.87+p.laserBonus)*balance.effectiveScale*balance.emitterScale*balance.movementScale*tick*(p.laserNovaTimer>0?1.30+Math.min(.65,effectiveNovaDamage(p)/1100):1);if(Math.random()<Math.min(.95,p.crit))damage*=p.critMult;if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damage*=p.bossBane;if(e.type==='guard')damage*=.70;if(p.relicLaserHunter&&e.hp<e.maxHp*.5)damage*=1.6;damageEnemy(e,damage,{special:true,source:'laser'});if(e.dead)continue;applyBasicElement(e,beamMode,damage,.85);if(p.relicLaserPulse&&Math.random()<.10)detonate(e.x,e.y,72,damage*.8,e,5);if(p.relicLaserFork&&Math.random()<.16){const other=visibleTarget(e.x,e.y,e,195);if(other){let sideDmg=damage*.55;if(p.relicLaserHunter&&other.hp<other.maxHp*.5)sideDmg*=1.6;
+ const targets=p.laserTargetsCache;const count=Math.min(p.laserLimit+(p.laserNovaTimer>0&&p.novaEvolution==='laser'?6:0),p.laserCount+(p.laserNovaTimer>0?(p.novaEvolution==='laser'?3+Math.floor(novaStrength(p)*3):2):0)),width=(Math.min(p.laserWidth,8)+Math.max(0,p.laserWidth-8)*.34)*(p.laserNovaTimer>0?1.2:1),balance=laserBalance(p,count);if(!targets.length){AnkinTactics.laserTarget(p,null);return;}const targeted=new Set();
+ for(let i=0;i<count;i++){const a=-Math.PI/2+TAU*i/count,ox=p.x+Math.cos(a)*14,oy=p.y+Math.sin(a)*14;let trg=null,dd=Infinity;for(const e of targets){if(e.dead||!isVisibleAutoTarget(e)||targeted.has(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}if(!trg){for(const e of targets){if(e.dead||!isVisibleAutoTarget(e))continue;const v=(e.x-ox)**2+(e.y-oy)**2;if(v<dd){dd=v;trg=e}}}if(!trg)continue;targeted.add(trg);let lx=trg.x,ly=trg.y;const collision=p.laserNovaTimer>0?null:engageImpact(ox,oy,lx,ly,Math.min(5,width*.2));if(collision!==null){const t=Math.max(0,collision-.006);lx=ox+(lx-ox)*t;ly=oy+(ly-oy)*t}if(i===0)AnkinTactics.laserTarget(p,collision===null?trg:null);if(Math.hypot(lx-ox,ly-oy)>2)laserLinks.push({x:ox,y:oy,x2:lx,y2:ly,width,nova:p.laserNovaTimer>0})}
+ p.laserTick-=dt;if(p.laserTick>0)return;const tick=.09,beamMode=p.laserVisualMode;p.laserTick+=tick;for(const l of laserLinks){const vx=l.x2-l.x,vy=l.y2-l.y,den=vx*vx+vy*vy;if(den<1)continue;for(const e of segmentCandidates(l.x,l.y,l.x2,l.y2,l.width*.52)){if(e.dead||e.isoWarp||(e.isoSafe||0)>0)continue;const along=((e.x-l.x)*vx+(e.y-l.y)*vy)/den;if(along<0||along>1.05)continue;const cx=l.x+vx*clamp(along,0,1),cy=l.y+vy*clamp(along,0,1);if((e.x-cx)**2+(e.y-cy)**2>(e.r+l.width*.52)**2)continue;let damage=p.laserNovaTimer>0?effectiveNovaDamage(p)*.60*balance.emitterScale*tick:(p.dmg*.87+p.laserBonus)*balance.effectiveScale*balance.emitterScale*balance.movementScale*tick;if(p.laserNovaTimer<=0&&Math.random()<Math.min(.95,p.crit))damage*=p.critMult;if(p.laserNovaTimer<=0&&['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damage*=p.bossBane;if(e.type==='guard')damage*=.70;if(p.laserNovaTimer<=0&&p.relicLaserHunter&&e.hp<e.maxHp*.5)damage*=1.6;damageEnemy(e,damage,{special:true,source:p.laserNovaTimer>0?'nova':'laser'});if(e.dead||p.laserNovaTimer>0)continue;applyBasicElement(e,beamMode,damage,.85);if(p.relicLaserPulse&&Math.random()<.10)detonate(e.x,e.y,72,damage*.8,e,5);if(p.relicLaserFork&&Math.random()<.16){const other=visibleTarget(e.x,e.y,e,195);if(other){let sideDmg=damage*.55;if(p.relicLaserHunter&&other.hp<other.maxHp*.5)sideDmg*=1.6;
  damageEnemy(other,sideDmg,{special:true,source:'laser'});if(!other.dead)applyBasicElement(other,beamMode,sideDmg,.85)
  particles.push({x:e.x,y:e.y,x2:other.x,y2:other.y,life:.22,total:.22,lightning:true,color:'#e3c5ff'})}}if(p.explosion>0&&Math.random()<p.explosion*.12)detonate(e.x,e.y,58+p.thermal*13,Math.max(8,damage*3),e,5);}}
 }
 // Comet: standing still banks charge. The first movement frame fires the stored charge.
 function updateCharge(dt,m){const p=player;if(AnkinTactics.holdsCharge(p)&&p.charge>.09){p.chargeStationary=true;return;}if(m<.02&&p.dashTime<=0){p.charge=Math.min(1,p.charge+dt*p.chargeRate);p.chargeStationary=true;p.shotTimer=Math.max(p.shotTimer,.08);return;}if(p.chargeStationary&&p.charge>.09){fireComet(p.charge);p.charge=0;p.shotTimer=Math.max(p.rate,.38)}p.chargeStationary=false;const mobileCharge=AnkinTactics.mobileCharge(p);if(mobileCharge)p.charge=Math.min(1,p.charge+dt*p.chargeRate*mobileCharge);p.shotTimer-=dt;if(p.shotTimer<=0){fireComet(.06);p.shotTimer=Math.max(p.limitRate,p.rate)}}
-function fireComet(amount=0,asNova=false){const p=player,q=clamp(amount,0,1),target=visibleTarget(p.x,p.y),dir=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);const count=asNova?Math.min(4,2+Math.floor(p.chargeNovaSpread*.5)):q>.4?Math.min(4,1+Math.floor((p.multishot-1)/2)):1,chargeStats=chargeBalance(p),chargeElement=asNova?null:nextBasicElement(p),tactical=shots.length<currentShotBudget()?AnkinTactics.chargeFire(p,q,asNova):null;
- for(let i=0;i<count&&shots.length<currentShotBudget();i++){const a=dir+(i-(count-1)/2)*(asNova?.24:.13),speed=(asNova?790:p.shotSpeed*(1+.85*q)),r=(asNova?18:5+18*q+chargeStats.bonusSize*q),power=(asNova?effectiveNovaDamage(p)*.84:p.dmg*(1+4.0*q*q)*chargeStats.effectiveScale)*(i===0||asNova?1:.52),pierce=asNova?Math.min(12,8+p.pierce):q>=.995?5+p.pierce+chargeStats.bonusPierce:p.pierce;
- shots.push({x:p.x+Math.cos(a)*13,y:p.y+Math.sin(a)*13,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r,damage:power*(tactical?.damage||1),pierce:pierce+(tactical?.pierce||0),kind:asNova?'novaCharge':'comet',elementMode:chargeElement,ttl:asNova?3.1:2.1,hit:new Set(),source:'charge',chargeFull:q>=.995||asNova});
+function fireComet(amount=0,asNova=false){const p=player,q=clamp(amount,0,1),target=visibleTarget(p.x,p.y),dir=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);const count=asNova?Math.min(7,2+Math.floor(novaStrength(p)*3)+Math.floor(p.chargeNovaSpread*.5)+p.novaChargeSalvo):q>.4?Math.min(4,1+Math.floor((p.multishot-1)/2)):1,chargeStats=chargeBalance(p),chargeElement=asNova?null:nextBasicElement(p),tactical=shots.length<currentShotBudget()?AnkinTactics.chargeFire(p,q,asNova):null;
+ if(asNova)reserveNovaShots(count);
+ for(let i=0;i<count&&shots.length<currentShotBudget();i++){const a=dir+(i-(count-1)/2)*(asNova?.24:.13),speed=(asNova?790:p.shotSpeed*(1+.85*q)),r=(asNova?(18+novaStrength(p)*12+p.novaChargeSize)*(p.novaEvolution==='charge'?1.6+novaStrength(p)*.9:1):5+18*q+chargeStats.bonusSize*q),power=(asNova?effectiveNovaDamage(p)*.84:p.dmg*(1+4.0*q*q)*chargeStats.effectiveScale)*(i===0||asNova?1:.52),pierce=asNova?9999:q>=.995?5+p.pierce+chargeStats.bonusPierce:p.pierce;
+ shots.push({x:p.x+Math.cos(a)*13,y:p.y+Math.sin(a)*13,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r,damage:power*(tactical?.damage||1),pierce:pierce+(tactical?.pierce||0),kind:asNova?'novaCharge':'comet',nova:asNova,arenaReflect:asNova&&p.novaEvolution==='charge',arenaBounces:asNova&&p.novaEvolution==='charge'?1+Math.floor(novaStrength(p)*4):0,elementMode:chargeElement,ttl:asNova?(p.novaEvolution==='charge'?5+novaStrength(p)*2:3.1):2.1,hit:new Set(),source:'charge',chargeFull:q>=.995||asNova});
  }if(!asNova&&q>=.995&&p.relicChargeEcho){p.relicEchoQueue.push({time:.18,dir,power:p.dmg*(1+4.0*q*q)*chargeStats.effectiveScale*.62})}if(q>.1||asNova){burst(p.x,p.y,asNova?'#fff0c1':'#ffba78',asNova?30:Math.round(7+q*19),asNova?200:90+q*140);ring(p.x,p.y,asNova?300:40+q*90,'#ffbf81');if(!asNova)tone(330-q*155,.13,'triangle',.025)}}
-function chargeNova(){const p=player;sfx('novaCharge');flash=.18;shake=0;for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],p)<Math.max(280,p.novaRadius))hostile.splice(i,1);fireComet(1,true);p.charge=0;p.chargeStationary=false;announce('COMET NOVA · METEOR SALVO',3.1);shake=0;}
+function chargeNova(){const p=player;sfx('novaCharge');flash=.18;shake=0;for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],p)<Math.max(280,p.novaRadius))hostile.splice(i,1);fireComet(1,true);p.charge=0;p.chargeStationary=false;announce(p.novaEvolution==='charge'?'スプラッシュチャージャー':'COMET NOVA · METEOR SALVO',3.1);shake=0;}
 // PLASMA DRILL: no primary projectiles. Movement charges the rotor; dash sweeps a melee capsule.
-function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player;
+function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player,novaActive=p.drillOverdriveTime>0,geometry=novaDrillGeometry(p);
  if(!dashWasActive){p.drillRushActive=0;const moved=Math.hypot(p.x-fromX,p.y-fromY);const gain=(m>.22&&moved>dt*28?p.drillGain*clamp(m,.3,1):0);p.drillPlasma=clamp(p.drillPlasma+dt*(gain||-p.drillDecay),0,p.drillCap);}
  else p.drillRushActive=Math.max(0,p.drillRushActive-dt);
  if(p.drillOverdriveTime>0)p.drillPlasma=p.drillCap;
  const drillMode=drillElementMode(p);p.drillVisualMode=drillMode;
  // Forward swept capsule: reaches beyond the ship nose; never enlarges player hurtbox.
- if(m>.18&&!dashWasActive){
-  const sx=p.x+p.dx*12,sy=p.y+p.dy*12,ex=p.x+p.dx*(32+p.drillReach),ey=p.y+p.dy*(32+p.drillReach),radius=11+p.drillWidth*.53;
+ if((m>.18||novaActive)&&!dashWasActive){
+  const sx=p.x+p.dx*12,sy=p.y+p.dy*12,ex=p.x+p.dx*geometry.reach,ey=p.y+p.dy*geometry.reach,radius=geometry.radius;
   const vx=ex-sx,vy=ey-sy,den=Math.max(1,vx*vx+vy*vy);
   for(const e of segmentCandidates(sx,sy,ex,ey,radius)){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||(e.drillTouchUntil||0)>runClock)continue;
    const q=clamp(((e.x-sx)*vx+(e.y-sy)*vy)/den,0,1),hx=sx+vx*q,hy=sy+vy*q;
-   if((e.x-hx)**2+(e.y-hy)**2>(e.r+radius)**2||engageBarrierBlocks(sx,sy,e.x,e.y))continue;
-   e.drillTouchUntil=runClock+.27;let amount=p.drillContact+p.dmg*.34;
-   if(Math.random()<p.crit)amount*=p.critMult;
-   damageEnemy(e,amount,{special:true,source:'drill',tacticalContact:true});AnkinTactics.onContact(p,e);
-   if(!e.dead)applyBasicElement(e,drillMode,amount+(drillMode==='plasma'?p.drillHeat*14:0),.7);
+   if((e.x-hx)**2+(e.y-hy)**2>(e.r+radius)**2||(!novaActive&&engageBarrierBlocks(sx,sy,e.x,e.y)))continue;
+   e.drillTouchUntil=runClock+.27;let amount=novaActive?effectiveNovaDamage(p)*.25*geometry.scale:p.drillContact+p.dmg*.34;
+   if(!novaActive&&Math.random()<p.crit)amount*=p.critMult;
+   damageEnemy(e,amount,{special:true,source:novaActive?'nova':'drill',tacticalContact:!novaActive});if(!novaActive)AnkinTactics.onContact(p,e);
+   if(!e.dead&&!novaActive)applyBasicElement(e,drillMode,amount+(drillMode==='plasma'?p.drillHeat*14:0),.7);
   }
  }
  if(!dashWasActive||p.drillRushPower<=0)return;
- const sx=fromX,sy=fromY,ex=p.x+p.dx*p.drillReach*.70,ey=p.y+p.dy*p.drillReach*.70,vx=ex-sx,vy=ey-sy,den=Math.max(1,vx*vx+vy*vy),radius=19+p.drillWidth*.60;
+ const sx=fromX,sy=fromY,ex=p.x+p.dx*(novaActive?geometry.reach:p.drillReach*.70),ey=p.y+p.dy*(novaActive?geometry.reach:p.drillReach*.70),vx=ex-sx,vy=ey-sy,den=Math.max(1,vx*vx+vy*vy),radius=novaActive?geometry.radius:19+p.drillWidth*.60;
  for(const e of segmentCandidates(sx,sy,ex,ey,radius)){
   if(e.dead||p.drillHitSet.has(e))continue;
   const along=clamp(((e.x-sx)*vx+(e.y-sy)*vy)/den,0,1),cx=sx+vx*along,cy=sy+vy*along;
-  if((e.x-cx)**2+(e.y-cy)**2>(e.r+radius)**2||engageBarrierBlocks(sx,sy,e.x,e.y))continue;
+  if((e.x-cx)**2+(e.y-cy)**2>(e.r+radius)**2||(!novaActive&&engageBarrierBlocks(sx,sy,e.x,e.y)))continue;
   p.drillHitSet.add(e);
   const boss=['minor','major','unique','ultimate','ultimatePart'].includes(e.type);
-  let power=(p.drillDamage+p.dmg*1.35)*(0.47+p.drillRushPower*.93)*(1+p.drillNozzle*.13)*(boss?p.bossBane:1);
-  if(Math.random()<Math.min(.85,p.crit))power*=p.critMult;
-  damageEnemy(e,power,{special:true,source:'drill',tacticalRush:true});
+  let power=novaActive?effectiveNovaDamage(p)*.72*geometry.scale:(p.drillDamage+p.dmg*1.35)*(0.47+p.drillRushPower*.93)*(1+p.drillNozzle*.13)*(boss?p.bossBane:1);
+  if(!novaActive&&Math.random()<Math.min(.85,p.crit))power*=p.critMult;
+  damageEnemy(e,power,{special:true,source:novaActive?'nova':'drill',tacticalRush:!novaActive});
+  if(novaActive){burst(cx,cy,'#ff70b5',2,90);continue;}
   if(!e.dead)applyBasicElement(e,drillMode,power*(drillMode==='plasma'?1+p.drillHeat*.3:1),.85);
   if(p.explosion>0&&Math.random()<p.explosion*.42)detonate(cx,cy,55,Math.min(power*.45,120+p.dmg),e,5);
   if(drillMode==='cryo'&&p.drillSlow>0&&!e.dead)applySlow(e,1.2+p.drillSlow*.3);
@@ -4717,24 +4821,24 @@ function updateDrill(dt,m,fromX,fromY,dashWasActive){const p=player;
   if(e.dead&&p.drillRefund>0)p.drillPlasma=Math.min(p.drillCap,p.drillPlasma+p.drillRefund);
   burst(cx,cy,'#ff70b5',settings.fx==='low'||settings.fx==='simple'?2:6,90);
  }
- if(p.drillRushActive<=0&&p.drillDashCount&&p.drillNovaPulse>0){p.drillNovaPulseTick=(p.drillNovaPulseTick||0)+dt;if(p.drillNovaPulseTick>.23){p.drillNovaPulseTick=0;ring(p.x,p.y,63,'#ff86bd');for(const e of circleCandidates(p.x,p.y,60)){if(!e.dead&&d2(e,p)<(e.r+58)**2)damageEnemy(e,p.drillNovaPulse*32,{special:true,source:'drill'})}}}
+ if(!novaActive&&p.drillRushActive<=0&&p.drillDashCount&&p.drillNovaPulse>0){p.drillNovaPulseTick=(p.drillNovaPulseTick||0)+dt;if(p.drillNovaPulseTick>.23){p.drillNovaPulseTick=0;ring(p.x,p.y,63,'#ff86bd');for(const e of circleCandidates(p.x,p.y,60)){if(!e.dead&&d2(e,p)<(e.r+58)**2)damageEnemy(e,p.drillNovaPulse*32,{special:true,source:'drill'})}}}
 }
 function dash(){if(!player||player.dashLeft>0)return;AnkinTactics.onDash(player,shots);if(controlMode==='mobile')validateTouchCapture();let x=controlMode==='mobile'?touchMove.x:0,y=controlMode==='mobile'?touchMove.y:0;if(keys.has('KeyW')||keys.has('ArrowUp'))y--;if(keys.has('KeyS')||keys.has('ArrowDown'))y++;if(keys.has('KeyA')||keys.has('ArrowLeft'))x--;if(keys.has('KeyD')||keys.has('ArrowRight'))x++;const mag=Math.hypot(x,y);if(mag){player.dx=x/mag;player.dy=y/mag}if(player.shipType==='drill'){
   const plasma=player.drillPlasma/Math.max(.001,player.drillCap);
   player.drillRushPower=plasma>=.22?Math.min(1,plasma):0;
-  player.drillRushActive=player.drillRushPower?.24*(player.thrusterEngine?1.65:1):0;
+  player.drillRushActive=player.drillRushPower?.24*(player.thrusterEngine?1.65:1)*(player.drillOverdriveTime>0?1+.12*player.novaDrillDash:1):0;
   player.drillHitSet=new Set();player.drillDashCount++;
   if(player.drillRushActive){player.drillPlasma=player.drillOverdriveTime>0?player.drillCap:0;player.iframes=Math.max(player.iframes,.27);sfx('novaLaser');burst(player.x,player.y,'#ff64af',15,110);}
  }
  if(player.dashPulse){let cleared=0;for(const b of hostile){if(cleared>=5)break;if(b.ttl>0&&!b.unblockable&&d2(b,player)<(b.r+72)**2){b.ttl=0;cleared++}}if(cleared){ring(player.x,player.y,72,'#a8fff4');pop(player.x,player.y-23,'BREAK '+cleared,'#affff4')}}
  if(player.dashFlow)player.dashFlowTimer=1.2;
- if(game?.combatLog)game.combatLog.dashCount++;player.dashTime=(player.shipType==='drill'?.24:.2)*(player.thrusterEngine?1.65:1);player.dashLeft=player.shipType==='drill'&&player.drillOverdriveTime>0?Math.min(.65,player.dashCd*.42):player.dashCd;player.dashGaugeFade=1;player.iframes=Math.max(.31,player.iframes);burst(player.x,player.y,'#75fff2',16,90);tone(260,.18,'sawtooth',.045)}
-function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaCooldown>0)))return;if(!force){player.energy=0;player.novaCooldown=Math.max(NOVA_REUSE_MIN,Math.min(NOVA_COOLDOWN,player.novaReuseDelay??NOVA_COOLDOWN));if(game?.combatLog)game.combatLog.novaCount++;}if(player.shipType==='dog'){sfx('novaShot');fireDogBones(true);ring(player.x,player.y,65,'#ffe2ac');burst(player.x,player.y,'#ffd6aa',22,165);announce('🐶 BOW SHOCK · 8方向骨ブーメラン！',2.6);return;}if(player.shipType==='drill'){
+ if(game?.combatLog)game.combatLog.dashCount++;player.dashTime=(player.shipType==='drill'?.24:.2)*(player.thrusterEngine?1.65:1)*(player.shipType==='drill'&&player.drillOverdriveTime>0?1+.12*player.novaDrillDash:1);player.dashLeft=player.shipType==='drill'&&player.drillOverdriveTime>0?Math.min(.65,player.dashCd*.42):player.dashCd;player.dashGaugeFade=1;player.iframes=Math.max(.31,player.iframes);burst(player.x,player.y,'#75fff2',16,90);tone(260,.18,'sawtooth',.045)}
+function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaCooldown>0)))return;if(!force){player.energy=0;player.novaCooldown=Math.max(NOVA_REUSE_MIN,Math.min(NOVA_COOLDOWN,player.novaReuseDelay??NOVA_COOLDOWN));if(game?.combatLog)game.combatLog.novaCount++;}if(player.shipType==='dog'){sfx('novaShot');fireDogBones(true);ring(player.x,player.y,65,'#ffe2ac');burst(player.x,player.y,'#ffd6aa',22,165);announce(player.novaEvolution==='dog'?'ごちそうたくさん！ · BOW SHOCK':'🐶 BOW SHOCK · 8方向骨ブーメラン！',2.6);return;}if(player.shipType==='drill'){
   sfx('novaLaser');flash=.09;shake=0;
-  player.drillOverdriveTime=5.5+Math.min(2,player.drillNovaBonusTime||0);player.drillPlasma=player.drillCap;player.iframes=Math.max(player.iframes,.35);
+  player.drillOverdriveTime=5.5+Math.min(2,player.drillNovaBonusTime||0)+(player.novaEvolution==='drill'?1.5+novaStrength(player)*2:0);player.drillPlasma=player.drillCap;player.iframes=Math.max(player.iframes,.35);
   ring(player.x,player.y,88,'#86fff0');burst(player.x,player.y,'#85fff0',24,130);
-  announce('PLASMA NOVA · OVERDRIVE '+player.drillOverdriveTime.toFixed(1)+'s / SPEED UP / PLASMA MAX',3);return;
- }if(player.shipType==='laser'){sfx('novaLaser');player.laserNovaTimer=3.2+Math.min(.65,player.voidHalo*.09);burst(player.x,player.y,'#bca5ff',45,230);ring(player.x,player.y,Math.min(450,player.novaRadius),'#a88cff');flash=.12;shake=0;hostile=hostile.filter(b=>dst(b,player)>Math.max(190,player.novaRadius));announce('PRISM NOVA · LASER OVERDRIVE',3.3);shake=0;return;}if(player.shipType==='charge'){chargeNova();return;}sfx('novaShot');flash=.12;shake=0;let hit=0;for(const e of enemies.slice()){if(e.dead)continue;if(dst(e,player)<player.novaRadius+e.r){damageEnemy(e,effectiveNovaDamage(player),{special:true,source:'nova'});hit++}}for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],player)<player.novaRadius)hostile.splice(i,1);burst(player.x,player.y,'#bd9bff',46,260);ring(player.x,player.y,player.novaRadius,'#c4a8ff');pop(player.x,player.y-32,`NOVA · ${hit} HIT`,'#d5c5ff');if(player.voidHalo>0)zones.push({x:player.x,y:player.y,r:Math.min(320,player.novaRadius*.6),life:Math.min(3.3,2+player.voidHalo*.12),ttl:0,dps:(effectiveNovaDamage(player)*.16+Math.min(6,player.voidHalo)*13)});shake=0;}
+  announce((player.novaEvolution==='drill'?'ギガドリル装備 · ':'PLASMA NOVA · OVERDRIVE ')+player.drillOverdriveTime.toFixed(1)+'s / SPEED UP / PLASMA MAX',3);return;
+ }if(player.shipType==='laser'){sfx('novaLaser');player.laserNovaTimer=3.2+Math.min(.65,player.voidHalo*.09)+(player.novaEvolution==='laser'?novaStrength(player)*2:0);burst(player.x,player.y,'#bca5ff',45,230);ring(player.x,player.y,Math.min(450,player.novaRadius),'#a88cff');flash=.12;shake=0;hostile=hostile.filter(b=>dst(b,player)>Math.max(190,player.novaRadius));announce(player.novaEvolution==='laser'?'クルーエル・レーザー · '+player.laserNovaTimer.toFixed(1)+'s':'PRISM NOVA · LASER OVERDRIVE',3.3);shake=0;return;}if(player.shipType==='charge'){chargeNova();return;}sfx('novaShot');if(player.novaEvolution==='shot'){reserveNovaShots(Math.min(16,player.multishot+4));player.novaShotTime=3+novaStrength(player)*3;announce('ノヴァ・フルパワーショット · '+player.novaShotTime.toFixed(1)+'s',3);}flash=.12;shake=0;let hit=0;for(const e of enemies.slice()){if(e.dead)continue;if(dst(e,player)<player.novaRadius+e.r){damageEnemy(e,effectiveNovaDamage(player),{special:true,source:'nova'});hit++}}for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],player)<player.novaRadius)hostile.splice(i,1);burst(player.x,player.y,'#bd9bff',46,260);ring(player.x,player.y,player.novaRadius,'#c4a8ff');pop(player.x,player.y-32,`NOVA · ${hit} HIT`,'#d5c5ff');if(player.voidHalo>0)zones.push({x:player.x,y:player.y,r:Math.min(320,player.novaRadius*.6),life:Math.min(3.3,2+player.voidHalo*.12),ttl:0,type:'nova',dps:(effectiveNovaDamage(player)*.16+Math.min(6,player.voidHalo)*13)});shake=0;}
 function loseHP(amount,pressure=false){if(player.iframes>0||player.dashTime>0||(player.shipType==='drill'&&player.drillOverdriveTime>0)||mode!=='playing')return;amount*=AnkinTactics.incomingMultiplier(player);player.hitTime=0;
  // High-level PHASE bolts partially bypass shields, but still respect dash/NOVA invulnerability.
  const direct=pressure?amount*.42:0;let blocked=amount-direct;
@@ -5103,12 +5207,12 @@ function tickIndependentElements(dt){
   p.meteorTimer-=dt;
   if(p.meteorTimer<=0&&!shots.some(b=>b.kind==='meteor'&&b.ttl>0)){
    if(shots.length>=currentShotBudget())p.meteorTimer=.13;
-   else{
+   else if(currentShotBudget()-shots.length>=(p.meteorTriple?3:1)){
     p.meteorTimer=Math.max(2.2,p.meteorInterval);
     const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
-    shots.push({x:p.x,y:p.y,vx:Math.cos(a)*155*(p.meteorSpeed||1),vy:Math.sin(a)*155*(p.meteorSpeed||1),r:12,
+    for(let i=0;i<(p.meteorTriple?3:1);i++){const angle=a+(i-(p.meteorTriple?1:0))*.28,size=p.meteorTriple?.5:1;shots.push({x:p.x,y:p.y,vx:Math.cos(angle)*155*(p.meteorSpeed||1),vy:Math.sin(angle)*155*(p.meteorSpeed||1),r:12*size,meteorSizeScale:size,arenaReflect:!!p.meteorArenaBounce,arenaBounces:p.meteorArenaBounce?1:0,
      damage:p.meteorDamage,pierce:9999,kind:'meteor',ttl:30,hit:new Set(),source:'meteor',
-     meteorDistance:0,meteorMaxRadius:Math.min(75,Math.max(22,p.meteorRadius+29))});
+     meteorDistance:0,meteorMaxRadius:Math.min(75,Math.max(22,p.meteorRadius+29))*size});}
    }
   }
  }
@@ -5157,20 +5261,20 @@ function explodeGigaNapalm(b,target,dmg){
   if(!e.dead)setBurn(e,burn,3.7);
  }
 }
-function projectileHit(b,e){let dmg=b.damage;if(Math.random()<Math.min(.97,player.crit)){dmg*=player.critMult;if(Math.random()<.08)pop(e.x,e.y-14,'CRIT!','#ffe296')}
- if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))dmg*=player.bossBane;
- damageEnemy(e,dmg,{tacticalPrimary:player.shipType==='shot'&&b.source==='primary',tacticalVolleyFactor:b.tacticalVolleyFactor||1,tacticalReturning:b.kind==='bone'&&b.returning,projectileAngle:Math.atan2(b.vy,b.vx),source:b.novaBone?'nova':b.kind==='bone'?'bone':b.kind==='dogEgg'?'dogEgg':b.kind==='iceball'?'iceball':b.kind==='meteor'?'meteor':b.source==='drone'?'drone':b.source==='rocket'?'missile':b.kind==='novaCharge'?'nova':b.kind==='comet'?'charge':player.shipType==='charge'?'charge':'shot'});
-  if(player.shipType==='charge'&&b.chargeFull&&b.source!=='fragment'&&!b.fragmented){if(player.relicChargeShatter)fireFragment(b,e);if(player.relicChargeNova){detonate(e.x,e.y,160,Math.max(12,dmg*.62),e,5);ring(e.x,e.y,158,'#ffd5a0')}b.fragmented=true}
-  if(player.shipType==='shot'&&e.dead&&player.relicBurst&&['primary','rear','side','echo'].includes(b.source)&&!b.splitDepth){const others=nearestThreeVisible(e.x,e.y,e,240);for(const other of others){if(shots.length>=currentShotBudget())break;const a=Math.atan2(other.y-e.y,other.x-e.x);shots.push(addPlayerShot({x:e.x,y:e.y,vx:Math.cos(a)*player.shotSpeed*.9,vy:Math.sin(a)*player.shotSpeed*.9,r:3.5,damage:Math.max(7,dmg*.32),pierce:0,kind:player.bulletKind,ttl:1.45,hit:new Set([e]),source:'burst',splitDepth:1}))}}
-  const primaryAttack=(['primary','charge'].includes(b.source)||player.shipType==='dog'&&b.kind==='bone')&&b.kind!=='novaCharge'&&!b.novaBone;
+function projectileHit(b,e){const novaAttack=isNovaAttack(b);let dmg=b.damage;if(!novaAttack&&Math.random()<Math.min(.97,player.crit)){dmg*=player.critMult;if(Math.random()<.08)pop(e.x,e.y-14,'CRIT!','#ffe296')}
+ if(!novaAttack&&['minor','major','unique','ultimate','ultimatePart'].includes(e.type))dmg*=player.bossBane;
+ damageEnemy(e,dmg,{tacticalPrimary:!novaAttack&&player.shipType==='shot'&&b.source==='primary',tacticalVolleyFactor:b.tacticalVolleyFactor||1,tacticalReturning:b.kind==='bone'&&b.returning,projectileAngle:Math.atan2(b.vy,b.vx),source:novaAttack?'nova':b.kind==='bone'?'bone':b.kind==='dogEgg'?'dogEgg':b.kind==='iceball'?'iceball':b.kind==='meteor'?'meteor':b.source==='drone'?'drone':b.source==='rocket'?'missile':b.kind==='novaCharge'?'nova':b.kind==='comet'?'charge':player.shipType==='charge'?'charge':'shot'});
+  if(!novaAttack&&player.shipType==='charge'&&b.chargeFull&&b.source!=='fragment'&&!b.fragmented){if(player.relicChargeShatter)fireFragment(b,e);if(player.relicChargeNova){detonate(e.x,e.y,160,Math.max(12,dmg*.62),e,5);ring(e.x,e.y,158,'#ffd5a0')}b.fragmented=true}
+  if(!novaAttack&&player.shipType==='shot'&&e.dead&&player.relicBurst&&['primary','rear','side','echo'].includes(b.source)&&!b.splitDepth){const others=nearestThreeVisible(e.x,e.y,e,240);for(const other of others){if(shots.length>=currentShotBudget())break;const a=Math.atan2(other.y-e.y,other.x-e.x);shots.push(addPlayerShot({x:e.x,y:e.y,vx:Math.cos(a)*player.shotSpeed*.9,vy:Math.sin(a)*player.shotSpeed*.9,r:3.5,damage:Math.max(7,dmg*.32),pierce:0,kind:player.bulletKind,ttl:1.45,hit:new Set([e]),source:'burst',splitDepth:1}))}}
+  const primaryAttack=!novaAttack&&(['primary','charge'].includes(b.source)||player.shipType==='dog'&&b.kind==='bone')&&b.kind!=='novaCharge'&&!b.novaBone;
   const basicMode=primaryAttack?(b.elementMode||(['plasma','cryo','arc'].includes(b.kind)?b.kind:null)):null;
   if(b.kind==='rocket'&&!e.dead)setBurn(e,Math.max(15,dmg*(.28+player.thermal*.8)*(1+(player.missileBurnBonus||0))),2.7);
- if(primaryAttack&&!e.dead)applyBasicElement(e,basicMode,dmg);
+ if(primaryAttack&&!e.dead)applyBasicElement(e,basicMode,dmg);if(novaAttack&&!e.dead&&(b.novaBone||b.nova))novaElementImpact(e,b.elementMode||(['plasma','cryo','arc'].includes(b.kind)?b.kind:null),dmg);
  if(b.kind==='iceball'&&!e.dead)chillEnemy(e,1.5,Math.min(.78,player.iceBallChance));if(b.kind==='meteor'&&!e.dead){const mods=player.elementMods||{};if(mods.meteorBurn)setBurn(e,Math.max(22,dmg*.25),2.1);if(mods.meteorSlow)applySlow(e,2);if(mods.meteorArc&&(e.meteorArcUntil||0)<=runClock){e.meteorArcUntil=runClock+.9;applyChain(e,dmg*.3+22);}if(mods.meteorWind){const dx=b.x-e.x,dy=b.y-e.y,l=Math.max(1,Math.hypot(dx,dy));e.x+=dx/l*21;e.y+=dy/l*21;}}
  if(b.kind==='rocket'){
   if(b.napalm)explodeGigaNapalm(b,e,dmg);
   else{detonate(b.x,b.y,95+Math.min(70,player.thermal*20),dmg*.8,e,5);if(player.elementMods?.volcanicCore)magmaPatch(b.x,b.y,1);}
- }if(b.kind==='comet'&&player.chargeBlast)detonate(b.x,b.y,40+player.chargeBlast*18+b.r*1.4,dmg*(.13+player.chargeBlast*.075),e,5);if(b.kind==='novaCharge')detonate(b.x,b.y,90+b.r*2,dmg*.35,e,5);
+ }if(b.kind==='comet'&&player.chargeBlast)detonate(b.x,b.y,40+player.chargeBlast*18+b.r*1.4,dmg*(.13+player.chargeBlast*.075),e,5);if(b.kind==='novaCharge')detonate(b.x,b.y,90+b.r*2,dmg*.35,e,5,'nova');
  if(b.source==='drone'&&player.droneThunder)applyChain(e,dmg*.6+player.droneThunder*12);
  if(primaryAttack&&player.bulletOrbit>0&&b.pierce>0){ring(b.x,b.y,55,'#fbd797');detonate(b.x,b.y,56,player.dmg*.5,e,5)}
  if(primaryAttack&&Math.random()<player.explosion)detonate(e.x,e.y,62+player.thermal*12,Math.max(14,dmg*.55),e,5);
@@ -5197,7 +5301,7 @@ function tickEchoShots(p,dt){
 }
 function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  spatialMaintenanceClock+=dt;if(spatialMaintenanceClock>=10){spatialMaintenanceClock=0;trimEnemyIndex()}scheduleBosses();updateRaid(dt);scheduleRelic();tickVacuum(dt);
- p.iframes=Math.max(0,p.iframes-dt);p.novaCooldown=Math.max(0,(p.novaCooldown||0)-dt);p.drillOverdriveTime=Math.max(0,(p.drillOverdriveTime||0)-dt);p.dashLeft=Math.max(0,p.dashLeft-dt);p.dashGaugeFade=p.dashLeft>0||p.dashTime>0?1:Math.max(0,(p.dashGaugeFade||0)-dt*2.4);p.hitTime+=dt;
+ p.iframes=Math.max(0,p.iframes-dt);p.novaCooldown=Math.max(0,(p.novaCooldown||0)-dt);p.novaShotTime=Math.max(0,(p.novaShotTime||0)-dt);p.drillOverdriveTime=Math.max(0,(p.drillOverdriveTime||0)-dt);p.dashLeft=Math.max(0,p.dashLeft-dt);p.dashGaugeFade=p.dashLeft>0||p.dashTime>0?1:Math.max(0,(p.dashGaugeFade||0)-dt*2.4);p.hitTime+=dt;
  p.pressureRecovery=Math.max(0,(p.pressureRecovery||0)-dt);
  p.grazeLock=Math.max(0,(p.grazeLock||0)-dt);p.dashFlowTimer=Math.max(0,(p.dashFlowTimer||0)-dt);
  const defenseLate=pressureUnlocked(),hpRegen=defenseLate&&p.regen>7?Math.min(16,7+Math.sqrt(p.regen-7)*1.65):p.regen;
@@ -5251,12 +5355,12 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(p.magmaLevel>0){p.magmaTimer-=dt;if(p.magmaTimer<=0){p.magmaTimer=Math.max(1.5,4.6-p.magmaLevel*.38);magmaPatch(p.x+rand(-90,90),p.y+rand(-90,90))}}
  if(p.lavaConstrain)unifyMagma();
  const zoneWalls=activeEngageWalls();for(const z of zones){
-  if(z.type==='magma'&&p.lavaConstrain){z.r=Math.min(185,z.r+dt*(4+(p.lavaGrowth||0)));if(!z.visualRadius||z.r-z.visualRadius>8)z.visualPaths=null;}if(zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma'){setBurn(e,Math.max(12,z.dps*.55),1.6);const mods=p.elementMods||{};if(mods.magmaSlow)applySlow(e,1.4);if(mods.magmaArc&&(e.magmaArcUntil||0)<=runClock){e.magmaArcUntil=runClock+1.4;applyChain(e,Math.min(135,z.dps*.25));}if(mods.magmaWind){const dx=z.x-e.x,dy=z.y-e.y,l=Math.max(1,Math.hypot(dx,dy));e.x+=dx/l*7;e.y+=dy/l*7;}if(mods.magmaRock&&['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damageEnemy(e,z.dps*.11,{special:true,source:'magma'});}}}}zones=zones.filter(z=>z.life>0);
+  if(z.type==='magma'&&p.lavaConstrain){z.r=Math.min(185,z.r+dt*(4+(p.lavaGrowth||0)));if(!z.visualRadius||z.r-z.visualRadius>8)z.visualPaths=null;}if(z.type!=='nova'&&zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma'){setBurn(e,Math.max(12,z.dps*.55),1.6);const mods=p.elementMods||{};if(mods.magmaSlow)applySlow(e,1.4);if(mods.magmaArc&&(e.magmaArcUntil||0)<=runClock){e.magmaArcUntil=runClock+1.4;applyChain(e,Math.min(135,z.dps*.25));}if(mods.magmaWind){const dx=z.x-e.x,dy=z.y-e.y,l=Math.max(1,Math.hypot(dx,dy));e.x+=dx/l*7;e.y+=dy/l*7;}if(mods.magmaRock&&['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damageEnemy(e,z.dps*.11,{special:true,source:'magma'});}}}}zones=zones.filter(z=>z.life>0);
  tickIndependentElements(dt);enemyIndexDirtyDuringForces=false;tickGusts(dt);gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(22,g.r)));tickRocks(dt);tickCrossFusion(dt);
  // Index is already current when neither wind nor rock attacks displaced a target.
  if(enemyIndexDirtyDuringForces)refreshEnemyIndex();
  // Projectiles persist across wave boundaries, including those already airborne.
- for(const b of shots){b.ttl-=dt;if(b.ttl<=0)continue;const bx=b.x,by=b.y;
+ for(const b of shots){b.ttl-=dt;if(b.ttl<=0)continue;const bx=b.x,by=b.y;b.novaPrevX=bx;b.novaPrevY=by;
  if(b.kind==='bone'){
   b.spinAngle=(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2))+(b.spinRate||2.0)*dt;b.flight+=dt;
   if(!b.returning&&b.flight>=b.range/Math.max(20,Math.hypot(b.vx,b.vy))){b.returning=true;b.hit.clear();}
@@ -5266,7 +5370,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
    const sp=b.homeSpeed||420;b.vx=dx/Math.max(1,d)*sp;b.vy=dy/Math.max(1,d)*sp;
   }
  }
- if(b.kind==='rocket'||b.relicHoming){b.seekTimer=(b.seekTimer||0)-dt;if(b.seekTimer<=0){b.seekTimer=.19+Math.random()*.06;const target=(b.cachedTarget&&!b.cachedTarget.dead&&isVisibleAutoTarget(b.cachedTarget)&&d2(b,b.cachedTarget)<330*330)?b.cachedTarget:nearTarget(b.x,b.y,null,Math.min(500,Math.max(W,H)*.75),true);b.cachedTarget=target;if(target){const v=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);const steer=b.napalm?.70:b.kind==='rocket'?.48:.42;b.vx=b.vx*(1-steer)+Math.cos(a)*v*steer;b.vy=b.vy*(1-steer)+Math.sin(a)*v*steer}}}b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.kind==='meteor'){b.meteorDistance=(b.meteorDistance||0)+Math.hypot(b.vx,b.vy)*dt;b.r=Math.min(b.meteorMaxRadius||45,12+b.meteorDistance*.065);if(b.x+b.r<0||b.y+b.r<0||b.x-b.r>W||b.y-b.r>H){b.ttl=0;continue;}}if(engageBarrierBlocks(bx,by,b.x,b.y,b.r||3)){b.ttl=0;continue}if(b.relicGrowth)b.r=Math.min(b.growthLimit||8.1,(b.r||4.5)+dt*(b.source==='burst'?1.55:1.85));if(p.shipType==='charge'&&b.chargeFull){if(p.relicChargeGravity){for(const e of circleCandidates(b.x,b.y,135)){if(e.dead||['minor','major','unique'].includes(e.type))continue;const dd=Math.hypot(e.x-b.x,e.y-b.y);if(dd>1&&dd<135){e.x+=(b.x-e.x)/dd*100*dt;e.y+=(b.y-e.y)/dd*100*dt}}}if(p.relicChargeFlame&&b.elementMode==='plasma'){b.trailTimer=(b.trailTimer||0)-dt;if(b.trailTimer<=0){b.trailTimer=.23;zones.push({x:b.x,y:b.y,r:34,life:1.1,ttl:0,dps:Math.max(18,p.dmg*.42),type:'magma'})}}}if(b.bounces>0&&(b.x<12||b.x>W-12||b.y<12||b.y>H-12)){if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<12||b.y>H-12)b.vy*=-1;b.x=clamp(b.x,13,W-13);b.y=clamp(b.y,13,H-13);const target=visibleTarget(b.x,b.y);if(target){const sp=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);b.vx=Math.cos(a)*sp;b.vy=Math.sin(a)*sp}b.bounces--;b.ttl=Math.max(b.ttl,.8);if(settings.fx!=='low'&&settings.fx!=='simple')ring(b.x,b.y,26,'#b8ffed')}if(b.x<-90||b.y<-90||b.x>W+90||b.y>H+90){b.ttl=0;continue}
+ if(b.kind==='rocket'||b.relicHoming){b.seekTimer=(b.seekTimer||0)-dt;if(b.seekTimer<=0){b.seekTimer=.19+Math.random()*.06;const target=(b.cachedTarget&&!b.cachedTarget.dead&&isVisibleAutoTarget(b.cachedTarget)&&d2(b,b.cachedTarget)<330*330)?b.cachedTarget:nearTarget(b.x,b.y,null,Math.min(500,Math.max(W,H)*.75),true);b.cachedTarget=target;if(target){const v=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);const steer=b.napalm?.70:b.kind==='rocket'?.48:.42;b.vx=b.vx*(1-steer)+Math.cos(a)*v*steer;b.vy=b.vy*(1-steer)+Math.sin(a)*v*steer}}}b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.novaBone&&!b.returning&&(b.x<b.r||b.x>W-b.r||b.y<b.r||b.y>H-b.r)){b.returning=true;b.hit.clear();}if(b.kind==='meteor'){b.meteorDistance=(b.meteorDistance||0)+Math.hypot(b.vx,b.vy)*dt;b.r=Math.min(b.meteorMaxRadius||45,(12+b.meteorDistance*.065)*(b.meteorSizeScale||1));if(b.x+b.r<0||b.y+b.r<0||b.x-b.r>W||b.y-b.r>H){b.ttl=0;continue;}}if(b.arenaReflect){reflectArenaProjectile(b);if(b.ttl<=0)continue;}if(!isNovaAttack(b)&&engageBarrierBlocks(bx,by,b.x,b.y,b.r||3)){b.ttl=0;continue}if(b.relicGrowth)b.r=Math.min(b.growthLimit||8.1,(b.r||4.5)+dt*(b.source==='burst'?1.55:1.85));if(p.shipType==='charge'&&b.chargeFull){if(p.relicChargeGravity){for(const e of circleCandidates(b.x,b.y,135)){if(e.dead||['minor','major','unique'].includes(e.type))continue;const dd=Math.hypot(e.x-b.x,e.y-b.y);if(dd>1&&dd<135){e.x+=(b.x-e.x)/dd*100*dt;e.y+=(b.y-e.y)/dd*100*dt}}}if(p.relicChargeFlame&&b.elementMode==='plasma'){b.trailTimer=(b.trailTimer||0)-dt;if(b.trailTimer<=0){b.trailTimer=.23;zones.push({x:b.x,y:b.y,r:34,life:1.1,ttl:0,dps:Math.max(18,p.dmg*.42),type:'magma'})}}}if(b.bounces>0&&(b.x<12||b.x>W-12||b.y<12||b.y>H-12)){if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<12||b.y>H-12)b.vy*=-1;b.x=clamp(b.x,13,W-13);b.y=clamp(b.y,13,H-13);const target=visibleTarget(b.x,b.y);if(target){const sp=Math.hypot(b.vx,b.vy),a=Math.atan2(target.y-b.y,target.x-b.x);b.vx=Math.cos(a)*sp;b.vy=Math.sin(a)*sp}b.bounces--;b.ttl=Math.max(b.ttl,.8);if(settings.fx!=='low'&&settings.fx!=='simple')ring(b.x,b.y,26,'#b8ffed')}if(!b.novaBone&&(b.x<-90||b.y<-90||b.x>W+90||b.y>H+90)){b.ttl=0;continue}
  const travelX=b.x-bx,travelY=b.y-by,travelSq=travelX*travelX+travelY*travelY,travelLen=Math.sqrt(travelSq);
  // Scan occupied spatial cells directly: no per-bullet candidate arrays or spreads.
  const pad=(b.r||0)+enemyMaxRadius;
@@ -5277,7 +5381,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  for(const e of cell){if(b.ttl<=0)break bulletCells;if(e.dead||e.isoWarp||(e.isoSafe||0)>0||b.hit.has(e))continue;
  const hitFrac=travelSq>0?clamp(((e.x-bx)*travelX+(e.y-by)*travelY)/travelSq,0,1):0;
  const hitX=bx+travelX*hitFrac,hitY=by+travelY*hitFrac;
- if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.kind==='bone'&&b.returning)damageEnemy(e,b.damage*Math.max(0,player.dogBoneReturn-1),{special:true,tacticalReturning:true,tacticalExtra:true,source:b.novaBone?'nova':'bone'});if(b.pierce>0)b.pierce--;else b.ttl=0;}}
+ if((e.x-hitX)**2+(e.y-hitY)**2<(b.r+e.r)**2){b.hit.add(e);projectileHit(b,e);if(b.kind==='bone'&&b.returning&&!isNovaAttack(b))damageEnemy(e,b.damage*Math.max(0,player.dogBoneReturn-1),{special:true,tacticalReturning:true,tacticalExtra:true,source:b.novaBone?'nova':'bone'});if(b.pierce>0)b.pierce--;else b.ttl=0;}}
  }}shots=shots.filter(b=>b.ttl>0);
  // A large gunner swarm retains enemy density but reduces total concurrent bullets.
  const activeShooters=enemies.reduce((count,e)=>count+(!e.dead&&e.type==='shooter'?1:0),0);
@@ -5353,7 +5457,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
    if(d2(m,bullet)<(m.r+bullet.r)**2){bullet.ttl=0;if(settings.fx!=='simple')ring(bullet.x,bullet.y,8,'#d4f7ff');}
   }
  }
- for(const b of hostile){if(b.ttl<=0)continue;b.ttl-=dt;if(b.warn>0){b.warn=Math.max(0,b.warn-dt);continue}const fromX=b.x,fromY=b.y;b.x+=b.vx*(1-p.slowField)*dt;b.y+=b.vy*(1-p.slowField)*dt;const distanceSq=segmentPointDistanceSq(fromX,fromY,b.x,b.y,p.x,p.y),hitRadius=b.r+(p.hitR??p.r);if(distanceSq<hitRadius*hitRadius){loseHP(b.damage,!!b.pressure);b.ttl=0}
+ const novaGuards=novaGuardSegments(p);for(const b of hostile){if(b.ttl<=0)continue;b.ttl-=dt;if(b.warn>0){b.warn=Math.max(0,b.warn-dt);continue}const fromX=b.x,fromY=b.y;b.x+=b.vx*(1-p.slowField)*dt;b.y+=b.vy*(1-p.slowField)*dt;if(novaGuards.length&&novaIntercepts(novaGuards,fromX,fromY,b)){b.ttl=0;continue;}const distanceSq=segmentPointDistanceSq(fromX,fromY,b.x,b.y,p.x,p.y),hitRadius=b.r+(p.hitR??p.r);if(distanceSq<hitRadius*hitRadius){loseHP(b.damage,!!b.pressure);b.ttl=0}
  else if(p.dashGraze&&!b.grazed&&p.grazeLock<=0&&p.iframes<=0&&p.dashTime<=0&&distanceSq<(hitRadius+10)**2){b.grazed=true;p.grazeLock=.55;p.energy=Math.min(100,p.energy+1.6);p.dashLeft=Math.max(0,p.dashLeft-.18);if(settings.fx!=='simple')ring(p.x,p.y,23,'#befff0');pop(p.x,p.y-18,'GRAZE','#acffed')}
  }hostile=hostile.filter(b=>b.ttl>0&&b.x>-110&&b.x<W+110&&b.y>-110&&b.y<H+110);
  // Unique ANKIN attacks: pre-warned crossing beams and area mines.
@@ -5597,12 +5701,16 @@ function drawDogEgg(b,drawCtx=ctx){const ctx=drawCtx;
  ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.globalAlpha=.85;ctx.beginPath();
  ctx.ellipse(-b.r*.27,-b.r*.39,b.r*.13,b.r*.29,-.26,0,TAU);ctx.fill();ctx.restore();
 }
+function dogBoneEvolutionPaint(g,r,pal,p){
+ const colors=[...new Set((p?.evolutionStyles||[]).map(s=>s.color))];if(!colors.length)return null;
+ const stops=[pal.accent,...colors,pal.body],paint=g.createLinearGradient(-r,-r,r,r);stops.forEach((c,i)=>paint.addColorStop(i/(stops.length-1),c));return paint;
+}
 function drawDogBone(b,drawCtx=ctx,visualPlayer=player){const ctx=drawCtx;
  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.spinAngle??(Math.atan2(b.vy,b.vx)+Math.PI/2));
- const r=b.r,pal=weaponElementPalette('dog',b.novaBone?null:b.elementMode,visualPlayer?.evolutionTint);
- ctx.shadowColor=b.novaBone?'#ffb2e7':pal.accent;ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
- ctx.strokeStyle=b.novaBone?'#fff6fc':pal.accent;ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
- ctx.fillStyle=b.novaBone?'#ffe3fa':pal.body;
+ const r=b.r,pal=weaponElementPalette('dog',b.elementMode),paint=dogBoneEvolutionPaint(ctx,r,pal,visualPlayer),plainNova=b.novaBone&&!b.elementMode&&!paint;
+ ctx.shadowColor=plainNova?'#ffb2e7':pal.accent;ctx.shadowBlur=renderHeavyLoad?0:7;ctx.lineCap='round';
+ ctx.strokeStyle=plainNova?'#fff6fc':paint||pal.accent;ctx.lineWidth=Math.max(4,r*.85);ctx.beginPath();ctx.moveTo(0,-r*.86);ctx.lineTo(0,r*.86);ctx.stroke();
+ ctx.fillStyle=plainNova?'#ffe3fa':paint||pal.body;
  for(const xx of [-r*.31,r*.31])for(const yy of [-r*.93,r*.93]){ctx.beginPath();ctx.arc(xx,yy,r*.43,0,TAU);ctx.fill();}
  ctx.restore();
 }
@@ -5617,10 +5725,10 @@ function drawDogPaw(z,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  ctx.beginPath();ctx.ellipse(0,r*.16,r*(.44+hot),r*.29,0,0,TAU);ctx.stroke();
 }
 
-function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor=player?.evolutionTint|| (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle=player?.evolutionTint|| (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='dog'){drawDogFrame();ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
+function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor= (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle= (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='dog'){drawDogFrame();ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
   const hot=(player.drillRushActive||0)>0,charge=clamp((player.drillPlasma||0)/Math.max(.001,player.drillCap||1),0,1);
   // Magenta plated chassis + a distinct, mechanical auger at the nose.
-  ctx.shadowColor=player?.evolutionTint||(hot?'#ffd0ee':'#ff4898');ctx.fillStyle=player?.evolutionTint||(hot?'#ffe2f3':'#f95da7');ctx.strokeStyle=player?.evolutionTint||'#6c164f';ctx.lineWidth=2.8;
+  ctx.shadowColor=(hot?'#ffd0ee':'#ff4898');ctx.fillStyle=(hot?'#ffe2f3':'#f95da7');ctx.strokeStyle='#6c164f';ctx.lineWidth=2.8;
   ctx.beginPath();ctx.moveTo(0,-13);ctx.lineTo(9,-4);ctx.lineTo(18,12);ctx.lineTo(10,19);ctx.lineTo(0,12);ctx.lineTo(-10,19);ctx.lineTo(-18,12);ctx.lineTo(-9,-4);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.fillStyle='#53113d';ctx.fillRect(-7,-1,14,10);
   ctx.fillStyle='#ffd78c';ctx.beginPath();ctx.moveTo(-7,5);ctx.lineTo(0,-7);ctx.lineTo(7,5);ctx.closePath();ctx.fill();
@@ -5628,9 +5736,9 @@ function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx
   ctx.strokeStyle='#fff0cf';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-6,-10);ctx.lineTo(0,-27);ctx.lineTo(6,-10);ctx.stroke();
   glow(0,5,3+charge*3,hot?'#fff6e8':'#ffb46a',settings.fx==='low'||settings.fx==='simple'?0:8);
   ctx.restore();return;}
-  if(!secondary&&player?.shipType==='laser'){ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(8,-2);ctx.lineTo(17,12);ctx.lineTo(4,7);ctx.lineTo(0,13);ctx.lineTo(-4,7);ctx.lineTo(-17,12);ctx.lineTo(-8,-2);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||'#6755d6';ctx.fillRect(-3,-7,6,13);ctx.fillStyle=player?.evolutionTint||'#e7d9ff';ctx.fillRect(-11,5,5,4);ctx.fillRect(6,5,5,4);ctx.restore();return;}if(!secondary&&player?.shipType==='charge'){ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(8,-9);ctx.lineTo(17,9);ctx.lineTo(10,15);ctx.lineTo(0,8);ctx.lineTo(-10,15);ctx.lineTo(-17,9);ctx.lineTo(-8,-9);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||'#c55e46';ctx.fillRect(-7,1,14,10);glow(0,-3,5,player?.evolutionTint||'#ffdfa3',8);ctx.restore();return;}ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(12,12);ctx.lineTo(0,6);ctx.lineTo(-12,12);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=player?.evolutionTint||(secondary?'#7458cf':'#20afb5');ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.fillStyle='#ffbb83';ctx.beginPath();ctx.moveTo(-5,12);ctx.lineTo(0,18+Math.sin(t*22)*3);ctx.lineTo(5,12);ctx.fill();ctx.restore()}
+  if(!secondary&&player?.shipType==='laser'){ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(8,-2);ctx.lineTo(17,12);ctx.lineTo(4,7);ctx.lineTo(0,13);ctx.lineTo(-4,7);ctx.lineTo(-17,12);ctx.lineTo(-8,-2);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#6755d6';ctx.fillRect(-3,-7,6,13);ctx.fillStyle='#e7d9ff';ctx.fillRect(-11,5,5,4);ctx.fillRect(6,5,5,4);ctx.restore();return;}if(!secondary&&player?.shipType==='charge'){ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(8,-9);ctx.lineTo(17,9);ctx.lineTo(10,15);ctx.lineTo(0,8);ctx.lineTo(-10,15);ctx.lineTo(-17,9);ctx.lineTo(-8,-9);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#c55e46';ctx.fillRect(-7,1,14,10);glow(0,-3,5,'#ffdfa3',8);ctx.restore();return;}ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(12,12);ctx.lineTo(0,6);ctx.lineTo(-12,12);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=(secondary?'#7458cf':'#20afb5');ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.fillStyle='#ffbb83';ctx.beginPath();ctx.moveTo(-5,12);ctx.lineTo(0,18+Math.sin(t*22)*3);ctx.lineTo(5,12);ctx.fill();ctx.restore()}
 function drawDrillAuger(p,active,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
-  const reach=32+p.drillReach,rad=11+p.drillWidth*.53,charge=clamp(p.drillPlasma/Math.max(.001,p.drillCap),0,1);
+  const geometry=novaDrillGeometry(p),reach=geometry.reach,rad=geometry.radius,charge=clamp(p.drillPlasma/Math.max(.001,p.drillCap),0,1);
   const len=Math.max(36,reach-12),tip=-reach,baseY=13;
   ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.dy,p.dx)+Math.PI/2);
   // Soft readable reach guide stays inside the original melee capsule; purely decorative.
@@ -5929,7 +6037,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
    ctx.fillStyle='#d45232';ctx.beginPath();ctx.moveTo(-rr*.55,rr*.34);ctx.lineTo(-rr,rr);ctx.lineTo(-rr*.22,rr*.72);ctx.lineTo(rr*.22,rr*.72);ctx.lineTo(rr,rr);ctx.lineTo(rr*.55,rr*.34);ctx.closePath();ctx.fill();
    ctx.fillStyle='#ffbd51';ctx.beginPath();ctx.moveTo(-rr*.30,rr*.9);ctx.lineTo(0,rr*(simple?1.45:1.8+.15*Math.sin(t*21)));ctx.lineTo(rr*.30,rr*.9);ctx.closePath();ctx.fill();
    ctx.restore();continue;
-  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(75,Math.max(14,b.r)),player.dogArmorHam?Math.sin(t*2)*.06:t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
+  }if(b.kind==='meteor'&&player.shipType==='dog'){drawAnimal('ham',b.x,b.y,Math.min(75,Math.max(b.meteorSizeScale===.5?7:14,b.r)),player.dogArmorHam?Math.sin(t*2)*.06:t*.7);continue;}if(b.kind==='meteor'){ctx.save();ctx.shadowBlur=renderHeavyLoad?0:10;ctx.shadowColor='#f3d5a3';ctx.fillStyle='#927659';ctx.strokeStyle='#eddbb4';ctx.lineWidth=2;ctx.beginPath();for(let j=0;j<8;j++){const a=j*TAU/8+t*.4,rad=b.r*(j%2?.91:1.06);j?ctx.lineTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad):ctx.moveTo(b.x+Math.cos(a)*rad,b.y+Math.sin(a)*rad)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='iceball'&&player.shipType==='dog'){drawAnimal('rabbit',b.x,b.y,Math.min(11,b.r),Math.atan2(b.vy,b.vx)+Math.PI/2);continue;}if(b.kind==='iceball'){ctx.save();ctx.fillStyle='#7edaff';ctx.strokeStyle='#edffff';ctx.lineWidth=2.4;ctx.shadowColor='#80e8ff';ctx.shadowBlur=renderHeavyLoad?0:9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.stroke();ctx.restore();continue;}
    if(b.kind==='comet'||b.kind==='novaCharge'){const pal=weaponElementPalette('charge',b.kind==='novaCharge'?null:b.elementMode,player.evolutionTint),c=player.evolutionTint||(b.kind==='novaCharge'?'#fff1bd':pal.accent);ctx.save();ctx.shadowColor=c;ctx.shadowBlur=renderHeavyLoad?0:Math.min(38,12+b.r);ctx.fillStyle=player.evolutionTint||(b.kind==='novaCharge'?'#ffd6a1':pal.body);ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,TAU);ctx.fill();ctx.shadowBlur=7;ctx.fillStyle=b.kind==='novaCharge'?'#fff':pal.core;ctx.beginPath();ctx.arc(b.x,b.y,b.r*.53,0,TAU);ctx.fill();ctx.strokeStyle=pal.accent;ctx.globalAlpha=.55;ctx.lineWidth=Math.max(3,b.r*.25);ctx.beginPath();ctx.moveTo(b.x-b.vx*.024,b.y-b.vy*.024);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();continue;}ctx.strokeStyle=(b.kind==='arc'&&fusedColor('thunder'))||(b.kind==='cryo'&&fusedColor('ice'))||(game?.fusions?.inferno&&b.kind==='plasma'?'#fff0b4':game?.fusions?.thunderGod&&b.kind==='arc'?'#efffc0':(player.evolutionTint||BULLET_COLOR[b.kind]||'#ffc27d'));ctx.lineWidth=b.r>7?Math.min(19,b.r*1.25):b.kind==='rocket'?5:3.1;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=shots.length>110?0:(settings.fx==='high'?10:4);ctx.beginPath();ctx.moveTo(b.x-b.vx*.017,b.y-b.vy*.017);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.shadowBlur=0;drawEvolutionShotMotifs();
  if(player.empRadius>0)drawTeslaField(player);
@@ -5976,7 +6084,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  ctx.save();ctx.globalAlpha=.58;ctx.strokeStyle='#edffff';ctx.lineWidth=1.15;ctx.beginPath();ctx.arc(player.x,player.y,player.hitR??6.5,0,TAU);ctx.stroke();ctx.globalAlpha=.9;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(player.x,player.y,1.75,0,TAU);ctx.fill();ctx.restore();
  const dashFill=1-clamp(player.dashLeft/Math.max(.001,player.dashCd),0,1),dashAlpha=player.dashLeft>0?.98:(player.dashGaugeFade||0);if(dashAlpha>.02){const gw=Math.max(34,player.r*4.2),gh=6,gx=player.x-gw/2,gy=player.y+player.r+12;ctx.save();ctx.globalAlpha=Math.min(.92,dashAlpha);ctx.fillStyle='#07111f';ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=1.2;ctx.beginPath();ctx.roundRect?ctx.roundRect(gx,gy,gw,gh,gh/2):(ctx.rect(gx,gy,gw,gh));ctx.fill();ctx.stroke();ctx.globalAlpha=Math.min(1,dashAlpha);ctx.shadowColor='#ffffff';ctx.shadowBlur=renderHeavyLoad?0:10;ctx.fillStyle='#ffffff';const inner=Math.max(0,(gw-2)*dashFill);ctx.fillRect(gx+1,gy+1,inner,gh-2);ctx.shadowBlur=0;ctx.restore();}
  if(player.shipType==='drill'){if(player.drillOverdriveTime>0){ctx.save();ctx.globalAlpha=.58+.18*Math.sin(t*7);ctx.strokeStyle='#ffc1dd';ctx.shadowColor='#ff478f';ctx.shadowBlur=16;ctx.lineWidth=3;ctx.beginPath();ctx.arc(player.x,player.y,player.r+13,0,TAU);ctx.stroke();ctx.restore()}const moving=controlMode==='mobile'?Math.hypot(touchMove.x,touchMove.y)>.17:keys.has('KeyW')||keys.has('KeyA')||keys.has('KeyS')||keys.has('KeyD')||keys.has('ArrowUp')||keys.has('ArrowDown')||keys.has('ArrowLeft')||keys.has('ArrowRight');
-  if(moving||player.drillRushActive>0)drawDrillAuger(player,player.drillRushActive>0);
+  if(moving||player.drillRushActive>0||player.drillOverdriveTime>0)drawDrillAuger(player,player.drillRushActive>0||player.drillOverdriveTime>0);
  const frac=clamp(player.drillPlasma/Math.max(.001,player.drillCap),0,1),gx=player.x-26,gy=player.y+52;
   ctx.save();ctx.globalAlpha=.92;ctx.fillStyle='#071a27bb';ctx.fillRect(gx-1,gy-1,54,9);ctx.fillStyle=frac>=.90?'#fff3dd':'#ff5fa8';ctx.shadowColor='#ff489e';ctx.shadowBlur=settings.fx==='low'||settings.fx==='simple'?0:9;ctx.fillRect(gx,gy,52*frac,6);ctx.shadowBlur=0;ctx.font='800 9px system-ui';ctx.textAlign='center';ctx.fillStyle='#ffdceb';ctx.fillText(frac>=.90?'DRILL READY':'PLASMA '+Math.floor(frac*100)+'%',player.x,gy-6);
   ctx.restore();}
@@ -6048,7 +6156,7 @@ function ankinPerformanceReport(){
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
  const wallSeconds=Array.from(perfRing.frame.slice(0,perfRing.count)).reduce((sum,n)=>sum+n,0)/1000;
  const simulatedSeconds=Array.from(perfRing.gameTime.slice(0,perfRing.count)).reduce((sum,n)=>sum+n,0);
- return {version:'13.35',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'14.0',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -6060,7 +6168,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v13.37.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v14.0.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
@@ -6150,7 +6258,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=13.37', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=14.0', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 

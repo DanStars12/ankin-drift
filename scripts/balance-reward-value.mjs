@@ -31,6 +31,10 @@ export function normalRewardValue(before,after){
  score+=Math.max(0,relative('dogAnimalBoost'))*3;
  for(const k of ['empDps','magmaDps','windDps','rockDamage'])if(n(after,k)>0)score+=Math.max(0,delta(k))*.025;
  for(const[k,weight]of Object.entries({dashPulse:2,dashFlow:1,slowField:.5,killBurst:.03,freezeChance:3,burnChance:3,slowChance:3,iceAttackSlow:2}))score+=Math.max(0,delta(k))*weight;
+ // NOVA-only utility is conditional; do not value it like permanent main-weapon DPS.
+ if(before.shipType==='charge')score+=Math.max(0,delta('novaChargeSalvo'))*1.2+Math.max(0,delta('novaChargeSize'))*.1;
+ if(before.shipType==='drill')score+=Math.max(0,delta('novaDrillDash'))*.3+Math.max(0,delta('novaDrillClear'))*.9;
+ if(n(before,'meteorCount')>0)score+=Math.max(0,delta('meteorArenaBounce'))*.9;
  // Expected conditional uptime, kept conservative rather than treating a tactical tag as raw DPS.
  const a=after.tacticFlags||{},b=before.tacticFlags||{};
  const conditional={shotFar:.525,shotNear:.375,shotSlip:.15,shotPierce:.45,laserLock:.875,laserGlide:.875,laserSwitch:.7,laserCycle:.2,
