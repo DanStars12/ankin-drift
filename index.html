@@ -4700,7 +4700,7 @@ function fireFrom(x,y,target,n=1,damage=player.dmg,speed=player.shotSpeed,source
 
 function fireDogBones(isNova=false){
  const p=player;if(!p||p.shipType!=='dog')return;
- const k=novaStrength(p),evolved=isNova&&p.novaEvolution==='dog';const n=isNova?(evolved?10+Math.floor(k*8):8):Math.min(8,p.dogBones),speed=isNova?350:p.dogBoneSpeed;
+ const k=novaStrength(p),evolved=isNova&&p.novaEvolution==='dog';const n=isNova?(evolved?10+Math.floor(k*2):8):Math.min(8,p.dogBones),speed=isNova?350:p.dogBoneSpeed;
  const target=visibleTarget(p.x,p.y);
  const heading=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
  const boneElement=isNova?null:nextBasicElement(p);if(isNova)reserveNovaShots(n);
