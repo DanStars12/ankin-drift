@@ -19,7 +19,7 @@ window.__tacticalQA={
  fusion(ship){this.reset(ship);const r=TACTICAL_FUSIONS.find(r=>r.shipOnly===ship);this.grant(skillById(r.power));this.grant(skillById(r.legend));
  activateUpgrades();const before=JSON.stringify(player.tacticFlags);restorePlayerBuild();activateUpgrades();
  const result={active:!!game.fusions[r.id],same:before===JSON.stringify(player.tacticFlags)};mode='menu';return result;},
- clocks(){const out=[];for(const ship of BALANCE_AI_SHIPS)for(const speed of [1,2]){this.reset(ship);
+ clocks(){const out=[];for(const ship of ['shot','laser','charge','drill','dog'])for(const speed of [1,2]){this.reset(ship);
  for(const c of AnkinTactics.cards.filter(c=>c.shipOnly===ship))c&&this.grant(skillById(c.id));
  game.activeChallenges=speed===2?['doubleTime']:[];player.dashLeft=4;player.novaCooldown=4;
  let ts=1000;frame(ts);for(let i=0;i<60;i++){ts+=1000/60;frame(ts);}

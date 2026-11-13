@@ -66,9 +66,9 @@ test('all 50 exact user-requested DOG names apply to their stable IDs',async({pa
  const cards=Object.fromEntries(data.cards.map(c=>[c.id,c]));
  const recipes=Object.fromEntries(data.recipes.map(c=>[c.id,c]));
  expect(Object.keys(requested)).toHaveLength(50);
- expect(data.cards).toHaveLength(97);
- expect(new Set(data.cards.map(c=>c.id)).size).toBe(97);
- expect(new Set(data.cards.map(c=>c.name)).size).toBe(97);
+ expect(data.cards).toHaveLength(99);
+ expect(new Set(data.cards.map(c=>c.id)).size).toBe(99);
+ expect(new Set(data.cards.map(c=>c.name)).size).toBe(99);
  let countCards=0,countRecipes=0;
  for(const [id,name] of Object.entries(requested)){
   const actual=cards[id]||recipes[id];

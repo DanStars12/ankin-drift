@@ -69,7 +69,7 @@ test('five new evolutions activate once, and all reward pools keep complete tagg
   const fusion=await page.evaluate(s=>window.__arsenalQA.fusion(s),ship);expect(fusion.active).toBe(1);expect(fusion.same).toBe(true);
   for(const kind of ['normal','minor','major','unique','relic']){
    const offer=await page.evaluate(({ship,kind})=>window.__arsenalQA.offer(ship,kind),{ship,kind});
-   expect(offer).toHaveLength(['minor','major'].includes(kind)?4:3);
+   expect(offer).toHaveLength(['normal','minor','major'].includes(kind)?4:3);
    expect(offer.every(c=>!c.supply&&c.tags.length>0)).toBe(true);expect(new Set(offer.map(c=>c.id)).size).toBe(offer.length);
    expect(offer.filter(c=>c.arsenal).length).toBeLessThanOrEqual(1);
   }

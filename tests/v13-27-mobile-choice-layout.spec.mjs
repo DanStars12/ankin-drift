@@ -50,7 +50,7 @@ test('real synergy-ready card and long Japanese skill name never occupy the same
   await page.setViewportSize(size);
   for(const kind of ['normal','major']){
    const state=await page.evaluate(k=>window.__reward1327.prepare(k),kind);
-   expect(state).toEqual({mode:'choice',ready:true,count:kind==='normal'?3:4});
+   expect(state).toEqual({mode:'choice',ready:true,count:4});
    const info=await page.evaluate(()=>{
     const pane=document.querySelector('.choice-panel');
     const card=pane.querySelector('.choice');

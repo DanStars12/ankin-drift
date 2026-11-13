@@ -15,7 +15,7 @@ async function open(page){
 
 test('common skills are listed once, independent of the five ship-specific conversions',async({page})=>{
  const errors=await open(page),metadata=await page.evaluate(()=>window.__weapon1320.metadata());
- await expect(page.locator('[data-visual-ship]')).toHaveCount(6);
+ await expect(page.locator('[data-visual-ship]')).toHaveCount(7);
  const common=metadata.rows.filter(r=>r.ship==='common');
  expect(common.map(v=>v.id).sort()).toEqual(['blade','bolt','cyclone','emp','iceball','magma','meteor','rocket','spike','wall']);
  for(const ship of ['shot','laser','charge','drill','dog']){

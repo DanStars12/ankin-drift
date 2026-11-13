@@ -11,7 +11,7 @@ window.__visualAudit={
  },
  metadata(){return {rows:VISUAL_CODEX.map(v=>({id:v.id,group:v.group,ship:v.ship,kind:v.kind})),
   mutations:VISUAL_CODEX.filter(v=>v.group==='mutation').length,
-  triple:FUSIONS.filter(x=>(x.required||[]).length).map(x=>({id:x.id,ingredients:fusionMaterials(x).length})),
+  triple:FUSIONS.filter(x=>x.shipOnly==='dog'&&(x.required||[]).length).map(x=>({id:x.id,ingredients:fusionMaterials(x).length})),
   gameCanvas:canvas,visualShip};},
  recipes(){return FUSIONS.filter(x=>x.id.endsWith('Apex')).map(r=>({id:r.id,materialCount:fusionMaterials(r).length,display:recipeBuild().includes(r.name)}));}
 };`;
@@ -26,7 +26,7 @@ async function openCodex(page){
 test('title BUILD LAB contains a responsive animated weapon preview, separate from gameplay',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await openCodex(page);
- await expect(page.locator('[data-visual-ship]')).toHaveCount(6);
+ await expect(page.locator('[data-visual-ship]')).toHaveCount(7);
  const canvas=page.locator('#weaponVisualCanvas');
  await expect.poll(()=>canvas.evaluate(node=>{
   const c=node.getContext('2d'),pixels=c.getImageData(0,0,node.width,node.height).data;

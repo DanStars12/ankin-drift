@@ -51,6 +51,26 @@ function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
  if(p.phantomVisuals.length>24)p.phantomVisuals.splice(0,p.phantomVisuals.length-24);
  p.phantomMetrics.attacks++;return attack;
 }
+// Tiny visibility graph over padded wall corners. Replanned in combat time,
+// at most twice per second per phantom; never teleports or returns to the ghost.
+function findRoute(f,target,world){
+ const walls=world.obstacles||[];if(!walls.length)return [];
+ const points=[{x:f.x,y:f.y},{x:target.x,y:target.y}];
+ for(const w of walls)for(const x of [w.x-14,w.x+w.w+14])for(const y of [w.y-14,w.y+w.h+14]){
+  if(x<12||y<12||x>world.width-12||y>world.height-12||world.blocked(x,y,x,y,10))continue;points.push({x,y});
+ }
+ const n=points.length,dist=new Array(n).fill(Infinity),previous=new Array(n).fill(-1),seen=new Array(n).fill(false);dist[0]=0;
+ for(let step=0;step<n;step++){
+  let from=-1;for(let i=0;i<n;i++)if(!seen[i]&&(from<0||dist[i]<dist[from]))from=i;
+  if(from<0||!Number.isFinite(dist[from]))break;if(from===1)break;seen[from]=true;
+  const a=points[from];for(let to=0;to<n;to++){if(to===from||seen[to])continue;const b=points[to];
+   if(world.blocked(a.x,a.y,b.x,b.y,10))continue;const next=dist[from]+Math.hypot(b.x-a.x,b.y-a.y);
+   if(next<dist[to]){dist[to]=next;previous[to]=from;}
+  }
+ }
+ if(previous[1]<0)return [];
+ const route=[];for(let at=1;at>0;at=previous[at])route.push(points[at]);return route.reverse();
+}
 function tick(p,dt,world){
  sync(p);p.phantomClock+=dt;p.phantomNova=Math.max(0,p.phantomNova-dt);p.phantomRelay=Math.max(0,p.phantomRelay-dt);
  const s=stats(p);
@@ -58,7 +78,19 @@ function tick(p,dt,world){
  for(const echo of p.phantomEchoes){echo.delay-=dt;if(echo.delay<=0){slash(p,echo.frame,world,s,echo.type,echo.factor,echo.angle);echo.done=true;}}
  p.phantomEchoes=p.phantomEchoes.filter(e=>!e.done);
  for(const f of p.phantoms){
-  f.cooldown-=dt;f.scan-=dt;f.warp=Math.max(0,f.warp-dt);
+  f.cooldown-=dt;f.scan-=dt;f.warp=Math.max(0,f.warp-dt);f.routeTime=Math.max(0,(f.routeTime||0)-dt);
+  const overlaps=(x,y)=>world.obstacles?.some(w=>x>=w.x-10&&x<=w.x+w.w+10&&y>=w.y-10&&y<=w.y+w.h+10);
+  if(overlaps(f.x,f.y)){
+   // A newly spawned wall can cover a remote phantom. Move normally to the
+   // nearest free face, withholding attacks until outside; never teleport.
+   let exit=null,best=Infinity;
+   for(const w of world.obstacles)for(const q of [{x:w.x-14,y:f.y},{x:w.x+w.w+14,y:f.y},{x:f.x,y:w.y-14},{x:f.x,y:w.y+w.h+14}]){
+    if(q.x<12||q.y<12||q.x>world.width-12||q.y>world.height-12||overlaps(q.x,q.y))continue;
+    const d=Math.hypot(q.x-f.x,q.y-f.y);if(d<best){best=d;exit=q;}
+   }
+   if(exit){const step=Math.min(best,s.speed*dt);f.x+=(exit.x-f.x)/Math.max(1,best)*step;f.y+=(exit.y-f.y)/Math.max(1,best)*step;}
+   f.state='REPOSITION';f.routeTime=0;f.cooldown=Math.max(f.cooldown,.1);continue;
+  }
   if(!f.target||f.target.dead||f.target.isoWarp||Math.hypot(f.target.x-f.x,f.target.y-f.y)>s.sense*1.2)f.target=null;
   if(f.scan<=0){f.scan=.22/(1+rank(p,'algorithm')*.12+rank(p,'predator')*.4);
    if(!f.target){let best=null,score=Infinity;
@@ -78,14 +110,23 @@ function tick(p,dt,world){
    const dx=wx-f.x,dy=wy-f.y,d=Math.max(1,Math.hypot(dx,dy)),step=Math.min(d,s.speed*.45*dt);
    const move=world.motion(f.x,f.y,f.x+dx/d*step,f.y+dy/d*step,10);f.x=clamp(move.x,12,world.width-12);f.y=clamp(move.y,12,world.height-12);f.angle=Math.atan2(dy,dx);continue;
   }
-  if(f.lastTarget!==target){f.chain=0;f.lastTarget=target;}
+  if(f.lastTarget!==target){f.chain=0;f.lastTarget=target;f.routeTime=0;f.route=[];}
   const dx=target.x-f.x,dy=target.y-f.y,d=Math.hypot(dx,dy);f.angle=Math.atan2(dy,dx);
-  if(d>s.range*.65+target.r){
-   f.state='CHASE';const step=Math.min(d-s.range*.6,s.speed*dt),nx=f.x+dx/Math.max(1,d)*step,ny=f.y+dy/Math.max(1,d)*step;
+  if(d>s.range*.65+target.r||world.blocked(f.x,f.y,target.x,target.y)){
+   f.state='CHASE';let aim=target;
+   if(world.obstacles?.length&&world.blocked(f.x,f.y,target.x,target.y,10)){
+    if(f.routeTime<=0){f.route=findRoute(f,target,world);f.routeTime=.5;}
+    while(f.route?.length&&Math.hypot(f.route[0].x-f.x,f.route[0].y-f.y)<8)f.route.shift();
+    if(f.route?.length){aim=f.route[0];f.state='REPOSITION';}
+   }else f.route=[];
+   const mx=aim.x-f.x,my=aim.y-f.y,md=Math.max(1,Math.hypot(mx,my));
+   const step=Math.min(md,s.speed*dt),nx=f.x+mx/md*step,ny=f.y+my/md*step;
    const move=world.motion(f.x,f.y,nx,ny,10);f.x=move.x;f.y=move.y;
-   if(move.blocked){f.state='REPOSITION';f.scan=0;f.target=null;
-    // Slide tangentially around the obstruction; re-evaluate on the next scan.
-    const side=f.id%2?1:-1,slide=world.motion(f.x,f.y,f.x-dy/Math.max(1,d)*step*side,f.y+dx/Math.max(1,d)*step*side,10);f.x=slide.x;f.y=slide.y;}
+   if(move.blocked){f.state='REPOSITION';f.routeTime=0;
+    // Axis-aligned sliding avoids a tangent's tiny inward component at a wall.
+    const side=f.id%2?1:-1,axisX=world.motion(f.x,f.y,f.x+Math.sign(mx||side)*step,f.y,10),axisY=world.motion(f.x,f.y,f.x,f.y+Math.sign(my||side)*step,10);
+    const sx=Math.hypot(axisX.x-f.x,axisX.y-f.y),sy=Math.hypot(axisY.x-f.x,axisY.y-f.y),slide=sx>sy?axisX:axisY;f.x=slide.x;f.y=slide.y;
+   }
    if(rank(p,'flash')&&f.warp<=0&&d<260&&!world.blocked(f.x,f.y,target.x,target.y)){
     const move=world.motion(f.x,f.y,target.x-Math.cos(f.angle)*s.range*.5,target.y-Math.sin(f.angle)*s.range*.5,10);f.x=move.x;f.y=move.y;f.warp=2.2;
    }
@@ -115,9 +156,10 @@ function collection(p,dt,orbs){p.phantomCollectClock+=dt;const field=rank(p,'fie
  const radius=p.magnet+(line?80+line*35:0)+(pulse?180+astral*90:0)+(field?120:0);
  if(line||pulse||field)for(const e of orbs){if(e.type!=='energy'||e.collected)continue;const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);if(d>p.magnet&&d<radius&&d>1){const step=Math.min(d-p.magnet*.9,dt*(110+line*35+(pulse?200:0)));e.x+=dx/d*step;e.y+=dy/d*step;}}
 }
+function drawGhost(ctx){ctx.fillStyle='#f5f8ff';ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-20);ctx.lineTo(15,13);ctx.lineTo(0,6);ctx.lineTo(-15,13);ctx.closePath();ctx.fill();ctx.stroke();}
 function draw(p,ctx){
  for(const f of p.phantoms){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(f.angle+Math.PI/2);ctx.fillStyle=f.primary?'#e4ecf5':'#9cabbf';ctx.strokeStyle='#f4fbff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(13,12);ctx.lineTo(0,5);ctx.lineTo(-13,12);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle=f.primary?'#ffffff':'#899de8';ctx.fillRect(-2,-5,4,8);ctx.restore();}
  for(const v of p.phantomVisuals){ctx.save();ctx.globalAlpha=Math.max(0,v.life/v.total)*.8;ctx.strokeStyle=v.nova?'#ffffff':p.evolutionTint||'#cfdfff';ctx.lineWidth=v.nova?7:4;ctx.beginPath();ctx.arc(v.x,v.y,v.range,v.angle-v.arc/2,v.angle+v.arc/2);ctx.stroke();ctx.restore();}
 }
-root.AnkinPhantom={init,sync,rank,addRank,level,stats,tick,nova,pickup,dashEnd,collection,draw};
+root.AnkinPhantom={init,sync,rank,addRank,level,stats,tick,nova,pickup,dashEnd,collection,drawGhost,draw};
 })(globalThis);

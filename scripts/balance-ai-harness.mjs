@@ -4,8 +4,66 @@
 import {drillContactGeometry} from './balance-drill-observation.mjs';
 import {normalRewardValue} from './balance-reward-value.mjs';
 import {decideAbilityUse} from './balance-ability-tactics.mjs';
+/* Developer-only ghost pilot. Plans legal inputs; never changes game state or rewards. */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const dirs=Array.from({length:8},(_,i)=>({x:Math.cos(i*Math.PI/4),y:Math.sin(i*Math.PI/4)}));
+function segmentDistance(x,y,dx,dy,t){const d=dx*dx+dy*dy,k=d?clamp(-(x*dx+y*dy)/d,0,t):0;return Math.hypot(x+dx*k,y+dy*k);}
+export function planGhostMovement(p,world){
+ const enemies=world.enemies.filter(e=>!e.dead&&!e.isoWarp),bullets=world.bullets.filter(b=>b.ttl>0),speed=p.spd;
+ let goal=null,bestGoal=-Infinity;
+ // Choose reachable XP with room to collect it. No blind straight-line dive into a pack.
+ for(const item of world.pickups){
+  if(item.type!=='energy'||item.collected)continue;const dx=item.x-p.x,dy=item.y-p.y,d=Math.hypot(dx,dy);
+  if(d<Math.max(25,p.magnet*.55)||d>650)continue;
+  if(enemies.some(e=>Math.hypot(e.x-item.x,e.y-item.y)<e.r+72))continue;
+  const motion=world.motion(p.x,p.y,item.x,item.y,p.r+2);if(motion.blocked)continue;
+  const value=(Math.min(100,item.value)+Math.min(20,item.charge||0)*.2+12)/(60+d);
+  if(value>bestGoal){bestGoal=value;goal=item;}
+ }
+ const hint=goal?{x:goal.x-p.x,y:goal.y-p.y}:world.hint,hm=Math.hypot(hint.x,hint.y)||1;
+ let best=null,bestScore=-Infinity;
+ for(const dir of dirs){
+  let score=(dir.x*hint.x+dir.y*hint.y)/hm*(goal?3.2:1.2),clearance=Infinity,collision=false;
+  const vx=dir.x*speed,vy=dir.y*speed;
+  if(world.previous)score+=(dir.x*world.previous.x+dir.y*world.previous.y)*.45;
+  for(const t of [.18,.4,.65]){
+   const rawX=p.x+vx*t,rawY=p.y+vy*t,nx=clamp(rawX,p.r+13,world.width-p.r-13),ny=clamp(rawY,p.r+13,world.height-p.r-13);
+   score-=Math.hypot(rawX-nx,rawY-ny)*.45;
+   const move=world.motion(p.x,p.y,nx,ny,p.r+2);score-=Math.hypot(nx-move.x,ny-move.y)*.4;
+   for(const e of enemies){
+    const dx=p.x-e.x,dy=p.y-e.y,d=Math.max(1,Math.hypot(dx,dy));
+    if(d>320+e.r)continue;
+    const chase=e.type==='shooter'&&d<260?-.3:e.type==='relic'?0:1;
+    const es=(e.frozen>0?0:e.slow>0?.5:1)*(e.spd||0)*chase;
+    const ex=e.x+dx/d*es*t,ey=e.y+dy/d*es*t,space=Math.hypot(move.x-ex,move.y-ey)-(e.r+(p.hitR??p.r));
+    clearance=Math.min(clearance,space);score-=Math.max(0,68-space)**2*.0025;
+    if(space<5){score-=120+(5-space)*3;collision=true;}
+   }
+   for(const h of world.hazards){
+    if((h.warn||0)>t||h.active<=0&&h.warn<=0)continue;
+    const dist=h.type==='beam'?Math.abs(Math.sin(h.a)*(move.x-h.x)-Math.cos(h.a)*(move.y-h.y)):Math.hypot(move.x-h.x,move.y-h.y);
+    const space=h.type==='voidring'?h.r-dist:dist-(h.type==='beam'?h.width:h.r);
+    if(space<p.r+20)score-=Math.max(0,p.r+20-space)*2;
+   }
+  }
+  for(const b of bullets){
+   if((b.warn||0)>.65)continue;
+   const space=segmentDistance(p.x-b.x,p.y-b.y,vx-(b.vx||0),vy-(b.vy||0),.65)-b.r-(p.hitR??p.r);
+   if(space<25)score-=Math.max(0,25-space)**2*.06;
+   if(space<0)collision=true;
+  }
+  const edge=Math.min(p.x+vx*.65,world.width-p.x-vx*.65,p.y+vy*.65,world.height-p.y-vy*.65);
+  score-=Math.max(0,55-edge)*.035;
+  if(score>bestScore){bestScore=score;best={...dir,score,clearance,collision,goal:goal?'orb':null};}
+ }
+ return best;
+}
+
 export const BALANCE_AI_HARNESS = String.raw`
 const normalRewardValue=${normalRewardValue.toString()};
+const ghostDirs=Array.from({length:8},(_,i)=>({x:Math.cos(i*Math.PI/4),y:Math.sin(i*Math.PI/4)}));
+function segmentDistance(x,y,dx,dy,t){const d=dx*dx+dy*dy,k=d?clamp(-(x*dx+y*dy)/d,0,t):0;return Math.hypot(x+dx*k,y+dy*k);}
+const planGhostMovement=${planGhostMovement.toString().replace('const dir of dirs','const dir of ghostDirs')};
 const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog','phantom'];
 const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
@@ -54,7 +112,8 @@ function balanceDashVector(moveX,moveY,target,offensive=false){
  for(const [vx,vy] of dirs){
   const rawX=p.x+vx*speed,rawY=p.y+vy*speed;
   const nx=clamp(rawX,p.r+18,W-p.r-18),ny=clamp(rawY,p.r+18,H-p.r-18);
-  let score=-Math.hypot(rawX-nx,rawY-ny)*.07+(vx*moveX+vy*moveY)/mag*.35;
+  const path=p.shipType==='phantom'?engageClampMotion(p.x,p.y,nx,ny,p.r+2):{x:nx,y:ny};
+  let score=-Math.hypot(path.x-nx,path.y-ny)*.15-Math.hypot(rawX-nx,rawY-ny)*.07+(vx*moveX+vy*moveY)/mag*.35;
   if(target){const prev=dst(p,target),after=Math.hypot(nx-target.x,ny-target.y);
    score+=offensive?(prev-after)*.022:-Math.max(0,90-after)*.014;}
   for(const b of hostile){
@@ -85,11 +144,11 @@ function balanceDashKeys(x,y){
 let balanceAbilityLog=null;
 function balanceAbilitySnapshot(priority,dist,threat){
  const p=player,live=enemies.filter(e=>!e.dead);
- let inNova=0,near=0,forward=0;
+ let inNova=0,near=0,forward=0,contactThreats=0;
  for(const e of live){
   const d=dst(p,e);
   if(d<p.novaRadius+(e.r||0))inNova++;
-  if(d<300)near++;
+  if(d<300)near++;if(p.shipType==='phantom'&&d<e.r+(p.hitR??p.r)+28)contactThreats++;
   if(d<540)forward++;
  }
  const bossDist=boss&&!boss.dead?dst(p,boss):Infinity;
@@ -100,7 +159,7 @@ function balanceAbilitySnapshot(priority,dist,threat){
   laserReach:p.laserReach,drillOverdrive:p.drillOverdriveTime,
   drillPlasmaRatio:p.drillPlasma/Math.max(.001,p.drillCap),
   enemiesInNova:inNova,enemiesNear:near,enemiesForward:forward,
-  threats:threat.near,imminent:threat.imminent,
+  threats:threat.near,imminent:threat.imminent,contactThreats,
   safeApproach:!!priority&&threat.imminent===0&&
    p.x>75&&p.x<W-75&&p.y>75&&p.y<H-75};
 }
@@ -134,7 +193,7 @@ function balanceRewardTraits(card){
   dog:['骨','ブーメラン','アニマル','肉球']
  }[player.shipType]||[];
  return {
-  primary:!card?.isSupply&&(card?.shipOnly===player.shipType||['damage','critical','critEpic'].includes(id)||tags.some(tag=>primary.includes(tag))),
+  primary:!card?.isSupply&&(player.shipType==='phantom'?(tags.includes('ブレード')||['damage','critical','critEpic','ph_core','ph_limit','ph_crescent','ph_driver','ph_matrix','ph_network','ph_parade','ph_emperor','ph_predator','ph_orchestra','ph_relay'].includes(id)):(card?.shipOnly===player.shipType||['damage','critical','critEpic'].includes(id)||tags.some(tag=>primary.includes(tag)))),
   survival:!!(card?.isSupply&&['supply_repair','supply_shield'].includes(id)||
    tags.some(tag=>['防御','装甲','継戦','回復','吸収','シールド'].includes(tag))||
    ['hp','armor','regen','repair','barrier','shieldEpic','expShield','eternalBody'].includes(id)),
@@ -152,6 +211,8 @@ function balanceRecordReward(card,options){
 }
 function balancePilotStep(frame,policy='tactical',seekExp=false){
  const p=player,profile=BALANCE_AI_PROFILES[p.shipType],sec=game.total;
+ if(p.shipType==='phantom'&&frame%600===0&&balanceAbilityLog.phantomSamples.length<240){balanceAbilityLog.phantomSamples.push({at:Number(sec.toFixed(2)),hp:p.hp,maxHp:p.maxHp,shield:p.shield,level:game.level,phantomLevel:p.phantomLevel,count:p.phantoms.length,x:p.x,y:p.y,xpOnField:pickups.reduce((sum,e)=>sum+(e.type==='energy'?e.value:0),0),states:p.phantoms.map(f=>f.state),primaryDamage:game.damageStats.phantomBlade||0,extraDamage:game.damageStats.phantomExtra||0});}
+
  keys.clear();
  const targets=enemies.filter(e=>!e.dead&&e.type!=='relic'),priority=boss&&!boss.dead
   ? (boss.type==='ultimate'&&game.ultimateParts.some(e=>!e.dead)?game.ultimateParts.find(e=>!e.dead):boss)
@@ -188,6 +249,10 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
  }
  // Charge ships deliberately hold still to charge, then reposition to fire.
  if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
+ if(p.shipType==='phantom'&&balanceAbilityLog.phantomPilot==='lookahead'){
+  if(frame%6===0||!balanceAbilityLog.ghostMove){balanceAbilityLog.ghostMove=planGhostMovement(p,{width:W,height:H,enemies,bullets:hostile,hazards,pickups:seekExp?pickups:[],motion:engageClampMotion,hint:{x,y},previous:balanceAbilityLog.ghostMove});balanceAbilityLog.ghostPlans++;}
+  const move=balanceAbilityLog.ghostMove;x=move.x;y=move.y;xpIntent=move.goal;
+ }
  const m=Math.hypot(x,y),stop=m<.14;
  if(!stop&&xpIntent&&balanceAbilityLog){
   balanceAbilityLog.xpSeekFrames++;
@@ -289,6 +354,7 @@ function balancePickReward(options){
    if(defense&&!normal)score+=hpRatio<.45?6:hpRatio<.75?3.5:1.3;
    const traits=balanceRewardTraits(c);
    if(player.shipType==='phantom'&&normal&&traits.survival)score+=player.maxHp<160?4:hpRatio<.65?3:0;
+   if(player.shipType==='phantom'&&normal&&['ph_core','ph_limit'].includes(c.id))score+=player.phantomLevel<6?3.5:1;
    if(player.shipType==='phantom'&&traits.experience&&player.magnet<230)score+=2;
    if(traits.primary&&!normal)score+=2.3;
    if(!normal&&traits.survival&&hpRatio<.8)score+=hpRatio<.45?2.5:1.2;
@@ -297,7 +363,7 @@ function balancePickReward(options){
    if(!normal&&tags.includes('ノヴァ'))score+=1.2;
    const ready=synergiesFor(c.id).filter(a=>!game.synergies[a.id]&&a.need.filter(id=>id!==c.id).every(owned)).length;
    score+=ready*12;
-   const evo=fusionFor(c.id).filter(a=>!game.fusions[a.id]&&fusionMaterials(a).filter(id=>id!==c.id).every(owned)).length;
+   const evo=fusionFor(c.id).filter(a=>!game.fusions[a.id]&&fusionMaterials(a).every(id=>(owned(id)||id===c.id)&&(!a.ranks?.[id]||(game.skills[id]||0)+(id===c.id?1:0)>=a.ranks[id]))).length;
    score+=evo*14;
    const elem=elementFromCard(c),own=ownedElementKeys();
    if(elem&&game.elementCombos.length<3){
@@ -367,8 +433,8 @@ function balanceSandbox(fn){
   mode='menu';
  }
 }
-function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical',runMode='normal',fullTimeline=false){
- balanceAbilityLog={policy,drillDiagnostics:{targetSeconds:0,angleDegreeSeconds:0,inReachSeconds:0,forwardOverlapSeconds:0,movingSeconds:0,dashSeconds:0,damageStepSeconds:0},dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
+function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical',runMode='normal',fullTimeline=false,phantomPilot='potential'){
+ balanceAbilityLog={policy,phantomPilot,ghostPlans:0,phantomSamples:[],drillDiagnostics:{targetSeconds:0,angleDegreeSeconds:0,inReachSeconds:0,forwardOverlapSeconds:0,movingSeconds:0,dashSeconds:0,damageStepSeconds:0},dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
   xpSeekFrames:0,xpSeekKinds:{},rewardAudit:{choices:0,primary:0,survival:0,experience:0,primaryOffers:0,survivalOffers:0,history:[]},
   fusionAudit:{offers:0,accepted:0,declined:0,failed:0,reasons:{},history:[]}};
  Math.random=seededBalanceRandom(seed);
@@ -413,6 +479,7 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   dashReasons:{...(balanceAbilityLog?.dashReasons||{})},
   novaReasons:{...(balanceAbilityLog?.novaReasons||{})},
   novaContexts:[...(balanceAbilityLog?.novaContexts||[])],
+  phantomPilot:player.shipType==='phantom'?balanceAbilityLog.phantomPilot:null,ghostPlans:balanceAbilityLog.ghostPlans,phantomSamples:[...balanceAbilityLog.phantomSamples],
   drillDiagnostics:balanceDrillReport(),
   xpSeekSeconds:Number(((balanceAbilityLog?.xpSeekFrames||0)/60).toFixed(2)),
   xpSeekKinds:{...(balanceAbilityLog?.xpSeekKinds||{})},
@@ -437,7 +504,8 @@ window.__ankinBalanceAI={
     count:zones.length,stacks:zones[0]?.stacks||1,damage:zones[0]?.dps};
   });
  },
- runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false,diagnostics=true}={}){
+ runEncounter({ship='shot',seed=1,phase=10,scenario='live-pack',build='representative',seconds=25,policy='tactical',initialNovaReady=false,diagnostics=true,phantomPilot='potential'}={}){
+  if(!['potential','lookahead'].includes(phantomPilot))throw Error('Invalid phantom pilot');
   if(typeof diagnostics!=='boolean')throw Error('Invalid diagnostics flag');
   if(typeof initialNovaReady!=='boolean')throw Error('Invalid initialNovaReady');
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
@@ -445,7 +513,7 @@ window.__ankinBalanceAI={
   if(![0,10,20].includes(phase)||!['live-pack','live-boss'].includes(scenario))throw Error('Invalid combat scenario');
   if(!['base','representative'].includes(build)||!Number.isFinite(seconds)||seconds<=0||seconds>120)throw Error('Invalid build/duration');
   return balanceSandbox(()=>{
-   balanceSetup(ship,seed,phase,build,scenario,policy);
+   balanceSetup(ship,seed,phase,build,scenario,policy,'normal',false,phantomPilot);
    if(!diagnostics)balanceAbilityLog.drillDiagnostics=null;
    if(scenario==='live-boss'){
     spawnBoss('minor',phase>=20?'vortex':'guardian');
@@ -475,7 +543,8 @@ window.__ankinBalanceAI={
  },
  // Full-timeline simulations use the actual 15m challenge OR 30m normal scheduler.
  // Both are explicit opt-in; short encounters never count toward their clear rates.
- runFull({ship='shot',seed=1,seconds,preview=false,policy='tactical',fusionPolicy='always',gameMode='normal'}={}){
+ runFull({ship='shot',seed=1,seconds,preview=false,policy='tactical',fusionPolicy='always',gameMode='normal',phantomPilot='potential'}={}){
+  if(!['potential','lookahead'].includes(phantomPilot))throw Error('Invalid phantom pilot');
   if(!['legacy','tactical'].includes(policy))throw Error('Invalid ability policy');
   if(!['always','adaptive','never'].includes(fusionPolicy))throw Error('Invalid fusion policy');
   if(!['normal','challenge'].includes(gameMode))throw Error('Invalid game mode');
@@ -487,7 +556,7 @@ window.__ankinBalanceAI={
    throw Error('Full simulation must include its own 15:00/30:00 boss; preview must last 20-120 seconds');
   return balanceSandbox(()=>{
    const scenario=gameMode==='challenge'?'full-15m':'full-30m';
-   balanceSetup(ship,seed,0,'normal-random-rewards',scenario,policy,gameMode,true);
+   balanceSetup(ship,seed,0,'normal-random-rewards',scenario,policy,gameMode,true,phantomPilot);
    const startSchedule={mode:game.gameMode,bossAt:ultimateThreshold(),
     firstBossAt:game.nextBossAt,firstRaidAt:game.nextRaidAt,
     firstRelicAt:game.nextRelicAt,firstVacuumAt:game.nextVacuumAt,

@@ -2734,11 +2734,23 @@ function visualCodexResolvedName(row){
  if(recipeId)return FUSIONS.find(r=>r.id===recipeId)?.name||row.fallbackName||row.id;
  return skillById(row.card)?.name||row.fallbackName||row.id;
 }
+VISUAL_CODEX_ROWS.push(
+ ['phantomBlade','basic','phantom','PHANTOM BLADE','銀の主機が斬撃。半透明ゴーストは操作・回収を担当。','phantom','ph_polish'],
+ ['phantomParade','basic','phantom','ナイトパレード','主機と追加2機が独立して戦闘。属性攻撃は主機だけ。','phantom:parade','ph_parade'],
+ ['phantomReaper','evolution','phantom','SILVER REAPER','進化合成で大型の三日月斬撃に変化。','phantom:reaper','ph_crescent'],
+ ['phantomFlash','evolution','phantom','PHANTOM FLASH','ワープ接近からの斬撃。障害壁の向こうへはワープしない。','phantom:flash','ph_driver'],
+ ['phantomRequiem','evolution','phantom','REQUIEM EDGE','最大2段の残響斬撃。追加斬撃から再帰発動しない。','phantom:requiem','ph_matrix'],
+ ['phantomNova','basic','phantom','SPECTRAL OVERDRIVE','全ファントム強化。シルバーテンペストで全周斬撃を追加。','phantom:nova','ph_novaTempestCore'],
+ ['fearAura','element','common','フィアーオーラ','前方に恐怖オーラ。通常敵は離れ、ボスは軽減弱体。','dark:fear','fearAura'],
+ ['programControl','element','common','プログラムコントロール','固定の四角いウイルス領域。通常敵を一時的に味方化。','dark:virus','programControl'],
+ ['dogBat','animal','dog','','こわもて・コウモリの恐怖オーラ。','bat','dogBat'],
+ ['dogBear','animal','dog','','フレンドリー・くまさんのウイルス領域。','bear','dogBear']
+);
 const VISUAL_CODEX=VISUAL_CODEX_ROWS.map(([id,group,ship,name,desc,kind,card])=>({
  id,group,ship,desc,kind,card,fallbackName:name,
  get name(){return visualCodexResolvedName(this);}
 }));
-const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性換装'],['animal','アニマル'],['mutation','変異・上位進化']];
+const VISUAL_GROUPS=[['all','すべて'],['basic','基本武装'],['element','属性換装'],['animal','アニマル'],['mutation','変異・上位進化'],['evolution','進化合成']];
 function visualCodexItems(){return VISUAL_CODEX.filter(v=>v.ship===visualShip&&(visualGroup==='all'||v.group===visualGroup)&&(!v.card||!!skillById(v.card)||['basic','element'].includes(v.group)));}
 function visualSelected(){const all=visualCodexItems();return all.find(v=>v.id===visualChoice)||all[0]||null;}
 /* v13.19 — preview first; selection remains isolated from gameplay state. */
@@ -2809,6 +2821,20 @@ function drawWeaponVisualPreview(ts){
   g.closePath();g.fill();g.stroke();g.restore();
  };
  switch(family){
+ case 'phantom':{
+  const count=variant==='parade'?3:1,radius=variant==='reaper'?105:variant==='nova'?100:72;
+  const color=variant==='nova'?'#ffffff':['reaper','flash','requiem'].includes(variant)?evolutionVisualProfile('ph_'+variant)?.color||'#dce9ff':null;
+  const phantoms=Array.from({length:count},(_,i)=>({primary:i===0,x:x+Math.sin(time*1.1+i)*24,y:y+(i-(count-1)/2)*58,angle:-.35+Math.sin(time*.8)*.25}));
+  const phantomVisuals=phantoms.map(f=>({x:f.x,y:f.y,angle:f.angle,range:radius,arc:variant==='nova'?TAU:Math.PI*.62,life:.10+.07*Math.sin(time*6)**2,total:.18,nova:variant==='nova'}));
+  if(variant==='requiem')for(let i=1;i<=2;i++)phantomVisuals.push({...phantomVisuals[0],range:radius+i*8,life:.05});
+  AnkinPhantom.draw({phantoms,phantomVisuals,evolutionTint:color},g);
+  g.save();g.globalAlpha=.5;g.translate(x-70,y+56);g.scale(1.2,1.2);AnkinPhantom.drawGhost(g);g.restore();break;
+ }
+ case 'dark':{
+  const darkFields=variant==='virus'?[{x,y,size:62}]:[],darkVisuals=variant==='fear'?[{x:x-35,y,angle:0,range:105,life:.2,type:'fear'}]:[];
+  AnkinDark.draw({darkFields,darkVisuals,darkAllies:[]},g);break;
+ }
+ case 'bat':case 'bear':g.save();g.translate(x,y);g.scale(2.4,2.4);AnkinDark.drawMascot(g,0,0,family==='bear');g.restore();break;
  case 'pulse':case 'shot':
   bullet(weaponElementPalette('shot',variant||null).accent,8);break;
  case 'laser':{
@@ -4156,6 +4182,7 @@ for(const [key,name,legend,material,desc] of [['novaTempest','シルバーテン
  FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:id,legend:'ph_'+legend,required:[material],desc,icon:'✦',apply:p=>AnkinPhantom.addRank(p,key)});
 }
 
+for(const id of ['ph_sanctuary','ph_barrier']){const c=skillById(id);c.tags=[...new Set([...c.tags,'防御','シールド'])];}for(const id of ['ph_coil','ph_relay']){const c=skillById(id);c.tags=[...new Set([...c.tags,'回収'])];}
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(player.shipType!=='phantom'||c.shipOnly==='phantom'||PHANTOM_SHARED.has(c.id)||!!elementFromCard(c))&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
@@ -4775,7 +4802,7 @@ function novaElementImpact(e,mode,damage){
 }
 function currentShotBudget(){return controlMode==='mobile'?170:245}
 function efficientShotRate(p=player){return Math.max(.095,p.rate)*(1+Math.max(0,shots.length/currentShotBudget()-.65)*.8)}
-function collectVacuum(source='item'){const core=game.vacuum;if(!core&&source!=='boss')return;let exp=0,energy=0,count=0;for(const e of pickups){if(e.type==='energy'){exp+=e.value;energy+=e.charge;count++}}
+function collectVacuum(source='item'){if(player?.shipType==='phantom'&&source==='boss')return;const core=game.vacuum;if(!core&&source!=='boss')return;let exp=0,energy=0,count=0;for(const e of pickups){if(e.type==='energy'){exp+=e.value;energy+=e.charge;count++}}
  if(balanceTelemetry){balanceTelemetry.vacuumExp+=exp;balanceTelemetry.vacuumOrbs+=count;}
  pickups=pickups.filter(e=>e.type!=='energy');game.vacuum=null;addExp(exp);gainNovaEnergy(energy);if(player.expShield&&count)player.shield=Math.min(player.shieldMax,player.shield+player.expShield*count);
  burst(player.x,player.y,'#fff2bc',65,270);ring(player.x,player.y,Math.max(W,H)*.75,'#fffad3');flash=Math.max(flash,.4);shake=Math.max(shake,12);pop(player.x,player.y-65,`ALL EXP +${format(exp)}`,'#fff2a4');announce(`${source==='boss'?'🏆 ボス撃破！':'✨ EXP SWEEP！'} ${count}個の結晶を一括回収 · EXP +${format(exp)}`,5);sfx('vacuum');}
@@ -5521,10 +5548,10 @@ function applyDarkFusionHit(e,meta){if(!e||e.dead||!player||meta.darkSecondary)r
 }
 
 function phantomWorld(){return {width:W,height:H,candidates:circleCandidates,damage:(e,d,m)=>{const before=game.damage;damageEnemy(e,d,m);if(player.phantomMetrics){const k=m.primary?'primaryDamage':'extraDamage';player.phantomMetrics[k]+=game.damage-before;}},random:Math.random,
- blocked:(x,y,x2,y2)=>engageBarrierBlocks(x,y,x2,y2),motion:engageClampMotion,
+ obstacles:activeEngageWalls(),blocked:(x,y,x2,y2,pad=0)=>engageBarrierBlocks(x,y,x2,y2,pad),motion:engageClampMotion,
  isBoss:e=>['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type),novaDamage:()=>effectiveNovaDamage(player),
  clear:(x,y,r)=>{for(const b of hostile)if((b.x-x)**2+(b.y-y)**2<r*r)b.ttl=0;},
- element:(e,d,a)=>{if(!a.primary||e.dead)return;const mode=nextBasicElement(player);if(mode==='plasma')setBurn(e,d*.16,2.7);if(mode==='cryo')chillEnemy(e,2.5,player.freezeChance);if(mode==='arc')applyChain(e,Math.max(18,d*.25));}
+ element:(e,d,a)=>{if(!a.primary||e.dead)return;applyBasicElement(e,nextBasicElement(player),d,.6);}
 };}
 function tickPhantom(dt){const p=player;const started=performance.now();
  p.phantomEmergency=Math.max(0,(p.phantomEmergency||0)-dt);p.phantomVeil=Math.max(0,(p.phantomVeil||0)-dt);
@@ -5961,7 +5988,7 @@ function drawDogPaw(z,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  ctx.beginPath();ctx.ellipse(0,r*.16,r*(.44+hot),r*.29,0,0,TAU);ctx.stroke();
 }
 
-function ship(x,y,rot,scale=1,secondary=false){ctx.save();if(!secondary&&player?.shipType==='phantom')ctx.globalAlpha*=.55;ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor= (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle= (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='phantom'){ctx.fillStyle='#f5f8ff';ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-20);ctx.lineTo(15,13);ctx.lineTo(0,6);ctx.lineTo(-15,13);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();return;}if(!secondary&&player?.shipType==='dog'){drawDogFrame();ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
+function ship(x,y,rot,scale=1,secondary=false){ctx.save();if(!secondary&&player?.shipType==='phantom')ctx.globalAlpha*=.55;ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor= (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle= (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='phantom'){AnkinPhantom.drawGhost(ctx);ctx.restore();return;}if(!secondary&&player?.shipType==='dog'){drawDogFrame();ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
   const hot=(player.drillRushActive||0)>0,charge=clamp((player.drillPlasma||0)/Math.max(.001,player.drillCap||1),0,1);
   // Magenta plated chassis + a distinct, mechanical auger at the nose.
   ctx.shadowColor=(hot?'#ffd0ee':'#ff4898');ctx.fillStyle=(hot?'#ffe2f3':'#f95da7');ctx.strokeStyle='#6c164f';ctx.lineWidth=2.8;

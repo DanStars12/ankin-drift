@@ -43,7 +43,7 @@ test('desktop title fits widescreen while mobile retains portrait layout', async
         gameButtons:document.querySelectorAll('[data-game-mode]').length
       };
     });
-    expect(info.cards).toHaveLength(5);
+    expect(info.cards).toHaveLength(6);
     expect(info.modeButtons).toBe(2);
     expect(info.gameButtons).toBe(2);
     const wide=!isMobile && viewport.width>=980 && viewport.height>=540;
@@ -372,4 +372,18 @@ test('v13.0 simple rendering is opt-in; organic magma never flashes into circles
  const input=await page.evaluate(()=>window.__v124InputSmoke());
  expect(input).toEqual({pointerReleased:true,typingGuard:true,focusReleased:true});
  expect(errors).toEqual([]);
+});
+
+test('PHANTOM title and weapon guide render without losing navigation or changing the saved game',async({page},testInfo)=>{
+ const errors=watchFailures(page);await page.goto('./');await page.locator('[data-ship="phantom"]').click();await page.locator('#openTitleLab').click();
+ const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));await page.locator('[data-tab="visual"]').click();
+ await expect(page.locator('[data-visual-id="phantomBlade"]')).toBeVisible();await expect(page.locator('#weaponVisualCanvas')).toBeVisible();
+ for(const id of ['phantomParade','phantomReaper','phantomFlash','phantomRequiem','phantomNova']){
+  await page.locator('[data-visual-id="'+id+'"]').click();await expect(page.locator('[data-visual-id="'+id+'"]')).toHaveAttribute('aria-pressed','true');
+ }
+ await page.locator('[data-visual-ship="common"]').click();for(const id of ['fearAura','programControl'])await page.locator('[data-visual-id="'+id+'"]').click();
+ await page.locator('[data-visual-ship="dog"]').click();for(const id of ['dogBat','dogBear'])await page.locator('[data-visual-id="'+id+'"]').click();
+ await page.locator('[data-visual-ship="phantom"]').click();await expect(page.locator('#weaponVisualCanvas')).toBeVisible();
+ expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(storage);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);
+ await page.screenshot({path:testInfo.outputPath('phantom-guide.png')});
 });

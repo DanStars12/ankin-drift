@@ -76,7 +76,7 @@ for(const scenario of ['live-pack','live-boss']){
   expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(storageBefore);
   expect(errors).toEqual([]);
   const summary=await exportAI(testInfo.project.name,scenario,rows);
-  expect(summary).toHaveLength(5);
+  expect(summary).toHaveLength(6);
   for(const row of summary){
    expect(row.survivalRate).toBeGreaterThanOrEqual(0);
    expect(row.survivalRate).toBeLessThanOrEqual(100);
@@ -136,7 +136,7 @@ test('v13.33 tactical ability probes keep distant NOVAs charged and reject unsaf
    near:window.__ankinBalanceAI.decide({...common,ship,bossDist:160}),
    emergency:window.__ankinBalanceAI.decide({...common,ship,imminent:2})}));
  });
- expect(cases).toHaveLength(5);
+ expect(cases).toHaveLength(6);
  for(const c of cases){expect(c.far.novaReason).toBeNull();expect(c.near.novaReason).toBeTruthy();
   expect(c.emergency.dashReason).toBe('emergency-evade');}
  expect(errors).toEqual([]);

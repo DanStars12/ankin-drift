@@ -1,0 +1,11 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {planGhostMovement} from '../scripts/balance-ai-harness.mjs';
+import {decideAbilityUse} from '../scripts/balance-ability-tactics.mjs';
+const p={x:400,y:400,r:12,hitR:5.5,spd:240,magnet:112};
+const base={width:1000,height:800,enemies:[],bullets:[],hazards:[],pickups:[],hint:{x:1,y:0},motion:(x,y,nx,ny)=>({x:nx,y:ny,blocked:false})};
+test('ghost pilot avoids an approaching contact enemy even if its goal is behind that enemy',()=>{const r=planGhostMovement(p,{...base,enemies:[{x:450,y:400,r:22,spd:70,type:'drone'}]});assert.ok(r.x<.1);assert.ok(!r.collision);});
+test('ghost pilot chooses XP only in an open collection area',()=>{const orb={x:600,y:400,type:'energy',value:50,charge:7};const clear=planGhostMovement(p,{...base,pickups:[orb]});assert.equal(clear.goal,'orb');assert.ok(clear.x>.7);const unsafe=planGhostMovement(p,{...base,pickups:[orb],enemies:[{x:610,y:405,r:20,spd:30}]});assert.equal(unsafe.goal,null);});
+test('lookahead avoids a projectile crossing the planned path and does not mutate the world',()=>{const world={...base,bullets:[{x:500,y:400,vx:-300,vy:0,r:8,ttl:2}]};const before=JSON.stringify(world);const r=planGhostMovement(p,world);assert.ok(Math.abs(r.y)>.5);assert.equal(JSON.stringify(world),before);});
+test('ghost input planning avoids blocked routes and edge-directed dashes',()=>{const r=planGhostMovement(p,{...base,motion:(x,y,nx,ny)=>nx>410?{x:410,y,blocked:true}:{x:nx,y:ny,blocked:false}});assert.ok(r.x<.1);const edge=planGhostMovement({...p,x:25},{...base,hint:{x:-1,y:0}});assert.ok(edge.x>=0);});
+test('only PHANTOM uses contact warnings for defensive dashes',()=>{const state={ship:'phantom',dashLeft:0,dashTime:0,iframes:0,contactThreats:1,threats:0,imminent:0,energy:0};assert.equal(decideAbilityUse(state).dashReason,'emergency-evade');assert.equal(decideAbilityUse({...state,ship:'shot'}).dashReason,null);});

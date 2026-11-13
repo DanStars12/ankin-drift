@@ -51,5 +51,5 @@ function draw(p,ctx){
  for(const a of p.darkAllies||[]){ctx.save();ctx.globalAlpha=Math.min(1,a.life);ctx.fillStyle=a.color;ctx.strokeStyle='#c6ffe6';ctx.lineWidth=2;ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#ffffff';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText('ALLY '+a.life.toFixed(1),a.x,a.y-a.r-5);ctx.restore();}
  for(const v of p.darkVisuals||[]){ctx.save();ctx.globalAlpha=Math.max(0,v.life/.3);ctx.strokeStyle='#cba1ff';ctx.lineWidth=3;ctx.beginPath();if(v.type==='ally'){ctx.moveTo(v.x,v.y);ctx.lineTo(v.x2,v.y2);}else ctx.arc(v.x,v.y,v.range,v.angle-Math.PI*.38,v.angle+Math.PI*.38);ctx.stroke();ctx.restore();}
 }
-root.AnkinDark={init,fear,convert,tick,interrupt,enemyTarget,intercept,draw,isBoss:boss};
+root.AnkinDark={init,fear,convert,tick,interrupt,enemyTarget,intercept,draw,drawMascot:mascot,isBoss:boss};
 })(globalThis);
