@@ -57,9 +57,15 @@ Full-timeline PHANTOM attempts still die before final boss eligibility. Initial 
 5. Add real frame-level profiling with multiple raids, evolved blades, many projectiles, dark allies, and DOUBLE TIME. Synthetic CPU-only results are insufficient.
 6. Request review for the complete LEVEL 4 change after these checks. Keep main and the live site unchanged.
 
-## GitHub publication blocker
+## GitHub publication status
 
-A push to `https://github.com/DanStars12/ankin-drift.git` was rejected by automatic approval review: source export to an unverified remote and branch creation were considered to lack explicit end-user authorization. No alternative upload path was used. The source, tests and reports remain on the local development branch. The next permission needed is to push this branch and open a **draft PR**, not to merge or publish the site.
+The user approved branch publication after destination verification. The connected GitHub integration uploaded the three commits and verified that the resulting source tree exactly matches the locally tested tree `da459bc00f919df4f3688b5361f79292b75548d4`.
+
+Draft PR: https://github.com/DanStars12/ankin-drift/pull/78  
+Branch: `feature/phantom-frame-20261114`  
+Published implementation/test/report commit: `d475c2968c9957cf1e60a7f22f12443cac7af9b3` (same files as local checkpoint `540cbe0`).
+
+The earlier approval-review blocker is resolved. Git command-line push lacked credentials; the connected GitHub integration completed publication. Main and the live site remain unchanged. Browser/FPS verification and long-run balance are still release blockers.
 
 ## Initial full-timeline comparison (one seed per mode)
 
