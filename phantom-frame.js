@@ -33,7 +33,7 @@ function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
  const attack={id:++p.phantomAttackId,phantomId:f.id,primary:f.primary,type,nova,element:f.primary&&!nova,angle,x:f.x,y:f.y,range,hit:new Set(),evolutions:{reaper:!!rank(p,'reaper'),flash:!!rank(p,'flash'),requiem:!!rank(p,'requiem')}};
  let n=0;
  for(const e of world.candidates(f.x,f.y,range+90)){
-  if(e.dead||e.isoWarp||e.isoSafe>0||attack.hit.has(e))continue;
+  if(e.dead||e.isoWarp||e.isoSafe>0||attack.hit.has(e)||!nova&&world.targetable&&!world.targetable(e))continue;
   const dx=e.x-f.x,dy=e.y-f.y,d=Math.hypot(dx,dy);if(d>range+e.r)continue;
   const delta=Math.atan2(Math.sin(Math.atan2(dy,dx)-angle),Math.cos(Math.atan2(dy,dx)-angle));
   if(!nova&&Math.abs(delta)>s.angle/2+Math.asin(Math.min(1,e.r/Math.max(1,d))))continue;
@@ -79,6 +79,7 @@ function tick(p,dt,world){
  p.phantomEchoes=p.phantomEchoes.filter(e=>!e.done);
  for(const f of p.phantoms){
   f.cooldown-=dt;f.scan-=dt;f.warp=Math.max(0,f.warp-dt);f.routeTime=Math.max(0,(f.routeTime||0)-dt);
+  f.novaTick=(f.novaTick||0)-dt;if(p.phantomNova>0&&rank(p,'novaTempest')&&f.novaTick<=0){f.novaTick=s.period;slash(p,f,world,s,'nova');}
   const overlaps=(x,y)=>world.obstacles?.some(w=>x>=w.x-10&&x<=w.x+w.w+10&&y>=w.y-10&&y<=w.y+w.h+10);
   if(overlaps(f.x,f.y)){
    // A newly spawned wall can cover a remote phantom. Move normally to the
@@ -91,10 +92,10 @@ function tick(p,dt,world){
    if(exit){const step=Math.min(best,s.speed*dt);f.x+=(exit.x-f.x)/Math.max(1,best)*step;f.y+=(exit.y-f.y)/Math.max(1,best)*step;}
    f.state='REPOSITION';f.routeTime=0;f.cooldown=Math.max(f.cooldown,.1);continue;
   }
-  if(!f.target||f.target.dead||f.target.isoWarp||Math.hypot(f.target.x-f.x,f.target.y-f.y)>s.sense*1.2)f.target=null;
+  if(!f.target||f.target.dead||f.target.isoWarp||world.targetable&&!world.targetable(f.target)||Math.hypot(f.target.x-f.x,f.target.y-f.y)>s.sense*1.2)f.target=null;
   if(f.scan<=0){f.scan=.22/(1+rank(p,'algorithm')*.12+rank(p,'predator')*.4);
    if(!f.target){let best=null,score=Infinity;
-    for(const e of world.candidates(f.x,f.y,s.sense)){if(e.dead||e.isoWarp||e.isoSafe>0)continue;
+    for(const e of world.candidates(f.x,f.y,s.sense)){if(e.dead||e.isoWarp||e.isoSafe>0||world.targetable&&!world.targetable(e)||e===f.unreachable&&p.phantomClock<(f.unreachableUntil||0))continue;
      const d=Math.hypot(e.x-f.x,e.y-f.y);if(d>s.sense)continue;
      let value=d;for(const other of p.phantoms)if(other!==f&&other.target===e&&!world.isBoss(e))value+=130;
      if(value<score){score=value;best=e;}}
@@ -115,7 +116,7 @@ function tick(p,dt,world){
   if(d>s.range*.65+target.r||world.blocked(f.x,f.y,target.x,target.y)){
    f.state='CHASE';let aim=target;
    if(world.obstacles?.length&&world.blocked(f.x,f.y,target.x,target.y,10)){
-    if(f.routeTime<=0){f.route=findRoute(f,target,world);f.routeTime=.5;}
+    if(f.routeTime<=0){f.route=findRoute(f,target,world);f.routeTime=.5;if(!f.route.length){f.unreachable=target;f.unreachableUntil=p.phantomClock+1.5;f.target=null;f.scan=0;continue;}}
     while(f.route?.length&&Math.hypot(f.route[0].x-f.x,f.route[0].y-f.y)<8)f.route.shift();
     if(f.route?.length){aim=f.route[0];f.state='REPOSITION';}
    }else f.route=[];
@@ -142,11 +143,10 @@ function tick(p,dt,world){
    if(rank(p,'double')&&world.random()<rank(p,'double')*.16)p.phantomEchoes.push({frame:snapshot,delay:.09,angle:a.angle,type:'double',factor:.55});
    if(rank(p,'emperor')&&f.hits>=8){f.hits=0;slash(p,f,world,s,'emperor',.85);}
    if(rank(p,'eternal')&&f.chain%4===0)slash(p,f,world,s,'coordination',.35);
-   if(p.phantomNova>0&&rank(p,'novaTempest'))slash(p,f,world,s,'nova');
   }
  }
 }
-function nova(p,world){p.phantomNova=6+Math.min(4,Math.max(0,p.novaRadius-180)/90);const radius=Math.min(480,p.novaRadius)*(rank(p,'novaSanctuary')?1.5:1);
+function nova(p,world){for(const f of p.phantoms)f.novaTick=0;p.phantomNova=6+Math.min(4,Math.max(0,p.novaRadius-180)/90);const radius=Math.min(480,p.novaRadius)*(rank(p,'novaSanctuary')?1.5:1);
  world.clear(p.x,p.y,radius);if(rank(p,'novaSanctuary'))p.shield=Math.min(p.shieldMax,p.shield+40+world.novaDamage()*.1);
 }
 function pickup(p){if(rank(p,'relay')||rank(p,'cycle'))p.phantomRelay=2.4;}

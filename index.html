@@ -5549,7 +5549,7 @@ function applyDarkFusionHit(e,meta){if(!e||e.dead||!player||meta.darkSecondary)r
 
 function phantomWorld(){return {width:W,height:H,candidates:circleCandidates,damage:(e,d,m)=>{const before=game.damage;damageEnemy(e,d,m);if(player.phantomMetrics){const k=m.primary?'primaryDamage':'extraDamage';player.phantomMetrics[k]+=game.damage-before;}},random:Math.random,
  obstacles:activeEngageWalls(),blocked:(x,y,x2,y2,pad=0)=>engageBarrierBlocks(x,y,x2,y2,pad),motion:engageClampMotion,
- isBoss:e=>['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type),novaDamage:()=>effectiveNovaDamage(player),
+ targetable:e=>e.type!=='ultimate'||ultimatePartsAlive()===0,isBoss:e=>['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type),novaDamage:()=>effectiveNovaDamage(player),
  clear:(x,y,r)=>{for(const b of hostile)if((b.x-x)**2+(b.y-y)**2<r*r)b.ttl=0;},
  element:(e,d,a)=>{if(!a.primary||e.dead)return;applyBasicElement(e,nextBasicElement(player),d,.6);}
 };}

@@ -387,3 +387,21 @@ test('PHANTOM title and weapon guide render without losing navigation or changin
  expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(storage);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);
  await page.screenshot({path:testInfo.outputPath('phantom-guide.png')});
 });
+
+test('PHANTOM pressure fixture records real browser frame timings with evolved blades and DARK',async({page},testInfo)=>{
+ const errors=watchFailures(page);
+ const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
+ const hook=`window.__phantomPressure={prepare(speed=1){selectedShip='phantom';newRun();mode='playing';game.autoBank=true;game.activeChallenges=speed===2?['doubleTime']:[];
+ game.spawn=game.nextBossAt=game.nextRaidAt=game.nextRelicAt=game.nextVacuumAt=1e9;
+ player.iframes=1e9;enemies=[];hostile=[];hazards=[];boss=null;
+ for(const c of ALL_SKILL_DEFS().filter(c=>c.shipOnly==='phantom'))for(let n=0;n<(c.maxStacks||1);n++){c.apply(player);const key={power:'powers',legendary:'legends',relic:'relics',unique:'uniques'}[c.rarity]||'skills';game[key][c.id]=(game[key][c.id]||0)+1;game.acquisitionLog.push(c.id);}
+ for(const id of ['fearAura','programControl','emberSeed','coldCoil','chain','windOrigin','meteorSeed']){const c=skillById(id);c.apply(player);game.skills[id]=1;game.acquisitionLog.push(id);}
+ activateUpgrades();pendingFusions=[];pendingSynergy=[];player.phantomNova=10;
+ for(let i=0;i<120;i++){const a=i*2.399963,r=100+(i%8)*20;const e=spawnEnemy(i%3===0?'shooter':i%3===1?'drone':'guard',{x:clamp(player.x+Math.cos(a)*r,35,W-35),y:clamp(player.y+Math.sin(a)*r,35,H-35)});e.hp=e.maxHp=1e8;}
+ for(const [kind,variant] of [['minor','guardian'],['major','titan']]){spawnBoss(kind,variant);boss.hp=boss.maxHp=1e8;}
+ refreshEnemyIndex();state('playing');return player.phantoms.length;},info(){return {performance:ankinPerformanceReport(),phantoms:player.phantoms.length,level:player.phantomLevel,echoes:player.phantomEchoes.length,visuals:player.phantomVisuals.length,damage:game.damage,sources:game.damageStats,metrics:player.phantomMetrics};}};`;
+ await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});});
+ await page.goto('./');for(const speed of [1,2]){expect(await page.evaluate(s=>window.__phantomPressure.prepare(s),speed)).toBe(3);await page.waitForTimeout(3000);
+ const result=await page.evaluate(()=>window.__phantomPressure.info());expect(result.phantoms).toBe(3);expect(result.level).toBe(10);expect(result.damage).toBeGreaterThan(0);expect(result.visuals).toBeLessThanOrEqual(24);expect(result.echoes).toBeLessThanOrEqual(24);expect(errors).toEqual([]);
+ console.log('PHANTOM_RENDER_METRICS='+JSON.stringify({project:testInfo.project.name,speed,...result}));await testInfo.attach('phantom-render-metrics-'+speed,{body:JSON.stringify(result,null,2),contentType:'application/json'});await page.screenshot({path:testInfo.outputPath('phantom-pressure-'+speed+'.png')});}
+});

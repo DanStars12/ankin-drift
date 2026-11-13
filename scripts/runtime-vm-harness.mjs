@@ -22,7 +22,7 @@ export function runtimeHarness(){
  fuse(main,sub,slot){game.level=40;game.lastChoice='normal';game.pendingLevels=Math.max(1,game.pendingLevels);choices=offerCards('normal');mode='choice';if(!enterElementChoice())throw Error('fusion unavailable');chooseFusionMain(main);selectElementFusion(sub);selectFusionWeapon(slot);confirmElementFusion();return game.elementCombos.length;},
  clear(){enemies=[];shots=[];hostile=[];pickups=[];hazards=[];zones=[];boss=null;enemyIndex.clear();enemyIndexReady=false;},
  enemy(type='drone',props={}){const e=spawnEnemy(type,{x:player.x+180,y:player.y});Object.assign(e,props);refreshEnemyIndex();return e;},
- advanceSimulation,drive,render,hudUpdate,dash,nova,shoot,restorePlayerBuild,orb,collectVacuum,compactPickups,availableElementPairs,fusionOutcome,selectable,activeFusions,phantomWorld,darkWorld,applyElementFusionStats,applyDarkFusionHit,drawOverlay,
+ spawnUltimateBoss,advanceSimulation,drive,render,hudUpdate,dash,nova,shoot,restorePlayerBuild,orb,collectVacuum,compactPickups,availableElementPairs,fusionOutcome,selectable,activeFusions,phantomWorld,darkWorld,applyElementFusionStats,applyDarkFusionHit,drawOverlay,
  setMode(m){mode=m},setKeys(values){keys=new Set(values)},stopSpawns(){game.spawn=1e9;game.nextBossAt=1e9;game.nextRaidAt=1e9;game.nextRelicAt=1e9},setClock(n){game.total=n;runClock=n},get time(){return runClock}
 };`;
  runInContext(source.replace(BALANCE_HARNESS_ANCHOR,BALANCE_HARNESS+'\n'+BALANCE_AI_HARNESS+'\n'+hook+'\n})();'),ctx,{filename:'index.html'});
