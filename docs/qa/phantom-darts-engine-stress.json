@@ -1,0 +1,30 @@
+{
+  "kind": "synthetic-engine-only",
+  "gameSeconds": 1800,
+  "enemyCount": 200,
+  "bossCount": 3,
+  "phantoms": 3,
+  "phantomLevel": 10,
+  "evolutions": [
+    "ph_eternal",
+    "ph_reaper",
+    "ph_novaTempest",
+    "ph_flash",
+    "ph_novaAccel",
+    "ph_requiem",
+    "ph_veil",
+    "ph_novaSanctuary",
+    "ph_field"
+  ],
+  "hits": 1138689,
+  "damage": 113764327.72126341,
+  "primaryElementCallbacks": 58806,
+  "maxQueue": 15,
+  "maxVisuals": 24,
+  "maxDarts": 5,
+  "maxDartProjectiles": 5,
+  "maxDartVisuals": 3,
+  "hostLogicMs": 67928.045342,
+  "rendered": false,
+  "fps": null
+}
