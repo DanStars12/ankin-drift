@@ -10,8 +10,8 @@ const world={...h.api.phantomWorld(),width:1280,height:800,candidates:()=>enemie
 for(let i=0;i<1800*60;i++){
  if(i%(20*60)===0)h.ctx.AnkinPhantom.nova(p,world);
  h.ctx.AnkinPhantom.tick(p,1/60,world);maxQueue=Math.max(maxQueue,p.phantomEchoes.length);maxVisuals=Math.max(maxVisuals,p.phantomVisuals.length);
- maxDarts=Math.max(maxDarts,p.darts.length);maxDartProjectiles=Math.max(maxDartProjectiles,p.dartProjectiles.length);maxDartVisuals=Math.max(maxDartVisuals,p.dartVisuals.length);assert.ok(p.darts.length<=5);assert.equal(new Set(p.darts.map(f=>f.type)).size,p.darts.length);assert.ok(p.dartProjectiles.length<=64);assert.ok(p.dartVisuals.length<=16);
+ maxDarts=Math.max(maxDarts,p.darts.length);maxDartProjectiles=Math.max(maxDartProjectiles,p.dartProjectiles.length);maxDartVisuals=Math.max(maxDartVisuals,p.dartVisuals.length);assert.ok(p.darts.length<=12);assert.equal(new Set(p.dartTypes.slice(0,5)).size,5);assert.ok(p.dartProjectiles.length<=256);assert.ok(p.dartVisuals.length<=64);
  assert.equal(p.phantoms.length,3);assert.ok(p.phantomEchoes.length<=24);assert.ok(p.phantomVisuals.length<=24);
 }
 const result={kind:'synthetic-engine-only',gameSeconds:1800,enemyCount:200,bossCount:3,phantoms:p.phantoms.length,phantomLevel:p.phantomLevel,evolutions:Object.keys(h.api.game.fusions),hits,damage,primaryElementCallbacks:elements,maxQueue,maxVisuals,maxDarts,maxDartProjectiles,maxDartVisuals,hostLogicMs:performance.now()-start,rendered:false,fps:null};
-mkdirSync('docs/qa',{recursive:true});writeFileSync('docs/qa/phantom-darts-engine-stress.json',JSON.stringify(result,null,2)+'\n');console.log(result);
+mkdirSync('docs/qa',{recursive:true});writeFileSync('docs/qa/phantom-neon-engine-stress.json',JSON.stringify(result,null,2)+'\n');console.log(result);

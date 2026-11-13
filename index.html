@@ -1112,7 +1112,8 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 .ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}
 .ship-card.dog{grid-column:auto}
 @media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.attr-dark{color:#efdcff;background:#592b83;border-color:#c78aff}.choice.element-dark{border-left:4px solid #b16aff;background:linear-gradient(135deg,#372044dd,#141c32)}.choice.element-dark .choice-attrs .attr-dark{box-shadow:0 0 8px #b16aff55}.choice .choice-owned{display:inline-flex;padding:3px 7px;border:1px solid #87b0d9;border-radius:6px;font-size:11px;color:#d7efff;background:#1e3557;white-space:nowrap}.choice .choice-head{flex-wrap:wrap}
+.attr-dark{color:#efdcff;background:#592b83;border-color:#c78aff}.choice .choice-owned{display:inline-flex;padding:3px 7px;border:1px solid #87b0d9;border-radius:6px;font-size:11px;color:#d7efff;background:#1e3557;white-space:nowrap}.choice .choice-head{flex-wrap:wrap}
+.panel.choice-panel .choice:hover{transform:none}.choice-element-band{display:flex;gap:6px;align-items:center;margin:6px 0;padding:5px 8px;border-radius:6px;border-left:3px solid var(--element);background:linear-gradient(100deg,color-mix(in srgb,var(--element),transparent 70%),transparent);font-size:10px;color:var(--element);grid-column:1/-1}.choice-element-band b{color:#edf6ff}
 </style>
 <style>
 .choice-pick{display:none}
@@ -1762,7 +1763,7 @@ function elementChoiceMarkup(){
  <p class="fine">今回のレベルアップで得られる通常スキル1枚の代わりに融合します。LEGENDARY・POWER等のボス報酬は消費しません。</p>
  <div class="actions"><button type="button" class="primary" id="fusionConfirm">✓ この内容で融合を確定</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
 }
-function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,chargeStationary:!!p.chargeStationary,laserNovaTimer:p.laserNovaTimer,novaShotTime:p.novaShotTime,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState,darkLive:{darkFields:p.darkFields,darkAllies:p.darkAllies,darkVisuals:p.darkVisuals,darkFearTimer:p.darkFearTimer,darkVirusTimer:p.darkVirusTimer},phantomLive:p.shipType==='phantom'?{dartTypes:p.dartTypes,darts:p.darts,dartProjectiles:p.dartProjectiles,dartVisuals:p.dartVisuals,dartActive:p.dartActive,dartCooldown:p.dartCooldown,phantoms:p.phantoms,phantomEchoes:p.phantomEchoes,phantomVisuals:p.phantomVisuals,phantomNova:p.phantomNova,phantomRelay:p.phantomRelay,phantomAttackId:p.phantomAttackId,phantomClock:p.phantomClock,phantomCollectClock:p.phantomCollectClock,phantomMetrics:p.phantomMetrics,phantomVeil:p.phantomVeil,phantomVeilShield:p.phantomVeilShield,phantomEmergency:p.phantomEmergency}:null}}
+function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,chargeStationary:!!p.chargeStationary,laserNovaTimer:p.laserNovaTimer,novaShotTime:p.novaShotTime,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState,darkLive:{darkFields:p.darkFields,darkAllies:p.darkAllies,darkVisuals:p.darkVisuals,darkFearTimer:p.darkFearTimer,darkVirusTimer:p.darkVirusTimer},phantomLive:p.shipType==='phantom'?{dartTypes:p.dartTypes,darts:p.darts,dartProjectiles:p.dartProjectiles,dartVisuals:p.dartVisuals,dartActive:p.dartActive,dartCooldown:p.dartCooldown,phantoms:p.phantoms,phantomEchoes:p.phantomEchoes,phantomVisuals:p.phantomVisuals,phantomNova:p.phantomNova,phantomRelay:p.phantomRelay,phantomAttackId:p.phantomAttackId,phantomClock:p.phantomClock,phantomCollectClock:p.phantomCollectClock,phantomDrainClock:p.phantomDrainClock,phantomMetrics:p.phantomMetrics,phantomVeil:p.phantomVeil,phantomVeilShield:p.phantomVeilShield,phantomEmergency:p.phantomEmergency}:null}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
  for(const id of game.acquisitionLog){const c=skillById(id);if(c&&owned(id)&&!isSealedCard(c))c.apply(next)}
  // Recalculate passive bonuses without triggering presentations or double-applying the original selection.
@@ -2511,6 +2512,7 @@ function expandedTagDetails(tag,base){
 
 function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.max(0,n)*100)}%`,burn=Math.max(15,p.dmg*(.28+p.thermal*.8)),magma=Math.round(p.magmaDps+p.magmaLevel*18+p.dmg*.25);
  const known={
+ 'ファントムダーツ':{name:'◈ ファントムダーツ',desc:'15秒出撃→10秒待機の小型支援機。最初の5機は別タイプ、限界突破後は重複可能。専用強化はこのタグが目印です。',details:[`解放済み：${p.dartTypes?.length||0}機 / 現在の枠：${p.shipType==='phantom'?AnkinPhantom.dartCapacity(p):5}（絶対上限12）`,'型：ショット / 近距離レーザー / 貫通チャージ / 回復バリア / 経験値回収','支援バリアは破壊から基本5秒で復旧。本人のHP・シールドとは別。']},
  '属性：炎':{name:'🔥 炎属性',desc:'攻撃の燃焼効果で継続ダメージ。マグマ床は接触中の敵へ追加ダメージを与えます。',details:[`燃焼：約${Math.round(burn)} ダメージ/秒（通常攻撃基準）`,`基本攻撃の燃焼：プラズマ換装中のみ（炎ミサイルは独立）`,p.magmaLevel>0?`マグマ床：約${magma} ダメージ/秒`:`マグマ床：未取得（取得時の基準威力 約${magma}/秒）`,`マグマ設置数の強化：${p.magmaLevel} ／ 効果半径：${Math.round(p.magmaRadius)}`]},
  '属性：氷':{name:'❄️ 氷属性',desc:'スロウと凍結は別系統。主武装への付与とアイスボールで戦います。スロウは凍結させず、アイスボールはスロウを与えません。ボスは凍結無効・スロウ効果半減。',details:[`スロウ中の移動速度：通常敵42% / ボス71%`,`スロウ中の敵攻撃頻度：通常の${pct(Math.max(.25,1-p.iceAttackSlow))}`,`基本攻撃の凍結：発生しません（アイスボールのみ凍結）`,`凍結時間：最大${Math.min(2,p.freezeDuration).toFixed(1)}秒 / 解凍後${FREEZE_RESIST_SECONDS.toFixed(1)}秒は再凍結不可（ボス無効）`]},
  '属性：雷':{name:'⚡ 雷属性',desc:'連鎖雷撃と電磁パルスは別系統。パルスは自機周辺に継続雷ダメージを与え、連鎖やNOVAへ自動伝播しません。',details:[`基本攻撃の雷連鎖：サンダー換装中のみ`,`連鎖ダメージ補正：+${Math.round(p.chainDamage)}`,`電磁パルスの実効半径：${Math.round(Math.min(290,p.empRadius))}`,`電磁パルス基準威力：${Math.round(p.empDps)}/秒`]},
@@ -2610,7 +2612,8 @@ function evolutionMarkup(c){
  }).join('');
 }
 function synergyMarkup(c){return synergiesFor(c.id).filter(a=>!game.synergies[a.id]).sort((a,b)=>Number(owned(b.need.find(x=>x!==c.id)))-Number(owned(a.need.find(x=>x!==c.id)))).slice(0,1).map(a=>{const partner=a.need.find(x=>x!==c.id),ready=owned(partner);return `<div class="synergy-note ${ready?'combo-ready':''}"><div class="synergy-note-head"><b>${a.name}</b>${ready?'<span class="combo-ready-pill">✦ 今選ぶと完成！</span>':'<span>◇ シナジー候補</span>'}</div><div class="synergy-partner-row">相方：${skillPeekLink(partner)} <span class="${ready?'partner-owned':'partner-missing'}">${ready?'✓ 取得済み':'未取得'}</span></div><span class="synergy-effect-line">完成時の効果：${escHtml(a.desc)}</span></div>`}).join('')}
-function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady(c),evoReady=choiceEvolutionReady(c),targets=choiceTargetMatches(c),count=game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0;return `<button class="choice ${c.rarity} ${elementFromCard(c)==='dark'?'element-dark':''} ${ready?'synergy-ready-choice':''} ${evoReady?'evolution-ready-choice':''} ${targets.length?'target-matching':''}" data-choice="${i}"><div class="choice-head"><span class="choice-num">${i+1}</span><span class="rarity">${RARITY_NAMES[c.rarity]}</span>${c.isSupply?'':`<span class="choice-owned" data-owned-count="${count}">現在 ${count}個${c.maxStacks?' / 最大'+c.maxStacks+'個':c.stackable===false?' / 最大1個':''}</span>`}${evoReady?'<span class="evolution-ready-banner">◇ 進化合成可能！</span>':''}${ready?'<span class="synergy-ready-banner">✦ シナジー完成可能</span>':''}</div>${targets.length?`<span class="target-banner">✦ 目標進化の素材：${targets.map(t=>escHtml(t.name)).join(' / ')}</span>`:''}<div class="choice-skill-head"><span class="choice-icon">${escHtml(c.icon)}</span><div class="choice-name rarity-name ${c.rarity}">${escHtml(c.name)}${owned(c.id)?' <span class="stack-indicator">[強化]</span>':''}</div></div><div class="choice-attrs">${attrMarkup(c)}</div><div class="choice-desc">${escHtml(c.desc)}</div>${evolutionMarkup(c)}${!['legendary','power','unique'].includes(c.rarity)?synergyMarkup(c):''}<span class="choice-pick">✓ タップして取得</span></button>`}).join('')}
+function choiceElementMarkup(c){const key=elementFromCard(c);if(!key)return '';const e=ELEMENTS[key];return `<div class="choice-element-band" data-choice-element="${key}" style="--element:${e.color}"><b>${e.icon} ${e.name}属性</b><span>ATTRIBUTE</span></div>`;}
+function cardsMarkup(){return choices.map((c,i)=>{const ready=choiceSynergyReady(c),evoReady=choiceEvolutionReady(c),targets=choiceTargetMatches(c),count=game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0;return `<button class="choice ${c.rarity} ${ready?'synergy-ready-choice':''} ${evoReady?'evolution-ready-choice':''} ${targets.length?'target-matching':''}" data-choice="${i}"><div class="choice-head"><span class="choice-num">${i+1}</span><span class="rarity">${RARITY_NAMES[c.rarity]}</span>${c.isSupply?'':`<span class="choice-owned" data-owned-count="${count}">現在 ${count}個${c.maxStacks?' / 最大'+c.maxStacks+'個':c.stackable===false?' / 最大1個':''}</span>`}${evoReady?'<span class="evolution-ready-banner">◇ 進化合成可能！</span>':''}${ready?'<span class="synergy-ready-banner">✦ シナジー完成可能</span>':''}</div>${targets.length?`<span class="target-banner">✦ 目標進化の素材：${targets.map(t=>escHtml(t.name)).join(' / ')}</span>`:''}<div class="choice-skill-head"><span class="choice-icon">${escHtml(c.icon)}</span><div class="choice-name rarity-name ${c.rarity}">${escHtml(c.name)}${owned(c.id)?' <span class="stack-indicator">[強化]</span>':''}</div></div><div class="choice-attrs">${attrMarkup(c)}</div><div class="choice-desc">${escHtml(c.desc)}</div>${choiceElementMarkup(c)}${evolutionMarkup(c)}${!['legendary','power','unique'].includes(c.rarity)?synergyMarkup(c):''}<span class="choice-pick">✓ タップして取得</span></button>`}).join('')}
 function skillRow(c,n){const dormant=isSealedCard(c);return `<div class="owned-skill ${c.rarity} ${dormant?'rebirth-dormant':''}"><div class="owned-skill-top"><span class="rarity-name ${c.rarity}">${c.icon} ${c.name}</span>${n>1?'<b>×'+n+'</b>':''}${dormant?'<b class="rebirth-rest">✦ 属性効果喪失・共鳴素材として記録</b>':''}</div><div class="owned-tags">${attrMarkup(c)}</div><div class="skill-details">${c.desc}</div></div>`;}
 function listBuild(){const part=(obj,defs)=>Object.entries(obj).map(([id,n])=>{const c=defs.find(x=>x.id===id);return c?skillRow(c,n):''}).join('');return{skills:part(game.skills,SKILLS),powers:part(game.powers,POWERS),legends:part(game.legends,LEGENDS),uniques:part(game.uniques,UNIQUE_SKILLS),relics:part(game.relics,RELICS)}}
 function inventoryMarkup(b){let html='';for(const [kind,title,body] of [['relic','✦ RELIC / WEAPON MOD',b.relics],['unique','✺ UNIQUE ANKIN',b.uniques],['legendary','★ LEGENDARY',b.legends],['power','◈ ANKIN POWER',b.powers]])html+=`<section class="lab-section ${kind}"><h3>${title}</h3><div class="inventory-grid">${body||'<div class="empty-inventory">まだ取得していません</div>'}</div></section>`;
@@ -2735,12 +2738,17 @@ function visualCodexResolvedName(row){
  return skillById(row.card)?.name||row.fallbackName||row.id;
 }
 VISUAL_CODEX_ROWS.push(
- ['phantomBlade','basic','phantom','PHANTOM BLADE','銀の主機が斬撃。半透明ゴーストは操作・回収を担当。','phantom','ph_polish'],
+ ['phantomBlade','basic','phantom','PHANTOM BLADE','白いネオンの三角刃を前方へ薙ぎ払う。ゴーストは操作・回収を担当。','phantom','ph_polish'],
  ['phantomParade','basic','phantom','ナイトパレード','主機と追加2機が独立して戦闘。属性攻撃は主機だけ。','phantom:parade','ph_parade'],
- ['phantomReaper','evolution','phantom','SILVER REAPER','進化合成で大型の三日月斬撃に変化。','phantom:reaper','ph_crescent'],
+ ['phantomReaper','evolution','phantom','SILVER REAPER','進化合成で大型の白い三角刃に変化。','phantom:reaper','ph_crescent'],
  ['phantomFlash','evolution','phantom','PHANTOM FLASH','ワープ接近からの斬撃。障害壁の向こうへはワープしない。','phantom:flash','ph_driver'],
  ['phantomRequiem','evolution','phantom','REQUIEM EDGE','最大2段の残響斬撃。追加斬撃から再帰発動しない。','phantom:requiem','ph_matrix'],
- ['phantomDarts','basic','phantom','ファントムダーツ出撃','15秒出撃→10秒待機。取得ごとに未取得の型をランダムで追加（全5種）。主機50%性能・低速。射撃：低威力・高速連射／レーザー：狭い近距離・高威力／チャージ：移動中も蓄積し全敵貫通／支援：破壊可能な回復バリア／フォロー：経験値のみ回収・EXP×1.2、本人のEXP補正も適用。','phantom:darts','ph_darts'],
+ ['phantomDarts','basic','phantom','ファントムダーツ出撃','15秒出撃→10秒待機。最初の5機は未取得型、限界突破後は重複可。主機50%性能・低速。射撃：低威力・高速連射／レーザー：狭い近距離・高威力／チャージ：移動中も蓄積し全敵貫通／支援：破壊可能な回復バリア／フォロー：経験値のみ回収・EXP×1.2、本人のEXP補正も適用。','phantom:darts','ph_darts'],
+ ['phantomDartShot','basic','phantom','ダーツ：ショット型','低威力・高速連射。プリズム・ダーツで2方向射撃、ミラー・ダーツで画面端1回反射。','dart:shot','ph_darts'],
+ ['phantomDartLaser','basic','phantom','ダーツ：レーザー型','狭い近距離を狙う高威力レーザー。ロングレンジで射程を延長。','dart:laser','ph_darts'],
+ ['phantomDartCharge','basic','phantom','ダーツ：チャージ型','移動中も蓄積し、満タンで全敵貫通弾を発射。クロノ・ニードルで遅延追撃。','dart:charge','ph_darts'],
+ ['phantomDartSupport','basic','phantom','ダーツ：サポート型','ゴーストを護衛する回復バリア。破壊から基本5秒で復旧。専用装甲・回復強化が有効。','dart:support','ph_darts'],
+ ['phantomDartFollow','basic','phantom','ダーツ：フォロー型','経験値だけを自動回収し20%増。回復アイテムは取らない。本人のEXP補正も適用。','dart:follow','ph_darts'],
  ['phantomNova','basic','phantom','SPECTRAL OVERDRIVE','全ファントム強化。シルバーテンペストで全周斬撃を追加。','phantom:nova','ph_novaTempestCore'],
  ['fearAura','element','common','フィアーオーラ','前方に恐怖オーラ。通常敵は離れ、ボスは軽減弱体。','dark:fear','fearAura'],
  ['programControl','element','common','プログラムコントロール','固定の四角いウイルス領域。通常敵を一時的に味方化。','dark:virus','programControl'],
@@ -2822,7 +2830,12 @@ function drawWeaponVisualPreview(ts){
   g.closePath();g.fill();g.stroke();g.restore();
  };
  switch(family){
+ case 'dart':{
+  g.save();g.translate(x,y);g.scale(2.2,2.2);const f={type:variant,x:0,y:0,angle:-Math.PI/2,barrier:55,charge:(time*.4)%1};
+  const demo={phantoms:[],phantomVisuals:[],darts:[f],dartVisuals:variant==='laser'?[{x:0,y:-12,x2:0,y2:-65,life:.1,total:.1}]:[],dartProjectiles:variant==='shot'||variant==='charge'?[{x:0,y:-30-move*45,vx:0,vy:-450,charged:variant==='charge'}]:[]};AnkinPhantom.draw(demo,g);g.restore();break;
+ }
  case 'phantom':{
+  if(variant==='darts'){const types=['shot','laser','charge','support','follow'];for(let i=0;i<5;i++){const px=x+(i-2)*51;g.save();g.translate(px,y);g.scale(1.3,1.3);AnkinPhantom.draw({phantoms:[],phantomVisuals:[],darts:[{type:types[i],x:0,y:0,angle:-Math.PI/2,barrier:55,charge:(time*.4)%1}]},g);g.restore();}break;}
   const count=variant==='parade'?3:1,radius=variant==='reaper'?105:variant==='nova'?100:72;
   const color=variant==='nova'?'#ffffff':['reaper','flash','requiem'].includes(variant)?evolutionVisualProfile('ph_'+variant)?.color||'#dce9ff':null;
   const phantoms=Array.from({length:count},(_,i)=>({primary:i===0,x:x+Math.sin(time*1.1+i)*24,y:y+(i-(count-1)/2)*58,angle:-.35+Math.sin(time*.8)*.25}));
@@ -2990,8 +3003,10 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
 /* Skill preview — hover / focus for mouse, tap-to-pin for touch. The host choice card must never receive preview taps. */
 const skillPeekPanel=document.createElement('aside');
 skillPeekPanel.id='skillPeekPanel';skillPeekPanel.className='skill-peek-panel';skillPeekPanel.setAttribute('role','tooltip');skillPeekPanel.hidden=true;document.body.appendChild(skillPeekPanel);
-let skillPeekPinned=false,skillPeekAnchor=null;
-function closeSkillPeek(force=false){if(!force&&skillPeekPinned)return;skillPeekPinned=false;skillPeekAnchor=null;skillPeekPanel.hidden=true;skillPeekPanel.classList.remove('is-touch')}
+let skillPeekPinned=false,skillPeekAnchor=null,skillPeekCloseTimer=null;
+function cancelSkillPeekClose(){clearTimeout(skillPeekCloseTimer);skillPeekCloseTimer=null;}
+function scheduleSkillPeekClose(){cancelSkillPeekClose();if(!skillPeekPinned)skillPeekCloseTimer=setTimeout(()=>closeSkillPeek(),160);}
+function closeSkillPeek(force=false){if(!force&&skillPeekPinned)return;cancelSkillPeekClose();skillPeekPinned=false;skillPeekAnchor=null;skillPeekPanel.hidden=true;skillPeekPanel.classList.remove('is-touch')}
 /* Skill atlas now resolves all linked synergies, not just the first few shown on selection cards. */
 let peekSkillId=null,peekHistory=[];
 function synergyDetailForSkill(id){
@@ -3043,9 +3058,14 @@ function showEvolutionPeek(id,anchor,pin=false){
  }).join('')+'</div>';
  skillPeekPanel.hidden=false;skillPeekPanel.classList.toggle('is-touch',mobile);positionPeek(anchor,mobile);
 }
-function positionPeek(anchor,mobile){if(mobile){skillPeekPanel.style.left='';skillPeekPanel.style.top='';skillPeekPanel.style.right='';return}const rect=anchor.getBoundingClientRect(),pw=skillPeekPanel.offsetWidth,ph=skillPeekPanel.offsetHeight;skillPeekPanel.style.left=Math.max(10,Math.min(rect.left,innerWidth-pw-10))+'px';let y=rect.bottom+9;if(y+ph>innerHeight-8)y=rect.top-ph-9;skillPeekPanel.style.top=Math.max(8,y)+'px';skillPeekPanel.style.right='auto'}
+function positionPeek(anchor,mobile){if(mobile){skillPeekPanel.style.maxHeight='';skillPeekPanel.style.left='';skillPeekPanel.style.top='';skillPeekPanel.style.right='';return}const rect=anchor.getBoundingClientRect(),pw=skillPeekPanel.offsetWidth;
+ const below=innerHeight-rect.bottom-18,above=rect.top-18,down=below>=Math.min(300,above);
+ const room=Math.max(40,down?below:above);skillPeekPanel.style.maxHeight=Math.min(690,innerHeight*.76,room)+'px';
+ const ph=skillPeekPanel.offsetHeight;skillPeekPanel.style.left=Math.max(10,Math.min(rect.left,innerWidth-pw-10))+'px';
+ skillPeekPanel.style.top=Math.max(8,down?rect.bottom+9:rect.top-ph-9)+'px';skillPeekPanel.style.right='auto';}
+
 function peekTarget(el){return el.closest?.('[data-attr-peek],[data-evo-peek],[data-skill-peek]')}
-function openAnyPeek(trigger,pin=false){if(!trigger)return;const a=trigger.dataset;if(a.attrPeek)showAttrPeek(a.attrPeek,trigger,pin);else if(a.evoPeek)showEvolutionPeek(a.evoPeek,trigger,pin);else if(a.skillPeek)showSkillPeek(a.skillPeek,trigger,pin)}
+function openAnyPeek(trigger,pin=false){if(!trigger)return;cancelSkillPeekClose();const a=trigger.dataset;if(a.attrPeek)showAttrPeek(a.attrPeek,trigger,pin);else if(a.evoPeek)showEvolutionPeek(a.evoPeek,trigger,pin);else if(a.skillPeek)showSkillPeek(a.skillPeek,trigger,pin)}
 skillPeekPanel.addEventListener('click',ev=>{
  if(ev.target.closest('.peek-close')){ev.stopPropagation();closeSkillPeek(true);peekHistory=[];return}
  const back=ev.target.closest('.peek-back');if(back){ev.preventDefault();ev.stopPropagation();const id=peekHistory.pop();if(id)showSkillPeek(id,skillPeekAnchor,true);return}
@@ -3053,10 +3073,12 @@ skillPeekPanel.addEventListener('click',ev=>{
  const tag=ev.target.closest('[data-attr-peek]');if(tag){ev.preventDefault();ev.stopPropagation();if(peekSkillId)peekHistory.push(peekSkillId);showAttrPeek(tag.dataset.attrPeek,skillPeekAnchor||tag,true);skillPeekPanel.scrollTop=0;return}
 });
 skillPeekPanel.addEventListener('keydown',ev=>{if((ev.key==='Enter'||ev.key===' ')&&ev.target.closest('[data-attr-peek]')){ev.preventDefault();const tag=ev.target.closest('[data-attr-peek]');if(peekSkillId)peekHistory.push(peekSkillId);showAttrPeek(tag.dataset.attrPeek,skillPeekAnchor||tag,true)}});
-panel.addEventListener('pointerover',ev=>{const trigger=peekTarget(ev.target);if(!trigger||ev.pointerType!=='mouse'||controlMode==='mobile'||!matchMedia('(hover:hover) and (pointer:fine)').matches||skillPeekPinned||trigger===skillPeekAnchor)return;peekHistory=[];openAnyPeek(trigger,false)});
-panel.addEventListener('pointerout',ev=>{const trigger=peekTarget(ev.target);if(!trigger||ev.pointerType!=='mouse'||skillPeekPinned||trigger.contains(ev.relatedTarget))return;closeSkillPeek(true)});
+skillPeekPanel.addEventListener('pointerenter',cancelSkillPeekClose);
+skillPeekPanel.addEventListener('pointerleave',ev=>{if(!skillPeekAnchor?.contains?.(ev.relatedTarget))scheduleSkillPeekClose();});
+panel.addEventListener('pointerover',ev=>{const trigger=peekTarget(ev.target);if(trigger)cancelSkillPeekClose();if(!trigger||ev.pointerType!=='mouse'||controlMode==='mobile'||!matchMedia('(hover:hover) and (pointer:fine)').matches||skillPeekPinned||trigger===skillPeekAnchor)return;peekHistory=[];openAnyPeek(trigger,false)});
+panel.addEventListener('pointerout',ev=>{const trigger=peekTarget(ev.target);if(!trigger||ev.pointerType!=='mouse'||skillPeekPinned||trigger.contains(ev.relatedTarget)||skillPeekPanel.contains(ev.relatedTarget))return;scheduleSkillPeekClose()});
 panel.addEventListener('focusin',ev=>{const trigger=peekTarget(ev.target);if(trigger)openAnyPeek(trigger,controlMode==='mobile')});
-panel.addEventListener('focusout',ev=>{const trigger=peekTarget(ev.target);if(trigger&&!skillPeekPinned)closeSkillPeek(true)});
+panel.addEventListener('focusout',ev=>{const trigger=peekTarget(ev.target);if(trigger&&!skillPeekPinned&&!skillPeekPanel.contains(ev.relatedTarget))scheduleSkillPeekClose()});
 panel.addEventListener('pointerdown',ev=>{const trigger=peekTarget(ev.target);if(!trigger)return;ev.stopPropagation();if(ev.pointerType==='touch'||ev.pointerType==='pen')openAnyPeek(trigger,true)},true);
 panel.addEventListener('click',ev=>{
  const s=ev.target.closest?.('[data-visual-ship]'),group=ev.target.closest?.('[data-visual-group]'),choice=ev.target.closest?.('[data-visual-id]'),step=ev.target.closest?.('[data-visual-step]');
@@ -4128,20 +4150,30 @@ DOG_FUSION_SOURCE_IDS.dark={A:'dogBat',B:'dogBear'};
 
 for(const [id,key,name,rarity,maxStacks,desc] of [
  ['darkAmplify','darkPower','深淵アンプ','uncommon',4,'闇オーラ・ウイルス領域の威力+15%。'],
+ ['darkVirusPower','darkVirusPower','ウイルス・オーバーロード','rare',4,'プログラムコントロール／くまさんのウイルス領域威力+25%。'],
+ ['darkVirusDuration','darkVirusDuration','パーシステント・コード','uncommon',4,'プログラムコントロール／くまさんのウイルス領域持続+0.75秒。'],
  ['darkQuick','darkHaste','ナイトクロック','rare',3,'恐怖オーラ・ウイルス領域の発動間隔-0.35秒。'],
  ['darkDread','darkDread','残響する恐怖','rare',3,'通常敵への恐怖時間+0.25秒。ボスの行動停止なし。'],
  ['darkCommand','darkCommand','シャドウ・コマンダー','epic',3,'一時的な味方の攻撃威力+15%。上限3体・5秒は維持。']
-])SKILLS.push(skill(id,rarity,'🌑',name,desc,p=>p[key]=(p[key]||0)+1,{element:'dark',maxStacks,tags:['属性：闇','強化'],available:p=>p.darkFear>0||p.darkVirus>0}));
+])SKILLS.push(skill(id,rarity,'🌑',name,desc,p=>p[key]=(p[key]||0)+1,{element:'dark',maxStacks,tags:['属性：闇','強化'],available:p=>id.startsWith('darkVirus')?p.darkVirus>0:p.darkFear>0||p.darkVirus>0}));
 for(const source of ['fearAura','dogBat'])SYNERGIES.push({id:'darkTerror_'+source,need:[source,'darkDread'],name:'ナイトメア・プレッシャー',desc:'恐怖オーラ命中時に1.5秒の弱体を付与。',apply:p=>p.darkTerror=1});
 for(const source of ['programControl','dogBear'])SYNERGIES.push({id:'darkResonance_'+source,need:[source,'darkAmplify'],name:'フィアー・ハッキング',desc:'恐怖中の敵へのウイルス領域ダメージ+25%。',apply:p=>p.darkResonance=1});
 
-for(const id of ['darkAmplify','darkQuick','darkDread','darkCommand'])DOG_SHARED.add(id);
+for(const id of ['darkAmplify','darkQuick','darkDread','darkCommand','darkVirusPower','darkVirusDuration'])DOG_SHARED.add(id);
 const PHANTOM_SHARED=new Set(['hp','speed','refit','battery','dash','dashGraze','dashPulse','dashFlow','nova','novaDamage','novaRadius','shield','regen','life','revive','phoenix','damage','critical','critEpic','superDash','pickup','xp','armor','shieldRegen','novaPulseRelay','field','magnet','novaAmp','critPower','void','seraph','reaper','blizzard','eternalBody','overlord','unboundNova']);
+const PHANTOM_FIRST_LEVEL=new Set(['darts','hunt','sync','assault','shell']);
 const PHANTOM_NORMALS=[
- ['darts','ファントムダーツ出撃','rare',5,'未取得の型をランダムで1機解放（最大5種類）。主機50%性能・低速。15秒出撃→10秒待機。射撃／レーザー／貫通弾／支援／XP回収。'],
+ ['darts','ファントムダーツ出撃','rare',5,'未取得の型をランダムで1機解放（最大5種類）。主機50%性能・低速。15秒出撃→10秒待機。'],
  ['dartDuration','ダーツ・ロングフライト','uncommon',3,'ダーツ出撃時間+3秒。'],
  ['dartCycle','ダーツ・リブート','rare',3,'ダーツの待機時間-1秒（最短7秒）。'],
  ['dartPower','ダーツ・リンクドライブ','uncommon',4,'ミニファントムの攻撃・支援性能+12%。主機強化も反映。'],
+ ['dartLimit','ダーツ・限界突破','epic',5,'ダーツ枠+1、追加1機。6機目以降は全5型からランダム（重複可）。'],
+ ['dartThruster','ダーツ・スラスター','uncommon',3,'ダーツ移動速度+12%。'],
+ ['dartReach','ダーツ・ロングレンジ','rare',3,'ショット型の射程+40、レーザー型の射程+10。'],
+ ['dartBarrier','ダーツ・バリア装甲','uncommon',3,'サポート型のバリア最大耐久+15%。'],
+ ['dartCharge','ダーツ・チャージコイル','rare',3,'チャージ型の蓄積効率+15%。'],
+ ['dartMedic','ダーツ・ヒーリング','rare',3,'サポート型のバリア内回復量+20%。'],
+ ['dartFocus','ダーツ・ターゲットマーク','rare',3,'ダーツのボス・レリック敵への威力+12%。'],
  ['novaCycle','スペクトル・リチャージ','uncommon',3,'NOVA再使用待機-0.8秒（最短10.5秒）。ゲージ100%は必要。'],
  ['polish','ブレード研磨','common',5,'ブレード威力+15%。'],
  ['haste','高速斬撃','common',5,'ブレード攻撃効率+9%。'],
@@ -4167,15 +4199,15 @@ const PHANTOM_NORMALS=[
  ['collector','アストラルコレクター','epic',2,'一定間隔で広い範囲の経験値を引き寄せる。即時取得なし。']
 ];
 for(const [key,name,rarity,maxStacks,desc] of PHANTOM_NORMALS){
- SKILLS.push(skill('ph_'+key,rarity,'◈',name,desc,p=>{AnkinPhantom.addRank(p,key);
-  if(key==='darts')AnkinPhantom.addDart(p);
+ SKILLS.push(skill('ph_'+key,rarity,'◈',name,desc+(PHANTOM_FIRST_LEVEL.has(key)?' 初回のみファントムLv+1。':''),p=>{const first=!AnkinPhantom.rank(p,key);AnkinPhantom.addRank(p,key);if(first&&PHANTOM_FIRST_LEVEL.has(key))AnkinPhantom.level(p,1);
+  if(key==='darts'||key==='dartLimit')AnkinPhantom.addDart(p);
   if(key==='novaCycle')p.novaReuseDelay=Math.max(NOVA_REUSE_MIN,p.novaReuseDelay-.8);
   if(key==='core'||key==='limit')AnkinPhantom.level(p,1);
   if(key==='shell'){p.maxHp+=15;p.hp=Math.min(p.maxHp,p.hp+15);}
   if(key==='recharge')p.shieldRecharge+=2;
   if(key==='shield'){p.shieldMax+=18;p.shield=Math.min(p.shieldMax,p.shield+18);}
   if(key==='magnet')p.magnet+=40;
- },{shipOnly:'phantom',maxStacks,tags:['ファントム',...(['shell','recharge','dash','shield','armor'].includes(key)?['防御']:['magnet','compression','line','collector'].includes(key)?['回収']:['ブレード'])],available:p=>key==='novaCycle'?p.novaReuseDelay>NOVA_REUSE_MIN+.001:key.startsWith('dart')&&key!=='darts'?p.dartTypes.length>0:!['core','limit'].includes(key)||p.phantomLevel<10}));
+ },{shipOnly:'phantom',maxStacks,tags:['ファントム',...(key.startsWith('dart')?['ファントムダーツ']:[]),...(key.startsWith('dart')?['強化']:key==='novaCycle'?['ノヴァ']:['shell','recharge','dash','shield','armor'].includes(key)?['防御']:['magnet','compression','line','collector'].includes(key)?['回収']:['ブレード'])],available:p=>key==='dartLimit'?p.dartTypes.length>=5&&p.dartTypes.length<12:key==='novaCycle'?p.novaReuseDelay>NOVA_REUSE_MIN+.001:key.startsWith('dart')&&key!=='darts'?p.dartTypes.length>0:!['core','limit'].includes(key)||p.phantomLevel<10}));
 }
 const PHANTOM_LEGENDS=[['parade','ナイトパレード','ファントムを2機追加（合計3機）、Lv+2。追加機は無属性。'],['emperor','シルバーエンペラー','ブレード威力+30%、射程+15。8命中毎に追加斬撃。'],['predator','ファントム・プレデター','探知範囲+180、移動速度+35、撃破後の再索敵を高速化。'],['orchestra','レクイエム・オーケストラ','残響斬撃の威力を強化。未取得なら残響斬撃を解放。'],['sanctuary','ゴースト・サンクチュアリ','HP+40・シールド+35。瀕死時シールド補充（18秒再使用）。'],['relay','ソウルリレー','経験値回収後2.4秒、全ファントムのブレード威力+18%。']];
 const PHANTOM_POWERS=[['crescent','クレセントエンジン','ブレード威力+12%、射程+7。'],['driver','フェイズドライバー','ブレード攻撃効率+7%。'],['matrix','エコーマトリクス','残響威力+10%。未取得なら残響斬撃を解放。'],['network','ナイトネットワーク','全機のブレード威力+10%。'],['barrier','フェイズバリア','最大シールド+20、シールドを補充。'],['coil','ソウルコイル','経験値回収半径+30、ソウルリレーの威力補正+4%。']];
@@ -4186,7 +4218,7 @@ for(const [rows,rarity,pool] of [[PHANTOM_LEGENDS,'legendary',LEGENDS],[PHANTOM_
  if(key==='coil')p.magnet+=30;
  },{shipOnly:'phantom',stackable:false,tags:['ファントム','進化合成素材']}));}
 const PHANTOM_RECIPES=[
- ['reaper','SILVER REAPER','crescent','emperor',{ph_polish:3,ph_edge:3},'大型三日月斬撃。射程+45、巻き込み+3。'],
+ ['reaper','SILVER REAPER','crescent','emperor',{ph_polish:3,ph_edge:3},'大型の白い三角刃で薙ぎ払う。射程+45、巻き込み+3。'],
  ['flash','PHANTOM FLASH','driver','predator',{ph_assault:2},'2.2秒毎に短距離ワープ接近。障壁を無視しない。'],
  ['requiem','REQUIEM EDGE','matrix','orchestra',{ph_echo:2},'時間差の残響斬撃を最大2段追加。追加攻撃から再帰発動しない。'],
  ['eternal','ETERNAL PARADE','network','parade',{},'3機が各自の位置で4斬撃毎に連携斬撃。強制帰還なし。'],
@@ -4198,6 +4230,32 @@ for(const [key,name,desc] of [['contract','幽魂の契約','HPが低いほど�
 for(const [key,name,legend,material,desc] of [['novaTempest','シルバーテンペスト','emperor','ph_wide','NOVA中、全機がNOVA威力を参照する全周斬撃を追加。'],['novaAccel','ファントムアクセラレーション','predator','ph_haste','NOVA中の移動・攻撃速度をさらに強化。'],['novaSanctuary','スペクトルサンクチュアリ','sanctuary','ph_shield','NOVAの弾消去範囲1.5倍、本体シールドを補充。']]){
  const id='ph_'+key+'Core';POWERS.push(skill(id,'power','✦',name+'・コア','NOVA威力+30、範囲+12。'+name+'の進化素材。',p=>{p.novaDamage+=30;p.novaRadius+=12;},{shipOnly:'phantom',stackable:false,tags:['ファントム','ノヴァ','進化合成素材']}));
  FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:id,legend:'ph_'+legend,required:[material],desc,icon:'✦',apply:p=>AnkinPhantom.addRank(p,key)});
+}
+
+const PHANTOM_ELITE_CARDS=[
+ ['armada','legendary','ファントム・アルマダ','ダーツ枠+2、追加2機（合計上限12）。6機目以降は全型ランダム。',true],
+ ['command','legendary','ダーツ・コマンドリンク','ダーツ威力+25%、攻撃効率+12%。',true],
+ ['duelist','legendary','白銀のデュエリスト','ボス・レリック敵へのブレード威力+25%。',false],
+ ['guardian','legendary','ゴースト・ガーディアン','NOVA発動時、ゴーストの最大HP10%を回復。',false],
+ ['dartReactor','power','ANKIN ダーツリアクター','ダーツの射撃・レーザー・チャージ効率+15%。',true],
+ ['bastion','power','ANKIN バリア・バスティオン','支援バリア耐久+50%、破壊後の復旧を5秒から4秒へ。',true],
+ ['bladeLance','power','ANKIN ネオンランス','三角ブレードの射程+18、巻き込み上限+2。',false],
+ ['relayDrive','power','ANKIN ソウルドライブ','経験値回収後2.4秒ブレード強化。NOVAゲージ獲得倍率+0.06。',false],
+ ['sovereign','unique','ダーツ・ソヴリン','ダーツ枠+2、追加2機（上限12）。全ダーツの出撃時間+5秒。',true],
+ ['prism','unique','プリズム・ダーツ','ショット型が75%威力の2方向射撃へ変化。',true],
+ ['zenith','unique','白刃ゼニス','通常斬撃4回ごとに90%威力の白い追撃。追撃から再発動しない。',false],
+ ['phoenixDarts','unique','フェニックス・レスキュー','支援バリア耐久+50%・回復量+50%。復旧時に周辺敵弾を消去。',true],
+ ['dartRicochet','relic','ミラー・ダーツ','ショット型の弾が画面端で1回反射する。',true],
+ ['needle','relic','クロノ・ニードル','チャージ型が0.18秒遅れて60%威力の貫通追撃を発射。',true],
+ ['harvest','relic','アストラル・ハーベスト','フォロー型の経験値倍率を1.2倍から1.35倍へ。本人のEXP補正も有効。',true],
+ ['bladeDrain','relic','白刃の蓄電器','ブレード命中でゴーストのシールド+1（0.25秒に1回）。',false]
+];
+for(const [key,rarity,name,desc,darts] of PHANTOM_ELITE_CARDS){
+ const pool={legendary:LEGENDS,power:POWERS,unique:UNIQUE_SKILLS,relic:RELICS}[rarity];
+ pool.push(skill('ph_'+key,rarity,'◈',name,desc,p=>{AnkinPhantom.addRank(p,key);
+  if(key==='armada'||key==='sovereign')for(let i=0;i<2;i++)AnkinPhantom.addDart(p);
+  if(key==='relayDrive')p.novaGain=Math.min(NOVA_GAIN_LIMIT,p.novaGain+.06);
+ },{shipOnly:'phantom',stackable:false,tags:['ファントム',...(darts?['ファントムダーツ']:key==='guardian'?['ノヴァ','回復']:key==='relayDrive'?['回収','ノヴァ']:['ブレード']),...(rarity==='relic'?['レリック']:[])],available:p=>key==='armada'?p.dartTypes.length>0&&p.dartTypes.length<12:!darts||p.dartTypes.length>0}));
 }
 
 for(const id of ['ph_sanctuary','ph_barrier']){const c=skillById(id);c.tags=[...new Set([...c.tags,'防御','シールド'])];}for(const id of ['ph_coil','ph_relay']){const c=skillById(id);c.tags=[...new Set([...c.tags,'回収'])];}
