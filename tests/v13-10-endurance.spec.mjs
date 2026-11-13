@@ -19,7 +19,7 @@ for(const ship of ['shot','laser','charge','drill','dog']){
   expect(r.late).toContain('endWindCurrent');
   expect(r.late).not.toContain('endIceCrystal');expect(r.late).not.toContain('endRockCore');
   expect(r.sealed).toEqual([]);expect(r.notDog).toEqual([]);
-  for(const draw of r.draws){expect(draw).toHaveLength(3);expect(draw.every(id=>!id.startsWith('supply_'))).toBe(true);}
+  for(const draw of r.draws){expect(draw).toHaveLength(4);expect(draw.every(id=>!id.startsWith('supply_'))).toBe(true);}
   expect(errors).toEqual([]);
  });
 }

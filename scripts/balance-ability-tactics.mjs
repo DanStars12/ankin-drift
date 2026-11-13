@@ -2,7 +2,7 @@
 export function decideAbilityUse(s) {
  const readyDash=s.dashLeft<=0 && s.dashTime<=0 && (s.ship==='drill' || s.iframes<.12);
  // Preemptive evasions must start before projectiles actually overlap the hitbox.
- const danger=s.imminent>0 || (s.threats>0 && (s.ship==='drill' || s.ship==='laser' || s.ship==='dog' || s.hpRatio<.38));
+ const danger=(s.ship==='phantom'&&(s.contactThreats||0)>0) || s.imminent>0 || (s.threats>0 && (s.ship==='drill' || s.ship==='laser' || s.ship==='dog' || s.hpRatio<.38));
  let dashReason=null,novaReason=null;
  if(readyDash) {
   if(danger)dashReason='emergency-evade';
@@ -31,6 +31,10 @@ export function decideAbilityUse(s) {
     if(s.bossDist<=330)novaReason='boss-overdrive';
     else if(s.enemiesNear>=2)novaReason='mob-overdrive';
     else if(danger&&s.hpRatio<.72)novaReason='defensive-overdrive';
+    break;
+   case 'phantom':
+    if(s.bossDist<=700||s.enemiesNear>=2)novaReason='spectral-overdrive';
+    else if(s.imminent>=2)novaReason='spectral-clear';
     break;
    case 'dog':
     if(s.bossDist<=285)novaReason='boss-bow-shock';

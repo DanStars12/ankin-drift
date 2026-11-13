@@ -152,7 +152,7 @@ test('late DOG offers remain complete, exclude invalid mutation prerequisites an
   const built=p.repeatedOffers();
   return{start,built};
  });
- expect(result.start.minSize).toBe(3);expect(result.start.dogMax).toBeLessThanOrEqual(2);expect(result.start.bad).toBe(0);
- expect(result.built.minSize).toBe(3);expect(result.built.dogMax).toBeLessThanOrEqual(2);expect(result.built.bad).toBe(0);
+ expect(result.start.minSize).toBe(4);expect(result.start.dogMax).toBeLessThanOrEqual(2);expect(result.start.bad).toBe(0);
+ expect(result.built.minSize).toBe(4);expect(result.built.dogMax).toBeLessThanOrEqual(2);expect(result.built.bad).toBe(0);
  expect(errors).toEqual([]);
 });

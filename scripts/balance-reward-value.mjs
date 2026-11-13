@@ -7,6 +7,7 @@ export function normalRewardValue(before,after){
    case 'laser':return dmg*n(p,'laserScale',1)*Math.sqrt(Math.max(1,n(p,'laserCount',1)))*(1+n(p,'laserBonus')/100);
    case 'charge':return dmg*n(p,'chargeScale',1)*Math.sqrt(Math.max(.1,n(p,'chargeRate',1)))*(1+Math.min(12,n(p,'chargePenetration'))*.025);
    case 'drill':return (n(p,'drillDamage')*Math.min(1,n(p,'drillGain'))/Math.max(.5,n(p,'dashCd',1))+n(p,'drillContact')*2)*(1+n(p,'drillReach')/200);
+   case 'phantom':{const r=p.phantomRanks||{};return dmg*(1+(n(p,'phantomLevel',1)-1)*.09+(r.polish||0)*.15)*(1+(r.haste||0)*.09)*(r.parade?2.2:1)/.65;}
    case 'dog':return dmg*n(p,'dogBonePower',1)*Math.sqrt(Math.max(1,n(p,'dogBones',1)))*(1+n(p,'dogBoneReturn',1)) / rate;
    default:return dmg*Math.sqrt(Math.max(1,n(p,'multishot',1)))*crit/rate;
   }
@@ -26,7 +27,7 @@ export function normalRewardValue(before,after){
  score+=5*(n(before,'novaReuseDelay',13.6)/Math.max(10.5,n(after,'novaReuseDelay',13.6))-1);
  score+=10*relative('spd')+5*relative('magnet')+8*relative('xpBonus')+4*relative('novaDamage')+3*relative('novaRadius')+5*relative('novaGain');
  score+=5*(n(before,'dashCd',1)/Math.max(.1,n(after,'dashCd',1))-1);
- for(const k of ['chain','rocketCd','orbit','iceBallCount','boltCount','spikeCount','meteorCount','droneCount','dogChicks','windCount'])score+=Math.max(0,delta(k))*1.5;
+ for(const k of ['darkFear','darkVirus','chain','rocketCd','orbit','iceBallCount','boltCount','spikeCount','meteorCount','droneCount','dogChicks','windCount'])score+=Math.max(0,delta(k))*1.5;
  for(const k of ['chainDamage','iceBallDamage','boltDamage','spikeDamage','meteorDamage','dogEggDamage'])score+=Math.max(0,delta(k))/Math.max(30,Math.abs(n(before,k)))*3;
  score+=Math.max(0,relative('dogAnimalBoost'))*3;
  for(const k of ['empDps','magmaDps','windDps','rockDamage'])if(n(after,k)>0)score+=Math.max(0,delta(k))*.025;
@@ -36,6 +37,7 @@ export function normalRewardValue(before,after){
  if(before.shipType==='drill')score+=Math.max(0,delta('novaDrillDash'))*.3+Math.max(0,delta('novaDrillClear'))*.9;
  if(n(before,'meteorCount')>0)score+=Math.max(0,delta('meteorArenaBounce'))*.9;
  // Expected conditional uptime, kept conservative rather than treating a tactical tag as raw DPS.
+ if(before.shipType==='phantom')for(const key of ['edge','wide','double','critical','echo','assault','hunt','algorithm','sync','dash','compression','line','collector'])score+=Math.max(0,(after.phantomRanks?.[key]||0)-(before.phantomRanks?.[key]||0))*.8;
  const a=after.tacticFlags||{},b=before.tacticFlags||{};
  const conditional={shotFar:.525,shotNear:.375,shotSlip:.15,shotPierce:.45,laserLock:.875,laserGlide:.875,laserSwitch:.7,laserCycle:.2,
   chargeBank:.8,chargeMid:.5,chargeStride:.32,chargeCover:.18,drillExit:.4,drillMark:.3,drillReserve:1,drillRhythm:.2,

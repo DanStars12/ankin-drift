@@ -1,8 +1,8 @@
 /* ANKIN DRIFT v14.0 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v14-0-nova-evolution-v1-combat-cache-v4-music-bags';
+const CACHE_NAME = 'ankin-drift-mobile-v14-0-nova-evolution-v1-combat-cache-v6-phantom-routes-codex';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
-  './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js', './skill-arsenal.js','./skill-tactics.js',
+  './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js', './skill-arsenal.js','./skill-tactics.js', './phantom-frame.js', './dark-element.js',
   './audio/neon-horizon.mp3', './audio/16-battle-beat.mp3', './audio/trinity.mp3',
   './audio/overdrive-nemesis.mp3', './audio/the-last-horizon.mp3',
   './audio/phantom-circuit.mp3', './audio/fractal-storm.mp3',

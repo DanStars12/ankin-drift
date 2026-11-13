@@ -4,7 +4,7 @@ import {BALANCE_HARNESS_ANCHOR,BALANCE_HARNESS} from '../scripts/balance-harness
 import {BALANCE_AI_HARNESS} from '../scripts/balance-ai-harness.mjs';
 import {summarizeRuns,runsToCsv,summaryToCsv} from '../scripts/balance-report.mjs';
 
-const ships=['shot','laser','charge','drill','dog'];
+const ships=['shot','laser','charge','drill','dog','phantom'];
 const seconds=Number(process.env.ANKIN_AI_SECONDS||14),seeds=Number(process.env.ANKIN_AI_SEEDS||1);
 const policy=process.env.ANKIN_AI_POLICY||'tactical';
 const fusionPolicy=process.env.ANKIN_FUSION_POLICY||'always';
@@ -42,7 +42,7 @@ for(const scenario of ['live-pack','live-boss']){
   const storageBefore=await page.evaluate(()=>JSON.stringify({...localStorage})),rows=[];
   const profiles=await page.evaluate(()=>window.__ankinBalanceAI.inspect());
   expect(profiles.ships).toEqual(ships);
-  expect(new Set(Object.values(profiles.profiles).map(p=>p.range)).size).toBe(5);
+  expect(new Set(Object.values(profiles.profiles).map(p=>p.range)).size).toBe(6);
   for(let seed=1;seed<=seeds;seed++)for(const ship of ships){
    const args={ship,seed,phase:10,scenario,build:'representative',seconds,policy};
    const result=await page.evaluate(arg=>window.__ankinBalanceAI.runEncounter(arg),args);
@@ -76,7 +76,7 @@ for(const scenario of ['live-pack','live-boss']){
   expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(storageBefore);
   expect(errors).toEqual([]);
   const summary=await exportAI(testInfo.project.name,scenario,rows);
-  expect(summary).toHaveLength(5);
+  expect(summary).toHaveLength(6);
   for(const row of summary){
    expect(row.survivalRate).toBeGreaterThanOrEqual(0);
    expect(row.survivalRate).toBeLessThanOrEqual(100);
@@ -131,12 +131,12 @@ test('v13.33 tactical ability probes keep distant NOVAs charged and reject unsaf
    targetDist:400,bossDist:900,novaRadius:215,laserReach:730,drillOverdrive:0,
    drillPlasmaRatio:.5,enemiesInNova:0,enemiesNear:0,enemiesForward:0,
    threats:0,imminent:0,safeApproach:true};
-  return ['shot','laser','charge','drill','dog'].map(ship=>({ship,
+  return ['shot','laser','charge','drill','dog','phantom'].map(ship=>({ship,
    far:window.__ankinBalanceAI.decide({...common,ship}),
    near:window.__ankinBalanceAI.decide({...common,ship,bossDist:160}),
    emergency:window.__ankinBalanceAI.decide({...common,ship,imminent:2})}));
  });
- expect(cases).toHaveLength(5);
+ expect(cases).toHaveLength(6);
  for(const c of cases){expect(c.far.novaReason).toBeNull();expect(c.near.novaReason).toBeTruthy();
   expect(c.emergency.dashReason).toBe('emergency-evade');}
  expect(errors).toEqual([]);
@@ -145,7 +145,7 @@ test('v13.33 actual ready-NOVA uses real combat, checks tactical versus legacy c
  const errors=await setup(page),prior=await page.evaluate(()=>JSON.stringify({...localStorage}));
  const cases=await page.evaluate(()=>{
   const out=[];
-  for(const ship of ['shot','laser','charge','drill','dog']){
+  for(const ship of ['shot','laser','charge','drill','dog','phantom']){
    const args={ship,seed:17,phase:10,scenario:'live-boss',build:'representative',
     seconds:.35,initialNovaReady:true};
    out.push({ship,

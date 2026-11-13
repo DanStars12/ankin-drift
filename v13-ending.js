@@ -5,6 +5,7 @@
 (function(root){
 'use strict';
 const SHIPS={
+ phantom:{name:'PHANTOM FRAME',jp:'ファントム型',epithet:'銀影の指揮者',weapon:'自律する白銀の刃'},
  shot:{name:'PULSE STRIKER',jp:'ショット型',epithet:'弾幕の航行者',weapon:'無数の弾丸'},
  laser:{name:'PRISM LANCER',jp:'レーザー型',epithet:'光条の狙撃手',weapon:'光の軌跡'},
  charge:{name:'COMET RAIDER',jp:'チャージ型',epithet:'彗星の砲撃手',weapon:'溜め込んだ一撃'},
@@ -12,6 +13,7 @@ const SHIPS={
  dog:{name:'BONE BUDDY',jp:'ドッグ型',epithet:'アニマルの指揮官',weapon:'仲間と骨ブーメラン'}
 };
 const ELEMENTS={
+ dark:{name:'闇',title:'幽闇',scene:'銀影と呪いの残響'},
  fire:{name:'炎',title:'紅蓮',scene:'焔の残光'},
  ice:{name:'氷',title:'氷晶',scene:'氷片の煌めき'},
  thunder:{name:'雷',title:'雷鳴',scene:'閃雷の残響'},
@@ -19,6 +21,8 @@ const ELEMENTS={
  rock:{name:'岩',title:'巌壁',scene:'砕けた岩の粒子'}
 };
 const SOURCE={
+ darkFear:'恐怖オーラ',darkVirus:'ウイルス領域',darkAlly:'ハッキング味方',
+ phantomBlade:'ファントムブレード',phantomExtra:'追加ファントムの刃',
  dogEgg:'ヒヨコのたまご弾',bone:'骨ブーメラン',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',drill:'近接ドリル',nova:'NOVA',
  dot:'燃焼DoT',magma:'マグマ',element:'属性攻撃',drone:'僚機',
  missile:'ミサイル',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'貫通隕石',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発',other:'複合攻撃'
@@ -52,7 +56,7 @@ const keys=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
 function normalize(source){
  const o=keys(source),ship=Object.hasOwn(SHIPS,o.ship)?o.ship:'shot',damageStats={};
  for(const [k,v] of Object.entries(keys(o.damageStats)))if(Object.hasOwn(SOURCE,k))damageStats[k]=sane(v);
- const fusions=arr(o.fusionIds).filter(x=>typeof x==='string'&&/^(fire|ice|thunder|wind|rock)_(fire|ice|thunder|wind|rock)$/.test(x)).slice(0,2);
+ const fusions=arr(o.fusionIds).filter(x=>typeof x==='string'&&/^(fire|ice|thunder|wind|rock|dark)_(fire|ice|thunder|wind|rock|dark)$/.test(x)).slice(0,3);
  const elements={};for(const id of Object.keys(ELEMENTS))elements[id]=sane(keys(o.elementAffinities)[id],1e4);
  return {ship,mode:o.mode==='challenge'?'challenge':'normal',endless:!!o.endless,
   clearCount:Math.max(1,Math.floor(sane(o.clearCount,1e5))),

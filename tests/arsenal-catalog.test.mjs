@@ -2,11 +2,11 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {catalogHarness} from '../scripts/catalog-harness.mjs';
 const kinds=['common','uncommon','rare','epic'];
-test('shipped catalog has 465 unique, named, tagged definitions and 97 distinct DOG cards',()=>{
+test('shipped catalog has 510 unique, named, tagged definitions and 99 distinct DOG cards',()=>{
  const {ctx}=catalogHarness(),cards=ctx.catalog;
- assert.equal(cards.length,465);assert.equal(new Set(cards.map(c=>c.id)).size,465);
+ assert.equal(cards.length,510);assert.equal(new Set(cards.map(c=>c.id)).size,510);
  for(const c of cards){assert.ok(c.tags.length,c.id);assert.equal(new Set(c.tags).size,c.tags.length,c.id);assert.ok(c.desc.trim().length);assert.ok(c.desc.length<=70,c.id);}
- const dog=cards.filter(c=>c.shipOnly==='dog');assert.equal(dog.length,97);assert.equal(new Set(dog.map(c=>c.name)).size,97);
+ const dog=cards.filter(c=>c.shipOnly==='dog');assert.equal(dog.length,99);assert.equal(new Set(dog.map(c=>c.name)).size,99);
 });
 test('every new one-off is excluded after acquisition in its actual reward bucket',()=>{
  const h=catalogHarness();

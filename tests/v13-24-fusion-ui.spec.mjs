@@ -52,7 +52,7 @@ test('normal level-up offers a stored fusion ticket without auto-triggering',asy
   expect(viewport.panel.top).toBeGreaterThanOrEqual(-1);
   expect(viewport.panel.bottom).toBeLessThanOrEqual(viewport.height+1);
   expect(viewport.actions.bottom).toBeLessThanOrEqual(viewport.height+1);
-  expect(viewport.cards).toHaveLength(3);
+  expect(viewport.cards).toHaveLength(4);
   expect(viewport.cards.every(c=>c.height>20&&c.top>=viewport.panel.top-1&&c.bottom<=viewport.panel.bottom+1)).toBe(true);
   expect(errors).toEqual([]);
 });

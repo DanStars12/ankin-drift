@@ -7,7 +7,7 @@
   },
   "scripts": {
     "check:syntax": "node scripts/check-syntax.mjs",
-    "test:arsenal": "node --test tests/arsenal-data.test.mjs tests/arsenal-catalog.test.mjs tests/tactical-skills.test.mjs tests/charge-state.test.mjs tests/nova-meteor.test.mjs tests/soundtrack-shuffle.test.mjs",
+    "test:arsenal": "node --test tests/arsenal-data.test.mjs tests/arsenal-catalog.test.mjs tests/tactical-skills.test.mjs tests/charge-state.test.mjs tests/nova-meteor.test.mjs tests/soundtrack-shuffle.test.mjs tests/phantom-frame.test.mjs tests/phantom-pilot.test.mjs",
     "test:clock": "node --test tests/simulation-clock.test.mjs tests/combat-kernels.test.mjs tests/render-batches.test.mjs",
     "test:trace-summary": "node --test tests/render-trace-summary.test.mjs tests/performance-fixture.test.mjs",
     "test:archive": "node --test tests/archive.test.mjs",
@@ -18,7 +18,10 @@
     "balance:ai": "playwright test tests/v13-30-balance-ai.spec.mjs",
     "check:pwa": "node scripts/check-pwa.mjs",
     "test:smoke": "playwright test",
-    "test": "npm run check:syntax && npm run test:arsenal && npm run test:clock && npm run test:trace-summary && npm run test:archive && npm run test:ending && npm run test:balance-report && npm run test:ability-tactics && npm run check:pwa && npm run test:smoke"
+    "test": "npm run check:syntax && npm run test:arsenal && npm run test:clock && npm run test:trace-summary && npm run test:archive && npm run test:ending && npm run test:balance-report && npm run test:ability-tactics && npm run check:pwa && npm run test:smoke",
+    "test:phantom": "node --test tests/phantom-frame.test.mjs tests/phantom-pilot.test.mjs",
+    "validate:phantom": "node scripts/validate-phantom.mjs",
+    "compare:phantom-pilots": "node scripts/compare-phantom-pilots.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

@@ -41,9 +41,9 @@ test('missile burns without generating magma; Meteo Shield buffs walls without d
  expect(rock.wall).toBeGreaterThan(1);expect(rock.meteor).toBe(1);expect(rock.meteorWall).toBe(1);
  expect(errors).toEqual([]);
 });
-test('five elements, twenty directed fusions and renamed cyclone/diamond',async({page})=>{
+test('six elements, thirty directed fusions and renamed cyclone/diamond',async({page})=>{
  const errors=await setup(page);const v=await page.evaluate(()=>window.__v134.meta());
- expect(v.recipes).toBe(20);expect(v.iceBall&&v.emp&&v.meteor).toBe(true);
+ expect(v.recipes).toBe(30);expect(v.iceBall&&v.emp&&v.meteor).toBe(true);
  expect(v.diamond).toBe('ダイヤモンド・ロック');expect(v.wind).toBe('サイクロン');
  expect(errors).toEqual([]);
 });
