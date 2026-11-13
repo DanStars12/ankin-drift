@@ -177,7 +177,7 @@ function tickDarts(p,dt,w){
  if(p.dartActive>0){p.dartActive=Math.max(0,p.dartActive-dt);if(!p.dartActive){p.darts=[];p.dartCooldown=Math.max(5,10-rank(p,'dartCycle'));}}
  else {p.dartCooldown=Math.max(0,p.dartCooldown-dt);if(!p.dartCooldown){p.dartActive=15+rank(p,'dartDuration')*3+rank(p,'sovereign')*5;p.darts=p.dartTypes.map((t,i)=>makeDart(p,t,i));}}
  const s=stats(p),power=s.damage*.5*(1+rank(p,'dartPower')*.12+rank(p,'command')*.25),speed=s.speed*.5*(1+rank(p,'dartThruster')*.12),tempo=1+rank(p,'dartReactor')*.15+rank(p,'command')*.12;
- for(const f of p.darts){f.cooldown-=dt;let target=null,best=Infinity;
+ for(const f of p.darts){f.x=clamp(f.x,10,w.width-10);f.y=clamp(f.y,10,w.height-10);f.cooldown-=dt;let target=null,best=Infinity;
   if(f.type==='follow'){
    for(const e of w.pickups||[]){if(e.type!=='energy'||e.collected)continue;const d=Math.hypot(e.x-f.x,e.y-f.y);if(d<best){best=d;target=e;}}
   }else if(f.type!=='support')for(const e of w.candidates(f.x,f.y,s.sense)){

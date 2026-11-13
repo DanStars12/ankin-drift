@@ -53,8 +53,10 @@ Both require a virus weapon and also support the DOG bear. They do not extend co
 
 ## Verification
 
-Local arsenal/combat: 101 passed. Clocks, archive, ending, trace, balance reports and ability-tactic suites passed; total local unit tests: 169. Syntax and PWA checks passed.
+Local arsenal/combat: 102 passed. Clocks, archive, ending, trace, balance reports and ability-tactic suites passed; total local unit tests: 170. Syntax and PWA checks passed.
 
 Regression cases cover first-acquisition levels and rebuilds, 12-dart bounds and repeated random types, barrier recovery, new tiers/one-off stock, split/reflected shots, delayed piercing echoes, XP relic accounting, real virus damage/lifetime and bounded shield recovery.
 
 Browser regression coverage includes all six below-description gradients, unchanged rarity presentation, pointer stability, tooltip transfer/exit, five individual codex previews, and 320/390/1280 viewport bounds. Browser/long synthetic results are recorded separately in the PR once complete. Local Chromium remains unavailable because the environment disallows its singleton socket.
+
+Synthetic engine stress completed 1800 combat seconds with 200 enemies, three bosses, all nine evolutions, three primary/parade frames and 12 darts. Maximum queue, visuals and projectile counts are recorded in qa/phantom-neon-engine-stress.json. This does not represent device FPS or a full survival/balance result.
