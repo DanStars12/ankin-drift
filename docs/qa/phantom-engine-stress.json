@@ -16,12 +16,12 @@
     "ph_novaSanctuary",
     "ph_field"
   ],
-  "hits": 1062645,
-  "damage": 103420915.67511602,
+  "hits": 1055781,
+  "damage": 103179302.87512319,
   "primaryElementCallbacks": 58806,
   "maxQueue": 14,
   "maxVisuals": 21,
-  "hostLogicMs": 5566.474956,
+  "hostLogicMs": 14612.340989,
   "rendered": false,
   "fps": null
 }

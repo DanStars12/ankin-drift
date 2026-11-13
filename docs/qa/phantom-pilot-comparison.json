@@ -1,0 +1,1360 @@
+{
+  "sourceHash": "3b43da5aababa9fed633b180e4866bd139abe59c8f78a44b03c8dc611e63581c",
+  "rendered": false,
+  "fps": null,
+  "scenario": "phase-10 live-pack, 60 game seconds, representative build",
+  "rows": [
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 1,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 21.1,
+      "damage": 5235.44,
+      "dps": 248.125,
+      "bossDamage": 0,
+      "kills": 7,
+      "hits": 4,
+      "damageTaken": 177.057,
+      "dashCount": 4,
+      "novaCount": 0,
+      "level": 1,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 5235.439999999995
+      },
+      "killsByType": {
+        "shooter": 2,
+        "stinger": 3,
+        "guard": 1,
+        "drone": 1
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 0,
+      "pickedOrbs": 0,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 5235.439999999995,
+          "bossDamage": 0,
+          "kills": 7,
+          "hits": 4,
+          "damageTaken": 177.05655555555478,
+          "sources": {
+            "phantomBlade": 5235.439999999995
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 21.1,
+      "aiMoves": 1204,
+      "aiDodges": 4,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 12,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 4
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "potential",
+      "ghostPlans": 0,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 212,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 5235.439999999995,
+          "extraDamage": 0,
+          "bladeHits": 47,
+          "attacks": 39,
+          "aiMs": 26.711981999999637
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 2,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 36.55,
+      "damage": 9760.704,
+      "dps": 267.051,
+      "bossDamage": 0,
+      "kills": 9,
+      "hits": 4,
+      "damageTaken": 198.534,
+      "dashCount": 7,
+      "novaCount": 0,
+      "level": 3,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 9760.703999999987
+      },
+      "killsByType": {
+        "shooter": 5,
+        "stinger": 1,
+        "guard": 2,
+        "drone": 1
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 140,
+      "pickedOrbs": 4,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 9760.703999999987,
+          "bossDamage": 0,
+          "kills": 9,
+          "hits": 4,
+          "damageTaken": 198.53361111110814,
+          "sources": {
+            "phantomBlade": 9760.703999999987
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 36.55,
+      "aiMoves": 2134,
+      "aiDodges": 7,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 17,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 7
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "potential",
+      "ghostPlans": 0,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 174,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 9760.703999999987,
+          "extraDamage": 0,
+          "bladeHits": 82,
+          "attacks": 68,
+          "aiMs": 18.92236800000029
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 3,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 26.4167,
+      "damage": 6993,
+      "dps": 264.719,
+      "bossDamage": 0,
+      "kills": 8,
+      "hits": 4,
+      "damageTaken": 202.921,
+      "dashCount": 4,
+      "novaCount": 0,
+      "level": 1,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 6992.9999999999945
+      },
+      "killsByType": {
+        "shooter": 3,
+        "stinger": 1,
+        "guard": 2,
+        "drone": 2
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 34,
+      "pickedOrbs": 1,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 6992.9999999999945,
+          "bossDamage": 0,
+          "kills": 8,
+          "hits": 4,
+          "damageTaken": 202.92063888888532,
+          "sources": {
+            "phantomBlade": 6992.9999999999945
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 26.417,
+      "aiMoves": 1554,
+      "aiDodges": 4,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 18,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 4
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "potential",
+      "ghostPlans": 0,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 236,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 6992.9999999999945,
+          "extraDamage": 0,
+          "bladeHits": 63,
+          "attacks": 49,
+          "aiMs": 17.041113999999425
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 4,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 26.4167,
+      "damage": 7197.48,
+      "dps": 272.46,
+      "bossDamage": 0,
+      "kills": 8,
+      "hits": 4,
+      "damageTaken": 202.918,
+      "dashCount": 4,
+      "novaCount": 0,
+      "level": 1,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 7197.479999999993
+      },
+      "killsByType": {
+        "shooter": 3,
+        "stinger": 1,
+        "guard": 2,
+        "drone": 2
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 34,
+      "pickedOrbs": 1,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 7197.479999999993,
+          "bossDamage": 0,
+          "kills": 8,
+          "hits": 4,
+          "damageTaken": 202.91822222221867,
+          "sources": {
+            "phantomBlade": 7197.479999999993
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 26.417,
+      "aiMoves": 1552,
+      "aiDodges": 4,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 18,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 4
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "potential",
+      "ghostPlans": 0,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 236,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 7197.479999999993,
+          "extraDamage": 0,
+          "bladeHits": 66,
+          "attacks": 49,
+          "aiMs": 20.071643999998173
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 5,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 16.75,
+      "damage": 3476.472,
+      "dps": 207.551,
+      "bossDamage": 0,
+      "kills": 3,
+      "hits": 4,
+      "damageTaken": 204.566,
+      "dashCount": 3,
+      "novaCount": 0,
+      "level": 1,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 3476.4719999999975
+      },
+      "killsByType": {
+        "shooter": 1,
+        "stinger": 1,
+        "guard": 1
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 0,
+      "pickedOrbs": 0,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 3476.4719999999975,
+          "bossDamage": 0,
+          "kills": 3,
+          "hits": 4,
+          "damageTaken": 204.56630555555503,
+          "sources": {
+            "phantomBlade": 3476.4719999999975
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 16.75,
+      "aiMoves": 970,
+      "aiDodges": 3,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 11,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 3
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "potential",
+      "ghostPlans": 0,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 106,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 3476.4719999999975,
+          "extraDamage": 0,
+          "bladeHits": 33,
+          "attacks": 31,
+          "aiMs": 9.125107000000071
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 1,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 28.6833,
+      "damage": 8867.736,
+      "dps": 309.16,
+      "bossDamage": 0,
+      "kills": 11,
+      "hits": 4,
+      "damageTaken": 168.596,
+      "dashCount": 2,
+      "novaCount": 0,
+      "level": 2,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 8867.735999999992
+      },
+      "killsByType": {
+        "shooter": 1,
+        "stinger": 5,
+        "guard": 2,
+        "drone": 2,
+        "bomber": 1
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 58,
+      "pickedOrbs": 2,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 8867.735999999992,
+          "bossDamage": 0,
+          "kills": 11,
+          "hits": 4,
+          "damageTaken": 168.5961111111106,
+          "sources": {
+            "phantomBlade": 8867.735999999992
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 28.683,
+      "aiMoves": 1721,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 24,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 287,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 274,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 8867.735999999992,
+          "extraDamage": 0,
+          "bladeHits": 77,
+          "attacks": 53,
+          "aiMs": 18.940593999994235
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 2,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 60,
+      "damage": 22602.408,
+      "dps": 376.707,
+      "bossDamage": 0,
+      "kills": 25,
+      "hits": 2,
+      "damageTaken": 70.292,
+      "dashCount": 5,
+      "novaCount": 0,
+      "level": 3,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 22602.408000000047
+      },
+      "killsByType": {
+        "shooter": 6,
+        "stinger": 5,
+        "guard": 5,
+        "drone": 8,
+        "bomber": 1
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 164,
+      "pickedOrbs": 5,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 22602.408000000047,
+          "bossDamage": 0,
+          "kills": 25,
+          "hits": 2,
+          "damageTaken": 70.29180555555348,
+          "sources": {
+            "phantomBlade": 22602.408000000047
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 103.71,
+      "maxHp": 160,
+      "survivalSeconds": 60,
+      "aiMoves": 3600,
+      "aiDodges": 5,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 47,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 5
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 600,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 633,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 22602.408000000047,
+          "extraDamage": 0,
+          "bladeHits": 213,
+          "attacks": 111,
+          "aiMs": 40.64640399998734
+        },
+        "hp": 103.7081944444465,
+        "shield": 21
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 3,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 60,
+      "damage": 24347.154,
+      "dps": 405.786,
+      "bossDamage": 0,
+      "kills": 28,
+      "hits": 3,
+      "damageTaken": 106.969,
+      "dashCount": 8,
+      "novaCount": 1,
+      "level": 5,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 24347.15360000003
+      },
+      "killsByType": {
+        "shooter": 5,
+        "stinger": 9,
+        "guard": 6,
+        "drone": 6,
+        "bomber": 2
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 473,
+      "pickedOrbs": 16,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 24347.15360000003,
+          "bossDamage": 0,
+          "kills": 28,
+          "hits": 3,
+          "damageTaken": 106.96866666666214,
+          "sources": {
+            "phantomBlade": 24347.15360000003
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 81.03,
+      "maxHp": 160,
+      "survivalSeconds": 60,
+      "aiMoves": 3600,
+      "aiDodges": 8,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 38,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 8
+      },
+      "novaReasons": {
+        "spectral-overdrive": 1
+      },
+      "novaContexts": [
+        {
+          "at": 656,
+          "reason": "spectral-overdrive",
+          "near": 9,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 600,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 419,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 24347.15360000003,
+          "extraDamage": 0,
+          "bladeHits": 216,
+          "attacks": 113,
+          "aiMs": 31.07725699998673
+        },
+        "hp": 81.03133333333784,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 4,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 29.55,
+      "damage": 7843.784,
+      "dps": 265.441,
+      "bossDamage": 0,
+      "kills": 8,
+      "hits": 4,
+      "damageTaken": 171.23,
+      "dashCount": 3,
+      "novaCount": 0,
+      "level": 2,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 7843.783999999996
+      },
+      "killsByType": {
+        "shooter": 1,
+        "stinger": 2,
+        "guard": 3,
+        "drone": 2
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 58,
+      "pickedOrbs": 2,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 7843.783999999996,
+          "bossDamage": 0,
+          "kills": 8,
+          "hits": 4,
+          "damageTaken": 171.23022222221948,
+          "sources": {
+            "phantomBlade": 7843.783999999996
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": false,
+      "won": false,
+      "cleared": false,
+      "terminal": true,
+      "playerHp": 0,
+      "maxHp": 160,
+      "survivalSeconds": 29.55,
+      "aiMoves": 1773,
+      "aiDodges": 3,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 23,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 3
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 296,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 216,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 7843.783999999996,
+          "extraDamage": 0,
+          "bladeHits": 65,
+          "attacks": 55,
+          "aiMs": 13.415122000001247
+        },
+        "hp": 0,
+        "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 5,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 60,
+      "damage": 22369.376,
+      "dps": 372.823,
+      "bossDamage": 0,
+      "kills": 22,
+      "hits": 3,
+      "damageTaken": 125.593,
+      "dashCount": 4,
+      "novaCount": 0,
+      "level": 1,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 22369.376000000022
+      },
+      "killsByType": {
+        "shooter": 9,
+        "stinger": 4,
+        "guard": 3,
+        "drone": 6
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 34,
+      "pickedOrbs": 1,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 22369.376000000022,
+          "bossDamage": 0,
+          "kills": 22,
+          "hits": 3,
+          "damageTaken": 125.59308333333098,
+          "sources": {
+            "phantomBlade": 22369.376000000022
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 60,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 34.41,
+      "maxHp": 160,
+      "survivalSeconds": 60,
+      "aiMoves": 3600,
+      "aiDodges": 4,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 50,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 4
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 600,
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 662,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 22369.376000000022,
+          "extraDamage": 0,
+          "bladeHits": 200,
+          "attacks": 111,
+          "aiMs": 29.255849000005128
+        },
+        "hp": 34.40691666666902,
+        "shield": 21
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    }
+  ],
+  "full": []
+}
