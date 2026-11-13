@@ -1107,6 +1107,12 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 .archive-panel .v13-backup:not([open]){padding-top:5px;padding-bottom:5px}
 @media(max-width:550px){.archive-panel .v13-clear-legacy>summary{display:block}.archive-panel .v13-clear-legacy>summary span{display:block;margin-top:5px}.archive-panel .v13-history{max-height:45dvh}}
 
+.ship-card.phantom{--sh:#e3ecff;background:linear-gradient(155deg,#343c52,#12182d)}
+.ship-graphic.phantom{opacity:.65;filter:grayscale(1)}
+.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ship-card.dog{grid-column:auto}
+@media(max-width:660px){.ship-select,body.pilot-mobile .ship-select{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.attr-dark{color:#dbc3ff;background:#56366a55;border-color:#be8eed77}
 </style>
 <style>
 .choice-pick{display:none}
@@ -1186,7 +1192,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
  }
  body:not(.pilot-mobile) #panel.title-panel .menu-arsenal>.ship-label{margin:0 0 9px}
  body:not(.pilot-mobile) #panel.title-panel .menu-arsenal .ship-select{
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));
   flex:1 1 auto;align-content:stretch;min-height:0;
   gap:8px;max-width:none;margin:0 0 10px;
  }
@@ -1252,6 +1258,8 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
 <script src="./v13-ending.js"></script>
 <script src="./skill-arsenal.js"></script>
 <script src="./skill-tactics.js"></script>
+<script src="./phantom-frame.js"></script>
+<script src="./dark-element.js"></script>
 <script src="./music-soundtrack.js"></script>
 <script>
 (()=>{'use strict';
@@ -1266,6 +1274,7 @@ let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, boss
  const touchMove={id:null,x:0,y:0,startX:0,startY:0,lastTap:0,lastX:0,lastY:0,moved:false,captureOk:false};
  const stick=U('floatingStick'),stickDot=U('stickDot'),novaTouch=U('novaTouch'),dashTouch=U('dashTouch');
 const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射しない。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'},dog:{name:'BONE BUDDY',jp:'ドッグ型',color:'#ffd2a0',sub:'アニマル/骨ブーメラン/ミニオン',desc:'骨ブーメランを往復させ、動物ミニオンと一緒に戦う専用機体。',nova:'BOW SHOCK：小さな骨を8方向へ投げ、帰還でもう一度攻撃'}};
+SHIPS.phantom={name:'PHANTOM FRAME',jp:'ファントム型',color:'#e2e9ff',sub:'生存 / 自律ブレード',desc:'ゴースト本人が回避と経験値回収を担当。自律ファントムが広範囲を索敵して斬撃する。',nova:'SPECTRAL OVERDRIVE：全ファントムを強化・周辺弾消去'};
 let W=innerWidth,H=innerHeight,dpr=1,mode='menu',backMode='playing',last=0,t=0,shake=0,flash=0,stars=[],particles=[],floats=[],enemies=[],shots=[],hostile=[],pickups=[],hazards=[],zones=[],player=null,game=null,boss=null,choices=[],keys=new Set(),soundOn=true,audio=null;
 const MAX_ENEMIES=235,MAX_SHOTS=290,MAX_HOSTILE=440,MAX_PICKUPS=620;
 // Normal enemy movement is tuned independently from boss movement. Never exceed each cap.
@@ -1296,7 +1305,7 @@ const BOSS_POOLS={minor:['guardian','raptor','hive'],major:['titan','rail','vort
 function pickBossVariant(type){const pool=BOSS_POOLS[type],last=game.bossHistory?.[type];const options=pool.filter(v=>v!==last);const id=options[Math.floor(Math.random()*options.length)];game.bossHistory[type]=id;return id;}
 const bossInfo=e=>ENEMY_CODEX.find(b=>b.id===(typeof e==='string'?e:e?.variant))||null;
 
-const initialP=()=>({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hitR:6.5,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,novaReuseDelay:13.6,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],drillModes:[],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,spikeCount:0,spikeDamage:48,spikeArea:0,spikePeriod:3.2,spikeTimer:.9,spikeGroups:[],spikeVisuals:[],boltCount:0,boltDamage:68,boltJumps:2,boltReach:150,boltPeriod:2.8,boltTimer:1.2,boltVisuals:[],empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,meteorArenaBounce:0,meteorTriple:0,novaEvolution:null,novaShotTime:0,novaChargeSalvo:0,novaChargeSize:0,novaDrillDash:0,novaDrillClear:0,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,dashGraze:0,dashPulse:0,dashFlow:0,dashFlowTimer:0,grazeLock:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99,dogBones:1,dogBoneSize:1,dogBoneRange:270,dogBoneSpeed:380,dogBonePower:1,dogBoneReturn:1,dogChicks:0,dogChickTimer:0,dogChickenEvolved:false,dogEggDamage:35,dogEggRate:2.4,dogEggSpeed:125,dogFox:0,dogDolphinDuet:0,dogHamster:0,dogAnimalBoost:1});
+const initialP=()=>{const p=({shipType:selectedShip,laserCount:1,laserLimit:12,laserWidth:2.6,laserBonus:0,laserScale:1,laserReach:730,laserElement:0,laserTick:0,laserNovaTimer:0,laserLinks:[],charge:0,chargeRate:.67,chargeScale:1,chargeSize:0,chargePenetration:0,chargeBlast:0,chargeFork:0,chargeNovaSpread:0,chargeStationary:false,laserIdleTime:0,x:W/2,y:H/2,r:12,hitR:6.5,hp:100,maxHp:100,spd:226,dmg:32,rate:.46,shotTimer:.16,shotSpeed:590,multishot:1,pierce:0,magnet:112,dashCd:2.8,dashLeft:0,dashTime:0,dx:0,dy:-1,iframes:0,energy:0,novaRadius:215,novaDamage:175,novaGain:1,novaReuseDelay:13.6,regen:0,crit:0,critMult:1.8,chain:0,chainDamage:0,explosion:0,lifeSteal:0,slowChance:0,orbit:0,droneCount:0,droneTimers:[],bulletKind:'pulse',bulletModes:['pulse'],drillModes:[],shotCycle:0,burnChance:0,shield:0,shieldMax:0,shieldRecharge:0,shieldIdle:0,hitTime:0,thorns:0,killCharge:0,killHeal:0,killBurst:0,rocketCd:0,rocketTimer:0,phoenix:0,slowField:0,autoNova:0,autoNovaTimer:0,multicrit:0,drain:0,reviveUsed:0,ricochet:0,limitShot:16,limitDrones:16,limitOrbit:10,limitRate:.055,xpBonus:1,afterglow:0,arcNova:0,iceBurst:0,thermal:0,droneThunder:0,meteorTrail:0,bossBane:1,fusionOutputBonus:0,evolutionTint:null,evolutionMotif:'',evolutionStyles:[],uniqueOverclock:0,mirrorField:0,echoShots:0,bulletOrbit:0,staticField:0,plasmaWave:0,voidHalo:0,fusionList:[],expShield:0,magmaLevel:0,magmaRadius:60,magmaDps:26,magmaTimer:0,flameMissiles:0,freezeChance:0,freezeDuration:1.1,iceAttackSlow:.25,iceBallCount:0,iceBallDamage:34,iceBallChance:.23,iceBallPeriod:2.55,iceBallTimer:1.1,spikeCount:0,spikeDamage:48,spikeArea:0,spikePeriod:3.2,spikeTimer:.9,spikeGroups:[],spikeVisuals:[],boltCount:0,boltDamage:68,boltJumps:2,boltReach:150,boltPeriod:2.8,boltTimer:1.2,boltVisuals:[],empRadius:0,empDps:0,empTick:0,meteorCount:0,meteorDamage:70,meteorRadius:15,meteorInterval:4.6,meteorTimer:1.9,bladeCross:0,empTrident:0,lavaConstrain:0,thrusterEngine:0,gigaNapalm:0,lavaGrowth:0,napalmBlast:1,napalmCooldown:1,meteorSpeed:1,meteorArenaBounce:0,meteorTriple:0,novaEvolution:null,novaShotTime:0,novaChargeSalvo:0,novaChargeSize:0,novaDrillDash:0,novaDrillClear:0,windCount:0,windRadius:70,windStrength:105,windDps:16,windTimer:1,windPeriod:4.1,rockWalls:0,rockDamage:21,rockSize:14,rockCooldowns:[],dashGaugeFade:0,dashGraze:0,dashPulse:0,dashFlow:0,dashFlowTimer:0,grazeLock:0,drillPlasma:0,drillGain:.31,drillDecay:.43,drillDamage:65,drillWidth:29,drillReach:38,drillContact:17,drillRushActive:0,drillRushPower:0,drillHitSet:new Set(),drillNozzle:0,drillCap:1,drillDashSpeed:760,drillRefund:0,drillShock:0,drillHeat:0,drillArmor:0,drillSlow:0,drillNovaPulse:0,drillRange:0,drillDashCount:0,drillOverdriveTime:0,drillNovaBonusTime:0,novaCooldown:0,lastShotSfxAt:-99,dogBones:1,dogBoneSize:1,dogBoneRange:270,dogBoneSpeed:380,dogBonePower:1,dogBoneReturn:1,dogChicks:0,dogChickTimer:0,dogChickenEvolved:false,dogEggDamage:35,dogEggRate:2.4,dogEggSpeed:125,dogFox:0,dogDolphinDuet:0,dogHamster:0,dogAnimalBoost:1});if(p.shipType==='phantom')AnkinPhantom.init(p);AnkinDark.init(p);return p;};
 let adaptiveRenderScale=1;
 let overloadClock=0,recoveryClock=0,lastAdaptiveTime=0;
 function applyCanvasResolution(){
@@ -1459,7 +1468,7 @@ const hasTrial=id=>!!game?.activeChallenges?.includes(id);
 function v13ClearTitle(){
  const source=(game.elementCombos||[]).at(-1);
  if(source){const themes={fire:'焔を導く者',ice:'氷晶の守護者',thunder:'雷鳴を統べる者',wind:'嵐の先導者',rock:'大地の城塞'};return themes[source.main]||'属性の支配者'}
- return {shot:'弾幕の支配者',laser:'光の指揮者',charge:'彗星を導く者',drill:'鋼鉄の突破者',dog:'アニマルたちのリーダー'}[player.shipType]||'星を超えし者';
+ return {shot:'弾幕の支配者',laser:'光の指揮者',charge:'彗星を導く者',drill:'鋼鉄の突破者',dog:'アニマルたちのリーダー',phantom:'銀影の指揮者'}[player.shipType]||'星を超えし者';
 }
 function v13Rank(count){return ['BRONZE','SILVER','GOLD','ANKIN MASTER'][Math.min(3,Math.max(0,count))]}
 
@@ -1583,7 +1592,7 @@ function v13ChallengeMenu(){
 const format=n=>Math.floor(n).toLocaleString('ja-JP');
 
 // ELEMENTAL CROSS FUSION v8: the same-element evolutions are ingredients.
-const ELEMENTS={fire:{name:'炎',color:'#ff9558',icon:'🔥',evo:'magmaEvo'},ice:{name:'氷',color:'#8cdeff',icon:'❄️',evo:'iceEvo'},thunder:{name:'雷',color:'#d3a6ff',icon:'⚡',evo:'thunderGod'},wind:{name:'風',color:'#7bffe1',icon:'🌪️',evo:'windEvo'},rock:{name:'岩',color:'#e7c69c',icon:'🪨',evo:'rockEvo'}};
+const ELEMENTS={dark:{name:'闇',color:'#bd91ef',icon:'🌑',evo:'darkDominion'},fire:{name:'炎',color:'#ff9558',icon:'🔥',evo:'magmaEvo'},ice:{name:'氷',color:'#8cdeff',icon:'❄️',evo:'iceEvo'},thunder:{name:'雷',color:'#d3a6ff',icon:'⚡',evo:'thunderGod'},wind:{name:'風',color:'#7bffe1',icon:'🌪️',evo:'windEvo'},rock:{name:'岩',color:'#e7c69c',icon:'🪨',evo:'rockEvo'}};
 // 5 x 4 = 20 directed outcomes. The primary attacks are transformed; the secondary element is dismantled.
 const CROSS_VARIANTS={
  fire:[['ice','クリムゾン・シャッター','火炎が大爆発へ変化。氷属性を失う。','🔥', {emberBlast:1}],['thunder','プラズマ・インフェルノ','火炎の周期パルスが弾け、広範囲を炎で焼く。雷属性を失う。','🌋',{emberPulse:1}],['wind','ブレイズ・トルネード','燃える竜巻が広がりながら敵を焼く。風属性を失う。','🌪️',{fireTornado:1}],['rock','ヴォルカニック・コア','マグマが激しく噴き上がり、広い範囲で追加爆発。岩属性を失う。','☄️',{volcanicCore:1}]],
@@ -1592,9 +1601,26 @@ const CROSS_VARIANTS={
  wind:[['fire','ストーム・エクスパンション','主力の風攻撃に燃焼を継承する。炎属性を失う。','🌀',{galeSplit:1}],['ice','スノウ・ハリケーン','主力のサイクロンまたは旋回刃にスロウを付与。氷属性を失う。','🌬️',{galeBlade:1}],['thunder','ヴォルテックス・クラッシュ','風の衝撃で押し返した敵へのダメージが増加。雷属性を失う。','🌪️',{galeCrush:1}],['rock','サイクロン・ランページ','サイクロンまたは旋回刃を高火力化。岩属性を失う。','💨',{galeOrbit:1}]],
  rock:[['fire','メテオ・シールド','岩壁が高火力の燃焼衝撃波を放つ。隕石は通常どおり残る。炎属性を失う。','🪨',{meteorWall:1}],['ice','ダイヤモンド・ロック','転がる隕石が接触時にスロウ・凍結を与え、通常敵弾を消す。氷属性を失う。','💎',{diamondWall:1}],['thunder','ガイア・インパクト','岩壁が敵をはじくたびに周囲へ衝撃波。雷属性を失う。','⛰️',{gaiaShock:1}],['wind','オービット・フォートレス','岩壁が高速に旋回し接触攻撃も強化。風属性を失う。','🛡️',{orbitFort:1}]]
 };
+// DARK adds ten directional pairs, each with distinct A/B weapons and effects.
+CROSS_VARIANTS.dark=[
+ ['fire','黒炎の恐怖','恐怖オーラが燃焼を付与。','🌑',{darkFire:1}],
+ ['ice','冥氷の眼差し','恐怖オーラが減速・確率凍結を付与。','🌑',{darkIce:1}],
+ ['thunder','冥雷パルス','恐怖オーラ命中から制限付き雷連鎖。','🌑',{darkThunder:1}],
+ ['wind','悪夢の嵐','恐怖オーラの持続時間を延長。','🌑',{darkWind:1}],
+ ['rock','呪縛の視線','恐怖オーラ命中で敵を弱体化。','🌑',{darkRock:1}]
+];
+for(const [main,name,desc,mod] of [
+ ['fire','シャドウミサイル','ミサイルが敵を短時間恐怖にする。','shadowMissile'],
+ ['ice','ナイトメアオーブ','氷球が敵を弱体化する。','shadowIce'],
+ ['thunder','フィアーパルス','電磁パルスが短時間恐怖を付与。','shadowPulse'],
+ ['wind','呪いのサイクロン','サイクロン命中で敵を弱体化。','shadowWind'],
+ ['rock','冥府の岩壁','岩壁接触で短時間恐怖を付与。','shadowWall']
+])CROSS_VARIANTS[main].push(['dark',name,desc,'🌑',{[mod]:1}]);
+
 const ELEMENT_FUSION_RECIPES=Object.entries(CROSS_VARIANTS).flatMap(([main,list])=>list.map(([sub,name,desc,icon,mod])=>({id:`${main}_${sub}`,main,sub,name,desc,icon,mod})));
 // Direction and weapon slot are explicit; the original 20 CROSS_VARIANTS remain slot A.
 const FUSION_WEAPON_CHOICES={
+ dark:[['A','フィアーオーラ','darkFear'],['B','プログラムコントロール','darkVirus']],
  fire:[['A','ホーミングミサイル','rocketCd'],['B','マグマ','magmaLevel']],
  ice:[['A','アイスボール','iceBallCount'],['B','フロストスパイク','spikeCount']],
  thunder:[['A','電磁パルス','empRadius'],['B','ライトニングボルト','boltCount']],
@@ -1602,6 +1628,16 @@ const FUSION_WEAPON_CHOICES={
  rock:[['A','岩壁','rockWalls'],['B','ローリング・メテオ','meteorCount']]
 };
 const FUSION_B_VARIANTS={
+ dark_fire:{name:'黒炎ウイルス',desc:'設置ウイルスが燃焼を付与。',effect:'virusBurn'},
+ dark_ice:{name:'冥氷ウイルス',desc:'設置ウイルスが減速・確率凍結を付与。',effect:'virusIce'},
+ dark_thunder:{name:'冥雷ネットワーク',desc:'ウイルスから制限付き雷連鎖。',effect:'virusArc'},
+ dark_wind:{name:'悪夢の感染域',desc:'ウイルス領域が近い敵を吸引。',effect:'virusWind'},
+ dark_rock:{name:'呪いの障壁',desc:'ウイルスの設置範囲拡大・確定スロウ。',effect:'virusRock'},
+ fire_dark:{name:'暗黒カルデラ',desc:'マグマ命中で敵を弱体化。',effect:'magmaDark'},
+ ice_dark:{name:'冥府の氷柱',desc:'氷柱が短時間恐怖を付与。',effect:'spikeDark'},
+ thunder_dark:{name:'ハッキングサーペント',desc:'雷撃が命中した敵を弱体化。',effect:'boltDark'},
+ wind_dark:{name:'ナイトメアエッジ',desc:'旋回ブレードが短時間恐怖を付与。',effect:'bladeDark'},
+ rock_dark:{name:'カースドメテオ',desc:'隕石が命中した敵を弱体化。',effect:'meteorDark'},
  fire_ice:{name:'クライオ・カルデラ',desc:'マグマ床が氷の減速領域を生み、燃焼とスロウを重ねる。',effect:'magmaSlow'},
  fire_thunder:{name:'ヴォルテック・カルデラ',desc:'マグマ床から制限付きの短距離雷撃を放つ。',effect:'magmaArc'},
  fire_wind:{name:'ストーム・マグマ',desc:'マグマ領域を拡幅し、敵をゆるやかに中心へ引き寄せる。',effect:'magmaWind'},
@@ -1627,27 +1663,27 @@ const DOG_FUSION_SOURCE_IDS={fire:{A:'dogFox',B:'dogPawLava'},ice:{A:'dogRabbit'
 function fusionWeaponDefinitions(main){return (FUSION_WEAPON_CHOICES[main]||[]).map(([slot,name,field])=>{const dogId=DOG_FUSION_SOURCE_IDS[main]?.[slot],dogCard=player?.shipType==='dog'?skillById(dogId):null;return {slot,name:dogCard?.name||name,owned:!!player&&player[field]>0,field,sourceId:dogCard?.id||null};});}
 function fusionOutcome(main,sub,slot='A'){return slot==='B'?FUSION_B_VARIANTS[main+'_'+sub]||null:ELEMENT_FUSION_RECIPES.find(x=>x.main===main&&x.sub===sub);}
 function fusionResultName(combo){return fusionOutcome(combo.main,combo.sub,combo.weapon||'A')?.name||combo.main+' × '+combo.sub;}
-function fusionStageIndex(){return Math.min(2,Math.max(0,game?.fusionMilestoneIndex??game?.elementCombos?.length??0));}
+function fusionStageIndex(){return Math.min(3,Math.max(0,game?.fusionMilestoneIndex??game?.elementCombos?.length??0));}
 function fusionReadyMainKeys(){return ownedElementKeys().filter(k=>fusionWeaponDefinitions(k).some(w=>w.owned));}
 function resonanceNames(main){return({
  fire:['endFireFuel','endFirePressure'],ice:['endIceCrystal','endIceAnchor'],thunder:['endThunderCoil','endThunderFocus'],
  wind:['endWindCurrent','endWindEdge'],rock:['endRockCore','endRockShell']
 })[main]||[];}
-const DAMAGE_LABELS={frostSpike:'フロストスパイク',lightningBolt:'ライトニングボルト',bone:'骨ブーメラン',dogEgg:'チック・タックの卵',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
+const DAMAGE_LABELS={darkFear:'フィアーオーラ',darkVirus:'ウイルス領域',darkAlly:'ハッキング味方',phantomBlade:'ファントムブレード（主機）',phantomExtra:'ファントムブレード（追加機）',frostSpike:'フロストスパイク',lightningBolt:'ライトニングボルト',bone:'骨ブーメラン',dogEgg:'チック・タックの卵',iceball:'アイスボール',pulseField:'電磁パルス',meteor:'隕石',drill:'プラズマドリル（近接）',shot:'通常ショット',laser:'レーザー',charge:'チャージ弾',nova:'ノヴァ',dot:'燃焼DoT',magma:'マグマ・持続領域',element:'属性攻撃',drone:'小型僚機',missile:'ミサイル',blade:'旋回ブレード',rock:'岩壁',explosion:'爆発・誘爆',other:'その他'};
 function targetDefinitions(){return [...activeFusions().map(r=>({key:'f:'+r.id,name:r.name,desc:r.desc,materials:[r.power,r.legend,...(r.required||[])],kind:'evolution'})),...ELEMENT_FUSION_RECIPES.map(r=>({key:'e:'+r.id,name:r.name,desc:r.desc,materials:[r.main,r.sub],kind:'element',main:r.main,sub:r.sub,slot:'A'})),...Object.entries(FUSION_B_VARIANTS).map(([id,v])=>({key:'e:'+id+'_B',name:v.name,desc:v.desc,materials:id.split('_'),kind:'element',main:id.split('_')[0],sub:id.split('_')[1],slot:'B'}))]}
-function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub&&(c.weapon||'A')===(t.slot||'A'));const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||fusionStageIndex()>=2);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
+function targetStatus(t){const done=t.kind==='evolution'?!!game.fusions[t.key.slice(2)]:game.elementCombos.some(c=>c.main===t.main&&c.sub===t.sub&&(c.weapon||'A')===(t.slot||'A'));const sealed=t.kind==='element'&&(fusedElementKeys().has(t.main)||fusedElementKeys().has(t.sub)||fusionStageIndex()>=3);const have=t.kind==='element'?t.materials.filter(id=>elementInvestments(id).count>0).length:t.materials.filter(id=>owned(id)&&((game.skills[id]||0)>=(FUSIONS.find(r=>'f:'+r.id===t.key)?.ranks?.[id]||0))).length;return{done,sealed,have:done?t.materials.length:have,total:t.materials.length}}
 function reconcileTargets(){if(!game)return;const defs=new Map(targetDefinitions().map(t=>[t.key,t]));const seen=new Set();const kept=[];game.targetHistory=game.targetHistory||[];for(const key of game.targets||[]){if(seen.has(key))continue;seen.add(key);const t=defs.get(key),status=t?targetStatus(t):null;if(!t||status.done||status.sealed){if(!game.targetHistory.some(h=>h.key===key)){game.targetHistory.push({key,name:t?.name||game.targetNameCache?.[key]||key,status:status?.done?'completed':'sealed'});}continue;}if(kept.length<3)kept.push(key)}game.targets=kept;}
 
 function targetBox(kind){reconcileTargets();const recipes=targetDefinitions().filter(r=>r.kind===kind),ids=game.targets||[];return `<section class="target-toolbox"><h3>✦ TARGET BUILD · 進化ターゲット ${ids.length}/3</h3><div class="target-mini">狙う進化を最大3件登録。完成済み・属性使用済みの目標は登録枠から自動解除されます。再抽選時のみ、目標素材・所持属性に関連する候補の抽選を補助します（確定入手ではありません）。</div><div class="target-grid">${recipes.map(r=>{const f=targetStatus(r),on=ids.includes(r.key);return `<button type="button" class="target-entry ${on?'selected':''}" data-target="${r.key}" aria-pressed="${on}" ${!on&&(ids.length>=3||f.done||f.sealed)?'disabled':''}><b>${on?'★':'☆'} ${escHtml(r.name)} ${f.done?'✓完成':f.sealed?'⊘使用済み':''}</b><div class="target-progress"><span style="width:${100*f.have/f.total}%"></span></div><small>素材 ${f.have}/${f.total} · ${f.done?'達成済み':f.sealed?'属性使用済み':r.materials.filter(x=>r.kind==='element'?elementInvestments(x).count===0:!owned(x)).map(x=>r.kind==='element'?ELEMENTS[x].name+'属性カード':skillById(x)?.name||x).join(' / ')||'素材所持済み'}</small></button>`}).join('')}</div>${(game.targetHistory||[]).filter(h=>h.key.startsWith(kind==='evolution'?'f:':'e:')).length?`<div class="target-mini">達成・解除履歴：${(game.targetHistory||[]).filter(h=>h.key.startsWith(kind==='evolution'?'f:':'e:')).slice(-6).map(h=>`<span style="margin-right:10px">${h.status==='completed'?'✓':'⊘'} ${escHtml(h.name)}</span>`).join('')}</div>`:''}</section>`}
 function toggleTarget(key){reconcileTargets();const r=targetDefinitions().find(x=>x.key===key);if(!r)return;let list=game.targets||[];const status=targetStatus(r);game.targetNameCache=game.targetNameCache||{};game.targetNameCache[key]=r.name;if(list.includes(key))list=list.filter(v=>v!==key);else if(list.length<3&&!status.done&&!status.sealed)list=[...list,key];game.targets=list;const sc=panel.querySelector('.lab-scroll'),y=sc?.scrollTop||0;drawOverlay();const next=panel.querySelector('.lab-scroll');if(next)next.scrollTop=y}
-function choiceTargetMatches(c){reconcileTargets();if(owned(c.id))return[];const defs=new Map(targetDefinitions().map(t=>[t.key,t]));return (game.targets||[]).map(key=>defs.get(key)).filter(t=>t&&!targetStatus(t).done&&!targetStatus(t).sealed&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id)))}
+function choiceTargetMatches(c){reconcileTargets();const defs=new Map(targetDefinitions().map(t=>[t.key,t]));return (game.targets||[]).map(key=>defs.get(key)).filter(t=>t&&!targetStatus(t).done&&!targetStatus(t).sealed&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id)&&!fusionMaterialReady(FUSIONS.find(r=>'f:'+r.id===t.key),c.id)))}
 function resultBreakdown(){const stats=game.damageStats||{},sum=Object.values(stats).reduce((a,b)=>a+b,0);return Object.keys(DAMAGE_LABELS).filter(k=>stats[k]>0).sort((a,b)=>stats[b]-stats[a]).map(k=>`<div class="damage-row"><span>${DAMAGE_LABELS[k]}</span><div class="damage-meter"><span style="width:${Math.max(1,stats[k]/Math.max(1,sum)*100).toFixed(2)}%"></span></div><strong>${format(stats[k])}</strong></div>`).join('')||'<p class="fine">まだ与ダメージはありません。</p>'}
 function buildSummary(){const cards=Object.entries(game.skills).map(([id,n])=>{const c=skillById(id);return c?`${c.name}${n>1?' ×'+n:''}`:null}).filter(Boolean);const specials=[...Object.keys(game.relics).map(id=>skillById(id)?.name),...Object.keys(game.fusions).map(id=>FUSIONS.find(f=>f.id===id)?.name),...game.elementCombos.map(c=>fusionResultName(c))].filter(Boolean);return{cards,specials}}
 function elementFromCard(c){if(!c)return null;if(c.element&&ELEMENTS[c.element])return c.element;for(const [k,v] of Object.entries(ELEMENTS))if(c.tags?.includes('属性：'+v.name))return k;return null}
 function isSealedCard(c){return !!(game?.sealedElements?.length&&c&&game.sealedElements.includes(elementFromCard(c)))}
 // v12: Ordinary elemental skills establish affinity; rarity-gated base evolutions are
 // optional bonuses, not a four-specific-card requirement for elemental fusion.
-const ELEMENT_FUSION_LEVELS=[12,28]; // Two milestones, at most two fusions per run.
+const ELEMENT_FUSION_LEVELS=[12,28,40]; // Three non-overlapping pairs from six elements.
 function elementInvestments(element){
  const cards=ALL_SKILL_DEFS().filter(c=>elementFromCard(c)===element&&owned(c.id));
  const count=cards.reduce((sum,c)=>sum+(game.skills[c.id]||game.powers[c.id]||game.legends[c.id]||game.uniques[c.id]||game.relics[c.id]||0),0);
@@ -1659,7 +1695,7 @@ function elementInvestments(element){
 function fusedElementKeys(){return new Set((game?.elementCombos||[]).flatMap(({main,sub})=>[main,sub]));}
 function ownedElementKeys(){const used=fusedElementKeys();return Object.keys(ELEMENTS).filter(e=>!used.has(e)&&!game.sealedElements.includes(e)&&elementInvestments(e).count>0);}
 function availableElementPairs(){
- if(!game||!player||fusionStageIndex()>=2||game.level<ELEMENT_FUSION_LEVELS[fusionStageIndex()])return[];
+ if(!game||!player||fusionStageIndex()>=3||game.level<ELEMENT_FUSION_LEVELS[fusionStageIndex()])return[];
  const keys=ownedElementKeys(),mainKeys=fusionReadyMainKeys();
  if(keys.length<2||mainKeys.length===0)return[];
  const pairs=[];
@@ -1669,16 +1705,18 @@ function availableElementPairs(){
 function fusionMainChoices(){return [...new Set(availableElementPairs().map(p=>p.main))];}
 function fusionSubChoices(main){return availableElementPairs().filter(p=>p.main===main).map(p=>p.sub);}
 const FUSION_PALETTES={
+ dark:{fire:'#bd6295',ice:'#a7a9f5',thunder:'#8d63e8',wind:'#ab8ec9',rock:'#ba96bc'},
  fire:{ice:'#50bfff',thunder:'#b66aff',wind:'#ff519a',rock:'#ffdd72'},
  ice:{fire:'#ff8fd9',thunder:'#bcb8ff',wind:'#5beee0',rock:'#a7fff1'},
  thunder:{fire:'#ff674d',ice:'#80deff',wind:'#42ffc5',rock:'#ffdb75'},
  wind:{fire:'#ff5968',ice:'#81caff',thunder:'#cc92ff',rock:'#e8ad63'},
  rock:{fire:'#ff9164',ice:'#a6ecff',thunder:'#cda1ff',wind:'#5dffd4'}
 };
+for(const key of ['fire','ice','thunder','wind','rock'])FUSION_PALETTES[key].dark='#bd91ef';
 function fusedColor(main){const combo=game?.elementCombos?.findLast(c=>c.main===main);return combo?FUSION_PALETTES[main]?.[combo.sub]||ELEMENTS[main].color:null}
 function enterElementChoice(){
  // Fusion cannot interrupt combat, boss reward queues or any non-level choice.
- if(mode!=='choice'||game?.lastChoice!=='normal'||fusionStageIndex()>=2)return false;
+ if(mode!=='choice'||game?.lastChoice!=='normal'||fusionStageIndex()>=3)return false;
  const options=availableElementPairs();
  if(!options.length)return false;
  pendingElementPairs=options;elementChoice=null;
@@ -1709,7 +1747,7 @@ function fusionAttributeButton(key,stage,main){
 function elementChoiceMarkup(){
  const stage=fusionStageIndex(),level=ELEMENT_FUSION_LEVELS[stage],
   main=elementChoice?.main,sub=elementChoice?.sub,weapon=elementChoice?.weapon;
- const banner=`<div class="fusion-unlock" role="status" aria-live="polite"><span class="fusion-unlock-stars">✦ ✧ ✦</span><p class="eyebrow">ELEMENTAL REFORGE · ${stage+1}/2</p><h2>属性融合 · 任意選択</h2><p class="fusion-unlock-level">Lv${level} · 実行済み ${game.elementCombos.length}回</p></div>`;
+ const banner=`<div class="fusion-unlock" role="status" aria-live="polite"><span class="fusion-unlock-stars">✦ ✧ ✦</span><p class="eyebrow">ELEMENTAL REFORGE · ${stage+1}/3</p><h2>属性融合 · 任意選択</h2><p class="fusion-unlock-level">Lv${level} · 実行済み ${game.elementCombos.length}回</p></div>`;
  const skip=`<div class="actions"><button type="button" id="fusionSkip" class="secondary">← 通常スキルの選択に戻る（融合権は保持）</button></div>`;
  if(!main)return `${banner}<h3 class="fusion-choice-heading">1. 主属性を選択</h3><div class="fusion-attribute-grid">${Object.keys(ELEMENTS).map(key=>fusionAttributeButton(key,'main')).join('')}</div>${skip}`;
  if(!sub)return `${banner}<h3 class="fusion-choice-heading">2. 消費する副属性を選択</h3><p>主属性：${ELEMENTS[main].name}</p>
@@ -1724,14 +1762,14 @@ function elementChoiceMarkup(){
  <p class="fine">今回のレベルアップで得られる通常スキル1枚の代わりに融合します。LEGENDARY・POWER等のボス報酬は消費しません。</p>
  <div class="actions"><button type="button" class="primary" id="fusionConfirm">✓ この内容で融合を確定</button><button type="button" class="secondary" id="fusionBackWeapon">← 武装を選び直す</button></div>${skip}`;
 }
-function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,chargeStationary:!!p.chargeStationary,laserNovaTimer:p.laserNovaTimer,novaShotTime:p.novaShotTime,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState}}
+function retainCombatState(p){return{x:p.x,y:p.y,dx:p.dx,dy:p.dy,energy:p.energy,hpPercent:p.hp/Math.max(1,p.maxHp),shieldPercent:p.shield/Math.max(1,p.shieldMax),dashLeft:p.dashLeft,dashTime:p.dashTime,dashGaugeFade:p.dashGaugeFade||0,iframes:p.iframes,hitTime:p.hitTime,shotTimer:p.shotTimer,charge:p.charge,chargeStationary:!!p.chargeStationary,laserNovaTimer:p.laserNovaTimer,novaShotTime:p.novaShotTime,laserIdleTime:p.laserIdleTime||0,drillPlasma:p.drillPlasma||0,drillRushActive:p.drillRushActive||0,drillRushPower:p.drillRushPower||0,drillHitSet:p.drillHitSet||new Set(),drillDashCount:p.drillDashCount||0,drillOverdriveTime:p.drillOverdriveTime||0,novaCooldown:p.novaCooldown||0,tacticState:p.tacticState,darkLive:{darkFields:p.darkFields,darkAllies:p.darkAllies,darkVisuals:p.darkVisuals,darkFearTimer:p.darkFearTimer,darkVirusTimer:p.darkVirusTimer},phantomLive:p.shipType==='phantom'?{phantoms:p.phantoms,phantomEchoes:p.phantomEchoes,phantomVisuals:p.phantomVisuals,phantomNova:p.phantomNova,phantomRelay:p.phantomRelay,phantomAttackId:p.phantomAttackId,phantomClock:p.phantomClock,phantomCollectClock:p.phantomCollectClock,phantomMetrics:p.phantomMetrics,phantomVeil:p.phantomVeil,phantomVeilShield:p.phantomVeilShield,phantomEmergency:p.phantomEmergency}:null}}
 function restorePlayerBuild(){const current=retainCombatState(player),next=initialP();applyShipPreset(next);
  for(const id of game.acquisitionLog){const c=skillById(id);if(c&&owned(id)&&!isSealedCard(c))c.apply(next)}
  // Recalculate passive bonuses without triggering presentations or double-applying the original selection.
  for(const a of activeSynergies())if(game.synergies[a.id])applyBalancedUpgrade(next,a.apply,'synergy');
- for(const a of activeFusions())if(game.fusions[a.id]&&[a.power,a.legend,...(a.required||[])].every(owned)){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
+ for(const a of activeFusions())if(game.fusions[a.id]&&fusionRanksReady(a)&&[a.power,a.legend,...(a.required||[])].every(owned)){applyBalancedUpgrade(next,a.apply,'fusion');next.fusionList.push(a.id)}
  for(const combo of game.elementCombos)applyBalancedUpgrade(next,p=>applyElementFusionStats(p,combo),'element');syncEvolutionVisuals(next);
- Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,chargeStationary:!!current.chargeStationary,laserNovaTimer:current.laserNovaTimer,novaShotTime:current.novaShotTime,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0,tacticState:current.tacticState});player=next;
+ Object.assign(next,{x:current.x,y:current.y,dx:current.dx,dy:current.dy,energy:current.energy,hp:clamp(current.hpPercent*next.maxHp,1,next.maxHp),shield:clamp(current.shieldPercent*next.shieldMax,0,next.shieldMax),dashLeft:current.dashLeft,dashTime:current.dashTime,dashGaugeFade:current.dashGaugeFade||0,iframes:current.iframes,hitTime:current.hitTime,shotTimer:current.shotTimer,charge:current.charge,chargeStationary:!!current.chargeStationary,laserNovaTimer:current.laserNovaTimer,novaShotTime:current.novaShotTime,laserIdleTime:current.laserIdleTime||0,drillPlasma:clamp(current.drillPlasma||0,0,next.drillCap),drillRushActive:current.drillRushActive||0,drillRushPower:current.drillRushPower||0,drillHitSet:current.drillHitSet||new Set(),drillDashCount:current.drillDashCount||0,drillOverdriveTime:current.drillOverdriveTime||0,novaCooldown:current.novaCooldown||0,tacticState:current.tacticState});if(current.phantomLive)Object.assign(next,current.phantomLive);if(!game.sealedElements.includes('dark'))Object.assign(next,current.darkLive);player=next;
 }
 // Auto-resonance is derived from a committed fusion; no additional acquisition or repeated stack in game.skills.
 function applyAutoFusionResonance(p,combo){
@@ -1781,6 +1819,7 @@ function applyElementFusionStats(p,combo){
   if(slot==='B'&&sub==='fire')p.bladeFireBurn=1;
   if(slot==='B'&&sub==='ice')p.bladeIceSlow=1;
  }
+ if(main==='dark'){if(slot==='A')p.darkFear=Math.min(8,p.darkFear+2);else p.darkVirus=Math.min(8,p.darkVirus+2);}
  if(main==='rock'){
   if(slot==='A'){p.rockWalls=Math.min(18,p.rockWalls+3);p.rockDamage+=105+echo*35;p.rockSize+=5;}
   else{p.meteorCount=1;p.meteorDamage+=105+echo*26;p.meteorRadius+=14;}
@@ -1818,7 +1857,7 @@ function clearConsumedElementAttacks(sub){
  if(sub==='thunder'&&player?.boltVisuals)player.boltVisuals.length=0;
 }
 function confirmElementFusion(){
- if(mode!=='elementChoice'||game.lastChoice!=='normal'||fusionStageIndex()>=2||!elementChoice?.main||!elementChoice.sub||!elementChoice.weapon)return;
+ if(mode!=='elementChoice'||game.lastChoice!=='normal'||fusionStageIndex()>=3||!elementChoice?.main||!elementChoice.sub||!elementChoice.weapon)return;
  const {main,sub,weapon}=elementChoice;
  if(!fusionSubChoices(main).includes(sub)||!fusionWeaponDefinitions(main).some(w=>w.slot===weapon&&w.owned))return;
  const r=fusionOutcome(main,sub,weapon);if(!r)return;
@@ -1860,9 +1899,9 @@ function elementLabMarkup(){
    <div class="recipe-parts"><span class="requirement ${mainReady?'owned':'missing'}">${mainReady?'✓':'＋'} ${ELEMENTS[r.main].name}属性</span><span class="fusion-plus">＋</span><span class="requirement ${subReady?'owned':'missing'}">${subReady?'✓':'＋'} ${ELEMENTS[r.sub].name}属性</span></div>
    <div class="recipe-effect">${r.desc}</div><div class="fusion-lab-source">✦ 融合時に自動発動する共鳴：${escHtml(fusionResonanceGuide(r.main,r.slot||'A'))}</div><small class="fusion-cost">${ELEMENTS[r.sub].name}属性の効果を失う代わりに、取得済みカードの蓄積を主属性の共鳴出力に変換します。</small></article>`;
  }).join('');
- return `<section class="lab-help"><b>✦ 現在の機体：${escHtml(machine)}</b><div class="v13-note">現在の機体の融合武装を表示。DOG型では動物スキルの名称・所持状況に連動します。</div><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+34%）</b><div class="v13-note">融合1件につき全攻撃+17%（最大2回で+34%）。融合を確定した瞬間に選択武装A/Bへ上記の共鳴強化が1回自動適用されます。共鳴カードの追加取得は不要です。副属性の蓄積量はさらに融合武装の性能へ反映されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28）</b> — Lv12とLv28で融合権が解放されます。以降の通常レベルアップ画面から通常スキル1枚の代わりに選択できます。融合のプレビューから戻っても権利は消費されず、戦闘中やボス報酬から直接融合することはありません。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、2回目に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。共鳴強化は属性融合に含まれるため、図鑑に別カードとしては掲載しません。POWER＋LEGENDARYの進化合成は別の強化です。</p>
+ return `<section class="lab-help"><b>✦ 現在の機体：${escHtml(machine)}</b><div class="v13-note">現在の機体の融合武装を表示。DOG型では動物スキルの名称・所持状況に連動します。</div><b>✦ 共鳴出力：与ダメージ +${outputPct}%（最大+51%）</b><div class="v13-note">融合1件につき全攻撃+17%（最大3回で+51%）。融合を確定した瞬間に選択武装A/Bへ上記の共鳴強化が1回自動適用されます。共鳴カードの追加取得は不要です。副属性の蓄積量はさらに融合武装の性能へ反映されます。</div>${fused.map(c=>'<div>✧ '+ELEMENTS[c.main].name+' × '+ELEMENTS[c.sub].name+'：共鳴 '+Number(c.resonance||0).toFixed(1)+' pt / 属性カード '+(c.cards||0)+'枚</div>').join('')}</section><p class="lab-help">✦ <b>属性融合（Lv12／Lv28／Lv40）</b> — Lv12・Lv28・Lv40で融合権が解放されます。以降の通常レベルアップ画面から通常スキル1枚の代わりに選択できます。融合のプレビューから戻っても権利は消費されず、戦闘中やボス報酬から直接融合することはありません。異なる2属性のスキルを1種類ずつ取得すると、<b>特化属性 → 失う属性</b>の順に選択できます。レアリティは問いません。<b>一度融合に使用した2属性は、以降に再使用できません。</b><br>失う属性の攻撃・効果は無効になり、取得済みカードの記録は残ります。副属性の投資量は特化属性の共鳴強化に変換されます。共鳴強化は属性融合に含まれるため、図鑑に別カードとしては掲載しません。POWER＋LEGENDARYの進化合成は別の強化です。</p>
  <div class="element-legend">${Object.entries(ELEMENTS).map(([k,v])=>`<span style="color:${v.color}">${v.icon} ${v.name}：${used.has(k)?'融合に使用済み':ready.includes(k)?'取得済み・選択可能':'属性素材未取得'}</span>`).join('')}</div>
- <p class="fine">現在 Lv${game.level} ／ ${next?(game.level>=next?'融合権保留中（次の通常LvUPで使用）':'次の融合権：Lv'+next):'融合権使用済み'} ／ 属性融合 ${stage}/2${next&&game.level>=next&&ready.length<2?' ／ 素材不足：融合権を保持中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
+ <p class="fine">現在 Lv${game.level} ／ ${next?(game.level>=next?'融合権保留中（次の通常LvUPで使用）':'次の融合権：Lv'+next):'融合権使用済み'} ／ 属性融合 ${stage}/3${next&&game.level>=next&&ready.length<2?' ／ 素材不足：融合権を保持中（残り'+(2-ready.length)+'属性）':''}</p><div class="lab-recipe-grid">${cards}</div>`;
 }
 function showBossAlert(type,variant){const box=U('bossAlert');if(!box)return;const info=bossInfo(variant);box.className='boss-alert show '+type;box.innerHTML=`<div class="alert-stripe">${type==='unique'?'⚠ CRITICAL ANOMALY':'⚠ HOSTILE SIGNATURE DETECTED'}</div><div class="alert-name">${variant==='theEnd'?ULTIMATE_NAME:(info?.en||'BOSS')}</div><div class="alert-sub">${variant==='theEnd'?'ULTIMATE BOSS · 3 MODULES':type==='unique'?'UNIQUE ENCOUNTER':type==='major'?'MAJOR BOSS INBOUND':'ELITE BOSS INBOUND'} · ${variant==='theEnd'?'PILOT LEVEL ADAPTIVE':(info?.jp||'')}</div>`;bossAlertUntil=performance.now()+3400;}
 
@@ -2126,7 +2165,7 @@ function updateRaid(dt){
  }
 }
 
-function ringPosition(i,count,seconds,first=40,step=29,capacity=6,speed=.95){const ring=Math.floor(i/capacity),slot=i%capacity,ringCount=Math.min(capacity,count-ring*capacity);const a=seconds*speed*(ring%2?-1:1)+slot/ringCount*TAU+(ring%2?.31:0);const r=first+ring*step;return {x:player.x+Math.cos(a)*r,y:player.y+Math.sin(a)*r,a,r}}
+function ringPosition(i,count,seconds,first=40,step=29,capacity=6,speed=.95){const ring=Math.floor(i/capacity),slot=i%capacity,ringCount=Math.min(capacity,count-ring*capacity);const a=seconds*speed*(ring%2?-1:1)+slot/ringCount*TAU+(ring%2?.31:0);const r=first+ring*step;return {x:elementalOrigin().x+Math.cos(a)*r,y:elementalOrigin().y+Math.sin(a)*r,a,r}}
 function renderSynergyNotices(){const root=U('synergyFeed');if(!root)return;root.innerHTML=synergyNotices.slice(controlMode==='mobile'?-2:-3).map(n=>`<div class="synergy-toast"><div class="synergy-small">✧ SKILL SYNERGY ACTIVATED</div><strong class="synergy-gradient">${n.name}</strong><div class="synergy-recipe">${n.need.map(id=>coloredName(id)).join(' ＋ ')}</div><div class="synergy-effect">強化効果：${n.desc}</div></div>`).join('')}
 function notifySynergies(){if(!pendingSynergy.length)return;for(const n of pendingSynergy)synergyNotices.push({...n,expires:runClock+10});synergyNotices=synergyNotices.slice(-3);renderSynergyNotices();announce('✧ シナジー発動！ '+pendingSynergy.map(x=>x.name).join(' / '),4);pendingSynergy=[]}
 function announce(s,dur=2.2){ui.announcement.textContent=s;ui.announcement.classList.add('show');announceUntil=runClock+dur}
@@ -2172,11 +2211,11 @@ function bindSafeChoice(el){
   });
 }
 function state(s){if(s!==mode){last=0;simAccumulator=0;}if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay();positionMusicToast();if(soundtrackUnlocked)playMusic()}
-function applyShipPreset(p){p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.laserCount=2;p.dmg=35;p.hp=106;p.maxHp=106;p.spd=245;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}if(p.shipType==='dog'){p.hp=118;p.maxHp=118;p.spd=238;p.dmg=39;p.rate=1.12;p.novaRadius=175;p.novaDamage=160;p.shotSpeed=375;p.r=15;p.limitShot=12;p.limitOrbit=10;p.dogBones=1;p.dogBoneSize=1;p.dogBoneRange=245;}}
+function applyShipPreset(p){if(p.shipType==='phantom'){p.hp=95;p.maxHp=95;p.spd=240;p.hitR=5.5;p.novaRadius=180;p.shieldMax=15;p.shield=15;p.shieldRecharge=2;AnkinPhantom.init(p);}p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.laserCount=2;p.dmg=35;p.hp=106;p.maxHp=106;p.spd=245;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}if(p.shipType==='dog'){p.hp=118;p.maxHp=118;p.spd=238;p.dmg=39;p.rate=1.12;p.novaRadius=175;p.novaDamage=160;p.shotSpeed=375;p.r=15;p.limitShot=12;p.limitOrbit=10;p.dogBones=1;p.dogBoneSize=1;p.dogBoneRange=245;}}
 function boot(){soundtrackUnlocked=true;setupAudio();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');playMusic();if(!first)sfx('level')}
 const GUIDE_KEY='ankin_drift_release_guide_seen';let guideReturn='playing';function guideSeen(){try{return localStorage.getItem(GUIDE_KEY)==='1'}catch{return false}}function markGuide(){try{localStorage.setItem(GUIDE_KEY,'1')}catch{}}
 function click(id,fn){U(id)?.addEventListener('click',fn)}
-function attrMarkup(c,interactive=true){return (c.tags||['汎用']).map(a=>{const cls=a==='属性：炎'?'attr-fire':a==='属性：氷'?'attr-ice':a==='属性：風'?'attr-wind':a==='属性：岩'?'attr-rock':a==='属性：雷'?'attr-thunder':a==='属性融合素材'?'attr-element-material':a==='進化合成素材'?'attr-element-ready':'';return `<span class="attr ${cls} ${interactive?'attr-info':''}" ${interactive?`data-attr-peek="${escHtml(a)}" tabindex="0" role="button" aria-label="${escHtml(a)}の特性と数値を確認"`:''}>${escHtml(a)}${interactive?'<b aria-hidden="true"> ⓘ</b>':''}</span>`}).join('')}
+function attrMarkup(c,interactive=true){return (c.tags||['汎用']).map(a=>{const cls=a==='属性：炎'?'attr-fire':a==='属性：氷'?'attr-ice':a==='属性：風'?'attr-wind':a==='属性：岩'?'attr-rock':a==='属性：雷'?'attr-thunder':a==='属性：闇'?'attr-dark':a==='属性融合素材'?'attr-element-material':a==='進化合成素材'?'attr-element-ready':'';return `<span class="attr ${cls} ${interactive?'attr-info':''}" ${interactive?`data-attr-peek="${escHtml(a)}" tabindex="0" role="button" aria-label="${escHtml(a)}の特性と数値を確認"`:''}>${escHtml(a)}${interactive?'<b aria-hidden="true"> ⓘ</b>':''}</span>`}).join('')}
 
 /* v13.21: concrete, player-facing definitions supplement numeric tag details.
    Tag text is illustrative UI metadata; it never changes which effects are granted. */
@@ -2483,7 +2522,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
   '最大3回':['取得上限','この出撃中は同じカードを最大3回まで獲得でき、上限で候補から外れます。',['回数はカードごとに数えます。','次の出撃では取得回数がリセットされます。']],
   '変異':['TRADE-OFF · 変異強化','強い効果と代償が同時に発生する一度きりのスキルです。',['攻撃の形態そのものが変化します。','一部の組み合わせでシナジーが自動発動します。']],
   '補給':['戦闘補給','一度きりのPOWER・LEGENDARYなどを取り尽くしても長時間プレイが停止しないための代替報酬です。',['最大HPや攻撃力の永続上昇はありません。','修理・シールド補給・再抽選補充・ダッシュ再起動から選択できます。']],
-  '属性融合素材':['属性融合素材 · Lv12／Lv28','炎・氷・雷・風・岩の属性スキルは、属性融合の素材になります。レアリティは問いません。',['Lv12：1回目の属性融合を解放','Lv28：2回目の属性融合を解放','0〜1属性ならスキップし、後から異なる2属性が揃えば選択できます。','一度の融合で使用した特化属性・素材属性は再使用できません。']],
+  '属性融合素材':['属性融合素材 · Lv12／Lv28／Lv40','炎・氷・雷・風・岩・闇の属性スキルは、属性融合の素材になります。レアリティは問いません。',['Lv12：1回目の属性融合を解放','Lv28：2回目の属性融合を解放','0〜1属性ならスキップし、後から異なる2属性が揃えば選択できます。','一度の融合で使用した特化属性・素材属性は再使用できません。']],
   '進化合成素材':['進化合成の素材','同じ進化レシピのPOWERとLEGENDARYを揃えると、従来の進化合成が発動します。属性融合とは独立したシステムです。',['進化合成には対応するPOWER＋LEGENDARYが必要です。','属性融合では取得済みカードの記録は保持されます。']],
   'プラズマ':['プラズマ蓄積','移動するとプラズマが貯まり、静止すると減少します。ダッシュ時に蓄積量を消費して近接突進に変換します。',[`現在の蓄積：${Math.floor(100*(p.drillPlasma||0)/Math.max(.001,p.drillCap||1))}%`,`移動蓄積：${((p.drillGain||0)*100).toFixed(1)}%/秒`,`静止減衰：${((p.drillDecay||0)*100).toFixed(1)}%/秒`]],
   '蓄積':['蓄積系','連続移動がプラズマを増幅します。プラズマが22%以上のダッシュで攻撃が発動します。',[`ドリルの蓄積：${Math.floor(100*(p.drillPlasma||0)/Math.max(.001,p.drillCap||1))}%`]],
@@ -2555,18 +2594,18 @@ function coloredName(id){const c=skillById(id);return c?`<span class="rarity-nam
 function evolutionPeekLink(id){const r=FUSIONS.find(x=>x.id===id);return r?`<span class="skill-peek-trigger" data-evo-peek="${escHtml(id)}" tabindex="0" role="button" aria-label="${escHtml(r.name)}の進化レシピ詳細">${escHtml(r.name)} <span class="peek-icon">ⓘ</span></span>`:id}
 function skillPeekLink(id){const c=skillById(id);if(!c)return coloredName(id);return `<span class="skill-peek-trigger rarity-name ${c.rarity}" role="button" tabindex="0" data-skill-peek="${escHtml(id)}" aria-label="${escHtml(c.name)}のスキル詳細を表示">${escHtml(c.name)}<span class="peek-icon" aria-hidden="true">ⓘ</span></span>`}
 function choiceSynergyReady(c){return synergiesFor(c.id).some(a=>!game.synergies[a.id]&&a.need.some(id=>id!==c.id&&owned(id)))}
-function choiceEvolutionReady(c){return fusionFor(c.id).some(r=>!game.fusions[r.id]&&fusionMaterials(r).filter(id=>id!==c.id).every(owned))}
+function choiceEvolutionReady(c){return fusionFor(c.id).some(r=>!game.fusions[r.id]&&fusionMaterials(r).every(id=>fusionMaterialReady(r,id,id===c.id?1:0)))}
 // All elemental choices already show the always-valid 属性融合素材 tag;
  // no level-up banner should repeat the same 'fusion available' message.
-function recipePartnerMarkup(id,offeredId=null){const c=skillById(id),selected=id===offeredId&&!owned(id);return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':selected?'✦ このカードを選択':'＋ 未所持'} ${skillPeekLink(id)} <small>${RARITY_NAMES[c?.rarity]||'スキル'}</small></span>`}
+function recipePartnerMarkup(id,offeredId=null,recipe=null){const c=skillById(id),selected=id===offeredId&&!owned(id),required=recipe?.ranks?.[id]||0;return `<span class="requirement ${owned(id)?'owned':'missing'}">${owned(id)?'✓ 所持':selected?'✦ このカードを選択':'＋ 未所持'} ${skillPeekLink(id)} <small>${RARITY_NAMES[c?.rarity]||'スキル'}${required?' · Lv'+(game.skills[id]||0)+'/'+required:''}</small></span>`}
 function evolutionMarkup(c){
  const recipes=fusionFor(c.id);if(!recipes.length)return '';
  return recipes.map(a=>{
-  const materials=fusionMaterials(a),done=!!game.fusions[a.id],needed=materials.filter(id=>id!==c.id&&!owned(id));
+  const materials=fusionMaterials(a),done=!!game.fusions[a.id],needed=materials.filter(id=>!fusionMaterialReady(a,id,id===c.id?1:0));
   const ready=needed.length===0;
   return '<div class="evolve '+(ready&&!done?'ready':'')+'"><div class="evo-title">'+
    (done?'✓ 進化済み':ready?'✦ このカードで進化合成完成！':'◈ 進化合成の組み合わせ')+'：'+a.icon+' '+escHtml(a.name)+'</div>'+
-   '<div class="recipe-parts">'+materials.map(id=>recipePartnerMarkup(id,c.id)).join('<span class="fusion-plus">＋</span>')+'</div>'+
+   '<div class="recipe-parts">'+materials.map(id=>recipePartnerMarkup(id,c.id,a)).join('<span class="fusion-plus">＋</span>')+'</div>'+
    '<div class="recipe-effect">必要 '+materials.length+' 種類 · '+escHtml(a.desc)+'</div></div>';
  }).join('');
 }
@@ -2586,11 +2625,11 @@ function recipeBuild(){
   return score(b)-score(a);
  });
  return recipes.map(a=>{
-  const mats=fusionMaterials(a),missing=mats.filter(id=>!owned(id)),done=!!game.fusions[a.id],complete=missing.length===0;
+  const mats=fusionMaterials(a),missing=mats.filter(id=>!fusionMaterialReady(a,id)),done=!!game.fusions[a.id],complete=missing.length===0;
   const status=done?'✓ 進化完了':complete?'✦ 合成可能':missing.length===1?'あと1種類':'あと'+missing.length+'種類';
   return '<article class="lab-recipe '+(done?'done':complete?'ready':missing.length<mats.length?'partial':'')+'">'+
    '<div class="lab-recipe-head"><strong>'+escHtml(a.icon+' '+a.name)+'</strong><span>'+status+'</span></div>'+
-   '<div class="recipe-parts">'+mats.map(recipePartnerMarkup).join('<span class="fusion-plus">＋</span>')+'</div>'+
+   '<div class="recipe-parts">'+mats.map(id=>recipePartnerMarkup(id,null,a)).join('<span class="fusion-plus">＋</span>')+'</div>'+
    (!done&&missing.length?'<div class="recipe-missing">不足：'+missing.map(coloredName).join('・')+'</div>':'')+
    '<div class="recipe-effect">必要 '+mats.length+' 種類 · 進化効果：'+escHtml(a.desc)+'</div></article>';
  }).join('')||'<p class="lab-empty">この条件の進化レシピはありません。</p>';
@@ -2873,8 +2912,8 @@ function enemyCodexMarkup(){return `<p class="lab-help">敵の見た目・名前
 function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipType);return `<p class="lab-help">🌈 レリック・ワンダラーを撃破すると、この機体の未取得レリック3択が出現します（最大4種類まで取得）。レリックは攻撃の動作を変え、1種類につき1回取得可能です。<br>取得数 ${Object.keys(game.relics).length} / ${items.length}</p><div class="atlas-grid">${items.map(c=>`<article class="atlas-card relic"><div class="atlas-head"><span class="rarity-name relic">${c.icon} ${c.name}</span><span class="atlas-rank relic">RELIC</span></div><div>${attrMarkup(c)}</div><div class="atlas-desc">${c.desc}</div><div class="atlas-meta">${game.relics[c.id]?'✦ 取得済み':'◇ 未取得'}</div></article>`).join('')}</div>`}
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
-function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/2':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v14.0 · スキル名を共通データと同期</div>${content}</div>`}
+function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28／40'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">エピック以下の2スキルで自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/3':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v14.0 · スキル名を共通データと同期</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
@@ -2882,7 +2921,7 @@ function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
- html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、3択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12とLv28で融合権が解放され、次の通常レベルアップ画面に保留されます。異なる2属性と対象武装が揃えば、通常スキルを1枚取る代わりに属性融合を選べます。必要な素材がなくても権利は消えず、選択画面で戻っても保持します。ボス・レリック報酬は別枠で、属性融合によって失いません。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
+ html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='phantom'?'<h3>✦ ファントム専用操作</h3><p>自機ゴーストは回避と経験値回収を担当します。白銀のファントムは独立して索敵・斬撃し、経験値は拾いません。ナイトパレードで最大3機、属性攻撃は初期の主機だけが使用します。</p>':''}${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、4択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12・Lv28・Lv40で融合権が解放され、次の通常レベルアップ画面に保留されます。異なる2属性と対象武装が揃えば、通常スキルを1枚取る代わりに属性融合を選べます。必要な素材がなくても権利は消えず、選択画面で戻っても保持します。ボス・レリック報酬は別枠で、属性融合によって失いません。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
  const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';const fusionTickets=kind==='normal'?Math.max(0,[12,28].filter(n=>game.level>=n).length-fusionStageIndex()):0;const fusionAvailable=fusionTickets>0&&availableElementPairs().length>0;const fusionTicket=fusionTickets?`<div class="fusion-level-ticket" role="status"><strong>✦ 属性融合権 ${fusionTickets}回分 · 保留中</strong><span>${fusionAvailable?'通常スキル1回分の代わりに属性融合を選べます':'異なる2属性＋主属性武装を揃えると使用できます（権利は保持）'}</span></div>`:'';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。':major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
  html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3'}キーまたはカードで選択。<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div>${fusionTicket}<div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div><div class="actions">${fusionTickets?`<button type="button" class="primary fusion-from-level" id="fusionFromLevel" ${fusionAvailable?'':'disabled'}>✦ 属性融合を選ぶ ${fusionAvailable?'（通常スキルの代わり）':'（素材不足）'}</button>`:''}<button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選 [R] 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑 [B]</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
@@ -2973,7 +3012,7 @@ function showEvolutionPeek(id,anchor,pin=false){
  skillPeekPanel.innerHTML='<div class="peek-top"><div><div class="peek-rank">EVOLUTION RECIPE · '+(game.fusions[id]?'進化済み':'未完成')+
  '</div><div class="peek-title">'+escHtml(r.icon+' '+r.name)+'</div></div><button type="button" class="peek-close">×</button></div>'+
  '<div class="peek-desc">'+escHtml(r.desc)+'</div><div class="attr-stats">'+fusionMaterials(r).map(mat=>{
-  const c=skillById(mat);return '<p>'+(owned(mat)?'✓ 所持':'◇ 未所持')+'：'+escHtml(c?.name||mat)+' — '+escHtml(c?.desc||'')+'</p>';
+  const c=skillById(mat);return '<p>'+(owned(mat)?'✓ 所持':'◇ 未所持')+'：'+escHtml((c?.name||mat)+(r.ranks?.[mat]?' Lv'+(game.skills[mat]||0)+'/'+r.ranks[mat]:''))+' — '+escHtml(c?.desc||'')+'</p>';
  }).join('')+'</div>';
  skillPeekPanel.hidden=false;skillPeekPanel.classList.toggle('is-touch',mobile);positionPeek(anchor,mobile);
 }
@@ -4052,11 +4091,77 @@ for(const c of ALL_SKILL_DEFS()){
  c.name=DOG_CUTE_SKILL_NAMES[c.id];
 }
 
+SKILLS.push(
+ skill('fearAura','uncommon','🌑','フィアーオーラ','5秒毎に前方オーラ。恐怖確率30%・2秒。ボスは軽減弱体。',p=>p.darkFear=Math.min(5,p.darkFear+1),{element:'dark',maxStacks:5,tags:['属性：闇','属性融合素材','恐怖']}),
+ skill('programControl','rare','▦','プログラムコントロール','固定ウイルス領域。撃破時30%で5秒味方化。上限3体、ボス対象外。',p=>p.darkVirus=Math.min(5,p.darkVirus+1),{element:'dark',maxStacks:5,tags:['属性：闇','属性融合素材','設置']})
+);
+for(const [id,key,name] of [['dogBat','darkFear','こわもて・コウモリ'],['dogBear','darkVirus','フレンドリー・くまさん']])SKILLS.push(skill(id,id==='dogBat'?'uncommon':'rare',id==='dogBat'?'🦇':'🐻',name,id==='dogBat'?'5秒毎に前方オーラ。恐怖確率30%・2秒。ボスは軽減弱体。':'固定ウイルス領域。撃破時30%で5秒味方化。上限3体。',p=>p[key]=Math.min(5,p[key]+1),{shipOnly:'dog',element:'dark',maxStacks:5,tags:['属性：闇','属性融合素材','アニマル']}));
+for(const id of ['fearAura','programControl'])SKILLS.find(c=>c.id===id).excludeShips=['dog'];
+DOG_FUSION_SOURCE_IDS.dark={A:'dogBat',B:'dogBear'};
+
+const PHANTOM_SHARED=new Set(['hp','speed','refit','battery','dash','dashGraze','dashPulse','dashFlow','nova','novaDamage','novaRadius','shield','regen','life','revive','phoenix','damage','critical','critEpic','superDash','pickup','xp','armor','shieldRegen','novaPulseRelay','field','magnet','novaAmp','critPower','void','seraph','reaper','blizzard','eternalBody','overlord','unboundNova']);
+const PHANTOM_NORMALS=[
+ ['polish','ブレード研磨','common',5,'ブレード威力+15%。'],
+ ['haste','高速斬撃','common',5,'ブレード攻撃効率+9%。'],
+ ['edge','クレセントエッジ','common',4,'斬撃射程+9。'],
+ ['wide','ワイドスイーパー','uncommon',3,'斬撃角度+14度、巻き込み+1。'],
+ ['double','ダブルスラッシュ','rare',3,'16%の確率で追加斬撃（最大48%）。'],
+ ['critical','シルバークリティカル','rare',3,'ブレードのクリティカル率+8%。'],
+ ['echo','ブレードエコー','epic',3,'32%威力の残響斬撃を追加。ランク毎に残響威力+8%。'],
+ ['assault','フェイズアサルト','epic',2,'接近速度+10%、ワープ斬撃の進化素材。'],
+ ['hunt','ハンターセンス','uncommon',3,'探知範囲+85、移動速度+12。'],
+ ['algorithm','アサルトアルゴリズム','rare',3,'再索敵間隔短縮、攻撃効率+4%。'],
+ ['core','ファントムコア','rare',5,'ファントムLv+1。全機の攻撃・速度と本体HP・シールドを強化。'],
+ ['limit','コア・リミットブレイク','epic',2,'ファントムLv+1。Lv10では抽選されない。'],
+ ['sync','シルバーシンクロ','epic',3,'全ファントムのブレード威力+8%。'],
+ ['shell','ゴーストシェル','common',5,'本体の最大HP+15、HPを15回復。'],
+ ['recharge','シールドリチャージ','uncommon',3,'シールド自動回復+2/秒。'],
+ ['dash','ゴーストダッシュ強化','uncommon',3,'ダッシュ終了後の無敵+0.07秒（基本0.20秒）。'],
+ ['shield','スペクトルシールド','rare',3,'最大シールド+18、シールドを18補充。'],
+ ['armor','フェイズアーマー','epic',2,'被ダメージ-7%。'],
+ ['magnet','ソウルマグネット','common',5,'経験値回収半径+40。本人が近づいて回収する。'],
+ ['compression','ソウルコンプレッション','uncommon',3,'近接する経験値を統合。経験値・NOVAチャージ総量を保存。'],
+ ['line','エクトプラズムライン','rare',3,'回収範囲外の経験値をゆっくり引き寄せる。'],
+ ['collector','アストラルコレクター','epic',2,'一定間隔で広い範囲の経験値を引き寄せる。即時取得なし。']
+];
+for(const [key,name,rarity,maxStacks,desc] of PHANTOM_NORMALS){
+ SKILLS.push(skill('ph_'+key,rarity,'◈',name,desc,p=>{AnkinPhantom.addRank(p,key);
+  if(key==='core'||key==='limit')AnkinPhantom.level(p,1);
+  if(key==='shell'){p.maxHp+=15;p.hp=Math.min(p.maxHp,p.hp+15);}
+  if(key==='recharge')p.shieldRecharge+=2;
+  if(key==='shield'){p.shieldMax+=18;p.shield=Math.min(p.shieldMax,p.shield+18);}
+  if(key==='magnet')p.magnet+=40;
+ },{shipOnly:'phantom',maxStacks,tags:['ファントム',...(['shell','recharge','dash','shield','armor'].includes(key)?['防御']:['magnet','compression','line','collector'].includes(key)?['回収']:['ブレード'])],available:p=>!['core','limit'].includes(key)||p.phantomLevel<10}));
+}
+const PHANTOM_LEGENDS=[['parade','ナイトパレード','ファントムを2機追加（合計3機）、Lv+2。追加機は無属性。'],['emperor','シルバーエンペラー','ブレード威力+30%、射程+15。8命中毎に追加斬撃。'],['predator','ファントム・プレデター','探知範囲+180、移動速度+35、撃破後の再索敵を高速化。'],['orchestra','レクイエム・オーケストラ','残響斬撃の威力を強化。未取得なら残響斬撃を解放。'],['sanctuary','ゴースト・サンクチュアリ','HP+40・シールド+35。瀕死時シールド補充（18秒再使用）。'],['relay','ソウルリレー','経験値回収後2.4秒、全ファントムのブレード威力+18%。']];
+const PHANTOM_POWERS=[['crescent','クレセントエンジン','ブレード威力+12%、射程+7。'],['driver','フェイズドライバー','ブレード攻撃効率+7%。'],['matrix','エコーマトリクス','残響威力+10%。未取得なら残響斬撃を解放。'],['network','ナイトネットワーク','全機のブレード威力+10%。'],['barrier','フェイズバリア','最大シールド+20、シールドを補充。'],['coil','ソウルコイル','経験値回収半径+30、ソウルリレーの威力補正+4%。']];
+for(const [rows,rarity,pool] of [[PHANTOM_LEGENDS,'legendary',LEGENDS],[PHANTOM_POWERS,'power',POWERS]])for(const [key,name,desc] of rows){pool.push(skill('ph_'+key,rarity,'✦',name,desc,p=>{AnkinPhantom.addRank(p,key);
+ if(key==='parade'){AnkinPhantom.level(p,2);AnkinPhantom.sync(p);}
+ if(key==='sanctuary'){p.maxHp+=40;p.hp=Math.min(p.maxHp,p.hp+40);p.shieldMax+=35;p.shield=Math.min(p.shieldMax,p.shield+35);}
+ if(key==='barrier'){p.shieldMax+=20;p.shield=Math.min(p.shieldMax,p.shield+20);}
+ if(key==='coil')p.magnet+=30;
+ },{shipOnly:'phantom',stackable:false,tags:['ファントム','進化合成素材']}));}
+const PHANTOM_RECIPES=[
+ ['reaper','SILVER REAPER','crescent','emperor',{ph_polish:3,ph_edge:3},'大型三日月斬撃。射程+45、巻き込み+3。'],
+ ['flash','PHANTOM FLASH','driver','predator',{ph_assault:2},'2.2秒毎に短距離ワープ接近。障壁を無視しない。'],
+ ['requiem','REQUIEM EDGE','matrix','orchestra',{ph_echo:2},'時間差の残響斬撃を最大2段追加。追加攻撃から再帰発動しない。'],
+ ['eternal','ETERNAL PARADE','network','parade',{},'3機が各自の位置で4斬撃毎に連携斬撃。強制帰還なし。'],
+ ['veil','GHOST VEIL','barrier','sanctuary',{ph_dash:2},'ダッシュ終了後0.65秒、短時間の防御シールドを生成。'],
+ ['field','ASTRAL FIELD','coil','relay',{ph_magnet:3},'経験値吸引・統合範囲を拡大。本人が回収する。']
+];
+for(const [key,name,power,legend,ranks,desc] of PHANTOM_RECIPES)FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:'ph_'+power,legend:'ph_'+legend,required:Object.keys(ranks),ranks,icon:'◈',desc,apply:p=>AnkinPhantom.addRank(p,key)});
+for(const [key,name,desc] of [['contract','幽魂の契約','HPが低いほどブレード威力上昇（最大+35%）。'],['oath','銀の誓約','同一敵へ連続斬撃する毎に威力+3%（最大30%）。標的変更で解除。'],['cycle','魂の輪廻','経験値回収後2.4秒、全ファントムのブレードを強化。'],['astralCore','アストラルコア','ブレード威力+4%。ファントムLv10で+18%。']])RELICS.push(skill('ph_'+key,'relic','◈',name,desc,p=>AnkinPhantom.addRank(p,key),{shipOnly:'phantom',stackable:false,tags:['ファントム','レリック']}));
+for(const [key,name,legend,material,desc] of [['novaTempest','シルバーテンペスト','emperor','ph_wide','NOVA中、全機がNOVA威力を参照する全周斬撃を追加。'],['novaAccel','ファントムアクセラレーション','predator','ph_haste','NOVA中の移動・攻撃速度をさらに強化。'],['novaSanctuary','スペクトルサンクチュアリ','sanctuary','ph_shield','NOVAの弾消去範囲1.5倍、本体シールドを補充。']]){
+ const id='ph_'+key+'Core';POWERS.push(skill(id,'power','✦',name+'・コア','NOVA威力+30、範囲+12。'+name+'の進化素材。',p=>{p.novaDamage+=30;p.novaRadius+=12;},{shipOnly:'phantom',stackable:false,tags:['ファントム','ノヴァ','進化合成素材']}));
+ FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:id,legend:'ph_'+legend,required:[material],desc,icon:'✦',apply:p=>AnkinPhantom.addRank(p,key)});
+}
+
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
-function fitsShip(c){return !!c&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
+function fitsShip(c){return !!c&&(player.shipType!=='phantom'||c.shipOnly==='phantom'||PHANTOM_SHARED.has(c.id)||!!elementFromCard(c))&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function activeFusions(){return FUSIONS.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&[a.power,a.legend,...(a.required||[])].every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
 function synergiesFor(id){return activeSynergies().filter(a=>a.need.includes(id))}
+function fusionMaterialReady(r,id,extra=0){return (owned(id)||extra>0)&&(!r?.ranks?.[id]||(game.skills[id]||0)+extra>=r.ranks[id]);}
 function fusionMaterials(r){return [r.power,r.legend,...(r.required||[])];}
 function fusionFor(id){return activeFusions().filter(a=>fusionMaterials(a).includes(id))}
 
@@ -4088,7 +4193,8 @@ function syncEvolutionVisuals(p){
  p.evolutionMotif=latest?.motif||'';
 }
 
-function activateUpgrades(){pendingSynergy=[];for(const a of activeSynergies()){if(!game.synergies[a.id]&&a.need.every(owned)){game.synergies[a.id]=1;applyBalancedUpgrade(player,a.apply,'synergy');pendingSynergy.push(a)}}for(const a of activeFusions()){if(!game.fusions[a.id]&&[a.power,a.legend,...(a.required||[])].every(owned)){game.fusions[a.id]=1;applyBalancedUpgrade(player,a.apply,'fusion');pendingFusions.push(a);player.fusionList.push(a.id)}}syncEvolutionVisuals(player)}
+function fusionRanksReady(a){return !a.ranks||Object.entries(a.ranks).every(([id,n])=>(game.skills[id]||0)>=n);}
+function activateUpgrades(){pendingSynergy=[];for(const a of activeSynergies()){if(!game.synergies[a.id]&&a.need.every(owned)){game.synergies[a.id]=1;applyBalancedUpgrade(player,a.apply,'synergy');pendingSynergy.push(a)}}for(const a of activeFusions()){if(!game.fusions[a.id]&&fusionRanksReady(a)&&[a.power,a.legend,...(a.required||[])].every(owned)){game.fusions[a.id]=1;applyBalancedUpgrade(player,a.apply,'fusion');pendingFusions.push(a);player.fusionList.push(a.id)}}syncEvolutionVisuals(player)}
 function kindLabel(k){return({pulse:'パルス',plasma:'プラズマ',cryo:'フロスト',arc:'サンダー'})[k]||'パルス'}
 function rarityWeights(){const k=clamp((game.level-1)/60,0,1);return{common:.50-.26*k,uncommon:.32-.02*k,rare:.15+.17*k,epic:.03+.11*k}}
 function weightedRarity(){const w=rarityWeights();let r=Math.random();for(const k of ['common','uncommon','rare','epic']){r-=w[k];if(r<=0)return k}return'epic'}
@@ -4139,7 +4245,7 @@ const REWARD_SUPPLIES=[
  {id:'supply_refit',icon:'⟳',name:'戦術補給',desc:'再抽選回数を1回補充（上限7回）。満杯ならHPを少量回復。',apply(p){if(game.rerolls<7)game.rerolls++;else p.hp=Math.min(p.maxHp,p.hp+Math.max(10,p.maxHp*.12));}},
  {id:'supply_dash',icon:'➤',name:'機動再起動',desc:'ダッシュの再使用待機を解除し、最大HPの10%を回復。',apply(p){p.dashLeft=0;p.hp=Math.min(p.maxHp,p.hp+Math.max(10,p.maxHp*.10));}}
 ].map(c=>({...c,rarity:'supply',tags:['補給'],isSupply:true,stackable:true}));
-function cardOfferCount(kind){return kind==='minor'||kind==='major'?4:3}
+function cardOfferCount(kind){return kind==='normal'||kind==='minor'||kind==='major'?4:3}
 function offeredElements(c){return (c.tags||[]).filter(t=>t.startsWith('属性：')).map(t=>t.slice(3))}
 function preferredElementNames(){
  const focus=new Set();for(const id of Object.keys({...game.skills,...game.powers,...game.legends})){
@@ -4162,14 +4268,14 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
  const targetDefs=targetDefinitions().filter(t=>game.targets.includes(t.key)&&!targetStatus(t).done&&!targetStatus(t).sealed);
  for(let i=0;i<desired;i++){
   const possible=offerCandidatePool(pool.filter(c=>!used.has(c.id)),options);if(!possible.length)break;let c;
-  const targetMatches=possible.filter(c=>targetDefs.some(t=>!owned(c.id)&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id))));
+  const targetMatches=possible.filter(c=>targetDefs.some(t=>(t.kind==='evolution'?!fusionMaterialReady(FUSIONS.find(r=>'f:'+r.id===t.key),c.id):!owned(c.id))&&(t.kind==='element'?(t.materials.includes(elementFromCard(c))&&elementInvestments(elementFromCard(c)).count===0):t.materials.includes(c.id))));
   const elementMatches=possible.filter(c=>offeredElements(c).some(tag=>focus.has(tag)));
   // Rerolls improve control of an existing elemental build, but never force a specific card.
   if(isReroll&&targetMatches.length&&Math.random()<.22){c=targetMatches[Math.floor(Math.random()*targetMatches.length)];}
   else if(isReroll&&elementMatches.length&&Math.random()<.27){c=elementMatches[Math.floor(Math.random()*elementMatches.length)];}
   else if(kind==='normal'){
    // Offer one missing element more often as the first fusion milestone approaches.
-   // Players still choose from three cards; no forced auto-pick or free upgrades.
+   // Players still choose from four cards; no forced auto-pick or free upgrades.
    const existing=ownedElementKeys();
    const fusionCandidates=possible.filter(c=>{const e=elementFromCard(c);return !!e&&!existing.includes(e)&&existing.length===1});
    if(fusionCandidates.length&&game.elementCombos.length===0&&game.level>=7&&Math.random()<.44){
@@ -4185,7 +4291,9 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
    const drillEligible=player.shipType==='drill'?diverse.filter(c=>c.shipOnly==='drill'):[];
    const shared=player.shipType==='dog'&&options.filter(o=>o.shipOnly==='dog').length>=2
     ?possible.filter(c=>c.shipOnly!=='dog'):[];
-   const pickPool=shared.length?shared:weighted;
+   const support=player.shipType==='phantom'&&(game.phantomOfferDry||0)>=3?possible.filter(c=>(c.tags||[]).some(t=>t==='防御'||t==='回収')):[];
+   const progress=player.shipType==='phantom'?possible.filter(card=>fusionFor(card.id).some(r=>!game.fusions[r.id]&&!fusionMaterialReady(r,card.id)&&fusionMaterials(r).some(owned))):[];
+   const pickPool=support.length&&Math.random()<.45?support:progress.length&&Math.random()<.22?progress:shared.length?shared:weighted;
    c=drillEligible.length&&Math.random()<.39?drillEligible[Math.floor(Math.random()*drillEligible.length)]:pickPool[Math.floor(Math.random()*pickPool.length)];
   }else{
    const ready=possible.filter(c=>fusionFor(c.id).some(a=>!game.fusions[a.id]&&owned(c.id===a.power?a.legend:a.power)));
@@ -4194,6 +4302,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
   }
   options.push(c);used.add(c.id);
  }
+ if(kind==='normal'&&player.shipType==='phantom')game.phantomOfferDry=options.some(c=>(c.tags||[]).some(t=>t==='防御'||t==='回収'))?0:(game.phantomOfferDry||0)+1;
  // Do not soft-lock when all once-per-run boss rewards have been claimed.
  if(['normal','minor','major','unique'].includes(kind)&&options.length<desired){
   for(const supply of REWARD_SUPPLIES){if(options.length>=desired)break;options.push(supply)}
@@ -4571,7 +4680,7 @@ function applyChain(e,amt,sourceX=e.x,sourceY=e.y){let from=e;const visited=new 
  }}
 
 function detonate(x,y,r,damage,except=null,depth=0,source='explosion'){ring(x,y,r,'#ffb173');burst(x,y,'#ffc380',10,140);if(depth>5)return;for(const e of circleCandidates(x,y,r)){if(e.dead||e===except)continue;if((e.x-x)**2+(e.y-y)**2<(r+e.r)**2)damageEnemy(e,damage,{special:true,source,depth:depth+1})}}
-function orb(x,y,xp,energy=7,heal=false){if(pickups.length>=MAX_PICKUPS){let best=null,dd=180*180;for(const k of pickups){if(k.type==='heal'!==heal)continue;const d=(k.x-x)**2+(k.y-y)**2;if(d<dd){best=k;dd=d}}if(best){best.value+=(heal?22:xp);best.charge+=energy;best.r=Math.min(15,best.r+.2);return;}if(!heal){addExp(xp);gainNovaEnergy(energy);}return;}
+function orb(x,y,xp,energy=7,heal=false){if(pickups.length>=MAX_PICKUPS){let best=null,dd=180*180;for(const k of pickups){if(k.type==='heal'!==heal)continue;const d=(k.x-x)**2+(k.y-y)**2;if(d<dd){best=k;dd=d}}if(best){best.value+=(heal?22:xp);best.charge+=energy;best.r=Math.min(15,best.r+.2);return;}if(!heal&&player?.shipType==='phantom'){const remote=pickups.find(k=>k.type==='energy');if(remote){remote.value+=xp;remote.charge+=energy;return;}}if(!heal){addExp(xp);gainNovaEnergy(energy);}return;}
  pickups.push({x,y,r:heal?9:6,type:heal?'heal':'energy',value:heal?22:xp,charge:energy,phase:rand(0,TAU),life:Infinity});}
 // Three-minute EXP magnet: bonus object stays in the field until touched.
 function spawnVacuum(){if(!game||!player)return;const dist=Math.min(165,Math.max(85,Math.min(W,H)*.18)),angle=rand(0,TAU);if(!game.vacuum){game.vacuum={x:clamp(player.x+Math.cos(angle)*dist,34,W-34),y:clamp(player.y+Math.sin(angle)*dist,40,H-40),pulse:0,charge:1}}else{game.vacuum.charge++;game.vacuum.x=clamp(player.x+Math.cos(angle)*dist,34,W-34);game.vacuum.y=clamp(player.y+Math.sin(angle)*dist,40,H-40)}announce('✦ EXP SWEEP 出現！ 光るコアに触れると全EXPを回収',5);pop(player.x,player.y-65,'✦ EXP SWEEP','#ffe998');sfx('pickupSpawn');ring(game.vacuum.x,game.vacuum.y,130,'#ffe8a3');}
@@ -4671,7 +4780,7 @@ function collectVacuum(source='item'){const core=game.vacuum;if(!core&&source!==
  pickups=pickups.filter(e=>e.type!=='energy');game.vacuum=null;addExp(exp);gainNovaEnergy(energy);if(player.expShield&&count)player.shield=Math.min(player.shieldMax,player.shield+player.expShield*count);
  burst(player.x,player.y,'#fff2bc',65,270);ring(player.x,player.y,Math.max(W,H)*.75,'#fffad3');flash=Math.max(flash,.4);shake=Math.max(shake,12);pop(player.x,player.y-65,`ALL EXP +${format(exp)}`,'#fff2a4');announce(`${source==='boss'?'🏆 ボス撃破！':'✨ EXP SWEEP！'} ${count}個の結晶を一括回収 · EXP +${format(exp)}`,5);sfx('vacuum');}
 // Merge close shards without removing their stored EXP or NOVA. Keeps long runs light.
-function compactPickups(){if(pickups.length<90)return;const buckets=new Map(),merged=[];for(const p of pickups){if(p.type!=='energy'){merged.push(p);continue}const key=`${Math.floor(p.x/42)}:${Math.floor(p.y/42)}`;const other=buckets.get(key);if(other){const total=other.value+p.value;other.x=(other.x*other.value+p.x*p.value)/Math.max(1,total);other.y=(other.y*other.value+p.y*p.value)/Math.max(1,total);other.value=total;other.charge+=p.charge;other.r=Math.min(12,other.r+.12)}else{buckets.set(key,p);merged.push(p)}}pickups=merged;}
+function compactPickups(force=false){if(pickups.length<(force?2:90))return;const buckets=new Map(),merged=[];for(const p of pickups){if(p.type!=='energy'){merged.push(p);continue}const cell=force&&player.shipType==='phantom'?42+AnkinPhantom.rank(player,'compression')*8+AnkinPhantom.rank(player,'field')*24:42;const key=`${Math.floor(p.x/cell)}:${Math.floor(p.y/cell)}`;const other=buckets.get(key);if(other){const total=other.value+p.value;other.x=(other.x*other.value+p.x*p.value)/Math.max(1,total);other.y=(other.y*other.value+p.y*p.value)/Math.max(1,total);other.value=total;other.charge+=p.charge;other.r=Math.min(12,other.r+.12)}else{buckets.set(key,p);merged.push(p)}}pickups=merged;}
 function tickVacuum(dt){game.compactTimer-=dt;if(game.compactTimer<=0){game.compactTimer=5;compactPickups()}
  while(game.total>=game.nextVacuumAt){const stamp=game.nextVacuumAt;game.nextVacuumAt=stamp+rand(70,120);if(!game.vacuum&&(Math.random()<.38||stamp-game.lastVacuumAt>=300)){spawnVacuum();game.lastVacuumAt=stamp}}
  const core=game.vacuum;if(!core)return;core.pulse+=dt;const distance=dst(core,player);if(distance<Math.max(95,player.magnet*.8)&&distance>1){const speed=clamp(180+(105-distance)*2,140,620);core.x+=(player.x-core.x)/distance*speed*dt;core.y+=(player.y-core.y)/distance*speed*dt}if(distance<player.r+23)collectVacuum();}
@@ -4745,12 +4854,12 @@ function damageEnemy(e,damage,meta={}){if(e.dead||e.isoWarp||(e.isoSafe||0)>0||!
  if(coreFloor!==null){damage*=.11;damage=Math.min(damage,Math.max(0,e.hp-coreFloor));if(damage<=0)return;}
  if(e.type==='ultimatePart'&&e.parent?.dead)return;
  if(hasBossSuper(e)&&e.superState==='recover')damage*=1.13;
- if(!meta.dot&&meta.source!=='nova'&&player&&engageBarrierBlocks(meta.origin?.x??player.x,meta.origin?.y??player.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}if(meta.source!=='nova'&&player.tacticFlags&&damage>0)damage*=AnkinTactics.damageMultiplier(player,e,meta,gainNovaEnergy);
+ const attackOrigin=meta.origin||(player?.shipType==='phantom'?player.phantoms?.[0]||player:player);if(!meta.dot&&meta.source!=='nova'&&player&&engageBarrierBlocks(attackOrigin.x,attackOrigin.y,e.x,e.y))return;if(e.type==='guard'&&Number.isFinite(meta.projectileAngle)&&Math.cos(meta.projectileAngle+Math.PI-e.faceAngle)>.45){damage*=.55;if(Math.random()<.14)pop(e.x,e.y-20,'GUARD','#8deaff')}if(meta.source!=='nova'&&player.tacticFlags&&damage>0)damage*=AnkinTactics.damageMultiplier(player,e,meta,gainNovaEnergy);
  // Final-boss module protection also bounds conditional damage bonuses.
  if(coreFloor!==null)damage=Math.min(damage,Math.max(0,e.hp-coreFloor));
  const wasSlow=e.slow>0,wasFrozen=e.frozen>0,wasBurn=e.burn>0,dealt=Math.min(Math.max(0,damage),Math.max(0,e.hp));game.damage+=dealt;const source=(meta.source&&Object.hasOwn(DAMAGE_LABELS,meta.source))?meta.source:(meta.dot?'dot':'other');game.damageStats[source]=(game.damageStats[source]||0)+dealt;trackBalanceDamage(dealt,source,e);if(['minor','major','unique','ultimate','ultimatePart'].includes(e.type))game.bossDamage+=dealt;e.hp-=Math.max(0,damage);e.hurt=.11;
  if(player.elementMods?.voltBlast&&['element','pulseField'].includes(meta.source)&&e.hp>0&&Math.random()<.025)detonate(e.x,e.y,65,Math.max(50,player.chainDamage*.3),e,5);
- if(player.lifeSteal>0&&dealt>0)player.hp=Math.min(player.maxHp,player.hp+dealt*player.lifeSteal);if(e.hp>0)return;
+ applyDarkFusionHit(e,meta);if(player.lifeSteal>0&&dealt>0)player.hp=Math.min(player.maxHp,player.hp+dealt*player.lifeSteal);if(e.hp>0)return;
  e.dead=true;game.kills++;trackBalanceKill(e);if(e.type==='ultimate')game.finisherSource=source;
  burst(e.x,e.y,e.color,e.type==='unique'?70:e.type==='major'?45:e.type==='minor'?30:(shots.length>110?4:7),e.type==='unique'?300:130);
  if(player.killBurst>0&&(meta.depth||0)<3&&e.type!=='unique')detonate(e.x,e.y,78+Math.min(65,player.killBurst*.18),player.killBurst/(meta.depth?2:1),e,(meta.depth||0)+1);
@@ -4839,7 +4948,7 @@ function tickDogChicks(dt){
  }
 }
 
-function shoot(){if(player.shipType==='dog'){fireDogBones();return;}const tgt=visibleTarget(player.x,player.y);if(tgt){player.bulletKind=player.bulletModes[player.shotCycle++%player.bulletModes.length];fireFrom(player.x,player.y,tgt,player.multishot);if(player.relicRear)fireRear();if(player.relicSide)fireSide();if(Math.random()<Math.min(.85,player.echoShots))fireFrom(player.x,player.y,tgt,Math.min(4,player.multishot),player.dmg*.42,player.shotSpeed*.85,'echo')}}
+function shoot(){if(player.shipType==='phantom')return;if(player.shipType==='dog'){fireDogBones();return;}const tgt=visibleTarget(player.x,player.y);if(tgt){player.bulletKind=player.bulletModes[player.shotCycle++%player.bulletModes.length];fireFrom(player.x,player.y,tgt,player.multishot);if(player.relicRear)fireRear();if(player.relicSide)fireSide();if(Math.random()<Math.min(.85,player.echoShots))fireFrom(player.x,player.y,tgt,Math.min(4,player.multishot),player.dmg*.42,player.shotSpeed*.85,'echo')}}
 // v10.3: diminishing returns and movement incentives for mature weapon builds.
 function laserBalance(p,count){
  const excess=Math.max(0,p.laserScale-1);
@@ -4934,7 +5043,7 @@ function dash(){if(!player||player.dashLeft>0)return;AnkinTactics.onDash(player,
  if(player.dashPulse){let cleared=0;for(const b of hostile){if(cleared>=5)break;if(b.ttl>0&&!b.unblockable&&d2(b,player)<(b.r+72)**2){b.ttl=0;cleared++}}if(cleared){ring(player.x,player.y,72,'#a8fff4');pop(player.x,player.y-23,'BREAK '+cleared,'#affff4')}}
  if(player.dashFlow)player.dashFlowTimer=1.2;
  if(game?.combatLog)game.combatLog.dashCount++;player.dashTime=(player.shipType==='drill'?.24:.2)*(player.thrusterEngine?1.65:1)*(player.shipType==='drill'&&player.drillOverdriveTime>0?1+.12*player.novaDrillDash:1);player.dashLeft=player.shipType==='drill'&&player.drillOverdriveTime>0?Math.min(.65,player.dashCd*.42):player.dashCd;player.dashGaugeFade=1;player.iframes=Math.max(.31,player.iframes);burst(player.x,player.y,'#75fff2',16,90);tone(260,.18,'sawtooth',.045)}
-function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaCooldown>0)))return;if(!force){player.energy=0;player.novaCooldown=Math.max(NOVA_REUSE_MIN,Math.min(NOVA_COOLDOWN,player.novaReuseDelay??NOVA_COOLDOWN));if(game?.combatLog)game.combatLog.novaCount++;}if(player.shipType==='dog'){sfx('novaShot');fireDogBones(true);ring(player.x,player.y,65,'#ffe2ac');burst(player.x,player.y,'#ffd6aa',22,165);announce(player.novaEvolution==='dog'?'ごちそうたくさん！ · BOW SHOCK':'🐶 BOW SHOCK · 8方向骨ブーメラン！',2.6);return;}if(player.shipType==='drill'){
+function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaCooldown>0)))return;if(!force){player.energy=0;player.novaCooldown=Math.max(NOVA_REUSE_MIN,Math.min(NOVA_COOLDOWN,player.novaReuseDelay??NOVA_COOLDOWN));if(game?.combatLog)game.combatLog.novaCount++;}if(player.shipType==='phantom'){AnkinPhantom.nova(player,phantomWorld());ring(player.x,player.y,player.novaRadius,'#eef5ff');sfx('novaLaser');announce('SPECTRAL OVERDRIVE · '+player.phantomNova.toFixed(1)+'s',2.5);return;}if(player.shipType==='dog'){sfx('novaShot');fireDogBones(true);ring(player.x,player.y,65,'#ffe2ac');burst(player.x,player.y,'#ffd6aa',22,165);announce(player.novaEvolution==='dog'?'ごちそうたくさん！ · BOW SHOCK':'🐶 BOW SHOCK · 8方向骨ブーメラン！',2.6);return;}if(player.shipType==='drill'){
   sfx('novaLaser');flash=.09;shake=0;
   player.drillOverdriveTime=5.5+Math.min(2,player.drillNovaBonusTime||0)+(player.novaEvolution==='drill'?1.5+novaStrength(player)*2:0);player.drillPlasma=player.drillCap;player.iframes=Math.max(player.iframes,.35);
   ring(player.x,player.y,88,'#86fff0');burst(player.x,player.y,'#85fff0',24,130);
@@ -4942,6 +5051,7 @@ function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaC
  }if(player.shipType==='laser'){sfx('novaLaser');player.laserNovaTimer=3.2+Math.min(.65,player.voidHalo*.09)+(player.novaEvolution==='laser'?novaStrength(player)*2:0);burst(player.x,player.y,'#bca5ff',45,230);ring(player.x,player.y,Math.min(450,player.novaRadius),'#a88cff');flash=.12;shake=0;hostile=hostile.filter(b=>dst(b,player)>Math.max(190,player.novaRadius));announce(player.novaEvolution==='laser'?'クルーエル・レーザー · '+player.laserNovaTimer.toFixed(1)+'s':'PRISM NOVA · LASER OVERDRIVE',3.3);shake=0;return;}if(player.shipType==='charge'){chargeNova();return;}sfx('novaShot');if(player.novaEvolution==='shot'){reserveNovaShots(Math.min(16,player.multishot+4));player.novaShotTime=3+novaStrength(player)*3;announce('ノヴァ・フルパワーショット · '+player.novaShotTime.toFixed(1)+'s',3);}flash=.12;shake=0;let hit=0;for(const e of enemies.slice()){if(e.dead)continue;if(dst(e,player)<player.novaRadius+e.r){damageEnemy(e,effectiveNovaDamage(player),{special:true,source:'nova'});hit++}}for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],player)<player.novaRadius)hostile.splice(i,1);burst(player.x,player.y,'#bd9bff',46,260);ring(player.x,player.y,player.novaRadius,'#c4a8ff');pop(player.x,player.y-32,`NOVA · ${hit} HIT`,'#d5c5ff');if(player.voidHalo>0)zones.push({x:player.x,y:player.y,r:Math.min(320,player.novaRadius*.6),life:Math.min(3.3,2+player.voidHalo*.12),ttl:0,type:'nova',dps:(effectiveNovaDamage(player)*.16+Math.min(6,player.voidHalo)*13)});shake=0;}
 function loseHP(amount,pressure=false){if(player.iframes>0||player.dashTime>0||(player.shipType==='drill'&&player.drillOverdriveTime>0)||mode!=='playing')return;amount*=AnkinTactics.incomingMultiplier(player);player.hitTime=0;
  // High-level PHASE bolts partially bypass shields, but still respect dash/NOVA invulnerability.
+ if(player.shipType==='phantom'){const r=AnkinPhantom.rank;amount*=1-r(player,'armor')*.07;if(player.phantomVeil>0){const absorb=Math.min(amount,player.phantomVeilShield||0);amount-=absorb;player.phantomVeilShield-=absorb;}if(r(player,'sanctuary')&&player.hp<player.maxHp*.3&&(player.phantomEmergency||0)<=0){player.shield=Math.min(player.shieldMax,player.shield+35);player.phantomEmergency=18;}}
  const direct=pressure?amount*.42:0;let blocked=amount-direct;
  if(player.shield>0){const absorbed=Math.min(player.shield,blocked);player.shield-=absorbed;blocked-=absorbed}
  amount=direct+blocked;
@@ -5059,15 +5169,15 @@ function tickGusts(dt){
  player.windTimer-=dt;
  if(player.windCount>0&&player.windTimer<=0){
   player.windTimer+=Math.max(1.25,player.windPeriod);
-  const target=visibleTarget(player.x,player.y);
-  const angle=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);
+  const target=visibleTarget(elementalOrigin().x,elementalOrigin().y);
+  const angle=target?Math.atan2(target.y-elementalOrigin().y,target.x-elementalOrigin().x):Math.atan2(player.dy,player.dx);
   const whale=player.shipType==='dog'&&!!player.dogWhale;
   const n=whale?1:Math.min(WIND_BULLET_CAP,player.windCount);
   const extra=Math.max(0,player.windCount-n);
   for(let i=0;i<n;i++){
    const a=angle+(i-(n-1)/2)*.36;
    gusts.push({
-    x:player.x,y:player.y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?230:150),
+    x:elementalOrigin().x,y:elementalOrigin().y,vx:Math.cos(a)*(player.elementMods?.galeOrbit?230:150),
     vy:Math.sin(a)*(player.elementMods?.galeOrbit?230:150),
     r:Math.min(WIND_VISUAL_CAP,Math.max(46,player.windRadius+(whale?Math.min(35,extra*6):0))),
     bonus:1+extra*(whale?.24:.18)+(whale&&player.dogWhaleAscended?.20:0)+Math.max(0,player.windRadius-WIND_VISUAL_CAP)*.004,
@@ -5108,7 +5218,7 @@ function tickGusts(dt){
    if(!immovable&&dist>=g.r*.5&&e.gustPushFrame!==gustFrameSerial){
     e.gustPushFrame=gustFrameSerial;
     let nx=dx/dist,ny=dy/dist;
-    const px=e.x-player.x,py=e.y-player.y;
+    const px=e.x-elementalOrigin().x,py=e.y-elementalOrigin().y;
     const pd=Math.hypot(px,py);
     // If the ring has travelled past a foe, redirect its push away from the
     // pilot rather than accidentally launching the enemy into the pilot.
@@ -5130,17 +5240,17 @@ function tickGusts(dt){
 function empEmitters(p){
  if(p.empRadius<=0)return[];
  const total=Math.min(290,p.empRadius);
- if(!p.empTrident)return[{x:p.x,y:p.y,empRadius:total,split:false}];
+ if(!p.empTrident)return[{x:elementalOrigin(p).x,y:elementalOrigin(p).y,empRadius:total,split:false}];
  const orbit=total*.54,r=Math.max(23,total*.37),speed=1.05+Math.min(3,Math.max(0,p.empDps)/230);
  const fields=[];
- for(let i=0;i<3;i++){const a=t*speed+i*TAU/3;fields.push({x:p.x+Math.cos(a)*orbit,y:p.y+Math.sin(a)*orbit,empRadius:r,split:true});}
+ for(let i=0;i<3;i++){const a=t*speed+i*TAU/3;fields.push({x:elementalOrigin(p).x+Math.cos(a)*orbit,y:elementalOrigin(p).y+Math.sin(a)*orbit,empRadius:r,split:true});}
  return fields;
 }
 // Bounded active casts, one hit per enemy per spike volley, one visited target per bolt chain.
 function spikePosition(group,i){if(i===0)return{x:group.x,y:group.y};const a=(i-1)*2.399963+1.05,r=19+Math.sqrt(i)*9;return{x:group.x+Math.cos(a)*r,y:group.y+Math.sin(a)*r};}
 function fireReforgeBolt(p){
- let target=visibleTarget(p.x,p.y);if(!target)return;
- const seen=new Set();let sx=p.x,sy=p.y;
+ let target=visibleTarget(elementalOrigin(p).x,elementalOrigin(p).y);if(!target)return;
+ const seen=new Set();let sx=elementalOrigin(p).x,sy=elementalOrigin(p).y;
  for(let i=0;target&&i<=Math.min(6,p.boltJumps+(p.elementMods?.boltWind?1:0));i++){
   if(target.dead||seen.has(target))break;seen.add(target);
   p.boltVisuals.push({x:sx,y:sy,x2:target.x,y2:target.y,life:.32,total:.32});
@@ -5158,7 +5268,7 @@ function tickReforgeWeapons(dt){
  if(p.spikeCount>0){
   p.spikeTimer-=dt;if(p.spikeTimer<=0){
    p.spikeTimer=Math.max(1.7,p.spikePeriod);
-   const target=visibleTarget(p.x,p.y);
+   const target=visibleTarget(elementalOrigin(p).x,elementalOrigin(p).y);
    if(target&&p.spikeGroups.length<3)p.spikeGroups.push({x:target.x,y:target.y,age:0,step:0,count:Math.min(6,p.spikeCount),damage:p.spikeDamage,hit:new Set()});
   }
  }
@@ -5294,11 +5404,11 @@ function tickIndependentElements(dt){
    if(shots.length>=currentShotBudget())p.iceBallTimer=.13;
    else{
     p.iceBallTimer=Math.max(1.1,p.iceBallPeriod);
-    const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
+    const target=visibleTarget(elementalOrigin(p).x,elementalOrigin(p).y),a=target?Math.atan2(target.y-elementalOrigin(p).y,target.x-elementalOrigin(p).x):Math.atan2(p.dy,p.dx);
     const count=Math.min(5,p.iceBallCount);
     for(let k=0;k<count&&shots.length<currentShotBudget();k++){
      const ang=a+(k-(count-1)/2)*.19;
-     shots.push(addPlayerShot({x:p.x,y:p.y,vx:Math.cos(ang)*325,vy:Math.sin(ang)*325,r:8.5,
+     shots.push(addPlayerShot({x:elementalOrigin(p).x,y:elementalOrigin(p).y,vx:Math.cos(ang)*325,vy:Math.sin(ang)*325,r:8.5,
       damage:p.iceBallDamage,pierce:0,kind:'iceball',ttl:3,hit:new Set(),source:'iceball'}));
     }
    }
@@ -5310,8 +5420,8 @@ function tickIndependentElements(dt){
    if(shots.length>=currentShotBudget())p.meteorTimer=.13;
    else if(currentShotBudget()-shots.length>=(p.meteorTriple?3:1)){
     p.meteorTimer=Math.max(2.2,p.meteorInterval);
-    const target=visibleTarget(p.x,p.y),a=target?Math.atan2(target.y-p.y,target.x-p.x):Math.atan2(p.dy,p.dx);
-    for(let i=0;i<(p.meteorTriple?3:1);i++){const angle=a+(i-(p.meteorTriple?1:0))*.28,size=p.meteorTriple?.5:1;shots.push({x:p.x,y:p.y,vx:Math.cos(angle)*155*(p.meteorSpeed||1),vy:Math.sin(angle)*155*(p.meteorSpeed||1),r:12*size,meteorSizeScale:size,arenaReflect:!!p.meteorArenaBounce,arenaBounces:p.meteorArenaBounce?1:0,
+    const target=visibleTarget(elementalOrigin(p).x,elementalOrigin(p).y),a=target?Math.atan2(target.y-elementalOrigin(p).y,target.x-elementalOrigin(p).x):Math.atan2(p.dy,p.dx);
+    for(let i=0;i<(p.meteorTriple?3:1);i++){const angle=a+(i-(p.meteorTriple?1:0))*.28,size=p.meteorTriple?.5:1;shots.push({x:elementalOrigin(p).x,y:elementalOrigin(p).y,vx:Math.cos(angle)*155*(p.meteorSpeed||1),vy:Math.sin(angle)*155*(p.meteorSpeed||1),r:12*size,meteorSizeScale:size,arenaReflect:!!p.meteorArenaBounce,arenaBounces:p.meteorArenaBounce?1:0,
      damage:p.meteorDamage,pierce:9999,kind:'meteor',ttl:30,hit:new Set(),source:'meteor',
      meteorDistance:0,meteorMaxRadius:Math.min(75,Math.max(22,p.meteorRadius+29))*size});}
    }
@@ -5336,8 +5446,8 @@ function tickIndependentElements(dt){
  tickReforgeWeapons(dt);
 }
 function tickCrossFusion(dt){const mods=player.elementMods;if(!mods)return;
- if(mods.fireTornado){player.fireTornadoTimer=(player.fireTornadoTimer||0)-dt;if(player.fireTornadoTimer<=0){player.fireTornadoTimer=4.1;const target=visibleTarget(player.x,player.y),a=target?Math.atan2(target.y-player.y,target.x-player.x):Math.atan2(player.dy,player.dx);gusts.push({kind:'fireTornado',x:player.x,y:player.y,vx:Math.cos(a)*115,vy:Math.sin(a)*115,r:54,color:fusedColor('fire')||'#ff9c4a',life:4.1,tick:0});if(gusts.length>WIND_ACTIVE_CAP)gusts.splice(0,gusts.length-WIND_ACTIVE_CAP);ring(player.x,player.y,100,fusedColor('fire')||'#ff9c4a')}}
- if(mods.iceStorm||mods.zeroSurge||mods.emberPulse||mods.thunderFort){player.elementPulseTimer=(player.elementPulseTimer||0)-dt;if(player.elementPulseTimer<=0){player.elementPulseTimer=3.1;const main=game.elementCombos.at(-1)?.main||'ice',color=ELEMENTS[main]?.color||'#ffffff';ring(player.x,player.y,195,color);for(const e of circleCandidates(player.x,player.y,190))if(!e.dead&&dst(e,player)<190){damageEnemy(e,45+player.dmg*.7+player.magmaDps*.12,{special:true});if(mods.iceStorm||mods.zeroSurge)chillEnemy(e,2.5,Math.min(.8,player.freezeChance));}}}
+ if(mods.fireTornado){player.fireTornadoTimer=(player.fireTornadoTimer||0)-dt;if(player.fireTornadoTimer<=0){player.fireTornadoTimer=4.1;const target=visibleTarget(elementalOrigin().x,elementalOrigin().y),a=target?Math.atan2(target.y-elementalOrigin().y,target.x-elementalOrigin().x):Math.atan2(player.dy,player.dx);gusts.push({kind:'fireTornado',x:elementalOrigin().x,y:elementalOrigin().y,vx:Math.cos(a)*115,vy:Math.sin(a)*115,r:54,color:fusedColor('fire')||'#ff9c4a',life:4.1,tick:0});if(gusts.length>WIND_ACTIVE_CAP)gusts.splice(0,gusts.length-WIND_ACTIVE_CAP);ring(elementalOrigin().x,elementalOrigin().y,100,fusedColor('fire')||'#ff9c4a')}}
+ if(mods.iceStorm||mods.zeroSurge||mods.emberPulse||mods.thunderFort){player.elementPulseTimer=(player.elementPulseTimer||0)-dt;if(player.elementPulseTimer<=0){player.elementPulseTimer=3.1;const main=game.elementCombos.at(-1)?.main||'ice',color=ELEMENTS[main]?.color||'#ffffff';ring(elementalOrigin().x,elementalOrigin().y,195,color);for(const e of circleCandidates(elementalOrigin().x,elementalOrigin().y,190))if(!e.dead&&dst(e,elementalOrigin())<190){damageEnemy(e,45+player.dmg*.7+player.magmaDps*.12,{special:true});if(mods.iceStorm||mods.zeroSurge)chillEnemy(e,2.5,Math.min(.8,player.freezeChance));}}}
 }
 
 // Retain the same three nearest split-bullet targets without sorting a full list.
@@ -5400,6 +5510,28 @@ function tickEchoShots(p,dt){
  }
  p.relicEchoQueue=p.relicEchoQueue.filter(echo=>!echo.fired);
 }
+function elementalOrigin(p=player){return p?.shipType==='phantom'&&p.phantoms?.[0]?p.phantoms[0]:p;}
+function darkWorld(){return {origin:elementalOrigin(),time:runClock,width:W,height:H,candidates:circleCandidates,target:visibleTarget,random:Math.random,damage:damageEnemy,burn:setBurn,chill:chillEnemy,chain:applyChain,slow:applySlow,combo:(main,slot)=>game.elementCombos.find(c=>c.main===main&&(c.weapon||'A')===slot)};}
+function applyDarkFusionHit(e,meta){if(!e||e.dead||!player||meta.darkSecondary)return;
+ const sources={fire:['missile','magma'],ice:['iceball','frostSpike'],thunder:['pulseField','lightningBolt'],wind:['element','blade'],rock:['rock','meteor']};
+ for(const combo of game.elementCombos){if(combo.sub!=='dark'||sources[combo.main]?.[combo.weapon==='B'?1:0]!==meta.source)continue;
+  if((e.darkFusionUntil||0)>runClock)continue;e.darkFusionUntil=runClock+1;
+  if(['fire','thunder','rock'].includes(combo.main)&&combo.weapon!=='B'||['ice','wind'].includes(combo.main)&&combo.weapon==='B')AnkinDark.fear(e,player,.8);else e.darkWeak=Math.max(e.darkWeak||0,2);
+ }
+}
+
+function phantomWorld(){return {width:W,height:H,candidates:circleCandidates,damage:(e,d,m)=>{const before=game.damage;damageEnemy(e,d,m);if(player.phantomMetrics){const k=m.primary?'primaryDamage':'extraDamage';player.phantomMetrics[k]+=game.damage-before;}},random:Math.random,
+ blocked:(x,y,x2,y2)=>engageBarrierBlocks(x,y,x2,y2),motion:engageClampMotion,
+ isBoss:e=>['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type),novaDamage:()=>effectiveNovaDamage(player),
+ clear:(x,y,r)=>{for(const b of hostile)if((b.x-x)**2+(b.y-y)**2<r*r)b.ttl=0;},
+ element:(e,d,a)=>{if(!a.primary||e.dead)return;const mode=nextBasicElement(player);if(mode==='plasma')setBurn(e,d*.16,2.7);if(mode==='cryo')chillEnemy(e,2.5,player.freezeChance);if(mode==='arc')applyChain(e,Math.max(18,d*.25));}
+};}
+function tickPhantom(dt){const p=player;const started=performance.now();
+ p.phantomEmergency=Math.max(0,(p.phantomEmergency||0)-dt);p.phantomVeil=Math.max(0,(p.phantomVeil||0)-dt);
+ AnkinPhantom.tick(p,dt,phantomWorld());p.phantomMetrics.aiMs+=performance.now()-started;
+ if(AnkinPhantom.rank(p,'compression')||AnkinPhantom.rank(p,'field')){p.phantomCompact=(p.phantomCompact||0)-dt;if(p.phantomCompact<=0){p.phantomCompact=2;compactPickups(true);}}
+}
+
 function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  spatialMaintenanceClock+=dt;if(spatialMaintenanceClock>=10){spatialMaintenanceClock=0;trimEnemyIndex()}scheduleBosses();updateRaid(dt);scheduleRelic();tickVacuum(dt);
  p.iframes=Math.max(0,p.iframes-dt);p.novaCooldown=Math.max(0,(p.novaCooldown||0)-dt);p.novaShotTime=Math.max(0,(p.novaShotTime||0)-dt);p.drillOverdriveTime=Math.max(0,(p.drillOverdriveTime||0)-dt);p.dashLeft=Math.max(0,p.dashLeft-dt);p.dashGaugeFade=p.dashLeft>0||p.dashTime>0?1:Math.max(0,(p.dashGaugeFade||0)-dt*2.4);p.hitTime+=dt;
@@ -5411,12 +5543,12 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(p.hitTime>5&&p.shield<p.shieldMax)p.shield=Math.min(p.shieldMax,p.shield+shieldRegen*AnkinTactics.shieldMultiplier(p)*(hasTrial('repairTax')?.65:1)*dt);
  if(g.spawn<=0&&!((boss&&boss.type==='ultimate')||g.ultimatePending)){const mins=minutes(),limit=enemyPopulationLimit(mins),focus=bossFocusRelief(mins),bossLimit=Math.round(limit*(1-.32*focus)),batch=Math.min(game.raid?Math.max(1,Math.ceil(enemyGroupSize(mins)*.65)):enemyGroupSize(mins),Math.max(0,(focus?bossLimit:limit)-enemies.length));if(batch>0)spawnNormalPack(mins,batch);g.spawn=enemySpawnInterval(mins)*(g.gameMode==='challenge'?.70:1)*(g.activeChallenges?.includes('onslaught')?.78:1)*rand(.88,1.12);}refreshEnemyIndex();
  if(controlMode==='mobile')validateTouchCapture();let x=controlMode==='mobile'?touchMove.x:0,y=controlMode==='mobile'?touchMove.y:0;if(keys.has('KeyW')||keys.has('ArrowUp'))y--;if(keys.has('KeyS')||keys.has('ArrowDown'))y++;if(keys.has('KeyA')||keys.has('ArrowLeft'))x--;if(keys.has('KeyD')||keys.has('ArrowRight'))x++;
- const rawM=Math.hypot(x,y),m=Math.min(1,rawM);if(rawM>1){x/=rawM;y/=rawM}if(m>.02){p.dx=x/Math.max(m,.001);p.dy=y/Math.max(m,.001)}const oldDrillX=p.x,oldDrillY=p.y,dashWasActive=p.dashTime>0;const mobileMotion=controlMode==='mobile'?1/.69:1;const drillNovaSpeed=p.shipType==='drill'&&p.drillOverdriveTime>0?1.8:1;/* keep the same on-screen touch response despite the wider camera */if(p.dashTime>0){p.dashTime-=dt;p.x+=p.dx*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;p.y+=p.dy*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;if(Math.random()<.5)burst(p.x,p.y,'#80fff6',1,40)}else{const flow=(p.dashFlowTimer>0?1.16:1)*AnkinTactics.speedMultiplier(p);p.x+=x*p.spd*drillNovaSpeed*mobileMotion*flow*dt;p.y+=y*p.spd*drillNovaSpeed*mobileMotion*flow*dt}{const blocked=engageClampMotion(oldDrillX,oldDrillY,p.x,p.y,p.r+2);
+ const rawM=Math.hypot(x,y),m=Math.min(1,rawM);if(rawM>1){x/=rawM;y/=rawM}if(m>.02){p.dx=x/Math.max(m,.001);p.dy=y/Math.max(m,.001)}const oldDrillX=p.x,oldDrillY=p.y,dashWasActive=p.dashTime>0;const mobileMotion=controlMode==='mobile'?1/.69:1;const drillNovaSpeed=p.shipType==='drill'&&p.drillOverdriveTime>0?1.8:1;/* keep the same on-screen touch response despite the wider camera */if(p.dashTime>0){p.dashTime-=dt;p.x+=p.dx*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;p.y+=p.dy*(p.shipType==='drill'?p.drillDashSpeed*drillNovaSpeed:780)*(p.thrusterEngine?1.75:1)*mobileMotion*dt;if(Math.random()<.5)burst(p.x,p.y,p.shipType==='phantom'?'#ffffff':'#80fff6',1,40)}else{const flow=(p.dashFlowTimer>0?1.16:1)*AnkinTactics.speedMultiplier(p);p.x+=x*p.spd*drillNovaSpeed*mobileMotion*flow*dt;p.y+=y*p.spd*drillNovaSpeed*mobileMotion*flow*dt}{const blocked=engageClampMotion(oldDrillX,oldDrillY,p.x,p.y,p.r+2);
  if(blocked.blocked){const targetX=p.x,targetY=p.y;const tryX=engageClampMotion(oldDrillX,oldDrillY,targetX,oldDrillY,p.r+2);const tryY=engageClampMotion(tryX.x,oldDrillY,tryX.x,targetY,p.r+2);p.x=tryY.x;p.y=tryY.y;if(dashWasActive){p.dashTime=0;p.drillRushActive=0;}}
- }p.x=clamp(p.x,p.r+13,W-p.r-13);p.y=clamp(p.y,p.r+13,H-p.r-13);
+ }if(p.shipType==='phantom'&&dashWasActive&&p.dashTime<=0)AnkinPhantom.dashEnd(p);p.x=clamp(p.x,p.r+13,W-p.r-13);p.y=clamp(p.y,p.r+13,H-p.r-13);
  if(p.tacticFlags){AnkinTactics.tick(p,dt,m>.19&&Math.hypot(p.x-oldDrillX,p.y-oldDrillY)>dt*20);const cue=AnkinTactics.pollCue(p);if(cue)pop(p.x,p.y-29,cue,SHIPS[p.shipType].color);}
  tickEchoShots(p,dt);
-  if(p.shipType==='laser'){p.laserIdleTime=m>.19?Math.max(0,(p.laserIdleTime||0)-dt*2.3):Math.min(4,(p.laserIdleTime||0)+dt);updateLaser(dt)}else if(p.shipType==='charge'){updateCharge(dt,m)}else if(p.shipType==='drill'){updateDrill(dt,m,oldDrillX,oldDrillY,dashWasActive)}else{p.shotTimer-=dt;if(p.shotTimer<=0){shoot();p.shotTimer=efficientShotRate(p)}}
+  if(p.shipType==='laser'){p.laserIdleTime=m>.19?Math.max(0,(p.laserIdleTime||0)-dt*2.3):Math.min(4,(p.laserIdleTime||0)+dt);updateLaser(dt)}else if(p.shipType==='charge'){updateCharge(dt,m)}else if(p.shipType==='phantom'){tickPhantom(dt)}else if(p.shipType==='drill'){updateDrill(dt,m,oldDrillX,oldDrillY,dashWasActive)}else{p.shotTimer-=dt;if(p.shotTimer<=0){shoot();p.shotTimer=efficientShotRate(p)}}
  tickDogChicks(dt);
  const count=p.droneCount;for(let i=0;i<count;i++){const pos=ringPosition(i,count,t),xx=pos.x,yy=pos.y;p.droneTimers[i]=(p.droneTimers[i]||0)-dt;if(p.droneTimers[i]<=0){const target=visibleTarget(xx,yy);if(target)fireFrom(xx,yy,target,1,p.dmg*(.58+p.droneThunder*.10),p.shotSpeed*.9,'drone');p.droneTimers[i]=Math.max(.16,.72/(p.droneBoost||1))}}
  if(p.orbit){
@@ -5435,7 +5567,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
      if(p.bladeFireBurn)setBurn(e,Math.max(16,p.dmg*.16),1.8);
       if(p.elementMods?.bladeBurn&&!e.dead){setBurn(e,Math.max(18,p.dmg*.25),1.9);if((e.bladeFusionBlastUntil||0)<=runClock){e.bladeFusionBlastUntil=runClock+.75;detonate(e.x,e.y,46,p.dmg*.25,e,5);}}
       if(p.elementMods?.bladeArc&&!e.dead&&(e.bladeFusionArcUntil||0)<=runClock){e.bladeFusionArcUntil=runClock+.8;applyChain(e,Math.max(30,p.chainDamage*.45+p.dmg*.23));}
-      if(p.elementMods?.bladeRock&&!e.dead){const dist=Math.max(1,Math.hypot(e.x-p.x,e.y-p.y));e.x+=(e.x-p.x)/dist*13;e.y+=(e.y-p.y)/dist*13;}
+      if(p.elementMods?.bladeRock&&!e.dead){const dist=Math.max(1,Math.hypot(e.x-elementalOrigin(p).x,e.y-elementalOrigin(p).y));e.x+=(e.x-elementalOrigin(p).x)/dist*13;e.y+=(e.y-elementalOrigin(p).y)/dist*13;}
       if(p.elementMods?.bladeFrost&&!e.dead)applySlow(e,1.6);
      if(p.bladeIceSlow)applySlow(e,1.3);
      e.bladeHit=.22;
@@ -5444,20 +5576,21 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
   }
  }
   if(p.rocketCd>0){p.rocketTimer-=dt;if(p.rocketTimer<=0){
- const target=visibleTarget(p.x,p.y);
+ const target=visibleTarget(elementalOrigin(p).x,elementalOrigin(p).y);
  if(target){
   // Extra missile stacks above the four-shot projectile cap convert into damage.
   const surplus=Math.max(0,p.rocketCd-8),dmg=p.dmg*2.6*(1+Math.min(36,surplus)*.065);
-  fireFrom(p.x,p.y,target,missileVolleyCount(p),dmg,p.shotSpeed*.7,'rocket');
+  fireFrom(elementalOrigin(p).x,elementalOrigin(p).y,target,missileVolleyCount(p),dmg,p.shotSpeed*.7,'rocket');
  }
  p.rocketTimer=p.gigaNapalm?Math.max(1.7,3.4*(p.napalmCooldown||1)):Math.max(.7,2.8-p.rocketCd*.22);
 }}
- if(p.staticField>0){p.staticTick=(p.staticTick||0)-dt;if(p.staticTick<=0){p.staticTick=.3;for(const e of circleCandidates(p.x,p.y,115+Math.min(4,p.staticField)*25)){if(!e.dead&&dst(e,p)<115+Math.min(4,p.staticField)*25){damageEnemy(e,12*p.staticField+p.dmg*.035,{special:true,source:'element'});if(Math.random()<.18)particles.push({x:p.x,y:p.y,x2:e.x,y2:e.y,life:.16,total:.16,lightning:true,color:'#91fff5'})}}}}
- if(p.magmaLevel>0){p.magmaTimer-=dt;if(p.magmaTimer<=0){p.magmaTimer=Math.max(1.5,4.6-p.magmaLevel*.38);magmaPatch(p.x+rand(-90,90),p.y+rand(-90,90))}}
+ if(p.staticField>0){p.staticTick=(p.staticTick||0)-dt;if(p.staticTick<=0){p.staticTick=.3;for(const e of circleCandidates(elementalOrigin(p).x,elementalOrigin(p).y,115+Math.min(4,p.staticField)*25)){if(!e.dead&&dst(e,elementalOrigin(p))<115+Math.min(4,p.staticField)*25){damageEnemy(e,12*p.staticField+p.dmg*.035,{special:true,source:'element'});if(Math.random()<.18)particles.push({x:elementalOrigin(p).x,y:elementalOrigin(p).y,x2:e.x,y2:e.y,life:.16,total:.16,lightning:true,color:'#91fff5'})}}}}
+ if(p.magmaLevel>0){p.magmaTimer-=dt;if(p.magmaTimer<=0){p.magmaTimer=Math.max(1.5,4.6-p.magmaLevel*.38);magmaPatch(elementalOrigin(p).x+rand(-90,90),elementalOrigin(p).y+rand(-90,90))}}
  if(p.lavaConstrain)unifyMagma();
  const zoneWalls=activeEngageWalls();for(const z of zones){
   if(z.type==='magma'&&p.lavaConstrain){z.r=Math.min(185,z.r+dt*(4+(p.lavaGrowth||0)));if(!z.visualRadius||z.r-z.visualRadius>8)z.visualPaths=null;}if(z.type!=='nova'&&zoneWalls.some(w=>z.x+z.r>w.x&&z.x-z.r<w.x+w.w&&z.y+z.r>w.y&&z.y-z.r<w.y+w.h)){z.life=0;continue;}z.life-=dt;z.ttl-=dt;if(z.ttl<=0){z.ttl=.25;for(const e of circleCandidates(z.x,z.y,z.r))if(!e.dead&&(e.x-z.x)**2+(e.y-z.y)**2<(e.r+z.r)**2){damageEnemy(e,z.dps*.25,{special:true,source:z.type==='magma'?'magma':'nova'});if(z.type==='magma'){setBurn(e,Math.max(12,z.dps*.55),1.6);const mods=p.elementMods||{};if(mods.magmaSlow)applySlow(e,1.4);if(mods.magmaArc&&(e.magmaArcUntil||0)<=runClock){e.magmaArcUntil=runClock+1.4;applyChain(e,Math.min(135,z.dps*.25));}if(mods.magmaWind){const dx=z.x-e.x,dy=z.y-e.y,l=Math.max(1,Math.hypot(dx,dy));e.x+=dx/l*7;e.y+=dy/l*7;}if(mods.magmaRock&&['minor','major','unique','ultimate','ultimatePart'].includes(e.type))damageEnemy(e,z.dps*.11,{special:true,source:'magma'});}}}}zones=zones.filter(z=>z.life>0);
  tickIndependentElements(dt);enemyIndexDirtyDuringForces=false;tickGusts(dt);gusts=gusts.filter(g=>!engageBlockedPoint(g.x,g.y,Math.min(22,g.r)));tickRocks(dt);tickCrossFusion(dt);
+ AnkinDark.tick(p,dt,darkWorld());
  // Index is already current when neither wind nor rock attacks displaced a target.
  if(enemyIndexDirtyDuringForces)refreshEnemyIndex();
  // Projectiles persist across wave boundaries, including those already airborne.
@@ -5486,9 +5619,10 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  }}shots=shots.filter(b=>b.ttl>0);
  // A large gunner swarm retains enemy density but reduces total concurrent bullets.
  const activeShooters=enemies.reduce((count,e)=>count+(!e.dead&&e.type==='shooter'?1:0),0);
- for(const e of enemies){if(e.dead)continue;
+ for(const e of enemies){if(e.dead)continue;const enemyAim=AnkinDark.enemyTarget(e,p);
+ if(AnkinDark.interrupt(e,p,dt,{width:W,height:H})){e.phase+=dt;e.hurt=Math.max(0,e.hurt-dt);tickBurn(e,dt);continue;}
  if(e.type==='ultimatePart'){locateUltimatePart(e);e.hurt=Math.max(0,e.hurt-dt);e.phase+=dt;tickBurn(e,dt);continue;}
- const enemyStartX=e.x,enemyStartY=e.y;e.phase+=dt;e.hurt=Math.max(0,e.hurt-dt);e.bladeHit=Math.max(0,e.bladeHit-dt);e.rockHit=Math.max(0,(e.rockHit||0)-dt);e.slow=Math.max(0,e.slow-dt);e.freezeResist=Math.max(0,(e.freezeResist||0)-dt);e.frozen=['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?0:Math.max(0,(e.frozen||0)-dt);const angle=Math.atan2(p.y-e.y,p.x-e.x),distance=dst(e,p);let spd=e.spd*(1-p.slowField*(['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?.5:1))*(e.slow>0?(['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?.71:.42):1)*(e.frozen>0?0:1);
+ const enemyStartX=e.x,enemyStartY=e.y;e.phase+=dt;e.hurt=Math.max(0,e.hurt-dt);e.bladeHit=Math.max(0,e.bladeHit-dt);e.rockHit=Math.max(0,(e.rockHit||0)-dt);e.slow=Math.max(0,e.slow-dt);e.freezeResist=Math.max(0,(e.freezeResist||0)-dt);e.frozen=['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?0:Math.max(0,(e.frozen||0)-dt);const angle=Math.atan2(enemyAim.y-e.y,enemyAim.x-e.x),distance=dst(e,enemyAim);let spd=e.spd*(e.darkWeak>0?.85:1)*(1-p.slowField*(['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?.5:1))*(e.slow>0?(['minor','major','unique','ultimate','ultimatePart'].includes(e.type)?.71:.42):1)*(e.frozen>0?0:1);
  // Temporary RAID rush; this multiplier does not change the long-term normal-enemy speed caps.
  if(game.raid&&isRaidTarget(e))spd*=controlMode==='mobile'?(game.raid.tier===1?1.10:game.raid.tier===2?1.15:1.19):(game.raid.tier===1?1.18:game.raid.tier===2?1.25:1.32);
  if(game.gameMode==='challenge'&&e.type!=='ultimate')spd*=1.15;
@@ -5521,7 +5655,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
   e.dashCd-=dt;
   if(e.dashCd<=0&&e.dashWarn<=0&&distance<440){
    const lead=clamp(distance*.19,32,88),facing=Math.atan2(p.dy||0,p.dx||0);
-   const aimX=clamp(p.x+Math.cos(facing)*lead,25,W-25),aimY=clamp(p.y+Math.sin(facing)*lead,25,H-25);
+   const aimX=clamp(enemyAim.x+Math.cos(facing)*lead,25,W-25),aimY=clamp(enemyAim.y+Math.sin(facing)*lead,25,H-25);
    e.dashAngle=Math.atan2(aimY-e.y,aimX-e.x);
    e.dashWarn=.80;e.dashCd=rand(4.1,5.6);
   }
@@ -5538,18 +5672,18 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  if(e.buffTime>0){e.buffTime=Math.max(0,e.buffTime-dt);spd*=1.17;}
  if(e.type==='relic'){e.wanderClock-=dt;if(e.wanderClock<=0){e.wanderClock=rand(.75,1.75);e.wander+=rand(-1.7,1.7)}const towardX=W*.5-e.x,towardY=H*.5-e.y;if(e.x<50||e.x>W-50||e.y<50||e.y>H-50)e.wander=Math.atan2(towardY,towardX)+rand(-.4,.4);e.x=clamp(e.x+Math.cos(e.wander)*e.spd*(e.frozen>0?0:e.slow>0?.5:1)*dt,e.r,W-e.r);e.y=clamp(e.y+Math.sin(e.wander)*e.spd*(e.frozen>0?0:e.slow>0?.5:1)*dt,e.r,H-e.r);tickBurn(e,dt);continue;}
   if(e.type==='stinger')spd=Math.min(ENEMY_SPEED.stinger.cap,spd*(1+.15*Math.sin(e.phase*6)));
- if(e.type==='endMinion'){e.shoot-=dt;if(e.shoot<=0){e.shoot=2.7+Math.random()*.8;const aim=Math.atan2(p.y-e.y,p.x-e.x);hostileShot(e.x,e.y,aim,125,Math.min(28,e.dmg*.75),5,'#f7a2ff',3.6);}spd=distance<75?-spd*.24:spd*.86;}
+ if(e.type==='endMinion'){e.shoot-=dt;if(e.shoot<=0){e.shoot=2.7+Math.random()*.8;const aim=Math.atan2(enemyAim.y-e.y,enemyAim.x-e.x);hostileShot(e.x,e.y,aim,125,Math.min(28,e.dmg*.75),5,'#f7a2ff',3.6);}spd=distance<75?-spd*.24:spd*.86;}
  if(e.type==='shooter'){spd=distance<260?-spd*.48:spd*.75;e.shoot-=dt*(e.buffTime>0?1.35:1)*(1+.28*clamp((minutes()-18)/25,0,1))*(e.frozen>0?0:e.slow>0?Math.max(.25,1-p.iceAttackSlow*(['minor','major','unique','ultimate'].includes(e.type)?.5:1)):1);if(e.shoot<=0){e.shoot=ordinaryShooterInterval(minutes(),activeShooters);{const pressure=pressureUnlocked()&&Math.random()<(controlMode==='mobile'?.19:.29)+.19*clamp((minutes()-20)/25,0,1);hostileShot(e.x,e.y,angle,ordinaryShotSpeed(minutes(),pressure),12+Math.round(minutes()*2.6),pressure?7:5,pressure?'#ffc0f4':'#89c2ff',4,false,pressure)}}}
  else if(['minor','major','unique','ultimate'].includes(e.type)){spd*=distance<(e.type==='unique'?220:165)?.17:.72;
   if(e.superState==='recover'){spd=0;e.shoot=Math.max(e.shoot,.30);}
   else e.shoot-=dt*(e.frozen>0?0:e.slow>0?Math.max(.25,1-p.iceAttackSlow*(['minor','major','unique','ultimate'].includes(e.type)?.5:1)):1);if(e.superState!=='recover'&&e.shoot<=0&&e.type==='ultimate'){e.shoot=ultimatePhase(e)===3?(controlMode==='mobile'?1.19:1.05):ultimatePhase(e)===2?(controlMode==='mobile'?1.48:1.35):(controlMode==='mobile'?1.79:1.63);ultimateVolley(e);}
  else if(e.superState!=='recover'&&e.shoot<=0){const factor=e.type==='unique'?1:e.type==='major'?.83:1.02;e.shoot=Math.max(e.type==='unique'?1.2:.77,(e.type==='unique'?3.15:1.9)*factor-minutes()*.025);bossVolley(e)}}
  if(e.type==='ultimate'){const currentPhase=ultimatePhase(e);if(currentPhase!==e.phaseNumber){e.phaseNumber=currentPhase;announce('⚠ THE END PHASE '+currentPhase+' — 攻撃パターン変化！',3);ring(e.x,e.y,210,'#ff9cb4');}}
- if(e.variant==='vortex'&&e.superState!=='recover'&&distance<300&&distance>60){const pull=22*dt;p.x+=(e.x-p.x)/distance*pull;p.y+=(e.y-p.y)/distance*pull;}
+ if(e.variant==='vortex'&&e.superState!=='recover'&&distance<300&&distance>60){const pull=22*dt;enemyAim.x+=(e.x-enemyAim.x)/distance*pull;enemyAim.y+=(e.y-enemyAim.y)/distance*pull;}
  e.x+=Math.cos(angle)*spd*dt;e.y+=Math.sin(angle)*spd*dt;
  // Hostile units ignore ENGAGE barriers, unlike the pilot and friendly fire.
  tickBurn(e,dt);
- if(e.type!=='bomber'&&distance<e.r+(p.hitR??p.r)&&(e.isoSafe||0)<=0)loseHP(e.dmg);
+ if(e.type!=='bomber'&&distance<e.r+(enemyAim.hitR??enemyAim.r)&&(e.isoSafe||0)<=0){if(enemyAim===p)loseHP(e.dmg*(e.darkWeak>0?.9:1));else if((e.darkAllyContact||0)<=runClock){enemyAim.hp-=e.dmg;e.darkAllyContact=runClock+.6;}}
  }enemies=enemies.filter(e=>!e.dead);
  if(player.elementMods?.diamondWall){
   const meteors=shots.filter(b=>b.kind==='meteor'&&b.ttl>0);
@@ -5558,7 +5692,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
    if(d2(m,bullet)<(m.r+bullet.r)**2){bullet.ttl=0;if(settings.fx!=='simple')ring(bullet.x,bullet.y,8,'#d4f7ff');}
   }
  }
- const novaGuards=novaGuardSegments(p);for(const b of hostile){if(b.ttl<=0)continue;b.ttl-=dt;if(b.warn>0){b.warn=Math.max(0,b.warn-dt);continue}const fromX=b.x,fromY=b.y;b.x+=b.vx*(1-p.slowField)*dt;b.y+=b.vy*(1-p.slowField)*dt;if(novaGuards.length&&novaIntercepts(novaGuards,fromX,fromY,b)){b.ttl=0;continue;}const distanceSq=segmentPointDistanceSq(fromX,fromY,b.x,b.y,p.x,p.y),hitRadius=b.r+(p.hitR??p.r);if(distanceSq<hitRadius*hitRadius){loseHP(b.damage,!!b.pressure);b.ttl=0}
+ const novaGuards=novaGuardSegments(p);for(const b of hostile){if(b.ttl<=0)continue;b.ttl-=dt;if(b.warn>0){b.warn=Math.max(0,b.warn-dt);continue}const fromX=b.x,fromY=b.y;b.x+=b.vx*(1-p.slowField)*dt;b.y+=b.vy*(1-p.slowField)*dt;if(novaGuards.length&&novaIntercepts(novaGuards,fromX,fromY,b)){b.ttl=0;continue;}if(AnkinDark.intercept(p,b,fromX,fromY,segmentPointDistanceSq))continue;const distanceSq=segmentPointDistanceSq(fromX,fromY,b.x,b.y,p.x,p.y),hitRadius=b.r+(p.hitR??p.r);if(distanceSq<hitRadius*hitRadius){loseHP(b.damage,!!b.pressure);b.ttl=0}
  else if(p.dashGraze&&!b.grazed&&p.grazeLock<=0&&p.iframes<=0&&p.dashTime<=0&&distanceSq<(hitRadius+10)**2){b.grazed=true;p.grazeLock=.55;p.energy=Math.min(100,p.energy+1.6);p.dashLeft=Math.max(0,p.dashLeft-.18);if(settings.fx!=='simple')ring(p.x,p.y,23,'#befff0');pop(p.x,p.y-18,'GRAZE','#acffed')}
  }hostile=hostile.filter(b=>b.ttl>0&&b.x>-110&&b.x<W+110&&b.y>-110&&b.y<H+110);
  // Unique ANKIN attacks: pre-warned crossing beams and area mines.
@@ -5568,10 +5702,11 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  // Purple shards give both experience AND Nova charge, with no expiry timer.
  // Avoid a square root for distant XP shards. Collision checks still use the
  // pre-movement distance, matching the original pickup and magnet behavior.
+ if(p.shipType==='phantom')AnkinPhantom.collection(p,dt,pickups);
  const pickupMagnetSq=p.magnet*p.magnet, pickupReach=p.r+14, pickupReachSq=pickupReach*pickupReach;
  for(const e of pickups){e.phase+=dt*3;const dx=p.x-e.x,dy=p.y-e.y,dd=dx*dx+dy*dy;
  if(dd<pickupMagnetSq&&dd>4){const distance=Math.sqrt(dd),speed=Math.min(780,340+Math.max(0,p.magnet-distance)*2);e.x+=dx/distance*speed*dt;e.y+=dy/distance*speed*dt}
- if(dd<pickupReachSq){e.collected=true;
+ if(dd<pickupReachSq){e.collected=true;if(p.shipType==='phantom'&&e.type==='energy')AnkinPhantom.pickup(p);
   if(balanceTelemetry){if(e.type==='heal')balanceTelemetry.healingPickups++;else{balanceTelemetry.pickedOrbs++;balanceTelemetry.pickedExp+=e.value;}}
   if(e.type==='heal'){p.hp=Math.min(p.maxHp,p.hp+e.value);pop(e.x,e.y,'+'+e.value+' HP','#70ffb0');tone(480,.1,'sine',.03)}else{addExp(e.value);gainNovaEnergy(e.charge);if(p.expShield>0)p.shield=Math.min(p.shieldMax,p.shield+p.expShield)}}}
  // Compact in place: hundreds of XP shards no longer allocate a new array 60 times/sec.
@@ -5614,7 +5749,7 @@ function hudUpdate(){if(!game||!player)return;
   if(superGauge){ui.bossSpecialWrap.className='boss-special-wrap '+superGauge.state;hudWidth(ui.bossSpecialFill,superGauge.fill*100+'%');hudText(ui.bossSpecialCaption,superGauge.label)}
  const moduleBar=U('ultimateModules');if(moduleBar){const display=boss&&!boss.dead&&boss.type==='ultimate';if(moduleBar.hidden!==!display)moduleBar.hidden=!display;if(display){const moduleHTML=(game.ultimateParts||[]).map((part,i)=>`<div class="ultimate-module ${part.dead?'broken':''}" title="${part.partName}：${part.dead?'破壊済み':Math.ceil(part.hp)+' / '+Math.ceil(part.maxHp)}"><span style="width:${Math.floor(100*clamp(part.hp/Math.max(1,part.maxHp),0,1))}%"></span></div>`).join('');if(moduleBar._previousMarkup!==moduleHTML){moduleBar.innerHTML=moduleHTML;moduleBar._previousMarkup=moduleHTML}}else if(moduleBar._previousMarkup){moduleBar._previousMarkup='';moduleBar.innerHTML=''}}
 
- const buildMarkup=`<b style="color:${SHIPS[p.shipType].color}">${SHIPS[p.shipType].jp}</b> · ${p.shipType==='laser'?`レーザー ${p.laserCount}本 · 幅${p.laserWidth.toFixed(1)} ${p.laserNovaTimer>0?'· OVERDRIVE!':''}`:p.shipType==='charge'?`チャージ ${Math.round(p.charge*100)}% ${p.charge>=.99?'· 貫通READY':''}`:p.shipType==='drill'?`プラズマ ${Math.floor(100*p.drillPlasma/Math.max(.001,p.drillCap))}% ${p.drillOverdriveTime>0?"· OVERDRIVE "+p.drillOverdriveTime.toFixed(1)+"s":""} · 近接ドリル ${Math.round(p.drillDamage)}`:`${p.bulletModes.map(kindLabel).join(' / ')}弾 · ${p.multishot}連射`} · 僚機 ${p.droneCount} · 岩壁 ${p.rockWalls} · 突風 ${p.windCount}<br>🌈 RELIC ${Object.keys(g.relics).length} · ◇ SYNERGY ${Object.keys(g.synergies).length} · ✦ EVOLVE ${Object.keys(g.fusions).length} · ★ LEGEND ${Object.keys(g.legends).length}<br><span style="color:${SHIPS[p.shipType].color}">${p.shipType==='charge'?'操作：停止でチャージ → 移動で発射':p.shipType==='drill'?'操作：移動で蓄積→高速ダッシュ突進 / NOVA中は完全無敵':p.shipType==='laser'?'攻撃：独立自動照準の貫通レーザー':'攻撃：敵へ自動追尾射撃'}</span>`;
+ const buildMarkup=`<b style="color:${SHIPS[p.shipType].color}">${SHIPS[p.shipType].jp}</b> · ${p.shipType==='phantom'?`PHANTOM Lv${p.phantomLevel}/10 · ${p.phantoms.length}/3機 ${p.phantomNova>0?'· OVERDRIVE':''}`:p.shipType==='laser'?`レーザー ${p.laserCount}本 · 幅${p.laserWidth.toFixed(1)} ${p.laserNovaTimer>0?'· OVERDRIVE!':''}`:p.shipType==='charge'?`チャージ ${Math.round(p.charge*100)}% ${p.charge>=.99?'· 貫通READY':''}`:p.shipType==='drill'?`プラズマ ${Math.floor(100*p.drillPlasma/Math.max(.001,p.drillCap))}% ${p.drillOverdriveTime>0?"· OVERDRIVE "+p.drillOverdriveTime.toFixed(1)+"s":""} · 近接ドリル ${Math.round(p.drillDamage)}`:`${p.bulletModes.map(kindLabel).join(' / ')}弾 · ${p.multishot}連射`} · 僚機 ${p.droneCount} · 岩壁 ${p.rockWalls} · 突風 ${p.windCount}<br>🌈 RELIC ${Object.keys(g.relics).length} · ◇ SYNERGY ${Object.keys(g.synergies).length} · ✦ EVOLVE ${Object.keys(g.fusions).length} · ★ LEGEND ${Object.keys(g.legends).length}<br><span style="color:${SHIPS[p.shipType].color}">${p.shipType==='phantom'?'操作：回避と経験値回収 / ファントムは自律戦闘':p.shipType==='charge'?'操作：停止でチャージ → 移動で発射':p.shipType==='drill'?'操作：移動で蓄積→高速ダッシュ突進 / NOVA中は完全無敵':p.shipType==='laser'?'攻撃：独立自動照準の貫通レーザー':'攻撃：敵へ自動追尾射撃'}</span>`;
  if(buildMarkup!==lastHudBuildMarkup){ui.build.innerHTML=buildMarkup;lastHudBuildMarkup=buildMarkup;}
 }
 
@@ -5826,7 +5961,7 @@ function drawDogPaw(z,drawCtx=ctx,visualTime=t){const ctx=drawCtx,t=visualTime;
  ctx.beginPath();ctx.ellipse(0,r*.16,r*(.44+hot),r*.29,0,0,TAU);ctx.stroke();
 }
 
-function ship(x,y,rot,scale=1,secondary=false){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor= (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle= (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='dog'){drawDogFrame();ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
+function ship(x,y,rot,scale=1,secondary=false){ctx.save();if(!secondary&&player?.shipType==='phantom')ctx.globalAlpha*=.55;ctx.translate(x,y);ctx.rotate(rot);ctx.scale(scale,scale);ctx.shadowBlur=renderHeavyLoad&&secondary?2:settings.fx==='high'?(secondary?11:21):settings.fx==='medium'?9:0;ctx.shadowColor= (secondary?'#b3a3ff':player?.shipType==='laser'?'#a79bff':player?.shipType==='charge'?'#ffae70':'#70fff0');ctx.fillStyle= (secondary?'#c9adff':player?.shipType==='laser'?'#e4dfff':player?.shipType==='charge'?'#ffdbad':'#e4ffff');if(!secondary&&player?.shipType==='phantom'){ctx.fillStyle='#f5f8ff';ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-20);ctx.lineTo(15,13);ctx.lineTo(0,6);ctx.lineTo(-15,13);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();return;}if(!secondary&&player?.shipType==='dog'){drawDogFrame();ctx.restore();return;}if(!secondary&&player?.shipType==='drill'){
   const hot=(player.drillRushActive||0)>0,charge=clamp((player.drillPlasma||0)/Math.max(.001,player.drillCap||1),0,1);
   // Magenta plated chassis + a distinct, mechanical auger at the nose.
   ctx.shadowColor=(hot?'#ffd0ee':'#ff4898');ctx.fillStyle=(hot?'#ffe2f3':'#f95da7');ctx.strokeStyle='#6c164f';ctx.lineWidth=2.8;
@@ -6180,6 +6315,7 @@ function render(){const renderPressure=shots.length+hostile.length+enemies.lengt
  if(player.relicLaserOrbit){for(let k=0;k<2;k++){const a=t*1.65+k*Math.PI;const xx=player.x+Math.cos(a)*28,yy=player.y+Math.sin(a)*28;glow(xx,yy,5,'#d9b6ff',11);ctx.strokeStyle='#9e8cff';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(xx,yy,9,0,TAU);ctx.stroke()}}
   if(player.shipType==='dog')for(let i=0;i<player.dogChicks;i++){const pos=ringPosition(i,player.dogChicks,t,52,24,7,-.88);drawAnimal(player.dogChickenEvolved?'chicken':'chick',pos.x,pos.y,14+Math.sin(t*5+i)*.65);}
   for(let i=0;i<player.droneCount;i++){const pos=ringPosition(i,player.droneCount,t);ship(pos.x,pos.y,pos.a+Math.PI/2,.55,true)}
+ AnkinDark.draw(player,ctx);if(player.shipType==='phantom')AnkinPhantom.draw(player,ctx);
  if(player.iframes>0&&Math.floor(t*14)%2===0)ctx.globalAlpha=.44;ship(player.x,player.y,Math.atan2(player.dy,player.dx)+Math.PI/2);ctx.globalAlpha=1;
  // A small visible core matches the actual damage radius, not the full ship silhouette.
  ctx.save();ctx.globalAlpha=.58;ctx.strokeStyle='#edffff';ctx.lineWidth=1.15;ctx.beginPath();ctx.arc(player.x,player.y,player.hitR??6.5,0,TAU);ctx.stroke();ctx.globalAlpha=.9;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(player.x,player.y,1.75,0,TAU);ctx.fill();ctx.restore();

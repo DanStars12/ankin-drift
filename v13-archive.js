@@ -7,7 +7,7 @@ const KEY='ankin_drift_pilot_archive';
 const OLD='ankin_drift_v96_damage_records';
 const LEGACY=['ankin_drift_v71_records','ankin_drift_v7_records','ankin_drift_v6_records','ankin_drift_v5_records'];
 const MAX_BYTES=1024*1024,MAX_CLEARS=1000,MAX_RUNS=200,SCHEMA=2;
-const SHIPS=['shot','laser','charge','drill','dog'],MODES=['normal','challenge'];
+const SHIPS=['shot','laser','charge','drill','dog','phantom'],MODES=['normal','challenge'];
 const finite=(v,max=1e15)=>Number.isFinite(+v)?Math.min(max,Math.max(0,+v)):0;
 const safeDate=v=>typeof v==='string'&&v.length<=36?v:new Date(0).toISOString();
 const text=(v,max=110)=>typeof v==='string'?v.slice(0,max):'';
@@ -45,7 +45,9 @@ const DEFINITIONS=[
  ['sevenhundred_kills','七百機撃墜','1回のプレイで敵を700体撃破','silver',700],
  ['survive_twelve','十二分の戦術','1回のプレイで12分間生存','silver',720],
  ['four_frames','四機の英雄','異なる4種類の機体でクリア','gold',4],
- ['five_frames','五機の英雄','5種類すべての機体でクリア','rainbow',5],
+ ['phantom_clear','銀影の生還者','ファントム型でクリア','gold',1],
+ ['six_frames','六機の英雄','6種類すべての機体でクリア','rainbow',6],
+ ['five_frames','五機の英雄','5種類の機体でクリア','rainbow',5],
  ['dog_clear','わんこの新星','ドッグ型で初クリア','gold',1],
  ['both_modes','双極の勝者','NORMALとCHALLENGEの両方でクリア','gold',2],
  ['ten_clears','不屈の挑戦者','累計10回クリア','gold',10],
@@ -73,8 +75,8 @@ const definitionById=new Map(DEFINITIONS.map(d=>[d[0],d]));
 function stripEnding(v){
  const o=object(v);if(!Object.keys(o).length)return null;
  const metrics=object(o.metrics),stats={};
- for(const [k,value] of Object.entries(object(metrics.damageStats)).slice(0,20))
-  if(/^[a-z]{2,18}$/.test(k))stats[k]=finite(value);
+ for(const [k,value] of Object.entries(object(metrics.damageStats)).slice(0,30))
+  if(/^[a-zA-Z]{2,18}$/.test(k))stats[k]=finite(value);
  const output={
   version:finite(o.version,10),styleId:text(o.styleId,40),styleName:text(o.styleName,90),
   title:text(o.title,90),story:text(o.story,550),summary:text(o.summary,200),
@@ -89,7 +91,7 @@ function stripEnding(v){
   evolutionNames:array(o.evolutionNames).map(x=>text(x,90)).slice(0,8),
   relicNames:array(o.relicNames).map(x=>text(x,90)).slice(0,8),
   featuredSkills:array(o.featuredSkills).map(x=>text(x,90)).slice(0,6),
-  fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,2)
+  fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,3)
  };
  return output;
 }
@@ -101,7 +103,7 @@ function stripClear(v,i){
   ship:SHIPS.includes(o.ship)?o.ship:null,title:text(o.title,90),
   subtitle:text(o.subtitle,160),rank:text(o.rank,32),
   challenges:unique(o.challenges,['fragile','onslaught','armored','swift','vicious','ironclad','ballistic','famine','novaTax','dashTax','repairTax','doubleTime']).slice(0,12),
-  fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,2),
+  fusionIds:array(o.fusionIds).map(x=>text(x,40)).slice(0,3),
   evolutionIds:array(o.evolutionIds).map(x=>text(x,70)).slice(0,30),
   finalSource:text(o.finalSource,40),ending:stripEnding(o.ending),
   meta:{...('victories' in meta?{victories:finite(meta.victories,1e7)}:{})}};
@@ -153,7 +155,7 @@ function profileOf(raw,r,legacy=false){
  p.shipsCleared=unique(o.shipsCleared,SHIPS);
  p.modesCleared=unique(o.modesCleared,MODES);
  p.fusionsDiscovered=unique(o.fusionsDiscovered,Array.from({length:0})).concat(
-  array(o.fusionsDiscovered).filter(x=>typeof x==='string'&&/^(fire|ice|thunder|wind|rock)_(fire|ice|thunder|wind|rock)$/.test(x)).slice(0,20)
+  array(o.fusionsDiscovered).filter(x=>typeof x==='string'&&/^(fire|ice|thunder|wind|rock|dark)_(fire|ice|thunder|wind|rock|dark)$/.test(x)).slice(0,30)
  );
  p.fusionsDiscovered=[...new Set(p.fusionsDiscovered)];
  p.dualFusion=!!o.dualFusion;p.evolutionMaster=!!o.evolutionMaster;
@@ -166,7 +168,7 @@ function profileOf(raw,r,legacy=false){
 function reconcileProfile(p,clears){
  p.shipsCleared=[...new Set([...p.shipsCleared,...clears.map(c=>c.ship).filter(x=>SHIPS.includes(x))])];
  p.modesCleared=[...new Set([...p.modesCleared,...clears.map(c=>c.mode)])];
- p.fusionsDiscovered=[...new Set([...p.fusionsDiscovered,...clears.flatMap(c=>c.fusionIds)])].slice(0,20);
+ p.fusionsDiscovered=[...new Set([...p.fusionsDiscovered,...clears.flatMap(c=>c.fusionIds)])].slice(0,30);
  p.dualFusion=p.dualFusion||clears.some(c=>c.fusionIds.length>=2);
  p.evolutionMaster=p.evolutionMaster||clears.some(c=>c.evolutionIds.length>=2);
  p.endlessClear=p.endlessClear||clears.some(c=>c.endless);
@@ -181,7 +183,8 @@ function progressValue(id,p){
  case 'survive_one':case 'survive_two':case 'survive_three':case 'survive_five':case 'survive_seven':case 'survive_ten':case 'survive_twelve':case 'survive_fifteen':case 'survive_twenty':case 'survive_twentyfive':return p.maxTime;
  case 'first_clear':case 'two_clears':case 'three_clears':case 'five_clears':case 'eight_clears':case 'ten_clears':case 'fifteen_clears':case 'twenty_clears':case 'thirty_clears':case 'fifty_clears':case 'hundred_clears':return p.totalClears;
  case 'challenge_clear':return p.modesCleared.includes('challenge')?1:0;
- case 'four_frames':case 'five_frames':return p.shipsCleared.length;
+ case 'six_frames':case 'four_frames':case 'five_frames':return p.shipsCleared.length;
+  case 'phantom_clear':return p.shipsCleared.includes('phantom')?1:0;
   case 'dog_clear':return p.shipsCleared.includes('dog')?1:0;
  case 'both_modes':return p.modesCleared.length;
  case 'fusion_scholar':return p.fusionsDiscovered.length;
@@ -306,7 +309,7 @@ function mergeProfile(a,b,clears){
  p.maxLevel=Math.max(a.maxLevel,b.maxLevel);p.maxKills=Math.max(a.maxKills,b.maxKills);p.maxTime=Math.max(a.maxTime,b.maxTime);
  p.shipsCleared=[...new Set([...a.shipsCleared,...b.shipsCleared])];
  p.modesCleared=[...new Set([...a.modesCleared,...b.modesCleared])];
- p.fusionsDiscovered=[...new Set([...a.fusionsDiscovered,...b.fusionsDiscovered])].slice(0,20);
+ p.fusionsDiscovered=[...new Set([...a.fusionsDiscovered,...b.fusionsDiscovered])].slice(0,30);
  p.dualFusion=a.dualFusion||b.dualFusion;p.evolutionMaster=a.evolutionMaster||b.evolutionMaster;
  p.endlessClear=a.endlessClear||b.endlessClear;p.bestChallenges=Math.max(a.bestChallenges,b.bestChallenges);
  reconcileProfile(p,clears);return p;
