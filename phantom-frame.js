@@ -39,7 +39,7 @@ function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
   if(!nova&&Math.abs(delta)>s.angle/2+Math.asin(Math.min(1,e.r/Math.max(1,d))))continue;
   if(!nova&&world.blocked(f.x,f.y,e.x,e.y))continue;
   attack.hit.add(e);let damage=(nova?world.novaDamage()*.24:s.damage)*factor*(f.primary?1:.6);
-  if(!nova){const crit=rank(p,'critical')*.08+(p.crit||0);if(world.random()<crit)damage*=p.critMult||1.8;
+  if(!nova){const crit=rank(p,'critical')*.08+(p.crit||0);if(world.random()<Math.min(.97,crit))damage*=p.critMult||1.8;
    if(world.isBoss(e))damage*=p.bossBane||1;damage*=1+(rank(p,'oath')?Math.min(.3,f.chain*.03):0);}
   world.damage(e,damage,{special:true,source:nova?'nova':f.primary?'phantomBlade':'phantomExtra',phantomId:f.id,attackId:attack.id,attackType:type,primary:f.primary,nova,origin:{x:f.x,y:f.y}});
   if(attack.element&&type==='blade'&&world.element)world.element(e,damage,attack);
@@ -70,7 +70,14 @@ function tick(p,dt,world){
    }
   }
   const target=f.target;
-  if(!target){f.state='HUNT';f.x=clamp(f.x,12,world.width-12);f.y=clamp(f.y,12,world.height-12);continue;}
+  if(!target){
+   // Patrol the arena rather than escorting the ghost or remaining idle forever
+   // after the pilot and a remote enemy pack move beyond the local search radius.
+   f.state='HUNT';const index=(Math.floor(p.phantomClock/4)+f.id*2)%5;
+   const wx=world.width*([.22,.78,.78,.22,.5][index]),wy=world.height*([.22,.22,.78,.78,.5][index]);
+   const dx=wx-f.x,dy=wy-f.y,d=Math.max(1,Math.hypot(dx,dy)),step=Math.min(d,s.speed*.45*dt);
+   const move=world.motion(f.x,f.y,f.x+dx/d*step,f.y+dy/d*step,10);f.x=clamp(move.x,12,world.width-12);f.y=clamp(move.y,12,world.height-12);f.angle=Math.atan2(dy,dx);continue;
+  }
   if(f.lastTarget!==target){f.chain=0;f.lastTarget=target;}
   const dx=target.x-f.x,dy=target.y-f.y,d=Math.hypot(dx,dy);f.angle=Math.atan2(dy,dx);
   if(d>s.range*.65+target.r){

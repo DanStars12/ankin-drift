@@ -18,7 +18,9 @@
     "balance:ai": "playwright test tests/v13-30-balance-ai.spec.mjs",
     "check:pwa": "node scripts/check-pwa.mjs",
     "test:smoke": "playwright test",
-    "test": "npm run check:syntax && npm run test:arsenal && npm run test:clock && npm run test:trace-summary && npm run test:archive && npm run test:ending && npm run test:balance-report && npm run test:ability-tactics && npm run check:pwa && npm run test:smoke"
+    "test": "npm run check:syntax && npm run test:arsenal && npm run test:clock && npm run test:trace-summary && npm run test:archive && npm run test:ending && npm run test:balance-report && npm run test:ability-tactics && npm run test:phantom && npm run check:pwa && npm run test:smoke",
+    "test:phantom": "node --test tests/phantom-frame.test.mjs",
+    "validate:phantom": "node scripts/validate-phantom.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

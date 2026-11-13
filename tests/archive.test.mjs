@@ -199,3 +199,9 @@ test('DOUBLE TIME and all twelve trials survive write, reload and backup import'
  assert.equal(asText(imported.api.read().clears[0].challenges),asText(trials));
  assert.equal(asText(reloaded.api.read().clears[0].rank),asText('ANKIN MASTER'));
 });
+
+test('PHANTOM, DARK and three fusions survive archive export, reload and restore',()=>{
+ const h=harness(),record=h.api.read();record.clears.push(clear('phantom-three',{ship:'phantom',fusionIds:['fire_ice','thunder_wind','dark_rock'],ending:{title:'銀影の指揮者',metrics:{damageStats:{phantomBlade:123,darkVirus:45}},fusionIds:['fire_ice','thunder_wind','dark_rock']}}));
+ assert.equal(h.api.write(record),true);const restored=harness({[key]:h.api.exported()});const c=restored.api.read().clears[0];assert.equal(c.ship,'phantom');assert.equal(c.fusionIds.length,3);assert.equal(c.ending.metrics.damageStats.phantomBlade,123);assert.equal(c.ending.metrics.damageStats.darkVirus,45);assert.ok(restored.api.current().profile.fusionsDiscovered.includes('dark_rock'));assert.ok(restored.api.earned('phantom_clear'));
+ const empty=harness();empty.api.restore(h.api.exported());assert.equal(empty.api.read().clears[0].fusionIds.length,3);
+});

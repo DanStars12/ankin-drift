@@ -13,7 +13,7 @@ const hook=`window.__reward1327={
   if(!choiceSynergyReady(c))throw Error('Expected a real ready synergy');
   const pool=kind==='minor'?POWERS:kind==='major'?LEGENDS:kind==='unique'?UNIQUE_SKILLS:SKILLS;
   choices=[{...c,name:'超・長い名前のスキル【融合 × 連携】テスト'}];
-  for(const card of pool)if(card.id!==c.id&&fitsShip(card)&&choices.length<(kind==='normal'?3:4))choices.push(card);
+  for(const card of pool)if(card.id!==c.id&&fitsShip(card)&&choices.length<4)choices.push(card);
   state('choice');
   return {mode,ready:choiceSynergyReady(c),count:choices.length};
  },

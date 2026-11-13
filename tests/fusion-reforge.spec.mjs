@@ -31,10 +31,10 @@ async function setup(page){const errors=[];page.on('pageerror',e=>errors.push(e.
  const response=await route.fetch(),html=await response.text();if(!html.includes(anchor))throw Error('fusion probe anchor changed');
  await route.fulfill({response,body:html.replace(anchor,inject+'\n'+anchor)});
  });await page.goto('./');return errors;}
-test('all 40 directed weapon fusion variants exist and produce finite stats',async({page})=>{
+test('all 60 directed weapon fusion variants exist and produce finite stats',async({page})=>{
  const errors=await setup(page),result=await page.evaluate(()=>({catalog:window.__fusionReforgeProbe.catalog(),stats:window.__fusionReforgeProbe.allStats()}));
- expect(result.catalog.a).toBe(20);expect(result.catalog.b).toBe(20);expect(result.catalog.cases).toHaveLength(40);
- expect(result.catalog.cases.every(x=>x.outcome)).toBe(true);expect(result.stats).toHaveLength(40);
+ expect(result.catalog.a).toBe(30);expect(result.catalog.b).toBe(30);expect(result.catalog.cases).toHaveLength(60);
+ expect(result.catalog.cases.every(x=>x.outcome)).toBe(true);expect(result.stats).toHaveLength(60);
  expect(result.stats.every(x=>Math.abs(x.bonus-.17)<.0001&&Number.isFinite(x.weaponValue)&&x.weaponValue>0)).toBe(true);
  expect(errors).toEqual([]);
 });

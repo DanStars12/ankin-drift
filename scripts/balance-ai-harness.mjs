@@ -6,13 +6,14 @@ import {normalRewardValue} from './balance-reward-value.mjs';
 import {decideAbilityUse} from './balance-ability-tactics.mjs';
 export const BALANCE_AI_HARNESS = String.raw`
 const normalRewardValue=${normalRewardValue.toString()};
-const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog'];
+const BALANCE_AI_SHIPS=['shot','laser','charge','drill','dog','phantom'];
 const BALANCE_AI_PROFILES={
  shot:{range:190,strafe:0.67,aggression:1},
  laser:{range:245,strafe:0.92,aggression:1},
  charge:{range:220,strafe:0.62,aggression:.8},
  drill:{range:58,strafe:.24,aggression:1.2},
- dog:{range:230,strafe:.78,aggression:.92}
+ dog:{range:230,strafe:.78,aggression:.92},
+ phantom:{range:280,strafe:1.05,aggression:.55}
 };
 function balanceThreats(){
  const p=player;let x=0,y=0,weight=0,near=0,imminent=0;
@@ -116,7 +117,8 @@ function balanceExpTarget(threat,policy){
  for(const item of pickups){
   if(item.type!=='energy')continue;
   const d=dst(p,item);
-  if(d<Math.max(35,p.magnet*.65)||d>290)continue;
+  if(d<Math.max(35,p.magnet*.65)||d>(p.shipType==='phantom'?580:290))continue;
+  if(p.shipType==='phantom'&&circleCandidates(item.x,item.y,155).some(e=>!e.dead&&d2(e,item)<(e.r+100)**2))continue;
   const score=(Math.min(180,item.value)+Math.min(30,item.charge)*.3)/(75+d);
   if(score>bestScore){best=item;bestScore=score;}
  }
@@ -136,7 +138,7 @@ function balanceRewardTraits(card){
   survival:!!(card?.isSupply&&['supply_repair','supply_shield'].includes(id)||
    tags.some(tag=>['防御','装甲','継戦','回復','吸収','シールド'].includes(tag))||
    ['hp','armor','regen','repair','barrier','shieldEpic','expShield','eternalBody'].includes(id)),
-  experience:tags.includes('経験値')||['xp','pickup','bounty'].includes(id)
+  experience:tags.includes('回収')||tags.includes('経験値')||['xp','pickup','bounty'].includes(id)
  };
 }
 function balanceRecordReward(card,options){
@@ -168,9 +170,9 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
  if(p.y<margin)y+=(margin-p.y)/margin*2.5;
  if(p.y>H-margin)y-=(p.y-(H-margin))/margin*2.5;
  for(const e of targets){
-  if(e===priority)continue;
+  if(e===priority&&p.shipType!=='phantom')continue;
   const ex=p.x-e.x,ey=p.y-e.y,ed=Math.hypot(ex,ey);
-  if(ed<90){const f=(90-ed)/90*1.1;x+=ex/Math.max(1,ed)*f;y+=ey/Math.max(1,ed)*f;}
+  const avoidRange=p.shipType==='phantom'?155:90;if(ed<avoidRange){const f=(avoidRange-ed)/avoidRange*(p.shipType==='phantom'?3.8:1.1);x+=ex/Math.max(1,ed)*f;y+=ey/Math.max(1,ed)*f;}
  }
  x+=threat.x*1.7;y+=threat.y*1.7;
  let xpIntent=null;
@@ -180,7 +182,7 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   const xp=threat.near||threat.imminent||(boss&&!boss.dead)||game.total%9>=4?null:balanceAbilityLog.currentXpTarget;
   if(xp){
    const vx=xp.x-p.x,vy=xp.y-p.y,len=Math.max(1,Math.hypot(vx,vy));
-   x=x*.28+vx/len*1.55;y=y*.28+vy/len*1.55;
+   const keep=p.shipType==='phantom'?.85:.28;x=x*keep+vx/len*1.55;y=y*keep+vy/len*1.55;
    xpIntent=xp.kind;
   }
  }
@@ -267,6 +269,7 @@ function balanceApplyBuild(level){
  if(p.shipType==='laser')p.laserCount=Math.max(p.laserCount,level>1?4:3);
  if(p.shipType==='charge')p.chargeRate=Math.max(p.chargeRate,level>1?1.4:1.08);
  if(p.shipType==='drill')p.drillDamage+=level>1?125:90;
+ if(p.shipType==='phantom'){AnkinPhantom.level(p,level>1?5:3);for(const key of ['polish','haste','edge'])AnkinPhantom.addRank(p,key);}
  if(p.shipType==='dog')p.dogBones=Math.max(p.dogBones,level>1?4:3);
 }
 
@@ -285,6 +288,8 @@ function balancePickReward(options){
    if(c.shipOnly===player.shipType)score+=normal?.2:3.5;
    if(defense&&!normal)score+=hpRatio<.45?6:hpRatio<.75?3.5:1.3;
    const traits=balanceRewardTraits(c);
+   if(player.shipType==='phantom'&&normal&&traits.survival)score+=player.maxHp<160?4:hpRatio<.65?3:0;
+   if(player.shipType==='phantom'&&traits.experience&&player.magnet<230)score+=2;
    if(traits.primary&&!normal)score+=2.3;
    if(!normal&&traits.survival&&hpRatio<.8)score+=hpRatio<.45?2.5:1.2;
    if(traits.experience&&game.level<15&&player.magnet<240)score+=1.0;
@@ -295,7 +300,7 @@ function balancePickReward(options){
    const evo=fusionFor(c.id).filter(a=>!game.fusions[a.id]&&fusionMaterials(a).filter(id=>id!==c.id).every(owned)).length;
    score+=evo*14;
    const elem=elementFromCard(c),own=ownedElementKeys();
-   if(elem&&game.elementCombos.length<2){
+   if(elem&&game.elementCombos.length<3){
     if(own.includes(elem))score+=1.2;
     else if(own.length===1)score+=2.4;
    }
@@ -417,6 +422,7 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   weaponState:{dmg:player.dmg,rate:player.rate,multishot:player.multishot,
    laserCount:player.laserCount,chargeRate:player.chargeRate,drillDamage:player.drillDamage,
    dogBones:player.dogBones,magnet:player.magnet,regen:player.regen,shieldMax:player.shieldMax},
+  phantomState:player.shipType==='phantom'?{level:player.phantomLevel,count:player.phantoms.length,ranks:{...player.phantomRanks},metrics:{...player.phantomMetrics},hp:player.hp,shield:player.shield}:null,
   bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
 }
 window.__ankinBalanceAI={

@@ -32,6 +32,10 @@ export function decideAbilityUse(s) {
     else if(s.enemiesNear>=2)novaReason='mob-overdrive';
     else if(danger&&s.hpRatio<.72)novaReason='defensive-overdrive';
     break;
+   case 'phantom':
+    if(s.bossDist<=700||s.enemiesNear>=2)novaReason='spectral-overdrive';
+    else if(s.imminent>=2)novaReason='spectral-clear';
+    break;
    case 'dog':
     if(s.bossDist<=285)novaReason='boss-bow-shock';
     else if(s.enemiesNear>=2)novaReason='radial-bow-shock';

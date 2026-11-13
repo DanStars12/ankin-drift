@@ -75,7 +75,7 @@ test('simulation timers agree across one-step and two-step frame scheduling',()=
 
 test('actual damage pipeline preserves final-boss core HP floor after tactical bonuses',()=>{
  const h=catalogHarness();Object.assign(h.ctx,{ultimatePartsAlive:()=>1,hasBossSuper:()=>false,engageBarrierBlocks:()=>false,trackBalanceDamage:()=>{},gainNovaEnergy:()=>{}});
- h.eval(h.declaration('DAMAGE_LABELS'));h.eval(h.declaration('damageEnemy'));h.ctx.player=h.eval('initialP()');h.ctx.AnkinTactics.apply(h.ctx.player,'tacShotFar');
+ h.eval(h.declaration('DAMAGE_LABELS'));h.eval(h.declaration('applyDarkFusionHit'));h.eval(h.declaration('damageEnemy'));h.ctx.player=h.eval('initialP()');h.ctx.AnkinTactics.apply(h.ctx.player,'tacShotFar');
  Object.assign(h.ctx.game,{damage:0,damageStats:{},bossDamage:0});h.ctx.enemy={x:h.ctx.player.x+300,y:h.ctx.player.y,hp:1000,maxHp:1000,invulnFloor:999,type:'ultimate'};
  h.eval("damageEnemy(enemy,100,{source:'shot',tacticalPrimary:true})");assert.equal(h.ctx.enemy.hp,999);assert.equal(h.ctx.game.damage,1);assert.equal(h.ctx.game.bossDamage,1);
  h.eval("damageEnemy(enemy,100,{source:'shot',tacticalPrimary:true})");assert.equal(h.ctx.enemy.hp,999);assert.equal(h.ctx.game.damage,1);
