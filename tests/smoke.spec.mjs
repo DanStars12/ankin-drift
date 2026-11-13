@@ -405,3 +405,18 @@ test('PHANTOM pressure fixture records real browser frame timings with evolved b
  const result=await page.evaluate(()=>window.__phantomPressure.info());expect(result.phantoms).toBe(3);expect(result.level).toBe(10);expect(result.damage).toBeGreaterThan(0);expect(result.visuals).toBeLessThanOrEqual(24);expect(result.echoes).toBeLessThanOrEqual(24);expect(errors).toEqual([]);
  console.log('PHANTOM_RENDER_METRICS='+JSON.stringify({project:testInfo.project.name,speed,...result}));await testInfo.attach('phantom-render-metrics-'+speed,{body:JSON.stringify(result,null,2),contentType:'application/json'});await page.screenshot({path:testInfo.outputPath('phantom-pressure-'+speed+'.png')});}
 });
+
+test('PHANTOM DARTS owned counts and DARK card colors fit every viewport',async({page},testInfo)=>{
+ const errors=watchFailures(page),anchor='})();';
+ const hook=`window.__dartChoice=()=>{selectedShip='phantom';newRun();game.autoBank=true;for(const id of ['ph_darts','ph_darts','fearAura']){const c=skillById(id);c.apply(player);game.skills[id]=(game.skills[id]||0)+1;game.acquisitionLog.push(id);}choices=['ph_darts','fearAura','darkAmplify','ph_novaCycle'].map(skillById);game.lastChoice='normal';state('choice');};`;
+ await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});});
+ await page.goto('./');await page.evaluate(()=>window.__dartChoice());
+ const cards=page.locator('.choice[data-choice]');await expect(cards).toHaveCount(4);
+ await expect(cards.nth(0).locator('.choice-owned')).toHaveText('現在 2個 / 最大5個');
+ await expect(cards.nth(1).locator('.choice-owned')).toHaveText('現在 1個 / 最大5個');
+ await expect(cards.nth(2).locator('.choice-owned')).toHaveText('現在 0個 / 最大4個');
+ await expect(cards.nth(1)).toHaveClass(/element-dark/);await expect(cards.nth(2).locator('.attr-dark')).toBeVisible();
+ const bounds=await cards.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width,scroll:n.scrollWidth,client:n.clientWidth};}));
+ for(const b of bounds){expect(b.left).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(testInfo.project.use.viewport.width+1);expect(b.scroll).toBeLessThanOrEqual(b.client+1);}
+ await page.screenshot({path:testInfo.outputPath('phantom-darts-choice.png'),fullPage:true});expect(errors).toEqual([]);
+});
