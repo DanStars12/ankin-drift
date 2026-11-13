@@ -182,7 +182,6 @@ function tickDarts(p,dt,w){
   }
   if(f.type==='support'){
    const radius=42;if(f.barrier>0){
-    for(const b of w.hostile||[]){if(b.ttl<=0||b.warn>0)continue;if(Math.hypot(b.x-f.x,b.y-f.y)<radius+(b.r||0)){f.barrier=Math.max(0,f.barrier-b.damage);b.ttl=0;if(!f.barrier)break;}}
     if(Math.hypot(f.x-p.x,f.y-p.y)<radius)p.hp=Math.min(p.maxHp,p.hp+dt*1.5*(power/16));
     if(f.cooldown<=0){f.cooldown=.5;for(const e of w.candidates(f.x,f.y,radius+50)){if(e.dead||Math.hypot(e.x-f.x,e.y-f.y)>radius+e.r)continue;w.damage(e,power*.16,{special:true,source:'phantomDart',origin:{x:f.x,y:f.y}});f.barrier=Math.max(0,f.barrier-(e.dmg||0)*.25);if(!f.barrier)break;}}
    }continue;
@@ -204,6 +203,13 @@ function tickDarts(p,dt,w){
    b.hit.add(e);w.damage(e,b.damage,{special:true,source:'phantomDart',origin:{x:ox,y:oy}});if(!b.charged){b.life=0;break;}
   }
  }p.dartProjectiles=p.dartProjectiles.filter(b=>b.life>0);
+}
+// Use the same swept projectile collision as the ghost so fast bullets cannot
+// cross a support barrier between simulation steps.
+function intercept(p,b,x,y,distance){
+ for(const f of p.darts||[]){if(f.type!=='support'||f.barrier<=0)continue;
+  if(distance(x,y,b.x,b.y,f.x,f.y)<(42+b.r)**2){f.barrier=Math.max(0,f.barrier-b.damage);b.ttl=0;return true;}
+ }return false;
 }
 function nova(p,world){for(const f of p.phantoms)f.novaTick=0;p.phantomNova=6+Math.min(4,Math.max(0,p.novaRadius-180)/90);const radius=Math.min(480,p.novaRadius)*(rank(p,'novaSanctuary')?1.5:1);
  world.clear(p.x,p.y,radius);if(rank(p,'novaSanctuary'))p.shield=Math.min(p.shieldMax,p.shield+40+world.novaDamage()*.1);
@@ -242,5 +248,5 @@ function draw(p,ctx){
  for(const b of p.dartProjectiles||[]){ctx.save();ctx.strokeStyle=b.charged?'#ffcc83':'#86e7ff';ctx.lineWidth=b.charged?7:3;const length=b.charged?.045:.018;ctx.beginPath();ctx.moveTo(b.x-b.vx*length,b.y-b.vy*length);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();}
  for(const v of p.dartVisuals||[]){ctx.save();ctx.globalAlpha=v.life/v.total;ctx.strokeStyle='#efb5ff';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(v.x,v.y);ctx.lineTo(v.x2,v.y2);ctx.stroke();ctx.restore();}
 }
-root.AnkinPhantom={init,sync,addDart,tickDarts,rank,addRank,level,stats,tick,nova,pickup,dashEnd,collection,drawGhost,draw};
+root.AnkinPhantom={init,sync,addDart,tickDarts,intercept,rank,addRank,level,stats,tick,nova,pickup,dashEnd,collection,drawGhost,draw};
 })(globalThis);
