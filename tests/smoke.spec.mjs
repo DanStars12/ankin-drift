@@ -378,7 +378,7 @@ test('PHANTOM title and weapon guide render without losing navigation or changin
  const errors=watchFailures(page);await page.goto('./');await page.locator('[data-ship="phantom"]').click();await page.locator('#openTitleLab').click();
  const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));await page.locator('[data-tab="visual"]').click();
  await expect(page.locator('[data-visual-id="phantomBlade"]')).toBeVisible();await expect(page.locator('#weaponVisualCanvas')).toBeVisible();
- for(const id of ['phantomParade','phantomReaper','phantomFlash','phantomRequiem','phantomNova']){
+ for(const id of ['phantomParade','phantomReaper','phantomFlash','phantomRequiem','phantomDarts','phantomNova']){
   await page.locator('[data-visual-id="'+id+'"]').click();await expect(page.locator('[data-visual-id="'+id+'"]')).toHaveAttribute('aria-pressed','true');
  }
  await page.locator('[data-visual-ship="common"]').click();for(const id of ['fearAura','programControl'])await page.locator('[data-visual-id="'+id+'"]').click();
@@ -407,7 +407,7 @@ test('PHANTOM pressure fixture records real browser frame timings with evolved b
 });
 
 test('PHANTOM DARTS owned counts and DARK card colors fit every viewport',async({page},testInfo)=>{
- const errors=watchFailures(page),anchor='})();';
+ const errors=watchFailures(page),anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
  const hook=`window.__dartChoice=()=>{selectedShip='phantom';newRun();game.autoBank=true;for(const id of ['ph_darts','ph_darts','fearAura']){const c=skillById(id);c.apply(player);game.skills[id]=(game.skills[id]||0)+1;game.acquisitionLog.push(id);}choices=['ph_darts','fearAura','darkAmplify','ph_novaCycle'].map(skillById);game.lastChoice='normal';state('choice');};`;
  await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});});
  await page.goto('./');await page.evaluate(()=>window.__dartChoice());
