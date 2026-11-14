@@ -15,19 +15,20 @@ function sync(p){
  while(p.phantoms.length<count){const i=p.phantoms.length;p.phantoms.push({id:i,primary:i===0,x:p.x+(i-1)*25,y:p.y-30,angle:-Math.PI/2,state:'HUNT',target:null,scan:i*.07,cooldown:0,warp:0,hits:0,chain:0,lastTarget:null});}
  p.phantoms.length=count;
 }
+function resetTargets(p){for(const f of p.phantoms||[]){f.target=null;f.lastTarget=null;f.scan=0;f.route=[];f.routeTime=0;f.unreachable=null;}}
 function addRank(p,k){if(!p.phantomRanks)init(p);p.phantomRanks[k]=rank(p,k)+1;}
 function level(p,n){const next=Math.min(10,p.phantomLevel+n),gain=next-p.phantomLevel;
  p.phantomOverflow=Math.min(.12,p.phantomOverflow+Math.max(0,p.phantomLevel+n-10)*.03);p.phantomLevel=next;
  p.maxHp+=gain*5;p.hp=Math.min(p.maxHp,p.hp+gain*5);p.shieldMax+=gain*2;p.shield=Math.min(p.shieldMax,p.shield+gain*2);p.shieldRecharge+=gain*.25;
 }
 function stats(p){const l=p.phantomLevel-1,active=p.phantomNova>0,novaScale=clamp(((p.novaDamage||175)-175)/1000,0,.3);
- return {range:85+rank(p,'bladeLance')*18+rank(p,'edge')*9+rank(p,'crescent')*7+(rank(p,'reaper')?45:0)+rank(p,'emperor')*15,
+ return {range:85+rank(p,'pursuitLink')*10+rank(p,'bladeLance')*18+rank(p,'edge')*9+rank(p,'crescent')*7+(rank(p,'reaper')?45:0)+rank(p,'emperor')*15,
  angle:(110+rank(p,'wide')*14+(rank(p,'reaper')?20:0))*Math.PI/180,
  cap:3+rank(p,'wide')+(rank(p,'reaper')?3:0)+rank(p,'bladeLance')*2,
- speed:(270+l*9+rank(p,'hunt')*12+rank(p,'predator')*35)*(1+rank(p,'assault')*.1)*(active?1.3+novaScale*.5+(rank(p,'novaAccel')?.35:0):1),
+ speed:(270+l*9+rank(p,'hunt')*12+rank(p,'predator')*35)*(1+rank(p,'assault')*.1+rank(p,'pursuitLink')*.08)*(active?1.3+novaScale*.5+(rank(p,'novaAccel')?.35:0):1),
  sense:600+l*22+rank(p,'hunt')*85+rank(p,'predator')*180,
- period:Math.max(.16,.65/(1+l*.035+rank(p,'haste')*.09+rank(p,'algorithm')*.04+rank(p,'driver')*.07)/(active?1.35+(rank(p,'novaAccel')?.30:0):1)),
- damage:p.dmg*(1+l*.09+rank(p,'polish')*.15+rank(p,'emperor')*.3+rank(p,'sync')*.08+rank(p,'network')*.1+p.phantomOverflow+rank(p,'crescent')*.12)*(p.phantomRelay>0?1.18+rank(p,'coil')*.04:1)*(active?1.2+novaScale:1)*(1+(rank(p,'contract')?.35*(1-p.hp/Math.max(1,p.maxHp)):0))*(1+(rank(p,'astralCore')?(p.phantomLevel===10?.18:.04):0))};
+ period:Math.max(.16,Math.min(.58,.65/(1+l*.035))/(1+(rank(p,'haste')*.09+rank(p,'algorithm')*.04+rank(p,'driver')*.07)/(1+l*.035))/(active?1.35+(rank(p,'novaAccel')?.30:0):1)),
+ damage:p.dmg*(1+rank(p,'bladeCircuit')*.12)*(1+l*.09+rank(p,'polish')*.15+rank(p,'emperor')*.3+rank(p,'sync')*.08+rank(p,'network')*.1+p.phantomOverflow+rank(p,'crescent')*.12)*(p.phantomRelay>0?1.18+rank(p,'coil')*.04:1)*(active?1.2+novaScale:1)*(1+(rank(p,'contract')?.35*(1-p.hp/Math.max(1,p.maxHp)):0))*(1+(rank(p,'astralCore')?(p.phantomLevel===10?.18:.04):0))};
 }
 function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
  const nova=type==='nova',range=nova?s.range*1.6:s.range;
@@ -176,7 +177,7 @@ function tickDarts(p,dt,w){
  if(!p.dartTypes.length)return;
  if(p.dartActive>0){p.dartActive=Math.max(0,p.dartActive-dt);if(!p.dartActive){p.darts=[];p.dartCooldown=Math.max(5,10-rank(p,'dartCycle'));}}
  else {p.dartCooldown=Math.max(0,p.dartCooldown-dt);if(!p.dartCooldown){p.dartActive=15+rank(p,'dartDuration')*3+rank(p,'sovereign')*5;p.darts=p.dartTypes.map((t,i)=>makeDart(p,t,i));}}
- const s=stats(p),power=s.damage*.5*(1+rank(p,'dartPower')*.12+rank(p,'command')*.25),speed=s.speed*.5*(1+rank(p,'dartThruster')*.12),tempo=1+rank(p,'dartReactor')*.15+rank(p,'command')*.12;
+ const s=stats(p),power=s.damage*.5*(1+rank(p,'dartPower')*.12+rank(p,'command')*.25+rank(p,'dartLink')*.15),speed=s.speed*.5*(1+rank(p,'dartThruster')*.12),tempo=1+rank(p,'dartReactor')*.15+rank(p,'command')*.12;
  for(const f of p.darts){f.x=clamp(f.x,10,w.width-10);f.y=clamp(f.y,10,w.height-10);f.cooldown-=dt;let target=null,best=Infinity;
   if(f.type==='follow'){
    for(const e of w.pickups||[]){if(e.type!=='energy'||e.collected)continue;const d=Math.hypot(e.x-f.x,e.y-f.y);if(d<best){best=d;target=e;}}
@@ -271,5 +272,5 @@ function draw(p,ctx){
  for(const b of p.dartProjectiles||[]){ctx.save();ctx.strokeStyle=b.charged?'#ffcc83':'#86e7ff';ctx.lineWidth=b.charged?7:3;const length=b.charged?.045:.018;ctx.beginPath();ctx.moveTo(b.x-b.vx*length,b.y-b.vy*length);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();}
  for(const v of p.dartVisuals||[]){ctx.save();ctx.globalAlpha=v.life/v.total;ctx.strokeStyle='#efb5ff';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(v.x,v.y);ctx.lineTo(v.x2,v.y2);ctx.stroke();ctx.restore();}
 }
-root.AnkinPhantom={init,sync,dartCapacity,barrierMax,addDart,tickDarts,intercept,rank,addRank,level,stats,tick,nova,pickup,dashEnd,collection,drawGhost,draw};
+root.AnkinPhantom={init,sync,resetTargets,dartCapacity,barrierMax,addDart,tickDarts,intercept,rank,addRank,level,stats,tick,nova,pickup,dashEnd,collection,drawGhost,draw};
 })(globalThis);

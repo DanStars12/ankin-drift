@@ -4259,6 +4259,13 @@ for(const [key,rarity,name,desc,darts] of PHANTOM_ELITE_CARDS){
 }
 
 for(const id of ['ph_sanctuary','ph_barrier']){const c=skillById(id);c.tags=[...new Set([...c.tags,'防御','シールド'])];}for(const id of ['ph_coil','ph_relay']){const c=skillById(id);c.tags=[...new Set([...c.tags,'回収'])];}
+SYNERGIES.push(
+ {id:'ph_bladeCircuit',shipOnly:'phantom',need:['ph_polish','ph_haste'],name:'白刃ドライブ',desc:'ブレード威力+12%。',apply:p=>AnkinPhantom.addRank(p,'bladeCircuit')},
+ {id:'ph_pursuitLink',shipOnly:'phantom',need:['ph_hunt','ph_edge'],name:'追撃リンク',desc:'ファントムの移動速度+8%、ブレード射程+10。',apply:p=>AnkinPhantom.addRank(p,'pursuitLink')},
+ {id:'ph_dartLink',shipOnly:'phantom',need:['ph_darts','ph_sync'],name:'ダーツ戦術同期',desc:'ダーツの攻撃・支援性能+15%。',apply:p=>AnkinPhantom.addRank(p,'dartLink')}
+);
+const PHANTOM_OFFENSE_IDS=new Set(['ph_polish','ph_haste','ph_wide','ph_critical','ph_double','ph_echo','ph_sync','ph_core','ph_limit','ph_darts','ph_dartPower','damage','critical','critEpic']);
+function phantomOffenseCard(c){return PHANTOM_OFFENSE_IDS.has(c.id);}
 const DRILL_RANGED_ONLY=new Set(["fire", "travel", "fan", "pierce", "echo", "rail", "wider", "plasma", "cryo", "arc", "scatter", "perforate", "rapid", "boomerang", "hyper", "railgod", "eternity", "limitBreak", "lPowerIon", "lStorm"]);
 function fitsShip(c){return !!c&&(player.shipType!=='phantom'||c.shipOnly==='phantom'||PHANTOM_SHARED.has(c.id)||!!elementFromCard(c))&&(!c.shipOnly||c.shipOnly===player.shipType)&&!(c.excludeShips||[]).includes(player.shipType)&&!(player.shipType==='drill'&&DRILL_RANGED_ONLY.has(c.id))&&(player.shipType!=='dog'||c.shipOnly==='dog'||DOG_SHARED.has(c.id))}
 function activeSynergies(){return SYNERGIES.filter(a=>(!a.shipOnly||a.shipOnly===player.shipType)&&a.need.every(id=>fitsShip(skillById(id))&&!isSealedCard(skillById(id))))}
@@ -4404,6 +4411,16 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
    c=weighted[Math.floor(Math.random()*weighted.length)];
   }
   options.push(c);used.add(c.id);
+ }
+ // Expanded utility stock must not leave PHANTOM with four non-offensive choices.
+ // Preserve four distinct, legal cards and keep the rarity of the replaced slot
+ // where possible. No card is granted or automatically selected.
+ if(kind==='normal'&&player.shipType==='phantom'&&options.length===desired&&!options.some(phantomOffenseCard)){
+  const attack=pool.filter(c=>phantomOffenseCard(c)&&!used.has(c.id));
+  if(attack.length){const last=options[options.length-1],same=attack.filter(c=>c.rarity===last.rarity),order={common:0,uncommon:1,rare:2,epic:3};
+   const lower=attack.filter(c=>order[c.rarity]<=order[last.rarity]);const candidates=same.length?same:lower.length?lower:attack;
+   options[options.length-1]=candidates[Math.floor(Math.random()*candidates.length)];
+  }
  }
  if(kind==='normal'&&player.shipType==='phantom')game.phantomOfferDry=options.some(c=>(c.tags||[]).some(t=>t==='防御'||t==='回収'))?0:(game.phantomOfferDry||0)+1;
  // Do not soft-lock when all once-per-run boss rewards have been claimed.
@@ -4558,6 +4575,7 @@ function spawnUltimateBoss(){
  U('raidStatus').style.display='none';
  // Remove ordinary enemies and hostile bullets so the ultimate fight is readable.
  enemies=[];hostile=[];hazards=[];enemyIndexReady=false;game.relicAlive=false;
+ if(player.shipType==='phantom')AnkinPhantom.resetTargets(player);
  const lvl=Math.max(1,game.level),mobile=controlMode==='mobile';
  const hpBase=game.gameMode==='challenge'?204000:292000;
  // Only this boss scales to pilot level; cap prevents runaway XP builds.

@@ -1,5 +1,5 @@
 /* ANKIN DRIFT v14.0 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v14-0-nova-evolution-v1-combat-cache-v8-neon-blade-darts-arsenal';
+const CACHE_NAME = 'ankin-drift-mobile-v14-0-nova-evolution-v1-combat-cache-v9-phantom-combat-progression';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js', './skill-arsenal.js','./skill-tactics.js', './phantom-frame.js', './dark-element.js',

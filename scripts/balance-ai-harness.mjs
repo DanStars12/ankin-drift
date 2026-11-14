@@ -2,7 +2,7 @@
    Two modes: short real-combat encounters, optional full 30-minute scripted-upgrade run.
    Never persist test progress; restore global RNG and archive methods even on failure. */
 import {drillContactGeometry} from './balance-drill-observation.mjs';
-import {normalRewardValue} from './balance-reward-value.mjs';
+import {normalRewardValue,previewNormalReward} from './balance-reward-value.mjs';
 import {decideAbilityUse} from './balance-ability-tactics.mjs';
 /* Developer-only ghost pilot. Plans legal inputs; never changes game state or rewards. */
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -61,6 +61,7 @@ export function planGhostMovement(p,world){
 
 export const BALANCE_AI_HARNESS = String.raw`
 const normalRewardValue=${normalRewardValue.toString()};
+const previewNormalReward=${previewNormalReward.toString()};
 const ghostDirs=Array.from({length:8},(_,i)=>({x:Math.cos(i*Math.PI/4),y:Math.sin(i*Math.PI/4)}));
 function segmentDistance(x,y,dx,dy,t){const d=dx*dx+dy*dy,k=d?clamp(-(x*dx+y*dy)/d,0,t):0;return Math.hypot(x+dx*k,y+dy*k);}
 const planGhostMovement=${planGhostMovement.toString().replace('const dir of dirs','const dir of ghostDirs')};
@@ -193,7 +194,7 @@ function balanceRewardTraits(card){
   dog:['骨','ブーメラン','アニマル','肉球']
  }[player.shipType]||[];
  return {
-  primary:!card?.isSupply&&(player.shipType==='phantom'?(tags.includes('ブレード')||['damage','critical','critEpic','ph_core','ph_limit','ph_crescent','ph_driver','ph_matrix','ph_network','ph_parade','ph_emperor','ph_predator','ph_orchestra','ph_relay'].includes(id)):(card?.shipOnly===player.shipType||['damage','critical','critEpic'].includes(id)||tags.some(tag=>primary.includes(tag)))),
+  primary:!card?.isSupply&&(player.shipType==='phantom'?(tags.includes('ブレード')||tags.includes('ファントムダーツ')||['damage','critical','critEpic','ph_core','ph_limit','ph_crescent','ph_driver','ph_matrix','ph_network','ph_parade','ph_emperor','ph_predator','ph_orchestra','ph_relay'].includes(id)):(card?.shipOnly===player.shipType||['damage','critical','critEpic'].includes(id)||tags.some(tag=>primary.includes(tag)))),
   survival:!!(card?.isSupply&&['supply_repair','supply_shield'].includes(id)||
    tags.some(tag=>['防御','装甲','継戦','回復','吸収','シールド'].includes(tag))||
    ['hp','armor','regen','repair','barrier','shieldEpic','expShield','eternalBody'].includes(id)),
@@ -211,7 +212,7 @@ function balanceRecordReward(card,options){
 }
 function balancePilotStep(frame,policy='tactical',seekExp=false){
  const p=player,profile=BALANCE_AI_PROFILES[p.shipType],sec=game.total;
- if(p.shipType==='phantom'&&frame%600===0&&balanceAbilityLog.phantomSamples.length<240){balanceAbilityLog.phantomSamples.push({at:Number(sec.toFixed(2)),hp:p.hp,maxHp:p.maxHp,shield:p.shield,level:game.level,phantomLevel:p.phantomLevel,count:p.phantoms.length,x:p.x,y:p.y,xpOnField:pickups.reduce((sum,e)=>sum+(e.type==='energy'?e.value:0),0),states:p.phantoms.map(f=>f.state),primaryDamage:game.damageStats.phantomBlade||0,extraDamage:game.damageStats.phantomExtra||0});}
+ if(p.shipType==='phantom'&&frame%600===0&&balanceAbilityLog.phantomSamples.length<240){balanceAbilityLog.phantomSamples.push({at:Number(sec.toFixed(2)),hp:p.hp,maxHp:p.maxHp,shield:p.shield,level:game.level,phantomLevel:p.phantomLevel,count:p.phantoms.length,x:p.x,y:p.y,xpOnField:pickups.reduce((sum,e)=>sum+(e.type==='energy'?e.value:0),0),states:p.phantoms.map(f=>f.state),dartCount:p.darts.length,dartUnlocked:p.dartTypes.length,dartActive:p.dartActive>0,primaryDamage:game.damageStats.phantomBlade||0,extraDamage:game.damageStats.phantomExtra||0});}
 
  keys.clear();
  const targets=enemies.filter(e=>!e.dead&&e.type!=='relic'),priority=boss&&!boss.dead
@@ -345,7 +346,7 @@ function balancePickReward(options){
   const normal=!c.isSupply&&['common','uncommon','rare','epic'].includes(c.rarity);
   const tags=c.tags||[],defense=tags.some(x=>['防御','装甲','継戦','回復'].includes(x));
   let score=normal?(rank[c.rarity]||0)*.15:(rank[c.rarity]||0)+Math.min(2,(game.skills[c.id]||0)*.22);
-  if(normal){const preview=structuredClone(player);c.apply(preview);score+=normalRewardValue(player,preview);}
+  if(normal){const preview=previewNormalReward(player,c,seededBalanceRandom((game.level*65537+c.id.split('').reduce((sum,x)=>sum*31+x.charCodeAt(0),0))>>>0));score+=normalRewardValue(player,preview);}
   if(c.isSupply){
    score=c.id==='supply_repair'?(hpRatio<.35?22:hpRatio<.65?8:-8):
     c.id==='supply_shield'?(hpRatio<.55?11:1):hpRatio<.45?4:-5;
@@ -489,7 +490,7 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   weaponState:{dmg:player.dmg,rate:player.rate,multishot:player.multishot,
    laserCount:player.laserCount,chargeRate:player.chargeRate,drillDamage:player.drillDamage,
    dogBones:player.dogBones,magnet:player.magnet,regen:player.regen,shieldMax:player.shieldMax},
-  phantomState:player.shipType==='phantom'?{level:player.phantomLevel,count:player.phantoms.length,ranks:{...player.phantomRanks},metrics:{...player.phantomMetrics},hp:player.hp,shield:player.shield}:null,
+  phantomState:player.shipType==='phantom'?{level:player.phantomLevel,count:player.phantoms.length,ranks:{...player.phantomRanks},metrics:{...player.phantomMetrics},dartTypes:[...player.dartTypes],hp:player.hp,shield:player.shield}:null,
   bossRemainingHp:boss&&!boss.dead?Math.round(boss.hp):0};
 }
 window.__ankinBalanceAI={
@@ -607,7 +608,8 @@ window.__ankinBalanceAI={
     clearCount:game.clearCount};
   });
  },
- decide(snapshot){return decideAbilityUse(snapshot)},
- inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES,abilityPolicy:'tactical'}}
+ pickRewardIds(ids){return balancePickReward(ids.map(skillById))?.id||null;},
+ inspect(){return {ships:BALANCE_AI_SHIPS,profiles:BALANCE_AI_PROFILES,abilityPolicy:'tactical'}},
+ decide(snapshot){return decideAbilityUse(snapshot)}
 };
 ` + '\n' + decideAbilityUse.toString() + '\n' + drillContactGeometry.toString() + '\n';
