@@ -13,11 +13,11 @@ export function normalRewardValue(before,after){
     const period=.65/(1+l*.035+(r.haste||0)*.09+(r.algorithm||0)*.04+(r.driver||0)*.07);
     const critical=1+Math.min(.969,n(p,'crit')+(r.critical||0)*.08)*(n(p,'critMult',1.8)-1);
     const coverage=1+Math.min(.22,(r.wide||0)*.04+(r.edge||0)*.025);
-    const blade=damage/period*critical*coverage*(r.parade?2.2:1);
+    const blade=damage/period*critical*coverage*(1+(r.parade?(r.grandParade?4:2)*(.6+(r.paradeCore||0)*.1):0));
     const duration=15+(r.dartDuration||0)*3+(r.sovereign||0)*8,uptime=duration/(duration+Math.max(7,10-(r.dartCycle||0)));
-    const weight={shot:.65*(r.prism?3:1),laser:1.05*(r.helix?1.8:1),charge:.8*(r.rail?1.8:1)*(r.needle?2.5:1),support:.12*(r.phoenixDarts?2:1),follow:0};
+    const weight={shot:.65*(1+(r.dartVolley||0))*(r.prism?3:1),laser:1.05*(r.helix?1.8:1),charge:.8*(r.rail?1.8:1)*(r.needle?2.5:1),support:.12*(r.phoenixDarts?2:1),follow:0};
     const darts=(p.dartTypes||[]).reduce((sum,t)=>sum+(weight[t]||0),0);
-    return blade*(1+(r.astralCore?.2:0))+damage/period*.5*darts*uptime*(1+(r.dartPower||0)*.12+(r.command||0)*.25+(r.dartLink||0)*.15)*(1+(r.dartReactor||0)*.15);
+    return blade*(1+(r.astralCore?.2:0))+damage/period*.5*darts*uptime*(1+(r.dartPower||0)*.12+(r.command||0)*.25+(r.dartLink||0)*.15)*(1+(r.dartReactor||0)*.15+(r.dartAccelerator||0)*.1);
    }
    case 'dog':return dmg*n(p,'dogBonePower',1)*Math.sqrt(Math.max(1,n(p,'dogBones',1)))*(1+n(p,'dogBoneReturn',1)) / rate;
    default:return dmg*Math.sqrt(Math.max(1,n(p,'multishot',1)))*crit/rate;
@@ -50,7 +50,7 @@ export function normalRewardValue(before,after){
  // Expected conditional uptime, kept conservative rather than treating a tactical tag as raw DPS.
  if(before.shipType==='phantom'){
   const ar=after.phantomRanks||{},br=before.phantomRanks||{};
-  for(const key of ['double','echo','assault','hunt','dash','compression','line','collector','dartReach','dartCharge','dartMedic','dartBarrier','dartThruster','dartFocus'])score+=Math.max(0,(ar[key]||0)-(br[key]||0))*.8;
+  for(const key of ['double','echo','assault','hunt','dash','compression','line','collector','dartReach','dartCharge','dartMedic','dartBarrier','dartThruster','dartFocus','dartBallistics','guardLink','activeOrbit'])score+=Math.max(0,(ar[key]||0)-(br[key]||0))*.8;
   score+=Math.max(0,(after.dartTypes||[]).filter(t=>t==='follow').length-(before.dartTypes||[]).filter(t=>t==='follow').length)*3;
  }
 

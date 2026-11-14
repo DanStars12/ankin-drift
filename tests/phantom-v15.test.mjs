@@ -5,8 +5,8 @@ import {runtimeHarness} from '../scripts/runtime-vm-harness.mjs';
 function setup(){const h=runtimeHarness();h.api.reset('phantom');h.api.stopSpawns();h.api.clear();return h;}
 const typed={ph_prism:'shot',ph_helix:'laser',ph_rail:'charge',ph_phoenixDarts:'support',ph_courier:'follow'};
 
-test('each typed UNIQUE unlocks its promised dart even as the first dart skill',()=>{
- for(const [id,type] of Object.entries(typed)){const h=setup();assert.ok(h.api.selectable(h.api.catalog).some(c=>c.id===id));h.api.acquire(id);assert.deepEqual(Array.from(h.api.player.dartTypes),[type]);assert.ok(!h.api.selectable(h.api.catalog).some(c=>c.id===id));}
+test('typed UNIQUE is gated before darts and its effect grants the promised type',()=>{
+ for(const [id,type] of Object.entries(typed)){const h=setup();assert.ok(!h.api.selectable(h.api.catalog).some(c=>c.id===id));h.api.acquire(id);assert.deepEqual(Array.from(h.api.player.dartTypes),[type]);assert.ok(!h.api.selectable(h.api.catalog).some(c=>c.id===id));}
 });
 test('UNIQUE bonus slots guarantee all promised types above twelve normal darts and survive rebuilding',()=>{
  const h=setup(),p=h.api.player;h.api.acquire('ph_darts',5);h.api.acquire('ph_dartLimit',5);h.api.acquire('ph_armada');assert.equal(p.dartTypes.length,12);
@@ -52,7 +52,7 @@ test('execution waves stay bounded, cannot recursively execute, and relics are n
  const h=setup(),p=h.api.player;h.api.acquire('ph_execution');h.api.acquire('ph_afterimage');const f=p.phantoms[0];for(let i=0;i<12;i++)h.api.enemy('drone',{x:f.x+30+i,y:f.y,hp:1,maxHp:100,spd:0});h.ctx.AnkinPhantom.tick(p,.01,h.api.phantomWorld());assert.equal(p.phantomVisuals.filter(v=>v.type==='pulse').length,1);assert.ok(p.phantomExecutionClock>0);assert.ok(p.phantomVisuals.length<=24);const relics=h.api.catalog.filter(c=>c.rarity==='relic'&&c.shipOnly==='phantom');assert.equal(relics.length,10);for(const c of relics){assert.ok(!c.tags.includes('進化合成素材'));assert.ok(!h.api.recipes.some(r=>[r.power,r.legend,...(r.required||[])].includes(c.id)));}
 });
 test('v15 title, manifest, cache and PHANTOM tag text share the same release and skill rules',()=>{
- const h=setup(),html=readFileSync(new URL('../index.html',import.meta.url),'utf8'),sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');assert.match(html,/<title>ANKIN DRIFT v15\.0/);assert.match(JSON.parse(readFileSync(new URL('../manifest.webmanifest',import.meta.url),'utf8')).name,/v15\.0/);assert.match(sw,/mobile-v15-0/);const detail=h.api.attrDetails('ブレード');assert.match(detail.desc,/三角刃/);assert.ok(!detail.desc.includes('旋回'));assert.match(h.api.attrDetails('ファントムダーツ').details.join(' ') ,/専用枠/);for(const id of Object.keys(typed)){const c=h.api.catalog.find(c=>c.id===id);assert.ok(c.desc.includes('取得時'));assert.ok(c.desc.includes('+1'));}
+ const h=setup(),html=readFileSync(new URL('../index.html',import.meta.url),'utf8'),sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');assert.match(html,/<title>ANKIN DRIFT v15\.2/);assert.match(JSON.parse(readFileSync(new URL('../manifest.webmanifest',import.meta.url),'utf8')).name,/v15\.2/);assert.match(sw,/mobile-v15-2/);const detail=h.api.attrDetails('ブレード');assert.match(detail.desc,/三角刃/);assert.ok(!detail.desc.includes('旋回'));assert.match(h.api.attrDetails('ファントムダーツ').details.join(' ') ,/専用枠/);for(const id of Object.keys(typed)){const c=h.api.catalog.find(c=>c.id===id);assert.ok(c.desc.includes('取得時'));assert.ok(c.desc.includes('+1'));}
 });
 test('shared NOVA unique wording preserves the real PHANTOM radius cap instead of promising full-screen clearing',()=>{
  const h=setup(),p=h.api.player;h.api.acquire('unboundNova');const c=h.api.catalog.find(c=>c.id==='unboundNova');assert.ok(!c.desc.includes('全画面'));assert.match(c.desc,/上限/);let radius=0;const w=h.api.phantomWorld();w.clear=(x,y,r)=>{radius=r;};h.ctx.AnkinPhantom.nova(p,w);assert.equal(radius,480);

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09152d">
-<meta name="description" content="ANKIN DRIFT v15.0 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
+<meta name="description" content="ANKIN DRIFT v15.2 — スマホ縦画面対応のオフライン・ローグライクシューティング。制作者：DAN">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ANKIN DRIFT">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<title>ANKIN DRIFT v15.0 | SPECTRAL ARSENAL</title>
+<title>ANKIN DRIFT v15.2 | SPECTRAL ARSENAL</title>
 <style>
 :root{--bg:#060916;--ink:#f3f8ff;--muted:#a2b4d0;--cyan:#65fff1;--pink:#ff6dba;--purple:#b99bff;--gold:#ffd16f;--edge:#3b5371;--common:#bbc5d6;--uncommon:#6be7a0;--rare:#6dafff;--epic:#ca8eff;--legendary:#ffc75b;--power:#ff89af}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',system-ui,sans-serif}button{font:inherit}button:focus-visible{outline:2px solid #abfff5;outline-offset:3px}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,transparent 38%,#0008 100%)}
@@ -1134,7 +1134,7 @@ body.pilot-mobile .choice-pick{display:block;grid-column:1 / -1;width:100%;text-
 @media(max-width:550px){#bgmTrackToast{font-size:10px;max-width:55vw}}
 @media(prefers-reduced-motion:reduce){#bgmTrackToast{transition:none}}
 
-/* v15.0 desktop title: wide cockpit layout. Mobile, non-menu overlays and narrow windows retain their original flow. */
+/* v15.2 desktop title: wide cockpit layout. Mobile, non-menu overlays and narrow windows retain their original flow. */
 @media (min-width:980px) and (min-height:540px){
  body:not(.pilot-mobile) #overlay .panel.title-panel{
   width:min(1420px,calc(100vw - 24px));height:min(820px,calc(100dvh - 24px));
@@ -1549,7 +1549,7 @@ function v13AchievementList(){
 
 function v13ArchiveMarkup(){
  const x=AnkinArchive.current(),awards=x.awards||{},all=AnkinArchive.definitions;
- return '<p class="eyebrow">ANKIN DRIFT v15.0 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
+ return '<p class="eyebrow">ANKIN DRIFT v15.2 · PILOT ARCHIVE</p><h2 class="logo small">PILOT ARCHIVE</h2><p class="archive-intro">実績は階級ごとに開閉、クリア履歴は専用エリアで確認できます。<button type="button" class="archive-jump" id="archiveJumpLegacy">✦ CLEAR LEGACYを開く</button></p>'+
  '<section class="v13-panel"><h3>✦ 永続パイロット記録</h3><div class="v13-grid"><div class="v13-card">累計クリア<b> '+x.record.clears.length+'</b></div><div class="v13-card">解放済み実績<b> '+Object.keys(awards).length+' / '+all.length+'</b></div></div>'+
  '<div class="v13-note">データはこの端末・ブラウザに保存。更新後も引き継ぎ、JSONで別端末へ移行できます。</div></section>'+
  (saveWarning?'<div class="v13-warning">⚠ '+escHtml(saveWarning)+'</div>':'')+
@@ -2741,15 +2741,16 @@ function visualCodexResolvedName(row){
 VISUAL_CODEX_ROWS.push(
  ['phantomBlade','basic','phantom','PHANTOM BLADE','白いネオンの三角刃を前方へ薙ぎ払う。ゴーストは操作・回収を担当。','phantom','ph_polish'],
  ['phantomParade','basic','phantom','ナイトパレード','主機と追加2機が独立して戦闘。属性攻撃は主機だけ。','phantom:parade','ph_parade'],
+ ['phantomGrandParade','evolution','phantom','グランド・ナイトパレード','ナイトパレード＋オーバーコアで進化。自律ファントムがさらに2機増え、合計5機。','phantom:grandParade','ph_paradeCore'],
  ['phantomReaper','evolution','phantom','SILVER REAPER','進化合成で大型の白い三角刃に変化。','phantom:reaper','ph_crescent'],
  ['phantomFlash','evolution','phantom','PHANTOM FLASH','ワープ接近からの斬撃。障害壁の向こうへはワープしない。','phantom:flash','ph_driver'],
  ['phantomRequiem','evolution','phantom','REQUIEM EDGE','最大2段の残響斬撃。追加斬撃から再帰発動しない。','phantom:requiem','ph_matrix'],
  ['phantomDarts','basic','phantom','ファントムダーツ出撃','15秒出撃→10秒待機。5機未満は未所持型、以降の通常追加はランダム。ユニークは指定型を専用枠に追加。主機50%性能・低速。射撃：低威力・高速連射／レーザー：狭い近距離・高威力／チャージ：移動中も蓄積し全敵貫通／支援：破壊可能な回復バリア／フォロー：経験値のみ回収・EXP×1.2、本人のEXP補正も適用。','phantom:darts','ph_darts'],
- ['phantomDartShot','basic','phantom','ダーツ：ショット型','低威力・高速連射。プリズム・ダーツで2方向射撃、ミラー・ダーツで画面端1回反射。','dart:shot','ph_darts'],
- ['phantomDartLaser','basic','phantom','ダーツ：レーザー型','狭い近距離を狙う高威力レーザー。ロングレンジで射程を延長。','dart:laser','ph_darts'],
- ['phantomDartCharge','basic','phantom','ダーツ：チャージ型','移動中も蓄積し、満タンで全敵貫通弾を発射。クロノ・ニードルで遅延追撃。','dart:charge','ph_darts'],
- ['phantomDartSupport','basic','phantom','ダーツ：サポート型','ゴーストを護衛する回復バリア。破壊から基本5秒で復旧。専用装甲・回復強化が有効。','dart:support','ph_darts'],
- ['phantomDartFollow','basic','phantom','ダーツ：フォロー型','経験値だけを自動回収し20%増。回復アイテムは取らない。本人のEXP補正も適用。','dart:follow','ph_darts'],
+ ['phantomDartShot','basic','phantom','ファントムダーツショット型','低威力・高速連射。プリズム・ダーツで3方向射撃。ミラー・ダーツで画面端2回反射、敵2体を貫通。','dart:shot','ph_darts'],
+ ['phantomDartLaser','basic','phantom','ファントムダーツレーザー型','狭い近距離を狙う高威力レーザー。ロングレンジで射程を延長。','dart:laser','ph_darts'],
+ ['phantomDartCharge','basic','phantom','ファントムダーツチャージ型','移動中も蓄積し、満タンで全敵貫通弾を発射。クロノ・ニードルで遅延追撃。','dart:charge','ph_darts'],
+ ['phantomDartSupport','basic','phantom','ファントムダーツサポート型','ゴーストを護衛する回復バリア。破壊から基本5秒で復旧。専用装甲・回復強化が有効。','dart:support','ph_darts'],
+ ['phantomDartFollow','basic','phantom','ファントムダーツフォロー型','経験値だけを自動回収し20%増。回復アイテムは取らない。本人のEXP補正も適用。','dart:follow','ph_darts'],
  ['phantomNova','basic','phantom','SPECTRAL OVERDRIVE','全ファントム強化。シルバーテンペストで全周斬撃を追加。','phantom:nova','ph_novaTempestCore'],
  ['fearAura','element','common','フィアーオーラ','前方に恐怖オーラ。通常敵は離れ、ボスは軽減弱体。','dark:fear','fearAura'],
  ['programControl','element','common','プログラムコントロール','固定の四角いウイルス領域。通常敵を一時的に味方化。','dark:virus','programControl'],
@@ -2837,9 +2838,9 @@ function drawWeaponVisualPreview(ts){
  }
  case 'phantom':{
   if(variant==='darts'){const types=['shot','laser','charge','support','follow'];for(let i=0;i<5;i++){const px=x+(i-2)*51;g.save();g.translate(px,y);g.scale(1.3,1.3);AnkinPhantom.draw({phantoms:[],phantomVisuals:[],darts:[{type:types[i],x:0,y:0,angle:-Math.PI/2,barrier:55,charge:(time*.4)%1}]},g);g.restore();}break;}
-  const count=variant==='parade'?3:1,radius=variant==='reaper'?105:variant==='nova'?100:72;
+  const count=variant==='grandParade'?5:variant==='parade'?3:1,radius=variant==='reaper'?105:variant==='nova'?100:72;
   const color=variant==='nova'?'#ffffff':['reaper','flash','requiem'].includes(variant)?evolutionVisualProfile('ph_'+variant)?.color||'#dce9ff':null;
-  const phantoms=Array.from({length:count},(_,i)=>({primary:i===0,x:x+Math.sin(time*1.1+i)*24,y:y+(i-(count-1)/2)*58,angle:-.35+Math.sin(time*.8)*.25}));
+  const phantoms=Array.from({length:count},(_,i)=>({primary:i===0,x:x+Math.sin(time*1.1+i)*24,y:y+(i-(count-1)/2)*(count===5?34:58),angle:-.35+Math.sin(time*.8)*.25}));
   const phantomVisuals=phantoms.map(f=>({x:f.x,y:f.y,angle:f.angle,range:radius,arc:variant==='nova'?TAU:Math.PI*.62,life:.10+.07*Math.sin(time*6)**2,total:.18,nova:variant==='nova'}));
   if(variant==='requiem')for(let i=1;i<=2;i++)phantomVisuals.push({...phantomVisuals[0],range:radius+i*8,life:.05});
   const darts=variant==='darts'?['shot','laser','charge','support','follow'].map((type,i)=>({type,x:x-90+i*45,y:y+85,angle:0,barrier:30,charge:(time*.3)%1})):[];AnkinPhantom.draw({phantoms,phantomVisuals,darts,phantomClock:time,evolutionTint:color},g);
@@ -2954,15 +2955,15 @@ function relicLabMarkup(){const items=RELICS.filter(c=>c.shipOnly===player.shipT
 
 function labProgressControls(kind){const defs=kind==='synergy'?activeSynergies():activeFusions(),current=labRecipeFilters[kind];const done=defs.filter(a=>kind==='synergy'?!!game.synergies[a.id]:!!game.fusions[a.id]).length;const near=defs.filter(a=>kind==='synergy'?(!game.synergies[a.id]&&a.need.some(owned)):(!game.fusions[a.id]&&fusionMaterials(a).some(owned))).length;return `<div class="lab-progress-filter" role="group" aria-label="${kind==='synergy'?'シナジー':'進化合成'}の状態で絞り込み">${[['all','すべて',defs.length],['done','完成',done],['near','取得途中',near],['empty','未着手',defs.length-done-near]].map(([key,label,n])=>`<button type="button" class="progress-filter ${current===key?'active':''}" data-recipe-kind="${kind}" data-recipe-filter="${key}" aria-pressed="${current===key}">${label} <span>${n}</span></button>`).join('')}</div>`}
 function labMarkup(){const b=listBuild(),tabs=[['inventory','保有スキル'],['relics','レリック'],['evolution','進化合成'],['element','属性融合 Lv12／28／40'],['synergy','シナジー'],['atlas','スキル図鑑'],['visual','武装プレビュー'],['enemies','敵図鑑']];const content=buildTab==='enemies'?enemyCodexMarkup():buildTab==='visual'?visualCodexMarkup():buildTab==='atlas'?atlasMarkup():buildTab==='inventory'?inventoryMarkup(b):buildTab==='relics'?relicLabMarkup():buildTab==='evolution'?`<p class="lab-help">ANKIN POWER / UNIQUE ANKIN と LEGENDARY を揃えると自動合成。変異を含む3素材の進化もあります。素材ごとの所持状況を確認できます。</p>${menuLabBackup?'':targetBox('evolution')}${labProgressControls('evolution')}<div id="recipeResults" class="lab-recipe-grid">${recipeBuild()}</div>`:buildTab==='element'?(menuLabBackup?'':targetBox('element'))+elementLabMarkup():`<p class="lab-help">通常スキルを組み合わせると自動発動。<b class="synergy-gradient">青〜緑に輝く名前がシナジー</b>の目印です。<b>素材のスキル名にマウスを重ねる／タップすると、その効果と属性を確認できます。</b></p>${labProgressControls('synergy')}<div id="recipeResults" class="lab-recipe-grid">${synergyBuild()}</div>`;
- return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/3':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v15.0 · 取得時の追加・発動条件・対象を効果本文で確認</div>${content}</div>`}
+ return `<div class="lab-tabs" role="tablist" aria-label="ビルド表示切替">${tabs.map(([id,name])=>`<button type="button" class="lab-tab ${buildTab===id?'active':''}" role="tab" aria-selected="${buildTab===id}" data-tab="${id}"><span class="lab-tab-label">${name}</span><small>${id==='inventory'?Object.keys(game.skills).length+Object.keys(game.powers).length+Object.keys(game.legends).length+Object.keys(game.uniques).length+Object.keys(game.relics).length:id==='relics'?Object.keys(game.relics).length+'/'+RELICS.filter(c=>c.shipOnly===player.shipType).length:id==='evolution'?Object.keys(game.fusions).length+'/'+activeFusions().length:id==='element'?game.elementCombos.length+'/3':id==='synergy'?Object.keys(game.synergies).length+'/'+activeSynergies().length:id==='atlas'?ATLAS_SKILL_DEFS().length:id==='visual'?'◉':ENEMY_CODEX.length}</small></button>`).join('')}</div><div class="lab-scroll" role="tabpanel"><div class="lab-release-line">図鑑データ v15.2 · 取得時の追加・発動条件・対象を効果本文で確認</div>${content}</div>`}
 let optionsBack='menu';
 function openOptions(){if(mode==='options')return;optionsBack=mode==='menu'?'menu':'paused';state('options')}
 function drawOverlay(){closeSkillPeek(true);let html='';if(mode==='menu'){
- const r=record.read();html=`<div class="menu-landscape-layout"><div class="menu-intro"><p class="eyebrow">V15.0 · SPECTRAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}</div><div class="menu-arsenal"><div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button><button id="musicPreview" class="secondary" type="button">♪ タイトルBGMを再生</button></div></div><div class="menu-footer fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div></div>`;
+ const r=record.read();html=`<div class="menu-landscape-layout"><div class="menu-intro"><p class="eyebrow">V15.2 · SPECTRAL ARSENAL</p><h1 class="logo">ANKIN<br>DRIFT</h1><div class="creator-credit">制作者：DAN</div><div class="ship-label">✦ PLAY STYLE · 操作方法を選択</div><div class="mode-select"><button type="button" class="mode-card ${controlMode==='desktop'?'selected':''}" data-control="desktop" aria-pressed="${controlMode==='desktop'}"><strong>⌨ PC版</strong><small>横画面 / WASD・キー操作</small></button><button type="button" class="mode-card ${controlMode==='mobile'?'selected':''}" data-control="mobile" aria-pressed="${controlMode==='mobile'}"><strong>◉ スマホ版</strong><small>縦画面 / タッチスティック操作</small></button></div><div class="ship-label">✦ GAME MODE · ゲームモード</div><div class="mode-select"><button type="button" class="mode-card ${selectedGameMode==='normal'?'selected':''}" data-game-mode="normal" aria-pressed="${selectedGameMode==='normal'}"><strong>◈ NORMAL · 30分</strong><small>段階的に強敵出現 / 30分で最終ボス</small></button><button type="button" class="mode-card ${selectedGameMode==='challenge'?'selected':''}" data-game-mode="challenge" aria-pressed="${selectedGameMode==='challenge'}"><strong>⚡ CHALLENGE · 15分</strong><small>高速進行 / ボスラッシュ / 15分で最終ボス</small></button></div>${v13ChallengeMenu()}</div><div class="menu-arsenal"><div class="ship-label">✦ SELECT YOUR FRAME · 出撃機体を選択</div><div class="ship-select">${Object.entries(SHIPS).map(([id,sh])=>`<button class="ship-card ${id} ${selectedShip===id?'selected':''}" data-ship="${id}" aria-pressed="${selectedShip===id}">${id==='dog'?`<span class="ship-graphic dog"><svg class="dog-frame-icon" viewBox="-26 -28 52 55" role="img" aria-label="犬の耳型ウイングと尖った機首を持つ戦闘機">${DOG_FRAME_PARTS.map(part=>`<path d="${part.path}" fill="${part.fill}" stroke="${part.stroke}" stroke-width="${part.id==='hull'?2.2:1.8}"></path>`).join('')}</svg></span>`:`<span class="ship-graphic ${id}"><i></i><em></em></span>`}<b>${sh.name}</b><strong>${sh.jp}</strong><small>${sh.sub}</small><span class="ship-description">${sh.desc}</span><span class="ship-nova">E：${sh.nova}</span></button>`).join('')}</div><div class="actions"><button id="start" class="primary">▶ ${selectedShip==='drill'?'プラズマドリルで出撃':(controlMode==='mobile'?'タッチ操作で':'')+SHIPS[selectedShip].jp+'で出撃する'}</button><button id="openTitleLab" class="secondary">◈ BUILD LAB · 図鑑と合成</button><button id="openArchive" class="secondary">🏆 PILOT ARCHIVE · 記録と実績</button><button id="openOptions" class="secondary">⚙ OPTIONS · 設定</button><button id="openGuide" class="secondary">ⓘ 遊び方</button><button id="musicPreview" class="secondary" type="button">♪ タイトルBGMを再生</button></div></div><div class="menu-footer fine">${controlMode==='mobile'?'左指で移動・右指でDASH / NOVA　2回タップダッシュも可能　上部ボタン：LAB・停止':'WASD / 矢印：移動　SPACE：ダッシュ　E：ノヴァ　B：BUILD LAB　L：強化ストック　P：停止'}<br>最長生存 ${fmtTime(r.time||0)} ／ 最高レベル ${format(r.level||0)} ／ 最大与ダメージ ${format(r.damage||0)}<br>PC・スマホ両対応のオフラインブラウザゲーム · BGM/SEは出撃ボタンを押すと再生 · スマホは標準画質 / PCは高画質が初期設定 · 複合レイドの描画負荷を自動最適化</div></div>`;
  }else if(mode==='archive'){
  html=v13ArchiveMarkup();
  }else if(mode==='guide'){
- html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='phantom'?'<h3>✦ ファントム専用操作</h3><p>自機ゴーストは回避と経験値回収を担当します。白銀のファントムは独立して索敵・斬撃し、経験値は拾いません。ナイトパレードで最大3機、属性攻撃は初期の主機だけが使用します。</p>':''}${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、4択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12・Lv28・Lv40で融合権が解放され、次の通常レベルアップ画面に保留されます。異なる2属性と対象武装が揃えば、通常スキルを1枚取る代わりに属性融合を選べます。必要な素材がなくても権利は消えず、選択画面で戻っても保持します。ボス・レリック報酬は別枠で、属性融合によって失いません。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
+ html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'WASD / 矢印キーで移動。SPACEでダッシュ、Eでノヴァ。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='phantom'?'<h3>✦ ファントム専用操作</h3><p>自機ゴーストは回避と経験値回収を担当します。白銀のファントムは独立して索敵・斬撃し、経験値は拾いません。ナイトパレードで3機、グランド・ナイトパレードへの進化で5機になります。属性攻撃は初期の主機だけが使用します。</p>':''}${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、4択のスキルを選択。出撃中はBキーまたはLAB、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12・Lv28・Lv40で融合権が解放され、次の通常レベルアップ画面に保留されます。異なる2属性と対象武装が揃えば、通常スキルを1枚取る代わりに属性融合を選べます。必要な素材がなくても権利は消えず、選択画面で戻っても保持します。ボス・レリック報酬は別枠で、属性融合によって失いません。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
  const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';const fusionTickets=kind==='normal'?Math.max(0,[12,28].filter(n=>game.level>=n).length-fusionStageIndex()):0;const fusionAvailable=fusionTickets>0&&availableElementPairs().length>0;const fusionTicket=fusionTickets?`<div class="fusion-level-ticket" role="status"><strong>✦ 属性融合権 ${fusionTickets}回分 · 保留中</strong><span>${fusionAvailable?'通常スキル1回分の代わりに属性融合を選べます':'異なる2属性＋主属性武装を揃えると使用できます（権利は保持）'}</span></div>`:'';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。':major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
  html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3'}キーまたはカードで選択。<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div>${fusionTicket}<div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div><div class="actions">${fusionTickets?`<button type="button" class="primary fusion-from-level" id="fusionFromLevel" ${fusionAvailable?'':'disabled'}>✦ 属性融合を選ぶ ${fusionAvailable?'（通常スキルの代わり）':'（素材不足）'}</button>`:''}<button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選 [R] 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑 [B]</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
@@ -4175,6 +4176,11 @@ const PHANTOM_NORMALS=[
  ['dartCharge','ダーツ・チャージコイル','rare',3,'チャージ型の蓄積効率+15%。'],
  ['dartMedic','ダーツ・ヒーリング','rare',3,'サポート型のバリア内回復量+20%。'],
  ['dartFocus','ダーツ・ターゲットマーク','rare',3,'ダーツのボス・レリック敵への威力+12%。'],
+ ['dartBallistics','ダーツ・バリスティクス','uncommon',3,'ファントムダーツショット型・チャージ型の弾速+15%。'],
+ ['dartVolley','ダーツ・マルチバレル','rare',2,'ファントムダーツショット型の通常弾+1発。最大2回。'],
+ ['dartAccelerator','ダーツ・アクセラレーター','uncommon',3,'ファントムダーツショット型・レーザー型・チャージ型の攻撃速度補正+10%。'],
+ ['guardLink','ゴースト・インターセプト','rare',3,'ゴースト周辺の敵を優先迎撃。範囲220、追加取得+40・ファントムLv上昇ごと+8。'],
+ ['activeOrbit','アクティブ・ハンター','rare',1,'敵の周囲を移動しながら斬撃。ファントムLvが高いほど旋回速度が上がる。'],
  ['novaCycle','スペクトル・リチャージ','uncommon',3,'NOVA再使用待機-0.8秒（最短10.5秒）。ゲージ100%は必要。'],
  ['polish','ブレード研磨','common',5,'ブレード威力+15%。'],
  ['haste','高速斬撃','common',5,'ブレードの攻撃速度補正+9%。'],
@@ -4183,7 +4189,7 @@ const PHANTOM_NORMALS=[
  ['double','ダブルスラッシュ','rare',3,'16%の確率で追加斬撃（最大48%）。'],
  ['critical','シルバークリティカル','rare',3,'ブレードのクリティカル率+8%。'],
  ['echo','ブレードエコー','epic',3,'32%威力の残響斬撃を追加。ランク毎に残響威力+8%。'],
- ['assault','フェイズアサルト','epic',2,'接近速度+10%、ワープ斬撃の進化素材。'],
+ ['assault','フェイズアサルト','epic',2,'ファントムの接近速度+10%。'],
  ['hunt','ハンターセンス','uncommon',3,'探知範囲+85、移動速度+12。'],
  ['algorithm','アサルトアルゴリズム','rare',3,'敵を探し直す間隔を短縮。ブレードの攻撃速度補正+4%。'],
  ['core','ファントムコア','rare',5,'ファントムLv+1。全機の攻撃・速度と本体HP・シールドを強化。'],
@@ -4211,22 +4217,24 @@ for(const [key,name,rarity,maxStacks,desc] of PHANTOM_NORMALS){
  },{shipOnly:'phantom',maxStacks,tags:['ファントム',...(key.startsWith('dart')?['ファントムダーツ']:[]),...(key.startsWith('dart')?['強化']:key==='novaCycle'?['ノヴァ']:['shell','recharge','dash','shield','armor'].includes(key)?['防御']:['magnet','compression','line','collector'].includes(key)?['回収']:['ブレード'])],available:p=>key==='dartLimit'?p.dartTypes.length>=5&&AnkinPhantom.dartNormalCapacity(p)<12:key==='novaCycle'?p.novaReuseDelay>NOVA_REUSE_MIN+.001:key.startsWith('dart')&&key!=='darts'?p.dartTypes.length>0:!['core','limit'].includes(key)||p.phantomLevel<10}));
 }
 const PHANTOM_LEGENDS=[['parade','ナイトパレード','ファントムを2機追加（合計3機）、Lv+2。追加機は無属性。'],['emperor','シルバーエンペラー','ブレード威力+30%、射程+15。8命中毎に追加斬撃。'],['predator','ファントム・プレデター','探知範囲+180、移動速度+35、撃破後の再索敵を高速化。'],['orchestra','レクイエム・オーケストラ','残響斬撃の威力を強化。未取得なら残響斬撃を解放。'],['sanctuary','ゴースト・サンクチュアリ','HP+40・シールド+35。瀕死時シールド補充（18秒再使用）。'],['relay','ソウルリレー','経験値回収後2.4秒、ブレード威力+18%。回収するたびに時間を更新。']];
-const PHANTOM_POWERS=[['crescent','クレセントエンジン','ブレード威力+12%、射程+7。'],['driver','フェイズドライバー','ブレード攻撃効率+7%。'],['matrix','エコーマトリクス','残響威力+10%。未取得なら残響斬撃を解放。'],['network','ナイトネットワーク','主機と追加ファントムのブレード威力補正+10%。'],['barrier','フェイズバリア','最大シールド+20、シールドを補充。'],['coil','ソウルコイル','経験値回収半径+30、ソウルリレーの威力補正+4%。']];
+const PHANTOM_POWERS=[['crescent','クレセントエンジン','ブレード威力+12%、射程+7。'],['driver','フェイズドライバー','ブレード攻撃効率+7%。'],['matrix','エコーマトリクス','残響威力+10%。未取得なら残響斬撃を解放。'],['network','ナイトネットワーク','主機と追加ファントムのブレード威力補正+10%。'],['barrier','フェイズバリア','最大シールド+20、シールドを補充。'],['coil','ソウルコイル','経験値回収半径+30、ソウルリレーの威力補正+4%。'],['paradeCore','ナイトパレード・オーバーコア','追加ファントムの威力を主機の70%へ。ファントムLv+1。']];
 for(const [rows,rarity,pool] of [[PHANTOM_LEGENDS,'legendary',LEGENDS],[PHANTOM_POWERS,'power',POWERS]])for(const [key,name,desc] of rows){pool.push(skill('ph_'+key,rarity,'✦',name,desc,p=>{AnkinPhantom.addRank(p,key);
  if(key==='parade'){AnkinPhantom.level(p,2);AnkinPhantom.sync(p);}
  if(key==='sanctuary'){p.maxHp+=40;p.hp=Math.min(p.maxHp,p.hp+40);p.shieldMax+=35;p.shield=Math.min(p.shieldMax,p.shield+35);}
  if(key==='barrier'){p.shieldMax+=20;p.shield=Math.min(p.shieldMax,p.shield+20);}
  if(key==='coil')p.magnet+=30;
+ if(key==='paradeCore')AnkinPhantom.level(p,1);
  },{shipOnly:'phantom',stackable:false,tags:['ファントム','進化合成素材']}));}
 const PHANTOM_RECIPES=[
  ['reaper','SILVER REAPER','crescent','emperor',{ph_polish:3,ph_edge:3},'大型の白い三角刃で薙ぎ払う。射程+45、巻き込み+3。'],
  ['flash','PHANTOM FLASH','driver','predator',{ph_assault:2},'2.2秒毎に短距離ワープ接近。障壁を無視しない。'],
  ['requiem','REQUIEM EDGE','matrix','orchestra',{ph_echo:2},'時間差の残響斬撃を最大2段追加。追加攻撃から再帰発動しない。'],
- ['eternal','ETERNAL PARADE','network','parade',{},'3機が各自の位置で4斬撃毎に連携斬撃。強制帰還なし。'],
+ ['eternal','ETERNAL PARADE','network','parade',{},'全ファントムが各自の位置で4斬撃毎に連携斬撃。強制帰還なし。'],
  ['veil','GHOST VEIL','barrier','sanctuary',{ph_dash:2},'ダッシュ終了後0.65秒、短時間の防御シールドを生成。'],
  ['field','ASTRAL FIELD','coil','relay',{ph_magnet:3},'経験値吸引・統合範囲を拡大。本人が回収する。']
 ];
-for(const [key,name,power,legend,ranks,desc] of PHANTOM_RECIPES)FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:'ph_'+power,legend:'ph_'+legend,required:Object.keys(ranks),ranks,icon:'◈',desc,apply:p=>AnkinPhantom.addRank(p,key)});
+PHANTOM_RECIPES.push(['grandParade','グランド・ナイトパレード','paradeCore','parade',{},'自律ファントムをさらに2機追加（合計5機）。追加機は無属性。']);
+for(const [key,name,power,legend,ranks,desc] of PHANTOM_RECIPES)FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:'ph_'+power,legend:'ph_'+legend,required:Object.keys(ranks),ranks,icon:'◈',desc,apply:p=>{AnkinPhantom.addRank(p,key);if(key==='grandParade')AnkinPhantom.sync(p)}});
 for(const [key,name,desc] of [
  ['contract','幽魂の契約','常時：HPが減るほど全機のブレード威力上昇。瀕死で最大+75%。'],
  ['oath','銀の誓約','同じ敵への連続斬撃で威力+8%ずつ、最大+80%。標的を変えると解除。'],
@@ -4236,7 +4244,7 @@ for(const [key,name,desc] of [
  ['astralCore','アストラル・ブレード','ゴースト本体も近くの敵へ無属性の白刃を振る。主機の70%威力、Lv10で110%。']
 ])RELICS.push(skill('ph_'+key,'relic','◈',name,desc,p=>AnkinPhantom.addRank(p,key),{shipOnly:'phantom',stackable:false,tags:['ファントム','ブレード','レリック','一度限り']}));
 for(const [key,name,legend,material,desc] of [['novaTempest','シルバーテンペスト','emperor','ph_wide','NOVA中、全機がNOVA威力を参照する全周斬撃を追加。'],['novaAccel','ファントムアクセラレーション','predator','ph_haste','NOVA中の移動・攻撃速度をさらに強化。'],['novaSanctuary','スペクトルサンクチュアリ','sanctuary','ph_shield','NOVAの弾消去範囲1.5倍、本体シールドを補充。']]){
- const id='ph_'+key+'Core';POWERS.push(skill(id,'power','✦',name+'・コア','NOVA威力+30、範囲+12。'+name+'の進化素材。',p=>{p.novaDamage+=30;p.novaRadius+=12;},{shipOnly:'phantom',stackable:false,tags:['ファントム','ノヴァ','進化合成素材']}));
+ const id='ph_'+key+'Core';POWERS.push(skill(id,'power','✦',name+'・コア','NOVA威力+30、範囲+12。',p=>{p.novaDamage+=30;p.novaRadius+=12;},{shipOnly:'phantom',stackable:false,tags:['ファントム','ノヴァ','進化合成素材']}));
  FUSIONS.push({id:'ph_'+key,shipOnly:'phantom',name,power:id,legend:'ph_'+legend,required:[material],desc,icon:'✦',apply:p=>AnkinPhantom.addRank(p,key)});
 }
 
@@ -4271,6 +4279,13 @@ for(const [key,rarity,name,desc,darts] of PHANTOM_ELITE_CARDS){
  },{shipOnly:'phantom',stackable:false,tags:['ファントム',...(darts?['ファントムダーツ']:key==='guardian'?['ノヴァ','回復']:key==='relayDrive'?['回収','ノヴァ']:['ブレード']),...(rarity==='relic'?['レリック']:[])],available:p=>rarity==='unique'?true:key==='armada'?p.dartTypes.length>0&&AnkinPhantom.dartNormalCapacity(p)<12:!darts||p.dartTypes.length>0}));
 }
 
+const PHANTOM_DART_REQUIREMENTS={dartBallistics:['shot','charge'],dartVolley:['shot'],dartAccelerator:['shot','laser','charge'],dartCharge:['charge'],dartBarrier:['support'],dartMedic:['support'],dartReach:['shot','laser']};
+for(const c of ALL_SKILL_DEFS().filter(c=>(c.tags||[]).includes('ファントムダーツ'))){
+ c.desc=c.desc.replace(/(?<!ファントムダーツ)(ショット|レーザー|チャージ|サポート|フォロー)型/g,'ファントムダーツ$1型');
+ if(c.id==='ph_darts')continue;
+ const previous=c.available,types=PHANTOM_DART_REQUIREMENTS[c.id.slice(3)];
+ c.available=p=>(p.dartTypes?.length||0)>0&&(!types||types.some(t=>p.dartTypes.includes(t)))&&(!previous||previous(p));
+}
 for(const id of ['ph_sanctuary','ph_barrier']){const c=skillById(id);c.tags=[...new Set([...c.tags,'防御','シールド'])];}for(const id of ['ph_coil','ph_relay']){const c=skillById(id);c.tags=[...new Set([...c.tags,'回収'])];}
 SYNERGIES.push(
  {id:'ph_bladeCircuit',shipOnly:'phantom',need:['ph_polish','ph_haste'],name:'白刃ドライブ',desc:'ブレード威力+12%。',apply:p=>AnkinPhantom.addRank(p,'bladeCircuit')},
@@ -5883,7 +5898,7 @@ function hudUpdate(){if(!game||!player)return;
   if(superGauge){ui.bossSpecialWrap.className='boss-special-wrap '+superGauge.state;hudWidth(ui.bossSpecialFill,superGauge.fill*100+'%');hudText(ui.bossSpecialCaption,superGauge.label)}
  const moduleBar=U('ultimateModules');if(moduleBar){const display=boss&&!boss.dead&&boss.type==='ultimate';if(moduleBar.hidden!==!display)moduleBar.hidden=!display;if(display){const moduleHTML=(game.ultimateParts||[]).map((part,i)=>`<div class="ultimate-module ${part.dead?'broken':''}" title="${part.partName}：${part.dead?'破壊済み':Math.ceil(part.hp)+' / '+Math.ceil(part.maxHp)}"><span style="width:${Math.floor(100*clamp(part.hp/Math.max(1,part.maxHp),0,1))}%"></span></div>`).join('');if(moduleBar._previousMarkup!==moduleHTML){moduleBar.innerHTML=moduleHTML;moduleBar._previousMarkup=moduleHTML}}else if(moduleBar._previousMarkup){moduleBar._previousMarkup='';moduleBar.innerHTML=''}}
 
- const buildMarkup=`<b style="color:${SHIPS[p.shipType].color}">${SHIPS[p.shipType].jp}</b> · ${p.shipType==='phantom'?`PHANTOM Lv${p.phantomLevel}/10 · ${p.phantoms.length}/3機 · DARTS ${p.darts.length}/${p.dartTypes.length}${p.dartTypes.length?' ('+(p.dartActive>0?'出撃 '+p.dartActive.toFixed(1):'待機 '+p.dartCooldown.toFixed(1))+'s)':''} ${p.phantomNova>0?'· OVERDRIVE':''}`:p.shipType==='laser'?`レーザー ${p.laserCount}本 · 幅${p.laserWidth.toFixed(1)} ${p.laserNovaTimer>0?'· OVERDRIVE!':''}`:p.shipType==='charge'?`チャージ ${Math.round(p.charge*100)}% ${p.charge>=.99?'· 貫通READY':''}`:p.shipType==='drill'?`プラズマ ${Math.floor(100*p.drillPlasma/Math.max(.001,p.drillCap))}% ${p.drillOverdriveTime>0?"· OVERDRIVE "+p.drillOverdriveTime.toFixed(1)+"s":""} · 近接ドリル ${Math.round(p.drillDamage)}`:`${p.bulletModes.map(kindLabel).join(' / ')}弾 · ${p.multishot}連射`} · 僚機 ${p.droneCount} · 岩壁 ${p.rockWalls} · 突風 ${p.windCount}<br>🌈 RELIC ${Object.keys(g.relics).length} · ◇ SYNERGY ${Object.keys(g.synergies).length} · ✦ EVOLVE ${Object.keys(g.fusions).length} · ★ LEGEND ${Object.keys(g.legends).length}<br><span style="color:${SHIPS[p.shipType].color}">${p.shipType==='phantom'?'操作：回避と経験値回収 / ファントムは自律戦闘':p.shipType==='charge'?'操作：停止でチャージ → 移動で発射':p.shipType==='drill'?'操作：移動で蓄積→高速ダッシュ突進 / NOVA中は完全無敵':p.shipType==='laser'?'攻撃：独立自動照準の貫通レーザー':'攻撃：敵へ自動追尾射撃'}</span>`;
+ const buildMarkup=`<b style="color:${SHIPS[p.shipType].color}">${SHIPS[p.shipType].jp}</b> · ${p.shipType==='phantom'?`PHANTOM Lv${p.phantomLevel}/10 · ${p.phantoms.length}/5機 · DARTS ${p.darts.length}/${p.dartTypes.length}${p.dartTypes.length?' ('+(p.dartActive>0?'出撃 '+p.dartActive.toFixed(1):'待機 '+p.dartCooldown.toFixed(1))+'s)':''} ${p.phantomNova>0?'· OVERDRIVE':''}`:p.shipType==='laser'?`レーザー ${p.laserCount}本 · 幅${p.laserWidth.toFixed(1)} ${p.laserNovaTimer>0?'· OVERDRIVE!':''}`:p.shipType==='charge'?`チャージ ${Math.round(p.charge*100)}% ${p.charge>=.99?'· 貫通READY':''}`:p.shipType==='drill'?`プラズマ ${Math.floor(100*p.drillPlasma/Math.max(.001,p.drillCap))}% ${p.drillOverdriveTime>0?"· OVERDRIVE "+p.drillOverdriveTime.toFixed(1)+"s":""} · 近接ドリル ${Math.round(p.drillDamage)}`:`${p.bulletModes.map(kindLabel).join(' / ')}弾 · ${p.multishot}連射`} · 僚機 ${p.droneCount} · 岩壁 ${p.rockWalls} · 突風 ${p.windCount}<br>🌈 RELIC ${Object.keys(g.relics).length} · ◇ SYNERGY ${Object.keys(g.synergies).length} · ✦ EVOLVE ${Object.keys(g.fusions).length} · ★ LEGEND ${Object.keys(g.legends).length}<br><span style="color:${SHIPS[p.shipType].color}">${p.shipType==='phantom'?'操作：回避と経験値回収 / ファントムは自律戦闘':p.shipType==='charge'?'操作：停止でチャージ → 移動で発射':p.shipType==='drill'?'操作：移動で蓄積→高速ダッシュ突進 / NOVA中は完全無敵':p.shipType==='laser'?'攻撃：独立自動照準の貫通レーザー':'攻撃：敵へ自動追尾射撃'}</span>`;
  if(buildMarkup!==lastHudBuildMarkup){ui.build.innerHTML=buildMarkup;lastHudBuildMarkup=buildMarkup;}
 }
 
@@ -6527,7 +6542,7 @@ function ankinPerformanceReport(){
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
  const wallSeconds=Array.from(perfRing.frame.slice(0,perfRing.count)).reduce((sum,n)=>sum+n,0)/1000;
  const simulatedSeconds=Array.from(perfRing.gameTime.slice(0,perfRing.count)).reduce((sum,n)=>sum+n,0);
- return {version:'15.0',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'15.2',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -6539,7 +6554,7 @@ function ankinPerformanceReport(){
 window.ankinPerformanceReport=ankinPerformanceReport;
 function exportAnkinPerfReport(){
  const json=JSON.stringify(ankinPerformanceReport(),null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
- const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v15.0.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ const link=document.createElement('a');link.href=url;link.download='ankin-drift-performance-v15.2.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 
 let renderBudget=0,actualFps=60,actualDraws=0,lastFpsSample=0;
@@ -6629,7 +6644,7 @@ document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('men
 <script>
 // Optional offline installation. Safe to ignore on file:// and unsupported browsers.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=15.0', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=15.2', {scope:'./',updateViaCache:'none'}).catch(err => console.warn('オフラインキャッシュを登録できませんでした', err)));
 }
 </script>
 
