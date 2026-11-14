@@ -14,10 +14,10 @@ export function normalRewardValue(before,after){
     const critical=1+Math.min(.969,n(p,'crit')+(r.critical||0)*.08)*(n(p,'critMult',1.8)-1);
     const coverage=1+Math.min(.22,(r.wide||0)*.04+(r.edge||0)*.025);
     const blade=damage/period*critical*coverage*(r.parade?2.2:1);
-    const duration=15+(r.dartDuration||0)*3+(r.sovereign||0)*5,uptime=duration/(duration+Math.max(7,10-(r.dartCycle||0)));
-    const weight={shot:.65,laser:1.05,charge:.8,support:.12,follow:0};
+    const duration=15+(r.dartDuration||0)*3+(r.sovereign||0)*8,uptime=duration/(duration+Math.max(7,10-(r.dartCycle||0)));
+    const weight={shot:.65*(r.prism?3:1),laser:1.05*(r.helix?1.8:1),charge:.8*(r.rail?1.8:1)*(r.needle?2.5:1),support:.12*(r.phoenixDarts?2:1),follow:0};
     const darts=(p.dartTypes||[]).reduce((sum,t)=>sum+(weight[t]||0),0);
-    return blade+damage/period*.5*darts*uptime*(1+(r.dartPower||0)*.12+(r.command||0)*.25+(r.dartLink||0)*.15)*(1+(r.dartReactor||0)*.15);
+    return blade*(1+(r.astralCore?.2:0))+damage/period*.5*darts*uptime*(1+(r.dartPower||0)*.12+(r.command||0)*.25+(r.dartLink||0)*.15)*(1+(r.dartReactor||0)*.15);
    }
    case 'dog':return dmg*n(p,'dogBonePower',1)*Math.sqrt(Math.max(1,n(p,'dogBones',1)))*(1+n(p,'dogBoneReturn',1)) / rate;
    default:return dmg*Math.sqrt(Math.max(1,n(p,'multishot',1)))*crit/rate;

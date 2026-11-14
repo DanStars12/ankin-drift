@@ -2,9 +2,9 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {catalogHarness} from '../scripts/catalog-harness.mjs';
 const kinds=['common','uncommon','rare','epic'];
-test('shipped catalog has 546 unique, named, tagged definitions and 99 distinct DOG cards',()=>{
+test('shipped catalog has 549 unique, named, tagged definitions and 99 distinct DOG cards',()=>{
  const {ctx}=catalogHarness(),cards=ctx.catalog;
- assert.equal(cards.length,546);assert.equal(new Set(cards.map(c=>c.id)).size,546);
+ assert.equal(cards.length,549);assert.equal(new Set(cards.map(c=>c.id)).size,549);
  for(const c of cards){assert.ok(c.tags.length,c.id);assert.equal(new Set(c.tags).size,c.tags.length,c.id);assert.ok(c.desc.trim().length);assert.ok(c.desc.length<=70,c.id);}
  const dog=cards.filter(c=>c.shipOnly==='dog');assert.equal(dog.length,99);assert.equal(new Set(dog.map(c=>c.name)).size,99);
 });
