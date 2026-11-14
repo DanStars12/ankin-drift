@@ -1,5 +1,5 @@
 {
-  "sourceHash": "c593666291a4d9101cebe68af6799c17ebef239fc454ce044fa4b5c5db6eb1a7",
+  "sourceHash": "818f05d79f5bf3e28125f1b1200810fe09b1c7ad57193da36ce60093de46d5d8",
   "scope": "early",
   "seeds": 5,
   "rendered": false,
@@ -8725,7 +8725,7 @@
           "extraDamage": 0,
           "bladeHits": 239,
           "attacks": 182,
-          "aiMs": 120.46227100046235
+          "aiMs": 85.56265599958715
         },
         "dartTypes": [],
         "hp": 127.19999999999999,
@@ -8764,25 +8764,28 @@
       "scenario": "full-30m",
       "build": "normal-random-rewards",
       "duration": 120,
-      "damage": 9263.247,
-      "dps": 77.194,
+      "damage": 12056.549,
+      "dps": 100.471,
       "bossDamage": 768,
-      "kills": 209,
+      "kills": 265,
       "hits": 0,
       "damageTaken": 0,
-      "dashCount": 1,
+      "dashCount": 0,
       "novaCount": 5,
-      "level": 10,
-      "skills": 8,
+      "level": 11,
+      "skills": 10,
       "evolutions": 0,
-      "synergies": 1,
+      "synergies": 2,
       "elementFusions": 0,
       "damageBySource": {
-        "phantomBlade": 9263.247296000001
+        "phantomBlade": 7334.181760000018,
+        "iceball": 320.36640000000006,
+        "pulseField": 3699.328639999991,
+        "element": 702.671999999999
       },
       "killsByType": {
-        "drone": 189,
-        "stinger": 19,
+        "drone": 228,
+        "stinger": 36,
         "minor": 1
       },
       "bossEvents": {
@@ -8793,11 +8796,11 @@
         "earlyKills": 1
       },
       "recoveryDamage": 0,
-      "pickedExp": 2343,
-      "pickedOrbs": 157,
+      "pickedExp": 2972,
+      "pickedOrbs": 196,
       "vacuumExp": 0,
       "vacuumOrbs": 0,
-      "healingPickups": 5,
+      "healingPickups": 4,
       "buckets": [
         {
           "minute": 0,
@@ -8812,13 +8815,16 @@
         },
         {
           "minute": 1,
-          "damage": 6445.247296,
+          "damage": 9238.54880000004,
           "bossDamage": 768,
-          "kills": 121,
+          "kills": 177,
           "hits": 0,
           "damageTaken": 0,
           "sources": {
-            "phantomBlade": 6445.247296
+            "phantomBlade": 4516.181760000005,
+            "iceball": 320.36640000000006,
+            "pulseField": 3699.328639999991,
+            "element": 702.671999999999
           }
         }
       ],
@@ -8838,17 +8844,15 @@
       "won": false,
       "cleared": false,
       "terminal": false,
-      "playerHp": 170.44,
-      "maxHp": 170.44,
+      "playerHp": 132.72,
+      "maxHp": 132.72,
       "survivalSeconds": 120,
       "aiMoves": 7200,
-      "aiDodges": 1,
+      "aiDodges": 0,
       "abilityPolicy": "tactical",
-      "dashReadySeconds": 117,
-      "novaReadySeconds": 2,
-      "dashReasons": {
-        "emergency-evade": 1
-      },
+      "dashReadySeconds": 120,
+      "novaReadySeconds": 6,
+      "dashReasons": {},
       "novaReasons": {
         "spectral-overdrive": 5
       },
@@ -8866,21 +8870,21 @@
           "bossDist": 496
         },
         {
-          "at": 79,
+          "at": 81,
           "reason": "spectral-overdrive",
           "near": 0,
           "bossDist": null
         },
         {
-          "at": 92,
+          "at": 98,
           "reason": "spectral-overdrive",
-          "near": 3,
+          "near": 0,
           "bossDist": null
         },
         {
-          "at": 107,
+          "at": 111,
           "reason": "spectral-overdrive",
-          "near": 7,
+          "near": 3,
           "bossDist": null
         }
       ],
@@ -9035,9 +9039,9 @@
           "level": 5,
           "phantomLevel": 2,
           "count": 1,
-          "x": 241.1162697096775,
-          "y": 605.3517677218597,
-          "xpOnField": 806,
+          "x": 648.7350647362955,
+          "y": 387.14718625761384,
+          "xpOnField": 793,
           "states": [
             "HUNT"
           ],
@@ -9049,82 +9053,82 @@
         },
         {
           "at": 80,
-          "hp": 155.72,
-          "maxHp": 155.72,
-          "shield": 26.04,
-          "level": 8,
-          "phantomLevel": 3,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 7,
+          "phantomLevel": 2,
           "count": 1,
-          "x": 541.9329627834585,
-          "y": 451.0021118646232,
-          "xpOnField": 503,
+          "x": 1107.6467529817273,
+          "y": 194.6476195335017,
+          "xpOnField": 599,
           "states": [
             "CHASE"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 4763.000000000002,
+          "primaryDamage": 4343.641600000003,
           "extraDamage": 0
         },
         {
           "at": 90,
-          "hp": 155.72,
-          "maxHp": 155.72,
-          "shield": 26.04,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
           "level": 8,
-          "phantomLevel": 3,
+          "phantomLevel": 2,
           "count": 1,
-          "x": 366.8632009576535,
-          "y": 661.6113973420393,
-          "xpOnField": 713,
+          "x": 496,
+          "y": 116.82424304263881,
+          "xpOnField": 769,
           "states": [
             "CHASE"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 5691.000000000002,
+          "primaryDamage": 5200.641600000006,
           "extraDamage": 0
         },
         {
           "at": 100,
-          "hp": 155.72,
-          "maxHp": 155.72,
-          "shield": 26.04,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
           "level": 8,
-          "phantomLevel": 3,
+          "phantomLevel": 2,
           "count": 1,
-          "x": 999.5329627834572,
-          "y": 346.4160803291418,
-          "xpOnField": 834,
+          "x": 670.529870527409,
+          "y": 130.8831175456846,
+          "xpOnField": 976,
           "states": [
             "CHASE"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 6639.000000000002,
+          "primaryDamage": 5704.041600000009,
           "extraDamage": 0
         },
         {
           "at": 110,
-          "hp": 155.72,
-          "maxHp": 155.72,
-          "shield": 26.04,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
           "level": 9,
-          "phantomLevel": 3,
+          "phantomLevel": 2,
           "count": 1,
-          "x": 269.2166930737831,
-          "y": 213.82536580655855,
-          "xpOnField": 827,
+          "x": 1062.0588745030454,
+          "y": 140.82424304263873,
+          "xpOnField": 1250,
           "states": [
             "HUNT"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 7789.000000000002,
+          "primaryDamage": 6370.260160000013,
           "extraDamage": 0
         }
       ],
@@ -9133,12 +9137,12 @@
       "xpSeekKinds": {
         "orb": 7128
       },
-      "xpOnField": 845,
+      "xpOnField": 1105,
       "rewardAudit": {
-        "choices": 10,
-        "primary": 3,
-        "survival": 5,
-        "experience": 1,
+        "choices": 11,
+        "primary": 4,
+        "survival": 2,
+        "experience": 2,
         "primaryOffers": 10,
         "survivalOffers": 6,
         "history": [
@@ -9181,7 +9185,7 @@
           {
             "at": 69,
             "level": 5,
-            "id": "ph_relayDrive",
+            "id": "ph_coil",
             "rarity": "power",
             "primary": false,
             "survival": false,
@@ -9190,46 +9194,55 @@
           {
             "at": 71,
             "level": 6,
-            "id": "ph_limit",
+            "id": "coldCoil",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 77,
+            "level": 7,
+            "id": "storm",
             "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 84,
+            "level": 8,
+            "id": "damage",
+            "rarity": "common",
             "primary": true,
             "survival": false,
             "experience": false
           },
           {
-            "at": 75,
-            "level": 7,
-            "id": "hp",
-            "rarity": "common",
-            "primary": false,
-            "survival": true,
-            "experience": false
-          },
-          {
-            "at": 79,
-            "level": 8,
-            "id": "superDash",
-            "rarity": "epic",
+            "at": 108,
+            "level": 9,
+            "id": "windOrigin",
+            "rarity": "uncommon",
             "primary": false,
             "survival": false,
             "experience": false
           },
           {
-            "at": 101,
-            "level": 9,
-            "id": "dashPulse",
-            "rarity": "rare",
-            "primary": false,
-            "survival": true,
-            "experience": false
-          },
-          {
-            "at": 112,
+            "at": 115,
             "level": 10,
-            "id": "armor",
+            "id": "ph_magnet",
             "rarity": "common",
             "primary": false,
-            "survival": true,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 118,
+            "level": 11,
+            "id": "ph_sync",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
             "experience": false
           }
         ]
@@ -9243,16 +9256,16 @@
         "history": []
       },
       "weaponState": {
-        "dmg": 32,
+        "dmg": 41.2,
         "rate": 0.46,
         "multishot": 1,
         "laserCount": 1,
         "chargeRate": 0.67,
         "drillDamage": 65,
         "dogBones": 1,
-        "magnet": 112,
+        "magnet": 182,
         "regen": 0,
-        "shieldMax": 33.4
+        "shieldMax": 26.04
       },
       "phantomState": {
         "level": 3,
@@ -9262,19 +9275,20 @@
           "haste": 1,
           "polish": 1,
           "bladeCircuit": 1,
-          "relayDrive": 1,
-          "limit": 1
+          "coil": 1,
+          "magnet": 1,
+          "sync": 1
         },
         "metrics": {
-          "primaryDamage": 9263.247296000001,
+          "primaryDamage": 7334.181760000005,
           "extraDamage": 0,
-          "bladeHits": 265,
-          "attacks": 199,
-          "aiMs": 105.86583000085375
+          "bladeHits": 251,
+          "attacks": 197,
+          "aiMs": 75.0885890001664
         },
         "dartTypes": [],
-        "hp": 170.44,
-        "shield": 33.4
+        "hp": 132.72,
+        "shield": 26.04
       },
       "bossRemainingHp": 0,
       "fullRun": false,
@@ -9296,7 +9310,7 @@
         "modeSpecificSecondBoss": "minor",
         "dogChickenAt": 900
       },
-      "menuChoices": 10,
+      "menuChoices": 11,
       "menuSkips": 0,
       "fusionPolicy": "always",
       "stopReason": "preview-end",
@@ -9801,7 +9815,7 @@
           "extraDamage": 0,
           "bladeHits": 192,
           "attacks": 162,
-          "aiMs": 100.49548700026935
+          "aiMs": 76.62293700010923
         },
         "dartTypes": [],
         "hp": 118,
@@ -10391,7 +10405,7 @@
           "extraDamage": 0,
           "bladeHits": 258,
           "attacks": 198,
-          "aiMs": 82.78066399969975
+          "aiMs": 104.46291499983636
         },
         "dartTypes": [],
         "hp": 173.20000000000002,
@@ -10958,7 +10972,7 @@
           "extraDamage": 423.39903999999206,
           "bladeHits": 241,
           "attacks": 182,
-          "aiMs": 88.44796300053713
+          "aiMs": 109.47859300031269
         },
         "dartTypes": [
           "shot"

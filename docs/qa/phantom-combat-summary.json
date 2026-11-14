@@ -229,12 +229,12 @@
       "scenario": "live-pack",
       "seeds": 3,
       "beforeDps": 353.4916666666666,
-      "afterDps": 322.98966666666666,
-      "dpsChangePercent": -8.628774841462539,
+      "afterDps": 340.16633333333334,
+      "dpsChangePercent": -3.7696315330394192,
       "beforeAlive": 2,
       "afterAlive": 3,
       "beforeDamage": 14225.645333333334,
-      "afterDamage": 14534.528
+      "afterDamage": 15307.493333333332
     },
     {
       "ship": "shot",
@@ -307,8 +307,8 @@
       "scenario": "live-boss",
       "seeds": 3,
       "beforeDps": 276.2183333333333,
-      "afterDps": 276.0466666666667,
-      "dpsChangePercent": -0.06214890394674599,
+      "afterDps": 276.79400000000004,
+      "dpsChangePercent": 0.20841001381759483,
       "beforeAlive": 3,
       "afterAlive": 3,
       "beforeDamage": 10017.0,
@@ -324,7 +324,9 @@
       "beforeLevel": 11.6,
       "afterLevel": 11.6,
       "beforeAlive": 5,
-      "afterAlive": 5
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
     },
     {
       "ship": "laser",
@@ -334,7 +336,9 @@
       "beforeLevel": 11.0,
       "afterLevel": 11.0,
       "beforeAlive": 5,
-      "afterAlive": 5
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
     },
     {
       "ship": "charge",
@@ -344,7 +348,9 @@
       "beforeLevel": 10.8,
       "afterLevel": 10.8,
       "beforeAlive": 5,
-      "afterAlive": 5
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
     },
     {
       "ship": "drill",
@@ -354,7 +360,9 @@
       "beforeLevel": 13.0,
       "afterLevel": 13.0,
       "beforeAlive": 5,
-      "afterAlive": 5
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
     },
     {
       "ship": "dog",
@@ -364,17 +372,21 @@
       "beforeLevel": 11.8,
       "afterLevel": 11.8,
       "beforeAlive": 5,
-      "afterAlive": 5
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
     },
     {
       "ship": "phantom",
       "seeds": 5,
       "beforeDps": 96.6312,
-      "afterDps": 89.9226,
+      "afterDps": 94.578,
       "beforeLevel": 11.0,
-      "afterLevel": 10.8,
+      "afterLevel": 11.0,
       "beforeAlive": 5,
-      "afterAlive": 5
+      "afterAlive": 5,
+      "beforeBladeDps": 54.67795733333336,
+      "afterBladeDps": 54.694808266666705
     }
   ],
   "progression": [
@@ -397,36 +409,44 @@
     },
     {
       "label": "ai-control",
-      "seeds": 3,
-      "meanSeconds": 749.66,
-      "meanLevel": 37.333333333333336,
-      "clears": 0,
+      "seeds": 5,
+      "meanSeconds": 867.0120000000001,
+      "meanLevel": 46.4,
+      "clears": 1,
       "stops": [
         "dead",
         "dead",
+        "dead",
+        "clear",
         "dead"
       ],
       "seconds": [
         252.63,
         1138.98,
-        857.37
+        857.37,
+        1819.95,
+        266.13
       ]
     },
     {
       "label": "candidate",
-      "seeds": 3,
-      "meanSeconds": 1167.71,
-      "meanLevel": 61.666666666666664,
+      "seeds": 5,
+      "meanSeconds": 1249.02,
+      "meanLevel": 64.0,
       "clears": 1,
       "stops": [
         "dead",
         "dead",
-        "clear"
+        "clear",
+        "dead",
+        "dead"
       ],
       "seconds": [
         993.05,
-        698.05,
-        1812.03
+        1302.7,
+        1812.03,
+        1449,
+        688.32
       ]
     },
     {

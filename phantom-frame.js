@@ -27,7 +27,7 @@ function stats(p){const l=p.phantomLevel-1,active=p.phantomNova>0,novaScale=clam
  cap:3+rank(p,'wide')+(rank(p,'reaper')?3:0)+rank(p,'bladeLance')*2,
  speed:(270+l*9+rank(p,'hunt')*12+rank(p,'predator')*35)*(1+rank(p,'assault')*.1+rank(p,'pursuitLink')*.08)*(active?1.3+novaScale*.5+(rank(p,'novaAccel')?.35:0):1),
  sense:600+l*22+rank(p,'hunt')*85+rank(p,'predator')*180,
- period:Math.max(.16,Math.min(.58,.65/(1+l*.035))/(1+(rank(p,'haste')*.09+rank(p,'algorithm')*.04+rank(p,'driver')*.07)/(1+l*.035))/(active?1.35+(rank(p,'novaAccel')?.30:0):1)),
+ period:Math.max(.16,Math.min(.58/(1+rank(p,'haste')*.09+rank(p,'algorithm')*.04+rank(p,'driver')*.07),.65/(1+l*.035+rank(p,'haste')*.09+rank(p,'algorithm')*.04+rank(p,'driver')*.07))/(active?1.35+(rank(p,'novaAccel')?.30:0):1)),
  damage:p.dmg*(1+rank(p,'bladeCircuit')*.12)*(1+l*.09+rank(p,'polish')*.15+rank(p,'emperor')*.3+rank(p,'sync')*.08+rank(p,'network')*.1+p.phantomOverflow+rank(p,'crescent')*.12)*(p.phantomRelay>0?1.18+rank(p,'coil')*.04:1)*(active?1.2+novaScale:1)*(1+(rank(p,'contract')?.35*(1-p.hp/Math.max(1,p.maxHp)):0))*(1+(rank(p,'astralCore')?(p.phantomLevel===10?.18:.04):0))};
 }
 function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){

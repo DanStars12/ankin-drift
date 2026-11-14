@@ -1,5 +1,5 @@
 {
-  "sourceHash": "c593666291a4d9101cebe68af6799c17ebef239fc454ce044fa4b5c5db6eb1a7",
+  "sourceHash": "818f05d79f5bf3e28125f1b1200810fe09b1c7ad57193da36ce60093de46d5d8",
   "scope": "encounters",
   "seeds": 3,
   "rendered": false,
@@ -2255,7 +2255,7 @@
           "extraDamage": 0,
           "bladeHits": 81,
           "attacks": 80,
-          "aiMs": 52.29933200002006
+          "aiMs": 26.479632000000947
         },
         "dartTypes": [],
         "hp": 95,
@@ -2501,7 +2501,7 @@
           "extraDamage": 0,
           "bladeHits": 80,
           "attacks": 78,
-          "aiMs": 43.155431999987286
+          "aiMs": 21.47636700000203
         },
         "dartTypes": [],
         "hp": 95,
@@ -2747,7 +2747,7 @@
           "extraDamage": 0,
           "bladeHits": 82,
           "attacks": 81,
-          "aiMs": 39.43844699998726
+          "aiMs": 18.73705499998823
         },
         "dartTypes": [],
         "hp": 95,
@@ -4759,7 +4759,7 @@
           "extraDamage": 0,
           "bladeHits": 15,
           "attacks": 15,
-          "aiMs": 8.045506999994359
+          "aiMs": 5.07406400000491
         },
         "dartTypes": [],
         "hp": 95,
@@ -4916,7 +4916,7 @@
           "extraDamage": 0,
           "bladeHits": 15,
           "attacks": 15,
-          "aiMs": 7.709446000000753
+          "aiMs": 3.2617549999968105
         },
         "dartTypes": [],
         "hp": 95,
@@ -5071,7 +5071,7 @@
           "extraDamage": 0,
           "bladeHits": 15,
           "attacks": 15,
-          "aiMs": 6.538242000007813
+          "aiMs": 9.453183999987232
         },
         "dartTypes": [],
         "hp": 95,
@@ -6850,13 +6850,13 @@
       "scenario": "live-pack",
       "build": "representative",
       "duration": 45,
-      "damage": 14945.928,
-      "dps": 332.132,
+      "damage": 15323.328,
+      "dps": 340.518,
       "bossDamage": 0,
-      "kills": 16,
+      "kills": 15,
       "hits": 3,
-      "damageTaken": 125.612,
-      "dashCount": 5,
+      "damageTaken": 125.602,
+      "dashCount": 6,
       "novaCount": 0,
       "level": 2,
       "skills": 0,
@@ -6864,13 +6864,13 @@
       "synergies": 0,
       "elementFusions": 0,
       "damageBySource": {
-        "phantomBlade": 14945.92799999998
+        "phantomBlade": 15323.327999999976
       },
       "killsByType": {
-        "shooter": 3,
-        "stinger": 6,
-        "guard": 4,
-        "drone": 3
+        "shooter": 6,
+        "stinger": 2,
+        "guard": 2,
+        "drone": 5
       },
       "bossEvents": {
         "spawn": 0,
@@ -6888,13 +6888,13 @@
       "buckets": [
         {
           "minute": 10,
-          "damage": 14945.92799999998,
+          "damage": 15323.327999999976,
           "bossDamage": 0,
-          "kills": 16,
+          "kills": 15,
           "hits": 3,
-          "damageTaken": 125.61241666666429,
+          "damageTaken": 125.60194444444208,
           "sources": {
-            "phantomBlade": 14945.92799999998
+            "phantomBlade": 15323.327999999976
           }
         }
       ],
@@ -6907,16 +6907,16 @@
       "won": false,
       "cleared": false,
       "terminal": false,
-      "playerHp": 41.39,
+      "playerHp": 41.4,
       "maxHp": 160,
       "survivalSeconds": 45,
       "aiMoves": 2700,
-      "aiDodges": 5,
+      "aiDodges": 6,
       "abilityPolicy": "tactical",
-      "dashReadySeconds": 31,
+      "dashReadySeconds": 30,
       "novaReadySeconds": 0,
       "dashReasons": {
-        "emergency-evade": 5
+        "emergency-evade": 6
       },
       "novaReasons": {},
       "novaContexts": [],
@@ -6971,8 +6971,8 @@
           "level": 2,
           "phantomLevel": 4,
           "count": 1,
-          "x": 169.9060458929813,
-          "y": 671.6769552621718,
+          "x": 171.429090630811,
+          "y": 668.0000000000015,
           "xpOnField": 120,
           "states": [
             "ATTACK"
@@ -6980,7 +6980,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 4540.9919999999975,
+          "primaryDamage": 4459.199999999997,
           "extraDamage": 0
         },
         {
@@ -6991,16 +6991,16 @@
           "level": 2,
           "phantomLevel": 4,
           "count": 1,
-          "x": 188.11597385039275,
-          "y": 406.55248198935516,
+          "x": 1006.4426617131944,
+          "y": 301.18642891762283,
           "xpOnField": 188,
           "states": [
-            "CHASE"
+            "ATTACK"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 7467.975999999994,
+          "primaryDamage": 7386.183999999994,
           "extraDamage": 0
         },
         {
@@ -7011,23 +7011,23 @@
           "level": 2,
           "phantomLevel": 4,
           "count": 1,
-          "x": 595.3426258194404,
-          "y": 648.1271570324398,
-          "xpOnField": 431,
+          "x": 1128.4426617131942,
+          "y": 211.39552005861248,
+          "xpOnField": 343,
           "states": [
-            "CHASE"
+            "ATTACK"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 12608.503999999986,
+          "primaryDamage": 13326.84799999998,
           "extraDamage": 0
         }
       ],
       "drillDiagnostics": null,
       "xpSeekSeconds": 0,
       "xpSeekKinds": {},
-      "xpOnField": 455,
+      "xpOnField": 413,
       "rewardAudit": {
         "choices": 0,
         "primary": 0,
@@ -7066,14 +7066,14 @@
           "edge": 1
         },
         "metrics": {
-          "primaryDamage": 14945.92799999998,
+          "primaryDamage": 15323.327999999976,
           "extraDamage": 0,
-          "bladeHits": 131,
-          "attacks": 84,
-          "aiMs": 52.40222200001699
+          "bladeHits": 138,
+          "attacks": 85,
+          "aiMs": 21.104625999995733
         },
         "dartTypes": [],
-        "hp": 41.38758333333571,
+        "hp": 41.39805555555792,
         "shield": 0
       },
       "bossRemainingHp": 0,
@@ -7087,249 +7087,12 @@
       "scenario": "live-pack",
       "build": "representative",
       "duration": 45,
-      "damage": 12885.432,
-      "dps": 286.343,
+      "damage": 16054.456,
+      "dps": 356.766,
       "bossDamage": 0,
-      "kills": 16,
-      "hits": 1,
-      "damageTaken": 34.282,
-      "dashCount": 4,
-      "novaCount": 0,
-      "level": 1,
-      "skills": 0,
-      "evolutions": 0,
-      "synergies": 0,
-      "elementFusions": 0,
-      "damageBySource": {
-        "phantomBlade": 12885.43199999998
-      },
-      "killsByType": {
-        "shooter": 4,
-        "stinger": 5,
-        "guard": 3,
-        "drone": 4
-      },
-      "bossEvents": {
-        "spawn": 0,
-        "telegraph": 0,
-        "ultimate": 0,
-        "recovery": 0,
-        "earlyKills": 0
-      },
-      "recoveryDamage": 0,
-      "pickedExp": 0,
-      "pickedOrbs": 0,
-      "vacuumExp": 0,
-      "vacuumOrbs": 0,
-      "healingPickups": 0,
-      "buckets": [
-        {
-          "minute": 10,
-          "damage": 12885.43199999998,
-          "bossDamage": 0,
-          "kills": 16,
-          "hits": 1,
-          "damageTaken": 34.28194444444419,
-          "sources": {
-            "phantomBlade": 12885.43199999998
-          }
-        }
-      ],
-      "events": [],
-      "mode": "ai",
-      "gameMode": "normal",
-      "phaseMinutes": 10,
-      "secondsPlanned": 45,
-      "alive": true,
-      "won": false,
-      "cleared": false,
-      "terminal": false,
-      "playerHp": 125.72,
-      "maxHp": 160,
-      "survivalSeconds": 45,
-      "aiMoves": 2700,
-      "aiDodges": 4,
-      "abilityPolicy": "tactical",
-      "dashReadySeconds": 36,
-      "novaReadySeconds": 0,
-      "dashReasons": {
-        "emergency-evade": 4
-      },
-      "novaReasons": {},
-      "novaContexts": [],
-      "phantomPilot": "lookahead",
-      "ghostPlans": 450,
-      "phantomSamples": [
-        {
-          "at": 600,
-          "hp": 160,
-          "maxHp": 160,
-          "shield": 21,
-          "level": 1,
-          "phantomLevel": 4,
-          "count": 1,
-          "x": 576,
-          "y": 416,
-          "xpOnField": 0,
-          "states": [
-            "HUNT"
-          ],
-          "dartCount": 0,
-          "dartUnlocked": 0,
-          "dartActive": false,
-          "primaryDamage": 0,
-          "extraDamage": 0
-        },
-        {
-          "at": 610,
-          "hp": 125.71805555555581,
-          "maxHp": 160,
-          "shield": 0,
-          "level": 1,
-          "phantomLevel": 4,
-          "count": 1,
-          "x": 672.4763635436038,
-          "y": 535.8854546845946,
-          "xpOnField": 58,
-          "states": [
-            "ATTACK"
-          ],
-          "dartCount": 0,
-          "dartUnlocked": 0,
-          "dartActive": false,
-          "primaryDamage": 2109.504,
-          "extraDamage": 0
-        },
-        {
-          "at": 620,
-          "hp": 125.71805555555581,
-          "maxHp": 160,
-          "shield": 21,
-          "level": 1,
-          "phantomLevel": 4,
-          "count": 1,
-          "x": 232.66880246045838,
-          "y": 140.36334828604225,
-          "xpOnField": 202,
-          "states": [
-            "ATTACK"
-          ],
-          "dartCount": 0,
-          "dartUnlocked": 0,
-          "dartActive": false,
-          "primaryDamage": 4917.231999999995,
-          "extraDamage": 0
-        },
-        {
-          "at": 630,
-          "hp": 125.71805555555581,
-          "maxHp": 160,
-          "shield": 21,
-          "level": 1,
-          "phantomLevel": 4,
-          "count": 1,
-          "x": 284.83971182964535,
-          "y": 133.63971182964588,
-          "xpOnField": 332,
-          "states": [
-            "CHASE"
-          ],
-          "dartCount": 0,
-          "dartUnlocked": 0,
-          "dartActive": false,
-          "primaryDamage": 9463.27999999999,
-          "extraDamage": 0
-        },
-        {
-          "at": 640,
-          "hp": 125.71805555555581,
-          "maxHp": 160,
-          "shield": 21,
-          "level": 1,
-          "phantomLevel": 4,
-          "count": 1,
-          "x": 604.9990913960796,
-          "y": 653.4271719001146,
-          "xpOnField": 448,
-          "states": [
-            "ATTACK"
-          ],
-          "dartCount": 0,
-          "dartUnlocked": 0,
-          "dartActive": false,
-          "primaryDamage": 11811.423999999983,
-          "extraDamage": 0
-        }
-      ],
-      "drillDiagnostics": null,
-      "xpSeekSeconds": 0,
-      "xpSeekKinds": {},
-      "xpOnField": 497,
-      "rewardAudit": {
-        "choices": 0,
-        "primary": 0,
-        "survival": 0,
-        "experience": 0,
-        "primaryOffers": 0,
-        "survivalOffers": 0,
-        "history": []
-      },
-      "fusionAudit": {
-        "offers": 0,
-        "accepted": 0,
-        "declined": 0,
-        "failed": 0,
-        "reasons": {},
-        "history": []
-      },
-      "weaponState": {
-        "dmg": 72,
-        "rate": 0.46,
-        "multishot": 1,
-        "laserCount": 1,
-        "chargeRate": 0.67,
-        "drillDamage": 65,
-        "dogBones": 1,
-        "magnet": 112,
-        "regen": 0,
-        "shieldMax": 21
-      },
-      "phantomState": {
-        "level": 4,
-        "count": 1,
-        "ranks": {
-          "polish": 1,
-          "haste": 1,
-          "edge": 1
-        },
-        "metrics": {
-          "primaryDamage": 12885.43199999998,
-          "extraDamage": 0,
-          "bladeHits": 117,
-          "attacks": 84,
-          "aiMs": 45.76362599998356
-        },
-        "dartTypes": [],
-        "hp": 125.71805555555581,
-        "shield": 21
-      },
-      "bossRemainingHp": 0,
-      "initialNovaReady": false,
-      "timeToWin": null
-    },
-    {
-      "schema": "ankin-balance-v1",
-      "ship": "phantom",
-      "seed": 3,
-      "scenario": "live-pack",
-      "build": "representative",
-      "duration": 45,
-      "damage": 15772.224,
-      "dps": 350.494,
-      "bossDamage": 0,
-      "kills": 21,
+      "kills": 22,
       "hits": 2,
-      "damageTaken": 70.287,
+      "damageTaken": 70.289,
       "dashCount": 3,
       "novaCount": 0,
       "level": 2,
@@ -7338,14 +7101,14 @@
       "synergies": 0,
       "elementFusions": 0,
       "damageBySource": {
-        "phantomBlade": 15772.223999999977
+        "phantomBlade": 16054.455999999975
       },
       "killsByType": {
-        "shooter": 5,
-        "stinger": 5,
-        "drone": 6,
+        "shooter": 4,
+        "stinger": 9,
         "guard": 2,
-        "bomber": 3
+        "drone": 3,
+        "bomber": 4
       },
       "bossEvents": {
         "spawn": 0,
@@ -7355,21 +7118,21 @@
         "earlyKills": 0
       },
       "recoveryDamage": 0,
-      "pickedExp": 92,
-      "pickedOrbs": 3,
+      "pickedExp": 130,
+      "pickedOrbs": 4,
       "vacuumExp": 0,
       "vacuumOrbs": 0,
       "healingPickups": 0,
       "buckets": [
         {
           "minute": 10,
-          "damage": 15772.223999999977,
+          "damage": 16054.455999999975,
           "bossDamage": 0,
-          "kills": 21,
+          "kills": 22,
           "hits": 2,
-          "damageTaken": 70.28697222222014,
+          "damageTaken": 70.28858333333125,
           "sources": {
-            "phantomBlade": 15772.223999999977
+            "phantomBlade": 16054.455999999975
           }
         }
       ],
@@ -7426,16 +7189,16 @@
           "level": 1,
           "phantomLevel": 4,
           "count": 1,
-          "x": 619.0190908859006,
-          "y": 585.019090885901,
-          "xpOnField": 68,
+          "x": 672.4763635436038,
+          "y": 535.8854546845946,
+          "xpOnField": 58,
           "states": [
             "ATTACK"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 2022.72,
+          "primaryDamage": 2109.504,
           "extraDamage": 0
         },
         {
@@ -7446,36 +7209,36 @@
           "level": 1,
           "phantomLevel": 4,
           "count": 1,
-          "x": 439.56181822819724,
-          "y": 130.89454582558506,
-          "xpOnField": 154,
+          "x": 232.66880246045838,
+          "y": 140.36334828604225,
+          "xpOnField": 178,
           "states": [
             "ATTACK"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 5047.199999999996,
+          "primaryDamage": 4927.431999999995,
           "extraDamage": 0
         },
         {
           "at": 630,
-          "hp": 125.71805555555581,
+          "hp": 132.7180555555558,
           "maxHp": 160,
           "shield": 21,
-          "level": 1,
+          "level": 2,
           "phantomLevel": 4,
           "count": 1,
-          "x": 351.5800005101763,
-          "y": 129.1386150476908,
-          "xpOnField": 342,
+          "x": 481.6190190984015,
+          "y": 288.66629201119406,
+          "xpOnField": 222,
           "states": [
             "ATTACK"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 9472.943999999992,
+          "primaryDamage": 8713.719999999992,
           "extraDamage": 0
         },
         {
@@ -7486,23 +7249,23 @@
           "level": 2,
           "phantomLevel": 4,
           "count": 1,
-          "x": 281.4654551947713,
-          "y": 660.1295239067,
-          "xpOnField": 425,
+          "x": 316.41936571911475,
+          "y": 662.854343800229,
+          "xpOnField": 526,
           "states": [
             "ATTACK"
           ],
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 13237.519999999982,
+          "primaryDamage": 14479.95999999998,
           "extraDamage": 0
         }
       ],
       "drillDiagnostics": null,
       "xpSeekSeconds": 0,
       "xpSeekKinds": {},
-      "xpOnField": 544,
+      "xpOnField": 526,
       "rewardAudit": {
         "choices": 0,
         "primary": 0,
@@ -7541,15 +7304,253 @@
           "edge": 1
         },
         "metrics": {
-          "primaryDamage": 15772.223999999977,
+          "primaryDamage": 16054.455999999975,
           "extraDamage": 0,
-          "bladeHits": 149,
-          "attacks": 84,
-          "aiMs": 46.19033599997783
+          "bladeHits": 143,
+          "attacks": 85,
+          "aiMs": 19.058035999971253
         },
         "dartTypes": [],
-        "hp": 96.71302777777984,
+        "hp": 96.71141666666873,
         "shield": 0
+      },
+      "bossRemainingHp": 0,
+      "initialNovaReady": false,
+      "timeToWin": null
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 3,
+      "scenario": "live-pack",
+      "build": "representative",
+      "duration": 45,
+      "damage": 14544.696,
+      "dps": 323.215,
+      "bossDamage": 0,
+      "kills": 16,
+      "hits": 1,
+      "damageTaken": 34.282,
+      "dashCount": 3,
+      "novaCount": 0,
+      "level": 3,
+      "skills": 0,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 14544.695999999976
+      },
+      "killsByType": {
+        "shooter": 3,
+        "stinger": 3,
+        "drone": 5,
+        "guard": 3,
+        "bomber": 2
+      },
+      "bossEvents": {
+        "spawn": 0,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 160,
+      "pickedOrbs": 5,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 0,
+      "buckets": [
+        {
+          "minute": 10,
+          "damage": 14544.695999999976,
+          "bossDamage": 0,
+          "kills": 16,
+          "hits": 1,
+          "damageTaken": 34.28194444444419,
+          "sources": {
+            "phantomBlade": 14544.695999999976
+          }
+        }
+      ],
+      "events": [],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 10,
+      "secondsPlanned": 45,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 139.72,
+      "maxHp": 160,
+      "survivalSeconds": 45,
+      "aiMoves": 2700,
+      "aiDodges": 3,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 38,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 3
+      },
+      "novaReasons": {},
+      "novaContexts": [],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 450,
+      "phantomSamples": [
+        {
+          "at": 600,
+          "hp": 160,
+          "maxHp": 160,
+          "shield": 21,
+          "level": 1,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 576,
+          "y": 416,
+          "xpOnField": 0,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 0,
+          "extraDamage": 0
+        },
+        {
+          "at": 610,
+          "hp": 125.71805555555581,
+          "maxHp": 160,
+          "shield": 0,
+          "level": 1,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 619.0190908859006,
+          "y": 585.019090885901,
+          "xpOnField": 68,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 2022.72,
+          "extraDamage": 0
+        },
+        {
+          "at": 620,
+          "hp": 125.71805555555581,
+          "maxHp": 160,
+          "shield": 21,
+          "level": 1,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 435.2381817718005,
+          "y": 141.33272759738713,
+          "xpOnField": 154,
+          "states": [
+            "ATTACK"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 5047.199999999996,
+          "extraDamage": 0
+        },
+        {
+          "at": 630,
+          "hp": 125.71805555555581,
+          "maxHp": 160,
+          "shield": 21,
+          "level": 1,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 319.4200292251756,
+          "y": 145.45845609483558,
+          "xpOnField": 304,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 9677.97599999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 640,
+          "hp": 132.7180555555558,
+          "maxHp": 160,
+          "shield": 21,
+          "level": 2,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 331.02002922517624,
+          "y": 657.363910269251,
+          "xpOnField": 343,
+          "states": [
+            "ATTACK"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 13217.135999999979,
+          "extraDamage": 0
+        }
+      ],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 0,
+      "xpSeekKinds": {},
+      "xpOnField": 348,
+      "rewardAudit": {
+        "choices": 0,
+        "primary": 0,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 0,
+        "survivalOffers": 0,
+        "history": []
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 72,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 21
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "polish": 1,
+          "haste": 1,
+          "edge": 1
+        },
+        "metrics": {
+          "primaryDamage": 14544.695999999976,
+          "extraDamage": 0,
+          "bladeHits": 135,
+          "attacks": 85,
+          "aiMs": 19.77327100000275
+        },
+        "dartTypes": [],
+        "hp": 139.7180555555558,
+        "shield": 21
       },
       "bossRemainingHp": 0,
       "initialNovaReady": false,
@@ -10000,9 +10001,9 @@
       "seed": 1,
       "scenario": "live-boss",
       "build": "representative",
-      "duration": 35.9333,
+      "duration": 36.7167,
       "damage": 10017,
-      "dps": 278.766,
+      "dps": 272.819,
       "bossDamage": 10017,
       "kills": 1,
       "hits": 0,
@@ -10027,7 +10028,7 @@
         "recovery": 2,
         "earlyKills": 0
       },
-      "recoveryDamage": 1497.284,
+      "recoveryDamage": 1358.647,
       "pickedExp": 0,
       "pickedOrbs": 0,
       "vacuumExp": 0,
@@ -10100,11 +10101,11 @@
       "terminal": false,
       "playerHp": 160,
       "maxHp": 160,
-      "survivalSeconds": 35.933,
-      "aiMoves": 2156,
+      "survivalSeconds": 36.717,
+      "aiMoves": 2203,
       "aiDodges": 6,
       "abilityPolicy": "tactical",
-      "dashReadySeconds": 22,
+      "dashReadySeconds": 23,
       "novaReadySeconds": 0,
       "dashReasons": {
         "emergency-evade": 6
@@ -10112,7 +10113,7 @@
       "novaReasons": {},
       "novaContexts": [],
       "phantomPilot": "lookahead",
-      "ghostPlans": 360,
+      "ghostPlans": 368,
       "phantomSamples": [
         {
           "at": 600,
@@ -10171,7 +10172,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 5539.853952000003,
+          "primaryDamage": 5523.904512000003,
           "extraDamage": 0
         },
         {
@@ -10191,7 +10192,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 8270.888832000002,
+          "primaryDamage": 8197.276032000003,
           "extraDamage": 0
         }
       ],
@@ -10239,9 +10240,9 @@
         "metrics": {
           "primaryDamage": 10017.000000000002,
           "extraDamage": 0,
-          "bladeHits": 68,
-          "attacks": 68,
-          "aiMs": 32.41777800007549
+          "bladeHits": 70,
+          "attacks": 70,
+          "aiMs": 13.442618999964907
         },
         "dartTypes": [],
         "hp": 160,
@@ -10249,7 +10250,7 @@
       },
       "bossRemainingHp": 0,
       "initialNovaReady": false,
-      "timeToWin": 35.933
+      "timeToWin": 36.717
     },
     {
       "schema": "ankin-balance-v1",
@@ -10257,9 +10258,9 @@
       "seed": 2,
       "scenario": "live-boss",
       "build": "representative",
-      "duration": 35.9333,
+      "duration": 35.6667,
       "damage": 10017,
-      "dps": 278.766,
+      "dps": 280.85,
       "bossDamage": 10017,
       "kills": 1,
       "hits": 0,
@@ -10284,7 +10285,7 @@
         "recovery": 2,
         "earlyKills": 0
       },
-      "recoveryDamage": 1719.104,
+      "recoveryDamage": 1580.467,
       "pickedExp": 0,
       "pickedOrbs": 0,
       "vacuumExp": 0,
@@ -10357,8 +10358,8 @@
       "terminal": false,
       "playerHp": 160,
       "maxHp": 160,
-      "survivalSeconds": 35.933,
-      "aiMoves": 2156,
+      "survivalSeconds": 35.667,
+      "aiMoves": 2140,
       "aiDodges": 6,
       "abilityPolicy": "tactical",
       "dashReadySeconds": 22,
@@ -10369,7 +10370,7 @@
       "novaReasons": {},
       "novaContexts": [],
       "phantomPilot": "lookahead",
-      "ghostPlans": 360,
+      "ghostPlans": 357,
       "phantomSamples": [
         {
           "at": 600,
@@ -10428,7 +10429,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 5723.395200000004,
+          "primaryDamage": 5707.445760000003,
           "extraDamage": 0
         },
         {
@@ -10448,7 +10449,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 8258.129280000005,
+          "primaryDamage": 8491.727232000005,
           "extraDamage": 0
         }
       ],
@@ -10498,7 +10499,7 @@
           "extraDamage": 0,
           "bladeHits": 68,
           "attacks": 68,
-          "aiMs": 32.022293999973044
+          "aiMs": 12.574890000023515
         },
         "dartTypes": [],
         "hp": 160,
@@ -10506,7 +10507,7 @@
       },
       "bossRemainingHp": 0,
       "initialNovaReady": false,
-      "timeToWin": 35.933
+      "timeToWin": 35.667
     },
     {
       "schema": "ankin-balance-v1",
@@ -10514,9 +10515,9 @@
       "seed": 3,
       "scenario": "live-boss",
       "build": "representative",
-      "duration": 37.0167,
+      "duration": 36.2,
       "damage": 10017,
-      "dps": 270.608,
+      "dps": 276.713,
       "bossDamage": 10017,
       "kills": 1,
       "hits": 0,
@@ -10541,7 +10542,7 @@
         "recovery": 2,
         "earlyKills": 0
       },
-      "recoveryDamage": 1608.194,
+      "recoveryDamage": 1469.557,
       "pickedExp": 0,
       "pickedOrbs": 0,
       "vacuumExp": 0,
@@ -10614,11 +10615,11 @@
       "terminal": false,
       "playerHp": 160,
       "maxHp": 160,
-      "survivalSeconds": 37.017,
-      "aiMoves": 2221,
+      "survivalSeconds": 36.2,
+      "aiMoves": 2172,
       "aiDodges": 6,
       "abilityPolicy": "tactical",
-      "dashReadySeconds": 24,
+      "dashReadySeconds": 23,
       "novaReadySeconds": 0,
       "dashReasons": {
         "emergency-evade": 6
@@ -10626,7 +10627,7 @@
       "novaReasons": {},
       "novaContexts": [],
       "phantomPilot": "lookahead",
-      "ghostPlans": 371,
+      "ghostPlans": 362,
       "phantomSamples": [
         {
           "at": 600,
@@ -10665,7 +10666,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 2821.824000000001,
+          "primaryDamage": 2919.974400000001,
           "extraDamage": 0
         },
         {
@@ -10685,7 +10686,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 5552.6135040000045,
+          "primaryDamage": 5634.814464000003,
           "extraDamage": 0
         },
         {
@@ -10705,7 +10706,7 @@
           "dartCount": 0,
           "dartUnlocked": 0,
           "dartActive": false,
-          "primaryDamage": 8185.497984000005,
+          "primaryDamage": 8406.336384000004,
           "extraDamage": 0
         }
       ],
@@ -10748,15 +10749,14 @@
         "ranks": {
           "polish": 1,
           "haste": 1,
-          "edge": 1,
-          "bladeLance": 1
+          "edge": 1
         },
         "metrics": {
           "primaryDamage": 10017,
           "extraDamage": 0,
-          "bladeHits": 70,
-          "attacks": 70,
-          "aiMs": 33.12200899998061
+          "bladeHits": 69,
+          "attacks": 69,
+          "aiMs": 14.604595999993762
         },
         "dartTypes": [],
         "hp": 160,
@@ -10764,7 +10764,7 @@
       },
       "bossRemainingHp": 0,
       "initialNovaReady": false,
-      "timeToWin": 37.017
+      "timeToWin": 36.2
     }
   ]
 }
