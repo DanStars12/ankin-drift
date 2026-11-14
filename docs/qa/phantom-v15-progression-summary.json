@@ -1,0 +1,78 @@
+{
+  "kind": "logic-only-actual-engine",
+  "rendered": false,
+  "fps": null,
+  "comparisonBase": "5caaf8459182da55b973916335c5b6f284cfffbe",
+  "candidateSourceHash": "5f77c17741f35a8a6cfaf11310757e40f9549ed6750218ab11a4dc6fb12a237d",
+  "groups": [
+    {
+      "revision": "control",
+      "seeds": 3,
+      "meanSeconds": 1198.5233333333333,
+      "meanLevel": 64,
+      "clears": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "seconds": 993.05,
+          "level": 54,
+          "stop": "dead",
+          "darts": 1,
+          "ghostDamage": 0
+        },
+        {
+          "seed": 2,
+          "seconds": 1160.72,
+          "level": 61,
+          "stop": "dead",
+          "darts": 3,
+          "ghostDamage": 0
+        },
+        {
+          "seed": 3,
+          "seconds": 1441.8,
+          "level": 77,
+          "stop": "dead",
+          "darts": 2,
+          "ghostDamage": 0
+        }
+      ]
+    },
+    {
+      "revision": "candidate",
+      "seeds": 3,
+      "meanSeconds": 1098.25,
+      "meanLevel": 57.666666666666664,
+      "clears": 0,
+      "runs": [
+        {
+          "seed": 1,
+          "seconds": 701.45,
+          "level": 39,
+          "stop": "dead",
+          "darts": 6,
+          "ghostDamage": 0
+        },
+        {
+          "seed": 2,
+          "seconds": 1279.5,
+          "level": 65,
+          "stop": "dead",
+          "darts": 4,
+          "ghostDamage": 226853.54750592407
+        },
+        {
+          "seed": 3,
+          "seconds": 1313.8,
+          "level": 69,
+          "stop": "dead",
+          "darts": 7,
+          "ghostDamage": 438157.2284362857
+        }
+      ]
+    }
+  ],
+  "limits": "同一の検証AI・同じ3シード。敵の強さ、時間、被弾を変更していない。取得候補とビルド・経路は分岐する。両群全滅で、勝率改善は確認していない。描画FPSは別の実ブラウザ検証を参照。",
+  "finalSourceHash": "48747df9f292b6132557219e5ad616e0198b5e8e93a1cb1dd6546191e5e454c0",
+  "postRunChanges": "共通ユニークNOVAの説明を全画面から広範囲・機体別上限へ訂正。戦闘処理・数値は変更していない。candidateSourceHashは計測時、finalSourceHashは文言訂正後。"
+}

@@ -7,7 +7,18 @@ export function normalRewardValue(before,after){
    case 'laser':return dmg*n(p,'laserScale',1)*Math.sqrt(Math.max(1,n(p,'laserCount',1)))*(1+n(p,'laserBonus')/100);
    case 'charge':return dmg*n(p,'chargeScale',1)*Math.sqrt(Math.max(.1,n(p,'chargeRate',1)))*(1+Math.min(12,n(p,'chargePenetration'))*.025);
    case 'drill':return (n(p,'drillDamage')*Math.min(1,n(p,'drillGain'))/Math.max(.5,n(p,'dashCd',1))+n(p,'drillContact')*2)*(1+n(p,'drillReach')/200);
-   case 'phantom':{const r=p.phantomRanks||{};return dmg*(1+(n(p,'phantomLevel',1)-1)*.09+(r.polish||0)*.15)*(1+(r.haste||0)*.09)*(r.parade?2.2:1)/.65;}
+   case 'phantom':{
+    const r=p.phantomRanks||{},l=n(p,'phantomLevel',1)-1;
+    const damage=dmg*(1+l*.09+(r.polish||0)*.15+(r.emperor||0)*.3+(r.sync||0)*.08+(r.network||0)*.1+(r.crescent||0)*.12)*(1+(r.bladeCircuit||0)*.12);
+    const period=.65/(1+l*.035+(r.haste||0)*.09+(r.algorithm||0)*.04+(r.driver||0)*.07);
+    const critical=1+Math.min(.969,n(p,'crit')+(r.critical||0)*.08)*(n(p,'critMult',1.8)-1);
+    const coverage=1+Math.min(.22,(r.wide||0)*.04+(r.edge||0)*.025);
+    const blade=damage/period*critical*coverage*(r.parade?2.2:1);
+    const duration=15+(r.dartDuration||0)*3+(r.sovereign||0)*8,uptime=duration/(duration+Math.max(7,10-(r.dartCycle||0)));
+    const weight={shot:.65*(r.prism?3:1),laser:1.05*(r.helix?1.8:1),charge:.8*(r.rail?1.8:1)*(r.needle?2.5:1),support:.12*(r.phoenixDarts?2:1),follow:0};
+    const darts=(p.dartTypes||[]).reduce((sum,t)=>sum+(weight[t]||0),0);
+    return blade*(1+(r.astralCore?.2:0))+damage/period*.5*darts*uptime*(1+(r.dartPower||0)*.12+(r.command||0)*.25+(r.dartLink||0)*.15)*(1+(r.dartReactor||0)*.15);
+   }
    case 'dog':return dmg*n(p,'dogBonePower',1)*Math.sqrt(Math.max(1,n(p,'dogBones',1)))*(1+n(p,'dogBoneReturn',1)) / rate;
    default:return dmg*Math.sqrt(Math.max(1,n(p,'multishot',1)))*crit/rate;
   }
@@ -37,11 +48,23 @@ export function normalRewardValue(before,after){
  if(before.shipType==='drill')score+=Math.max(0,delta('novaDrillDash'))*.3+Math.max(0,delta('novaDrillClear'))*.9;
  if(n(before,'meteorCount')>0)score+=Math.max(0,delta('meteorArenaBounce'))*.9;
  // Expected conditional uptime, kept conservative rather than treating a tactical tag as raw DPS.
- if(before.shipType==='phantom')for(const key of ['edge','wide','double','critical','echo','assault','hunt','algorithm','sync','dash','compression','line','collector'])score+=Math.max(0,(after.phantomRanks?.[key]||0)-(before.phantomRanks?.[key]||0))*.8;
+ if(before.shipType==='phantom'){
+  const ar=after.phantomRanks||{},br=before.phantomRanks||{};
+  for(const key of ['double','echo','assault','hunt','dash','compression','line','collector','dartReach','dartCharge','dartMedic','dartBarrier','dartThruster','dartFocus'])score+=Math.max(0,(ar[key]||0)-(br[key]||0))*.8;
+  score+=Math.max(0,(after.dartTypes||[]).filter(t=>t==='follow').length-(before.dartTypes||[]).filter(t=>t==='follow').length)*3;
+ }
+
  const a=after.tacticFlags||{},b=before.tacticFlags||{};
  const conditional={shotFar:.525,shotNear:.375,shotSlip:.15,shotPierce:.45,laserLock:.875,laserGlide:.875,laserSwitch:.7,laserCycle:.2,
   chargeBank:.8,chargeMid:.5,chargeStride:.32,chargeCover:.18,drillExit:.4,drillMark:.3,drillReserve:1,drillRhythm:.2,
   dogRecall:1.25,dogCatch:.36,dogPiyo:.375,dogHome:.6};
  for(const[k,value]of Object.entries(conditional))if(a[k]&&!b[k])score+=value;
  return score;
+}
+
+// Preview randomness must never advance the actual encounter's RNG stream.
+// This function is also injected into the VM/browser realm that owns card.apply.
+export function previewNormalReward(player,card,random){
+ const preview=structuredClone(player),saved=Math.random;
+ try{Math.random=random||(()=>.5);card.apply(preview);return preview;}finally{Math.random=saved;}
 }

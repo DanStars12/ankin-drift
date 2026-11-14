@@ -1,0 +1,5834 @@
+{
+  "sourceHash": "434e648aa20118d4d4b838c5d0bcddf7a51c90bba53fc29b36279a0b67d355e7",
+  "scope": "progression",
+  "seeds": 1,
+  "rendered": false,
+  "fps": null,
+  "rows": [
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 1832.0667,
+      "damage": 86069782.412,
+      "dps": 46979.613,
+      "bossDamage": 1286308,
+      "kills": 15131,
+      "hits": 120,
+      "damageTaken": 10848.734,
+      "dashCount": 261,
+      "novaCount": 125,
+      "level": 99,
+      "skills": 55,
+      "evolutions": 4,
+      "synergies": 13,
+      "elementFusions": 3,
+      "damageBySource": {
+        "phantomBlade": 3218211.292266991,
+        "rock": 7200511.490942806,
+        "blade": 941.1840000000001,
+        "meteor": 1452373.1349080186,
+        "magma": 36355889.65333473,
+        "dot": 19889446.955654044,
+        "iceball": 1872.0879880000002,
+        "pulseField": 16881805.514079217,
+        "lightningBolt": 228660.7111395922,
+        "missile": 356689.40571122116,
+        "explosion": 162970.45291935027,
+        "darkVirus": 763.8000000000006,
+        "phantomDart": 178452.74741090924,
+        "nova": 141193.9815688771
+      },
+      "killsByType": {
+        "drone": 5646,
+        "stinger": 2626,
+        "minor": 7,
+        "relic": 8,
+        "brute": 2371,
+        "major": 3,
+        "shooter": 1797,
+        "unique": 2,
+        "phantom": 116,
+        "guard": 1191,
+        "bomber": 710,
+        "support": 641,
+        "ultimatePart": 3,
+        "endMinion": 9,
+        "ultimate": 1
+      },
+      "bossEvents": {
+        "spawn": 13,
+        "telegraph": 3,
+        "ultimate": 3,
+        "recovery": 3,
+        "earlyKills": 10
+      },
+      "recoveryDamage": 107206.744,
+      "pickedExp": 676586,
+      "pickedOrbs": 13352,
+      "vacuumExp": 5095,
+      "vacuumOrbs": 118,
+      "healingPickups": 285,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2464,
+          "bossDamage": 0,
+          "kills": 79,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 2464
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 8633,
+          "bossDamage": 768,
+          "kills": 169,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 4295.804720000005,
+            "rock": 3396.0112799999993,
+            "blade": 941.1840000000001
+          }
+        },
+        {
+          "minute": 2,
+          "damage": 22500.000000000004,
+          "bossDamage": 1285,
+          "kills": 347,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 5946.292799999997,
+            "rock": 14294.136000000013,
+            "meteor": 2259.5712
+          }
+        },
+        {
+          "minute": 3,
+          "damage": 37078.008408000016,
+          "bossDamage": 0,
+          "kills": 189,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 4214.968960000004,
+            "rock": 22239.448539999998,
+            "magma": 6915.655696000002,
+            "dot": 2425.9352120000017,
+            "meteor": 1282
+          }
+        },
+        {
+          "minute": 4,
+          "damage": 151435.99159199966,
+          "bossDamage": 0,
+          "kills": 444,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 8107.575136000015,
+            "rock": 64494.17922729998,
+            "dot": 10986.925342900007,
+            "magma": 41867.64941379999,
+            "meteor": 24107.574484,
+            "iceball": 1872.0879880000002
+          }
+        },
+        {
+          "minute": 5,
+          "damage": 28105.99999999999,
+          "bossDamage": 6686,
+          "kills": 104,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "rock": 18081.807672,
+            "phantomBlade": 2147.9731360000005,
+            "meteor": 2217,
+            "magma": 4479.8109158,
+            "dot": 1179.4082762
+          }
+        },
+        {
+          "minute": 6,
+          "damage": 233417.6293200002,
+          "bossDamage": 0,
+          "kills": 589,
+          "hits": 2,
+          "damageTaken": 43.8,
+          "sources": {
+            "rock": 88712.50864399994,
+            "phantomBlade": 10402.609507999998,
+            "meteor": 13794.356559999997,
+            "magma": 95300.23662400001,
+            "dot": 24598.887191999987,
+            "pulseField": 609.0307920000002
+          }
+        },
+        {
+          "minute": 7,
+          "damage": 65575.37068000002,
+          "bossDamage": 4739,
+          "kills": 160,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "magma": 16178.89576,
+            "rock": 40568.56743999999,
+            "pulseField": 311.2491599999999,
+            "phantomBlade": 6018.36972,
+            "meteor": 1151.7156799999998,
+            "dot": 1346.5729200000007
+          }
+        },
+        {
+          "minute": 8,
+          "damage": 108012.85712000004,
+          "bossDamage": 0,
+          "kills": 233,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "rock": 80490.39509500001,
+            "magma": 14819.109798700007,
+            "meteor": 1477.91792,
+            "phantomBlade": 8362.579872,
+            "pulseField": 849.0239999999998,
+            "dot": 2013.8304343000007
+          }
+        },
+        {
+          "minute": 9,
+          "damage": 239546.84376000008,
+          "bossDamage": 0,
+          "kills": 368,
+          "hits": 3,
+          "damageTaken": 77.6,
+          "sources": {
+            "magma": 32626.964828840042,
+            "rock": 146886.74601173005,
+            "dot": 9749.395051310008,
+            "meteor": 9333.19051424,
+            "phantomBlade": 28180.011285459957,
+            "pulseField": 12770.536068420011
+          }
+        },
+        {
+          "minute": 10,
+          "damage": 111858.99999999993,
+          "bossDamage": 34136.999999999956,
+          "kills": 133,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 7473.3969552000035,
+            "pulseField": 3702.9024000000027,
+            "rock": 53223.87055727997,
+            "magma": 32904.729495399995,
+            "dot": 10528.100592120007,
+            "meteor": 4026
+          }
+        },
+        {
+          "minute": 11,
+          "damage": 1634702.0568592409,
+          "bossDamage": 0,
+          "kills": 920,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 44973.58797263993,
+            "pulseField": 63552.02519959883,
+            "rock": 350933.01206383813,
+            "magma": 902355.3747596289,
+            "dot": 222948.39361357738,
+            "meteor": 45040.88052992,
+            "lightningBolt": 995.0304000000001,
+            "missile": 415.2928000000001,
+            "explosion": 3488.4595200000003
+          }
+        },
+        {
+          "minute": 12,
+          "damage": 870322.281460802,
+          "bossDamage": 9543,
+          "kills": 457,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "magma": 469721.2212454146,
+            "pulseField": 27172.248533759757,
+            "rock": 213626.94615484212,
+            "phantomBlade": 27693.30728460803,
+            "missile": 4568.2208,
+            "explosion": 10797.61280000001,
+            "dot": 103059.37685537263,
+            "lightningBolt": 4460.323999999999,
+            "meteor": 9223.0237868032
+          }
+        },
+        {
+          "minute": 13,
+          "damage": 365227.16625561815,
+          "bossDamage": 0,
+          "kills": 298,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "rock": 154616.96403192863,
+            "pulseField": 17382.170528855604,
+            "missile": 3233.560640000001,
+            "explosion": 3276.9009288704005,
+            "phantomBlade": 22660.508820948802,
+            "magma": 89147.43524838048,
+            "lightningBolt": 3995.6119999999987,
+            "dot": 54703.928851230645,
+            "meteor": 16210.0852054016
+          }
+        },
+        {
+          "minute": 14,
+          "damage": 713974.1354243706,
+          "bossDamage": 0,
+          "kills": 468,
+          "hits": 1,
+          "damageTaken": 46.719999999999985,
+          "sources": {
+            "rock": 297614.2583663367,
+            "pulseField": 144820.26534498786,
+            "dot": 37651.23399792805,
+            "phantomBlade": 65894.73524795909,
+            "magma": 98686.07810911453,
+            "meteor": 34185.3276408136,
+            "lightningBolt": 4020.123039999999,
+            "missile": 1928.5067075828003,
+            "explosion": 29173.60696965436
+          }
+        },
+        {
+          "minute": 15,
+          "damage": 303540.0118985472,
+          "bossDamage": 39188.99999999999,
+          "kills": 180,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 26219.53837249285,
+            "rock": 138962.80323319472,
+            "pulseField": 12251.319093427204,
+            "magma": 89288.35603938757,
+            "lightningBolt": 3738.6535999999983,
+            "missile": 3377.288897587201,
+            "explosion": 2491.756800000001,
+            "dot": 12205.5157773056,
+            "meteor": 15004.780085151999
+          }
+        },
+        {
+          "minute": 16,
+          "damage": 3907810.0043334933,
+          "bossDamage": 0,
+          "kills": 1044,
+          "hits": 1,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 65502.20476819193,
+            "lightningBolt": 8997.312520000001,
+            "pulseField": 229230.3757693889,
+            "magma": 2303085.6603461066,
+            "rock": 455463.41941942216,
+            "missile": 4197.806945408001,
+            "dot": 753987.352320901,
+            "meteor": 67895.6035737856,
+            "explosion": 19450.26867027202
+          }
+        },
+        {
+          "minute": 17,
+          "damage": 2194760.8769559856,
+          "bossDamage": 20907.999999999996,
+          "kills": 546,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "rock": 332260.7067615045,
+            "pulseField": 290864.5670817116,
+            "dot": 352279.726304059,
+            "magma": 1088110.095094147,
+            "phantomBlade": 62368.48481543175,
+            "lightningBolt": 10895.716000000008,
+            "meteor": 41483,
+            "missile": 4084.5677791360017,
+            "explosion": 11650.213120000004,
+            "darkVirus": 763.8000000000006
+          }
+        },
+        {
+          "minute": 18,
+          "damage": 862234.926960774,
+          "bossDamage": 0,
+          "kills": 338,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "pulseField": 382091.94094718836,
+            "dot": 57836.04688030777,
+            "rock": 205829.39711692216,
+            "phantomBlade": 56014.86705580545,
+            "lightningBolt": 10575.778746336002,
+            "missile": 3848.0307040547996,
+            "explosion": 7291.437627086003,
+            "magma": 136067.13741779368,
+            "meteor": 2680.290465279999
+          }
+        },
+        {
+          "minute": 19,
+          "damage": 2232936.5678275223,
+          "bossDamage": 0,
+          "kills": 800,
+          "hits": 14,
+          "damageTaken": 833.979128268623,
+          "sources": {
+            "pulseField": 1133687.3658943803,
+            "rock": 305838.48167074966,
+            "phantomBlade": 100143.2352113966,
+            "missile": 4587.950855936,
+            "explosion": 28949.68189532893,
+            "dot": 194583.0124237856,
+            "lightningBolt": 11605.265381778405,
+            "magma": 431460.57160412334,
+            "meteor": 22081.0028898752
+          }
+        },
+        {
+          "minute": 20,
+          "damage": 896828.7903917126,
+          "bossDamage": 141194.00000000015,
+          "kills": 239,
+          "hits": 4,
+          "damageTaken": 0,
+          "sources": {
+            "rock": 149835.53455829123,
+            "pulseField": 232110.85513667652,
+            "dot": 100664.51770046302,
+            "magma": 325258.833385802,
+            "phantomBlade": 48693.13756391923,
+            "missile": 5871.828430559999,
+            "lightningBolt": 10344.978016000001,
+            "meteor": 20807.800000000003,
+            "explosion": 3241.3056
+          }
+        },
+        {
+          "minute": 21,
+          "damage": 2974315.448970071,
+          "bossDamage": 0,
+          "kills": 812,
+          "hits": 9,
+          "damageTaken": 40.23013423000117,
+          "sources": {
+            "phantomBlade": 116531.32577500744,
+            "pulseField": 1344535.2355658133,
+            "dot": 372360.92814844125,
+            "magma": 533800.0037593849,
+            "rock": 530169.6663292011,
+            "lightningBolt": 12498.174929877205,
+            "missile": 5519.582816,
+            "explosion": 21093.914595647988,
+            "meteor": 37806.6170504928
+          }
+        },
+        {
+          "minute": 22,
+          "damage": 1581978.4547180021,
+          "bossDamage": 31372.000000000007,
+          "kills": 387,
+          "hits": 1,
+          "damageTaken": 83.85155555551337,
+          "sources": {
+            "rock": 259006.16717375678,
+            "dot": 216897.67647502065,
+            "magma": 457217.7075481428,
+            "pulseField": 467430.1434948364,
+            "phantomBlade": 84345.19435648566,
+            "lightningBolt": 14531.024475924012,
+            "missile": 9510.324674892792,
+            "explosion": 22065.29439248878,
+            "meteor": 50974.9221263936
+          }
+        },
+        {
+          "minute": 23,
+          "damage": 1863711.0517545727,
+          "bossDamage": 0,
+          "kills": 371,
+          "hits": 10,
+          "damageTaken": 685.3219722221281,
+          "sources": {
+            "pulseField": 503444.39010989736,
+            "magma": 628857.6427141877,
+            "rock": 281060.68357017834,
+            "dot": 239121.71690404284,
+            "phantomBlade": 100076.23245733356,
+            "meteor": 78085.14283658419,
+            "missile": 19636.05317692796,
+            "lightningBolt": 13429.189985280005
+          }
+        },
+        {
+          "minute": 24,
+          "damage": 4035194.558497805,
+          "bossDamage": 0,
+          "kills": 815,
+          "hits": 19,
+          "damageTaken": 2485.333227836054,
+          "sources": {
+            "rock": 497356.8211194115,
+            "pulseField": 2383511.981139576,
+            "phantomBlade": 156066.94116681098,
+            "lightningBolt": 13972.501813533301,
+            "dot": 396234.048010517,
+            "meteor": 58880.82110695381,
+            "missile": 32286.655709601513,
+            "magma": 496884.7884310971
+          }
+        },
+        {
+          "minute": 25,
+          "damage": 2371026.2219078834,
+          "bossDamage": 103509.00000000019,
+          "kills": 357,
+          "hits": 11,
+          "damageTaken": 1381.4218770905245,
+          "sources": {
+            "magma": 863163.4052091355,
+            "phantomBlade": 140517.65347725525,
+            "rock": 288268.7719686391,
+            "pulseField": 596840.8642425325,
+            "dot": 383415.5521797662,
+            "missile": 15997.162596375865,
+            "lightningBolt": 17509.475937335996,
+            "meteor": 65313.33629683948
+          }
+        },
+        {
+          "minute": 26,
+          "damage": 15573983.545108926,
+          "bossDamage": 0,
+          "kills": 1405,
+          "hits": 11,
+          "damageTaken": 343.7218392505864,
+          "sources": {
+            "pulseField": 2370010.6821018057,
+            "dot": 4684544.9689135635,
+            "magma": 7224641.6994544165,
+            "phantomBlade": 373557.50243749504,
+            "rock": 633573.1875060032,
+            "lightningBolt": 21359.420566280794,
+            "meteor": 185236.75488102928,
+            "missile": 62150.52595036313,
+            "phantomDart": 18908.803297783834
+          }
+        },
+        {
+          "minute": 27,
+          "damage": 10922700.793311471,
+          "bossDamage": 59822,
+          "kills": 800,
+          "hits": 11,
+          "damageTaken": 2166.604073009154,
+          "sources": {
+            "rock": 453760.85963801236,
+            "dot": 2714542.5308644385,
+            "magma": 4985530.261111825,
+            "pulseField": 1938474.4157571723,
+            "meteor": 326968.07180162065,
+            "phantomBlade": 401477.84988607967,
+            "missile": 40396.70786432,
+            "lightningBolt": 18825.2156065242,
+            "phantomDart": 34361.397031377564,
+            "nova": 8363.483750213221
+          }
+        },
+        {
+          "minute": 28,
+          "damage": 9013779.266172433,
+          "bossDamage": 0,
+          "kills": 791,
+          "hits": 4,
+          "damageTaken": 69.6822,
+          "sources": {
+            "phantomDart": 50199.09325012199,
+            "pulseField": 1507392.612903118,
+            "rock": 440019.7250196641,
+            "phantomBlade": 396334.1385721838,
+            "lightningBolt": 20750.537196054884,
+            "magma": 3997098.2676545265,
+            "dot": 2376929.5803373214,
+            "nova": 48179.87222516351,
+            "meteor": 127328.46441971885,
+            "missile": 49546.974595200096
+          }
+        },
+        {
+          "minute": 29,
+          "damage": 21857045.78858323,
+          "bossDamage": 0,
+          "kills": 1275,
+          "hits": 18,
+          "damageTaken": 2590.46826490407,
+          "sources": {
+            "phantomDart": 51117.96047059079,
+            "rock": 604654.6254522083,
+            "phantomBlade": 744001.2839707359,
+            "pulseField": 3123482.372943268,
+            "dot": 6347255.113408787,
+            "nova": 81789.76595539539,
+            "magma": 10625891.31748764,
+            "lightningBolt": 22038.135804667163,
+            "missile": 78454.72423831547,
+            "meteor": 178360.48885312004
+          }
+        },
+        {
+          "minute": 30,
+          "damage": 885081.763647999,
+          "bossDamage": 833156.0000000003,
+          "kills": 13,
+          "hits": 1,
+          "damageTaken": 0,
+          "sources": {
+            "pulseField": 95276.93986367968,
+            "rock": 75271.78932100005,
+            "magma": 364530.744185697,
+            "phantomBlade": 97525.98096153118,
+            "dot": 205396.68066799402,
+            "meteor": 9157.395,
+            "missile": 7077.6395289600005,
+            "lightningBolt": 4118.241120000001,
+            "nova": 2860.8596381053217,
+            "phantomDart": 23865.49336103518
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        },
+        {
+          "at": 150,
+          "boss": "minor",
+          "variant": "raptor",
+          "event": "spawn"
+        },
+        {
+          "at": 300,
+          "boss": "major",
+          "variant": "vortex",
+          "event": "spawn"
+        },
+        {
+          "at": 450.017,
+          "boss": "minor",
+          "variant": "hive",
+          "event": "spawn"
+        },
+        {
+          "at": 600.017,
+          "boss": "unique",
+          "variant": "mirror",
+          "event": "spawn"
+        },
+        {
+          "at": 750.017,
+          "boss": "minor",
+          "variant": "raptor",
+          "event": "spawn"
+        },
+        {
+          "at": 900.017,
+          "boss": "major",
+          "variant": "rail",
+          "event": "spawn"
+        },
+        {
+          "at": 1050.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 1200.017,
+          "boss": "unique",
+          "variant": "ankin",
+          "event": "spawn"
+        },
+        {
+          "at": 1350.017,
+          "boss": "minor",
+          "variant": "raptor",
+          "event": "spawn"
+        },
+        {
+          "at": 1500.017,
+          "boss": "major",
+          "variant": "titan",
+          "event": "spawn"
+        },
+        {
+          "at": 1515.833,
+          "boss": "major",
+          "variant": "titan",
+          "event": "telegraph"
+        },
+        {
+          "at": 1517.3,
+          "boss": "major",
+          "variant": "titan",
+          "event": "ultimate"
+        },
+        {
+          "at": 1517.3,
+          "boss": "major",
+          "variant": "titan",
+          "event": "recovery"
+        },
+        {
+          "at": 1650.017,
+          "boss": "minor",
+          "variant": "hive",
+          "event": "spawn"
+        },
+        {
+          "at": 1800.017,
+          "boss": "ultimate",
+          "variant": "theEnd",
+          "event": "spawn"
+        },
+        {
+          "at": 1819.433,
+          "boss": "ultimate",
+          "variant": "theEnd",
+          "event": "telegraph"
+        },
+        {
+          "at": 1821.1,
+          "boss": "ultimate",
+          "variant": "theEnd",
+          "event": "ultimate"
+        },
+        {
+          "at": 1821.1,
+          "boss": "ultimate",
+          "variant": "theEnd",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 1860,
+      "alive": true,
+      "won": true,
+      "cleared": true,
+      "terminal": true,
+      "playerHp": 760.42,
+      "maxHp": 760.4200000000001,
+      "survivalSeconds": 1832.067,
+      "aiMoves": 109924,
+      "aiDodges": 261,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 1154,
+      "novaReadySeconds": 76,
+      "dashReasons": {
+        "emergency-evade": 261
+      },
+      "novaReasons": {
+        "spectral-overdrive": 125
+      },
+      "novaContexts": [
+        {
+          "at": 19,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 40,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 59,
+          "reason": "spectral-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 72,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": 435
+        },
+        {
+          "at": 91,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 105,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 119,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 132,
+          "reason": "spectral-overdrive",
+          "near": 10,
+          "bossDist": null
+        },
+        {
+          "at": 146,
+          "reason": "spectral-overdrive",
+          "near": 6,
+          "bossDist": null
+        },
+        {
+          "at": 159,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 173,
+          "reason": "spectral-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 191,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 210,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 224,
+          "reason": "spectral-overdrive",
+          "near": 8,
+          "bossDist": null
+        },
+        {
+          "at": 238,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 251,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 265,
+          "reason": "spectral-overdrive",
+          "near": 7,
+          "bossDist": null
+        },
+        {
+          "at": 278,
+          "reason": "spectral-overdrive",
+          "near": 6,
+          "bossDist": null
+        },
+        {
+          "at": 293,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 307,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 322,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 340,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 356,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 371,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 385,
+          "reason": "spectral-overdrive",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 399,
+          "reason": "spectral-overdrive",
+          "near": 11,
+          "bossDist": null
+        },
+        {
+          "at": 412,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 426,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 443,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 459,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 494,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 510,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 526,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 539,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 553,
+          "reason": "spectral-overdrive",
+          "near": 34,
+          "bossDist": null
+        },
+        {
+          "at": 567,
+          "reason": "spectral-overdrive",
+          "near": 47,
+          "bossDist": null
+        },
+        {
+          "at": 582,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 596,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 609,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 630,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 645,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 659,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 673,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 687,
+          "reason": "spectral-overdrive",
+          "near": 8,
+          "bossDist": null
+        },
+        {
+          "at": 700,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 714,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 727,
+          "reason": "spectral-overdrive",
+          "near": 5,
+          "bossDist": null
+        },
+        {
+          "at": 741,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 755,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": 369
+        },
+        {
+          "at": 770,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 784,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 800,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 814,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 828,
+          "reason": "spectral-overdrive",
+          "near": 15,
+          "bossDist": null
+        },
+        {
+          "at": 841,
+          "reason": "spectral-overdrive",
+          "near": 18,
+          "bossDist": null
+        },
+        {
+          "at": 855,
+          "reason": "spectral-overdrive",
+          "near": 16,
+          "bossDist": null
+        },
+        {
+          "at": 869,
+          "reason": "spectral-overdrive",
+          "near": 62,
+          "bossDist": null
+        },
+        {
+          "at": 882,
+          "reason": "spectral-overdrive",
+          "near": 22,
+          "bossDist": null
+        },
+        {
+          "at": 899,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 912,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 927,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 941,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 955,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 968,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 982,
+          "reason": "spectral-overdrive",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 995,
+          "reason": "spectral-overdrive",
+          "near": 12,
+          "bossDist": null
+        },
+        {
+          "at": 1009,
+          "reason": "spectral-overdrive",
+          "near": 51,
+          "bossDist": null
+        },
+        {
+          "at": 1023,
+          "reason": "spectral-overdrive",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 1036,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1050,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1064,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1079,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1092,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1106,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1119,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1133,
+          "reason": "spectral-overdrive",
+          "near": 17,
+          "bossDist": null
+        },
+        {
+          "at": 1147,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 1160,
+          "reason": "spectral-overdrive",
+          "near": 26,
+          "bossDist": null
+        },
+        {
+          "at": 1174,
+          "reason": "spectral-overdrive",
+          "near": 26,
+          "bossDist": null
+        },
+        {
+          "at": 1187,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1201,
+          "reason": "spectral-overdrive",
+          "near": 2,
+          "bossDist": 604
+        },
+        {
+          "at": 1215,
+          "reason": "spectral-overdrive",
+          "near": 5,
+          "bossDist": 394
+        },
+        {
+          "at": 1228,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1242,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1255,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1269,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 1283,
+          "reason": "spectral-overdrive",
+          "near": 14,
+          "bossDist": null
+        },
+        {
+          "at": 1296,
+          "reason": "spectral-overdrive",
+          "near": 20,
+          "bossDist": null
+        },
+        {
+          "at": 1310,
+          "reason": "spectral-overdrive",
+          "near": 10,
+          "bossDist": null
+        },
+        {
+          "at": 1323,
+          "reason": "spectral-overdrive",
+          "near": 11,
+          "bossDist": null
+        },
+        {
+          "at": 1337,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1351,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": 437
+        },
+        {
+          "at": 1364,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 1378,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1392,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1405,
+          "reason": "spectral-overdrive",
+          "near": 5,
+          "bossDist": null
+        },
+        {
+          "at": 1419,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 1432,
+          "reason": "spectral-overdrive",
+          "near": 27,
+          "bossDist": null
+        },
+        {
+          "at": 1446,
+          "reason": "spectral-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 1460,
+          "reason": "spectral-overdrive",
+          "near": 43,
+          "bossDist": null
+        },
+        {
+          "at": 1473,
+          "reason": "spectral-overdrive",
+          "near": 44,
+          "bossDist": null
+        },
+        {
+          "at": 1487,
+          "reason": "spectral-overdrive",
+          "near": 24,
+          "bossDist": null
+        },
+        {
+          "at": 1500,
+          "reason": "spectral-overdrive",
+          "near": 6,
+          "bossDist": 757
+        },
+        {
+          "at": 1518,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": 595
+        },
+        {
+          "at": 1531,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 1545,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 1559,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1572,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 1586,
+          "reason": "spectral-overdrive",
+          "near": 20,
+          "bossDist": null
+        },
+        {
+          "at": 1599,
+          "reason": "spectral-overdrive",
+          "near": 21,
+          "bossDist": null
+        },
+        {
+          "at": 1613,
+          "reason": "spectral-overdrive",
+          "near": 38,
+          "bossDist": null
+        },
+        {
+          "at": 1627,
+          "reason": "spectral-overdrive",
+          "near": 18,
+          "bossDist": null
+        },
+        {
+          "at": 1640,
+          "reason": "spectral-overdrive",
+          "near": 5,
+          "bossDist": null
+        },
+        {
+          "at": 1654,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": 542
+        },
+        {
+          "at": 1667,
+          "reason": "spectral-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 1681,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 1695,
+          "reason": "spectral-overdrive",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 1708,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 1722,
+          "reason": "spectral-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 1735,
+          "reason": "spectral-overdrive",
+          "near": 27,
+          "bossDist": null
+        },
+        {
+          "at": 1749,
+          "reason": "spectral-overdrive",
+          "near": 68,
+          "bossDist": null
+        },
+        {
+          "at": 1763,
+          "reason": "spectral-overdrive",
+          "near": 10,
+          "bossDist": null
+        },
+        {
+          "at": 1776,
+          "reason": "spectral-overdrive",
+          "near": 34,
+          "bossDist": null
+        },
+        {
+          "at": 1790,
+          "reason": "spectral-overdrive",
+          "near": 19,
+          "bossDist": null
+        },
+        {
+          "at": 1803,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": 346
+        }
+      ],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 18321,
+      "phantomSamples": [
+        {
+          "at": 0,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 1,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 640,
+          "y": 400,
+          "xpOnField": 0,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 0,
+          "extraDamage": 0
+        },
+        {
+          "at": 10,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 3,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 316.8528137423864,
+          "y": 131.3826842697964,
+          "xpOnField": 48,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 424,
+          "extraDamage": 0
+        },
+        {
+          "at": 20,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 4,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 753.4701294725901,
+          "y": 191.52900397563542,
+          "xpOnField": 13,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 650,
+          "extraDamage": 0
+        },
+        {
+          "at": 30,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 5,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1161.9696961967038,
+          "y": 120.73506473629715,
+          "xpOnField": 52,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 1165,
+          "extraDamage": 0
+        },
+        {
+          "at": 40,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 6,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 256.4995667241123,
+          "y": 184.4995667241168,
+          "xpOnField": 68,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1569,
+          "extraDamage": 0
+        },
+        {
+          "at": 50,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 6,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 125.35238046649897,
+          "y": 178.17662350914333,
+          "xpOnField": 124,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 2124.76,
+          "extraDamage": 0
+        },
+        {
+          "at": 60,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 6,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 893.3523804664999,
+          "y": 126.76536853960118,
+          "xpOnField": 197,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 2464,
+          "extraDamage": 0
+        },
+        {
+          "at": 70,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 7,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 682.4995667241144,
+          "y": 403.4932906009598,
+          "xpOnField": 238,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 3132,
+          "extraDamage": 0
+        },
+        {
+          "at": 80,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 8,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 797.1757569573645,
+          "y": 544.581602355528,
+          "xpOnField": 58,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 4102.344400000002,
+          "extraDamage": 0
+        },
+        {
+          "at": 90,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 9,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1170.5281374238646,
+          "y": 140.69935136162098,
+          "xpOnField": 178,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 4598.024400000003,
+          "extraDamage": 0
+        },
+        {
+          "at": 100,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 10,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 158.61731573020725,
+          "y": 147.72878861314382,
+          "xpOnField": 220,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 5146.112400000003,
+          "extraDamage": 0
+        },
+        {
+          "at": 110,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 10,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 463.08831175457,
+          "y": 577.3166670918263,
+          "xpOnField": 428,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 5819.768400000002,
+          "extraDamage": 0
+        },
+        {
+          "at": 120,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 13,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 714.2354980121843,
+          "y": 432.1106063311672,
+          "xpOnField": 32,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 6759.804719999998,
+          "extraDamage": 0
+        },
+        {
+          "at": 130,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 15,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 251.91255479720724,
+          "y": 593.081169079644,
+          "xpOnField": 256,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 8320.797359999997,
+          "extraDamage": 0
+        },
+        {
+          "at": 140,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 16,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 517.4198769408954,
+          "y": 474.52124855605894,
+          "xpOnField": 407,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 9986.332719999991,
+          "extraDamage": 0
+        },
+        {
+          "at": 150,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 17,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 993.8016946589178,
+          "y": 355.727309316718,
+          "xpOnField": 221,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 10827.85751999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 160,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 18,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 821.6265504461957,
+          "y": 161.03744647823342,
+          "xpOnField": 34,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 11691.353839999989,
+          "extraDamage": 0
+        },
+        {
+          "at": 170,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 18,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1035.2144289248774,
+          "y": 120.5664504538696,
+          "xpOnField": 119,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 12073.887599999987,
+          "extraDamage": 0
+        },
+        {
+          "at": 180,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 18,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1021.155554421832,
+          "y": 120.5664504538696,
+          "xpOnField": 343,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 12706.097519999988,
+          "extraDamage": 0
+        },
+        {
+          "at": 190,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 18,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 832.3580438450226,
+          "y": 687.3639610306794,
+          "xpOnField": 546,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 13073.383919999993,
+          "extraDamage": 0
+        },
+        {
+          "at": 200,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 19,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 121.79960261786425,
+          "y": 286.3933982822017,
+          "xpOnField": 484,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 13716.727279999992,
+          "extraDamage": 0
+        },
+        {
+          "at": 210,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 19,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 373.32146391856264,
+          "y": 129.32738110421965,
+          "xpOnField": 664,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 14165.632879999997,
+          "extraDamage": 0
+        },
+        {
+          "at": 220,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 19,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 412.58639918226726,
+          "y": 142.18019484660618,
+          "xpOnField": 466,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 14671.671919999993,
+          "extraDamage": 0
+        },
+        {
+          "at": 230,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 20,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1007.2625894155174,
+          "y": 167.38625560726607,
+          "xpOnField": 336,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 15402.949359999984,
+          "extraDamage": 0
+        },
+        {
+          "at": 240,
+          "hp": 128.12,
+          "maxHp": 128.12,
+          "shield": 24.2,
+          "level": 21,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 379.8513344459718,
+          "y": 664.8563850798571,
+          "xpOnField": 468,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 17116.95255999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 250,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 23,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 171.58726573404098,
+          "y": 681.8269478283344,
+          "xpOnField": 435,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 18308.59287999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 260,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 25,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 607.7050147401326,
+          "y": 386.2979438526979,
+          "xpOnField": 1393,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 19788.943827999974,
+          "extraDamage": 0
+        },
+        {
+          "at": 270,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 27,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1129.1751442127236,
+          "y": 322.5334418648802,
+          "xpOnField": 789,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 22003.082704,
+          "extraDamage": 0
+        },
+        {
+          "at": 280,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 28,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 396.3223304703372,
+          "y": 407.38625560726655,
+          "xpOnField": 168,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 23427.940863999993,
+          "extraDamage": 0
+        },
+        {
+          "at": 290,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 28,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 811.8513344459736,
+          "y": 435.50400461335744,
+          "xpOnField": 132,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 24077.849439999987,
+          "extraDamage": 0
+        },
+        {
+          "at": 300,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 28,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 533.2928932188145,
+          "y": 141.1810613983821,
+          "xpOnField": 139,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 25028.64161599998,
+          "extraDamage": 0
+        },
+        {
+          "at": 310,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 28,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1152.5874981980155,
+          "y": 430.7570398917368,
+          "xpOnField": 20,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 25654.479503999974,
+          "extraDamage": 0
+        },
+        {
+          "at": 320,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 28,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 422.6463727010611,
+          "y": 652.5804163826004,
+          "xpOnField": 60,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 25859.08035199997,
+          "extraDamage": 0
+        },
+        {
+          "at": 330,
+          "hp": 151.12,
+          "maxHp": 151.12,
+          "shield": 24.2,
+          "level": 28,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 510.4108746888794,
+          "y": 632.6981653886921,
+          "xpOnField": 100,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 26388.635487999967,
+          "extraDamage": 0
+        },
+        {
+          "at": 340,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 29,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 437.9113079647657,
+          "y": 273.9042261493512,
+          "xpOnField": 100,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 26629.342367999965,
+          "extraDamage": 0
+        },
+        {
+          "at": 350,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 29,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 624.5874981980156,
+          "y": 526.7570398917389,
+          "xpOnField": 60,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 26773.766495999964,
+          "extraDamage": 0
+        },
+        {
+          "at": 360,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 29,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 923.0281904190831,
+          "y": 150.49297117980808,
+          "xpOnField": 21,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 27176.61475199996,
+          "extraDamage": 0
+        },
+        {
+          "at": 370,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 29,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 431.8810041614695,
+          "y": 171.5812829343766,
+          "xpOnField": 188,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 27472.64795999996,
+          "extraDamage": 0
+        },
+        {
+          "at": 380,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 29,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 531.8587095848835,
+          "y": 430.1325814865978,
+          "xpOnField": 399,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 28199.847519999952,
+          "extraDamage": 0
+        },
+        {
+          "at": 390,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 30,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 337.56581636607007,
+          "y": 135.4132813965916,
+          "xpOnField": 1323,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 29739.71924399994,
+          "extraDamage": 0
+        },
+        {
+          "at": 400,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 7,
+          "level": 32,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 330.16295090390173,
+          "y": 194.70562748477118,
+          "xpOnField": 231,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 32143.687707999936,
+          "extraDamage": 0
+        },
+        {
+          "at": 410,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 33,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 557.310137161517,
+          "y": 171.91168824543155,
+          "xpOnField": 342,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 34677.381531999905,
+          "extraDamage": 0
+        },
+        {
+          "at": 420,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 34,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 495.25126265847155,
+          "y": 349.85281374238616,
+          "xpOnField": 494,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 37579.22425999988,
+          "extraDamage": 0
+        },
+        {
+          "at": 430,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 34,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 984.4858941188808,
+          "y": 581.6173157302044,
+          "xpOnField": 22,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 39468.51663599989,
+          "extraDamage": 0
+        },
+        {
+          "at": 440,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 34,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 183.25126265847217,
+          "y": 128.0294372515238,
+          "xpOnField": 66,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 41029.408651999904,
+          "extraDamage": 0
+        },
+        {
+          "at": 450,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 34,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 937.6919548795395,
+          "y": 231.0588745030457,
+          "xpOnField": 110,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 42158.366155999924,
+          "extraDamage": 0
+        },
+        {
+          "at": 460,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 34,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 718.2806999099939,
+          "y": 129.94199204872896,
+          "xpOnField": 272,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 42955.81538799993,
+          "extraDamage": 0
+        },
+        {
+          "at": 470,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 34,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 676.1040764008576,
+          "y": 129.94199204872896,
+          "xpOnField": 580,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 43426.65485999994,
+          "extraDamage": 0
+        },
+        {
+          "at": 480,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 35,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 662.0452018978121,
+          "y": 129.94199204872896,
+          "xpOnField": 1020,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 43597.59397999994,
+          "extraDamage": 0
+        },
+        {
+          "at": 490,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 35,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 684.3395744130394,
+          "y": 129.94199204872896,
+          "xpOnField": 1438,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 43894.68805999994,
+          "extraDamage": 0
+        },
+        {
+          "at": 500,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 35,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 924.3395744130394,
+          "y": 240.00086655177353,
+          "xpOnField": 498,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 44446.349019999936,
+          "extraDamage": 0
+        },
+        {
+          "at": 510,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 35,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 678.0166311980627,
+          "y": 216.50043327588676,
+          "xpOnField": 229,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 44867.23229999994,
+          "extraDamage": 0
+        },
+        {
+          "at": 520,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 35,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 395.3404409648126,
+          "y": 647.294372515228,
+          "xpOnField": 160,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 45639.67690799995,
+          "extraDamage": 0
+        },
+        {
+          "at": 530,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 35,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1019.3404409648133,
+          "y": 217.70649403654596,
+          "xpOnField": 332,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 47609.573067999976,
+          "extraDamage": 0
+        },
+        {
+          "at": 540,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 36,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 708.5465017254724,
+          "y": 496.2649352637045,
+          "xpOnField": 414,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 51960.173851999985,
+          "extraDamage": 0
+        },
+        {
+          "at": 550,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 36,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 25,
+          "y": 215.15432893255073,
+          "xpOnField": 1128,
+          "states": [
+            "REPOSITION"
+          ],
+          "primaryDamage": 57747.95736799991,
+          "extraDamage": 0
+        },
+        {
+          "at": 560,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 6.780500000000003,
+          "level": 37,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1060.262589415517,
+          "y": 363.0386719675128,
+          "xpOnField": 1748,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 63271.17207145991,
+          "extraDamage": 0
+        },
+        {
+          "at": 570,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 37,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 394.5899705197344,
+          "y": 560.5290039756346,
+          "xpOnField": 3240,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 71657.8459244199,
+          "extraDamage": 0
+        },
+        {
+          "at": 580,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 38,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 332.8691911333144,
+          "y": 401.70562748477187,
+          "xpOnField": 609,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 76793.89377745998,
+          "extraDamage": 0
+        },
+        {
+          "at": 590,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 38,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 381.36875785742814,
+          "y": 350.087445202794,
+          "xpOnField": 95,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 78340.58726353999,
+          "extraDamage": 0
+        },
+        {
+          "at": 600,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 24.2,
+          "level": 38,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 507.89862838483907,
+          "y": 250.6761902332496,
+          "xpOnField": 192,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 80140.18513745996,
+          "extraDamage": 0
+        },
+        {
+          "at": 610,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 479.59354185720645,
+          "y": 274.0258659140547,
+          "xpOnField": 450,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 82999.83864801998,
+          "extraDamage": 0
+        },
+        {
+          "at": 620,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 269.4169183480699,
+          "y": 252.43798743537303,
+          "xpOnField": 24,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 84077.80912273999,
+          "extraDamage": 0
+        },
+        {
+          "at": 630,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 689.0636713297968,
+          "y": 666.2613639262366,
+          "xpOnField": 48,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 84222.93798353999,
+          "extraDamage": 0
+        },
+        {
+          "at": 640,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 379.9753595752283,
+          "y": 177.5262991899413,
+          "xpOnField": 49,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 85750.16118481998,
+          "extraDamage": 0
+        },
+        {
+          "at": 650,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 796.2108575874101,
+          "y": 670.8786796564406,
+          "xpOnField": 97,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 87178.19551025997,
+          "extraDamage": 0
+        },
+        {
+          "at": 660,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 394.74072811481915,
+          "y": 529.2908011777589,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 87613.58209265998,
+          "extraDamage": 0
+        },
+        {
+          "at": 670,
+          "hp": 174.12,
+          "maxHp": 174.12,
+          "shield": 40.760000000000005,
+          "level": 39,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 800.3286065935006,
+          "y": 290.99642866253095,
+          "xpOnField": 125,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 88633.20406353998,
+          "extraDamage": 0
+        },
+        {
+          "at": 680,
+          "hp": 178.72,
+          "maxHp": 178.72,
+          "shield": 42.60000000000001,
+          "level": 40,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 527.5935418572051,
+          "y": 508.20248942319097,
+          "xpOnField": 198,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 90754.48451314004,
+          "extraDamage": 0
+        },
+        {
+          "at": 690,
+          "hp": 178.72,
+          "maxHp": 178.72,
+          "shield": 42.60000000000001,
+          "level": 41,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 567.84689655673,
+          "y": 455.6324676318525,
+          "xpOnField": 834,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 99607.80851746017,
+          "extraDamage": 0
+        },
+        {
+          "at": 700,
+          "hp": 178.72,
+          "maxHp": 178.72,
+          "shield": 42.60000000000001,
+          "level": 43,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 607.512372777573,
+          "y": 386.18019484660454,
+          "xpOnField": 758,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 109193.12887170032,
+          "extraDamage": 0
+        },
+        {
+          "at": 710,
+          "hp": 178.72,
+          "maxHp": 178.72,
+          "shield": 42.60000000000001,
+          "level": 45,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 760.3874810965452,
+          "y": 453.59945904286076,
+          "xpOnField": 655,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 120593.59864610057,
+          "extraDamage": 0
+        },
+        {
+          "at": 720,
+          "hp": 178.72,
+          "maxHp": 178.72,
+          "shield": 42.60000000000001,
+          "level": 46,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 697.288455329571,
+          "y": 278.40411229460796,
+          "xpOnField": 68,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 132587.17006530068,
+          "extraDamage": 0
+        },
+        {
+          "at": 730,
+          "hp": 183.32,
+          "maxHp": 183.32,
+          "shield": 44.44000000000001,
+          "level": 48,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 623.3889603929599,
+          "y": 379.75945135393647,
+          "xpOnField": 970,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 144288.43698530094,
+          "extraDamage": 0
+        },
+        {
+          "at": 740,
+          "hp": 183.32,
+          "maxHp": 183.32,
+          "shield": 44.44000000000001,
+          "level": 49,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 728.207286249942,
+          "y": 153.63751826573775,
+          "xpOnField": 94,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 150337.87015650113,
+          "extraDamage": 0
+        },
+        {
+          "at": 750,
+          "hp": 183.32,
+          "maxHp": 183.32,
+          "shield": 44.44000000000001,
+          "level": 49,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 950.0306627408056,
+          "y": 598.989898732237,
+          "xpOnField": 26,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 154203.48600770123,
+          "extraDamage": 0
+        },
+        {
+          "at": 760,
+          "hp": 183.32,
+          "maxHp": 183.32,
+          "shield": 44.44000000000001,
+          "level": 49,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 797.80587874103,
+          "y": 385.80256121069414,
+          "xpOnField": 104,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 157197.28654100045,
+          "extraDamage": 0
+        },
+        {
+          "at": 770,
+          "hp": 183.32,
+          "maxHp": 183.32,
+          "shield": 44.44000000000001,
+          "level": 49,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 289.1885630108254,
+          "y": 644.4787514439442,
+          "xpOnField": 52,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 158232.38827514442,
+          "extraDamage": 0
+        },
+        {
+          "at": 780,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 50,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 412.10025125625657,
+          "y": 302.15580822896686,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 160280.47734990923,
+          "extraDamage": 0
+        },
+        {
+          "at": 790,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 50,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1047.3830432073048,
+          "y": 523.9898987322374,
+          "xpOnField": 37,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 163412.0943914004,
+          "extraDamage": 0
+        },
+        {
+          "at": 800,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 50,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 347.97178823775926,
+          "y": 276.46089475660125,
+          "xpOnField": 78,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 164689.54471353805,
+          "extraDamage": 0
+        },
+        {
+          "at": 810,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 50,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 833.2955980045103,
+          "y": 131.25483399594248,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 167211.12285892045,
+          "extraDamage": 0
+        },
+        {
+          "at": 820,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 50,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 437.6488450227839,
+          "y": 131.25483399594222,
+          "xpOnField": 53,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 169491.9609930901,
+          "extraDamage": 0
+        },
+        {
+          "at": 830,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 50,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 955.2503961066989,
+          "y": 659.4766594028888,
+          "xpOnField": 385,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 172263.90083938133,
+          "extraDamage": 0
+        },
+        {
+          "at": 840,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 51,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 546.8132752231008,
+          "y": 498.5111472882925,
+          "xpOnField": 64,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 182940.98617085803,
+          "extraDamage": 0
+        },
+        {
+          "at": 850,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 51,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 551.3056992722767,
+          "y": 662.6066017177984,
+          "xpOnField": 273,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 197333.6999739651,
+          "extraDamage": 0
+        },
+        {
+          "at": 860,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 52,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 159.6990975544788,
+          "y": 386.3309524416868,
+          "xpOnField": 443,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 207361.52966240188,
+          "extraDamage": 0
+        },
+        {
+          "at": 870,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 52,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 744.3975823643137,
+          "y": 98.5857864376269,
+          "xpOnField": 659,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 217174.69484194284,
+          "extraDamage": 0
+        },
+        {
+          "at": 880,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 6,
+          "level": 53,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1185.5094998008456,
+          "y": 109.60425216205124,
+          "xpOnField": 719,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 234563.70197775715,
+          "extraDamage": 0
+        },
+        {
+          "at": 890,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 53,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1149.4886845206743,
+          "y": 465.14397015009195,
+          "xpOnField": 0,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 246119.5168005732,
+          "extraDamage": 0
+        },
+        {
+          "at": 900,
+          "hp": 187.92,
+          "maxHp": 187.92,
+          "shield": 46.280000000000015,
+          "level": 53,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 406.1951785572196,
+          "y": 476.79072313181996,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 248835.72141881718,
+          "extraDamage": 0
+        },
+        {
+          "at": 910,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 529.3215495346631,
+          "y": 187.58404962652227,
+          "xpOnField": 39,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 254363.54249429877,
+          "extraDamage": 0
+        },
+        {
+          "at": 920,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 570.8219828105504,
+          "y": 475.31911436281734,
+          "xpOnField": 54,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 259611.74643751793,
+          "extraDamage": 0
+        },
+        {
+          "at": 930,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1091.0860515224822,
+          "y": 592.4074261173855,
+          "xpOnField": 28,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 262580.8487760267,
+          "extraDamage": 0
+        },
+        {
+          "at": 940,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 684.2921122831413,
+          "y": 389.96673389631724,
+          "xpOnField": 56,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 265124.11475392134,
+          "extraDamage": 0
+        },
+        {
+          "at": 950,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1127.9388652648686,
+          "y": 364.26110641154446,
+          "xpOnField": 56,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 270095.0119225231,
+          "extraDamage": 0
+        },
+        {
+          "at": 960,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 607.1752298288229,
+          "y": 271.6723613810899,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 275055.25979131047,
+          "extraDamage": 0
+        },
+        {
+          "at": 970,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 54,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 204.99860631968693,
+          "y": 188.0256083993642,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 278770.1005766162,
+          "extraDamage": 0
+        },
+        {
+          "at": 980,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 55,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 135.49460170633114,
+          "y": 413.1763659944477,
+          "xpOnField": 37,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 284781.97796988365,
+          "extraDamage": 0
+        },
+        {
+          "at": 990,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 56,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 560.1743632770482,
+          "y": 144.84985144200476,
+          "xpOnField": 1878,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 298832.7796589089,
+          "extraDamage": 0
+        },
+        {
+          "at": 1000,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 58,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 597.1327327167052,
+          "y": 219.79306898001374,
+          "xpOnField": 626,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 309521.06381153705,
+          "extraDamage": 0
+        },
+        {
+          "at": 1010,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 183.54227777780625,
+          "level": 59,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 719.7429057719728,
+          "y": 603.8385283925127,
+          "xpOnField": 3034,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 324385.4805402935,
+          "extraDamage": 0
+        },
+        {
+          "at": 1020,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 61,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 573.5311816327901,
+          "y": 642.9476554272527,
+          "xpOnField": 114,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 340557.46455950744,
+          "extraDamage": 0
+        },
+        {
+          "at": 1030,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 62,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 401.41343262669943,
+          "y": 589.2491706174173,
+          "xpOnField": 874,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 366245.7939126158,
+          "extraDamage": 0
+        },
+        {
+          "at": 1040,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 63,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 530.6890819028092,
+          "y": 278.6943007277266,
+          "xpOnField": 41,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 380155.69497392763,
+          "extraDamage": 0
+        },
+        {
+          "at": 1050,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 254.28000000000003,
+          "level": 63,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 895.3063976330138,
+          "y": 574.722871427476,
+          "xpOnField": 161,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 389294.5998286604,
+          "extraDamage": 0
+        },
+        {
+          "at": 1060,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 327.5418956451956,
+          "y": 286.7228714274756,
+          "xpOnField": 116,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 396582.6669259979,
+          "extraDamage": 0
+        },
+        {
+          "at": 1070,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 389.10120342412984,
+          "y": 291.3401871576801,
+          "xpOnField": 145,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 400655.78700549866,
+          "extraDamage": 0
+        },
+        {
+          "at": 1080,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 455.7773936573799,
+          "y": 311.7220048757024,
+          "xpOnField": 285,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 402925.94937493856,
+          "extraDamage": 0
+        },
+        {
+          "at": 1090,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 735.5418956451983,
+          "y": 475.6042558696115,
+          "xpOnField": 29,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 408053.6680719561,
+          "extraDamage": 0
+        },
+        {
+          "at": 1100,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1059.5439876862526,
+          "y": 357.1950929411206,
+          "xpOnField": 145,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 415179.1085149577,
+          "extraDamage": 0
+        },
+        {
+          "at": 1110,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 140.10329546518508,
+          "y": 533.9301576774161,
+          "xpOnField": 59,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 420538.09519902174,
+          "extraDamage": 0
+        },
+        {
+          "at": 1120,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 64,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 639.9855464590938,
+          "y": 573.6946596652343,
+          "xpOnField": 129,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 427145.7438309896,
+          "extraDamage": 0
+        },
+        {
+          "at": 1130,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 65,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 653.4565424834582,
+          "y": 138.28340469569045,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 436400.9362966279,
+          "extraDamage": 0
+        },
+        {
+          "at": 1140,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 65,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 233.21180975528432,
+          "y": 739.5453813665669,
+          "xpOnField": 1489,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 458940.81643074384,
+          "extraDamage": 0
+        },
+        {
+          "at": 1150,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 48.81752894733361,
+          "level": 66,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1055.6107857999066,
+          "y": 87.31814638822705,
+          "xpOnField": 1604,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 475762.13130607153,
+          "extraDamage": 0
+        },
+        {
+          "at": 1160,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 118.72250090539174,
+          "level": 66,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1209.4148263070126,
+          "y": 71.33748237198517,
+          "xpOnField": 5741,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 495360.41574608756,
+          "extraDamage": 0
+        },
+        {
+          "at": 1170,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 78.34198528573536,
+          "level": 67,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 242.28156646176774,
+          "y": 343.4838020778235,
+          "xpOnField": 420,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 513020.462195156,
+          "extraDamage": 0
+        },
+        {
+          "at": 1180,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 10,
+          "level": 68,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 350.89296500631343,
+          "y": 671.9295449327736,
+          "xpOnField": 622,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 536948.0646137137,
+          "extraDamage": 0
+        },
+        {
+          "at": 1190,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 55.547614883943005,
+          "level": 69,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 481.7493500861676,
+          "y": 581.1391770309025,
+          "xpOnField": 240,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 552110.3102670319,
+          "extraDamage": 0
+        },
+        {
+          "at": 1200,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 307.080059705445,
+          "level": 69,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 484.6244584051395,
+          "y": 509.0874452027948,
+          "xpOnField": 90,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 559084.051642139,
+          "extraDamage": 0
+        },
+        {
+          "at": 1210,
+          "hp": 305.41999999999996,
+          "maxHp": 305.41999999999996,
+          "shield": 491.28000000000003,
+          "level": 69,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 539.7121574150672,
+          "y": 347.1183617507316,
+          "xpOnField": 91,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 569068.2831539615,
+          "extraDamage": 0
+        },
+        {
+          "at": 1220,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 460.78389337857993,
+          "level": 69,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 47.71511600789684,
+          "y": 392.3538597629139,
+          "xpOnField": 862,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 578361.702718256,
+          "extraDamage": 0
+        },
+        {
+          "at": 1230,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 416.9587794000265,
+          "level": 69,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 610.1019843598007,
+          "y": 587.4766594028881,
+          "xpOnField": 0,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 585170.6665881439,
+          "extraDamage": 0
+        },
+        {
+          "at": 1240,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 672.4912242215262,
+          "level": 69,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 212.3339110345152,
+          "y": 670.9360748630734,
+          "xpOnField": 43,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 592926.3201445149,
+          "extraDamage": 0
+        },
+        {
+          "at": 1250,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 827.28,
+          "level": 70,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 840.4796179957164,
+          "y": 278.25840533340977,
+          "xpOnField": 31,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 598970.3414820762,
+          "extraDamage": 0
+        },
+        {
+          "at": 1260,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 827.28,
+          "level": 70,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 636.8069990999356,
+          "y": 187.34314575051027,
+          "xpOnField": 124,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 607777.1892060566,
+          "extraDamage": 0
+        },
+        {
+          "at": 1270,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 827.28,
+          "level": 70,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 711.0059171856582,
+          "y": 214.12994231491356,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 614576.5131465873,
+          "extraDamage": 0
+        },
+        {
+          "at": 1280,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 577.28,
+          "level": 70,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 1115.402886805328,
+          "y": 25,
+          "xpOnField": 230,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 623309.928214158,
+          "extraDamage": 0
+        },
+        {
+          "at": 1290,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 606.8739319750232,
+          "level": 71,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 946.7769491037743,
+          "y": 202.50609665440982,
+          "xpOnField": 62,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 654749.9659384461,
+          "extraDamage": 0
+        },
+        {
+          "at": 1300,
+          "hp": 737.42,
+          "maxHp": 737.42,
+          "shield": 470.3774342670006,
+          "level": 72,
+          "phantomLevel": 5,
+          "count": 1,
+          "x": 651.2327932264916,
+          "y": 754.4838020778234,
+          "xpOnField": 323,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 679666.6480928316,
+          "extraDamage": 0
+        },
+        {
+          "at": 1310,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 499.37102619405357,
+          "level": 73,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 777.4308447604402,
+          "y": 380.4034995499675,
+          "xpOnField": 354,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 700403.2620679964,
+          "extraDamage": 0
+        },
+        {
+          "at": 1320,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 4,
+          "level": 73,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1114.0883117545682,
+          "y": 107.75674656824265,
+          "xpOnField": 2625,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 724308.5149810623,
+          "extraDamage": 0
+        },
+        {
+          "at": 1330,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 111.71050423790032,
+          "level": 73,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 843.3395744130387,
+          "y": 81.17453146808509,
+          "xpOnField": 716,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 735896.1272942015,
+          "extraDamage": 0
+        },
+        {
+          "at": 1340,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 365.9575489105305,
+          "level": 74,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 869.086219713513,
+          "y": 223.72940135777458,
+          "xpOnField": 0,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 748867.0920881812,
+          "extraDamage": 0
+        },
+        {
+          "at": 1350,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 623.2045935831607,
+          "level": 74,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 77.16886808956005,
+          "y": 184.88225099391101,
+          "xpOnField": 32,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 761032.7949919787,
+          "extraDamage": 0
+        },
+        {
+          "at": 1360,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 74,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 611.2420279424794,
+          "y": 348.0365799264605,
+          "xpOnField": 32,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 774904.3396787596,
+          "extraDamage": 0
+        },
+        {
+          "at": 1370,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 75,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1008.6059889731591,
+          "y": 141.85429303880167,
+          "xpOnField": 327,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 791155.5848016271,
+          "extraDamage": 0
+        },
+        {
+          "at": 1380,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 75,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 708.5349211612934,
+          "y": 431.00357133747076,
+          "xpOnField": 59,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 808653.709337552,
+          "extraDamage": 0
+        },
+        {
+          "at": 1390,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 75,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 427.7718984698879,
+          "y": 459.8448045156778,
+          "xpOnField": 924,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 820757.9007474215,
+          "extraDamage": 0
+        },
+        {
+          "at": 1400,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 75,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 593.3124830097039,
+          "y": 548.9509729575893,
+          "xpOnField": 96,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 839580.0250382995,
+          "extraDamage": 0
+        },
+        {
+          "at": 1410,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 768.0952846505925,
+          "level": 75,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1107.8206717051692,
+          "y": 382.7535341682818,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 852200.8550014236,
+          "extraDamage": 0
+        },
+        {
+          "at": 1420,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 76,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 501.4567106744903,
+          "y": 381.37528778773003,
+          "xpOnField": 318,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 868898.7632325676,
+          "extraDamage": 0
+        },
+        {
+          "at": 1430,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 76,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 516.6627714351496,
+          "y": 135.24325343176463,
+          "xpOnField": 257,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 885131.7286891891,
+          "extraDamage": 0
+        },
+        {
+          "at": 1440,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 2,
+          "level": 76,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1247.8456710674495,
+          "y": 377.97056274847716,
+          "xpOnField": 2691,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 908729.9417948902,
+          "extraDamage": 0
+        },
+        {
+          "at": 1450,
+          "hp": 439.02,
+          "maxHp": 742.02,
+          "shield": 0,
+          "level": 76,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 75.91168824543142,
+          "y": 306.2670273047572,
+          "xpOnField": 4897,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 934303.2231513155,
+          "extraDamage": 0
+        },
+        {
+          "at": 1460,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 4,
+          "level": 77,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 988.0883117545682,
+          "y": 775,
+          "xpOnField": 2836,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 950114.5334890693,
+          "extraDamage": 0
+        },
+        {
+          "at": 1470,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 2,
+          "level": 78,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1106.1912858163287,
+          "y": 658.6091763446173,
+          "xpOnField": 2181,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 981332.4907061121,
+          "extraDamage": 0
+        },
+        {
+          "at": 1480,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 0,
+          "level": 78,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 105.7669697836908,
+          "y": 771.7103717463358,
+          "xpOnField": 1662,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1005611.3840049516,
+          "extraDamage": 0
+        },
+        {
+          "at": 1490,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 1,
+          "level": 79,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 33.376746058064725,
+          "y": 65.44650788387051,
+          "xpOnField": 1508,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 1041463.0329660921,
+          "extraDamage": 0
+        },
+        {
+          "at": 1500,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 4,
+          "level": 79,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 973.8835371563944,
+          "y": 508.46896791182303,
+          "xpOnField": 1183,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1064796.8829617058,
+          "extraDamage": 0
+        },
+        {
+          "at": 1510,
+          "hp": 636.9041385789149,
+          "maxHp": 742.02,
+          "shield": 0,
+          "level": 79,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1255,
+          "y": 82.19999999999997,
+          "xpOnField": 2408,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1076995.4487576208,
+          "extraDamage": 0
+        },
+        {
+          "at": 1520,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 9,
+          "level": 80,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 559.5243402108568,
+          "y": 202.8437050796698,
+          "xpOnField": 706,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1089725.4434305362,
+          "extraDamage": 0
+        },
+        {
+          "at": 1530,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 244.83402657421547,
+          "level": 80,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 1062.8538407896392,
+          "y": 397.6470791776154,
+          "xpOnField": 273,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1122036.5762494542,
+          "extraDamage": 0
+        },
+        {
+          "at": 1540,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 286.7795766883599,
+          "level": 80,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 598.5367208474131,
+          "y": 340.26385044633514,
+          "xpOnField": 0,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1150483.2418693942,
+          "extraDamage": 0
+        },
+        {
+          "at": 1550,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 550.02662136099,
+          "level": 81,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 328.2440537531813,
+          "y": 593.2016736328417,
+          "xpOnField": 415,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 1186741.7622910175,
+          "extraDamage": 0
+        },
+        {
+          "at": 1560,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 810.2736660336202,
+          "level": 81,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 423.8509253482986,
+          "y": 392.49308550244314,
+          "xpOnField": 215,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1205314.536438961,
+          "extraDamage": 0
+        },
+        {
+          "at": 1570,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 829.12,
+          "level": 81,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 384.7788756934666,
+          "y": 148.69198316334644,
+          "xpOnField": 158,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1237674.6943235314,
+          "extraDamage": 0
+        },
+        {
+          "at": 1580,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 782.72,
+          "level": 82,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 632.7425732542661,
+          "y": 477.4180399094819,
+          "xpOnField": 872,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 1277195.1759616625,
+          "extraDamage": 0
+        },
+        {
+          "at": 1590,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 461.74,
+          "level": 83,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 589.3467412661931,
+          "y": 249.79304260000305,
+          "xpOnField": 574,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1369866.4476665065,
+          "extraDamage": 0
+        },
+        {
+          "at": 1600,
+          "hp": 742.02,
+          "maxHp": 742.02,
+          "shield": 311.00693848779974,
+          "level": 85,
+          "phantomLevel": 6,
+          "count": 1,
+          "x": 441.7501716827089,
+          "y": 686.1098567711608,
+          "xpOnField": 219,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1435007.507034896,
+          "extraDamage": 0
+        },
+        {
+          "at": 1610,
+          "hp": 746.62,
+          "maxHp": 746.62,
+          "shield": 160.20335404736488,
+          "level": 87,
+          "phantomLevel": 7,
+          "count": 1,
+          "x": 468.41711728818234,
+          "y": 422.20057129374504,
+          "xpOnField": 440,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1496991.9390990734,
+          "extraDamage": 0
+        },
+        {
+          "at": 1620,
+          "hp": 746.62,
+          "maxHp": 746.62,
+          "shield": 15.787810400172885,
+          "level": 87,
+          "phantomLevel": 7,
+          "count": 1,
+          "x": 747.3864096952985,
+          "y": 139.5100230728287,
+          "xpOnField": 753,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1578872.03887646,
+          "extraDamage": 0
+        },
+        {
+          "at": 1630,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 1,
+          "level": 88,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 65.44650788387051,
+          "y": 775,
+          "xpOnField": 5638,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1669316.1500458755,
+          "extraDamage": 0
+        },
+        {
+          "at": 1640,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 10,
+          "level": 89,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 343.2361227214034,
+          "y": 651.9252494160232,
+          "xpOnField": 203,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1746027.9531317311,
+          "extraDamage": 0
+        },
+        {
+          "at": 1650,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 258.46137758962203,
+          "level": 90,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 136.0965990697919,
+          "y": 230.29191608269025,
+          "xpOnField": 49,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1814599.4426613103,
+          "extraDamage": 0
+        },
+        {
+          "at": 1660,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 529.5248832780259,
+          "level": 90,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 389.7237849872871,
+          "y": 691.9252923184625,
+          "xpOnField": 1153,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1880145.6573992444,
+          "extraDamage": 0
+        },
+        {
+          "at": 1670,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 794.5883889664298,
+          "level": 91,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 972.1111843845399,
+          "y": 127.8286235139696,
+          "xpOnField": 393,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 1922239.526156035,
+          "extraDamage": 0
+        },
+        {
+          "at": 1680,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 685.8000000000001,
+          "level": 91,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 1133.6604763483892,
+          "y": 441.61396846451953,
+          "xpOnField": 960,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 1980349.8887625479,
+          "extraDamage": 0
+        },
+        {
+          "at": 1690,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 743.8215919340574,
+          "level": 91,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 264.6129626923879,
+          "y": 262.9431472020579,
+          "xpOnField": 1209,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 2030400.0038089936,
+          "extraDamage": 0
+        },
+        {
+          "at": 1700,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 832.8000000000001,
+          "level": 92,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 609.3773710163355,
+          "y": 348.56803187439516,
+          "xpOnField": 69,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 2075100.6657472663,
+          "extraDamage": 0
+        },
+        {
+          "at": 1710,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 641.6403979835144,
+          "level": 92,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 450.78238926081434,
+          "y": 438.0531005401832,
+          "xpOnField": 371,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 2122325.1898024045,
+          "extraDamage": 0
+        },
+        {
+          "at": 1720,
+          "hp": 751.22,
+          "maxHp": 751.22,
+          "shield": 832.8000000000001,
+          "level": 92,
+          "phantomLevel": 8,
+          "count": 1,
+          "x": 756.308808096589,
+          "y": 402.40933914194414,
+          "xpOnField": 105,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 2177010.512760771,
+          "extraDamage": 0
+        },
+        {
+          "at": 1730,
+          "hp": 755.82,
+          "maxHp": 755.82,
+          "shield": 834.6400000000001,
+          "level": 93,
+          "phantomLevel": 9,
+          "count": 1,
+          "x": 666.3668168981558,
+          "y": 110.51317455053717,
+          "xpOnField": 388,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 2249187.0796680334,
+          "extraDamage": 0
+        },
+        {
+          "at": 1740,
+          "hp": 755.82,
+          "maxHp": 755.82,
+          "shield": 649.7100000000002,
+          "level": 94,
+          "phantomLevel": 9,
+          "count": 1,
+          "x": 251.13271648310356,
+          "y": 757.8921950214967,
+          "xpOnField": 2940,
+          "states": [
+            "HUNT"
+          ],
+          "primaryDamage": 2376684.0273347273,
+          "extraDamage": 0
+        },
+        {
+          "at": 1750,
+          "hp": 755.82,
+          "maxHp": 755.82,
+          "shield": 6,
+          "level": 95,
+          "phantomLevel": 9,
+          "count": 1,
+          "x": 648.4686192383157,
+          "y": 425.5181364764465,
+          "xpOnField": 47,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 2486527.3829539125,
+          "extraDamage": 0
+        },
+        {
+          "at": 1760,
+          "hp": 755.82,
+          "maxHp": 755.82,
+          "shield": 6,
+          "level": 96,
+          "phantomLevel": 9,
+          "count": 1,
+          "x": 173.49121608162898,
+          "y": 608.4902129635404,
+          "xpOnField": 94,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 2609806.6772314874,
+          "extraDamage": 0
+        },
+        {
+          "at": 1770,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 1,
+          "level": 97,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 1214.5534921161297,
+          "y": 25,
+          "xpOnField": 6894,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 2722666.8855364793,
+          "extraDamage": 0
+        },
+        {
+          "at": 1780,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 16.73663260173042,
+          "level": 97,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 510.47482297272427,
+          "y": 65.44650788387051,
+          "xpOnField": 8525,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 2849279.08114623,
+          "extraDamage": 0
+        },
+        {
+          "at": 1790,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 28.24446220788559,
+          "level": 99,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 257.6855862950089,
+          "y": 132.54656420244166,
+          "xpOnField": 1997,
+          "states": [
+            "CHASE"
+          ],
+          "primaryDamage": 2987157.160849149,
+          "extraDamage": 0
+        },
+        {
+          "at": 1800,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 151.11396843137646,
+          "level": 99,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 678.3132174529768,
+          "y": 32.36538460977266,
+          "xpOnField": 6930,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 3120685.3113054684,
+          "extraDamage": 0
+        },
+        {
+          "at": 1810,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 375.6037559460336,
+          "level": 99,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 700.8868978382116,
+          "y": 517.8402075824971,
+          "xpOnField": 0,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 3161957.392797184,
+          "extraDamage": 0
+        },
+        {
+          "at": 1820,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 651.9766184381323,
+          "level": 99,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 876.5694855410452,
+          "y": 135.01809622805112,
+          "xpOnField": 0,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 3183277.017427768,
+          "extraDamage": 0
+        },
+        {
+          "at": 1830,
+          "hp": 760.4200000000001,
+          "maxHp": 760.4200000000001,
+          "shield": 836.4800000000001,
+          "level": 99,
+          "phantomLevel": 10,
+          "count": 1,
+          "x": 981.565261210548,
+          "y": 354.19482886998566,
+          "xpOnField": 36,
+          "states": [
+            "ATTACK"
+          ],
+          "primaryDamage": 3210807.130740522,
+          "extraDamage": 0
+        }
+      ],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 1123.7,
+      "xpSeekKinds": {
+        "orb": 67422
+      },
+      "xpOnField": 0,
+      "rewardAudit": {
+        "choices": 115,
+        "primary": 31,
+        "survival": 29,
+        "experience": 8,
+        "primaryOffers": 80,
+        "survivalOffers": 66,
+        "history": [
+          {
+            "at": 3,
+            "level": 2,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 9,
+            "level": 3,
+            "id": "ph_shell",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 20,
+            "level": 4,
+            "id": "ph_dash",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 24,
+            "level": 5,
+            "id": "life",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 40,
+            "level": 6,
+            "id": "ph_dash",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 60,
+            "level": 7,
+            "id": "regen",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 72,
+            "level": 8,
+            "id": "stoneCarapace",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 76,
+            "level": 8,
+            "id": "crossForge",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 80,
+            "level": 9,
+            "id": "stoneFury",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 93,
+            "level": 10,
+            "id": "xp",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 110,
+            "level": 11,
+            "id": "stoneCarapace",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 119,
+            "level": 13,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 123,
+            "level": 14,
+            "id": "meteorSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 127,
+            "level": 14,
+            "id": "ph_bladeDrain",
+            "rarity": "relic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 129,
+            "level": 15,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 137,
+            "level": 16,
+            "id": "armor",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 142,
+            "level": 17,
+            "id": "stoneSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 152,
+            "level": 18,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 157,
+            "level": 18,
+            "id": "ph_bladeLance",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 190,
+            "level": 19,
+            "id": "thermal",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 226,
+            "level": 20,
+            "id": "lavaConstrain",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 236,
+            "level": 21,
+            "id": "static",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 240,
+            "level": 22,
+            "id": "hp",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 246,
+            "level": 23,
+            "id": "regen",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 252,
+            "level": 24,
+            "id": "iceShardScatter",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 260,
+            "level": 25,
+            "id": "iceBall",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 265,
+            "level": 26,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 269,
+            "level": 27,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 306,
+            "level": 28,
+            "id": "rockLegend",
+            "rarity": "legendary",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 336,
+            "level": 29,
+            "id": "hp",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 360,
+            "level": 29,
+            "id": "ph_execution",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 384,
+            "level": 30,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 394,
+            "level": 31,
+            "id": "dashPulse",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 400,
+            "level": 32,
+            "id": "ph_polish",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 409,
+            "level": 33,
+            "id": "ionCompression",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 420,
+            "level": 34,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 453,
+            "level": 34,
+            "id": "rockPower",
+            "rarity": "power",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 474,
+            "level": 35,
+            "id": "stoneFury",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 531,
+            "level": 36,
+            "id": "ph_polish",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 553,
+            "level": 36,
+            "id": "ph_cycle",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 558,
+            "level": 37,
+            "id": "ph_polish",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 577,
+            "level": 38,
+            "id": "empOverdrive",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 600,
+            "level": 39,
+            "id": "ph_shield",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 608,
+            "level": 39,
+            "id": "ph_zenith",
+            "rarity": "unique",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 670,
+            "level": 40,
+            "id": "ph_sync",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 687,
+            "level": 41,
+            "id": "ph_recharge",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 691,
+            "level": 42,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 698,
+            "level": 43,
+            "id": "stoneFury",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 703,
+            "level": 44,
+            "id": "ph_line",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 709,
+            "level": 45,
+            "id": "lightningBolt",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 715,
+            "level": 46,
+            "id": "emberSeed",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 720,
+            "level": 47,
+            "id": "ph_limit",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 728,
+            "level": 48,
+            "id": "magmaFlash",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 734,
+            "level": 49,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 750,
+            "level": 49,
+            "id": "ph_astralCore",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 756,
+            "level": 49,
+            "id": "ph_crescent",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 779,
+            "level": 50,
+            "id": "ph_core",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 834,
+            "level": 51,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 851,
+            "level": 52,
+            "id": "empPulse",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 877,
+            "level": 53,
+            "id": "ph_polish",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 902,
+            "level": 54,
+            "id": "tridentPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 909,
+            "level": 54,
+            "id": "seraph",
+            "rarity": "legendary",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 971,
+            "level": 55,
+            "id": "empAmplifier",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 986,
+            "level": 56,
+            "id": "boltRelay",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 991,
+            "level": 57,
+            "id": "boltConductor",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 997,
+            "level": 58,
+            "id": "empPulse",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1003,
+            "level": 59,
+            "id": "boltRelay",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1011,
+            "level": 60,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1011,
+            "level": 60,
+            "id": "ph_contract",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1016,
+            "level": 61,
+            "id": "empOverdrive",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1024,
+            "level": 62,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1030,
+            "level": 63,
+            "id": "programControl",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1056,
+            "level": 64,
+            "id": "field",
+            "rarity": "power",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1122,
+            "level": 65,
+            "id": "ph_compression",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 1146,
+            "level": 66,
+            "id": "ph_sync",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1164,
+            "level": 67,
+            "id": "ph_line",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 1176,
+            "level": 68,
+            "id": "ph_sync",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1189,
+            "level": 69,
+            "id": "stoneFury",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1215,
+            "level": 69,
+            "id": "eternalBody",
+            "rarity": "unique",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1243,
+            "level": 70,
+            "id": "life",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1253,
+            "level": 70,
+            "id": "ph_afterimage",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1285,
+            "level": 71,
+            "id": "ph_haste",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1295,
+            "level": 72,
+            "id": "meteorArenaBounce",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1309,
+            "level": 73,
+            "id": "ph_assault",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1335,
+            "level": 74,
+            "id": "rocket",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1359,
+            "level": 74,
+            "id": "ph_driver",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1370,
+            "level": 75,
+            "id": "gigaNapalm",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1417,
+            "level": 76,
+            "id": "ph_algorithm",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1455,
+            "level": 77,
+            "id": "storm",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1466,
+            "level": 78,
+            "id": "superDash",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1482,
+            "level": 78,
+            "id": "ph_oath",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1489,
+            "level": 79,
+            "id": "life",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1519,
+            "level": 80,
+            "id": "boltConductor",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1524,
+            "level": 80,
+            "id": "ph_emperor",
+            "rarity": "legendary",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1547,
+            "level": 81,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1579,
+            "level": 82,
+            "id": "chain",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1585,
+            "level": 83,
+            "id": "storm",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1590,
+            "level": 84,
+            "id": "ph_assault",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1597,
+            "level": 85,
+            "id": "empOverdrive",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1603,
+            "level": 86,
+            "id": "ph_darts",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1609,
+            "level": 87,
+            "id": "rocket",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1621,
+            "level": 88,
+            "id": "ph_limit",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1633,
+            "level": 89,
+            "id": "ph_wide",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1642,
+            "level": 90,
+            "id": "ph_recharge",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1660,
+            "level": 90,
+            "id": "ph_novaTempestCore",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1662,
+            "level": 91,
+            "id": "ph_double",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1696,
+            "level": 92,
+            "id": "ph_armor",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1729,
+            "level": 93,
+            "id": "ph_core",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1736,
+            "level": 94,
+            "id": "ph_haste",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1743,
+            "level": 94,
+            "id": "ph_harvest",
+            "rarity": "relic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1748,
+            "level": 95,
+            "id": "ph_recharge",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 1758,
+            "level": 96,
+            "id": "chain",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1766,
+            "level": 97,
+            "id": "ph_hunt",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1781,
+            "level": 98,
+            "id": "static",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 1788,
+            "level": 99,
+            "id": "ph_compression",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 3,
+        "accepted": 3,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 114,
+            "main": "rock",
+            "sub": "wind",
+            "slot": "A",
+            "mainPoints": 7,
+            "subPoints": 4,
+            "accepted": true
+          },
+          {
+            "at": 278,
+            "main": "fire",
+            "sub": "ice",
+            "slot": "B",
+            "mainPoints": 10,
+            "subPoints": 3.5,
+            "accepted": true
+          },
+          {
+            "at": 1053,
+            "main": "thunder",
+            "sub": "dark",
+            "slot": "A",
+            "mainPoints": 25.5,
+            "subPoints": 2,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 78.00000000000001,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 307,
+        "regen": 16.548,
+        "shieldMax": 836.4800000000001
+      },
+      "phantomState": {
+        "level": 10,
+        "count": 1,
+        "ranks": {
+          "shell": 1,
+          "dash": 2,
+          "bladeDrain": 1,
+          "bladeLance": 1,
+          "execution": 1,
+          "polish": 4,
+          "cycle": 1,
+          "shield": 1,
+          "zenith": 1,
+          "sync": 3,
+          "recharge": 3,
+          "line": 2,
+          "limit": 2,
+          "astralCore": 1,
+          "crescent": 1,
+          "core": 2,
+          "contract": 1,
+          "compression": 2,
+          "afterimage": 1,
+          "haste": 2,
+          "assault": 2,
+          "driver": 1,
+          "algorithm": 1,
+          "oath": 1,
+          "emperor": 1,
+          "darts": 1,
+          "wide": 1,
+          "novaTempest": 1,
+          "double": 1,
+          "armor": 1,
+          "harvest": 1,
+          "hunt": 1
+        },
+        "metrics": {
+          "primaryDamage": 3359405.2738370644,
+          "extraDamage": 178452.7474102229,
+          "bladeHits": 10940,
+          "attacks": 4066,
+          "aiMs": 2411.0458759997273
+        },
+        "hp": 760.4200000000001,
+        "shield": 797.9560000000001
+      },
+      "bossRemainingHp": 0,
+      "fullRun": true,
+      "preview": false,
+      "simulationTime": 1832.07,
+      "finalBossAt": 1800,
+      "finalBossSpawned": true,
+      "finalBossSpawnTime": 1800.02,
+      "reachedFinalBoss": true,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 118,
+      "menuSkips": 9,
+      "fusionPolicy": "always",
+      "stopReason": "clear",
+      "clearCount": 1
+    }
+  ]
+}

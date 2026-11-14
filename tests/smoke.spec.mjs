@@ -153,7 +153,7 @@ function rectanglesOverlap(a,b) {
 test('FPS indicator stays clear of desktop HUD and mobile touch controls', async ({ page, isMobile }, testInfo) => {
   const errors = watchFailures(page);
   await page.goto('./');
-  await expect(page).toHaveTitle(/ANKIN DRIFT v14\.0/);
+  await expect(page).toHaveTitle(/ANKIN DRIFT v15\.0/);
   await page.locator('[data-control="' + (isMobile ? 'mobile' : 'desktop') + '"]').click();
   await page.locator('#openOptions').click();
   await page.locator('#showFps').check();
@@ -445,4 +445,21 @@ test('desktop skill hover remains stable and lets the pointer enter the detail p
  const a=await trigger.boundingBox(),b=await tooltip.boundingBox();expect(b.y+b.height<=a.y||b.y>=a.y+a.height).toBe(true);
  await page.mouse.move(b.x+b.width/2,b.y+Math.min(45,b.height/2));await page.waitForTimeout(250);await expect(tooltip).toBeVisible();
  await page.screenshot({path:testInfo.outputPath('neon-hover-stable.png')});await page.mouse.move(0,0);await expect(tooltip).toBeHidden();expect(errors).toEqual([]);
+});
+
+async function installV15Review(page){
+ const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
+ const hook=`window.__v15Review={setup(ids,full=false){selectedShip='phantom';newRun();game.autoBank=true;if(full)for(const [id,n] of [['ph_darts',5],['ph_dartLimit',5],['ph_armada',1]]){const c=skillById(id);for(let i=0;i<n;i++){c.apply(player);const bucket=c.rarity==='legendary'?game.legends:game.skills;bucket[id]=(bucket[id]||0)+1;game.acquisitionLog.push(id);}}choices=ids.map(skillById);game.lastChoice=choices[0].rarity==='relic'?'relic':'unique';state('choice');},info(){return {types:[...player.dartTypes],ghost:game.damageStats.phantomGhost||0,ghostX:player.x,phantomX:player.phantoms[0].x};},ghost(){selectedShip='phantom';newRun();game.autoBank=true;game.spawn=1e9;game.nextBossAt=1e9;game.nextRaidAt=1e9;game.nextRelicAt=1e9;enemies=[];shots=[];hostile=[];hazards=[];boss=null;skillById('ph_astralCore').apply(player);Object.assign(player.phantoms[0],{x:20,y:20});const e=spawnEnemy('drone',{x:player.x+40,y:player.y});Object.assign(e,{hp:1e9,maxHp:1e9,spd:0,dmg:0});refreshEnemyIndex();state('playing');},pose(){mode='paused';player.ghostBlade.cooldown=0;AnkinPhantom.tick(player,1/60,phantomWorld());render();}};`;
+ await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});});
+ await page.goto('./');
+}
+test('v15 UNIQUE descriptions fit every viewport and a real choice grants its typed bonus above twelve darts',async({page},testInfo)=>{
+ const errors=watchFailures(page);await installV15Review(page);await expect(page).toHaveTitle(/ANKIN DRIFT v15\.0/);await page.evaluate(()=>window.__v15Review.setup(['ph_prism','ph_helix','ph_rail','ph_phoenixDarts'],true));
+ const cards=page.locator('.choice[data-choice]');await expect(cards).toHaveCount(4);for(let i=0;i<4;i++)await expect(cards.nth(i).locator('.choice-desc')).toContainText('取得時');
+ const bounds=await cards.evaluateAll(nodes=>nodes.map(n=>({left:n.getBoundingClientRect().left,right:n.getBoundingClientRect().right,client:n.clientWidth,scroll:n.scrollWidth})));for(const b of bounds){expect(b.left).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(testInfo.project.use.viewport.width+1);expect(b.scroll).toBeLessThanOrEqual(b.client+1);}
+ await page.screenshot({path:testInfo.outputPath('v15-unique-choices.png'),fullPage:true});const before=await page.evaluate(()=>window.__v15Review.info());expect(before.types.length).toBe(12);await cards.first().click();const after=await page.evaluate(()=>window.__v15Review.info());expect(after.types.length).toBe(13);expect(after.types.filter(t=>t==='shot').length).toBe(before.types.filter(t=>t==='shot').length+1);expect(errors).toEqual([]);
+});
+test('v15 ghost visibly swings its own blade and relic descriptions fit mobile cards',async({page},testInfo)=>{
+ const errors=watchFailures(page);await installV15Review(page);await page.evaluate(()=>window.__v15Review.setup(['ph_astralCore','ph_execution','ph_afterimage']));await expect(page.locator('.choice-desc').first()).toContainText('ゴースト本体');await page.screenshot({path:testInfo.outputPath('v15-relic-choices.png'),fullPage:true});
+ await page.evaluate(()=>window.__v15Review.ghost());await expect.poll(async()=>page.evaluate(()=>window.__v15Review.info().ghost)).toBeGreaterThan(0);await page.evaluate(()=>window.__v15Review.pose());await page.screenshot({path:testInfo.outputPath('v15-ghost-blade.png')});expect(errors).toEqual([]);
 });

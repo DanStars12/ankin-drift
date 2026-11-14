@@ -1,0 +1,466 @@
+{
+  "logicOnly": true,
+  "fps": null,
+  "encounters": [
+    {
+      "ship": "shot",
+      "build": "base",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 44.785333333333334,
+      "afterDps": 44.785333333333334,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 2015.3333333333333,
+      "afterDamage": 2015.3333333333333
+    },
+    {
+      "ship": "laser",
+      "build": "base",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 44.455000000000005,
+      "afterDps": 44.455000000000005,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 2000.479,
+      "afterDamage": 2000.479
+    },
+    {
+      "ship": "charge",
+      "build": "base",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 32.44133333333333,
+      "afterDps": 32.44133333333333,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 2,
+      "afterAlive": 2,
+      "beforeDamage": 1366.1693333333333,
+      "afterDamage": 1366.1693333333333
+    },
+    {
+      "ship": "drill",
+      "build": "base",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 41.60266666666667,
+      "afterDps": 41.60266666666667,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 1872.0996666666667,
+      "afterDamage": 1872.0996666666667
+    },
+    {
+      "ship": "dog",
+      "build": "base",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 33.89633333333333,
+      "afterDps": 33.89633333333333,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 1525.3333333333333,
+      "afterDamage": 1525.3333333333333
+    },
+    {
+      "ship": "phantom",
+      "build": "base",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 40.348000000000006,
+      "afterDps": 44.53366666666667,
+      "dpsChangePercent": 10.373913618188425,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 1815.6666666666667,
+      "afterDamage": 2004.0
+    },
+    {
+      "ship": "shot",
+      "build": "base",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 67.446,
+      "afterDps": 67.446,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 471.0,
+      "afterDamage": 471.0
+    },
+    {
+      "ship": "laser",
+      "build": "base",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 61.435,
+      "afterDps": 61.435,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 471.0,
+      "afterDamage": 471.0
+    },
+    {
+      "ship": "charge",
+      "build": "base",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 75.16,
+      "afterDps": 75.16,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 471.0,
+      "afterDamage": 471.0
+    },
+    {
+      "ship": "drill",
+      "build": "base",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 82.632,
+      "afterDps": 82.632,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 471.0,
+      "afterDamage": 471.0
+    },
+    {
+      "ship": "dog",
+      "build": "base",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 63.649,
+      "afterDps": 63.649,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 471.0,
+      "afterDamage": 471.0
+    },
+    {
+      "ship": "phantom",
+      "build": "base",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 51.758,
+      "afterDps": 57.91,
+      "dpsChangePercent": 11.88608524286099,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 471.0,
+      "afterDamage": 471.0
+    },
+    {
+      "ship": "shot",
+      "build": "representative",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 316.36100000000005,
+      "afterDps": 316.36100000000005,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 0,
+      "afterAlive": 0,
+      "beforeDamage": 5987.360000000001,
+      "afterDamage": 5987.360000000001
+    },
+    {
+      "ship": "laser",
+      "build": "representative",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 230.37400000000002,
+      "afterDps": 230.37400000000002,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 0,
+      "afterAlive": 0,
+      "beforeDamage": 4843.524333333334,
+      "afterDamage": 4843.524333333334
+    },
+    {
+      "ship": "charge",
+      "build": "representative",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 252.62933333333334,
+      "afterDps": 252.62933333333334,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 0,
+      "afterAlive": 0,
+      "beforeDamage": 2917.8700000000003,
+      "afterDamage": 2917.8700000000003
+    },
+    {
+      "ship": "drill",
+      "build": "representative",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 190.0596666666667,
+      "afterDps": 190.0596666666667,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 0,
+      "afterAlive": 0,
+      "beforeDamage": 5188.713333333333,
+      "afterDamage": 5188.713333333333
+    },
+    {
+      "ship": "dog",
+      "build": "representative",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 319.433,
+      "afterDps": 319.433,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 0,
+      "afterAlive": 0,
+      "beforeDamage": 6483.286666666667,
+      "afterDamage": 6483.286666666667
+    },
+    {
+      "ship": "phantom",
+      "build": "representative",
+      "scenario": "live-pack",
+      "seeds": 3,
+      "beforeDps": 353.4916666666666,
+      "afterDps": 340.16633333333334,
+      "dpsChangePercent": -3.7696315330394192,
+      "beforeAlive": 2,
+      "afterAlive": 3,
+      "beforeDamage": 14225.645333333334,
+      "afterDamage": 15307.493333333332
+    },
+    {
+      "ship": "shot",
+      "build": "representative",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 557.8083333333334,
+      "afterDps": 557.8083333333334,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 10017.0,
+      "afterDamage": 10017.0
+    },
+    {
+      "ship": "laser",
+      "build": "representative",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 273.85566666666665,
+      "afterDps": 273.85566666666665,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 10017.0,
+      "afterDamage": 10017.0
+    },
+    {
+      "ship": "charge",
+      "build": "representative",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 267.65766666666667,
+      "afterDps": 267.65766666666667,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 10017.0,
+      "afterDamage": 10017.0
+    },
+    {
+      "ship": "drill",
+      "build": "representative",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 70.83933333333333,
+      "afterDps": 70.83933333333333,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 0,
+      "afterAlive": 0,
+      "beforeDamage": 3010.6803333333337,
+      "afterDamage": 3010.6803333333337
+    },
+    {
+      "ship": "dog",
+      "build": "representative",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 168.71866666666665,
+      "afterDps": 168.71866666666665,
+      "dpsChangePercent": 0.0,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 7592.342333333334,
+      "afterDamage": 7592.342333333334
+    },
+    {
+      "ship": "phantom",
+      "build": "representative",
+      "scenario": "live-boss",
+      "seeds": 3,
+      "beforeDps": 276.2183333333333,
+      "afterDps": 276.79400000000004,
+      "dpsChangePercent": 0.20841001381759483,
+      "beforeAlive": 3,
+      "afterAlive": 3,
+      "beforeDamage": 10017.0,
+      "afterDamage": 10017.0
+    }
+  ],
+  "early": [
+    {
+      "ship": "shot",
+      "seeds": 5,
+      "beforeDps": 93.6686,
+      "afterDps": 93.6686,
+      "beforeLevel": 11.6,
+      "afterLevel": 11.6,
+      "beforeAlive": 5,
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
+    },
+    {
+      "ship": "laser",
+      "seeds": 5,
+      "beforeDps": 114.3732,
+      "afterDps": 114.3732,
+      "beforeLevel": 11.0,
+      "afterLevel": 11.0,
+      "beforeAlive": 5,
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
+    },
+    {
+      "ship": "charge",
+      "seeds": 5,
+      "beforeDps": 96.18440000000001,
+      "afterDps": 96.18440000000001,
+      "beforeLevel": 10.8,
+      "afterLevel": 10.8,
+      "beforeAlive": 5,
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
+    },
+    {
+      "ship": "drill",
+      "seeds": 5,
+      "beforeDps": 120.43520000000001,
+      "afterDps": 120.43520000000001,
+      "beforeLevel": 13.0,
+      "afterLevel": 13.0,
+      "beforeAlive": 5,
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
+    },
+    {
+      "ship": "dog",
+      "seeds": 5,
+      "beforeDps": 88.3252,
+      "afterDps": 88.3252,
+      "beforeLevel": 11.8,
+      "afterLevel": 11.8,
+      "beforeAlive": 5,
+      "afterAlive": 5,
+      "beforeBladeDps": 0.0,
+      "afterBladeDps": 0.0
+    },
+    {
+      "ship": "phantom",
+      "seeds": 5,
+      "beforeDps": 96.6312,
+      "afterDps": 94.578,
+      "beforeLevel": 11.0,
+      "afterLevel": 11.0,
+      "beforeAlive": 5,
+      "afterAlive": 5,
+      "beforeBladeDps": 54.67795733333336,
+      "afterBladeDps": 54.694808266666705
+    }
+  ],
+  "progression": [
+    {
+      "label": "baseline",
+      "seeds": 3,
+      "meanSeconds": 1284.83,
+      "meanLevel": 63.333333333333336,
+      "clears": 0,
+      "stops": [
+        "time-limit",
+        "dead",
+        "dead"
+      ],
+      "seconds": [
+        1860,
+        1156.02,
+        838.47
+      ]
+    },
+    {
+      "label": "ai-control",
+      "seeds": 5,
+      "meanSeconds": 867.0120000000001,
+      "meanLevel": 46.4,
+      "clears": 1,
+      "stops": [
+        "dead",
+        "dead",
+        "dead",
+        "clear",
+        "dead"
+      ],
+      "seconds": [
+        252.63,
+        1138.98,
+        857.37,
+        1819.95,
+        266.13
+      ]
+    },
+    {
+      "label": "candidate",
+      "seeds": 5,
+      "meanSeconds": 1249.02,
+      "meanLevel": 64.0,
+      "clears": 1,
+      "stops": [
+        "dead",
+        "dead",
+        "clear",
+        "dead",
+        "dead"
+      ],
+      "seconds": [
+        993.05,
+        1302.7,
+        1812.03,
+        1449,
+        688.32
+      ]
+    },
+    {
+      "label": "fix-only",
+      "seeds": 1,
+      "meanSeconds": 1832.07,
+      "meanLevel": 99.0,
+      "clears": 1,
+      "stops": [
+        "clear"
+      ],
+      "seconds": [
+        1832.07
+      ]
+    }
+  ]
+}
