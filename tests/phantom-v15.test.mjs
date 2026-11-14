@@ -54,3 +54,6 @@ test('execution waves stay bounded, cannot recursively execute, and relics are n
 test('v15 title, manifest, cache and PHANTOM tag text share the same release and skill rules',()=>{
  const h=setup(),html=readFileSync(new URL('../index.html',import.meta.url),'utf8'),sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');assert.match(html,/<title>ANKIN DRIFT v15\.0/);assert.match(JSON.parse(readFileSync(new URL('../manifest.webmanifest',import.meta.url),'utf8')).name,/v15\.0/);assert.match(sw,/mobile-v15-0/);const detail=h.api.attrDetails('ブレード');assert.match(detail.desc,/三角刃/);assert.ok(!detail.desc.includes('旋回'));assert.match(h.api.attrDetails('ファントムダーツ').details.join(' ') ,/専用枠/);for(const id of Object.keys(typed)){const c=h.api.catalog.find(c=>c.id===id);assert.ok(c.desc.includes('取得時'));assert.ok(c.desc.includes('+1'));}
 });
+test('shared NOVA unique wording preserves the real PHANTOM radius cap instead of promising full-screen clearing',()=>{
+ const h=setup(),p=h.api.player;h.api.acquire('unboundNova');const c=h.api.catalog.find(c=>c.id==='unboundNova');assert.ok(!c.desc.includes('全画面'));assert.match(c.desc,/上限/);let radius=0;const w=h.api.phantomWorld();w.clear=(x,y,r)=>{radius=r;};h.ctx.AnkinPhantom.nova(p,w);assert.equal(radius,480);
+});

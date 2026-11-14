@@ -3316,7 +3316,7 @@ LEGENDS.push(
 const UNIQUE_SKILLS=[
  skill('limitBreak','unique','♾️','インフィニット・バレル','弾数上限32・最低射撃間隔0.025秒に拡張。弾数+8。',p=>{p.limitShot=32;p.limitRate=.025;p.multishot=Math.min(32,p.multishot+8);p.rate=Math.max(p.limitRate,p.rate*.6)},{excludeShips:["laser","charge"]}),
  skill('hiveMind','unique','🛸','ドローン・オーバーロード','僚機上限を28に拡張。僚機+8、射撃間隔を短縮。',p=>{p.limitDrones=28;p.droneCount=Math.min(28,p.droneCount+8);p.droneBoost=(p.droneBoost||1)*1.7}),
- skill('unboundNova','unique','🪐','シンギュラリティ・ノヴァ','NOVAを全画面化。基礎威力+450、周囲へ継続ダメージの余波を追加。威力はNOVAの上限補正を受ける。',p=>{p.novaRadius=10000;p.novaDamage+=450;p.voidHalo+=3;if(p.shipType==='drill')p.drillNovaBonusTime=Math.min(2,(p.drillNovaBonusTime||0)+.8)}),
+ skill('unboundNova','unique','🪐','シンギュラリティ・ノヴァ','NOVAを広範囲化。基礎威力+450、継続ダメージの余波を追加。威力・範囲は機体ごとの上限補正を受ける。',p=>{p.novaRadius=10000;p.novaDamage+=450;p.voidHalo+=3;if(p.shipType==='drill')p.drillNovaBonusTime=Math.min(2,(p.drillNovaBonusTime||0)+.8)}),
  skill('eternalBody','unique','🧬','フェニックス・リアクター','最大HP+450、シールド+350、常時再生+12/秒、蘇生+1。',p=>{p.maxHp+=450;p.hp=p.maxHp;p.shieldMax+=350;p.shield+=350;p.regen+=12;p.phoenix++}),
  skill('divineNetwork','unique','⚡','サンダー・ドミネーター','電磁パルスの範囲+80・威力+340、雷連鎖射程と威力を強化。',p=>{p.empRadius=Math.max(96,p.empRadius)+80;p.empDps+=340;p.chainDamage+=230;p.arcNova+=3}),
  skill('overlord','unique','👁️','オーバーロード・システム','基本攻撃力+250、経験値倍率+0.8、ボスへの基本攻撃ダメージ2倍。',p=>{p.dmg+=250;p.xpBonus+=.8;p.bossBane*=2})
