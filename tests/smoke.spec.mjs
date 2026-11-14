@@ -378,7 +378,7 @@ test('PHANTOM title and weapon guide render without losing navigation or changin
  const errors=watchFailures(page);await page.goto('./');await page.locator('[data-ship="phantom"]').click();await page.locator('#openTitleLab').click();
  const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));await page.locator('[data-tab="visual"]').click();
  await expect(page.locator('[data-visual-id="phantomBlade"]')).toBeVisible();await expect(page.locator('#weaponVisualCanvas')).toBeVisible();
- for(const id of ['phantomParade','phantomReaper','phantomFlash','phantomRequiem','phantomDarts','phantomNova']){
+ for(const id of ['phantomParade','phantomReaper','phantomFlash','phantomRequiem','phantomDarts','phantomDartShot','phantomDartLaser','phantomDartCharge','phantomDartSupport','phantomDartFollow','phantomNova']){
   await page.locator('[data-visual-id="'+id+'"]').click();await expect(page.locator('[data-visual-id="'+id+'"]')).toHaveAttribute('aria-pressed','true');
  }
  await page.locator('[data-visual-ship="common"]').click();for(const id of ['fearAura','programControl'])await page.locator('[data-visual-id="'+id+'"]').click();
@@ -415,8 +415,34 @@ test('PHANTOM DARTS owned counts and DARK card colors fit every viewport',async(
  await expect(cards.nth(0).locator('.choice-owned')).toHaveText('現在 2個 / 最大5個');
  await expect(cards.nth(1).locator('.choice-owned')).toHaveText('現在 1個 / 最大5個');
  await expect(cards.nth(2).locator('.choice-owned')).toHaveText('現在 0個 / 最大4個');
- await expect(cards.nth(1)).toHaveClass(/element-dark/);await expect(cards.nth(2).locator('.attr-dark')).toBeVisible();
+ await expect(cards.nth(1)).not.toHaveClass(/element-dark/);await expect(cards.nth(1).locator('[data-choice-element="dark"]')).toBeVisible();await expect(cards.nth(2).locator('.attr-dark')).toBeVisible();
  const bounds=await cards.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width,scroll:n.scrollWidth,client:n.clientWidth};}));
  for(const b of bounds){expect(b.left).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(testInfo.project.use.viewport.width+1);expect(b.scroll).toBeLessThanOrEqual(b.client+1);}
  await page.screenshot({path:testInfo.outputPath('phantom-darts-choice.png'),fullPage:true});expect(errors).toEqual([]);
+});
+
+async function installNeonReview(page){
+ const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
+ const hook=`window.__neonReview={choice(ids){selectedShip='phantom';newRun();choices=ids.map(skillById);game.lastChoice='normal';state('choice');},colors(){return Object.fromEntries(choices.map(c=>[c.id,{rarity:c.rarity,element:elementFromCard(c)}]));}};`;
+ await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});});
+ await page.goto('./');
+}
+test('all six attribute gradients sit below descriptions while rarity keeps the card border',async({page},testInfo)=>{
+ const errors=watchFailures(page);await installNeonReview(page);
+ for(const ids of [['fearAura','emberSeed','coldCoil','chain'],['windOrigin','meteorSeed','ph_darts','ph_novaCycle']]){
+  await page.evaluate(ids=>window.__neonReview.choice(ids),ids);const cards=page.locator('.choice[data-choice]');await expect(cards).toHaveCount(4);
+  const result=await cards.evaluateAll(nodes=>nodes.map(n=>{const band=n.querySelector('.choice-element-band'),desc=n.querySelector('.choice-desc'),cs=getComputedStyle(n);return {element:band?.dataset.choiceElement,below:!band||band.getBoundingClientRect().top>=desc.getBoundingClientRect().bottom-1,gradient:band?getComputedStyle(band).backgroundImage:'',border:cs.borderTopColor,rarity:cs.getPropertyValue('--rarity').trim(),left:n.getBoundingClientRect().left,right:n.getBoundingClientRect().right};}));
+  for(let i=0;i<result.length;i++){const r=result[i];expect(r.below).toBe(true);expect(r.left).toBeGreaterThanOrEqual(0);expect(r.right).toBeLessThanOrEqual(testInfo.project.use.viewport.width+1);if(r.element)expect(r.gradient).toContain('linear-gradient');expect(r.border).not.toBe('rgba(0, 0, 0, 0)');}
+  const attrs=ids.filter(id=>!id.startsWith('ph_')).length;await expect(page.locator('.choice-element-band')).toHaveCount(attrs);
+ }
+ await page.screenshot({path:testInfo.outputPath('neon-attribute-rarity.png'),fullPage:true});expect(errors).toEqual([]);
+});
+test('desktop skill hover remains stable and lets the pointer enter the detail panel',async({page,isMobile},testInfo)=>{
+ test.skip(isMobile,'Mouse hover regression uses a fine pointer.');const errors=watchFailures(page);await installNeonReview(page);await page.evaluate(()=>window.__neonReview.choice(['ph_assault','ph_hunt','ph_darts','ph_shell']));
+ const trigger=page.locator('#panel [data-skill-peek]').first();await expect(trigger).toBeVisible();
+ await page.evaluate(()=>{window.__peekHidden=[];new MutationObserver(()=>window.__peekHidden.push(document.querySelector('#skillPeekPanel').hidden)).observe(document.querySelector('#skillPeekPanel'),{attributes:true,attributeFilter:['hidden']});});
+ await trigger.hover();const tooltip=page.locator('#skillPeekPanel');await expect(tooltip).toBeVisible();await page.waitForTimeout(650);expect(await page.evaluate(()=>window.__peekHidden.filter(Boolean).length)).toBe(0);
+ const a=await trigger.boundingBox(),b=await tooltip.boundingBox();expect(b.y+b.height<=a.y||b.y>=a.y+a.height).toBe(true);
+ await page.mouse.move(b.x+b.width/2,b.y+Math.min(45,b.height/2));await page.waitForTimeout(250);await expect(tooltip).toBeVisible();
+ await page.screenshot({path:testInfo.outputPath('neon-hover-stable.png')});await page.mouse.move(0,0);await expect(tooltip).toBeHidden();expect(errors).toEqual([]);
 });

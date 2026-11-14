@@ -2,7 +2,7 @@
 (function(root){
 'use strict';
 const boss=e=>['minor','major','unique','ultimate','ultimatePart','relic'].includes(e.type);
-function init(p){p.darkPower=0;p.darkHaste=0;p.darkDread=0;p.darkCommand=0;p.darkResonance=0;p.darkTerror=0;p.darkFear=0;p.darkVirus=0;p.darkFearTimer=0;p.darkVirusTimer=0;p.darkFields=[];p.darkAllies=[];p.darkVisuals=[];}
+function init(p){p.darkVirusPower=0;p.darkVirusDuration=0;p.darkPower=0;p.darkHaste=0;p.darkDread=0;p.darkCommand=0;p.darkResonance=0;p.darkTerror=0;p.darkFear=0;p.darkVirus=0;p.darkFearTimer=0;p.darkVirusTimer=0;p.darkFields=[];p.darkAllies=[];p.darkVisuals=[];}
 function fear(e,p,seconds=2){if(e.dead)return;if(boss(e)){e.darkWeak=Math.max(e.darkWeak||0,seconds*.6);return;}if((e.fearResist||0)>0)return;e.fear=Math.max(e.fear||0,seconds+(p.darkDread||0)*.25);e.fearResist=seconds+2;}
 function convert(e,p,random){if(boss(e)||e.darkConverted||p.darkAllies.length>=3||random()>.3)return false;e.darkConverted=true;
  p.darkAllies.push({x:e.x,y:e.y,r:e.r,type:e.type,color:'#b5a3f5',hp:Math.max(30,Math.min(500,e.maxHp*.5)),life:5,cooldown:0,spd:Math.min(250,e.spd||100),damage:Math.min(160,Math.max(18,e.dmg*2))*(1+(p.darkCommand||0)*.15)});return true;
@@ -24,10 +24,10 @@ function tick(p,dt,w){
    if(d>r+e.r||Math.abs(delta)>Math.PI*.38)continue;const damage=(24+p.darkFear*12)*(1+(p.darkPower||0)*.15);w.damage(e,damage,{special:true,source:'darkFear',origin:{x:o.x,y:o.y}});if(w.random()<Math.min(.6,.3+(p.darkFear-1)*.04))fear(e,p);if(p.darkTerror)e.darkWeak=Math.max(e.darkWeak||0,1.5);affect(e,p,damage,'A',w);
   }
  }}
- if(p.darkVirus>0){p.darkVirusTimer=(p.darkVirusTimer||0)-dt;if(p.darkVirusTimer<=0){p.darkVirusTimer=Math.max(3.5,5.5-(p.darkHaste||0)*.35);const o=w.origin,target=w.target(o.x,o.y);if(target){const combo=w.combo('dark','B');p.darkFields.push({x:target.x,y:target.y,size:55+p.darkVirus*5+(combo?.sub==='rock'?25:0),life:3,tick:0,angle:0});if(p.darkFields.length>3)p.darkFields.shift();}}}
+ if(p.darkVirus>0){p.darkVirusTimer=(p.darkVirusTimer||0)-dt;if(p.darkVirusTimer<=0){p.darkVirusTimer=Math.max(3.5,5.5-(p.darkHaste||0)*.35);const o=w.origin,target=w.target(o.x,o.y);if(target){const combo=w.combo('dark','B');p.darkFields.push({x:target.x,y:target.y,size:55+p.darkVirus*5+(combo?.sub==='rock'?25:0),life:3+(p.darkVirusDuration||0)*.75,tick:0,angle:0});if(p.darkFields.length>3)p.darkFields.shift();}}}
  for(const f of p.darkFields){f.life-=dt;f.angle=((f.angle||0)+dt*.7)%(Math.PI*2);f.tick-=dt;if(f.tick<=0){f.tick+=.25;
   for(const e of w.candidates(f.x,f.y,f.size*1.5+70)){const dx=e.x-f.x,dy=e.y-f.y,c=Math.cos(f.angle),s=Math.sin(f.angle);if(e.dead||Math.abs(dx*c+dy*s)>f.size+e.r||Math.abs(-dx*s+dy*c)>f.size+e.r)continue;
-   const damage=(24+p.darkVirus*14)*.25*(1+(p.darkPower||0)*.15)*(p.darkResonance&&e.fear>0?1.25:1);w.damage(e,damage,{special:true,source:'darkVirus',origin:{x:f.x,y:f.y}});affect(e,p,damage,'B',w);if(e.dead)convert(e,p,w.random);
+   const damage=(24+p.darkVirus*14)*.25*(1+(p.darkPower||0)*.15)*(1+(p.darkVirusPower||0)*.25)*(p.darkResonance&&e.fear>0?1.25:1);w.damage(e,damage,{special:true,source:'darkVirus',origin:{x:f.x,y:f.y}});affect(e,p,damage,'B',w);if(e.dead)convert(e,p,w.random);
   }
  }}p.darkFields=p.darkFields.filter(f=>f.life>0);
  for(const a of p.darkAllies){a.life-=dt;a.cooldown-=dt;if(a.hp<=0||a.life<=0)continue;let target=null,best=600**2;
