@@ -20,7 +20,7 @@ test('real title PAD launch keeps animation and combat alive across guide and ev
  for(const ship of ['shot','laser','charge','drill','dog','phantom']){
   if(ship!=='shot')await page.reload();
   await page.locator('[data-control="desktop"]').click();await page.locator('[data-ship="'+ship+'"]').click();
-  await neutral(page);await padGoto(page,'start');await button(page,1);
+  await neutral(page);await button(page,13);await padGoto(page,'start');await button(page,1);
   if(await page.locator('#guideContinue').isVisible()){await neutral(page);await button(page,1);}
   await expect(page.locator('#overlay')).toBeHidden();
   const before=await page.locator('#hudWave').innerText();await page.waitForTimeout(1200);
