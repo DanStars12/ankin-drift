@@ -1,0 +1,33 @@
+{
+  "kind": "synthetic-engine-only",
+  "gameSeconds": 30,
+  "enemyCount": 200,
+  "bossCount": 3,
+  "phantoms": 5,
+  "phantomLevel": 10,
+  "evolutions": [
+    "ph_eternal",
+    "ph_grandParade",
+    "ph_reaper",
+    "ph_novaTempest",
+    "ph_flash",
+    "ph_novaAccel",
+    "ph_requiem",
+    "ph_veil",
+    "ph_novaSanctuary",
+    "ph_field"
+  ],
+  "hits": 187145,
+  "damage": 64764944.95948544,
+  "primaryElementCallbacks": 1276,
+  "maxQueue": 23,
+  "maxVisuals": 24,
+  "maxDarts": 25,
+  "maxDartProjectiles": 256,
+  "maxDartVisuals": 60,
+  "hostLogicMs": 66956.118015,
+  "rendered": false,
+  "fps": null,
+  "phantomEngineHash": "591c8c23dba478882e365fc014c16ee9ffb9dd1f3e8453486e758108035b2c50",
+  "limits": "固定敵200体（ボス3体）、5ファントム＋25ダーツ、30ゲーム秒の合成負荷。描画FPS・実戦勝率は測定していない。"
+}

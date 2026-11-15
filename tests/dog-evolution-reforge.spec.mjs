@@ -70,7 +70,7 @@ test('five DOG attributes have explicit owners and sealed cards stay out of ever
   }
   return{before,results};
  });
- expect(result.before.mutationIds).toHaveLength(5);expect(result.before.evolutions).toHaveLength(5);
+ expect(result.before.mutationIds).toEqual(expect.arrayContaining(['dogMutWhale','dogMutMoon','dogMutViper','dogMutNineTail','dogMutHam','darkMutRing','darkMutCitadel','dogMutBat','dogMutBear']));expect(result.before.mutationIds).toHaveLength(9);expect(result.before.evolutions).toHaveLength(5);
  for(const r of Object.values(result.results))expect(r).toEqual({typed:true,excluded:true,bone:true});
  expect(errors).toEqual([]);
 });
