@@ -1118,6 +1118,7 @@ body.pilot-mobile #overlay .panel.choice-panel{width:calc(100vw - 8px);height:ca
 .control-focus{outline:3px solid #83ffe3!important;outline-offset:3px;box-shadow:0 0 20px #61f4d86b!important}
 .pc-control-settings{width:100%;text-align:left;padding:14px;border:1px solid #4d8298;border-radius:12px;background:#122438;margin:15px 0;box-sizing:border-box}
 .pc-control-settings p{font-size:12px;line-height:1.7;color:#c1dbe8;overflow-wrap:anywhere}.binding-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:7px;align-items:center;font-size:12px}.binding-grid button,.pc-control-settings>button{padding:8px 6px;min-height:36px;border:1px solid #518899;border-radius:7px;background:#1b374c;color:#edfffb;font-weight:700;cursor:pointer;overflow-wrap:anywhere}.binding-notice{font-size:12px;padding:9px;background:#17473f;border-radius:7px;margin:9px 0}.pc-control-settings label{display:flex;align-items:center;gap:12px;margin:15px 0;font-size:12px}.pc-control-settings input[type=range]{min-width:0;flex:1}.control-readout{padding:10px;border:1px solid #6ce5cb;border-radius:8px;background:#14394a;font-size:12px;line-height:1.7;text-align:left}.pc-input-help{margin:12px 0;font-size:11px;line-height:1.8}.control-peek{left:50%!important;top:50%!important;transform:translate(-50%,-50%);width:min(650px,calc(100vw - 28px))!important;max-height:85dvh!important;box-shadow:0 0 0 100vmax #040b16bb,0 15px 50px #000c!important}.skill-peek-panel.control-peek.is-touch{right:auto!important;bottom:auto!important}.binding-grid span{overflow-wrap:anywhere}@media(max-width:570px){.binding-grid{font-size:10px;gap:5px}.pc-control-settings{padding:9px}.binding-grid button{font-size:11px}}
+#runtimeNotice{position:fixed;left:12px;right:12px;bottom:12px;z-index:10002;padding:10px 14px;border:1px solid #ffc77e;border-radius:9px;background:#342518f5;color:#fff2dc;font-size:12px;line-height:1.6;pointer-events:none}#runtimeNotice[hidden]{display:none}
 </style>
 <style>
 .choice-pick{display:none}
@@ -1341,6 +1342,15 @@ function resize(){
 addEventListener('resize',resize);
 const SETTINGS_KEY='ankin_drift_v71_settings';
 const settings=(()=>{try{const x=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');return{bgm:clamp(Number.isFinite(+x.bgm)?+x.bgm:70,0,100),sfx:clamp(Number.isFinite(+x.sfx)?+x.sfx:70,0,100),bgmMuted:x.bgmMuted===true,sfxMuted:x.sfxMuted===true,fx:['high','medium','low','simple'].includes(x.fx)?x.fx:'medium',quality:['high','balanced','low'].includes(x.quality)?x.quality:(controlMode==='mobile'?'balanced':'high'),fps:[0,30,45,60,90,120].includes(Number(x.fps))?Number(x.fps):60,showFps:x.showFps===true}}catch{return{bgm:70,sfx:70,bgmMuted:false,sfxMuted:false,fx:'medium',quality:controlMode==='mobile'?'balanced':'high',fps:60,showFps:false}}})();
+const runtimeFaults=[];let runtimeFaultCount=0;
+function reportRuntimeFault(error,stage){
+ runtimeFaultCount++;const message=String(error?.message||error),previous=runtimeFaults.at(-1);
+ if(previous&&previous.message===message&&previous.stage===stage)previous.count++;else{runtimeFaults.push({stage,message,stack:String(error?.stack||'').slice(0,2000),mode,at:new Date().toISOString(),count:1});if(runtimeFaults.length>8)runtimeFaults.shift();console.warn('ANKIN recovered '+stage,error);}
+ let note=U('runtimeNotice');if(!note){note=document.createElement('div');note.id='runtimeNotice';note.setAttribute('role','alert');document.body.appendChild(note)}
+ note.hidden=false;note.textContent='処理エラーを検出し、一時停止しました。設定の「負荷ログ保存」で原因を確認できます。';
+}
+function runtimeDiagnostic(){return {faultCount:runtimeFaultCount,faults:runtimeFaults.map(f=>({...f}))};}
+window.ankinRuntimeStatus=runtimeDiagnostic;
 function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}catch{}}
 // The settings object must be initialized before the first resize.
 resize();
@@ -2217,7 +2227,7 @@ function bindSafeChoice(el){
     if(mode==='choice')choose(index); // PC mouse and keyboard / accessibility
   });
 }
-function state(s){if(s!==mode){last=0;simAccumulator=0;pcControls?.clear();}if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay();positionMusicToast();if(soundtrackUnlocked)playMusic()}
+function state(s){if(s!==mode){last=0;simAccumulator=0;pcControls?.clear();}if(s==='playing'&&U('runtimeNotice'))U('runtimeNotice').hidden=true;if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay();positionMusicToast();if(soundtrackUnlocked)playMusic()}
 function applyShipPreset(p){if(p.shipType==='phantom'){p.hp=95;p.maxHp=95;p.spd=240;p.hitR=5.5;p.novaRadius=180;p.shieldMax=15;p.shield=15;p.shieldRecharge=2;AnkinPhantom.init(p);}p.relicRicochet=0;p.relicHoming=0;p.relicRear=0;p.relicBurst=0;p.relicLaserFork=0;p.relicLaserPierce=0;p.relicLaserPulse=0;p.relicLaserOrbit=0;p.relicChargeShatter=0;p.relicChargeNova=0;p.relicChargeEcho=0;p.relicChargeMomentum=0;p.relicSide=0;p.relicGrow=0;p.relicLaserFrost=0;p.relicLaserHunter=0;p.relicChargeGravity=0;p.relicChargeFlame=0;p.relicEchoQueue=[]; if(p.shipType==='laser'){p.laserCount=2;p.dmg=35;p.hp=106;p.maxHp=106;p.spd=245;p.novaRadius=200;p.novaDamage=85;p.rate=.53;}if(p.shipType==='charge'){p.dmg=38;p.hp=115;p.maxHp=115;p.spd=215;p.novaDamage=225;p.rate=.58;p.shotSpeed=510;}if(p.shipType==='drill'){p.dmg=31;p.hp=175;p.maxHp=175;p.spd=265;p.dashCd=1.55;p.novaRadius=180;p.novaDamage=225;p.drillDamage=65;p.drillContact=17;p.drillDashSpeed=875;p.drillGain=.31;}if(p.shipType==='dog'){p.hp=118;p.maxHp=118;p.spd=238;p.dmg=39;p.rate=1.12;p.novaRadius=175;p.novaDamage=160;p.shotSpeed=375;p.r=15;p.limitShot=12;p.limitOrbit=10;p.dogBones=1;p.dogBoneSize=1;p.dogBoneRange=245;}}
 function boot(){soundtrackUnlocked=true;setupAudio();document.body.classList.toggle('pilot-mobile',controlMode==='mobile');U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD [B]';U('pauseButton').textContent='Ⅱ';resize();newRun();const first=!guideSeen();state(first?'guide':'playing');playMusic();if(!first)sfx('level')}
 const GUIDE_KEY='ankin_drift_release_guide_seen';let guideReturn='playing';function guideSeen(){try{return localStorage.getItem(GUIDE_KEY)==='1'}catch{return false}}function markGuide(){try{localStorage.setItem(GUIDE_KEY,'1')}catch{}}
@@ -6632,7 +6642,7 @@ function ankinPerformanceReport(){
  const over33=Array.from(perfRing.frame.slice(0,perfRing.count)).filter(n=>n>33.34).length;
  const wallSeconds=Array.from(perfRing.frame.slice(0,perfRing.count)).reduce((sum,n)=>sum+n,0)/1000;
  const simulatedSeconds=Array.from(perfRing.gameTime.slice(0,perfRing.count)).reduce((sum,n)=>sum+n,0);
- return {version:'15.3',collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
+ return {version:'15.3',runtime:runtimeDiagnostic(),collectedAt:new Date().toISOString(),mode,controlMode,viewport:{width:W,height:H,canvasWidth:canvas.width,canvasHeight:canvas.height},
   rendering:{quality:settings.quality,fx:settings.fx,targetFps:settings.fps,actualFps:Number(actualFps.toFixed(1)),scale:Number(adaptiveRenderScale.toFixed(2))},
   counters:{enemies:enemies.length,friendlyShots:shots.length,hostileShots:hostile.length,particles:particles.length,zones:zones.length,gusts:gusts.length,pickups:pickups.length},
   raid:game?.raid?{tier:game.raid.tier,effects:[...game.raid.effects]}:null,
@@ -6688,8 +6698,12 @@ function tuneRenderResolution(elapsed,renderMs){
 
 
 function frame(ts){
+ requestAnimationFrame(frame);
+ let frameStage='PAD入力';
+ try{
  pcControls?.poll(ts);
  const elapsed=last?Math.max(0,(ts-last)/1000):0;last=ts;
+ frameStage='戦闘処理';
  const perfSimStart=performance.now();
  const simulatedSeconds=advanceSimulation(elapsed);
  const perfSimMs=performance.now()-perfSimStart;
@@ -6698,7 +6712,7 @@ function frame(ts){
  const particleDrag=Math.pow(.97,effectsDt*60);for(const p of particles){p.life-=effectsDt;if(p.ring)p.r+=(p.to-p.r)*Math.min(1,effectsDt*12);else if(!p.lightning){p.x+=p.vx*effectsDt;p.y+=p.vy*effectsDt;p.vx*=particleDrag;p.vy*=particleDrag}}particles=particles.filter(x=>x.life>0);
  for(const f of floats){f.life-=effectsDt;f.y-=effectsDt*28}floats=floats.filter(f=>f.life>0);
  if(mode==='playing'){achievementSyncClock+=Math.min(elapsed,.25);if(achievementSyncClock>=12){achievementSyncClock=0;v13ObserveRun()}hudClock+=Math.min(elapsed,.25);if(hudClock>=.11){hudClock%=.11;hudUpdate()}}
- playMusic();
+ frameStage='音楽';playMusic();
  if(bossAlertUntil&&performance.now()>bossAlertUntil){U('bossAlert').classList.remove('show');bossAlertUntil=0}
  // FPS cap is now user selectable in BOTH modes. Physics always runs on RAF.
  // Accumulated intervals avoid halving the visible frame rate on 60/90/120 Hz screens.
@@ -6712,7 +6726,7 @@ function frame(ts){
   else renderBudget=0;
   const festivalStep=frame.lastDraw?Math.min(.12,(ts-frame.lastDraw)/1000):effectsDt;
   const drawStart=performance.now();
-  render();updateFestival(festivalStep);drawWeaponVisualPreview(ts);frame.lastDraw=ts;
+  frameStage='描画';render();updateFestival(festivalStep);drawWeaponVisualPreview(ts);frame.lastDraw=ts;
   perfDrawMs=performance.now()-drawStart;
   if(mode==='playing')tuneRenderResolution(elapsed,perfDrawMs);
   if(mode==='playing'){
@@ -6724,12 +6738,12 @@ function frame(ts){
   }else{actualDraws=0;lastFpsSample=ts}
  }
  v13AdvanceAward();recordPerfSample(elapsed*1000,perfSimMs,perfDrawMs,simulatedSeconds);
- requestAnimationFrame(frame)
+ }catch(error){last=0;simAccumulator=0;pcControls?.clear();if(mode==='playing')state('paused');reportRuntimeFault(error,frameStage);}
 }
 document.addEventListener('visibilitychange',()=>{last=0;simAccumulator=0;keys.clear();clearTouch();if(document.hidden&&mode==='playing')state('paused')});
 window.addEventListener('pagehide',()=>{keys.clear();clearTouch()});
 window.addEventListener('focus',()=>{keys.clear();clearTouch()});
-pcControls=AnkinControls.create({panel,mode:()=>mode,choice:i=>choices[i],pick:i=>{if(mode==='choice')choose(i)},detail:(id,el)=>{peekHistory=[];showSkillPeek(id,el,true)},closeDetail:()=>closeSkillPeek(true),
+pcControls=AnkinControls.create({panel,onInputError:error=>reportRuntimeFault(error,'PAD入力'),mode:()=>mode,choice:i=>choices[i],pick:i=>{if(mode==='choice')choose(i)},detail:(id,el)=>{peekHistory=[];showSkillPeek(id,el,true)},closeDetail:()=>closeSkillPeek(true),
  back:()=>{if(mode==='options')state(optionsBack);else if(mode==='quitConfirm')state('paused');else if(mode==='build')state(menuLabBackup?'menu':backMode);else if(mode==='guide')state(guideReturn);else if(mode==='archive')U('v13ArchiveBack')?.click();else if(mode==='elementChoice'){const b=U('fusionBackWeapon')||U('fusionBackSub')||U('fusionBackMain')||U('fusionSkip');b?.click()}else if(mode==='paused')state('playing')},
  action:a=>{if(a==='pause')togglePause();else if(a==='dash')dash();else if(a==='nova')nova();else if(a==='stored'&&mode==='playing')openStored();else if(a==='reroll'&&mode==='choice')reroll();else if(a==='build'){if(mode==='menu')openTitleLab();else if(mode==='build')state(menuLabBackup?'menu':backMode);else if(!['options','archive','guide'].includes(mode))showBuild()}},
  refreshHints:()=>{if(!pcControls)return;U('buildButton').textContent=controlMode==='mobile'?'LAB':'◈ BUILD ['+pcControls.label('build')+']';U('buildButton').title='ビルドを見る ('+pcControls.label('build')+')';U('pauseButton').title='一時停止 ('+pcControls.label('pause')+')';U('upgradeButton').title='保留した強化を選択 ('+pcControls.label('stored')+')';const h=U('pcLiveHints');if(h)h.textContent='移動：'+['up','left','down','right'].map(a=>pcControls.config().keyboard[a][0].replace('Key','')).join(' / ')+'　ダッシュ：'+pcControls.label('dash')+'　NOVA：'+pcControls.label('nova')+'　停止：'+pcControls.label('pause');}
