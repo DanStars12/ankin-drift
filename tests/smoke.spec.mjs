@@ -402,7 +402,7 @@ test('PHANTOM pressure fixture records real browser frame timings with evolved b
  refreshEnemyIndex();state('playing');return player.phantoms.length;},info(){return {performance:ankinPerformanceReport(),phantoms:player.phantoms.length,level:player.phantomLevel,echoes:player.phantomEchoes.length,visuals:player.phantomVisuals.length,damage:game.damage,sources:game.damageStats,metrics:player.phantomMetrics};}};`;
  await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();expect(html).toContain(anchor);await route.fulfill({response,body:html.replace(anchor,hook+'\n'+anchor)});});
  await page.goto('./');for(const speed of [1,2]){expect(await page.evaluate(s=>window.__phantomPressure.prepare(s),speed)).toBe(5);await page.waitForTimeout(3000);
- const result=await page.evaluate(()=>window.__phantomPressure.info());expect(result.phantoms).toBe(5);expect(result.level).toBe(10);expect(result.damage).toBeGreaterThan(0);expect(result.visuals).toBeLessThanOrEqual(24);expect(result.echoes).toBeLessThanOrEqual(40);expect(errors).toEqual([]);
+ const result=await page.evaluate(()=>window.__phantomPressure.info());expect(result.phantoms).toBe(5);expect(result.level).toBe(30);expect(result.damage).toBeGreaterThan(0);expect(result.visuals).toBeLessThanOrEqual(24);expect(result.echoes).toBeLessThanOrEqual(40);expect(errors).toEqual([]);
  console.log('PHANTOM_RENDER_METRICS='+JSON.stringify({project:testInfo.project.name,speed,...result}));await testInfo.attach('phantom-render-metrics-'+speed,{body:JSON.stringify(result,null,2),contentType:'application/json'});await page.screenshot({path:testInfo.outputPath('phantom-pressure-'+speed+'.png')});}
 });
 
