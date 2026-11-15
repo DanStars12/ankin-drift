@@ -1,0 +1,9 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import '../pc-controls.js';
+const C=globalThis.AnkinControls;
+test('PS defaults use circle confirm, cross dash/back and square NOVA with two movement key slots',()=>{const c=C.normalize(null);assert.equal(c.pad.confirm,1);assert.equal(c.pad.dash,0);assert.equal(c.pad.back,0);assert.equal(c.pad.nova,2);assert.deepEqual(c.keyboard.up,['KeyW','ArrowUp']);});
+test('radial deadzone removes drift, rescales partial motion and clamps diagonals',()=>{assert.deepEqual(C.axisVector([.1,-.1],.22),{x:0,y:0});const v=C.axisVector([.61,0],.22);assert.ok(Math.abs(v.x-.5)<1e-9);assert.ok(Math.abs(Math.hypot(...Object.values(C.axisVector([1,1],.22)))-1)<1e-9);assert.deepEqual(C.axisVector([NaN,Infinity],.22),{x:0,y:0});});
+test('invalid or partial saved bindings retain safe defaults and clamp deadzone',()=>{const c=C.normalize({keyboard:{dash:['evil'],nova:['KeyQ']},pad:{confirm:-1,nova:100,detail:7},deadzone:.9});assert.deepEqual(c.keyboard.dash,['Space']);assert.deepEqual(c.keyboard.nova,['KeyQ']);assert.equal(c.pad.confirm,1);assert.equal(c.pad.nova,2);assert.equal(c.pad.detail,7);assert.equal(c.deadzone,.5);});
+test('rebinding swaps conflicts in the same context while dash and menu-back may share a button',()=>{const c=C.rebind(C.DEFAULTS,'pad','nova',0);assert.equal(c.pad.nova,0);assert.equal(c.pad.dash,2);assert.equal(c.pad.back,0);const k=C.rebind(C.DEFAULTS,'keyboard','nova','Space');assert.deepEqual(k.keyboard.nova,['Space']);assert.deepEqual(k.keyboard.dash,['KeyE']);assert.deepEqual(C.DEFAULTS.keyboard.dash,['Space']);});
+test('rebinding an arrow secondary removes its old action without erasing its primary',()=>{const c=C.rebind(C.DEFAULTS,'keyboard','nova','ArrowUp');assert.deepEqual(c.keyboard.up,['KeyW']);assert.deepEqual(c.keyboard.nova,['ArrowUp']);});
