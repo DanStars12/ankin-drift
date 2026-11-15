@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 test.use({serviceWorkers:'block'});
 const anchor="document.body.classList.toggle('pilot-mobile',controlMode==='mobile');state('menu');requestAnimationFrame(frame);\n})();";
-async function setup(page){const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(()=>{window.fakePad={id:'Test DualSense (standard)',index:0,connected:true,mapping:'standard',axes:[0,0,0,0],buttons:Array.from({length:17},()=>({pressed:false,value:0}))};window.padConnected=true;Object.defineProperty(navigator,'getGamepads',{value:()=>window.padConnected?[window.fakePad]:[]});});await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();await route.fulfill({response,body:html.replace(anchor,`window.__pc={mode:()=>mode,config:()=>pcControls.config(),vector:()=>pcControls.vector(),run(){controlMode='desktop';newRun();state('playing');game.spawn=1e9;game.nextBossAt=1e9;game.nextRaidAt=1e9;enemies=[];refreshEnemyIndex();},snapshot:()=>({mode,x:player.x,y:player.y,dash:player.dashLeft,nova:player.novaCooldown,xp:game.xp}),ready(){player.energy=100;player.novaCooldown=0;player.dashLeft=0;},choice(){choices=['fearAura','programControl',...SKILLS.filter(c=>c.rarity==='common'&&fitsShip(c)&&(!c.available||c.available(player))).slice(0,2).map(c=>c.id)].map(skillById);game.lastChoice='normal';state('choice');},takeCount:()=>Object.values(game.skills).reduce((n,x)=>n+x,0)};\n`+anchor)});});await page.goto('./');await page.waitForTimeout(150);return errors;}
+async function setup(page){const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(()=>{window.fakePad={id:'Test DualSense (standard)',index:0,connected:true,mapping:'standard',axes:[0,0,0,0],buttons:Array.from({length:17},()=>({pressed:false,value:0}))};window.padConnected=true;Object.defineProperty(navigator,'getGamepads',{value:()=>window.padConnected?[window.fakePad]:[]});});await page.route('**/ankin-drift/',async route=>{const response=await route.fetch(),html=await response.text();await route.fulfill({response,body:html.replace(anchor,`window.__pc={mode:()=>mode,config:()=>pcControls.config(),vector:()=>pcControls.vector(),run(){controlMode='desktop';newRun();state('playing');game.spawn=1e9;game.nextBossAt=1e9;game.nextRaidAt=1e9;enemies=[];refreshEnemyIndex();},snapshot:()=>({mode,x:player.x,y:player.y,dash:player.dashLeft,nova:player.novaCooldown,xp:game.xp}),bank(){game.autoBank=true;},ready(){player.energy=100;player.novaCooldown=0;player.dashLeft=0;},choice(){choices=['fearAura','programControl',...SKILLS.filter(c=>c.rarity==='common'&&fitsShip(c)&&(!c.available||c.available(player))).slice(0,2).map(c=>c.id)].map(skillById);game.lastChoice='normal';state('choice');},takeCount:()=>Object.values(game.skills).reduce((n,x)=>n+x,0)};\n`+anchor)});});await page.goto('./');await page.waitForTimeout(150);return errors;}
 async function button(page,n,hold=80){await page.evaluate(n=>{window.fakePad.buttons[n]={pressed:true,value:1}},n);await page.waitForTimeout(hold);await page.evaluate(n=>{window.fakePad.buttons[n]={pressed:false,value:0}},n);await page.waitForTimeout(90);}
 async function neutral(page){await page.evaluate(()=>{window.fakePad.axes=[0,0,0,0];window.fakePad.buttons.forEach(b=>{b.pressed=false;b.value=0})});await page.waitForTimeout(130);}
 async function padGoto(page,id){
@@ -22,7 +22,7 @@ test('real title PAD launch keeps animation and combat alive across guide and ev
   await page.locator('[data-control="desktop"]').click();await page.locator('[data-ship="'+ship+'"]').click();
   await neutral(page);await button(page,13);await padGoto(page,'start');await button(page,1);
   if(await page.locator('#guideContinue').isVisible()){await neutral(page);await button(page,1);}
-  await expect(page.locator('#overlay')).toBeHidden();
+  await expect(page.locator('#overlay')).toBeHidden();await page.evaluate(()=>window.__pc.bank());
   const before=await page.locator('#hudWave').innerText();await page.waitForTimeout(1200);
   expect(errors,ship+' startup errors').toEqual([]);await expect(page.locator('#hudWave')).not.toHaveText(before);
   await neutral(page);await page.evaluate(()=>window.fakePad.axes=[.8,0,0,0]);await page.waitForTimeout(160);await button(page,0);await neutral(page);
@@ -31,4 +31,24 @@ test('real title PAD launch keeps animation and combat alive across guide and ev
   if(ship==='shot')await page.screenshot({path:testInfo.outputPath('pad-real-start-combat.png')});
  }
  expect(errors).toEqual([]);
+});
+
+test('array-like real-device packets keep combat running without Array.map',async({page})=>{
+ const errors=await setup(page);await page.evaluate(()=>window.__pc.run());await neutral(page);
+ const before=await page.evaluate(()=>window.__pc.snapshot());await page.evaluate(()=>{const b=window.fakePad.buttons;window.fakePad.buttons=Object.assign({length:b.length},b);window.fakePad.axes=new Float32Array([0,0,0,0]);});
+ await button(page,15,180);expect((await page.evaluate(()=>window.__pc.snapshot())).x).toBeGreaterThan(before.x);expect(await page.evaluate(()=>window.ankinRuntimeStatus().faultCount)).toBe(0);expect(errors).toEqual([]);
+});
+test('device getter failure pauses safely, keeps settings working and resumes without a reload',async({page})=>{
+ const errors=await setup(page);await page.evaluate(()=>window.__pc.run());await neutral(page);
+ await page.evaluate(()=>{window.savedButtons=window.fakePad.buttons;Object.defineProperty(window.fakePad,'buttons',{configurable:true,get(){throw new Error('test device reconnect failure')}})});
+ await expect.poll(()=>page.evaluate(()=>window.__pc.mode())).toBe('paused');await expect(page.locator('#runtimeNotice')).toBeVisible();
+ await page.evaluate(()=>Object.defineProperty(window.fakePad,'buttons',{configurable:true,writable:true,value:window.savedButtons}));await neutral(page);
+ await page.locator('#openOptions').click();await expect(page.locator('#pcControlSettings')).toBeVisible();const report=await page.evaluate(()=>window.ankinPerformanceReport());expect(report.runtime.faults.at(-1).stage).toBe('PAD入力');expect(report.runtime.faults.at(-1).message).toContain('test device reconnect failure');
+ await button(page,0);await neutral(page);await button(page,0);await expect(page.locator('#overlay')).toBeHidden();const t=await page.locator('#hudWave').innerText();await page.waitForTimeout(1200);await expect(page.locator('#hudWave')).not.toHaveText(t);expect(errors).toEqual([]);
+});
+test('one rendering exception cannot kill the RAF loop or prevent PAD resume',async({page})=>{
+ const errors=await setup(page);await page.evaluate(()=>window.__pc.run());await neutral(page);
+ await page.evaluate(()=>{const ctx=document.querySelector('#game').getContext('2d'),fill=ctx.fillRect;ctx.fillRect=function(...args){ctx.fillRect=fill;throw new Error('test transient canvas failure')};});
+ await expect.poll(()=>page.evaluate(()=>window.__pc.mode())).toBe('paused');await expect(page.locator('#runtimeNotice')).toBeVisible();expect(await page.evaluate(()=>window.ankinRuntimeStatus().faults.at(-1).stage)).toBe('描画');
+ await neutral(page);await button(page,0);await expect(page.locator('#overlay')).toBeHidden();const t=await page.locator('#hudWave').innerText();await page.waitForTimeout(1200);await expect(page.locator('#hudWave')).not.toHaveText(t);await expect(page.locator('#runtimeNotice')).toBeHidden();expect(errors).toEqual([]);
 });
