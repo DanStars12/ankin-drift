@@ -3086,7 +3086,7 @@ skillPeekPanel.id='skillPeekPanel';skillPeekPanel.className='skill-peek-panel';s
 let skillPeekPinned=false,skillPeekAnchor=null,skillPeekCloseTimer=null;
 function cancelSkillPeekClose(){clearTimeout(skillPeekCloseTimer);skillPeekCloseTimer=null;}
 function scheduleSkillPeekClose(){cancelSkillPeekClose();if(!skillPeekPinned)skillPeekCloseTimer=setTimeout(()=>closeSkillPeek(),160);}
-function closeSkillPeek(force=false){if(!force&&skillPeekPinned)return;cancelSkillPeekClose();skillPeekPinned=false;skillPeekAnchor=null;skillPeekPanel.hidden=true;skillPeekPanel.classList.remove('is-touch')}
+function closeSkillPeek(force=false){if(!force&&skillPeekPinned)return;cancelSkillPeekClose();skillPeekPinned=false;skillPeekAnchor=null;skillPeekPanel.hidden=true;skillPeekPanel.classList.remove('is-touch','control-peek');skillPeekPanel.setAttribute('role','tooltip');skillPeekPanel.removeAttribute('aria-modal')}
 /* Skill atlas now resolves all linked synergies, not just the first few shown on selection cards. */
 let peekSkillId=null,peekHistory=[];
 function synergyDetailForSkill(id){
@@ -3185,7 +3185,7 @@ panel.addEventListener('keydown',ev=>{
  if(visualButton&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();visualButton.click();return;}
  const trigger=peekTarget(ev.target);const card=ev.target.closest?.('[data-atlas-card]');if((trigger||card)&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();ev.stopPropagation();if(trigger)openAnyPeek(trigger,true);else openAnyPeek({dataset:{skillPeek:card.dataset.atlasCard},getBoundingClientRect:()=>card.getBoundingClientRect()},true)}},true);
 document.addEventListener('pointerdown',ev=>{if(skillPeekPanel.hidden)return;if(!ev.target.closest?.('[data-attr-peek],[data-evo-peek],[data-skill-peek]')&&!skillPeekPanel.contains(ev.target))closeSkillPeek(true)},true);
-window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!skillPeekPanel.hidden){closeSkillPeek(true);ev.preventDefault();ev.stopImmediatePropagation()}},true);
+window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!skillPeekPanel.hidden){if(skillPeekPanel.classList.contains('control-peek'))pcControls?.activate('back');else closeSkillPeek(true);ev.preventDefault();ev.stopImmediatePropagation()}},true);
 
 function showBuild(){if(!game||mode==='menu'||mode==='build')return;backMode=mode;state('build')}
 function openTitleLab(){
