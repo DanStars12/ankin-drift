@@ -2229,7 +2229,7 @@ function bindSafeChoice(el){
     if(ev.pointerType==='touch'||ev.pointerType==='pen'||ev.sourceCapabilities?.firesTouchEvents){
       ev.preventDefault();return;
     }
-    if(mode==='choice')choose(index); // PC mouse and keyboard / accessibility
+    if(mode==='choice'){if(controlMode==='mobile'){if(performance.now()-choiceOpenedAt>=CHOICE_TAP_GUARD_MS)selectTouchChoice(index);}else choose(index);} // Mobile compatibility clicks also require explicit confirmation.
   });
 }
 function state(s){if(s!==mode){last=0;simAccumulator=0;pcControls?.clear();}if(s==='playing'&&U('runtimeNotice'))U('runtimeNotice').hidden=true;if(menuLabBackup&&s!=='build'){player=menuLabBackup.player;game=menuLabBackup.game;menuLabBackup=null;}if(s==='playing'&&game&&!game.startedMarked){game.startedMarked=true;AnkinArchive.markStarted();saveWarning=AnkinArchive.status()||'';v13CollectAwards()}if(s!=='playing'&&U('raidStatus'))U('raidStatus').style.display='none';if(s!=='playing'&&U('bossAlert'))U('bossAlert').classList.remove('show');mode=s;if(s==='choice'){choiceOpenedAt=performance.now();choiceTouchArms.clear()}overlay.style.display=s==='playing'?'none':'flex';hud.style.display=(s==='menu'||s==='archive'||(s==='build'&&!!menuLabBackup))?'none':'block';document.body.classList.toggle('playing-mobile',controlMode==='mobile'&&s==='playing');if(s!=='playing'){keys.clear();clearTouch();touchMove.lastTap=0;ui.announcement.classList.remove('show')}if(s!=='playing')drawOverlay();refreshFpsDisplay();positionMusicToast();if(soundtrackUnlocked)playMusic()}
