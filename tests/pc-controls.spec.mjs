@@ -14,3 +14,21 @@ test('PAD selects left/right, opens complete skill details, scrolls, returns and
 test('keyboard remap persists, old key stops acting, conflict swaps and defaults restore',async({page},testInfo)=>{const errors=await setup(page);await page.locator('#openOptions').click();await page.locator('[data-bind="keyboard:nova"]').click();await page.keyboard.press('KeyQ');await expect(page.locator('[data-bind="keyboard:nova"]')).toHaveText('Q');await page.reload();await page.locator('#openOptions').click();await expect(page.locator('[data-bind="keyboard:nova"]')).toHaveText('Q');await page.screenshot({path:testInfo.outputPath('keyboard-pad-bindings.png'),fullPage:true});await page.evaluate(()=>window.__pc.run());await neutral(page);await page.evaluate(()=>window.__pc.ready());await page.keyboard.press('KeyE');expect((await page.evaluate(()=>window.__pc.snapshot())).nova).toBe(0);await page.keyboard.press('KeyQ');expect((await page.evaluate(()=>window.__pc.snapshot())).nova).toBeGreaterThan(0);await page.keyboard.press('KeyP');await page.locator('#openOptions').click();await page.locator('[data-bind="keyboard:nova"]').click();await page.keyboard.press('Space');await expect(page.locator('[data-bind="keyboard:dash"]')).toHaveText('Q');await page.locator('#resetBindings').click();await expect(page.locator('[data-bind="keyboard:nova"]')).toHaveText('E');expect(errors).toEqual([]);});
 test('PAD button remap excludes its capture press, persists and works after release',async({page})=>{const errors=await setup(page);await page.locator('#openOptions').click();await page.locator('[data-bind="pad:nova"]').click();await neutral(page);await button(page,7);await expect(page.locator('[data-bind="pad:nova"]')).toHaveText('R2');await page.reload();await page.locator('#openOptions').click();await expect(page.locator('[data-bind="pad:nova"]')).toHaveText('R2');await page.evaluate(()=>window.__pc.run());await neutral(page);await page.evaluate(()=>window.__pc.ready());await button(page,2);expect((await page.evaluate(()=>window.__pc.snapshot())).nova).toBe(0);await button(page,7);expect((await page.evaluate(()=>window.__pc.snapshot())).nova).toBeGreaterThan(0);expect(errors).toEqual([]);});
 test('keyboard-only skill navigation and detail never acquire a card until confirm',async({page})=>{const errors=await setup(page);await page.evaluate(()=>{window.__pc.run();window.__pc.choice()});await page.keyboard.press('ArrowRight');await expect(page.locator('[data-choice="1"]')).toBeFocused();await page.keyboard.press('KeyI');await expect(page.locator('#skillPeekPanel')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#skillPeekPanel')).toBeHidden();expect(await page.evaluate(()=>window.__pc.takeCount())).toBe(0);await expect(page.locator('[data-choice="1"]')).toBeFocused();await page.keyboard.press('Enter');expect(await page.evaluate(()=>window.__pc.takeCount())).toBe(1);expect(errors).toEqual([]);});
+
+test('real title PAD launch keeps animation and combat alive across guide and every ship',async({page},testInfo)=>{
+ test.setTimeout(60000);const errors=await setup(page);
+ for(const ship of ['shot','laser','charge','drill','dog','phantom']){
+  if(ship!=='shot')await page.reload();
+  await page.locator('[data-control="desktop"]').click();await page.locator('[data-ship="'+ship+'"]').click();
+  await neutral(page);await padGoto(page,'start');await button(page,1);
+  if(await page.locator('#guideContinue').isVisible()){await neutral(page);await button(page,1);}
+  await expect(page.locator('#overlay')).toBeHidden();
+  const before=await page.locator('#hudWave').innerText();await page.waitForTimeout(1200);
+  expect(errors,ship+' startup errors').toEqual([]);await expect(page.locator('#hudWave')).not.toHaveText(before);
+  await neutral(page);await page.evaluate(()=>window.fakePad.axes=[.8,0,0,0]);await page.waitForTimeout(160);await button(page,0);await neutral(page);
+  expect(errors,ship+' movement errors').toEqual([]);
+  await button(page,9);await expect(page.locator('#resume')).toBeVisible();await button(page,0);await expect(page.locator('#overlay')).toBeHidden();
+  if(ship==='shot')await page.screenshot({path:testInfo.outputPath('pad-real-start-combat.png')});
+ }
+ expect(errors).toEqual([]);
+});
