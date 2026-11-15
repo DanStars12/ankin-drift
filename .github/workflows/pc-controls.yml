@@ -1,0 +1,39 @@
+name: ANKIN PC input
+on:
+  pull_request:
+    paths: ['index.html', 'pc-controls.js', 'tests/pc-controls*', '.github/workflows/pc-controls.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pc-input-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  controls:
+    name: PC input (${{ matrix.project }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile-390, mobile-320]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/pc-controls.test.mjs
+      - run: npx playwright install chromium
+      - run: npx playwright test tests/pc-controls.spec.mjs --project=${{ matrix.project }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pc-input-${{ matrix.project }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
