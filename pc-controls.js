@@ -36,6 +36,7 @@ function create(host){
  function finishCapture(value){config=rebind(config,capture.device,capture.action,value);capture=null;save();renderSettings();}
  function keyboard(e){if(e.isComposing||e.keyCode===229)return false;if(capture){if(e.type==='keyup')return true;if(e.code==='Escape'){capture=null;renderSettings();return true;}if(capture.device==='keyboard'&&!e.repeat&&!['MetaLeft','MetaRight','Tab'].includes(e.code))finishCapture(e.code);return true;}if(e.type==='keyup'){held.delete(e.code);return false;}
  if(e.target?.matches('input:not([type=range]):not([type=checkbox]),textarea,[contenteditable]'))return false;
+ if(!isPlaying()&&e.code==='Space'){if(e.target?.closest('button,summary,[role=button]'))return false;if(['fusion','uniqueReward','elementResult'].includes(host.mode())){if(!e.repeat)activate('confirm');return true;}}
  const actions=Object.keys(LABELS).filter(a=>config.keyboard[a].includes(e.code));if(!actions.length)return false;
  if(isPlaying()){for(const a of actions)if(['up','down','left','right'].includes(a))held.add(e.code);if(!e.repeat){const a=actions.find(a=>['pause','back','dash','nova','build','stored'].includes(a));if(a)activate(a);}return true;}
  if(e.repeat)return true;activate(actions.find(a=>!['dash','nova','stored'].includes(a))||'');return true;}
