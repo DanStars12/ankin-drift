@@ -2200,7 +2200,7 @@ const CHOICE_TAP_GUARD_MS=700;
 document.addEventListener('pointercancel',ev=>choiceTouchArms.delete(ev.pointerId),true);
 window.addEventListener('blur',()=>choiceTouchArms.clear());
 function canStartChoiceTouch(ev){
-  return mode==='choice' && (ev.pointerType==='touch'||ev.pointerType==='pen')
+  return mode==='choice' && !ev.target?.closest?.('[data-attr-peek],[data-evo-peek],[data-skill-peek]') && (ev.pointerType==='touch'||ev.pointerType==='pen')
     && performance.now()-choiceOpenedAt>=CHOICE_TAP_GUARD_MS;
 }
 function selectTouchChoice(index){if(mode!=='choice'||!choices[index])return;touchChoiceIndex=index;touchChoiceReadyAt=performance.now()+180;panel.querySelectorAll('[data-choice]').forEach(el=>{const on=+el.dataset.choice===index;el.classList.toggle('touch-selected',on);el.setAttribute('aria-pressed',String(on))});const button=U('touchChoiceConfirm');if(button){button.disabled=false;button.textContent='✓ 「'+choices[index].name+'」を取得';} }
@@ -2220,7 +2220,7 @@ function bindSafeChoice(el){
     if(!arm||arm.element!==el||mode!=='choice'||
        performance.now()-choiceOpenedAt<CHOICE_TAP_GUARD_MS)return;
     if(Math.hypot(ev.clientX-arm.x,ev.clientY-arm.y)>19)return; // scrolling != selecting
-    ev.preventDefault();ev.stopPropagation();selectTouchChoice(arm.index);
+    ev.preventDefault();ev.stopPropagation();if(controlMode==='mobile')selectTouchChoice(arm.index);else choose(arm.index);
   });
   el.addEventListener('pointercancel',ev=>choiceTouchArms.delete(ev.pointerId));
   el.addEventListener('click',ev=>{
