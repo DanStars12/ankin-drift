@@ -249,7 +249,7 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   }
  }
  // Charge ships deliberately hold still to charge, then reposition to fire.
- if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
+ if(p.shipType==='charge'&&threat.near===0&&p.charge<.995&&Math.floor(sec*10)%20<16){x=0;y=0;}
  if(p.shipType==='phantom'&&balanceAbilityLog.phantomPilot==='lookahead'){
   if(frame%6===0||!balanceAbilityLog.ghostMove){balanceAbilityLog.ghostMove=planGhostMovement(p,{width:W,height:H,enemies,bullets:hostile,hazards,pickups:seekExp?pickups:[],motion:engageClampMotion,hint:{x,y},previous:balanceAbilityLog.ghostMove});balanceAbilityLog.ghostPlans++;}
   const move=balanceAbilityLog.ghostMove;x=move.x;y=move.y;xpIntent=move.goal;

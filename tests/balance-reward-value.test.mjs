@@ -32,3 +32,7 @@ test('all six primary weapons value critical upgrades and DRILL values its real 
  const h=runtimeHarness();for(const ship of ['shot','laser','charge','drill','dog','phantom']){h.api.reset(ship);const p=h.api.player,next=structuredClone(p);next.crit+=.1;assert.ok(value(p,next)>0,ship);}
  h.api.reset('drill');const p=h.api.player,next=structuredClone(p);next.dmg+=30;assert.ok(value(p,next)>0);
 });
+
+test('CHARGE pilot releases a full stored shot immediately but still holds an incomplete charge',()=>{
+ for(const charge of [.4,1]){const h=runtimeHarness();h.api.balanceSetup('charge',17,0,'base','live-pack');const p=h.api.player;h.api.enemy('drone',{x:p.x+250,y:p.y,hp:1e6,maxHp:1e6,spd:0,shoot:1e9});p.charge=charge;p.chargeStationary=true;const a=h.api.balancePilotStep(0,'tactical');h.api.drive(1/60);if(charge===1){assert.equal(a.move,true);assert.equal(p.charge,0);assert.ok(h.api.shots.some(b=>b.kind==='comet'));}else{assert.equal(a.move,false);assert.ok(p.charge>charge);}}
+});
