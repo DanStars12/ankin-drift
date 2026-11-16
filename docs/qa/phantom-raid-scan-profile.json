@@ -1,0 +1,32 @@
+{
+  "kind": "fixed-seed synthetic logic comparison; not rendering FPS or live raid win-rate",
+  "baseline": {
+    "gameSeconds": 5,
+    "enemies": 400,
+    "phantoms": 5,
+    "darts": 25,
+    "scans": 5645,
+    "hits": 20954,
+    "damage": 9295364.999409525,
+    "maxShots": 256,
+    "maxEffects": 24,
+    "hostLogicMs": 14880.650047000001,
+    "rendered": false,
+    "fps": null
+  },
+  "candidate": {
+    "gameSeconds": 5,
+    "enemies": 400,
+    "phantoms": 5,
+    "darts": 25,
+    "scans": 1460,
+    "hits": 21124,
+    "damage": 9413986.707754742,
+    "maxShots": 256,
+    "maxEffects": 24,
+    "hostLogicMs": 14722.881548,
+    "rendered": false,
+    "fps": null
+  },
+  "scanReductionPct": 74.1364038972542
+}
