@@ -1,0 +1,6595 @@
+{
+  "sourceHash": "f0bad106128a24fd3065d04e37424c10c3b81d4afdc8c831a9a121fd7b4f60d9",
+  "scope": "early",
+  "seeds": 3,
+  "rendered": false,
+  "fps": null,
+  "rows": [
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "shot",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 11315,
+      "dps": 94.292,
+      "bossDamage": 768,
+      "kills": 257,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 1,
+      "novaCount": 7,
+      "level": 12,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 3,
+      "elementFusions": 1,
+      "damageBySource": {
+        "shot": 8146.92,
+        "nova": 721,
+        "pulseField": 1004.3199999999999,
+        "meteor": 333,
+        "iceball": 714,
+        "lightningBolt": 395.76
+      },
+      "killsByType": {
+        "drone": 210,
+        "stinger": 46,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 2402,
+      "pickedOrbs": 165,
+      "vacuumExp": 1292,
+      "vacuumOrbs": 82,
+      "healingPickups": 4,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2954,
+          "bossDamage": 0,
+          "kills": 93,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "shot": 2785,
+            "nova": 169
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 8361,
+          "bossDamage": 768,
+          "kills": 164,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "shot": 5361.92,
+            "pulseField": 1004.3199999999999,
+            "nova": 552,
+            "meteor": 333,
+            "iceball": 714,
+            "lightningBolt": 395.76
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 78.84,
+      "maxHp": 78.84,
+      "survivalSeconds": 120,
+      "aiMoves": 6071,
+      "aiDodges": 1,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 118,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "legacy-dash": 1
+      },
+      "novaReasons": {
+        "legacy-nova": 7
+      },
+      "novaContexts": [
+        {
+          "at": 23,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 38,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 52,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 66,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": 188
+        },
+        {
+          "at": 79,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 99,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 113,
+          "reason": "legacy-nova",
+          "near": 5,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 3.02,
+      "xpSeekKinds": {
+        "orb": 157,
+        "vacuum": 24
+      },
+      "xpOnField": 256,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 4,
+        "survival": 1,
+        "experience": 1,
+        "primaryOffers": 7,
+        "survivalOffers": 3,
+        "history": [
+          {
+            "at": 18,
+            "level": 2,
+            "id": "arsCollector",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 22,
+            "level": 3,
+            "id": "critEpic",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 30,
+            "level": 4,
+            "id": "critical",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 39,
+            "level": 5,
+            "id": "fan",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 51,
+            "level": 6,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 62,
+            "level": 7,
+            "id": "chain",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 9,
+            "id": "meteorTriple",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 9,
+            "id": "storm",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 9,
+            "id": "coldCoil",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 98,
+            "level": 10,
+            "id": "glassReactor",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 114,
+            "level": 11,
+            "id": "lightningBolt",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 118,
+            "main": "thunder",
+            "sub": "ice",
+            "slot": "A",
+            "mainPoints": 6.5,
+            "subPoints": 1.5,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 119.4,
+        "rate": 0.46,
+        "multishot": 2,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 136,
+        "regen": 0,
+        "shieldMax": 0
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "shot",
+      "seed": 2,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 10998.304,
+      "dps": 91.653,
+      "bossDamage": 768,
+      "kills": 241,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 1,
+      "novaCount": 7,
+      "level": 12,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 2,
+      "elementFusions": 1,
+      "damageBySource": {
+        "shot": 9095.504,
+        "nova": 490.6,
+        "meteor": 613.6,
+        "missile": 389.80000000000007,
+        "explosion": 408.79999999999995
+      },
+      "killsByType": {
+        "drone": 213,
+        "stinger": 27,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 2667,
+      "pickedOrbs": 182,
+      "vacuumExp": 531,
+      "vacuumOrbs": 34,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 3009,
+          "bossDamage": 0,
+          "kills": 93,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "shot": 2907,
+            "nova": 102
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 7989.303999999999,
+          "bossDamage": 768.0000000000001,
+          "kills": 148,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "shot": 6188.503999999999,
+            "nova": 388.6,
+            "meteor": 613.6,
+            "missile": 389.80000000000007,
+            "explosion": 408.79999999999995
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 118,
+      "maxHp": 118,
+      "survivalSeconds": 120,
+      "aiMoves": 6317,
+      "aiDodges": 1,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 117,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "legacy-dash": 1
+      },
+      "novaReasons": {
+        "legacy-nova": 7
+      },
+      "novaContexts": [
+        {
+          "at": 31,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 44,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 58,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 72,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 85,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 99,
+          "reason": "legacy-nova",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 112,
+          "reason": "legacy-nova",
+          "near": 4,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 1.62,
+      "xpSeekKinds": {
+        "orb": 97
+      },
+      "xpOnField": 487,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 4,
+        "survival": 1,
+        "experience": 2,
+        "primaryOffers": 8,
+        "survivalOffers": 6,
+        "history": [
+          {
+            "at": 13,
+            "level": 2,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 17,
+            "level": 3,
+            "id": "arsPlating",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 32,
+            "level": 4,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 38,
+            "level": 5,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 43,
+            "level": 6,
+            "id": "fan",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 57,
+            "level": 7,
+            "id": "xp",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 69,
+            "level": 9,
+            "id": "arsPowerShotSalvo",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 9,
+            "id": "meteorSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 9,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 86,
+            "level": 10,
+            "id": "emberSeed",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 109,
+            "level": 11,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 116,
+            "main": "rock",
+            "sub": "fire",
+            "slot": "B",
+            "mainPoints": 5.5,
+            "subPoints": 1,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 50.400000000000006,
+        "rate": 0.4416,
+        "multishot": 4,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 177,
+        "regen": 0,
+        "shieldMax": 4
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 150.9998745843768,
+        "firstVacuumAt": 121.71254721703008,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "shot",
+      "seed": 3,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 9964.448,
+      "dps": 83.037,
+      "bossDamage": 768,
+      "kills": 226,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 6,
+      "level": 11,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 4,
+      "elementFusions": 0,
+      "damageBySource": {
+        "shot": 5788.281999999997,
+        "element": 1075.1657439999988,
+        "pulseField": 2075.4822560000002,
+        "nova": 526.478,
+        "meteor": 499.03999999999996
+      },
+      "killsByType": {
+        "drone": 193,
+        "stinger": 32,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 1,
+        "ultimate": 1,
+        "recovery": 1,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 378.05,
+      "pickedExp": 1995,
+      "pickedOrbs": 136,
+      "vacuumExp": 723,
+      "vacuumOrbs": 48,
+      "healingPickups": 6,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2529,
+          "bossDamage": 0,
+          "kills": 80,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "shot": 2399.12,
+            "element": 43,
+            "pulseField": 86.88
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 7435.448000000015,
+          "bossDamage": 767.9999999999998,
+          "kills": 146,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "shot": 3389.1620000000003,
+            "pulseField": 1988.602256,
+            "element": 1032.165743999999,
+            "nova": 526.478,
+            "meteor": 499.03999999999996
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 100,
+      "maxHp": 100,
+      "survivalSeconds": 120,
+      "aiMoves": 6185,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 115,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "legacy-dash": 2
+      },
+      "novaReasons": {
+        "legacy-nova": 6
+      },
+      "novaContexts": [
+        {
+          "at": 19,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 51,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 64,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": 398
+        },
+        {
+          "at": 78,
+          "reason": "legacy-nova",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 93,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 109,
+          "reason": "legacy-nova",
+          "near": 8,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 5.22,
+      "xpSeekKinds": {
+        "orb": 313
+      },
+      "xpOnField": 756,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 3,
+        "survival": 0,
+        "experience": 1,
+        "primaryOffers": 6,
+        "survivalOffers": 7,
+        "history": [
+          {
+            "at": 10,
+            "level": 2,
+            "id": "cycloneOverpressure",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 13,
+            "level": 3,
+            "id": "empAmplifier",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 29,
+            "level": 4,
+            "id": "empPulse",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 53,
+            "level": 5,
+            "id": "tridentPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 64,
+            "level": 6,
+            "id": "fire",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 76,
+            "level": 7,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 76,
+            "level": 9,
+            "id": "tacShotStrafe",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 76,
+            "level": 9,
+            "id": "meteorSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 76,
+            "level": 9,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 109,
+            "level": 10,
+            "id": "bounty",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 119,
+            "level": 11,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 41.2,
+        "rate": 0.421912,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 0
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 128.0929728411138,
+        "firstVacuumAt": 121.01133918855339,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 11,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "laser",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 14630.42,
+      "dps": 121.92,
+      "bossDamage": 768,
+      "kills": 309,
+      "hits": 1,
+      "damageTaken": 3.2,
+      "dashCount": 1,
+      "novaCount": 5,
+      "level": 11,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 5,
+      "elementFusions": 0,
+      "damageBySource": {
+        "laser": 8978.807443368256,
+        "nova": 5369.324680267952,
+        "iceball": 188.28797397129182,
+        "meteor": 94
+      },
+      "killsByType": {
+        "drone": 259,
+        "stinger": 49,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 1757,
+      "pickedOrbs": 101,
+      "vacuumExp": 990,
+      "vacuumOrbs": 66,
+      "healingPickups": 2,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2933.000000000042,
+          "bossDamage": 0,
+          "kills": 92,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "laser": 2451.0000000000496,
+            "nova": 482
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 11697.420097607503,
+          "bossDamage": 768,
+          "kills": 217,
+          "hits": 1,
+          "damageTaken": 3.1999999999999993,
+          "sources": {
+            "laser": 6527.807443368268,
+            "nova": 4887.324680267944,
+            "iceball": 188.28797397129182,
+            "meteor": 94
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 124,
+      "maxHp": 124,
+      "survivalSeconds": 120,
+      "aiMoves": 6097,
+      "aiDodges": 1,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 117,
+      "novaReadySeconds": 10,
+      "dashReasons": {
+        "emergency-evade": 1
+      },
+      "novaReasons": {
+        "multi-target-overdrive": 5
+      },
+      "novaContexts": [
+        {
+          "at": 38,
+          "reason": "multi-target-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 53,
+          "reason": "multi-target-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 70,
+          "reason": "multi-target-overdrive",
+          "near": 6,
+          "bossDist": null
+        },
+        {
+          "at": 95,
+          "reason": "multi-target-overdrive",
+          "near": 6,
+          "bossDist": null
+        },
+        {
+          "at": 114,
+          "reason": "multi-target-overdrive",
+          "near": 57,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 4.02,
+      "xpSeekKinds": {
+        "orb": 241
+      },
+      "xpOnField": 2040,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 3,
+        "survival": 2,
+        "experience": 0,
+        "primaryOffers": 6,
+        "survivalOffers": 7,
+        "history": [
+          {
+            "at": 11,
+            "level": 2,
+            "id": "lRefraction",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 23,
+            "level": 3,
+            "id": "lCooling",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 38,
+            "level": 4,
+            "id": "arsPlating",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 48,
+            "level": 5,
+            "id": "novaEpic",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 55,
+            "level": 6,
+            "id": "radius",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 9,
+            "id": "tacLaserClose",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 9,
+            "id": "freeze",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 9,
+            "id": "iceBarrier",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 9,
+            "id": "iceLock",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 106,
+            "level": 10,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 119,
+            "level": 11,
+            "id": "iceBall",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 35,
+        "rate": 0.53,
+        "multishot": 1,
+        "laserCount": 4,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 17.8
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 11,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "laser",
+      "seed": 2,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 15356.704,
+      "dps": 127.973,
+      "bossDamage": 768,
+      "kills": 322,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 5,
+      "level": 10,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 4,
+      "elementFusions": 0,
+      "damageBySource": {
+        "laser": 10758.498763713891,
+        "nova": 4376.151723282045,
+        "missile": 99.01850212133971,
+        "explosion": 53.166519092057385,
+        "meteor": 69.86845784895692
+      },
+      "killsByType": {
+        "drone": 275,
+        "minor": 1,
+        "stinger": 46
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 1547,
+      "pickedOrbs": 90,
+      "vacuumExp": 965,
+      "vacuumOrbs": 65,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 3016.000000000002,
+          "bossDamage": 0,
+          "kills": 92,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "laser": 2487.199287702396,
+            "nova": 528.8007122976002
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 12340.703966058318,
+          "bossDamage": 768.0000000000017,
+          "kills": 230,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "laser": 8271.299476011534,
+            "nova": 3847.3510109844437,
+            "missile": 99.01850212133971,
+            "explosion": 53.166519092057385,
+            "meteor": 69.86845784895692
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 106,
+      "maxHp": 106,
+      "survivalSeconds": 120,
+      "aiMoves": 6083,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 114,
+      "novaReadySeconds": 4,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {
+        "multi-target-overdrive": 4,
+        "boss-overdrive": 1
+      },
+      "novaContexts": [
+        {
+          "at": 31,
+          "reason": "multi-target-overdrive",
+          "near": 6,
+          "bossDist": null
+        },
+        {
+          "at": 47,
+          "reason": "multi-target-overdrive",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 70,
+          "reason": "boss-overdrive",
+          "near": 5,
+          "bossDist": 387
+        },
+        {
+          "at": 84,
+          "reason": "multi-target-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 111,
+          "reason": "multi-target-overdrive",
+          "near": 33,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 4.03,
+      "xpSeekKinds": {
+        "orb": 242
+      },
+      "xpOnField": 2481,
+      "rewardAudit": {
+        "choices": 10,
+        "primary": 4,
+        "survival": 0,
+        "experience": 0,
+        "primaryOffers": 7,
+        "survivalOffers": 5,
+        "history": [
+          {
+            "at": 11,
+            "level": 2,
+            "id": "lCooling",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 27,
+            "level": 3,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 37,
+            "level": 4,
+            "id": "novaEpic",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 48,
+            "level": 5,
+            "id": "radius",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 6,
+            "id": "lReach",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "lPowerSplitter",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "emberSeed",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "meteorSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 112,
+            "level": 10,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 44.2,
+        "rate": 0.53,
+        "multishot": 1,
+        "laserCount": 4,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 0
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 150.9998745843768,
+        "firstVacuumAt": 121.71254721703008,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 10,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "laser",
+      "seed": 3,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 11807.962,
+      "dps": 98.4,
+      "bossDamage": 768,
+      "kills": 259,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 0,
+      "novaCount": 6,
+      "level": 12,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 2,
+      "elementFusions": 1,
+      "damageBySource": {
+        "laser": 5243.914781019264,
+        "nova": 2182.6682007655345,
+        "meteor": 1461.0984464000003,
+        "frostSpike": 1604.5770041291883,
+        "missile": 139.62368833110057,
+        "explosion": 1092.973925247847,
+        "rock": 83.10628
+      },
+      "killsByType": {
+        "drone": 219,
+        "stinger": 39,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 2244,
+      "pickedOrbs": 151,
+      "vacuumExp": 911,
+      "vacuumOrbs": 61,
+      "healingPickups": 4,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2851.9999999999973,
+          "bossDamage": 0,
+          "kills": 90,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "laser": 2066.107920000037,
+            "nova": 236.67100000000016,
+            "meteor": 165,
+            "frostSpike": 384.22108000000003
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 8955.962325892979,
+          "bossDamage": 768.0000000000009,
+          "kills": 169,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "laser": 3177.806861019148,
+            "frostSpike": 1220.3559241291885,
+            "nova": 1945.9972007655363,
+            "meteor": 1296.0984464000003,
+            "missile": 139.62368833110057,
+            "explosion": 1092.973925247847,
+            "rock": 83.10628
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 114,
+      "maxHp": 114,
+      "survivalSeconds": 120,
+      "aiMoves": 5557,
+      "aiDodges": 0,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 120,
+      "novaReadySeconds": 5,
+      "dashReasons": {},
+      "novaReasons": {
+        "multi-target-overdrive": 5,
+        "boss-overdrive": 1
+      },
+      "novaContexts": [
+        {
+          "at": 28,
+          "reason": "multi-target-overdrive",
+          "near": 9,
+          "bossDist": null
+        },
+        {
+          "at": 42,
+          "reason": "multi-target-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 62,
+          "reason": "boss-overdrive",
+          "near": 5,
+          "bossDist": 267
+        },
+        {
+          "at": 76,
+          "reason": "multi-target-overdrive",
+          "near": 9,
+          "bossDist": null
+        },
+        {
+          "at": 102,
+          "reason": "multi-target-overdrive",
+          "near": 5,
+          "bossDist": null
+        },
+        {
+          "at": 116,
+          "reason": "multi-target-overdrive",
+          "near": 31,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 5.8,
+      "xpSeekKinds": {
+        "orb": 348
+      },
+      "xpOnField": 834,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 1,
+        "survival": 3,
+        "experience": 3,
+        "primaryOffers": 7,
+        "survivalOffers": 9,
+        "history": [
+          {
+            "at": 10,
+            "level": 2,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 22,
+            "level": 3,
+            "id": "expShield",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": true
+          },
+          {
+            "at": 32,
+            "level": 4,
+            "id": "frostSpike",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 45,
+            "level": 5,
+            "id": "arsRepairMesh",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 62,
+            "level": 6,
+            "id": "meteorSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "rockPower",
+            "rarity": "power",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "bounty",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 71,
+            "level": 9,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 101,
+            "level": 10,
+            "id": "emberSeed",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 111,
+            "level": 11,
+            "id": "xp",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 119,
+            "main": "rock",
+            "sub": "fire",
+            "slot": "A",
+            "mainPoints": 9.5,
+            "subPoints": 1,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 44.2,
+        "rate": 0.53,
+        "multishot": 1,
+        "laserCount": 2,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0.35,
+        "shieldMax": 41.4
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 128.0929728411138,
+        "firstVacuumAt": 121.01133918855339,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "charge",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 10897.536,
+      "dps": 90.813,
+      "bossDamage": 768,
+      "kills": 236,
+      "hits": 2,
+      "damageTaken": 0,
+      "dashCount": 5,
+      "novaCount": 5,
+      "level": 11,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 1,
+      "elementFusions": 0,
+      "damageBySource": {
+        "charge": 5952.253977845279,
+        "nova": 1116.410022154722,
+        "element": 1786.647999999992,
+        "missile": 360.0079999999999,
+        "explosion": 1682.216
+      },
+      "killsByType": {
+        "drone": 203,
+        "stinger": 32,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 2,
+        "ultimate": 2,
+        "recovery": 2,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 20.714,
+      "pickedExp": 1545,
+      "pickedOrbs": 107,
+      "vacuumExp": 802,
+      "vacuumOrbs": 53,
+      "healingPickups": 1,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2644,
+          "bossDamage": 0,
+          "kills": 84,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "charge": 2209,
+            "nova": 435
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 8253.536000000138,
+          "bossDamage": 768,
+          "kills": 152,
+          "hits": 2,
+          "damageTaken": 0,
+          "sources": {
+            "charge": 3743.2539778452783,
+            "nova": 681.4100221547219,
+            "element": 1786.647999999992,
+            "missile": 360.0079999999999,
+            "explosion": 1682.216
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        },
+        {
+          "at": 87.4,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 88.75,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 88.75,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 138,
+      "maxHp": 138,
+      "survivalSeconds": 120,
+      "aiMoves": 1824,
+      "aiDodges": 5,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 106,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 5
+      },
+      "novaReasons": {
+        "comet-volley": 4,
+        "boss-comet": 1
+      },
+      "novaContexts": [
+        {
+          "at": 34,
+          "reason": "comet-volley",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 56,
+          "reason": "comet-volley",
+          "near": 10,
+          "bossDist": null
+        },
+        {
+          "at": 69,
+          "reason": "boss-comet",
+          "near": 0,
+          "bossDist": 346
+        },
+        {
+          "at": 89,
+          "reason": "comet-volley",
+          "near": 8,
+          "bossDist": null
+        },
+        {
+          "at": 108,
+          "reason": "comet-volley",
+          "near": 0,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 2.4,
+      "xpSeekKinds": {
+        "orb": 144
+      },
+      "xpOnField": 1309,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 3,
+        "survival": 3,
+        "experience": 2,
+        "primaryOffers": 7,
+        "survivalOffers": 6,
+        "history": [
+          {
+            "at": 28,
+            "level": 2,
+            "id": "shieldEpic",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 32,
+            "level": 3,
+            "id": "cPower",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 38,
+            "level": 4,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 56,
+            "level": 5,
+            "id": "expShield",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": true
+          },
+          {
+            "at": 62,
+            "level": 6,
+            "id": "bounty",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 66,
+            "level": 7,
+            "id": "hp",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 89,
+            "level": 10,
+            "id": "flameField",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 89,
+            "level": 10,
+            "id": "windTwin",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 89,
+            "level": 10,
+            "id": "cPower",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 89,
+            "level": 10,
+            "id": "windEngine",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 120,
+            "level": 11,
+            "id": "iceBallVolley",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 47.2,
+        "rate": 0.58,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 96.6
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 11,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "charge",
+      "seed": 2,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 12405.496,
+      "dps": 103.379,
+      "bossDamage": 768,
+      "kills": 265,
+      "hits": 3,
+      "damageTaken": 0,
+      "dashCount": 1,
+      "novaCount": 6,
+      "level": 10,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 4,
+      "elementFusions": 0,
+      "damageBySource": {
+        "charge": 5562.973583377478,
+        "nova": 565.3879999999999,
+        "element": 4884.557376622504,
+        "iceball": 901.57672,
+        "pulseField": 491.00032
+      },
+      "killsByType": {
+        "drone": 227,
+        "stinger": 37,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 1,
+        "ultimate": 1,
+        "recovery": 1,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 271.346,
+      "pickedExp": 1542,
+      "pickedOrbs": 104,
+      "vacuumExp": 806,
+      "vacuumOrbs": 55,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2439.000000000005,
+          "bossDamage": 0,
+          "kills": 78,
+          "hits": 2,
+          "damageTaken": 0,
+          "sources": {
+            "charge": 1961.9679999999996,
+            "nova": 109.14799999999994,
+            "element": 241.16799999999992,
+            "iceball": 126.71599999999998
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 9966.495999999848,
+          "bossDamage": 767.9999999999999,
+          "kills": 187,
+          "hits": 1,
+          "damageTaken": 0,
+          "sources": {
+            "element": 4643.389376622517,
+            "charge": 3601.0055833774795,
+            "iceball": 774.86072,
+            "pulseField": 491.00032,
+            "nova": 456.24
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 115,
+      "maxHp": 115,
+      "survivalSeconds": 120,
+      "aiMoves": 1681,
+      "aiDodges": 1,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 117,
+      "novaReadySeconds": 1,
+      "dashReasons": {
+        "emergency-evade": 1
+      },
+      "novaReasons": {
+        "comet-volley": 4,
+        "boss-comet": 2
+      },
+      "novaContexts": [
+        {
+          "at": 38,
+          "reason": "comet-volley",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 52,
+          "reason": "comet-volley",
+          "near": 5,
+          "bossDist": null
+        },
+        {
+          "at": 65,
+          "reason": "boss-comet",
+          "near": 4,
+          "bossDist": 505
+        },
+        {
+          "at": 79,
+          "reason": "boss-comet",
+          "near": 1,
+          "bossDist": 307
+        },
+        {
+          "at": 92,
+          "reason": "comet-volley",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 112,
+          "reason": "comet-volley",
+          "near": 3,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 2.4,
+      "xpSeekKinds": {
+        "orb": 144
+      },
+      "xpOnField": 1771,
+      "rewardAudit": {
+        "choices": 10,
+        "primary": 1,
+        "survival": 1,
+        "experience": 2,
+        "primaryOffers": 4,
+        "survivalOffers": 7,
+        "history": [
+          {
+            "at": 30,
+            "level": 2,
+            "id": "expShield",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": true
+          },
+          {
+            "at": 36,
+            "level": 3,
+            "id": "cPierce",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 40,
+            "level": 4,
+            "id": "windOrigin",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 50,
+            "level": 5,
+            "id": "coldCoil",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 64,
+            "level": 6,
+            "id": "chain",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 7,
+            "id": "windEngine",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "boomerang",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "bounty",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "windTwin",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 112,
+            "level": 10,
+            "id": "storm",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 68.08,
+        "rate": 0.58,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 41.4
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 150.9998745843768,
+        "firstVacuumAt": 121.71254721703008,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 10,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "charge",
+      "seed": 3,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 12033.872,
+      "dps": 100.282,
+      "bossDamage": 768,
+      "kills": 264,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 5,
+      "level": 11,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 5,
+      "elementFusions": 0,
+      "damageBySource": {
+        "charge": 4684.526104,
+        "element": 5606.004296000086,
+        "nova": 687.2016,
+        "pulseField": 707.6359999999999,
+        "magma": 343.524,
+        "dot": 4.980000000000011
+      },
+      "killsByType": {
+        "drone": 229,
+        "stinger": 34,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 1,
+        "ultimate": 1,
+        "recovery": 1,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 50.307,
+      "pickedExp": 1951,
+      "pickedOrbs": 128,
+      "vacuumExp": 1125,
+      "vacuumOrbs": 78,
+      "healingPickups": 4,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2687.424799999996,
+          "bossDamage": 0,
+          "kills": 85,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "charge": 1692.5927999999997,
+            "element": 960.8319999999958,
+            "nova": 34
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 9346.44720000013,
+          "bossDamage": 768,
+          "kills": 179,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "element": 4645.172296,
+            "charge": 2991.9333040000006,
+            "nova": 653.2016,
+            "pulseField": 707.6359999999999,
+            "magma": 343.524,
+            "dot": 4.980000000000011
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 115,
+      "maxHp": 115,
+      "survivalSeconds": 120,
+      "aiMoves": 1584,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 115,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {
+        "comet-volley": 4,
+        "boss-comet": 1
+      },
+      "novaContexts": [
+        {
+          "at": 44,
+          "reason": "comet-volley",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 64,
+          "reason": "boss-comet",
+          "near": 1,
+          "bossDist": 562
+        },
+        {
+          "at": 79,
+          "reason": "comet-volley",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 98,
+          "reason": "comet-volley",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 112,
+          "reason": "comet-volley",
+          "near": 7,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 1.27,
+      "xpSeekKinds": {
+        "orb": 76
+      },
+      "xpOnField": 1017,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 2,
+        "survival": 2,
+        "experience": 1,
+        "primaryOffers": 2,
+        "survivalOffers": 8,
+        "history": [
+          {
+            "at": 36,
+            "level": 2,
+            "id": "windEngine",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 38,
+            "level": 3,
+            "id": "windTwin",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 48,
+            "level": 4,
+            "id": "barrier",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 64,
+            "level": 5,
+            "id": "cPower",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "pulseGrid",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "stoneAnchor",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "stoneSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 79,
+            "level": 9,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 106,
+            "level": 10,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 112,
+            "level": 11,
+            "id": "static",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 47.2,
+        "rate": 0.58,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 177,
+        "regen": 0,
+        "shieldMax": 123.64
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 128.0929728411138,
+        "firstVacuumAt": 121.01133918855339,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 11,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "drill",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 12506,
+      "dps": 104.217,
+      "bossDamage": 768,
+      "kills": 271,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 64,
+      "novaCount": 8,
+      "level": 12,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 3,
+      "elementFusions": 1,
+      "damageBySource": {
+        "drill": 2692.94019675,
+        "nova": 7491.272705944222,
+        "meteor": 620,
+        "frostSpike": 1332.0065038999287,
+        "iceball": 369.7805934058488
+      },
+      "killsByType": {
+        "drone": 238,
+        "stinger": 32,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 3593,
+      "pickedOrbs": 242,
+      "vacuumExp": 271,
+      "vacuumOrbs": 15,
+      "healingPickups": 2,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2885,
+          "bossDamage": 0,
+          "kills": 90,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "drill": 817,
+            "nova": 1842,
+            "meteor": 36,
+            "frostSpike": 190
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 9621,
+          "bossDamage": 768,
+          "kills": 181,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "frostSpike": 1142.0065038999287,
+            "drill": 1875.9401967499998,
+            "iceball": 369.7805934058488,
+            "nova": 5649.272705944222,
+            "meteor": 584
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 221,
+      "maxHp": 221,
+      "survivalSeconds": 120,
+      "aiMoves": 5408,
+      "aiDodges": 64,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 54,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "legacy-dash": 64
+      },
+      "novaReasons": {
+        "legacy-nova": 8
+      },
+      "novaContexts": [
+        {
+          "at": 22,
+          "reason": "legacy-nova",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 36,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 49,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 63,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": 146
+        },
+        {
+          "at": 76,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 90,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 104,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 117,
+          "reason": "legacy-nova",
+          "near": 8,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": {
+        "targetSeconds": 119.783,
+        "inReachSeconds": 58.033,
+        "forwardOverlapSeconds": 4.4,
+        "movingSeconds": 90.6,
+        "dashSeconds": 14.8,
+        "damageStepSeconds": 0.933,
+        "meanAimErrorDegrees": 67.78,
+        "forwardOverlapPercent": 3.67
+      },
+      "xpSeekSeconds": 1,
+      "xpSeekKinds": {
+        "orb": 60
+      },
+      "xpOnField": 320,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 3,
+        "survival": 2,
+        "experience": 2,
+        "primaryOffers": 10,
+        "survivalOffers": 5,
+        "history": [
+          {
+            "at": 1,
+            "level": 2,
+            "id": "dContact",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 13,
+            "level": 3,
+            "id": "dArmor",
+            "rarity": "rare",
+            "primary": true,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 23,
+            "level": 4,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 28,
+            "level": 5,
+            "id": "expShield",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": true
+          },
+          {
+            "at": 39,
+            "level": 6,
+            "id": "meteorSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 47,
+            "level": 7,
+            "id": "frostSpike",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 60,
+            "level": 8,
+            "id": "iceLock",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 66,
+            "level": 8,
+            "id": "meteorPower",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 9,
+            "id": "iceBall",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 90,
+            "level": 10,
+            "id": "meteorAnvil",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 106,
+            "level": 11,
+            "id": "dTwinBit",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 114,
+            "main": "rock",
+            "sub": "ice",
+            "slot": "B",
+            "mainPoints": 7.5,
+            "subPoints": 6,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 31,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 177,
+        "regen": 0,
+        "shieldMax": 89.84000000000002
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "drill",
+      "seed": 2,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 15448,
+      "dps": 128.733,
+      "bossDamage": 768,
+      "kills": 331,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 70,
+      "novaCount": 8,
+      "level": 14,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 3,
+      "elementFusions": 1,
+      "damageBySource": {
+        "drill": 2524.4599999999996,
+        "pulseField": 3211.666748623396,
+        "nova": 5109.917626376605,
+        "explosion": 1719.92,
+        "magma": 962.9675,
+        "dot": 157.60812500000003,
+        "missile": 699.46,
+        "other": 1062
+      },
+      "killsByType": {
+        "drone": 276,
+        "stinger": 54,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 4516,
+      "pickedOrbs": 302,
+      "vacuumExp": 212,
+      "vacuumOrbs": 11,
+      "healingPickups": 5,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 3241,
+          "bossDamage": 0,
+          "kills": 100,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "drill": 722.9,
+            "pulseField": 1204.1000000000004,
+            "nova": 1208,
+            "explosion": 34,
+            "magma": 65.125,
+            "dot": 6.875
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 12207,
+          "bossDamage": 767.9999999999998,
+          "kills": 231,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "pulseField": 2007.5667486233954,
+            "magma": 897.8425,
+            "dot": 150.73312500000003,
+            "drill": 1801.5599999999997,
+            "missile": 699.46,
+            "explosion": 1685.92,
+            "nova": 3901.917626376605,
+            "other": 1062
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 175,
+      "maxHp": 175,
+      "survivalSeconds": 120,
+      "aiMoves": 6865,
+      "aiDodges": 70,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 48,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "legacy-dash": 70
+      },
+      "novaReasons": {
+        "legacy-nova": 8
+      },
+      "novaContexts": [
+        {
+          "at": 14,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 28,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 41,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 55,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 69,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 82,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 96,
+          "reason": "legacy-nova",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 109,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": {
+        "targetSeconds": 120,
+        "inReachSeconds": 23.017,
+        "forwardOverlapSeconds": 3.95,
+        "movingSeconds": 115.15,
+        "dashSeconds": 16.333,
+        "damageStepSeconds": 0.967,
+        "meanAimErrorDegrees": 31.44,
+        "forwardOverlapPercent": 3.29
+      },
+      "xpSeekSeconds": 1.2,
+      "xpSeekKinds": {
+        "orb": 72
+      },
+      "xpOnField": 384,
+      "rewardAudit": {
+        "choices": 13,
+        "primary": 3,
+        "survival": 0,
+        "experience": 3,
+        "primaryOffers": 12,
+        "survivalOffers": 6,
+        "history": [
+          {
+            "at": 1,
+            "level": 2,
+            "id": "empOverdrive",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 11,
+            "level": 3,
+            "id": "ionCompression",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 19,
+            "level": 4,
+            "id": "thermal",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 25,
+            "level": 5,
+            "id": "blast",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 35,
+            "level": 6,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 46,
+            "level": 7,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 57,
+            "level": 8,
+            "id": "static",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 63,
+            "level": 8,
+            "id": "missileFlare",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 66,
+            "level": 9,
+            "id": "dContact",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 84,
+            "level": 10,
+            "id": "bounty",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 105,
+            "level": 11,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 113,
+            "level": 13,
+            "id": "dTwinBit",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 117,
+            "level": 14,
+            "id": "dContact",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 110,
+            "main": "fire",
+            "sub": "thunder",
+            "slot": "A",
+            "mainPoints": 11,
+            "subPoints": 5,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 31,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 242,
+        "regen": 0,
+        "shieldMax": 0
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 150.9998745843768,
+        "firstVacuumAt": 121.71254721703008,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 14,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "drill",
+      "seed": 3,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 13978,
+      "dps": 116.483,
+      "bossDamage": 768,
+      "kills": 297,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 51,
+      "novaCount": 8,
+      "level": 13,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 1,
+      "damageBySource": {
+        "drill": 6686.65,
+        "nova": 6739.969999999999,
+        "missile": 153.46,
+        "explosion": 397.46000000000004,
+        "iceball": 0.46000000000000085
+      },
+      "killsByType": {
+        "drone": 263,
+        "minor": 1,
+        "stinger": 33
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 4030,
+      "pickedOrbs": 269,
+      "vacuumExp": 288,
+      "vacuumOrbs": 17,
+      "healingPickups": 2,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 3025.54,
+          "bossDamage": 0,
+          "kills": 93,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "drill": 790.62,
+            "nova": 2234.92
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 10952.46,
+          "bossDamage": 768,
+          "kills": 204,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "drill": 5896.03,
+            "nova": 4505.05,
+            "missile": 153.46,
+            "explosion": 397.46000000000004,
+            "iceball": 0.46000000000000085
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 213.64,
+      "maxHp": 213.64,
+      "survivalSeconds": 120,
+      "aiMoves": 6058,
+      "aiDodges": 51,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 68,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "legacy-dash": 51
+      },
+      "novaReasons": {
+        "legacy-nova": 8
+      },
+      "novaContexts": [
+        {
+          "at": 24,
+          "reason": "legacy-nova",
+          "near": 7,
+          "bossDist": null
+        },
+        {
+          "at": 38,
+          "reason": "legacy-nova",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 51,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 65,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": 59
+        },
+        {
+          "at": 79,
+          "reason": "legacy-nova",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 92,
+          "reason": "legacy-nova",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 106,
+          "reason": "legacy-nova",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 119,
+          "reason": "legacy-nova",
+          "near": 3,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": {
+        "targetSeconds": 120,
+        "inReachSeconds": 49.667,
+        "forwardOverlapSeconds": 6,
+        "movingSeconds": 100.917,
+        "dashSeconds": 11.9,
+        "damageStepSeconds": 1.867,
+        "meanAimErrorDegrees": 55.81,
+        "forwardOverlapPercent": 5
+      },
+      "xpSeekSeconds": 6.23,
+      "xpSeekKinds": {
+        "orb": 374
+      },
+      "xpOnField": 269,
+      "rewardAudit": {
+        "choices": 12,
+        "primary": 9,
+        "survival": 1,
+        "experience": 0,
+        "primaryOffers": 12,
+        "survivalOffers": 7,
+        "history": [
+          {
+            "at": 4,
+            "level": 2,
+            "id": "dHyper",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 22,
+            "level": 3,
+            "id": "dRecovery",
+            "rarity": "rare",
+            "primary": true,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 25,
+            "level": 4,
+            "id": "dHyper",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 29,
+            "level": 5,
+            "id": "dash",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 39,
+            "level": 6,
+            "id": "dStream",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 50,
+            "level": 7,
+            "id": "dTwinBit",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 67,
+            "level": 8,
+            "id": "novaCoreDrill",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 67,
+            "level": 8,
+            "id": "dEdgeStorm",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 9,
+            "id": "dSpear",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 88,
+            "level": 10,
+            "id": "dHyper",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 108,
+            "level": 11,
+            "id": "iceBallFocus",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 112,
+            "level": 12,
+            "id": "rocket",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 116,
+            "main": "fire",
+            "sub": "ice",
+            "slot": "A",
+            "mainPoints": 3,
+            "subPoints": 2,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 31,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 277,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 1.3800000000000001,
+        "shieldMax": 0
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 128.0929728411138,
+        "firstVacuumAt": 121.01133918855339,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 13,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "dog",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 11559,
+      "dps": 96.325,
+      "bossDamage": 768,
+      "kills": 254,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 6,
+      "level": 12,
+      "skills": 10,
+      "evolutions": 0,
+      "synergies": 4,
+      "elementFusions": 1,
+      "damageBySource": {
+        "bone": 4622.0412670303385,
+        "nova": 1089.0787329696623,
+        "lightningBolt": 2582.0399999999995,
+        "pulseField": 1659.2799999999995,
+        "rock": 34.96,
+        "frostSpike": 1158.8,
+        "iceball": 412.8
+      },
+      "killsByType": {
+        "drone": 220,
+        "stinger": 33,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 1,
+        "ultimate": 1,
+        "recovery": 1,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 158.2,
+      "pickedExp": 2594,
+      "pickedOrbs": 174,
+      "vacuumExp": 589,
+      "vacuumOrbs": 38,
+      "healingPickups": 2,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2332,
+          "bossDamage": 0,
+          "kills": 76,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "bone": 2053,
+            "nova": 29,
+            "lightningBolt": 250
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 9227,
+          "bossDamage": 768.0000000000001,
+          "kills": 178,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "bone": 2569.0412670303367,
+            "pulseField": 1659.2799999999995,
+            "lightningBolt": 2332.0399999999995,
+            "nova": 1060.0787329696623,
+            "rock": 34.96,
+            "frostSpike": 1158.8,
+            "iceball": 412.8
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 93.03,
+      "maxHp": 93.0312,
+      "survivalSeconds": 120,
+      "aiMoves": 6183,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 115,
+      "novaReadySeconds": 1,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {
+        "radial-bow-shock": 5,
+        "boss-bow-shock": 1
+      },
+      "novaContexts": [
+        {
+          "at": 25,
+          "reason": "radial-bow-shock",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 54,
+          "reason": "radial-bow-shock",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 68,
+          "reason": "boss-bow-shock",
+          "near": 4,
+          "bossDist": 226
+        },
+        {
+          "at": 81,
+          "reason": "radial-bow-shock",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 95,
+          "reason": "radial-bow-shock",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 115,
+          "reason": "radial-bow-shock",
+          "near": 13,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 3.82,
+      "xpSeekKinds": {
+        "orb": 229
+      },
+      "xpOnField": 759,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 8,
+        "survival": 2,
+        "experience": 0,
+        "primaryOffers": 11,
+        "survivalOffers": 5,
+        "history": [
+          {
+            "at": 15,
+            "level": 2,
+            "id": "repair",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 22,
+            "level": 3,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 34,
+            "level": 4,
+            "id": "radius",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 54,
+            "level": 5,
+            "id": "dogSnake",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 61,
+            "level": 6,
+            "id": "dogHedgehog",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 70,
+            "level": 7,
+            "id": "dogCatFort",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 78,
+            "level": 9,
+            "id": "novaCoreDog",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 78,
+            "level": 9,
+            "id": "dogRabbit",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 78,
+            "level": 9,
+            "id": "dogHare",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 106,
+            "level": 10,
+            "id": "glassReactor",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 118,
+            "level": 11,
+            "id": "dogHamMeteor",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 120,
+            "main": "rock",
+            "sub": "ice",
+            "slot": "A",
+            "mainPoints": 4,
+            "subPoints": 3,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 135.6,
+        "rate": 1.12,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 0
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "dog",
+      "seed": 2,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 10803.83,
+      "dps": 90.032,
+      "bossDamage": 768,
+      "kills": 245,
+      "hits": 1,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 7,
+      "level": 12,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 1,
+      "damageBySource": {
+        "bone": 6536.816000000001,
+        "nova": 1591.3719999999998,
+        "frostSpike": 1192.312,
+        "darkVirus": 1037.1349999999998,
+        "darkAlly": 446.195
+      },
+      "killsByType": {
+        "drone": 203,
+        "stinger": 41,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 1,
+        "ultimate": 1,
+        "recovery": 1,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 187.872,
+      "pickedExp": 2848,
+      "pickedOrbs": 192,
+      "vacuumExp": 316,
+      "vacuumOrbs": 19,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2550,
+          "bossDamage": 0,
+          "kills": 82,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "bone": 2483,
+            "nova": 67
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 8253.830000000002,
+          "bossDamage": 767.9999999999998,
+          "kills": 163,
+          "hits": 1,
+          "damageTaken": 0,
+          "sources": {
+            "bone": 4053.8160000000003,
+            "nova": 1524.3719999999998,
+            "frostSpike": 1192.312,
+            "darkVirus": 1037.1349999999998,
+            "darkAlly": 446.195
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 111.16,
+      "maxHp": 111.1644,
+      "survivalSeconds": 120,
+      "aiMoves": 6307,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 114,
+      "novaReadySeconds": 1,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {
+        "radial-bow-shock": 6,
+        "boss-bow-shock": 1
+      },
+      "novaContexts": [
+        {
+          "at": 32,
+          "reason": "radial-bow-shock",
+          "near": 2,
+          "bossDist": null
+        },
+        {
+          "at": 47,
+          "reason": "radial-bow-shock",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 60,
+          "reason": "radial-bow-shock",
+          "near": 5,
+          "bossDist": 661
+        },
+        {
+          "at": 74,
+          "reason": "boss-bow-shock",
+          "near": 3,
+          "bossDist": 274
+        },
+        {
+          "at": 88,
+          "reason": "radial-bow-shock",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 104,
+          "reason": "radial-bow-shock",
+          "near": 4,
+          "bossDist": null
+        },
+        {
+          "at": 117,
+          "reason": "radial-bow-shock",
+          "near": 26,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 3.8,
+      "xpSeekKinds": {
+        "orb": 228
+      },
+      "xpOnField": 635,
+      "rewardAudit": {
+        "choices": 11,
+        "primary": 6,
+        "survival": 3,
+        "experience": 1,
+        "primaryOffers": 10,
+        "survivalOffers": 6,
+        "history": [
+          {
+            "at": 19,
+            "level": 2,
+            "id": "novaFracture",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 31,
+            "level": 3,
+            "id": "arsCollector",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 33,
+            "level": 4,
+            "id": "hp",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 43,
+            "level": 5,
+            "id": "shieldEpic",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 55,
+            "level": 6,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 62,
+            "level": 7,
+            "id": "dogBonePack",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 73,
+            "level": 8,
+            "id": "dogHare",
+            "rarity": "uncommon",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 75,
+            "level": 9,
+            "id": "novaCoreDog",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 75,
+            "level": 9,
+            "id": "dogBear",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 104,
+            "level": 10,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 115,
+            "level": 11,
+            "id": "glassReactor",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 1,
+        "accepted": 1,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": [
+          {
+            "at": 119,
+            "main": "dark",
+            "sub": "ice",
+            "slot": "B",
+            "mainPoints": 2,
+            "subPoints": 1.5,
+            "accepted": true
+          }
+        ]
+      },
+      "weaponState": {
+        "dmg": 144.8,
+        "rate": 1.12,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 2,
+        "magnet": 136,
+        "regen": 0,
+        "shieldMax": 55.2
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 150.9998745843768,
+        "firstVacuumAt": 121.71254721703008,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 1,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "dog",
+      "seed": 3,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 9161,
+      "dps": 76.342,
+      "bossDamage": 768,
+      "kills": 209,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 6,
+      "level": 12,
+      "skills": 7,
+      "evolutions": 0,
+      "synergies": 0,
+      "elementFusions": 0,
+      "damageBySource": {
+        "bone": 7994.984088583928,
+        "nova": 1166.0159114160729
+      },
+      "killsByType": {
+        "drone": 187,
+        "stinger": 21,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 1,
+        "ultimate": 1,
+        "recovery": 1,
+        "earlyKills": 0
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 2888,
+      "pickedOrbs": 194,
+      "vacuumExp": 296,
+      "vacuumOrbs": 17,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2256,
+          "bossDamage": 0,
+          "kills": 73,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "bone": 2178,
+            "nova": 78
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 6905,
+          "bossDamage": 768,
+          "kills": 136,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "bone": 5816.984088583927,
+            "nova": 1088.0159114160729
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        },
+        {
+          "at": 73.633,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "telegraph"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "ultimate"
+        },
+        {
+          "at": 74.983,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "recovery"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 118,
+      "maxHp": 118,
+      "survivalSeconds": 120,
+      "aiMoves": 6355,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 115,
+      "novaReadySeconds": 0,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {
+        "radial-bow-shock": 4,
+        "boss-bow-shock": 2
+      },
+      "novaContexts": [
+        {
+          "at": 26,
+          "reason": "radial-bow-shock",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 54,
+          "reason": "radial-bow-shock",
+          "near": 6,
+          "bossDist": null
+        },
+        {
+          "at": 68,
+          "reason": "boss-bow-shock",
+          "near": 10,
+          "bossDist": 213
+        },
+        {
+          "at": 81,
+          "reason": "boss-bow-shock",
+          "near": 1,
+          "bossDist": 195
+        },
+        {
+          "at": 95,
+          "reason": "radial-bow-shock",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 108,
+          "reason": "radial-bow-shock",
+          "near": 9,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": null,
+      "ghostPlans": 0,
+      "phantomSamples": [],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 2,
+      "xpSeekKinds": {
+        "orb": 120
+      },
+      "xpOnField": 64,
+      "rewardAudit": {
+        "choices": 12,
+        "primary": 6,
+        "survival": 4,
+        "experience": 2,
+        "primaryOffers": 11,
+        "survivalOffers": 8,
+        "history": [
+          {
+            "at": 15,
+            "level": 2,
+            "id": "novaFracture",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 24,
+            "level": 3,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 32,
+            "level": 4,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 54,
+            "level": 5,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 57,
+            "level": 6,
+            "id": "dogGoodBoy",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 66,
+            "level": 7,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 8,
+            "id": "shieldEpic",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 82,
+            "level": 9,
+            "id": "novaCoreDog",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 82,
+            "level": 9,
+            "id": "expShield",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": true
+          },
+          {
+            "at": 98,
+            "level": 10,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 111,
+            "level": 11,
+            "id": "dashPulse",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 120,
+            "level": 12,
+            "id": "shieldEpic",
+            "rarity": "epic",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 85.00000000000001,
+        "rate": 1.12,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 177,
+        "regen": 0,
+        "shieldMax": 151.8
+      },
+      "phantomState": null,
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 128.0929728411138,
+        "firstVacuumAt": 121.01133918855339,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 12,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 1,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 10807.658,
+      "dps": 90.064,
+      "bossDamage": 768,
+      "kills": 239,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 3,
+      "novaCount": 6,
+      "level": 10,
+      "skills": 9,
+      "evolutions": 0,
+      "synergies": 1,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 7945.202439999999,
+        "phantomDart": 1165.1209999999987,
+        "meteor": 381.52,
+        "element": 300.3375999999999,
+        "dot": 311.01620000000014,
+        "magma": 704.4610000000004
+      },
+      "killsByType": {
+        "drone": 205,
+        "stinger": 33,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 2455,
+      "pickedOrbs": 169,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2797.0000000000036,
+          "bossDamage": 0,
+          "kills": 88,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 2295.4694400000003,
+            "phantomDart": 388.6969599999998,
+            "meteor": 112.8336
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 8010.6582399999725,
+          "bossDamage": 768.0000000000001,
+          "kills": 151,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 5649.732999999999,
+            "element": 300.3375999999999,
+            "dot": 311.01620000000014,
+            "phantomDart": 776.4240400000003,
+            "meteor": 268.6864,
+            "magma": 704.4610000000004
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 108.8,
+      "maxHp": 108.79999999999998,
+      "survivalSeconds": 120,
+      "aiMoves": 7200,
+      "aiDodges": 3,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 111,
+      "novaReadySeconds": 19,
+      "dashReasons": {
+        "emergency-evade": 3
+      },
+      "novaReasons": {
+        "spectral-overdrive": 6
+      },
+      "novaContexts": [
+        {
+          "at": 16,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 44,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 60,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": 198
+        },
+        {
+          "at": 75,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 91,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 105,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 1200,
+      "phantomSamples": [
+        {
+          "at": 0,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 1,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 640,
+          "y": 400,
+          "xpOnField": 0,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 0,
+          "extraDamage": 0
+        },
+        {
+          "at": 10,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 2,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 1014.5584412271592,
+          "y": 247.2649352637049,
+          "xpOnField": 24,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 343,
+          "extraDamage": 0
+        },
+        {
+          "at": 20,
+          "hp": 104.19999999999999,
+          "maxHp": 104.19999999999999,
+          "shield": 18.68,
+          "level": 4,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 215.02943725152315,
+          "y": 475.618182281979,
+          "xpOnField": 26,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 1,
+          "dartUnlocked": 1,
+          "dartActive": true,
+          "primaryDamage": 767,
+          "extraDamage": 0
+        },
+        {
+          "at": 30,
+          "hp": 104.19999999999999,
+          "maxHp": 104.19999999999999,
+          "shield": 18.68,
+          "level": 5,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 1112.4709960243651,
+          "y": 618.4121215213204,
+          "xpOnField": 26,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 1,
+          "dartUnlocked": 1,
+          "dartActive": true,
+          "primaryDamage": 1069.50048,
+          "extraDamage": 0
+        },
+        {
+          "at": 40,
+          "hp": 104.19999999999999,
+          "maxHp": 104.19999999999999,
+          "shield": 18.68,
+          "level": 5,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 817.4415587728424,
+          "y": 669.3238097667522,
+          "xpOnField": 237,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 1,
+          "dartActive": false,
+          "primaryDamage": 1547.3756799999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 50,
+          "hp": 104.19999999999999,
+          "maxHp": 104.19999999999999,
+          "shield": 18.68,
+          "level": 5,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 865.4415587728424,
+          "y": 669.3238097667522,
+          "xpOnField": 489,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 1,
+          "dartUnlocked": 1,
+          "dartActive": true,
+          "primaryDamage": 2005.87584,
+          "extraDamage": 0
+        },
+        {
+          "at": 60,
+          "hp": 104.19999999999999,
+          "maxHp": 104.19999999999999,
+          "shield": 18.68,
+          "level": 6,
+          "phantomLevel": 3,
+          "count": 1,
+          "x": 655.2649352637061,
+          "y": 119.73593128807119,
+          "xpOnField": 349,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 1,
+          "dartActive": false,
+          "primaryDamage": 2295.4694400000003,
+          "extraDamage": 0
+        },
+        {
+          "at": 70,
+          "hp": 108.79999999999998,
+          "maxHp": 108.79999999999998,
+          "shield": 20.52,
+          "level": 8,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 688.7064940365476,
+          "y": 525.9419920487303,
+          "xpOnField": 43,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 1,
+          "dartUnlocked": 1,
+          "dartActive": true,
+          "primaryDamage": 3277.2534399999995,
+          "extraDamage": 0
+        },
+        {
+          "at": 80,
+          "hp": 108.79999999999998,
+          "maxHp": 108.79999999999998,
+          "shield": 20.52,
+          "level": 9,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 1119.0847404171013,
+          "y": 117.85811818340494,
+          "xpOnField": 208,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 1,
+          "dartUnlocked": 1,
+          "dartActive": true,
+          "primaryDamage": 3934.8054399999987,
+          "extraDamage": 0
+        },
+        {
+          "at": 90,
+          "hp": 108.79999999999998,
+          "maxHp": 108.79999999999998,
+          "shield": 20.52,
+          "level": 9,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 537.2613639262377,
+          "y": 261.858118183405,
+          "xpOnField": 373,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 1,
+          "dartActive": false,
+          "primaryDamage": 4462.38336,
+          "extraDamage": 0
+        },
+        {
+          "at": 100,
+          "hp": 108.79999999999998,
+          "maxHp": 108.79999999999998,
+          "shield": 20.52,
+          "level": 10,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 891.4379874353738,
+          "y": 164.15249069863387,
+          "xpOnField": 172,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 1,
+          "dartUnlocked": 1,
+          "dartActive": true,
+          "primaryDamage": 5228.452000000001,
+          "extraDamage": 0
+        },
+        {
+          "at": 110,
+          "hp": 108.79999999999998,
+          "maxHp": 108.79999999999998,
+          "shield": 20.52,
+          "level": 10,
+          "phantomLevel": 4,
+          "count": 1,
+          "x": 1018.9669914110102,
+          "y": 215.56374566817937,
+          "xpOnField": 556,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 1,
+          "dartActive": false,
+          "primaryDamage": 6743.108040000002,
+          "extraDamage": 0
+        }
+      ],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 110.3,
+      "xpSeekKinds": {
+        "orb": 6618
+      },
+      "xpOnField": 1214,
+      "rewardAudit": {
+        "choices": 10,
+        "primary": 5,
+        "survival": 1,
+        "experience": 1,
+        "primaryOffers": 10,
+        "survivalOffers": 4,
+        "history": [
+          {
+            "at": 3,
+            "level": 2,
+            "id": "pickup",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 11,
+            "level": 3,
+            "id": "ph_assault",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 19,
+            "level": 4,
+            "id": "ph_darts",
+            "rarity": "rare",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 26,
+            "level": 5,
+            "id": "meteorCore",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 56,
+            "level": 6,
+            "id": "windOrigin",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 61,
+            "level": 7,
+            "id": "ph_limit",
+            "rarity": "epic",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 65,
+            "level": 8,
+            "id": "magmaPulse",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 72,
+            "level": 8,
+            "id": "ph_bastion",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 75,
+            "level": 9,
+            "id": "dashPulse",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 97,
+            "level": 10,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 41.2,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 177,
+        "regen": 0,
+        "shieldMax": 20.52
+      },
+      "phantomState": {
+        "level": 4,
+        "count": 1,
+        "ranks": {
+          "assault": 1,
+          "darts": 1,
+          "limit": 1,
+          "bastion": 1
+        },
+        "metrics": {
+          "primaryDamage": 7945.20244,
+          "extraDamage": 1165.1210000000085,
+          "bladeHits": 237,
+          "attacks": 182,
+          "aiMs": 365.1273540005059
+        },
+        "dartTypes": [
+          "shot"
+        ],
+        "hp": 108.79999999999998,
+        "shield": 20.52
+      },
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 125.21885769441724,
+        "firstVacuumAt": 116.35369702940807,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 10,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 2,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 10207,
+      "dps": 85.058,
+      "bossDamage": 768,
+      "kills": 224,
+      "hits": 1,
+      "damageTaken": 0,
+      "dashCount": 6,
+      "novaCount": 6,
+      "level": 10,
+      "skills": 8,
+      "evolutions": 0,
+      "synergies": 1,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 7607.684800000015,
+        "nova": 285,
+        "blade": 1931.2748000000008,
+        "rock": 69.03099999999999,
+        "element": 314.00939999999974
+      },
+      "killsByType": {
+        "drone": 207,
+        "minor": 1,
+        "stinger": 16
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 2351,
+      "pickedOrbs": 160,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 3,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2607,
+          "bossDamage": 0,
+          "kills": 82,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 2607
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 7599.999999999974,
+          "bossDamage": 768.0000000000001,
+          "kills": 142,
+          "hits": 1,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 5000.684800000005,
+            "nova": 285,
+            "blade": 1931.2748000000008,
+            "rock": 69.03099999999999,
+            "element": 314.00939999999974
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 150.2,
+      "maxHp": 150.2,
+      "survivalSeconds": 120,
+      "aiMoves": 7200,
+      "aiDodges": 6,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 107,
+      "novaReadySeconds": 5,
+      "dashReasons": {
+        "emergency-evade": 6
+      },
+      "novaReasons": {
+        "spectral-overdrive": 6
+      },
+      "novaContexts": [
+        {
+          "at": 31,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 45,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 68,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": 580
+        },
+        {
+          "at": 81,
+          "reason": "spectral-overdrive",
+          "near": 3,
+          "bossDist": null
+        },
+        {
+          "at": 98,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 112,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 1200,
+      "phantomSamples": [
+        {
+          "at": 0,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 1,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 640,
+          "y": 400,
+          "xpOnField": 0,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 0,
+          "extraDamage": 0
+        },
+        {
+          "at": 10,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 2,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 287.0294372515227,
+          "y": 127.26493526370581,
+          "xpOnField": 72,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 317,
+          "extraDamage": 0
+        },
+        {
+          "at": 20,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 2,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 548.1177490060909,
+          "y": 110.2943725152287,
+          "xpOnField": 198,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 599,
+          "extraDamage": 0
+        },
+        {
+          "at": 30,
+          "hp": 113.4,
+          "maxHp": 113.4,
+          "shield": 16.84,
+          "level": 2,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 723.1471862576136,
+          "y": 117.3238097667516,
+          "xpOnField": 380,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 1037,
+          "extraDamage": 0
+        },
+        {
+          "at": 40,
+          "hp": 127.2,
+          "maxHp": 127.2,
+          "shield": 33.400000000000006,
+          "level": 4,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 273.6770567850249,
+          "y": 119.73593128807249,
+          "xpOnField": 319,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 1527,
+          "extraDamage": 0
+        },
+        {
+          "at": 50,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 5,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 575.7359312880703,
+          "y": 119.73593128807249,
+          "xpOnField": 487,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 2158,
+          "extraDamage": 0
+        },
+        {
+          "at": 60,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 5,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 479.73593128807033,
+          "y": 119.73593128807249,
+          "xpOnField": 627,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 2607,
+          "extraDamage": 0
+        },
+        {
+          "at": 70,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 6,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 119.56078707534856,
+          "y": 619.7222586828377,
+          "xpOnField": 562,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 3293.320000000002,
+          "extraDamage": 0
+        },
+        {
+          "at": 80,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 7,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 599.644660940674,
+          "y": 129.8738828296945,
+          "xpOnField": 682,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 4033.6400000000035,
+          "extraDamage": 0
+        },
+        {
+          "at": 90,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 8,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 127.88015895285713,
+          "y": 539.5795103144666,
+          "xpOnField": 584,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 4730.8210000000045,
+          "extraDamage": 0
+        },
+        {
+          "at": 100,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 8,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 585.5857864376286,
+          "y": 115.8150083266492,
+          "xpOnField": 707,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 5429.5450000000055,
+          "extraDamage": 0
+        },
+        {
+          "at": 110,
+          "hp": 150.2,
+          "maxHp": 150.2,
+          "shield": 33.400000000000006,
+          "level": 10,
+          "phantomLevel": 2,
+          "count": 1,
+          "x": 1053.2325394193556,
+          "y": 563.5795103144669,
+          "xpOnField": 593,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 6482.602400000008,
+          "extraDamage": 0
+        }
+      ],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 118.8,
+      "xpSeekKinds": {
+        "orb": 7128
+      },
+      "xpOnField": 1093,
+      "rewardAudit": {
+        "choices": 10,
+        "primary": 2,
+        "survival": 6,
+        "experience": 1,
+        "primaryOffers": 10,
+        "survivalOffers": 6,
+        "history": [
+          {
+            "at": 2,
+            "level": 2,
+            "id": "ph_shell",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 31,
+            "level": 3,
+            "id": "ph_shield",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 33,
+            "level": 4,
+            "id": "ph_shell",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 49,
+            "level": 5,
+            "id": "hp",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 68,
+            "level": 6,
+            "id": "ph_magnet",
+            "rarity": "common",
+            "primary": false,
+            "survival": false,
+            "experience": true
+          },
+          {
+            "at": 73,
+            "level": 6,
+            "id": "crossForge",
+            "rarity": "power",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 74,
+            "level": 7,
+            "id": "stoneSeed",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 84,
+            "level": 8,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 102,
+            "level": 9,
+            "id": "windOrigin",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 109,
+            "level": 10,
+            "id": "dashPulse",
+            "rarity": "rare",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 41.2,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 152,
+        "regen": 0,
+        "shieldMax": 33.400000000000006
+      },
+      "phantomState": {
+        "level": 2,
+        "count": 1,
+        "ranks": {
+          "shell": 2,
+          "shield": 1,
+          "magnet": 1
+        },
+        "metrics": {
+          "primaryDamage": 7607.684800000012,
+          "extraDamage": 285,
+          "bladeHits": 268,
+          "attacks": 191,
+          "aiMs": 169.73194599992712
+        },
+        "dartTypes": [],
+        "hp": 150.2,
+        "shield": 16.400000000000006
+      },
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 150.9998745843768,
+        "firstVacuumAt": 121.71254721703008,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 10,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    },
+    {
+      "schema": "ankin-balance-v1",
+      "ship": "phantom",
+      "seed": 3,
+      "scenario": "full-30m",
+      "build": "normal-random-rewards",
+      "duration": 120,
+      "damage": 12564.88,
+      "dps": 104.707,
+      "bossDamage": 768,
+      "kills": 269,
+      "hits": 0,
+      "damageTaken": 0,
+      "dashCount": 2,
+      "novaCount": 4,
+      "level": 9,
+      "skills": 8,
+      "evolutions": 0,
+      "synergies": 4,
+      "elementFusions": 0,
+      "damageBySource": {
+        "phantomBlade": 4306.447679999996,
+        "iceball": 642.2399999999999,
+        "pulseField": 7210.192320000001,
+        "nova": 406
+      },
+      "killsByType": {
+        "drone": 231,
+        "stinger": 37,
+        "minor": 1
+      },
+      "bossEvents": {
+        "spawn": 1,
+        "telegraph": 0,
+        "ultimate": 0,
+        "recovery": 0,
+        "earlyKills": 1
+      },
+      "recoveryDamage": 0,
+      "pickedExp": 1829,
+      "pickedOrbs": 114,
+      "vacuumExp": 0,
+      "vacuumOrbs": 0,
+      "healingPickups": 1,
+      "buckets": [
+        {
+          "minute": 0,
+          "damage": 2747,
+          "bossDamage": 0,
+          "kills": 87,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 1955.6399999999999,
+            "iceball": 295.03999999999996,
+            "pulseField": 496.3199999999999
+          }
+        },
+        {
+          "minute": 1,
+          "damage": 9817.88,
+          "bossDamage": 768,
+          "kills": 182,
+          "hits": 0,
+          "damageTaken": 0,
+          "sources": {
+            "phantomBlade": 2350.807679999999,
+            "pulseField": 6713.872320000001,
+            "iceball": 347.20000000000005,
+            "nova": 406
+          }
+        }
+      ],
+      "events": [
+        {
+          "at": 60.017,
+          "boss": "minor",
+          "variant": "guardian",
+          "event": "spawn"
+        }
+      ],
+      "mode": "ai",
+      "gameMode": "normal",
+      "phaseMinutes": 0,
+      "secondsPlanned": 120,
+      "alive": true,
+      "won": false,
+      "cleared": false,
+      "terminal": false,
+      "playerHp": 113.4,
+      "maxHp": 113.4,
+      "survivalSeconds": 120,
+      "aiMoves": 7200,
+      "aiDodges": 2,
+      "abilityPolicy": "tactical",
+      "dashReadySeconds": 114,
+      "novaReadySeconds": 7,
+      "dashReasons": {
+        "emergency-evade": 2
+      },
+      "novaReasons": {
+        "spectral-overdrive": 4
+      },
+      "novaContexts": [
+        {
+          "at": 51,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": null
+        },
+        {
+          "at": 69,
+          "reason": "spectral-overdrive",
+          "near": 0,
+          "bossDist": 433
+        },
+        {
+          "at": 89,
+          "reason": "spectral-overdrive",
+          "near": 1,
+          "bossDist": null
+        },
+        {
+          "at": 107,
+          "reason": "spectral-overdrive",
+          "near": 8,
+          "bossDist": null
+        }
+      ],
+      "phantomPilot": "lookahead",
+      "ghostPlans": 1200,
+      "phantomSamples": [
+        {
+          "at": 0,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 1,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 640,
+          "y": 400,
+          "xpOnField": 0,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 0,
+          "extraDamage": 0
+        },
+        {
+          "at": 10,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 2,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 364.8528137423864,
+          "y": 131.38268426979607,
+          "xpOnField": 72,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 263,
+          "extraDamage": 0
+        },
+        {
+          "at": 20,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 2,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 1164.3818177180228,
+          "y": 397.0883117545678,
+          "xpOnField": 237,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 635,
+          "extraDamage": 0
+        },
+        {
+          "at": 30,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 2,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 1164.3818177180228,
+          "y": 301.0883117545678,
+          "xpOnField": 458,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 1084,
+          "extraDamage": 0
+        },
+        {
+          "at": 40,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 2,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 1164.3818177180228,
+          "y": 123.14718625761361,
+          "xpOnField": 667,
+          "states": [
+            "HUNT"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 1463,
+          "extraDamage": 0
+        },
+        {
+          "at": 50,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 4,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 388.14631970584105,
+          "y": 431.0294372515223,
+          "xpOnField": 620,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 1769,
+          "extraDamage": 0
+        },
+        {
+          "at": 60,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 4,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 116.61731573020586,
+          "y": 654.5584412271587,
+          "xpOnField": 749,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 1955.6399999999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 70,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 5,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 688.676190233251,
+          "y": 680.2640687119315,
+          "xpOnField": 941,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 2337.279999999999,
+          "extraDamage": 0
+        },
+        {
+          "at": 80,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 15,
+          "level": 5,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 710.9705627484782,
+          "y": 680.2640687119315,
+          "xpOnField": 1181,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 2555.8399999999983,
+          "extraDamage": 0
+        },
+        {
+          "at": 90,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 28.8,
+          "level": 6,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 1135.9411254969555,
+          "y": 239.52900397563582,
+          "xpOnField": 1213,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 2810.3618399999973,
+          "extraDamage": 0
+        },
+        {
+          "at": 100,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 28.8,
+          "level": 8,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 313.6181822819781,
+          "y": 667.9108216936585,
+          "xpOnField": 964,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 3114.481839999997,
+          "extraDamage": 0
+        },
+        {
+          "at": 110,
+          "hp": 95,
+          "maxHp": 95,
+          "shield": 28.8,
+          "level": 8,
+          "phantomLevel": 1,
+          "count": 1,
+          "x": 338.8242430426385,
+          "y": 112.99913344822545,
+          "xpOnField": 1475,
+          "states": [
+            "CHASE"
+          ],
+          "dartCount": 0,
+          "dartUnlocked": 0,
+          "dartActive": false,
+          "primaryDamage": 3634.561839999996,
+          "extraDamage": 0
+        }
+      ],
+      "drillDiagnostics": null,
+      "xpSeekSeconds": 113.6,
+      "xpSeekKinds": {
+        "orb": 6816
+      },
+      "xpOnField": 2323,
+      "rewardAudit": {
+        "choices": 9,
+        "primary": 1,
+        "survival": 2,
+        "experience": 0,
+        "primaryOffers": 8,
+        "survivalOffers": 5,
+        "history": [
+          {
+            "at": 2,
+            "level": 2,
+            "id": "coldCoil",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 48,
+            "level": 3,
+            "id": "chain",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 50,
+            "level": 4,
+            "id": "storm",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 66,
+            "level": 5,
+            "id": "damage",
+            "rarity": "common",
+            "primary": true,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 69,
+            "level": 5,
+            "id": "ph_novaSanctuaryCore",
+            "rarity": "power",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 87,
+            "level": 6,
+            "id": "iceBarrier",
+            "rarity": "uncommon",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          },
+          {
+            "at": 97,
+            "level": 7,
+            "id": "freeze",
+            "rarity": "rare",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 99,
+            "level": 8,
+            "id": "iceLock",
+            "rarity": "epic",
+            "primary": false,
+            "survival": false,
+            "experience": false
+          },
+          {
+            "at": 113,
+            "level": 9,
+            "id": "ph_shell",
+            "rarity": "common",
+            "primary": false,
+            "survival": true,
+            "experience": false
+          }
+        ]
+      },
+      "fusionAudit": {
+        "offers": 0,
+        "accepted": 0,
+        "declined": 0,
+        "failed": 0,
+        "reasons": {},
+        "history": []
+      },
+      "weaponState": {
+        "dmg": 41.2,
+        "rate": 0.46,
+        "multishot": 1,
+        "laserCount": 1,
+        "chargeRate": 0.67,
+        "drillDamage": 65,
+        "dogBones": 1,
+        "magnet": 112,
+        "regen": 0,
+        "shieldMax": 30.64
+      },
+      "phantomState": {
+        "level": 2,
+        "count": 1,
+        "ranks": {
+          "shell": 1
+        },
+        "metrics": {
+          "primaryDamage": 4306.447680000009,
+          "extraDamage": 406,
+          "bladeHits": 184,
+          "attacks": 158,
+          "aiMs": 90.53702300018631
+        },
+        "dartTypes": [],
+        "hp": 113.4,
+        "shield": 30.64
+      },
+      "bossRemainingHp": 0,
+      "fullRun": false,
+      "preview": true,
+      "simulationTime": 120,
+      "finalBossAt": 1800,
+      "finalBossSpawned": false,
+      "finalBossSpawnTime": null,
+      "reachedFinalBoss": false,
+      "startSchedule": {
+        "mode": "normal",
+        "bossAt": 1800,
+        "firstBossAt": 60,
+        "firstRaidAt": 105,
+        "firstRelicAt": 128.0929728411138,
+        "firstVacuumAt": 121.01133918855339,
+        "nextUltimateAt": 1800,
+        "nextBossAfterFirst": 150,
+        "modeSpecificSecondBoss": "minor",
+        "dogChickenAt": 900
+      },
+      "menuChoices": 9,
+      "menuSkips": 0,
+      "fusionPolicy": "always",
+      "stopReason": "preview-end",
+      "clearCount": 0
+    }
+  ]
+}
