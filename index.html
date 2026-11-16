@@ -4005,7 +4005,7 @@ const ENDURANCE_SKILLS=[
  skill('endDrillTorque','uncommon','⚙️','ローター持久軸','接触威力+15、突進威力+19。',p=>{p.drillContact+=15;p.drillDamage+=19},{shipOnly:'drill',available:()=>enduranceRoom('endDrillTorque',8),tags:['専用：ドリル型','継戦']}),
  skill('endDrillGuard','rare','🔩','スピン装甲','ドリルリーチ+8、最大HP+16。',p=>{p.drillReach+=8;p.maxHp+=16;p.hp=Math.min(p.maxHp,p.hp+16)},{shipOnly:'drill',available:()=>enduranceRoom('endDrillGuard',7),tags:['専用：ドリル型','装甲','継戦']}),
  // Dog gets its own non-elemental bone, companion and NOVA growth branches.
- skill('dogEndBoneTorque','common','🦴','骨あそび・強化','骨ブーメラン威力+10%、帰還威力+5%。',p=>{p.dogBonePower+=.10;p.dogBoneReturn+=.05},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneTorque',9),tags:['アニマル','骨ブーメラン','継戦']}),
+ skill('dogEndBoneTorque','common','🦴','骨あそび・強化','骨ブーメラン威力+20%、帰還威力+10%。',p=>{p.dogBonePower+=.20;p.dogBoneReturn+=.10},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneTorque',9),tags:['アニマル','骨ブーメラン','継戦']}),
  skill('dogEndBoneFlight','uncommon','🎾','リターン・トレーニング','骨の帰還威力+12%、飛行速度+12、発射間隔-6%（最短0.65秒）。',p=>{p.dogBoneReturn+=.12;p.dogBoneSpeed+=12;p.rate=Math.min(p.rate,Math.max(.65,p.rate*.94))},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneFlight',8),tags:['アニマル','骨ブーメラン','継戦']}),
  skill('dogEndEggCare','uncommon','🥚','たまごお世話係','仲間がいれば卵の威力+18、発射間隔-4%。',p=>{p.dogEggDamage+=18;p.dogEggRate=Math.max(.58,p.dogEggRate*.96)},{shipOnly:'dog',available:p=>p.dogChicks>0&&enduranceRoom('dogEndEggCare',8),tags:['アニマル','ヒヨコ','継戦']}),
  skill('dogEndPackBond','rare','🐾','アニマル・ボンド','アニマル攻撃力+5%、最大HP+26。',p=>{p.dogAnimalBoost*=1.05;p.maxHp+=26;p.hp=Math.min(p.maxHp,p.hp+26)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndPackBond',8),tags:['アニマル','装甲','継戦']}),
