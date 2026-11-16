@@ -1,5 +1,5 @@
 /* ANKIN DRIFT v15.3 mobile - offline app shell, scoped to this install */
-const CACHE_NAME = 'ankin-drift-mobile-v15-3-pc-pad-recovery-v2';
+const CACHE_NAME = 'ankin-drift-mobile-v15-3-phantom-ai-level-feedback-v1';
 const CACHE_PREFIX = 'ankin-drift-mobile-';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './v13-archive.js', './v13-ending.js', './music-soundtrack.js', './skill-arsenal.js','./skill-tactics.js', './phantom-frame.js', './dark-element.js', './pc-controls.js',
