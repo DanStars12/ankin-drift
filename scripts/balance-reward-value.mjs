@@ -4,9 +4,9 @@ export function normalRewardValue(before,after){
  function primary(p){
   const dmg=n(p,'dmg',1),crit=1+Math.min(.969,Math.max(0,n(p,'crit')))*(n(p,'critMult',1)-1),rate=Math.max(.05,n(p,'rate',1));
   switch(p.shipType){
-   case 'laser':return dmg*n(p,'laserScale',1)*Math.sqrt(Math.max(1,n(p,'laserCount',1)))*(1+n(p,'laserBonus')/100);
-   case 'charge':return dmg*n(p,'chargeScale',1)*Math.sqrt(Math.max(.1,n(p,'chargeRate',1)))*(1+Math.min(12,n(p,'chargePenetration'))*.025);
-   case 'drill':return (n(p,'drillDamage')*Math.min(1,n(p,'drillGain'))/Math.max(.5,n(p,'dashCd',1))+n(p,'drillContact')*2)*(1+n(p,'drillReach')/200);
+   case 'laser':return dmg*n(p,'laserScale',1)*Math.sqrt(Math.max(1,n(p,'laserCount',1)))*(1+n(p,'laserBonus')/100)*crit;
+   case 'charge':return dmg*n(p,'chargeScale',1)*Math.sqrt(Math.max(.1,n(p,'chargeRate',1)))*(1+Math.min(12,n(p,'chargePenetration'))*.025)*crit;
+   case 'drill':return ((n(p,'drillDamage')+dmg*1.35)*Math.min(1,n(p,'drillGain'))/Math.max(.5,n(p,'dashCd',1))+(n(p,'drillContact')+dmg*.34)*2)*(1+n(p,'drillReach')/200)*crit;
    case 'phantom':{
     const r=p.phantomRanks||{},l=n(p,'phantomLevel',1)-1;
     const damage=dmg*(1+l*.09+(r.polish||0)*.15+(r.emperor||0)*.3+(r.sync||0)*.08+(r.network||0)*.1+(r.crescent||0)*.12)*(1+(r.bladeCircuit||0)*.12);
@@ -19,7 +19,7 @@ export function normalRewardValue(before,after){
     const darts=(p.dartTypes||[]).reduce((sum,t)=>sum+(weight[t]||0),0);
     return blade*(1+(r.astralCore?.2:0))+damage/period*.5*darts*uptime*(1+(r.dartPower||0)*.12+(r.command||0)*.25+(r.dartLink||0)*.15)*(1+(r.dartReactor||0)*.15+(r.dartAccelerator||0)*.1);
    }
-   case 'dog':return dmg*n(p,'dogBonePower',1)*Math.sqrt(Math.max(1,n(p,'dogBones',1)))*(1+n(p,'dogBoneReturn',1)) / rate;
+   case 'dog':return dmg*n(p,'dogBonePower',1)*Math.sqrt(Math.max(1,n(p,'dogBones',1)))*(1+n(p,'dogBoneReturn',1))*crit / rate;
    default:return dmg*Math.sqrt(Math.max(1,n(p,'multishot',1)))*crit/rate;
   }
  }

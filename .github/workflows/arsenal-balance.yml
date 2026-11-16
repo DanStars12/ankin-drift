@@ -49,7 +49,7 @@ jobs:
       matrix:
         revision: [baseline, candidate]
         mode: [normal, challenge]
-        ship: [shot, laser, charge, drill, dog]
+        ship: [shot, laser, charge, drill, dog, phantom]
     env:
       ANKIN_ARSENAL_FULL: '1'
       ANKIN_ARSENAL_FULL_SEEDS: '20'

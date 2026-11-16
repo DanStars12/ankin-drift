@@ -134,12 +134,12 @@ test('arsenal full progression: paired seeds, both real modes, actual random rew
  const seeds=Array.from({length:seedCount},(_,i)=>17+i);
  const modes=process.env.ANKIN_ARSENAL_MODE?[process.env.ANKIN_ARSENAL_MODE]:['normal','challenge'];
  expect(modes.every(m=>['normal','challenge'].includes(m))).toBe(true);
- const ships=process.env.ANKIN_ARSENAL_SHIP?[process.env.ANKIN_ARSENAL_SHIP]:['shot','laser','charge','drill','dog'];
- expect(ships.every(s=>['shot','laser','charge','drill','dog'].includes(s))).toBe(true);
+ const ships=process.env.ANKIN_ARSENAL_SHIP?[process.env.ANKIN_ARSENAL_SHIP]:['shot','laser','charge','drill','dog','phantom'];
+ expect(ships.every(s=>['shot','laser','charge','drill','dog','phantom'].includes(s))).toBe(true);
  test.setTimeout(2100000);const errors=await setup(page),rows=[];
  const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
  for(const gameMode of modes)for(const ship of ships)for(const seed of seeds){
-  const r=await page.evaluate(args=>window.__ankinBalanceAI.runFull({...args,fusionPolicy:'always'}),{ship,gameMode,seed});
+  const r=await page.evaluate(args=>window.__ankinBalanceAI.runFull({...args,fusionPolicy:'always',phantomPilot:'lookahead'}),{ship,gameMode,seed});
   expect(r.stopReason.startsWith('unhandled-menu'),JSON.stringify({ship,gameMode,seed,stop:r.stopReason,time:r.simulationTime})).toBe(false);expect(Number.isFinite(r.dps)).toBe(true);rows.push(r);
  }
  const summary=rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,fusions:r.elementFusions,choices:r.menuChoices,clear:r.clearCount,boss:r.reachedFinalBoss}));

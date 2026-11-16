@@ -1,3 +1,4 @@
+import {runtimeHarness} from '../scripts/runtime-vm-harness.mjs';
 import {catalogHarness} from '../scripts/catalog-harness.mjs';
 import{test}from'node:test';import assert from'node:assert/strict';import{normalRewardValue as value}from'../scripts/balance-reward-value.mjs';
 const p={shipType:'shot',dmg:32,rate:.46,multishot:1,crit:0,critMult:1.8,hp:100,maxHp:100,spd:226,dashCd:2.8};
@@ -26,3 +27,8 @@ test('NOVA-only normal choices receive bounded conditional utility and capped re
 
 test('PHANTOM evaluator recognizes real crit, unlocked darts, dart output and finite uptime',()=>{const base={...p,shipType:'phantom',phantomLevel:1,phantomRanks:{},dartTypes:[]};assert(value(base,{...base,crit:.1})>0);assert(value(base,{...base,dartTypes:['shot']})>0);const live={...base,dartTypes:['shot','laser','charge']};assert(value(live,{...live,phantomRanks:{dartPower:1}})>0);assert(value(live,{...live,phantomRanks:{dartDuration:1}})>0);assert(value(base,{...base,dartTypes:['follow']})>0);assert.equal(value(live,structuredClone(live)),0);});
 test('normal reward previews restore RNG on success and exceptions without mutating live state',async()=>{const {previewNormalReward}=await import('../scripts/balance-reward-value.mjs');const live={value:0},saved=Math.random;const preview=previewNormalReward(live,{apply(p){p.value=Math.random();}},()=>.25);assert.equal(preview.value,.25);assert.equal(live.value,0);assert.equal(Math.random,saved);assert.throws(()=>previewNormalReward(live,{apply(){throw Error('test');}}));assert.equal(Math.random,saved);});
+
+test('all six primary weapons value critical upgrades and DRILL values its real damage contribution',()=>{
+ const h=runtimeHarness();for(const ship of ['shot','laser','charge','drill','dog','phantom']){h.api.reset(ship);const p=h.api.player,next=structuredClone(p);next.crit+=.1;assert.ok(value(p,next)>0,ship);}
+ h.api.reset('drill');const p=h.api.player,next=structuredClone(p);next.dmg+=30;assert.ok(value(p,next)>0);
+});
