@@ -73,3 +73,11 @@ test('three PHANTOM normal synergies activate once and stay once across rebuilds
 test('onboarding cadence improves first-rank haste and never becomes slower when leveling up',()=>{const h=setup(),p=h.api.player,periods=[];for(let i=0;i<10;i++){periods.push(h.ctx.AnkinPhantom.stats(p).period);h.ctx.AnkinPhantom.level(p,1);}assert.equal(periods[0],.58);for(let i=1;i<periods.length;i++)assert.ok(periods[i]<=periods[i-1]+1e-10);const a=setup(),ap=a.api.player,before=a.ctx.AnkinPhantom.stats(ap).period;a.api.acquire('ph_haste');assert.ok(a.ctx.AnkinPhantom.stats(ap).period<before);});
 
 test('level gain never slows a PHANTOM already using haste, algorithm or NOVA acceleration',()=>{for(const haste of [0,1,3,5])for(const nova of [false,true]){const h=setup(),p=h.api.player;p.phantomRanks.haste=haste;p.phantomRanks.algorithm=2;p.phantomRanks.driver=1;p.phantomNova=nova?6:0;let last=Infinity;for(let i=1;i<=10;i++){const period=h.ctx.AnkinPhantom.stats(p).period;assert.ok(period<=last+1e-10,haste+':'+i);last=period;h.ctx.AnkinPhantom.level(p,1);}}});
+
+test('PHANTOM can acquire real shared shield and NOVA utilities while ranged primary cards stay excluded',()=>{
+ const h=setup();const ids=new Set(h.api.selectable(h.api.catalog).map(c=>c.id));for(const id of ['barrier','shieldEpic','expShield','repair','radius','novaEpic'])assert.ok(ids.has(id),id);for(const id of ['fan','lWidth','cRate','dStrike','dogBonePack'])assert.ok(!ids.has(id),id);h.api.acquire('barrier');h.api.acquire('expShield');const p=h.api.player,max=p.shieldMax;p.shield=0;h.api.orb(p.x,p.y,1,0);h.api.drive(1/60);assert.ok(p.shield>0);h.api.restorePlayerBuild();assert.equal(h.api.player.shieldMax,max);
+});
+
+test('PHANTOM level defense grows to the cap and cannot farm HP or shield after reaching it',()=>{
+ const h=setup(),p=h.api.player;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.phantomLevel,30);assert.equal(p.maxHp,95+29*7);assert.equal(p.shieldMax,15+29*3);const hp=p.maxHp,shield=p.shieldMax;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.maxHp,hp);assert.equal(p.shieldMax,shield);
+});

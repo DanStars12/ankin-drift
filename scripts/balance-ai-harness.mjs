@@ -249,7 +249,7 @@ function balancePilotStep(frame,policy='tactical',seekExp=false){
   }
  }
  // Charge ships deliberately hold still to charge, then reposition to fire.
- if(p.shipType==='charge'&&threat.near===0&&Math.floor(sec*10)%20<16){x=0;y=0;}
+ if(p.shipType==='charge'&&threat.near===0&&p.charge<.995&&Math.floor(sec*10)%20<16){x=0;y=0;}
  if(p.shipType==='phantom'&&balanceAbilityLog.phantomPilot==='lookahead'){
   if(frame%6===0||!balanceAbilityLog.ghostMove){balanceAbilityLog.ghostMove=planGhostMovement(p,{width:W,height:H,enemies,bullets:hostile,hazards,pickups:seekExp?pickups:[],motion:engageClampMotion,hint:{x,y},previous:balanceAbilityLog.ghostMove});balanceAbilityLog.ghostPlans++;}
   const move=balanceAbilityLog.ghostMove;x=move.x;y=move.y;xpIntent=move.goal;
@@ -435,7 +435,7 @@ function balanceSandbox(fn){
  }
 }
 function balanceSetup(ship,seed,phaseMinutes,build,scenario,policy='tactical',runMode='normal',fullTimeline=false,phantomPilot='potential'){
- balanceAbilityLog={policy,phantomPilot,ghostPlans:0,phantomSamples:[],drillDiagnostics:{targetSeconds:0,angleDegreeSeconds:0,inReachSeconds:0,forwardOverlapSeconds:0,movingSeconds:0,dashSeconds:0,damageStepSeconds:0},dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
+ balanceAbilityLog={policy,phantomPilot,ghostPlans:0,phantomSamples:[],progressionSamples:[],drillDiagnostics:{targetSeconds:0,angleDegreeSeconds:0,inReachSeconds:0,forwardOverlapSeconds:0,movingSeconds:0,dashSeconds:0,damageStepSeconds:0},dashReadySeconds:0,novaReadySeconds:0,novaHeldFrames:0,dashReasons:{},novaReasons:{},novaContexts:[],
   xpSeekFrames:0,xpSeekKinds:{},rewardAudit:{choices:0,primary:0,survival:0,experience:0,primaryOffers:0,survivalOffers:0,history:[]},
   fusionAudit:{offers:0,accepted:0,declined:0,failed:0,reasons:{},history:[]}};
  Math.random=seededBalanceRandom(seed);
@@ -482,12 +482,13 @@ function balanceResult(report,secondsPlanned,{won=false,cleared=false,terminal=f
   novaContexts:[...(balanceAbilityLog?.novaContexts||[])],
   phantomPilot:player.shipType==='phantom'?balanceAbilityLog.phantomPilot:null,ghostPlans:balanceAbilityLog.ghostPlans,phantomSamples:[...balanceAbilityLog.phantomSamples],
   drillDiagnostics:balanceDrillReport(),
+  progressionSamples:[...(balanceAbilityLog?.progressionSamples||[])],
   xpSeekSeconds:Number(((balanceAbilityLog?.xpSeekFrames||0)/60).toFixed(2)),
   xpSeekKinds:{...(balanceAbilityLog?.xpSeekKinds||{})},
   xpOnField:Number(pickups.filter(e=>e.type==='energy').reduce((sum,e)=>sum+e.value,0).toFixed(2)),
   rewardAudit:balanceAbilityLog?.rewardAudit||null,
   fusionAudit:balanceAbilityLog?.fusionAudit||null,
-  weaponState:{dmg:player.dmg,rate:player.rate,multishot:player.multishot,
+  weaponState:{crit:player.crit,critMult:player.critMult,bossBane:player.bossBane,laserScale:player.laserScale,laserBonus:player.laserBonus,chargeScale:player.chargeScale,drillContact:player.drillContact,drillReach:player.drillReach,drillWidth:player.drillWidth,dashCd:player.dashCd,shieldRecharge:player.shieldRecharge,dogChicks:player.dogChicks,dogBonePower:player.dogBonePower,dogBoneReturn:player.dogBoneReturn,dmg:player.dmg,rate:player.rate,multishot:player.multishot,
    laserCount:player.laserCount,chargeRate:player.chargeRate,drillDamage:player.drillDamage,
    dogBones:player.dogBones,magnet:player.magnet,regen:player.regen,shieldMax:player.shieldMax},
   phantomState:player.shipType==='phantom'?{level:player.phantomLevel,count:player.phantoms.length,ranks:{...player.phantomRanks},metrics:{...player.phantomMetrics},dartTypes:[...player.dartTypes],hp:player.hp,shield:player.shield}:null,
@@ -591,6 +592,7 @@ window.__ankinBalanceAI={
    for(;step<steps&&!game.completed&&game.runOutcome!=='dead';step++){
     resolveMenus();
     if(unhandled||mode!=='playing')break;
+    if(step%3600===0&&balanceAbilityLog.progressionSamples.length<40)balanceAbilityLog.progressionSamples.push({at:Number(game.total.toFixed(2)),hp:Number(player.hp.toFixed(2)),maxHp:player.maxHp,shield:Number(player.shield.toFixed(2)),shieldMax:player.shieldMax,level:game.level,damage:game.damage,primaryDamage:Object.fromEntries(Object.entries(game.damageStats)),boss:boss?{type:boss.type,variant:boss.variant,hp:boss.hp,distance:Math.round(dst(player,boss))}:null,enemies:enemies.filter(e=>!e.dead).length});
     const a=balancePilotStep(step,policy,true);if(a.move)aiMoves++;
     drive(dt);balanceObserveDrill(dt,a);
     const dd=game.combatLog.dashCount-lastDash;if(dd>0)aiDodges+=dd;lastDash=game.combatLog.dashCount;
