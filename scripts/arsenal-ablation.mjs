@@ -25,7 +25,7 @@ if(['legacy-pools','legacy-control','legacy-normal','legacy-upper'].includes(var
    'RELICS.some(c=>!c.arsenal&&c.shipOnly===player.shipType&&!game.relics[c.id])');
  }
 }
-if(variant==='limit-normal')replaceOnce('const possible=pool.filter(c=>!used.has(c.id));',
- "const possible=pool.filter(c=>!used.has(c.id)&&(kind!=='normal'||!c.arsenal||!options.some(o=>o.arsenal)||!pool.some(o=>!o.arsenal&&!used.has(o.id))));");
+if(variant==='limit-normal')replaceOnce('const possible=offerCandidatePool(pool.filter(c=>!used.has(c.id)),options);',
+ "const possible=offerCandidatePool(pool.filter(c=>!used.has(c.id)&&(kind!=='normal'||!c.arsenal||!options.some(o=>o.arsenal)||!pool.some(o=>!o.arsenal&&!used.has(o.id)))),options);");
 writeFileSync('index.html',html);
 console.log('Diagnostic fixture only: '+variant);

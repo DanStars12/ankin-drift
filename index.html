@@ -3057,7 +3057,7 @@ function drawOverlay(){if(mode==='choice'){choiceOpenedAt=performance.now();touc
  }else if(mode==='guide'){
  html=`<p class="eyebrow">ANKIN DRIFT · QUICK START</p><h2 class="logo small">遊び方 · 基本とイベント</h2><div class="release-guide"><h3>① 自機の移動と回避</h3><p>${controlMode==='mobile'?'画面を指でスライドして移動。もう一方の指で右側のDASH・NOVAボタンを押せます。移動を止めずに同時操作可能です。2回タップダッシュも残しています。強化画面が出た直後のタッチは誤選択防止のため無効です。':'移動：'+pcControls.label('up')+' / '+pcControls.label('left')+' / '+pcControls.label('down')+' / '+pcControls.label('right')+'。ダッシュ：'+pcControls.label('dash')+'、NOVA：'+pcControls.label('nova')+'。PADは左スティックと十字キーで移動し、初期配置は×ダッシュ、□NOVA、○決定。OPTIONSでキー・ボタンを変更できます。'} 画面の白い小ゲージはダッシュ再使用時間です。NOVAはゲージ100%に加え基礎13.6秒の再使用待機が必要です。専用スキルで最短10.5秒まで短縮できます。</p>${selectedShip==='phantom'?'<h3>✦ ファントム専用操作</h3><p>自機ゴーストは回避と経験値回収を担当します。白銀のファントムは独立して索敵・斬撃し、経験値は拾いません。ナイトパレードで3機、グランド・ナイトパレードへの進化で5機になります。属性攻撃は初期の主機だけが使用します。</p>':''}${selectedShip==='drill'?'<h3>✦ プラズマドリル専用操作</h3><p>止まらず移動すると機体上部のプラズマゲージが溜まります。22%以上でダッシュすると短時間無敵の強力な近接突進を行います。通常弾はありません。近距離でのドリル接触攻撃も可能です。専用NOVAは一定時間プラズマMAXを維持し、移動速度を大きく高めます。</p>':''}<h3>② EXPを集めて強化</h3><p>敵を倒すと紫色の結晶が落ちます。拾ってレベルアップし、4択のスキルを選択。出撃中は${controlMode==='mobile'?'LAB':'BキーまたはLAB'}、タイトル画面からは「BUILD LAB」で図鑑・武装プレビュー・合成レシピを閲覧できます。</p><h3>③ ボス・進化・レリック</h3><p>属性融合はLv12・Lv28・Lv40で融合権が解放され、次の通常レベルアップ画面に保留されます。異なる2属性と対象武装が揃えば、通常スキルを1枚取る代わりに属性融合を選べます。必要な素材がなくても権利は消えず、選択画面で戻っても保持します。ボス・レリック報酬は別枠で、属性融合によって失いません。副属性は効果だけ休眠し、所持カードは残って主属性の共鳴強化になります。従来のPOWER＋LEGENDARY進化合成も別に利用可能です。</p><p>最初の中ボスは1分。以降は階級別ランダムボス。POWER＋LEGENDARYで進化合成、虹色のレリック敵を倒せば武器を改造できます。LABの「進化合成」「属性融合」で目標を3件まで登録できます。</p><h3>④ RAID・特殊イベント / 最終ボス</h3><p>ボスの合間にレイドが発生。大量の敵が加速して押し寄せます。ハルカニウム増幅では巨大化、イソ・ベンチャーでは紫白の予告マーカーに向けて新しい敵が出現します。出現直後は短時間無敵になります。後半の紫白のPHASE弾は岩壁を通り、一部がシールドを貫通します。予告を見て移動やDASHで回避してください。DANs Time ENGAGEでは巨大な障害エリアを3つ以上生成。敵は通過できます。NORMALは30分、CHALLENGEは中ボス2戦ごとに大ボス、6戦ごとにユニークボスが出現し、15分にTHE・END・OF・ANKINと決戦！3つの部位を壊して本体を攻撃します。クリア後はエンドレスへ続行可能です。</p><p class="guide-note">タイトル画面では「ANKIN TRIAL」を開いて追加制約を選択できます（初回クリア後に解放）。NORMALとCHALLENGEのどちらでも使え、ラン中は変更できません。タイトルの「遊び方」からいつでも確認可能。ゲーム中はPAUSED→LAB / OPTIONSで確認できます。</p></div><div class="actions"><button class="primary" id="guideContinue">${guideReturn==='menu'?'← タイトルへ戻る':'▶ 出撃開始'}</button></div>`;
  }else if(mode==='choice'){
- const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';const fusionTickets=kind==='normal'?Math.max(0,[12,28].filter(n=>game.level>=n).length-fusionStageIndex()):0;const fusionAvailable=fusionTickets>0&&availableElementPairs().length>0;const fusionTicket=fusionTickets?`<div class="fusion-level-ticket" role="status"><strong>✦ 属性融合権 ${fusionTickets}回分 · 保留中</strong><span>${fusionAvailable?'通常スキル1回分の代わりに属性融合を選べます':'異なる2属性＋主属性武装を揃えると使用できます（権利は保持）'}</span></div>`:'';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。':major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
+ const kind=game.lastChoice,major=kind==='major',minor=kind==='minor',unique=kind==='unique';const fusionTickets=kind==='normal'?Math.max(0,[12,28].filter(n=>game.level>=n).length-fusionStageIndex()):0;const fusionAvailable=fusionTickets>0&&availableElementPairs().length>0;const fusionTicket=fusionTickets?`<div class="fusion-level-ticket" role="status"><strong>✦ 属性融合権 ${fusionTickets}回分 · 保留中</strong><span>${fusionAvailable?'通常スキル1回分の代わりに属性融合を選べます':'異なる2属性＋主属性武装を揃えると使用できます（権利は保持）'}</span></div>`:'';let header=kind==='relic'?'RELIC CHOICE':major?'LEGENDARY':minor?'ANKIN POWER':unique?'UNIQUE ANKIN':'LEVEL UP',message=kind==='relic'?(choices.every(c=>c.isSupply)?'🌈 条件を満たすレリックがないため、補給を1つ選択。':'🌈 レリックエネミー撃破！機体専用レリックを1つ選択。'):major?'大ボスを撃破！レジェンダリースキルを獲得。':minor?'中ボス撃破！ANKIN POWERを獲得。':unique?'特殊ボス撃破！限界突破スキルを選択。':`LV ${game.level} に到達！経験値で獲得したスキルを選択。`;
  html=`<p class="eyebrow">${kind==='normal'?`PILOT LEVEL ${game.level} · ${fmtTime(game.total)}`:kind==='relic'?`${fmtTime(game.total)} · RAINBOW ENCOUNTER`:`${fmtTime(game.total)} · BOSS REWARD`}</p><h2 class="logo small" style="${kind==='relic'?'background-image:linear-gradient(100deg,#ff92af,#f8dc6a,#72ffcd,#80c6ff,#df99ff);':major?'background-image:linear-gradient(95deg,#ffedba,#ffb450);':minor?'background-image:linear-gradient(95deg,#ffbbca,#ff7eae);':unique?'background-image:linear-gradient(95deg,#ff8a9e,#ffe399,#99ffba,#8ad3ff,#e9a1ff);':''}">${header}</h2><div class="subtitle">${message} · ${SHIPS[player.shipType].jp}</div>${kind==='normal'&&game.choiceBatchTotal>1?`<div class="batch-indicator">連続強化 <b>${game.choiceBatchDone+1} / ${game.choiceBatchTotal}</b> · 戦場は停止中</div>`:''}<div class="desc" style="margin-bottom:4px">${controlMode==='mobile'?'カードを選び、取得ボタンで確定。':(cardOfferCount(kind)===4?'1 / 2 / 3 / 4':'1 / 2 / 3')+'キーまたはカードで選択。'}<b>炎・氷・風・岩の属性とシナジー</b>を組み合わせよう！</div>${fusionTicket}<div class="choice-grid ${choices.length===4?'four-choice':''}">${cardsMarkup()}</div>${controlMode==='mobile'?'<div class="touch-choice-confirm"><span>カードをタップして確認 → 取得ボタンで確定</span><button id="touchChoiceConfirm" type="button" disabled>スキルを選択してください</button></div>':''}<div class="actions">${fusionTickets?`<button type="button" class="primary fusion-from-level" id="fusionFromLevel" ${fusionAvailable?'':'disabled'}>✦ 属性融合を選ぶ ${fusionAvailable?'（通常スキルの代わり）':'（素材不足）'}</button>`:''}<button class="secondary" id="reroll" ${game.rerolls<=0||choices.every(c=>c.isSupply)?'disabled':''}>⟳ 再抽選${controlMode==='mobile'?'':' [R]'} 残り${game.rerolls}</button><button class="secondary" id="inspect">◈ ビルド / 進化図鑑${controlMode==='mobile'?'':' [B]'}</button>${kind==='normal'?'<button id="defer" class="secondary upgrade-save">☆ 残りの強化を保留して戦闘へ</button>':''}</div><div class="fine">選択後は同じ戦場から再開。敵・弾・経験値は消えません。${kind==='minor'||kind==='major'?' ボス報酬は4択・再抽選で属性素材を優先しやすくなります。獲得できるスキルが尽きた場合は補給報酬に切り替わります。':''}${choices.some(c=>c.isSupply)?' 未取得報酬が少ないため、一部が能力値を増やさない補給報酬に切り替わっています。':''}${game.pendingLevels?' レベルアップ待ち：'+game.pendingLevels:''}</div>`;
  }else if(mode==='elementChoice'){
   html=elementChoiceMarkup();
@@ -4008,7 +4008,7 @@ const ENDURANCE_SKILLS=[
  skill('dogEndBoneTorque','common','🦴','骨あそび・強化','骨ブーメラン威力+10%、帰還威力+5%。',p=>{p.dogBonePower+=.10;p.dogBoneReturn+=.05},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneTorque',9),tags:['アニマル','骨ブーメラン','継戦']}),
  skill('dogEndBoneFlight','uncommon','🎾','リターン・トレーニング','骨の帰還威力+12%、飛行速度+12、発射間隔-6%（最短0.65秒）。',p=>{p.dogBoneReturn+=.12;p.dogBoneSpeed+=12;p.rate=Math.min(p.rate,Math.max(.65,p.rate*.94))},{shipOnly:'dog',available:()=>enduranceRoom('dogEndBoneFlight',8),tags:['アニマル','骨ブーメラン','継戦']}),
  skill('dogEndEggCare','uncommon','🥚','たまごお世話係','仲間がいれば卵の威力+18、発射間隔-4%。',p=>{p.dogEggDamage+=18;p.dogEggRate=Math.max(.58,p.dogEggRate*.96)},{shipOnly:'dog',available:p=>p.dogChicks>0&&enduranceRoom('dogEndEggCare',8),tags:['アニマル','ヒヨコ','継戦']}),
- skill('dogEndPackBond','rare','🐾','アニマル・ボンド','アニマル攻撃力+5%、最大HP+12。',p=>{p.dogAnimalBoost*=1.05;p.maxHp+=12;p.hp=Math.min(p.maxHp,p.hp+12)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndPackBond',8),tags:['アニマル','装甲','継戦']}),
+ skill('dogEndPackBond','rare','🐾','アニマル・ボンド','アニマル攻撃力+5%、最大HP+26。',p=>{p.dogAnimalBoost*=1.05;p.maxHp+=26;p.hp=Math.min(p.maxHp,p.hp+26)},{shipOnly:'dog',available:()=>enduranceRoom('dogEndPackBond',8),tags:['アニマル','装甲','継戦']}),
  skill('dogEndHowl','epic','🐶','バウショック・共鳴','BOW SHOCK威力+70、NOVA範囲+12。',p=>{p.novaDamage+=70;p.novaRadius+=12},{shipOnly:'dog',available:()=>enduranceRoom('dogEndHowl',7),tags:['アニマル','骨ブーメラン','継戦']}),
  skill('dogEndGuard','common','🦴','おさんぽガード','最大シールド+14、再充填+0.7/秒。',p=>{p.shieldMax+=14;p.shield+=14;p.shieldRecharge+=.7},{shipOnly:'dog',available:()=>enduranceRoom('dogEndGuard',9),tags:['アニマル','防御','継戦']}),
  skill('dogEndFoxEmber','rare','🦊','狐火の追い風','解放済み狐火ミサイルの威力・燃焼を強化。',p=>{p.dmg+=9;p.missileBurnBonus=(p.missileBurnBonus||0)+.12},{shipOnly:'dog',available:p=>p.rocketCd>0&&enduranceRoom('dogEndFoxEmber',6),tags:['アニマル','属性：炎','ミサイル','継戦']}),
@@ -4503,9 +4503,16 @@ function offerCandidatePool(cards,options){
  const core=cards.filter(c=>!c.arsenal);
  return core.length?core:cards;
 }
+function offerRecipeLookups(){
+ const synergies=new Map(),fusions=new Map();
+ for(const recipe of activeSynergies())for(const id of new Set(recipe.need)){if(!synergies.has(id))synergies.set(id,[]);synergies.get(id).push(recipe);}
+ for(const recipe of activeFusions())for(const id of new Set(fusionMaterials(recipe))){if(!fusions.has(id))fusions.set(id,[]);fusions.get(id).push(recipe);}
+ return {synergies,fusions};
+}
 function offerCards(kind,avoidIds=new Set(),isReroll=false){
  const source=kind==='major'?LEGENDS:kind==='minor'?POWERS:kind==='unique'?UNIQUE_SKILLS:kind==='relic'?RELICS:SKILLS;
  const eligible=selectable(source).filter(c=>kind!=='relic'||!game.relics[c.id]);
+ const recipes=offerRecipeLookups();
  const desired=cardOfferCount(kind),fresh=eligible.filter(c=>!avoidIds.has(c.id));
  const pool=fresh.length>=Math.min(desired,eligible.length)?fresh:eligible;
  const options=[],used=new Set(),focus=preferredElementNames();
@@ -4526,7 +4533,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
     c=fusionCandidates[Math.floor(Math.random()*fusionCandidates.length)];
     options.push(c);used.add(c.id);continue;
    }
-   const completed=possible.filter(c=>synergiesFor(c.id).some(a=>!game.synergies[a.id]&&a.need.some(id=>id!==c.id&&owned(id))));
+   const completed=possible.filter(c=>(recipes.synergies.get(c.id)||[]).some(a=>!game.synergies[a.id]&&a.need.some(id=>id!==c.id&&owned(id))));
    const preferred=weightedRarity(),rarityDuplicates=options.filter(x=>x.rarity===preferred).length;
    const same=possible.filter(c=>c.rarity===preferred);
    const diverse=rarityDuplicates>=2&&possible.some(c=>c.rarity!==preferred)?possible.filter(c=>c.rarity!==preferred):possible;
@@ -4536,11 +4543,11 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
    const shared=player.shipType==='dog'&&options.filter(o=>o.shipOnly==='dog').length>=2
     ?possible.filter(c=>c.shipOnly!=='dog'):[];
    const support=player.shipType==='phantom'&&(game.phantomOfferDry||0)>=3?possible.filter(c=>(c.tags||[]).some(t=>t==='防御'||t==='回収')):[];
-   const progress=player.shipType==='phantom'?possible.filter(card=>fusionFor(card.id).some(r=>!game.fusions[r.id]&&!fusionMaterialReady(r,card.id)&&fusionMaterials(r).some(owned))):[];
+   const progress=player.shipType==='phantom'?possible.filter(card=>(recipes.fusions.get(card.id)||[]).some(r=>!game.fusions[r.id]&&!fusionMaterialReady(r,card.id)&&fusionMaterials(r).some(owned))):[];
    const pickPool=support.length&&Math.random()<.45?support:progress.length&&Math.random()<.22?progress:shared.length?shared:weighted;
    c=drillEligible.length&&Math.random()<.39?drillEligible[Math.floor(Math.random()*drillEligible.length)]:pickPool[Math.floor(Math.random()*pickPool.length)];
   }else{
-   const ready=possible.filter(c=>fusionFor(c.id).some(a=>!game.fusions[a.id]&&owned(c.id===a.power?a.legend:a.power)));
+   const ready=possible.filter(c=>(recipes.fusions.get(c.id)||[]).some(a=>!game.fusions[a.id]&&owned(c.id===a.power?a.legend:a.power)));
    const weighted=(i===0&&ready.length)||Math.random()<.75&&ready.length?ready:possible;
    c=weighted[Math.floor(Math.random()*weighted.length)];
   }
@@ -4558,7 +4565,7 @@ function offerCards(kind,avoidIds=new Set(),isReroll=false){
  }
  if(kind==='normal'&&player.shipType==='phantom')game.phantomOfferDry=options.some(c=>(c.tags||[]).some(t=>t==='防御'||t==='回収'))?0:(game.phantomOfferDry||0)+1;
  // Do not soft-lock when all once-per-run boss rewards have been claimed.
- if(['normal','minor','major','unique'].includes(kind)&&options.length<desired){
+ if((['normal','minor','major','unique'].includes(kind)||kind==='relic'&&options.length===0)&&options.length<desired){
   for(const supply of REWARD_SUPPLIES){if(options.length>=desired)break;options.push(supply)}
  }
  return options;
@@ -4585,7 +4592,9 @@ function processTransitions(){if(mode!=='playing'||!game)return;
 function endRun(reason='dead'){if(!game||game.runOutcome||!['playing','quitConfirm'].includes(mode))return;game.runOutcome=reason;v13ObserveRun();const r=record.read();game.bestBroke=game.damage>r.damage||game.total>(r.time||0)||game.level>(r.level||0);r.damage=Math.max(r.damage,Math.floor(game.damage));r.time=Math.max(r.time||0,Math.floor(game.total));r.level=Math.max(r.level||0,game.level);r.runs=Array.isArray(r.runs)?r.runs:[];r.runs.unshift({id:game.runId,outcome:reason,gameMode:game.gameMode,damage:Math.floor(game.damage),bossDamage:Math.floor(game.bossDamage),stats:{...game.damageStats},ship:player.shipType,time:Math.floor(game.total),level:game.level,kills:game.kills,build:buildSummary(),date:new Date().toISOString()});r.runs=r.runs.slice(0,200);record.write(r);v13CollectAwards();state(reason==='retired'?'retired':'dead');if(reason==='dead')tone(140,.5,'triangle',.05)}
 function edgeSpawn(){const i=Math.floor(rand(0,4)),m=60;return {x:i===0?-m:i===1?W+m:rand(-m,W+m),y:i===2?-m:i===3?H+m:rand(-m,H+m)}}
 
-function spawnRelicEnemy(){if(!game||game.relicAlive||RELICS.filter(c=>c.shipOnly===player.shipType&&!game.relics[c.id]).length<3)return false;
+function spawnRelicEnemy(){if(!game||game.relicAlive)return false;
+ const remaining=RELICS.filter(c=>c.shipOnly===player.shipType&&!game.relics[c.id]);
+ if(remaining.length<3||!selectable(remaining).length)return false;
  const angle=rand(0,TAU),distance=Math.min(W,H)*.39;
  const x=clamp(player.x+Math.cos(angle)*distance,48,W-48),y=clamp(player.y+Math.sin(angle)*distance,48,H-48);
  const hp=Math.round(250*(1+minutes()*.65+minutes()*minutes()*.07));
@@ -5208,7 +5217,8 @@ function shoot(){if(player.shipType==='phantom')return;if(player.shipType==='dog
 function laserBalance(p,count){
  const excess=Math.max(0,p.laserScale-1);
  const effectiveScale=1+Math.min(excess,1.4)*.88+Math.pow(Math.max(0,excess-1.4),.72)*.76;
- const emitterScale=1/(1+.025*Math.max(0,count-3));
+ const emitterDamping=game?.gameMode==='challenge'?.045:.025;
+ const emitterScale=1/(1+emitterDamping*Math.max(0,count-3));
  // Standing still is possible but less efficient; continuous maneuvering restores output.
  const movementScale=p.laserIdleTime>1.6?.74:p.laserIdleTime>0.65?.88:1;
  return {effectiveScale,emitterScale,movementScale};

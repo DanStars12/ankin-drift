@@ -77,3 +77,7 @@ test('level gain never slows a PHANTOM already using haste, algorithm or NOVA ac
 test('PHANTOM can acquire real shared shield and NOVA utilities while ranged primary cards stay excluded',()=>{
  const h=setup();const ids=new Set(h.api.selectable(h.api.catalog).map(c=>c.id));for(const id of ['barrier','shieldEpic','expShield','repair','radius','novaEpic'])assert.ok(ids.has(id),id);for(const id of ['fan','lWidth','cRate','dStrike','dogBonePack'])assert.ok(!ids.has(id),id);h.api.acquire('barrier');h.api.acquire('expShield');const p=h.api.player,max=p.shieldMax;p.shield=0;h.api.orb(p.x,p.y,1,0);h.api.drive(1/60);assert.ok(p.shield>0);h.api.restorePlayerBuild();assert.equal(h.api.player.shieldMax,max);
 });
+
+test('PHANTOM level defense grows to the cap and cannot farm HP or shield after reaching it',()=>{
+ const h=setup(),p=h.api.player;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.phantomLevel,30);assert.equal(p.maxHp,95+29*7);assert.equal(p.shieldMax,15+29*3);const hp=p.maxHp,shield=p.shieldMax;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.maxHp,hp);assert.equal(p.shieldMax,shield);
+});

@@ -36,3 +36,7 @@ test('all six primary weapons value critical upgrades and DRILL values its real 
 test('CHARGE pilot releases a full stored shot immediately but still holds an incomplete charge',()=>{
  for(const charge of [.4,1]){const h=runtimeHarness();h.api.balanceSetup('charge',17,0,'base','live-pack');const p=h.api.player;h.api.enemy('drone',{x:p.x+250,y:p.y,hp:1e6,maxHp:1e6,spd:0,shoot:1e9});p.charge=charge;p.chargeStationary=true;const a=h.api.balancePilotStep(0,'tactical');h.api.drive(1/60);if(charge===1){assert.equal(a.move,true);assert.equal(p.charge,0);assert.ok(h.api.shots.some(b=>b.kind==='comet'));}else{assert.equal(a.move,false);assert.ok(p.charge>charge);}}
 });
+
+test('PHANTOM level rewards use the shipped late-level damping and onboarding attack period',()=>{
+ const h=runtimeHarness();for(const level of [1,10,20,29]){h.api.reset('phantom');const p=h.api.player;h.ctx.AnkinPhantom.level(p,level-1);const before=structuredClone(p),after=structuredClone(p);h.ctx.AnkinPhantom.level(after,1);for(const k of ['maxHp','hp','shieldMax','shieldRecharge'])after[k]=before[k];const a=h.ctx.AnkinPhantom.stats(before),b=h.ctx.AnkinPhantom.stats(after),expected=25*((b.damage/b.period)/(a.damage/a.period)-1);assert.ok(Math.abs(value(before,after)-expected)<1e-8,level+':'+value(before,after)+' vs '+expected);}
+});

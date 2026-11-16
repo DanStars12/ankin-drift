@@ -8,9 +8,10 @@ export function normalRewardValue(before,after){
    case 'charge':return dmg*n(p,'chargeScale',1)*Math.sqrt(Math.max(.1,n(p,'chargeRate',1)))*(1+Math.min(12,n(p,'chargePenetration'))*.025)*crit;
    case 'drill':return ((n(p,'drillDamage')+dmg*1.35)*Math.min(1,n(p,'drillGain'))/Math.max(.5,n(p,'dashCd',1))+(n(p,'drillContact')+dmg*.34)*2)*(1+n(p,'drillReach')/200)*crit;
    case 'phantom':{
-    const r=p.phantomRanks||{},l=n(p,'phantomLevel',1)-1;
+    const r=p.phantomRanks||{},rawLevel=n(p,'phantomLevel',1)-1,l=Math.min(9,rawLevel)+Math.max(0,rawLevel-9)*.35;
     const damage=dmg*(1+l*.09+(r.polish||0)*.15+(r.emperor||0)*.3+(r.sync||0)*.08+(r.network||0)*.1+(r.crescent||0)*.12)*(1+(r.bladeCircuit||0)*.12);
-    const period=.65/(1+l*.035+(r.haste||0)*.09+(r.algorithm||0)*.04+(r.driver||0)*.07);
+    const haste=(r.haste||0)*.09+(r.algorithm||0)*.04+(r.driver||0)*.07;
+    const period=Math.max(.16,Math.min(.58/(1+haste),.65/(1+l*.035+haste)));
     const critical=1+Math.min(.969,n(p,'crit')+(r.critical||0)*.08)*(n(p,'critMult',1.8)-1);
     const coverage=1+Math.min(.22,(r.wide||0)*.04+(r.edge||0)*.025);
     const blade=damage/period*critical*coverage*(1+(r.parade?(r.grandParade?4:2)*(.6+(r.paradeCore||0)*.1):0));

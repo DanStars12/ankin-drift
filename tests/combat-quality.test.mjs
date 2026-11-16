@@ -66,3 +66,11 @@ test('eight normal DOG bones can focus four outbound hits on a stationary boss-s
 test('DOG endurance cadence grows within its floor, rebuilds once, and never slows an already faster legacy build',()=>{
  const h=setup('dog');h.api.acquire('dogEndBoneFlight',8);const rate=h.api.player.rate;assert.ok(rate>=.65&&rate<1.12);h.api.restorePlayerBuild();assert.equal(h.api.player.rate,rate);const p=h.api.player;p.rate=.5;h.api.catalog.find(c=>c.id==='dogEndBoneFlight').apply(p);assert.equal(p.rate,.5);
 });
+
+test('relics with unmet prerequisites cannot spawn an empty reward and depleted offers supply a usable fallback',()=>{
+ const h=setup('dog'),p=h.api.player;for(const c of h.api.catalog.filter(c=>c.rarity==='relic'&&c.shipOnly==='dog'))if(!['dogRelicMoonCharm','dogRelicSnakeSkin','dogRelicFoxTalisman'].includes(c.id))h.api.game.relics[c.id]=1;
+ assert.equal(p.spikeCount,0);assert.equal(p.boltCount,0);assert.equal(p.rocketCd,0);assert.equal(h.api.spawnRelicEnemy(),false);const before=Object.keys(h.api.game.relics).length;const cards=h.api.offerCards('relic');assert.equal(cards.length,3);assert.ok(cards.every(c=>c.isSupply));p.hp=10;cards[0].apply(p);assert.ok(p.hp>10);assert.equal(Object.keys(h.api.game.relics).length,before);
+});
+test('per-offer recipe indexes preserve direct lookup order and rebuild after attribute sealing',()=>{
+ const h=setup('phantom');for(const ship of ['shot','laser','charge','drill','dog','phantom']){h.api.reset(ship);for(const sealed of [false,true]){if(sealed)h.api.game.sealedElements.push('fire');const indexed=h.api.offerRecipeLookups();for(const id of ['hp','barrier','shieldEpic','damage','ph_core','ph_parade','field','seraph','plasma','lPowerLens','dogGoodBoy']){assert.deepEqual(Array.from(indexed.synergies.get(id)||[],r=>r.id),Array.from(h.api.synergiesFor(id),r=>r.id));assert.deepEqual(Array.from(indexed.fusions.get(id)||[],r=>r.id),Array.from(h.api.fusionFor(id),r=>r.id));}}}
+});

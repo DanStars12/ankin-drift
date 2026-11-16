@@ -21,7 +21,7 @@ function resetTargets(p){for(const f of [...(p.phantoms||[]),...(p.ghostBlade?[p
 function addRank(p,k){if(!p.phantomRanks)init(p);p.phantomRanks[k]=rank(p,k)+1;}
 function level(p,n){const next=Math.min(LEVEL_CAP,p.phantomLevel+n),gain=next-p.phantomLevel;
  p.phantomOverflow=Math.min(.12,p.phantomOverflow+Math.max(0,p.phantomLevel+n-LEVEL_CAP)*.03);p.phantomLevel=next;
- p.maxHp+=gain*5;p.hp=Math.min(p.maxHp,p.hp+gain*5);p.shieldMax+=gain*2;p.shield=Math.min(p.shieldMax,p.shield+gain*2);p.shieldRecharge+=gain*.25;
+ p.maxHp+=gain*7;p.hp=Math.min(p.maxHp,p.hp+gain*7);p.shieldMax+=gain*3;p.shield=Math.min(p.shieldMax,p.shield+gain*3);p.shieldRecharge+=gain*.3;
 }
 function stats(p){const rawLevel=p.phantomLevel-1,l=Math.min(9,rawLevel)+Math.max(0,rawLevel-9)*.35,active=p.phantomNova>0,novaScale=clamp(((p.novaDamage||175)-175)/1000,0,.3);
  return {range:85+rank(p,'pursuitLink')*10+rank(p,'bladeLance')*18+rank(p,'edge')*9+rank(p,'crescent')*7+(rank(p,'reaper')?45:0)+rank(p,'emperor')*15,
