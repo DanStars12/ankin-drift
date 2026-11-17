@@ -1284,8 +1284,8 @@ let elementChoice=null, pendingElementPairs=[], pendingElementChoice=false, boss
  let controlMode=/(Android|iPhone|iPod|iPad)/i.test(navigator.userAgent)||(matchMedia('(pointer:coarse)').matches&&innerWidth<900)?'mobile':'desktop'; // On phones select touch controls by default; title choice remains available.
  const touchMove={id:null,x:0,y:0,startX:0,startY:0,lastTap:0,lastX:0,lastY:0,moved:false,captureOk:false};
  const stick=U('floatingStick'),stickDot=U('stickDot'),novaTouch=U('novaTouch'),dashTouch=U('dashTouch');
-const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射せず、初期シールドを備え、敵の体当たりを25%軽減。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'},dog:{name:'BONE BUDDY',jp:'ドッグ型',color:'#ffd2a0',sub:'アニマル/骨ブーメラン/ミニオン',desc:'骨ブーメランを往復させ、動物ミニオンと一緒に戦う専用機体。',nova:'BOW SHOCK：小さな骨を8方向へ投げ、帰還でもう一度攻撃'}};
-SHIPS.phantom={name:'PHANTOM FRAME',jp:'ファントム型',color:'#e2e9ff',sub:'生存 / 自律ブレード',desc:'ゴースト本人が回避と経験値回収を担当。自律ファントムが広範囲を索敵して斬撃する。',nova:'SPECTRAL OVERDRIVE：全ファントムを強化・周辺弾消去'};
+const SHIPS={shot:{name:'PULSE STRIKER',jp:'ショット型',color:'#6effed',sub:'バランス / 弾幕',desc:'自動追尾ショットで敵を制圧。弾数・連射・弾種のビルドが得意。',nova:'パルス・ノヴァ：周囲へ瞬間範囲攻撃'},laser:{name:'PRISM LANCER',jp:'レーザー型',color:'#a69aff',sub:'即着弾 / 持続照射',desc:'近い敵を自動照準。移動を続けると出力を維持し、静止し続けると火力が落ちる。',nova:'プリズム・ノヴァ：短時間レーザーを追加強化'},charge:{name:'COMET RAIDER',jp:'チャージ型',color:'#ffad6d',sub:'溜め撃ち / 高威力貫通',desc:'停止してチャージ、移動開始で解放。最大チャージは強力だが、過剰強化には逓減補正。',nova:'コメット・ノヴァ：巨大な貫通彗星を複数発射'},drill:{name:'PLASMA DRILL',jp:'プラズマドリル型',color:'#ff4f9c',sub:'近接 / 移動蓄積 / 突進',desc:'常に動いてプラズマを貯める近接機。ダッシュで無敵のドリル突進を放つ。通常弾は発射せず、初期シールドを備え、敵の体当たりを25%軽減。',nova:'プラズマ・オーバードライブ：一定時間プラズマMAX＋移動速度UP'},dog:{name:'BONE BUDDY',jp:'ドッグ型',color:'#ffd2a0',sub:'アニマル/骨ブーメラン/ミニオン',desc:'骨ブーメランを往復させ、動物ミニオンと一緒に戦う専用機体。通常モードでは敵の体当たりを25%軽減。',nova:'BOW SHOCK：小さな骨を8方向へ投げ、帰還でもう一度攻撃'}};
+SHIPS.phantom={name:'PHANTOM FRAME',jp:'ファントム型',color:'#e2e9ff',sub:'生存 / 自律ブレード',desc:'ゴースト本人が回避と経験値回収を担当。自律ファントムが広範囲を索敵して斬撃する。通常モードでは敵の体当たりを30%軽減。',nova:'SPECTRAL OVERDRIVE：全ファントムを強化・周辺弾消去'};
 let W=innerWidth,H=innerHeight,dpr=1,mode='menu',backMode='playing',last=0,t=0,shake=0,flash=0,stars=[],particles=[],floats=[],enemies=[],shots=[],hostile=[],pickups=[],hazards=[],zones=[],player=null,game=null,boss=null,choices=[],keys=new Set(),soundOn=true,audio=null;
 const MAX_ENEMIES=235,MAX_SHOTS=290,MAX_HOSTILE=440,MAX_PICKUPS=620;
 // Normal enemy movement is tuned independently from boss movement. Never exceed each cap.
@@ -2663,7 +2663,7 @@ function attrDetails(tag){const p=player||initialP(),pct=n=>`${Math.round(Math.m
  '吸引':['重力による引き寄せ','一部のチャージ系レリックや重力攻撃で敵を引き寄せます。風の突風とは別の効果です。',['風の突風は吸引ではなくノックバックになりました。']],
  '防御壁':['旋回する岩壁','自機周囲の壁が通常弾を防ぎ、接触した敵を押し返します。後半のPHASE弾・特殊攻撃は防げないため、回避が必要です。',[`防御壁：${p.rockWalls}枚`,`壁のサイズ：${Math.round(p.rockSize)}`,`壁の反撃ダメージ補正：+${Math.round(p.rockDamage)}`]],
  '防御':['シールド防御','シールドで通常の被ダメージを先に吸収します。後半に現れるPHASE弾は一部がHPへ直接届きます。',[`シールド：${Math.round(p.shield)} / ${Math.round(p.shieldMax)}`,`シールド回復：${Math.round(p.shieldRecharge)}/秒（後半の実効：${Math.round(p.shieldRecharge>16?Math.min(34,16+Math.sqrt(p.shieldRecharge-16)*2.2):p.shieldRecharge)}/秒）`]],
- '装甲':['機体の耐久力','最大HPや被ダメージ対策を増やし、長時間生存を支えます。',[`現在のHP：${Math.round(p.hp)} / ${Math.round(p.maxHp)}`]],
+ '装甲':['機体の耐久力','最大HPや被ダメージ対策を増やし、長時間生存を支えます。体当たり軽減は敵弾・範囲攻撃には適用されません。',[`現在のHP：${Math.round(p.hp)} / ${Math.round(p.maxHp)}`,`敵の体当たり軽減：${Math.round(100*(1-contactDamageMultiplier(p,game?.gameMode||selectedGameMode)))}%`]],
  '回復':['HP回復','HPの回復量や自然回復を高めます。レベルアップ回復とも組み合わせられます。',[`HP自然回復：${p.regen.toFixed(1)}/秒（後半の実効：${(p.regen>7?Math.min(16,7+Math.sqrt(p.regen-7)*1.65):p.regen).toFixed(1)}/秒）`,`撃破時のHP回復補正：${p.killHeal}`]],
  '再生':['自動再生・復活','HPの継続回復や、致命傷からの復活など、生存継続に関わります。',[`自然回復：${p.regen.toFixed(1)}/秒（後半の実効：${(p.regen>7?Math.min(16,7+Math.sqrt(p.regen-7)*1.65):p.regen).toFixed(1)}/秒）`,`残り復活回数：${p.phoenix}`]],
  '吸収':['ライフスティール','攻撃によるダメージの一部を自機HPへ戻します。',[`与ダメージ吸収率：${pct(p.lifeSteal)}`]],
@@ -5328,6 +5328,12 @@ function nova(force=false){if(!player||(!force&&(player.energy<100||player.novaC
   ring(player.x,player.y,88,'#86fff0');burst(player.x,player.y,'#85fff0',24,130);
   announce((player.novaEvolution==='drill'?'ギガドリル装備 · ':'PLASMA NOVA · OVERDRIVE ')+player.drillOverdriveTime.toFixed(1)+'s / SPEED UP / PLASMA MAX',3);return;
  }if(player.shipType==='laser'){sfx('novaLaser');player.laserNovaTimer=3.2+Math.min(.65,player.voidHalo*.09)+(player.novaEvolution==='laser'?novaStrength(player)*2:0);burst(player.x,player.y,'#bca5ff',45,230);ring(player.x,player.y,Math.min(450,player.novaRadius),'#a88cff');flash=.12;shake=0;hostile=hostile.filter(b=>dst(b,player)>Math.max(190,player.novaRadius));announce(player.novaEvolution==='laser'?'クルーエル・レーザー · '+player.laserNovaTimer.toFixed(1)+'s':'PRISM NOVA · LASER OVERDRIVE',3.3);shake=0;return;}if(player.shipType==='charge'){chargeNova();return;}sfx('novaShot');if(player.novaEvolution==='shot'){reserveNovaShots(Math.min(16,player.multishot+4));player.novaShotTime=3+novaStrength(player)*3;announce('ノヴァ・フルパワーショット · '+player.novaShotTime.toFixed(1)+'s',3);}flash=.12;shake=0;let hit=0;for(const e of enemies.slice()){if(e.dead)continue;if(dst(e,player)<player.novaRadius+e.r){damageEnemy(e,effectiveNovaDamage(player),{special:true,source:'nova'});hit++}}for(let i=hostile.length-1;i>=0;i--)if(dst(hostile[i],player)<player.novaRadius)hostile.splice(i,1);burst(player.x,player.y,'#bd9bff',46,260);ring(player.x,player.y,player.novaRadius,'#c4a8ff');pop(player.x,player.y-32,`NOVA · ${hit} HIT`,'#d5c5ff');if(player.voidHalo>0)zones.push({x:player.x,y:player.y,r:Math.min(320,player.novaRadius*.6),life:Math.min(3.3,2+player.voidHalo*.12),ttl:0,type:'nova',dps:(effectiveNovaDamage(player)*.16+Math.min(6,player.voidHalo)*13)});shake=0;}
+// Body-contact protection is separate from projectile and area damage.
+function contactDamageMultiplier(p,runMode){
+ if(p.shipType==='drill')return 1-clamp(p.drillArmor||0,0,.35);
+ if(runMode!=='normal')return 1;
+ return p.shipType==='dog'?.75:p.shipType==='phantom'?.70:1;
+}
 function loseHP(amount,pressure=false,kind='unknown',attacker=null){if(player.iframes>0||player.dashTime>0||(player.shipType==='drill'&&player.drillOverdriveTime>0)||mode!=='playing')return;amount*=AnkinTactics.incomingMultiplier(player);player.hitTime=0;
  // High-level PHASE bolts partially bypass shields, but still respect dash/NOVA invulnerability.
  if(player.shipType==='phantom'){const r=AnkinPhantom.rank;amount*=1-r(player,'armor')*.07;if(player.phantomVeil>0){const absorb=Math.min(amount,player.phantomVeilShield||0);amount-=absorb;player.phantomVeilShield-=absorb;}if(r(player,'sanctuary')&&player.hp<player.maxHp*.3&&(player.phantomEmergency||0)<=0){player.shield=Math.min(player.shieldMax,player.shield+35);player.phantomEmergency=18;}}
@@ -5963,7 +5969,7 @@ function drive(dt){const p=player,g=game;g.total+=dt;runClock+=dt;g.spawn-=dt;
  e.x+=Math.cos(angle)*spd*dt;e.y+=Math.sin(angle)*spd*dt;
  // Hostile units ignore ENGAGE barriers, unlike the pilot and friendly fire.
  tickBurn(e,dt);
- if(e.type!=='bomber'&&distance<e.r+(enemyAim.hitR??enemyAim.r)&&(e.isoSafe||0)<=0){if(enemyAim===p)loseHP(e.dmg*(e.darkWeak>0?.9:1)*(p.shipType==='drill'?1-clamp(p.drillArmor||0,0,.35):1),false,'contact',e);else if((e.darkAllyContact||0)<=runClock){enemyAim.hp-=e.dmg;e.darkAllyContact=runClock+.6;}}
+ if(e.type!=='bomber'&&distance<e.r+(enemyAim.hitR??enemyAim.r)&&(e.isoSafe||0)<=0){if(enemyAim===p)loseHP(e.dmg*(e.darkWeak>0?.9:1)*contactDamageMultiplier(p,g.gameMode),false,'contact',e);else if((e.darkAllyContact||0)<=runClock){enemyAim.hp-=e.dmg;e.darkAllyContact=runClock+.6;}}
  }enemies=enemies.filter(e=>!e.dead);
  if(player.elementMods?.diamondWall){
   const meteors=shots.filter(b=>b.kind==='meteor'&&b.ttl>0);

@@ -1,4 +1,4 @@
-name: Contact survival balance measurement
+name: Contact survival unseen-seed confirmation
 on:
   push:
     branches: ['experiment/contact-survival-20261118']
@@ -15,18 +15,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [baseline, light, balanced, strong]
+        variant: [baseline, candidate]
         ship: [dog, phantom]
     env:
       ANKIN_ARSENAL_FULL: '1'
       ANKIN_ARSENAL_FULL_SEEDS: '20'
       ANKIN_ARSENAL_SHIP: ${{ matrix.ship }}
       ANKIN_ARSENAL_MODE: normal
-      ANKIN_FULL_START_SEED: '17'
+      ANKIN_FULL_START_SEED: '57'
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
