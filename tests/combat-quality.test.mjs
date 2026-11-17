@@ -56,8 +56,8 @@ test('the live DOG collision pipeline applies the return bonus once, with one da
  h.api.drive(1/60);assert.equal(h.api.game.damage,400);assert.equal(e.hp,600);assert.equal(h.api.game.damageStats.bone,400);
 });
 
-test('DRILL contact armor reduces real enemy body collisions, while projectiles keep their full damage',()=>{
- for(const ship of ['shot','laser','charge','drill','dog','phantom']){const h=setup(ship),p=h.api.player;Object.assign(p,{shield:0,shieldMax:0,regen:0,shotTimer:1e9});h.api.enemy('drone',{x:p.x,y:p.y,r:12,spd:0,dmg:40,hp:1e9,maxHp:1e9,shoot:1e9});const hp=p.hp;h.api.drive(1/60);assert.ok(Math.abs(hp-p.hp-(ship==='drill'?30:40))<1e-8,ship);p.iframes=0;const before=p.hp;h.api.loseHP(40);assert.ok(Math.abs(before-p.hp-40)<1e-8,ship+' projectile');}
+test('normal body armor reduces real enemy collisions while direct damage stays full',()=>{
+ for(const ship of ['shot','laser','charge','drill','dog','phantom']){const h=setup(ship),p=h.api.player;Object.assign(p,{shield:0,shieldMax:0,regen:0,shotTimer:1e9});h.api.enemy('drone',{x:p.x,y:p.y,r:12,spd:0,dmg:40,hp:1e9,maxHp:1e9,shoot:1e9});const hp=p.hp;h.api.drive(1/60);assert.ok(Math.abs(hp-p.hp-(ship==='drill'||ship==='dog'?30:ship==='phantom'?28:40))<1e-8,ship);p.iframes=0;const before=p.hp;h.api.loseHP(40);assert.ok(Math.abs(before-p.hp-40)<1e-8,ship+' projectile');}
 });
 test('eight normal DOG bones can focus four outbound hits on a stationary boss-sized target without adding projectiles',()=>{
  const h=setup('dog'),p=h.api.player;Object.assign(p,{dmg:100,dogBones:8,dogBonePower:1,crit:0,shotTimer:1e9});h.api.enemy('drone',{x:p.x+230,y:p.y,r:55,spd:0,hp:1e9,maxHp:1e9,shoot:1e9});h.api.shoot();assert.equal(h.api.shots.length,8);for(let i=0;i<38;i++)h.api.drive(1/60);assert.equal(h.api.game.damage,400);
@@ -76,7 +76,7 @@ test('per-offer recipe indexes preserve direct lookup order and rebuild after at
 });
 
 test('incoming telemetry identifies native contact, phase bolts and hazards without changing damage or invulnerability',()=>{
- for(const kind of ['contact','phase','hazard']){const h=setup('dog'),p=h.api.player;Object.assign(p,{shotTimer:1e9,regen:0,shield:kind==='phase'?100:0,shieldMax:100});h.api.beginBalanceTelemetry();const hp=p.hp;
+ for(const kind of ['contact','phase','hazard']){const h=setup('dog'),p=h.api.player;h.api.game.gameMode='challenge';Object.assign(p,{shotTimer:1e9,regen:0,shield:kind==='phase'?100:0,shieldMax:100});h.api.beginBalanceTelemetry();const hp=p.hp;
   if(kind==='contact')h.api.enemy('drone',{x:p.x,y:p.y,spd:0,shoot:1e9,dmg:40,hp:1e9});
   if(kind==='phase')h.api.hostile.push({x:p.x,y:p.y,vx:0,vy:0,r:7,damage:40,pressure:true,ttl:2});
   if(kind==='hazard')h.api.hazards.push({type:'mine',x:p.x,y:p.y,r:40,warn:0,active:1,damage:40});
@@ -92,4 +92,26 @@ test('incoming telemetry bounds recent hit details while preserving the complete
 });
 test('VM AI encounters advance the native simulation and visual phase clocks and reset phases between runs',()=>{
  const h=setup('shot');for(let i=0;i<2;i++){h.ctx.__ankinBalanceAI.runEncounter({ship:'shot',seed:17,phase:0,scenario:'live-pack',seconds:2});assert.ok(Math.abs(h.api.visualTime-2)<1e-7);assert.ok(Math.abs(h.api.time-2)<1e-7);}
+});
+
+test('normal DOG and PHANTOM contact protection reduces native body hits before shields and survives rebuilds',()=>{
+ for(const mode of ['normal','challenge'])for(const ship of ['shot','laser','charge','drill','dog','phantom']){
+  const h=setup(ship);h.api.game.gameMode=mode;
+  const multiplier=ship==='drill'?.75:mode==='normal'&&ship==='dog'?.75:mode==='normal'&&ship==='phantom'?.70:1;
+  for(const rebuild of [false,true]){
+   if(rebuild)h.api.restorePlayerBuild();const p=h.api.player;Object.assign(p,{hp:1000,maxHp:1000,shield:10,shieldMax:100,regen:0,shotTimer:1e9,iframes:0});
+   h.api.clear();h.api.beginBalanceTelemetry();h.api.enemy('drone',{x:p.x,y:p.y,spd:0,shoot:1e9,dmg:100,hp:1e9});h.api.drive(1/60);
+   assert.ok(Math.abs(p.hp-(1000-(100*multiplier-10)))<1e-8,ship+mode+rebuild);assert.equal(p.shield,0);assert.equal(h.api.balanceTelemetryReport().incoming['contact:drone'].hits,1);
+   assert.equal(h.api.contactDamageMultiplier(p,mode),multiplier);
+  }
+ }
+});
+test('DOG/PHANTOM contact protection leaves bullets, PHASE bolts, hazards and invulnerability intact',()=>{
+ for(const mode of ['normal','challenge'])for(const ship of ['dog','phantom'])for(const kind of ['projectile','phase','hazard','dash','iframe']){
+  const h=setup(ship),p=h.api.player;h.api.game.gameMode=mode;Object.assign(p,{hp:1000,maxHp:1000,shield:0,regen:0,shotTimer:1e9});h.api.beginBalanceTelemetry();
+  if(kind==='hazard')h.api.hazards.push({type:'mine',x:p.x,y:p.y,r:40,warn:0,active:1,damage:100});
+  else if(kind==='dash'||kind==='iframe'){p[kind==='dash'?'dashTime':'iframes']=1;h.api.enemy('drone',{x:p.x,y:p.y,spd:0,shoot:1e9,dmg:100,hp:1e9});}
+  else h.api.hostile.push({x:p.x,y:p.y,vx:0,vy:0,r:7,damage:100,pressure:kind==='phase',ttl:2});
+  h.api.drive(1/60);assert.equal(p.hp,['dash','iframe'].includes(kind)?1000:900,ship+mode+kind);
+ }
 });

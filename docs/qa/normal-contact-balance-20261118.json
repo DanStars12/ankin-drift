@@ -1,0 +1,2814 @@
+{
+  "date": "2026-11-18",
+  "baselineCommit": "d3750ec47dc749fd16fdaf85f6928727d798a6b8",
+  "candidateIndexBlob": "b671d8290d7a368e7a9494344c03b2610433e71f",
+  "selectedContactReduction": {
+    "normal": {
+      "dog": 0.25,
+      "phantom": 0.3
+    },
+    "challenge": {
+      "dog": 0,
+      "phantom": 0
+    }
+  },
+  "samePilotAndRewardPolicy": true,
+  "scope": "real normal 30-minute timelines including random rewards and final boss; deaths and timeouts remain in denominator; no invulnerability or HP refill",
+  "statistics": [
+    {
+      "ship": "dog",
+      "cohort": "training",
+      "baselineClear": 4,
+      "candidateClear": 10,
+      "trials": 20,
+      "gainedSeeds": [
+        17,
+        21,
+        23,
+        24,
+        30,
+        32
+      ],
+      "lostSeeds": []
+    },
+    {
+      "ship": "dog",
+      "cohort": "holdout",
+      "baselineClear": 5,
+      "candidateClear": 11,
+      "trials": 20,
+      "gainedSeeds": [
+        58,
+        60,
+        62,
+        69,
+        71,
+        72
+      ],
+      "lostSeeds": []
+    },
+    {
+      "ship": "phantom",
+      "cohort": "training",
+      "baselineClear": 6,
+      "candidateClear": 11,
+      "trials": 20,
+      "gainedSeeds": [
+        24,
+        25,
+        29,
+        30,
+        35
+      ],
+      "lostSeeds": []
+    },
+    {
+      "ship": "phantom",
+      "cohort": "holdout",
+      "baselineClear": 2,
+      "candidateClear": 7,
+      "trials": 20,
+      "gainedSeeds": [
+        60,
+        65,
+        66,
+        70,
+        73
+      ],
+      "lostSeeds": []
+    }
+  ],
+  "training": {
+    "commit": "77e32e8b2078917e7bcefc7b5a9057fa4a1d7b2b",
+    "run": 44161753815,
+    "seeds": [
+      17,
+      36
+    ],
+    "comparisons": [
+      {
+        "jobId": 134317130165,
+        "name": "Contact balance (light, dog)",
+        "rows": [
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1812.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 129,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1803.98,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 915.63,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1808.53,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1807.08,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 143,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1804.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 136,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1760.65,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 131,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1777.9,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 157,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1152,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 700.82,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 1507.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 113,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 875.58,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 1510.9,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 103,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1812.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 124,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 271.73,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 27,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1809.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 878.47,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1805.27,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1446.93,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 103,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 844.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "jobId": 134317130467,
+        "name": "Contact balance (balanced, dog)",
+        "rows": [
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1812.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 129,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1803.98,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 915.63,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1808.53,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1807.08,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 143,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1804.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 136,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1805.42,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 135,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1805.78,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 161,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1152.65,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 700.82,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 1507.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 113,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 875.58,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 1510.9,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 103,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1812.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 124,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 423.53,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 34,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1809.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 1029.77,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 78,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1805.27,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1636.13,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 123,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 845.3,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "jobId": 134317130475,
+        "name": "Contact balance (light, phantom)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1823.78,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 101,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 1028.38,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 557.98,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 36,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1803.48,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 154,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 713.75,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 863.93,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1804.73,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 139,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1813.12,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 115,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1180.6,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 1007.63,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 61,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 857.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 1840.02,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 97,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1801.67,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 144,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1730.55,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 104,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 858.88,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 54,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 867.17,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1809.87,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 118,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1441.8,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 101,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1815.7,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "jobId": 134317130541,
+        "name": "Contact balance (balanced, phantom)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1820.33,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 102,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 995.88,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 723.17,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 47,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1735.35,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1166.33,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1025.67,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1804.73,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 139,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1810.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 113,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1451.97,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 99,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 568,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 38,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 858.32,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 1830.37,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 104,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1801.67,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 144,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1811.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 110,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1822.45,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 126,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 869.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1809.33,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 118,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1803.52,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1816.75,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "jobId": 134317130579,
+        "name": "Contact balance (baseline, dog)",
+        "rows": [
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1743.15,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 123,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1803.98,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 915.63,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1808.53,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1767.72,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 139,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1804.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 136,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1736.77,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1640.8,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 142,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1149.3,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 694.9,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 1507.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 113,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 874.1,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 722.28,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1630.1,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 105,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 264.53,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1152.7,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 81,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 875.82,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1805.27,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1446.93,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 103,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 842.97,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "jobId": 134317130751,
+        "name": "Contact balance (strong, phantom)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1819,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 101,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 1026.33,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 725.92,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 47,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1803.52,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 139,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1031.72,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1804.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 122,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1804.73,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 139,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1811.45,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 120,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1301.78,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 88,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 692.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 44,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 858.97,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 1835.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 104,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1801.67,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 144,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1813.53,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 109,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1760.15,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 870.47,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1810.07,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1803.52,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1816.03,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "jobId": 134317130869,
+        "name": "Contact balance (baseline, phantom)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1813.68,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 100,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 876.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 557.12,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 36,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 875.6,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 268.93,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1010.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 996.95,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 69,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1179.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 399.12,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 31,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 856.05,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 271.17,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 276.35,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 24,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1810.53,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 109,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1811.28,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 114,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 833.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1809.38,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1176.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1815.85,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "jobId": 134317130893,
+        "name": "Contact balance (strong, dog)",
+        "rows": [
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1812.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 129,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1803.98,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 915.63,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1808.53,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1807.08,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 143,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1804.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 136,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1805.42,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 135,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1805.78,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 161,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 1154.48,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1802.88,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 143,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 1507.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 113,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 878.47,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 1805.05,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1812.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 124,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 425.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 35,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1809.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 1807.05,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 146,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1805.27,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1803.47,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 141,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 845.3,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      }
+    ]
+  },
+  "holdout": {
+    "commit": "064623725b486637bb19caf03a87a2f87e5bbdd2",
+    "run": 44163155562,
+    "seeds": [
+      57,
+      76
+    ],
+    "frozenBeforeMeasuring": true,
+    "comparisons": [
+      {
+        "jobId": 134322067649,
+        "name": "Contact balance (candidate, phantom)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 57,
+            "seconds": 263.25,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 24,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 58,
+            "seconds": 711.57,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 50,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 59,
+            "seconds": 1141.33,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 60,
+            "seconds": 1806,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 61,
+            "seconds": 715.95,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 62,
+            "seconds": 850.72,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 63,
+            "seconds": 1804,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 129,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 64,
+            "seconds": 1804.98,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 123,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 65,
+            "seconds": 1802.97,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 66,
+            "seconds": 1826.98,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 106,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 67,
+            "seconds": 1637.77,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 96,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 68,
+            "seconds": 406.38,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 32,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 69,
+            "seconds": 412.07,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 30,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 70,
+            "seconds": 1803.53,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 137,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 71,
+            "seconds": 863.47,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 58,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 72,
+            "seconds": 1157.85,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 73,
+            "seconds": 1815.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 102,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 74,
+            "seconds": 1441.15,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 101,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 75,
+            "seconds": 1474.05,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 96,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 76,
+            "seconds": 1619.3,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "jobId": 134322067952,
+        "name": "Contact balance (baseline, phantom)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 57,
+            "seconds": 259.97,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 24,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 58,
+            "seconds": 855.3,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 59,
+            "seconds": 869.3,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 60,
+            "seconds": 1295.45,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 81,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 61,
+            "seconds": 705.13,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 45,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 62,
+            "seconds": 850.07,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 63,
+            "seconds": 1804,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 129,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 64,
+            "seconds": 1803.62,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 140,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 65,
+            "seconds": 268.93,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 22,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 66,
+            "seconds": 561.97,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 35,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 67,
+            "seconds": 1318.13,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 76,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 68,
+            "seconds": 403.45,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 31,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 69,
+            "seconds": 398.02,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 70,
+            "seconds": 1298.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 81,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 71,
+            "seconds": 729.78,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 72,
+            "seconds": 709.57,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 43,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 73,
+            "seconds": 257.07,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 22,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 74,
+            "seconds": 1141.55,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 75,
+            "seconds": 1148.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 75,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 76,
+            "seconds": 1475.77,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 105,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "jobId": 134322068029,
+        "name": "Contact balance (baseline, dog)",
+        "rows": [
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 57,
+            "seconds": 1601.73,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 100,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 58,
+            "seconds": 1603.83,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 124,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 59,
+            "seconds": 1219.4,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 85,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 60,
+            "seconds": 569.28,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 61,
+            "seconds": 1804.97,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 133,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 62,
+            "seconds": 1767.22,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 148,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 63,
+            "seconds": 1804.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 149,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 64,
+            "seconds": 1511.35,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 106,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 65,
+            "seconds": 1511.85,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 104,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 66,
+            "seconds": 1804.55,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 67,
+            "seconds": 1468.9,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 96,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 68,
+            "seconds": 1811.68,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 137,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 69,
+            "seconds": 1453.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 105,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 70,
+            "seconds": 1443.82,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 100,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 71,
+            "seconds": 1481.15,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 108,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 72,
+            "seconds": 1022.3,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 70,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 73,
+            "seconds": 1805.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 141,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 74,
+            "seconds": 616.2,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 42,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 75,
+            "seconds": 622.23,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 76,
+            "seconds": 1508.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 110,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "jobId": 134322068113,
+        "name": "Contact balance (candidate, dog)",
+        "rows": [
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 57,
+            "seconds": 1774.2,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 122,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 58,
+            "seconds": 1807.28,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 153,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 59,
+            "seconds": 1219.4,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 85,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 60,
+            "seconds": 1803.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 139,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 61,
+            "seconds": 1804.97,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 133,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 62,
+            "seconds": 1804.92,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 154,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 63,
+            "seconds": 1804.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 149,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 64,
+            "seconds": 1511.35,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 106,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 65,
+            "seconds": 1511.85,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 104,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 66,
+            "seconds": 1804.55,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 67,
+            "seconds": 1722.77,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 119,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 68,
+            "seconds": 1804.02,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 153,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 69,
+            "seconds": 1802.97,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 148,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 70,
+            "seconds": 692.8,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 71,
+            "seconds": 1805.75,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 141,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 72,
+            "seconds": 1803.6,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 143,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 73,
+            "seconds": 1805.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 141,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 74,
+            "seconds": 616.2,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 42,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 75,
+            "seconds": 622.23,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "dog",
+            "gameMode": "normal",
+            "seed": 76,
+            "seconds": 1508.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 110,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      }
+    ]
+  }
+}
