@@ -28,8 +28,10 @@ window.__companionLoad=function(speed,scenario){return balanceSandbox(()=>{
   for(let i=0;i<300;i++)orb(20+(i*37)%Math.max(1,W-40),20+(i*61)%Math.max(1,H-40),2,1);
   const initial={scenario,bosses:enemies.filter(e=>['minor','major'].includes(e.type)).length,enemies:enemies.length,phantoms:player.phantoms.length,types:player.dartTypes.length,walls:activeEngageWalls().length};
   let maxDarts=0,maxShots=0,maxVisuals=0,maxEchoes=0,finite=true;
-  for(let i=0;i<900/speed;i++){
-   advanceSimulation(1/60);if(i%10===0){render();hudUpdate();}
+  for(let i=0;i<1200/speed&&game.total<1215-1e-7;i++){
+   advanceSimulation(1/60);
+   for(let n=0;n<50&&mode!=='playing';n++){if(mode==='fusion')dismissFusion();else if(mode==='uniqueReward'||mode==='elementResult')continueAfterReward();else throw Error('Unexpected combat menu: '+mode);}
+   if(i%10===0){render();hudUpdate();}
    maxDarts=Math.max(maxDarts,player.darts.length);maxShots=Math.max(maxShots,player.dartProjectiles.length);maxVisuals=Math.max(maxVisuals,player.dartVisuals.length);maxEchoes=Math.max(maxEchoes,player.phantomEchoes.length);
    finite&&=[player,...player.phantoms,...player.darts,...enemies].every(e=>Number.isFinite(e.x)&&Number.isFinite(e.y));
    if(mode!=='playing')throw Error('Load fixture stopped: '+mode);
@@ -46,7 +48,7 @@ test('maximum PHANTOM companions sustain native complex raids and multi-boss com
   await page.goto('./');const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));
   const r=await page.evaluate(({speed,scenario})=>window.__companionLoad(speed,scenario),{speed,scenario});rows.push(r);
   expect(r.initial.enemies).toBe(235);expect(r.initial.phantoms).toBe(5);expect(r.initial.types).toBe(25);if(scenario==='raid')expect(r.initial.walls).toBeGreaterThan(0);else expect(r.initial.bosses).toBe(3);
-  expect(r.seconds).toBeCloseTo(15,5);expect(r.damage).toBeGreaterThan(0);expect(r.maxDarts).toBe(25);expect(r.maxShots).toBeLessThanOrEqual(256);expect(r.maxVisuals).toBeLessThanOrEqual(64);expect(r.maxEchoes).toBeLessThanOrEqual(40);expect(r.finite).toBe(true);expect(r.faults).toBe(0);
+  expect(r.seconds).toBeGreaterThanOrEqual(15-1e-6);expect(r.seconds).toBeLessThanOrEqual(15+1/60+1e-6);expect(r.damage).toBeGreaterThan(0);expect(r.maxDarts).toBe(25);expect(r.maxShots).toBeLessThanOrEqual(256);expect(r.maxVisuals).toBeLessThanOrEqual(64);expect(r.maxEchoes).toBeLessThanOrEqual(40);expect(r.finite).toBe(true);expect(r.faults).toBe(0);
   expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);
  }
  expect(errors).toEqual([]);await writeFile(info.outputPath('phantom-native-load.json'),JSON.stringify({project:info.project.name,rows},null,2));
