@@ -1,0 +1,45 @@
+name: Contact survival balance measurement
+on:
+  push:
+    branches: ['experiment/contact-survival-20261118']
+permissions:
+  contents: read
+concurrency:
+  group: contact-survival-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  paired:
+    name: Contact balance (${{ matrix.variant }}, ${{ matrix.ship }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [baseline, light, balanced, strong]
+        ship: [dog, phantom]
+    env:
+      ANKIN_ARSENAL_FULL: '1'
+      ANKIN_ARSENAL_FULL_SEEDS: '20'
+      ANKIN_ARSENAL_SHIP: ${{ matrix.ship }}
+      ANKIN_ARSENAL_MODE: normal
+      ANKIN_FULL_START_SEED: '17'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: node scripts/contact-survival-fixture.mjs ${{ matrix.variant }}
+      - run: npx playwright test tests/v13-36-arsenal.spec.mjs --project=desktop --grep='arsenal full progression'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: contact-${{ matrix.variant }}-${{ matrix.ship }}
+          path: |
+            artifacts/arsenal/
+            test-results/
+          retention-days: 14
