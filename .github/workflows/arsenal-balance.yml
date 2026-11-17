@@ -1,7 +1,7 @@
 name: ANKIN arsenal balance
 on:
   pull_request:
-    paths: ['index.html', 'skill-arsenal.js', 'skill-tactics.js', 'scripts/balance-ai-harness.mjs', 'scripts/balance-reward-value.mjs', 'tests/v13-37-tactics.spec.mjs', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
+    paths: ['index.html', 'phantom-frame.js', 'skill-arsenal.js', 'skill-tactics.js', 'scripts/balance-ai-harness.mjs', 'scripts/balance-reward-value.mjs', 'tests/v13-37-tactics.spec.mjs', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
   workflow_dispatch:
 permissions:
   contents: read

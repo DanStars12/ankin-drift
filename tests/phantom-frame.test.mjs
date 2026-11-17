@@ -115,3 +115,15 @@ test('target reserve adds at most one hit and respects geometry, walls, safety a
   if(['wall','arc','absent'].includes(scenario))assert.ok(hits.length<=cap,scenario);
  }
 });
+
+test('targetless echoes and NOVA retain their original hit limits in a dense pack',()=>{
+ for(const nova of [false,true]){
+  const h=setup(),p=h.api.player,f=p.phantoms[0],s=h.ctx.AnkinPhantom.stats(p),hits=[];
+  Object.assign(f,{x:500,y:300,cooldown:100,scan:100,target:null});
+  const candidates=Array.from({length:30},(_,i)=>({id:i,type:'drone',x:525+i*.1,y:300,r:8,hp:1e6,maxHp:1e6,dead:false}));
+  const w=h.api.phantomWorld();w.candidates=()=>candidates;w.random=()=>1;w.element=()=>{};w.damage=e=>hits.push(e.id);
+  if(nova){p.phantomNova=2;p.phantomRanks.novaTempest=1;f.novaTick=0;f.target=f.lastTarget=candidates.at(-1);}
+  else p.phantomEchoes.push({frame:{...f},delay:0,angle:0,type:'echo',factor:1});
+  h.ctx.AnkinPhantom.tick(p,1/60,w);assert.equal(hits.length,nova?16:s.cap);assert.deepEqual(hits,Array.from({length:nova?16:s.cap},(_,i)=>i));
+ }
+});
