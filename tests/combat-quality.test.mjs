@@ -74,3 +74,22 @@ test('relics with unmet prerequisites cannot spawn an empty reward and depleted 
 test('per-offer recipe indexes preserve direct lookup order and rebuild after attribute sealing',()=>{
  const h=setup('phantom');for(const ship of ['shot','laser','charge','drill','dog','phantom']){h.api.reset(ship);for(const sealed of [false,true]){if(sealed)h.api.game.sealedElements.push('fire');const indexed=h.api.offerRecipeLookups();for(const id of ['hp','barrier','shieldEpic','damage','ph_core','ph_parade','field','seraph','plasma','lPowerLens','dogGoodBoy']){assert.deepEqual(Array.from(indexed.synergies.get(id)||[],r=>r.id),Array.from(h.api.synergiesFor(id),r=>r.id));assert.deepEqual(Array.from(indexed.fusions.get(id)||[],r=>r.id),Array.from(h.api.fusionFor(id),r=>r.id));}}}
 });
+
+test('incoming telemetry identifies native contact, phase bolts and hazards without changing damage or invulnerability',()=>{
+ for(const kind of ['contact','phase','hazard']){const h=setup('dog'),p=h.api.player;Object.assign(p,{shotTimer:1e9,regen:0,shield:kind==='phase'?100:0,shieldMax:100});h.api.beginBalanceTelemetry();const hp=p.hp;
+  if(kind==='contact')h.api.enemy('drone',{x:p.x,y:p.y,spd:0,shoot:1e9,dmg:40,hp:1e9});
+  if(kind==='phase')h.api.hostile.push({x:p.x,y:p.y,vx:0,vy:0,r:7,damage:40,pressure:true,ttl:2});
+  if(kind==='hazard')h.api.hazards.push({type:'mine',x:p.x,y:p.y,r:40,warn:0,active:1,damage:40});
+  h.api.drive(1/60);const report=h.api.balanceTelemetryReport(),key={contact:'contact:drone',phase:'projectile:phase',hazard:'hazard:mine'}[kind],damage=kind==='phase'?16.8:40;
+  assert.ok(Math.abs(hp-p.hp-damage)<1e-8,kind);assert.equal(report.hits,1);assert.ok(Math.abs(report.incoming[key].damage-damage)<1e-8);assert.equal(report.hitEvents[0].hpBefore,hp);h.api.loseHP(999);assert.equal(h.api.balanceTelemetryReport().hitEvents.length,1);
+  report.incoming[key].damage=999;report.hitEvents[0].damage=999;assert.notEqual(h.api.balanceTelemetryReport().hitEvents[0].damage,999);
+ }
+});
+test('incoming telemetry bounds recent hit details while preserving the complete aggregate',()=>{
+ const h=setup('dog'),p=h.api.player;h.api.beginBalanceTelemetry();p.maxHp=p.hp=1000;p.shield=0;
+ for(let i=0;i<80;i++){p.iframes=0;h.api.setClock(i);h.api.loseHP(1,false,'projectile');}
+ const r=h.api.balanceTelemetryReport();assert.equal(r.hitEvents.length,64);assert.equal(r.hitEvents[0].at,16);assert.equal(r.incoming.projectile.hits,80);assert.equal(r.damageTaken,80);
+});
+test('VM AI encounters advance the native simulation and visual phase clocks and reset phases between runs',()=>{
+ const h=setup('shot');for(let i=0;i<2;i++){h.ctx.__ankinBalanceAI.runEncounter({ship:'shot',seed:17,phase:0,scenario:'live-pack',seconds:2});assert.ok(Math.abs(h.api.visualTime-2)<1e-7);assert.ok(Math.abs(h.api.time-2)<1e-7);}
+});

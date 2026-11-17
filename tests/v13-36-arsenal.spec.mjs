@@ -144,6 +144,7 @@ test('arsenal full progression: paired seeds, both real modes, actual random rew
  }
  const summary=rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,fusions:r.elementFusions,choices:r.menuChoices,clear:r.clearCount,boss:r.reachedFinalBoss}));
  console.log('ARSENAL_PROGRESSION='+JSON.stringify(summary));
+ console.log('ARSENAL_INCOMING='+JSON.stringify(rows.map(r=>({ship:r.ship,gameMode:r.gameMode,seed:r.seed,seconds:r.simulationTime,result:r.stopReason,maxHp:r.maxHp,incoming:r.incoming||null,lastHits:(r.hitEvents||[]).slice(-5)}))));
  await mkdir('artifacts/arsenal',{recursive:true});await writeFile('artifacts/arsenal/'+testInfo.project.name+'-progression.json',JSON.stringify({rows,summary},null,2));
  expect(rows).toHaveLength(modes.length*ships.length*seedCount);expect(await page.evaluate(()=>JSON.stringify({...localStorage}))).toBe(saved);expect(errors).toEqual([]);
 });
