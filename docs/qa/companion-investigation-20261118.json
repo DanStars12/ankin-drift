@@ -1,0 +1,4813 @@
+{
+  "date": "2026-11-18",
+  "baseline": "12f26bb06db939a635c03ae5c2abf01564ca1fd0",
+  "decision": "Retain baseline gameplay; reject the priority, reserve and defensive-growth candidates. Merge bounded diagnostics, VM clock correction and regression checks only.",
+  "measurement": "Headless browser combat with fixed steps, identical AI/rewards/schedules; not human win rates or FPS.",
+  "rejectedAllSix": {
+    "commit": "cd9096e7f582c71cc3668fb422114feddbb98215",
+    "run": 44154766825,
+    "pairs": [
+      {
+        "id": 134292625775,
+        "name": "Arsenal progression (baseline, normal, dog)",
+        "total": 20,
+        "clear": 4,
+        "dead": 16,
+        "timeout": 0
+      },
+      {
+        "id": 134292626044,
+        "name": "Arsenal progression (baseline, normal, charge)",
+        "total": 20,
+        "clear": 10,
+        "dead": 10,
+        "timeout": 0
+      },
+      {
+        "id": 134292626058,
+        "name": "Arsenal progression (candidate, normal, charge)",
+        "total": 20,
+        "clear": 10,
+        "dead": 10,
+        "timeout": 0
+      },
+      {
+        "id": 134292626097,
+        "name": "Arsenal progression (baseline, challenge, dog)",
+        "total": 20,
+        "clear": 19,
+        "dead": 1,
+        "timeout": 0
+      },
+      {
+        "id": 134292626100,
+        "name": "Arsenal progression (candidate, challenge, shot)",
+        "total": 20,
+        "clear": 16,
+        "dead": 4,
+        "timeout": 0
+      },
+      {
+        "id": 134292626121,
+        "name": "Arsenal progression (baseline, challenge, drill)",
+        "total": 20,
+        "clear": 11,
+        "dead": 9,
+        "timeout": 0
+      },
+      {
+        "id": 134292626178,
+        "name": "Arsenal progression (baseline, challenge, shot)",
+        "total": 20,
+        "clear": 16,
+        "dead": 4,
+        "timeout": 0
+      },
+      {
+        "id": 134292626182,
+        "name": "Arsenal progression (candidate, normal, dog)",
+        "total": 20,
+        "clear": 4,
+        "dead": 16,
+        "timeout": 0
+      },
+      {
+        "id": 134292626231,
+        "name": "Arsenal progression (baseline, challenge, laser)",
+        "total": 20,
+        "clear": 14,
+        "dead": 6,
+        "timeout": 0
+      },
+      {
+        "id": 134292626241,
+        "name": "Arsenal progression (candidate, normal, phantom)",
+        "total": 20,
+        "clear": 1,
+        "dead": 19,
+        "timeout": 0
+      },
+      {
+        "id": 134292626287,
+        "name": "Arsenal progression (candidate, challenge, laser)",
+        "total": 20,
+        "clear": 14,
+        "dead": 6,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (candidate, normal, laser)",
+        "n": 20,
+        "clear": 7,
+        "dead": 13,
+        "timeout": 0
+      },
+      {
+        "id": 134292626346,
+        "name": "Arsenal progression (candidate, challenge, charge)",
+        "total": 20,
+        "clear": 17,
+        "dead": 3,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (baseline, normal, laser)",
+        "n": 20,
+        "clear": 7,
+        "dead": 13,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (candidate, normal, drill)",
+        "n": 20,
+        "clear": 8,
+        "dead": 12,
+        "timeout": 0
+      },
+      {
+        "id": 134292626378,
+        "name": "Arsenal progression (baseline, challenge, phantom)",
+        "total": 20,
+        "clear": 14,
+        "dead": 5,
+        "timeout": 1
+      },
+      {
+        "id": 134292626380,
+        "name": "Arsenal progression (baseline, normal, drill)",
+        "total": 20,
+        "clear": 8,
+        "dead": 12,
+        "timeout": 0
+      },
+      {
+        "id": 134292626394,
+        "name": "Arsenal progression (baseline, challenge, charge)",
+        "total": 20,
+        "clear": 17,
+        "dead": 3,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (baseline, normal, phantom)",
+        "n": 20,
+        "clear": 6,
+        "dead": 14,
+        "timeout": 0
+      },
+      {
+        "id": 134292626516,
+        "name": "Arsenal progression (candidate, challenge, phantom)",
+        "total": 20,
+        "clear": 8,
+        "dead": 11,
+        "timeout": 1
+      },
+      {
+        "id": 134292626566,
+        "name": "Arsenal progression (candidate, challenge, drill)",
+        "total": 20,
+        "clear": 11,
+        "dead": 9,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (baseline, normal, shot)",
+        "n": 20,
+        "clear": 14,
+        "dead": 6,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (candidate, challenge, dog)",
+        "n": 20,
+        "clear": 19,
+        "dead": 1,
+        "timeout": 0
+      },
+      {
+        "name": "Arsenal progression (candidate, normal, shot)",
+        "n": 20,
+        "clear": 14,
+        "dead": 6,
+        "timeout": 0
+      }
+    ]
+  },
+  "coverageStudy": {
+    "commit": "1334560e6933396eaf23650a6a0a9b1d53bc8188",
+    "run": 44155673369,
+    "trials": [
+      {
+        "job": 134295631241,
+        "name": "PHANTOM fixture (cleave, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 844,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 50,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 849.48,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 562.72,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 39,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 549.4,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 37,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 916.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 3,
+            "choices": 54,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 947.27,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 919.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 924.88,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 915,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134295631572,
+        "name": "PHANTOM fixture (coverage-growth, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 917.88,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 71,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 54,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 924.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 928.42,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 951.27,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 833.5,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 913.68,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 933.42,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 923.13,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 920.95,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134295631635,
+        "name": "PHANTOM fixture (cleave, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 410.98,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 30,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1292.08,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 77,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 848.53,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1809.35,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 118,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 858.18,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 54,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 999.83,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 383.78,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1614.03,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 115,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 696.32,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1023.2,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 74,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134295631729,
+        "name": "PHANTOM fixture (coverage-growth, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1285.03,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 91,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 734.18,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 713.9,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1472.8,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 93,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1304.72,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 73,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 402.53,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 34,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1622.22,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 120,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 847.98,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 54,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 277.98,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 25,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 981.27,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 72,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134295631761,
+        "name": "PHANTOM fixture (coverage, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 915.82,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 67,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 846.03,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 913.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 931.88,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 955.3,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 926.82,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 919.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 933.42,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 923.13,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 567.27,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 40,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134295631820,
+        "name": "PHANTOM fixture (coverage, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1285.03,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 91,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 734.18,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 853.35,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1591.73,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1219.42,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 1326.78,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 92,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1442.57,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 105,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 556.53,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 36,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 277.98,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 25,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1293.35,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 98,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134295631950,
+        "name": "PHANTOM fixture (growth, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 410.98,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 30,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 867.57,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 567.97,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 33,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1809.35,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 118,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 858.18,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 54,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 858.3,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 383.78,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1614.03,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 115,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 696.32,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1167.45,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 84,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134295631982,
+        "name": "PHANTOM fixture (growth, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 847.18,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 50,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 929.25,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 919.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 556.2,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 37,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 916.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 3,
+            "choices": 54,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 945.13,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 919.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 924.88,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 908.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      }
+    ]
+  },
+  "defenseStudy": {
+    "commit": "01a0456f1f6615d954b1b302cd384721c532673a",
+    "run": 44156332111,
+    "trials": [
+      {
+        "job": 134297942962,
+        "name": "PHANTOM fixture (relic-defense, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 842.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 846.43,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 922.27,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.92,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 921.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 913.5,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134297943363,
+        "name": "PHANTOM fixture (relic-defense, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 697.25,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 45,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1802.3,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 854.5,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1814.08,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 112,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1638.87,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 270.03,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1802.73,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1485.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1308.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 88,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134297943436,
+        "name": "PHANTOM fixture (relic-reserve, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 839.93,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 845.78,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 842.5,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 936.68,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 914.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134297943457,
+        "name": "PHANTOM fixture (baseline-growth, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1818.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 100,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 849.03,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 50,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1810.48,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 116,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 991.47,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 268.93,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1783.7,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 131,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1595,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 125,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1308.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 88,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134297943507,
+        "name": "PHANTOM fixture (baseline-defense, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 916.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 846.43,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 840.28,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.92,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 921.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 913.5,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134297943529,
+        "name": "PHANTOM fixture (baseline-growth, challenge)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 916.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 845.78,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 840.28,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 921.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 915.87,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134297943587,
+        "name": "PHANTOM fixture (relic-reserve, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 696.28,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 45,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1803.55,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 876.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 557.12,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 36,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 875.6,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 268.93,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1010.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 996.95,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 69,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1179.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134297943614,
+        "name": "PHANTOM fixture (baseline-defense, normal)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1818.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 100,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 856.95,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1810.48,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 116,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1638.87,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 270.03,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1783.7,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 131,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1485.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1308.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 88,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      }
+    ]
+  },
+  "confirmation": {
+    "commit": "f4f8f2300222b0380d3e99a36aa370a23ad48765",
+    "run": 44157033355,
+    "originalSeeds": [
+      17,
+      36
+    ],
+    "holdoutSeeds": [
+      37,
+      56
+    ],
+    "trials": [
+      {
+        "job": 134300409912,
+        "name": "PHANTOM confirm (relic-defense, challenge, original)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 842.52,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 846.43,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 922.27,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.92,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 921.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 913.5,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 27,
+            "seconds": 930.5,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 28,
+            "seconds": 922.88,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 29,
+            "seconds": 405.95,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 30,
+            "seconds": 847.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 31,
+            "seconds": 848.42,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 32,
+            "seconds": 953.77,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 33,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 34,
+            "seconds": 919.83,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 35,
+            "seconds": 564.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 36,
+            "seconds": 955.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134300410078,
+        "name": "PHANTOM confirm (baseline, challenge, original)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 916.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 845.78,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 924.33,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 936.68,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 914.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 27,
+            "seconds": 930.5,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 28,
+            "seconds": 925.58,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 29,
+            "seconds": 412.48,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 30,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 30,
+            "seconds": 919.22,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 63,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 31,
+            "seconds": 848.42,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 32,
+            "seconds": 953.77,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 33,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 34,
+            "seconds": 923.52,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 64,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 35,
+            "seconds": 564.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 36,
+            "seconds": 955.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134300410084,
+        "name": "PHANTOM confirm (baseline, normal, original)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1813.68,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 100,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 876.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 557.12,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 36,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 875.6,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 268.93,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1010.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 996.95,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 69,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1179.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 399.12,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 31,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 856.05,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 271.17,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 276.35,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 24,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1810.53,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 109,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 1811.28,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 114,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 833.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1809.38,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1176.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1815.85,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134300410094,
+        "name": "PHANTOM confirm (baseline-growth, challenge, original)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 17,
+            "seconds": 910.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 18,
+            "seconds": 916.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 19,
+            "seconds": 845.78,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 20,
+            "seconds": 840.28,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 21,
+            "seconds": 845.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 52,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 22,
+            "seconds": 914.1,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 23,
+            "seconds": 921.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 24,
+            "seconds": 939.45,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 25,
+            "seconds": 926.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 26,
+            "seconds": 915.87,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 56,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 27,
+            "seconds": 930.5,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 28,
+            "seconds": 910.6,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 63,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 29,
+            "seconds": 412.48,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 30,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 30,
+            "seconds": 847.43,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 31,
+            "seconds": 848.42,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 32,
+            "seconds": 953.77,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 33,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 34,
+            "seconds": 919.83,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 35,
+            "seconds": 564.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 36,
+            "seconds": 955.17,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134300410168,
+        "name": "PHANTOM confirm (baseline, challenge, holdout)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 37,
+            "seconds": 400.78,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 38,
+            "seconds": 564.1,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 40,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 39,
+            "seconds": 927.12,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 40,
+            "seconds": 913.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 41,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 42,
+            "seconds": 936.58,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 43,
+            "seconds": 915.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 44,
+            "seconds": 938.58,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 45,
+            "seconds": 954.85,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 46,
+            "seconds": 913.2,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 47,
+            "seconds": 919.4,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 48,
+            "seconds": 839.92,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 49,
+            "seconds": 945.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 61,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 50,
+            "seconds": 925.8,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 51,
+            "seconds": 931.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 52,
+            "seconds": 932.02,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 65,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 53,
+            "seconds": 959.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 54,
+            "seconds": 918.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 55,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 56,
+            "seconds": 564.4,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 37,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134300410174,
+        "name": "PHANTOM confirm (baseline-growth, challenge, holdout)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 37,
+            "seconds": 932.4,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 38,
+            "seconds": 564.1,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 40,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 39,
+            "seconds": 916.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 40,
+            "seconds": 913.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 41,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 42,
+            "seconds": 845.8,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 43,
+            "seconds": 915.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 44,
+            "seconds": 551.48,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 38,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 45,
+            "seconds": 954.85,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 46,
+            "seconds": 913.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 47,
+            "seconds": 390.43,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 48,
+            "seconds": 839.92,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 49,
+            "seconds": 548.97,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 50,
+            "seconds": 925.8,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 51,
+            "seconds": 931.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 52,
+            "seconds": 932.02,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 65,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 53,
+            "seconds": 959.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 54,
+            "seconds": 918.82,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 55,
+            "seconds": 914.85,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 56,
+            "seconds": 846.87,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134300410246,
+        "name": "PHANTOM confirm (baseline-growth, normal, original)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 1818.32,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 100,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1801.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 849.03,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 50,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1810.48,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 116,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 991.47,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 268.93,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1783.7,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 131,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1595,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 125,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1308.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 88,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 399.12,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 31,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 866.67,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 64,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 271.17,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1802.53,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 145,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1803.68,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 134,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 727.38,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 47,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 833.02,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1809.38,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1615.82,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 120,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1815.85,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134300410253,
+        "name": "PHANTOM confirm (relic-defense, normal, holdout)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 37,
+            "seconds": 1438.37,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 97,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 38,
+            "seconds": 867.75,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 61,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 39,
+            "seconds": 1455.83,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 85,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 40,
+            "seconds": 1303.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 80,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 41,
+            "seconds": 991.8,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 42,
+            "seconds": 869.17,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 43,
+            "seconds": 720.73,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 44,
+            "seconds": 719.17,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 47,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 45,
+            "seconds": 1432.85,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 91,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 46,
+            "seconds": 266.38,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 47,
+            "seconds": 1803.62,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 110,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 48,
+            "seconds": 1803.42,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 114,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 49,
+            "seconds": 1307.95,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 50,
+            "seconds": 548.43,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 37,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 51,
+            "seconds": 1144.63,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 75,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 52,
+            "seconds": 713.67,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 43,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 53,
+            "seconds": 876.58,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 54,
+            "seconds": 1479.63,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 97,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 55,
+            "seconds": 1803.28,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 56,
+            "seconds": 857.48,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134300410273,
+        "name": "PHANTOM confirm (relic-defense, challenge, holdout)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 37,
+            "seconds": 923.7,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 38,
+            "seconds": 827.98,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 51,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 39,
+            "seconds": 916.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 40,
+            "seconds": 913.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 41,
+            "seconds": 960,
+            "result": "time-limit",
+            "fusions": 2,
+            "choices": 62,
+            "clear": 0,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 42,
+            "seconds": 845.8,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 43,
+            "seconds": 917.02,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 44,
+            "seconds": 551.48,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 38,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 45,
+            "seconds": 954.85,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 46,
+            "seconds": 913.97,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 47,
+            "seconds": 390.43,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 29,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 48,
+            "seconds": 955.8,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 49,
+            "seconds": 548.97,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 50,
+            "seconds": 917.37,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 51,
+            "seconds": 931.05,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 52,
+            "seconds": 932.02,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 65,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 53,
+            "seconds": 959.35,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 55,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 54,
+            "seconds": 916.4,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 60,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 55,
+            "seconds": 914.85,
+            "result": "clear",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "challenge",
+            "seed": 56,
+            "seconds": 837.17,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 50,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134300410310,
+        "name": "PHANTOM confirm (baseline-growth, normal, holdout)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 37,
+            "seconds": 1600.88,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 111,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 38,
+            "seconds": 867.75,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 61,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 39,
+            "seconds": 1290.1,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 81,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 40,
+            "seconds": 1285.15,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 41,
+            "seconds": 845.12,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 42,
+            "seconds": 838.53,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 53,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 43,
+            "seconds": 720.73,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 44,
+            "seconds": 694.4,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 45,
+            "seconds": 1432.85,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 91,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 46,
+            "seconds": 265.73,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 47,
+            "seconds": 842.53,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 48,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 48,
+            "seconds": 1737.78,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 112,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 49,
+            "seconds": 1307.95,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 82,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 50,
+            "seconds": 547.78,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 37,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 51,
+            "seconds": 1804.72,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 118,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 52,
+            "seconds": 1171.87,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 83,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 53,
+            "seconds": 876.58,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 54,
+            "seconds": 1604.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 111,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 55,
+            "seconds": 1804.63,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 124,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 56,
+            "seconds": 851.17,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 59,
+            "clear": 0,
+            "boss": false
+          }
+        ]
+      },
+      {
+        "job": 134300410555,
+        "name": "PHANTOM confirm (baseline, normal, holdout)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 37,
+            "seconds": 1599.75,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 111,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 38,
+            "seconds": 867.75,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 61,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 39,
+            "seconds": 1306.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 73,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 40,
+            "seconds": 1806.18,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 41,
+            "seconds": 737.55,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 44,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 42,
+            "seconds": 1013.6,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 66,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 43,
+            "seconds": 1804.23,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 133,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 44,
+            "seconds": 695.63,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 45,
+            "seconds": 1287.87,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 81,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 46,
+            "seconds": 265.08,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 47,
+            "seconds": 685.55,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 41,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 48,
+            "seconds": 1766.92,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 114,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 49,
+            "seconds": 1807.62,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 124,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 50,
+            "seconds": 701.08,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 51,
+            "seconds": 1604.9,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 98,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 52,
+            "seconds": 992.18,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 58,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 53,
+            "seconds": 995.93,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 68,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 54,
+            "seconds": 1635.57,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 55,
+            "seconds": 1803.87,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 126,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 56,
+            "seconds": 1801.37,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 136,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      },
+      {
+        "job": 134300410664,
+        "name": "PHANTOM confirm (relic-defense, normal, original)",
+        "rows": [
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 17,
+            "seconds": 697.25,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 45,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 18,
+            "seconds": 1802.3,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 138,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 19,
+            "seconds": 854.5,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 49,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 20,
+            "seconds": 1814.08,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 112,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 21,
+            "seconds": 1638.87,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 121,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 22,
+            "seconds": 270.03,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 26,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 23,
+            "seconds": 1802.73,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 132,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 24,
+            "seconds": 1485.27,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 117,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 25,
+            "seconds": 708.15,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 46,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 26,
+            "seconds": 1308.05,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 88,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 27,
+            "seconds": 1816.6,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 109,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 28,
+            "seconds": 866.67,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 64,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 29,
+            "seconds": 271.17,
+            "result": "dead",
+            "fusions": 1,
+            "choices": 23,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 30,
+            "seconds": 1805.47,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 146,
+            "clear": 1,
+            "boss": true
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 31,
+            "seconds": 1605.23,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 101,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 32,
+            "seconds": 728.72,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 47,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 33,
+            "seconds": 844.67,
+            "result": "dead",
+            "fusions": 2,
+            "choices": 57,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 34,
+            "seconds": 1475.6,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 96,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 35,
+            "seconds": 1434.82,
+            "result": "dead",
+            "fusions": 3,
+            "choices": 102,
+            "clear": 0,
+            "boss": false
+          },
+          {
+            "ship": "phantom",
+            "gameMode": "normal",
+            "seed": 36,
+            "seconds": 1815.85,
+            "result": "clear",
+            "fusions": 3,
+            "choices": 128,
+            "clear": 1,
+            "boss": true
+          }
+        ]
+      }
+    ]
+  },
+  "nativeLoad": {
+    "commit": "a5ca39cad173c57a3bccc81db679583836f7147f",
+    "run": 44157784313,
+    "projects": [
+      "desktop",
+      "mobile-390",
+      "mobile-320"
+    ],
+    "scenarios": [
+      "complex-raid",
+      "three-boss"
+    ],
+    "speeds": [
+      1,
+      2
+    ],
+    "gameSecondsPerScenario": 15,
+    "phantoms": 5,
+    "darts": 25,
+    "enemies": 235,
+    "fps": null
+  }
+}

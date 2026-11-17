@@ -36,11 +36,7 @@ function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
  const nova=type==='nova',range=nova?s.range*1.6:s.range;
  const attack={id:++p.phantomAttackId,phantomId:f.id,primary:f.primary,type,nova,element:f.primary&&!f.ghost&&!nova,angle,x:f.x,y:f.y,range,hit:new Set(),evolutions:{reaper:!!rank(p,'reaper'),flash:!!rank(p,'flash'),requiem:!!rank(p,'requiem')}};
  let n=0;
- const candidates=world.candidates(f.x,f.y,range+90),target=!nova&&f.target&&candidates.includes(f.target)?f.target:null;
- // Keep the original crowd hits. If they exhaust the cap before the chosen
- // target, check that target once in a bounded extra slot (same geometry).
- for(let i=0;i<=candidates.length;i++){
-  const e=i===candidates.length?target:candidates[i];if(!e)continue;
+ for(const e of world.candidates(f.x,f.y,range+90)){
   if(e.dead||e.isoWarp||e.isoSafe>0||attack.hit.has(e)||!nova&&world.targetable&&!world.targetable(e))continue;
   const dx=e.x-f.x,dy=e.y-f.y,d=Math.hypot(dx,dy);if(d>range+e.r)continue;
   const delta=Math.atan2(Math.sin(Math.atan2(dy,dx)-angle),Math.cos(Math.atan2(dy,dx)-angle));
@@ -54,10 +50,7 @@ function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
   if(!nova&&rank(p,'bladeDrain')&&p.phantomDrainClock<=0){p.phantomDrainClock=.25;p.shield=Math.min(p.shieldMax,p.shield+4);p.phantomVisuals.push({type:'ward',x:p.x,y:p.y,range:30,life:.25,total:.25});}
   if(e.dead&&type==='blade'&&rank(p,'execution')&&p.phantomExecutionClock<=0){p.phantomExecutionClock=.45;radialStrike(p,world,e.x,e.y,105,s.damage*.5,'execution');}
   f.hits++;p.phantomMetrics.bladeHits++;
-  if(++n>= (nova?16:s.cap)){
-   if(!nova&&target&&!attack.hit.has(target)&&i<candidates.length)i=candidates.length-1;
-   else break;
-  }
+  if(++n>= (nova?16:s.cap))break;
  }
  // Visual budget never suppresses a damage event.
  p.phantomVisuals.push({x:f.x,y:f.y,angle,range,arc:nova?Math.PI*2:s.angle,life:.18,total:.18,nova,primary:f.primary,ghost:!!f.ghost,zenith:type==='zenith'});

@@ -1,7 +1,7 @@
 name: ANKIN arsenal balance
 on:
   pull_request:
-    paths: ['index.html', 'phantom-frame.js', 'skill-arsenal.js', 'skill-tactics.js', 'scripts/balance-ai-harness.mjs', 'scripts/balance-reward-value.mjs', 'tests/v13-37-tactics.spec.mjs', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
+    paths: ['index.html', 'phantom-frame.js', 'skill-arsenal.js', 'skill-tactics.js', 'scripts/balance-ai-harness.mjs', 'scripts/balance-reward-value.mjs', 'scripts/compare-progression.mjs', 'tests/progression-comparison.test.mjs', 'tests/v13-37-tactics.spec.mjs', 'tests/v13-36-arsenal.spec.mjs', '.github/workflows/arsenal-balance.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -93,3 +93,23 @@ jobs:
             test-results/
             comparison-base/test-results/
           retention-days: 14
+
+  paired-regression:
+    name: Paired progression regression
+    if: always()
+    needs: [progression]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: arsenal-full-*
+          path: artifacts/paired-progression
+      - name: Reject incomplete comparisons and decreased clear counts
+        run: node scripts/compare-progression.mjs artifacts/paired-progression

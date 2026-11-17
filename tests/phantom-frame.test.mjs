@@ -82,40 +82,6 @@ test('PHANTOM level defense grows to the cap and cannot farm HP or shield after 
  const h=setup(),p=h.api.player;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.phantomLevel,30);assert.equal(p.maxHp,95+29*7);assert.equal(p.shieldMax,15+29*3);const hp=p.maxHp,shield=p.shieldMax;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.maxHp,hp);assert.equal(p.shieldMax,shield);
 });
 
-test('blade preserves crowd hits and checks a crowded-out target once without reordering candidates',()=>{
- for(const type of ['relic','major','drone']){
-  const h=setup(),p=h.api.player,f=p.phantoms[0];Object.assign(f,{x:500,y:300,cooldown:0,scan:1});
-  const target={id:'target',type,x:540,y:300,r:8,hp:1e6,maxHp:1e6,dead:false};
-  const candidates=Array.from({length:4},(_,i)=>({id:'crowd'+i,type:'drone',x:525+i,y:290+i*6,r:8,hp:1e6,maxHp:1e6,dead:false}));candidates.push(target);
-  f.target=f.lastTarget=target;const order=candidates.map(e=>e.id),hits=[],w=h.api.phantomWorld();
-  w.candidates=()=>candidates;w.relics=type==='relic'?[target]:[];w.random=()=>1;w.element=()=>{};w.damage=(e,d,m)=>hits.push({id:e.id,source:m.source});
-  h.ctx.AnkinPhantom.tick(p,1/60,w);
-  const cap=h.ctx.AnkinPhantom.stats(p).cap;
-  assert.equal(hits.length,cap+1,type);assert.deepEqual(hits.slice(0,cap).map(e=>e.id),order.slice(0,cap));assert.equal(hits.at(-1).id,'target',type);assert.equal(hits.filter(e=>e.id==='target').length,1,type);assert.deepEqual(candidates.map(e=>e.id),order);
- }
-});
-
-test('target reserve adds at most one hit and respects geometry, walls, safety and ordinary caps',()=>{
- for(const scenario of ['front','back','dead','safe','warp','wall','arc','range','untargetable','absent','duplicate']){
-  const h=setup(),p=h.api.player,f=p.phantoms[0];Object.assign(f,{x:500,y:300,cooldown:0,scan:1});
-  const target={id:'target',type:'relic',x:540,y:300,r:8,hp:1e6,maxHp:1e6,dead:false};
-  const crowd=Array.from({length:8},(_,i)=>({id:'crowd'+i,type:'drone',x:525+i,y:290+i*2,r:8,hp:1e6,maxHp:1e6,dead:false}));
-  const candidates=scenario==='front'?[target,...crowd]:scenario==='absent'?crowd:[...crowd,target];if(scenario==='duplicate')candidates.push(target);
-  if(scenario==='dead')target.dead=true;if(scenario==='safe')target.isoSafe=1;if(scenario==='warp')target.isoWarp={};if(scenario==='range')target.x=1000;
-  // Hold the attack angle by aiming at a valid target; validate the geometry of
-  // the reserved target independently by moving it during the candidate query.
-  f.target=f.lastTarget=target;const hits=[],w=h.api.phantomWorld();w.candidates=()=>{if(scenario==='arc'){target.x=460;target.y=300;}return candidates;};
-  w.blocked=(x,y,x2,y2)=>scenario==='wall'&&x2===target.x&&y2===target.y;
-  w.targetable=e=>!(scenario==='untargetable'&&e===target);w.random=()=>1;w.element=()=>{};w.damage=e=>hits.push(e.id);
-  h.ctx.AnkinPhantom.tick(p,1/60,w);const cap=h.ctx.AnkinPhantom.stats(p).cap;
-  if(['dead','safe','warp','range','untargetable'].includes(scenario)){assert.equal(hits.includes('target'),false,scenario);continue;}
-  assert.ok(hits.length<=cap+1,scenario);assert.equal(new Set(hits).size,hits.length,scenario);
-  assert.equal(hits.includes('target'),['front','back','duplicate'].includes(scenario),scenario);
-  if(scenario==='front')assert.equal(hits.length,cap);
-  if(['wall','arc','absent'].includes(scenario))assert.ok(hits.length<=cap,scenario);
- }
-});
-
 test('targetless echoes and NOVA retain their original hit limits in a dense pack',()=>{
  for(const nova of [false,true]){
   const h=setup(),p=h.api.player,f=p.phantoms[0],s=h.ctx.AnkinPhantom.stats(p),hits=[];

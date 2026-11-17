@@ -1,7 +1,7 @@
 name: ANKIN PC input
 on:
   pull_request:
-    paths: ['index.html', 'pc-controls.js', 'tests/pc-controls*', 'phantom-frame.js', 'tests/phantom-ai-feedback*', '.github/workflows/pc-controls.yml']
+    paths: ['index.html', 'pc-controls.js', 'tests/pc-controls*', 'phantom-frame.js', 'tests/phantom-ai-feedback*', 'tests/phantom-load.spec.mjs', '.github/workflows/pc-controls.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
       - run: npm ci
       - run: node --test tests/pc-controls.test.mjs
       - run: npx playwright install chromium
-      - run: npx playwright test tests/pc-controls.spec.mjs tests/phantom-ai-feedback.spec.mjs --project=${{ matrix.project }}
+      - run: npx playwright test tests/pc-controls.spec.mjs tests/phantom-ai-feedback.spec.mjs tests/phantom-load.spec.mjs --project=${{ matrix.project }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
