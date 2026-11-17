@@ -36,7 +36,10 @@ function slash(p,f,world,s,type='blade',factor=1,angle=f.angle){
  const nova=type==='nova',range=nova?s.range*1.6:s.range;
  const attack={id:++p.phantomAttackId,phantomId:f.id,primary:f.primary,type,nova,element:f.primary&&!f.ghost&&!nova,angle,x:f.x,y:f.y,range,hit:new Set(),evolutions:{reaper:!!rank(p,'reaper'),flash:!!rank(p,'flash'),requiem:!!rank(p,'requiem')}};
  let n=0;
- for(const e of world.candidates(f.x,f.y,range+90)){
+ const candidates=world.candidates(f.x,f.y,range+90),target=!nova&&f.target&&candidates.includes(f.target)?f.target:null;
+ // Spend the existing hit cap on the chosen target first; retain candidate order for other hits.
+ for(let i=target?-1:0;i<candidates.length;i++){
+  const e=i<0?target:candidates[i];
   if(e.dead||e.isoWarp||e.isoSafe>0||attack.hit.has(e)||!nova&&world.targetable&&!world.targetable(e))continue;
   const dx=e.x-f.x,dy=e.y-f.y,d=Math.hypot(dx,dy);if(d>range+e.r)continue;
   const delta=Math.atan2(Math.sin(Math.atan2(dy,dx)-angle),Math.cos(Math.atan2(dy,dx)-angle));

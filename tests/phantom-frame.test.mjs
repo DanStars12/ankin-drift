@@ -81,3 +81,15 @@ test('PHANTOM can acquire real shared shield and NOVA utilities while ranged pri
 test('PHANTOM level defense grows to the cap and cannot farm HP or shield after reaching it',()=>{
  const h=setup(),p=h.api.player;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.phantomLevel,30);assert.equal(p.maxHp,95+29*7);assert.equal(p.shieldMax,15+29*3);const hp=p.maxHp,shield=p.shieldMax;h.ctx.AnkinPhantom.level(p,100);assert.equal(p.maxHp,hp);assert.equal(p.shieldMax,shield);
 });
+
+test('blade hit caps include the selected target first in dense packs without duplicate damage or reordering candidates',()=>{
+ for(const type of ['relic','major','drone']){
+  const h=setup(),p=h.api.player,f=p.phantoms[0];Object.assign(f,{x:500,y:300,cooldown:0,scan:1});
+  const target={id:'target',type,x:540,y:300,r:8,hp:1e6,maxHp:1e6,dead:false};
+  const candidates=Array.from({length:4},(_,i)=>({id:'crowd'+i,type:'drone',x:525+i,y:290+i*6,r:8,hp:1e6,maxHp:1e6,dead:false}));candidates.push(target);
+  f.target=f.lastTarget=target;const order=candidates.map(e=>e.id),hits=[],w=h.api.phantomWorld();
+  w.candidates=()=>candidates;w.relics=type==='relic'?[target]:[];w.random=()=>1;w.element=()=>{};w.damage=(e,d,m)=>hits.push({id:e.id,source:m.source});
+  h.ctx.AnkinPhantom.tick(p,1/60,w);
+  assert.equal(hits.length,h.ctx.AnkinPhantom.stats(p).cap,type);assert.equal(hits[0].id,'target',type);assert.equal(hits.filter(e=>e.id==='target').length,1,type);assert.deepEqual(candidates.map(e=>e.id),order);
+ }
+});
