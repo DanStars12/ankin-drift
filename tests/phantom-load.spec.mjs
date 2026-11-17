@@ -14,6 +14,8 @@ window.__companionLoad=function(speed,scenario){return balanceSandbox(()=>{
    const pool=['power','legendary','unique','relic'].includes(c.rarity)?({power:'powers',legendary:'legends',unique:'uniques',relic:'relics'})[c.rarity]:'skills';
    for(let n=0;n<(c.maxStacks||1);n++){game[pool][c.id]=(game[pool][c.id]||0)+1;game.acquisitionLog.push(c.id);c.apply(player);}activateUpgrades();
   }
+  // Dismiss acquisition animations before measuring the combat workload.
+  for(let n=0;n<50&&mode!=='playing';n++){if(mode==='fusion')dismissFusion();else if(mode==='uniqueReward'||mode==='elementResult')continueAfterReward();else throw Error('Unexpected setup menu: '+mode);}
   game.total=runClock=1200;game.endless=true;game.activeChallenges=speed===2?['doubleTime']:[];
   game.nextBossAt=game.nextRaidAt=game.nextRelicAt=game.nextVacuumAt=game.nextUltimateAt=game.spawn=1e9;
   enemies=[];shots=[];hostile=[];pickups=[];hazards=[];zones=[];boss=null;enemyIndex.clear();enemyIndexReady=false;
