@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [cleave, coverage, growth, coverage-growth]
+        variant: [baseline-growth, baseline-defense, relic-defense, relic-reserve]
         mode: [normal, challenge]
     env:
       ANKIN_ARSENAL_FULL: '1'
@@ -26,6 +26,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
